@@ -1,4 +1,4 @@
-#pragma once
+
 
 #include <map>
 #include <string>
@@ -14,7 +14,7 @@ private :
 public:
 	RIVDataSet(void);
 	~RIVDataSet(void);
-	bool AddData(string name,vector<int>);
-	bool AddData(string name,vector<float>);
+	bool AddData(string name,vector<int>*);
+	bool AddData(string name,vector<float>*);
 };
 

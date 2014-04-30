@@ -1,6 +1,6 @@
-#include "RIVDataSet.h"
+#include "DataSet.h"
 
-class DataView
+class RIVDataView
 {
 protected:
 	//properties
@@ -9,10 +9,10 @@ protected:
 	RIVDataSet *dataset;
 
 	//constructor destructor
-	DataView(int x, int y, int width, int height);
-	virtual ~DataView(void);
-
+	RIVDataView(int x, int y, int width, int height);
+	RIVDataView(void);
+public:
 	//functions
-	void SetData(RIVDataSet*);
+	virtual void SetData(RIVDataSet*);
 };
 

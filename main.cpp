@@ -1,6 +1,6 @@
 #include "DataView.h"
 #include "ParallelCoordsView.h"
-#include "RIVDataSet.h"
+#include "DataSet.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -80,9 +80,8 @@ void initializeViews() {
 	data.push_back(4.F);
 	testDataSet.AddData("attribute2",&moreData);
 
-	ParallelCoordsView pview = ParallelCoordsView(0,0,100,100);
-	pview.SetDataSource(testDataSet);
-	
+	ParallelCoordsView pview = ParallelCoordsView(0,0,500,200);
+	pview.SetData(testDataSet);
 }
 
 int main(int argc, char *argv[])
@@ -102,7 +101,6 @@ int main(int argc, char *argv[])
 
   /* create the window and store the handle to it */
   wd = glutCreateWindow("Experiment with line drawing" /* title */ );
-
 
   /* Initialize the views */
   initializeViews();

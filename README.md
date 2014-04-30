@@ -1,4 +1,4 @@
 afstuderen
 ==========
 
-afstudeer opdracht crap
+C++ code voor afstuderen

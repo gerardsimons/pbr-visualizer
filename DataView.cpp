@@ -1,6 +1,6 @@
 #include "DataView.h"
 
-DataView::DataView(int x, int y, int width, int height)
+RIVDataView::RIVDataView(int x, int y, int width, int height)
 {
 	startX = x;
 	startY = y;
@@ -8,7 +8,7 @@ DataView::DataView(int x, int y, int width, int height)
 	this->height = height;
 }
 
-DataView::~DataView(void)
+RIVDataView::RIVDataView(void)
 {
 	delete &startX;
 	delete &startY;
@@ -16,6 +16,6 @@ DataView::~DataView(void)
 	delete &height;
 }
 
-void DataView::SetData(RIVDataSet *dataset) {
+void RIVDataView::SetData(RIVDataSet *dataset) {
 	this->dataset = dataset;
 }

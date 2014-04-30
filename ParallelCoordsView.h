@@ -1,6 +1,8 @@
 #pragma once
-#include "view.h"
-class ParallelCoordsView : public View
+
+#include "DataView.h"
+
+class ParallelCoordsView : public RIVDataView
 {
 public:
 	ParallelCoordsView(int x, int y, int width, int height);
