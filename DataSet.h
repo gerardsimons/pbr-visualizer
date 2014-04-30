@@ -1,4 +1,7 @@
+#ifndef DATASET_H
+#define DATASET_H
 
+#include "Record.h"
 
 #include <map>
 #include <string>
@@ -9,12 +12,18 @@ using namespace std;
 class RIVDataSet
 {
 private :
-	map<string,vector<int>> int_values;
-	map<string,vector<float>> float_values;
+	//map<string,vector<int>> int_records;
+	vector<RIVRecord> float_records;
 public:
 	RIVDataSet(void);
 	~RIVDataSet(void);
-	bool AddData(string name,vector<int>*);
-	bool AddData(string name,vector<float>*);
+	//void AddData(string name,vector<int>);
+	void AddRecord(RIVRecord);
+	pair<float,float> MinMax(int);
+	size_t NumberOfRecords();
+	size_t NumberOfValuesPerRecord();
+	RIVRecord* GetRecord(int);
 };
+
+#endif
 

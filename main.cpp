@@ -1,3 +1,4 @@
+
 #include "DataView.h"
 #include "ParallelCoordsView.h"
 #include "DataSet.h"
@@ -12,27 +13,36 @@
 #include <GL/glut.h>
 #endif
 
-int width = 640; /* window width and height */
+/* window width and height */
+int width = 640; 
 int height = 480;
+
+/* window position */
+int posX = 300;
+int posY = 300;
+
 int wd;                   /* GLUT window handle */
 
 using namespace std;
 
 /* Contains pointers to all the views to be drawn */
-vector<DataView*> views;
+vector<RIVDataView*> views;
 
 /* Callback functions for GLUT */
 
 /* Draw the window - this is where all the GL actions are */
 void display(void)
 {
-
+	printf("Display function called\n");
   /* clear the screen to white */
   glClearColor(1.0, 1.0, 1.0, 0.0);
   glClear(GL_COLOR_BUFFER_BIT);
 
   /* Draw the views */
-
+  for(size_t i = 0 ; i < views.size() ; i++) {
+	  RIVDataView *view = views[i];
+	  view->Draw();
+  }
 
   glEnd();
   glFlush();
@@ -41,6 +51,8 @@ void display(void)
 /* Handles mouse input */
 void mouse(int button, int state, int x, int y) {
 	//TODO: 
+	printf("mouse click button=%d state=%d x=%d y=%d\n",button,state,x,y);
+	glutPostRedisplay();
 }
 
 /* Called when window is resized,
@@ -71,25 +83,40 @@ void initializeViews() {
 	data.push_back(2.F);
 	data.push_back(3.F);
 	data.push_back(4.F);
-	testDataSet.AddData("attribute1",&data);
 
-	vector<float> moreData;
-	data.push_back(10.F);
+	RIVRecord recordOne("attribute1",data);
+	testDataSet.AddRecord(recordOne);
+
+	data.clear();
+	data.push_back(1.F);
+	data.push_back(2.F);
 	data.push_back(21.F);
 	data.push_back(22.F);
-	data.push_back(4.F);
-	testDataSet.AddData("attribute2",&moreData);
+	//data.push_back(5.F);
 
-	ParallelCoordsView pview = ParallelCoordsView(0,0,500,200);
-	pview.SetData(testDataSet);
+	RIVRecord recordTwo("attribute2",data);
+	testDataSet.AddRecord(recordTwo);
+
+	data.clear();
+	data.push_back(1.F);
+	data.push_back(2.F);
+	data.push_back(5.F);
+	data.push_back(8.F);
+
+	RIVRecord recordThree("attribute3",data);
+	testDataSet.AddRecord(recordThree);
+	testDataSet.AddRecord(recordThree);
+
+	ParallelCoordsView *pview = new ParallelCoordsView(0,0,width,height);
+	pview->SetData(testDataSet);
+	views.push_back(pview);
 }
 
 int main(int argc, char *argv[])
 {
 
   /* initialize GLUT, let it extract command-line 
-     GLUT options that you may provide 
-     - NOTE THE '&' BEFORE argc */
+     GLUT options that you may provide */
   glutInit(&argc, argv);
 
   /* specify the display to be single 
@@ -99,12 +126,14 @@ int main(int argc, char *argv[])
   /* set the initial window size */
   glutInitWindowSize(width, height);
 
+  /* set the initial window position */
+  glutInitWindowPosition(posX,posY);
+
   /* create the window and store the handle to it */
   wd = glutCreateWindow("Experiment with line drawing" /* title */ );
 
   /* Initialize the views */
   initializeViews();
-
 
   /* --- register callbacks with GLUT --- */
 

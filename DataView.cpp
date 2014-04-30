@@ -15,7 +15,3 @@ RIVDataView::RIVDataView(void)
 	delete &width;
 	delete &height;
 }
-
-void RIVDataView::SetData(RIVDataSet *dataset) {
-	this->dataset = dataset;
-}
