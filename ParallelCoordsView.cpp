@@ -1,5 +1,6 @@
 #include "ParallelCoordsView.h"
 #include "DataView.h"
+
 #include <stdio.h>
 
 #if defined(__APPLE__)
@@ -9,22 +10,20 @@
 #endif
 
 ParallelCoordsView::ParallelCoordsView(int x, int y, int width, int height) : RIVDataView(x,y,width,height) {
-
+    //Nothing else to do
 }
 
 
-ParallelCoordsView::~ParallelCoordsView(void)
-{
-	//Additional deleting unique to parallel coords view
+ParallelCoordsView::~ParallelCoordsView(void) {
+	//Additional deleting unique to parallel coords view ?
 }
 
 void ParallelCoordsView::Draw() {
 	printf("ParallCoordsView::Draw()\n");
 
-	
 	float textColor[3] = {0,0,0};
 
-	//Draw the axes
+    //Draw the axes
 	glLineWidth(1);
 	glColor3f(0.0, 0.0, 0.0);
 
@@ -33,28 +32,24 @@ void ParallelCoordsView::Draw() {
 
 	printf("columns = %d\n",columns);
 
-	float delta = 1.F / (columns + 1) * width;
-
 	glBegin(GL_LINES);
-		for(size_t i = 0 ; i < columns ; i++) {
-			float x = delta * (i + 1) + startX;
-			//printf("x=%f\n",x);
-			glVertex3f(x, startY + marginHeight, 0.0);
-			glVertex3f(x, startY + height - marginHeight, 0);
-
-
-			//Draw text for axis
-		}
+    for(size_t i = 0 ; i < axes.size() ; i++) {
+        ParallelCoordsAxis *axis = &axes[i];
+        
+        glVertex3f(axis->x, axis->y, 0);
+        glVertex3f(axis->x, axis->y + axis->height, 0);
+    }
 	glEnd();
-
-	//Draw text for axis
-	for(size_t i = 0 ; i < columns ; i++) {
-		float x = delta * (i + 1) + startX;
-		//printf("x=%f\n",x);
-		RIVRecord *record = dataset.GetRecord(i);	
-		string text = record->name;
-		DrawText(text.c_str(),text.size() + 1,x,startY + marginHeight,textColor,.15F);
-	}
+    
+    for(size_t i = 0 ; i < axes.size() ; i++) {
+        ParallelCoordsAxis *axis = &axes[i];
+        string text = axis->record->name;
+        
+        glVertex3f(axis->x, axis->y, 0);
+        glVertex3f(axis->x, axis->y, 0);
+        
+        DrawText(text.c_str(),text.size() + 1,axis->x,axis->y - 2   0,textColor,.1F);
+    }
 	
 	//Find the min-max for each axis
 	vector<pair<float,float>> minmax_values;
@@ -65,12 +60,13 @@ void ParallelCoordsView::Draw() {
 	}
 
 	size_t records_per_column = dataset.NumberOfValuesPerRecord();
-	printf("record_per_column = %d\n",records_per_column);
+	//printf("record_per_column = %d\n",records_per_column);
 
 	//Draw the lines
-	
 	glColor3f(1.0, 0.0, 0.0);
 	glLineWidth(3.F);
+    
+    float delta = 1.F / (columns + 1) * width;
 
 	//for each record
 	for(size_t record_i = 0 ; record_i < records_per_column ; record_i++) {
@@ -93,35 +89,50 @@ void ParallelCoordsView::Draw() {
 
 			float y = startY + marginHeight + heightRatio * (height - 2 * marginHeight);
 
-			printf("heightratio = %f\n",heightRatio);
-			printf("value point (x,y) = (%f,%f)\n",x,y);
+//			printf("heightratio = %f\n",heightRatio);
+//			printf("value point (x,y) = (%f,%f)\n",x,y);
 			
 			glVertex3f(x, y, 0);
 		}
 		glEnd();
 	}
+}
 
-	
-	//glTranslatef(width / 2, 3.6, 0);
-	//glScalef(0.15, 0.15, 0.15);
-	//glColor4f( 0.0, 0.0, 0.0, 1.0 );
-	char p[5] = "test";
-
-	DrawText(p,4,width/2,height/2,textColor,.2F);
-
-	//Draw the texts
+void ParallelCoordsView::ComputeLayout() {
+    axes.clear(); //Remove the old axes
+    
+    size_t nr_of_axes = dataset.NumberOfRecords();
+    int marginHeight = 20;
+    
+    //Fixed y for all axes
+    int y = startY + marginHeight;
+    int axisHeight = height - 2 * marginHeight;
+    float delta = 1.F / (nr_of_axes + 1) * width;
+    
+    for(size_t i = 0 ; i < nr_of_axes ; i++) {
+        int x = delta * (i + 1) + startX;
+        
+        RIVRecord* record = dataset.GetRecord(i);
+        
+        ParallelCoordsAxis axis(x,y,axisHeight,record);
+        axes.push_back(axis);
+    }
 }
 
 void ParallelCoordsView::DrawText(const char *text, int size, int x, int y, float *color, float sizeModifier) {
-	glMatrixMode( GL_MODELVIEW );
+    
+    //Estimate center, seems to be the magic number for font pixel size
+    float xCenter = 60 * sizeModifier * size / 2.F;
+    
+    glLineWidth(1);
 	glColor3f(*color,*(color+1),*(color+2));
-	glTranslatef(x,y, 0);
+    glPushMatrix();
+	glTranslatef(x - xCenter,y, 0);
+    glPushMatrix();
 	glScalef(sizeModifier,sizeModifier,1);
 	for(size_t i = 0 ; i < size ; i++) {
 		glutStrokeCharacter(GLUT_STROKE_ROMAN, *(text+i));
 	}
-	glPopMatrix();
-	glPopMatrix();
-	glPopMatrix();
-	glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
 }

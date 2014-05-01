@@ -18,6 +18,7 @@ protected:
 public:
 	//functions
 	void SetData(RIVDataSet newDataSet) { dataset = newDataSet; } ;
+    virtual void ComputeLayout() = 0; //Strictly virtual, MUST be implemented
 	virtual void Draw() = 0;
 };
 

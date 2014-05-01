@@ -60,6 +60,8 @@ void mouse(int button, int state, int x, int y) {
    before the first call to display(). */
 void reshape(int w, int h)
 {
+    
+    printf("reshape called.\n");
   /* save new screen dimensions */
   width = w;
   height = h;
@@ -75,7 +77,6 @@ void reshape(int w, int h)
 }
 
 void initializeViews() {
-
 	RIVDataSet testDataSet;
 
 	vector<float> data;
@@ -104,11 +105,15 @@ void initializeViews() {
 	data.push_back(8.F);
 
 	RIVRecord recordThree("attribute3",data);
+    RIVRecord recordFour("attribute4",data);
 	testDataSet.AddRecord(recordThree);
-	testDataSet.AddRecord(recordThree);
+    testDataSet.AddRecord(recordFour);
 
-	ParallelCoordsView *pview = new ParallelCoordsView(0,0,width,height);
+	ParallelCoordsView *pview = new ParallelCoordsView(0,0,width, height);
+    
 	pview->SetData(testDataSet);
+    pview->ComputeLayout();
+    
 	views.push_back(pview);
 }
 
