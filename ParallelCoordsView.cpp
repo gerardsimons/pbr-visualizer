@@ -48,7 +48,7 @@ void ParallelCoordsView::Draw() {
         glVertex3f(axis->x, axis->y, 0);
         glVertex3f(axis->x, axis->y, 0);
         
-        DrawText(text.c_str(),text.size() + 1,axis->x,axis->y - 2   0,textColor,.1F);
+        DrawText(text.c_str(),text.size() + 1,axis->x,axis->y - 15,textColor,.1F);
     }
 	
 	//Find the min-max for each axis

@@ -7,8 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E1B7BB491912741C008253AA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B7BB481912741C008253AA /* main.cpp */; };
 		E1B7BB4B1912741C008253AA /* Afstuderen.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = E1B7BB4A1912741C008253AA /* Afstuderen.1 */; };
+		E1B7BB5A19128FAE008253AA /* DataSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B7BB5119128FAE008253AA /* DataSet.cpp */; };
+		E1B7BB5B19128FAE008253AA /* DataView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B7BB5319128FAE008253AA /* DataView.cpp */; };
+		E1B7BB5C19128FAE008253AA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B7BB5519128FAE008253AA /* main.cpp */; };
+		E1B7BB5D19128FAE008253AA /* ParallelCoordsView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B7BB5619128FAE008253AA /* ParallelCoordsView.cpp */; };
+		E1B7BB5E19128FAE008253AA /* Record.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B7BB5819128FAE008253AA /* Record.cpp */; };
+		E1B7BB6019128FCC008253AA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1B7BB5F19128FCC008253AA /* Cocoa.framework */; };
+		E1B7BB6219128FD3008253AA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1B7BB6119128FD3008253AA /* OpenGL.framework */; };
+		E1B7BB6419128FE1008253AA /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1B7BB6319128FE1008253AA /* GLUT.framework */; };
+		E1B7BB671912AC15008253AA /* ParallelCoordsAxis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1B7BB651912AC15008253AA /* ParallelCoordsAxis.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,8 +34,21 @@
 
 /* Begin PBXFileReference section */
 		E1B7BB451912741C008253AA /* Afstuderen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Afstuderen; sourceTree = BUILT_PRODUCTS_DIR; };
-		E1B7BB481912741C008253AA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		E1B7BB4A1912741C008253AA /* Afstuderen.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Afstuderen.1; sourceTree = "<group>"; };
+		E1B7BB5119128FAE008253AA /* DataSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataSet.cpp; sourceTree = SOURCE_ROOT; };
+		E1B7BB5219128FAE008253AA /* DataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSet.h; sourceTree = SOURCE_ROOT; };
+		E1B7BB5319128FAE008253AA /* DataView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataView.cpp; sourceTree = SOURCE_ROOT; };
+		E1B7BB5419128FAE008253AA /* DataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataView.h; sourceTree = SOURCE_ROOT; };
+		E1B7BB5519128FAE008253AA /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = SOURCE_ROOT; };
+		E1B7BB5619128FAE008253AA /* ParallelCoordsView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParallelCoordsView.cpp; sourceTree = SOURCE_ROOT; };
+		E1B7BB5719128FAE008253AA /* ParallelCoordsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParallelCoordsView.h; sourceTree = SOURCE_ROOT; };
+		E1B7BB5819128FAE008253AA /* Record.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Record.cpp; sourceTree = SOURCE_ROOT; };
+		E1B7BB5919128FAE008253AA /* Record.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Record.h; sourceTree = SOURCE_ROOT; };
+		E1B7BB5F19128FCC008253AA /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		E1B7BB6119128FD3008253AA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		E1B7BB6319128FE1008253AA /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		E1B7BB651912AC15008253AA /* ParallelCoordsAxis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParallelCoordsAxis.cpp; sourceTree = "<group>"; };
+		E1B7BB661912AC15008253AA /* ParallelCoordsAxis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParallelCoordsAxis.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +56,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1B7BB6419128FE1008253AA /* GLUT.framework in Frameworks */,
+				E1B7BB6219128FD3008253AA /* OpenGL.framework in Frameworks */,
+				E1B7BB6019128FCC008253AA /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +68,9 @@
 		E1B7BB3C1912741C008253AA = {
 			isa = PBXGroup;
 			children = (
+				E1B7BB6319128FE1008253AA /* GLUT.framework */,
+				E1B7BB6119128FD3008253AA /* OpenGL.framework */,
+				E1B7BB5F19128FCC008253AA /* Cocoa.framework */,
 				E1B7BB471912741C008253AA /* Afstuderen */,
 				E1B7BB461912741C008253AA /* Products */,
 			);
@@ -60,7 +87,17 @@
 		E1B7BB471912741C008253AA /* Afstuderen */ = {
 			isa = PBXGroup;
 			children = (
-				E1B7BB481912741C008253AA /* main.cpp */,
+				E1B7BB5119128FAE008253AA /* DataSet.cpp */,
+				E1B7BB5219128FAE008253AA /* DataSet.h */,
+				E1B7BB5319128FAE008253AA /* DataView.cpp */,
+				E1B7BB5419128FAE008253AA /* DataView.h */,
+				E1B7BB5519128FAE008253AA /* main.cpp */,
+				E1B7BB5619128FAE008253AA /* ParallelCoordsView.cpp */,
+				E1B7BB5719128FAE008253AA /* ParallelCoordsView.h */,
+				E1B7BB651912AC15008253AA /* ParallelCoordsAxis.cpp */,
+				E1B7BB661912AC15008253AA /* ParallelCoordsAxis.h */,
+				E1B7BB5819128FAE008253AA /* Record.cpp */,
+				E1B7BB5919128FAE008253AA /* Record.h */,
 				E1B7BB4A1912741C008253AA /* Afstuderen.1 */,
 			);
 			path = Afstuderen;
@@ -117,7 +154,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1B7BB491912741C008253AA /* main.cpp in Sources */,
+				E1B7BB5B19128FAE008253AA /* DataView.cpp in Sources */,
+				E1B7BB5D19128FAE008253AA /* ParallelCoordsView.cpp in Sources */,
+				E1B7BB5A19128FAE008253AA /* DataSet.cpp in Sources */,
+				E1B7BB671912AC15008253AA /* ParallelCoordsAxis.cpp in Sources */,
+				E1B7BB5E19128FAE008253AA /* Record.cpp in Sources */,
+				E1B7BB5C19128FAE008253AA /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,7 +198,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -189,7 +231,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -227,6 +269,7 @@
 				E1B7BB501912741C008253AA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
