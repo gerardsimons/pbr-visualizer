@@ -2,6 +2,7 @@
 #include "DataView.h"
 #include "ParallelCoordsView.h"
 #include "DataSet.h"
+#include "ImageView.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -108,13 +109,18 @@ void initializeViews() {
     RIVRecord recordFour("attribute4",data);
 	testDataSet.AddRecord(recordThree);
     testDataSet.AddRecord(recordFour);
-
-	ParallelCoordsView *pview = new ParallelCoordsView(0,0,width, height);
+    
+    int imageWidth = 100;
+    int imageHeight = 100;
+    RIVImageView *imageView = new RIVImageView("/Users/gerardsimons/Git/Afstuderen/ufo_small.bmp",10,height / 2.F - imageHeight / 2.F,imageWidth,imageHeight);
+    ParallelCoordsView *pview = new ParallelCoordsView(0,0,width, height);
     
 	pview->SetData(testDataSet);
     pview->ComputeLayout();
     
 	views.push_back(pview);
+    views.push_back(imageView);
+    
 }
 
 int main(int argc, char *argv[])
