@@ -8,17 +8,16 @@
 #ifndef BMPIMAGE_H_
 #define BMPIMAGE_H_
 
-
-#include <iostream>
-#include <fstream>
-#include <math.h>
-
+#if defined(__APPLE__)
 #include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
 
 class BMPImage {
 public:
 	BMPImage(const char* imagePath,bool hasAlpha);
-	int width,height;
+	int sizeX,sizeY;
 	GLubyte *data;
 	bool loadTexture(const char* imagePath, int alpha);
 	virtual ~BMPImage();

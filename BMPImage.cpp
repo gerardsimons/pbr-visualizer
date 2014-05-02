@@ -5,7 +5,13 @@
  *      Author: gerard
  */
 
+#include <iostream>
+#include <fstream>
+#include <math.h>
+#include <stdlib.h>
+
 #include "BMPImage.h"
+
 
 BMPImage::BMPImage(const char* imagePath, bool hasAlpha) {
 	loadTexture(imagePath, hasAlpha);
@@ -44,13 +50,13 @@ bool BMPImage::loadTexture(const char* imagepath, int alpha)
 	    // Read ints from the byte array
 	    dataPos    = *(int*)&(header[0x0A]);
 
-	    width      = *(int*)&(header[0x12]);
-	    height     = *(int*)&(header[0x16]);
+	    sizeX      = *(int*)&(header[0x12]);
+	    sizeY     = *(int*)&(header[0x16]);
 
 	    // Some BMP files are misformatted, guess missing information
 	    int channels = 3 + alpha;
 	    printf("Channels found: %i\n",channels);
-	    imageSize=width*height*(3+alpha); // 3 : one byte for each Red, Green and Blue component
+	    imageSize=sizeX*sizeY*(3+alpha); // 3 : one byte for each Red, Green and Blue component
 	    if (dataPos==0)      dataPos=500; // The BMP header is done that way
 
 	    // Create a buffer

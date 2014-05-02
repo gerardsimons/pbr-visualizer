@@ -1,12 +1,11 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <vector>
 
 #include "DataView.h"
 #include "ParallelCoordsView.h"
 #include "DataSet.h"
 #include "ImageView.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <vector>
 
 #if defined(__APPLE__)
 #include <GLUT/glut.h>
@@ -14,36 +13,56 @@
 #include <GL/glut.h>
 #endif
 
+
+
+const float DEG2RAD = 3.14159/180;
+
 /* window width and height */
-int width = 640; 
-int height = 480;
+int width = 1200; 
+int height = 600;
 
 /* window position */
-int posX = 300;
-int posY = 300;
+int posX = 0;
+int posY = 400;
 
 int wd;                   /* GLUT window handle */
+
+/* For debugging purposes, keep track of mouse location */
+int lastMouseX,lastMouseY = 0;
 
 using namespace std;
 
 /* Contains pointers to all the views to be drawn */
 vector<RIVDataView*> views;
 
+/* The dataset, views have pointers to this in order to draw their views consistently */
+RIVDataSet dataset;
+
 /* Callback functions for GLUT */
 
 /* Draw the window - this is where all the GL actions are */
 void display(void)
 {
-	printf("Display function called\n");
   /* clear the screen to white */
   glClearColor(1.0, 1.0, 1.0, 0.0);
   glClear(GL_COLOR_BUFFER_BIT);
 
   /* Draw the views */
   for(size_t i = 0 ; i < views.size() ; i++) {
-	  RIVDataView *view = views[i];
-	  view->Draw();
+	  views[i]->Draw();
   }
+
+  glColor3f(1.F,0,0);
+
+  float radius = 10.F;
+  
+   glBegin(GL_LINE_LOOP);
+ 
+   for (int i=0; i < 360; i++)
+   {
+      float degInRad = i*DEG2RAD;
+	  glVertex2f(cos(degInRad)*radius + lastMouseX,sin(degInRad)*radius + lastMouseY);
+   }
 
   glEnd();
   glFlush();
@@ -51,9 +70,32 @@ void display(void)
 
 /* Handles mouse input */
 void mouse(int button, int state, int x, int y) {
-	//TODO: 
-	printf("mouse click button=%d state=%d x=%d y=%d\n",button,state,x,y);
-	glutPostRedisplay();
+	//Check what view catches the interaction
+	y = height - y; //Very important to invert Y!
+	lastMouseX = x;
+	lastMouseY = y;
+	for(size_t i = 0 ; i < views.size() ; i++) {
+		if(views[i]->HandleMouse(button,state,x,y)) {
+			glutPostRedisplay();
+			return;
+		}
+	}
+}
+
+void motion(int x, int y) {
+	y = height - y;
+	for(size_t i = 0 ; i < views.size() ; i++) {
+		if(views[i]->HandleMouseMotion(x,y)) {
+			glutPostRedisplay();
+			return;
+		}
+	}
+}
+
+void invalidateAllViews() {
+	for(size_t i = 0 ; i < views.size() ; i++) {
+	  views[i]->Invalidate();
+  }
 }
 
 /* Called when window is resized,
@@ -67,6 +109,8 @@ void reshape(int w, int h)
   width = w;
   height = h;
 
+  /* Invalidate all views */
+
   /* tell OpenGL to use the whole window for drawing */
   glViewport(0, 0, (GLsizei) width, (GLsizei) height);
 
@@ -75,11 +119,13 @@ void reshape(int w, int h)
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluOrtho2D(0.0, width, 0.0, height);
+
+  invalidateAllViews();
 }
 
-void initializeViews() {
-	RIVDataSet testDataSet;
 
+
+void initialize() {
 	vector<float> data;
 	data.push_back(1.F);
 	data.push_back(2.F);
@@ -87,7 +133,7 @@ void initializeViews() {
 	data.push_back(4.F);
 
 	RIVRecord recordOne("attribute1",data);
-	testDataSet.AddRecord(recordOne);
+	dataset.AddRecord(recordOne);
 
 	data.clear();
 	data.push_back(1.F);
@@ -97,7 +143,7 @@ void initializeViews() {
 	//data.push_back(5.F);
 
 	RIVRecord recordTwo("attribute2",data);
-	testDataSet.AddRecord(recordTwo);
+	dataset.AddRecord(recordTwo);
 
 	data.clear();
 	data.push_back(1.F);
@@ -107,20 +153,24 @@ void initializeViews() {
 
 	RIVRecord recordThree("attribute3",data);
     RIVRecord recordFour("attribute4",data);
-	testDataSet.AddRecord(recordThree);
-    testDataSet.AddRecord(recordFour);
-    
-    int imageWidth = 100;
-    int imageHeight = 100;
-    RIVImageView *imageView = new RIVImageView("/Users/gerardsimons/Git/Afstuderen/ufo_small.bmp",10,height / 2.F - imageHeight / 2.F,imageWidth,imageHeight);
-    ParallelCoordsView *pview = new ParallelCoordsView(0,0,width, height);
-    
-	pview->SetData(testDataSet);
+	dataset.AddRecord(recordThree);
+    dataset.AddRecord(recordFour);
+
+    int imageWidth = 500;
+    int imageHeight = 500;
+
+	//CAUTION: Below path is Windows / Visual Studio Specific
+	//CAUTION: Image should be power of two!
+    //RIVImageView *imageView = new RIVImageView("../RenderingInfoVis/teapot128x128x512.ppm",0,0,imageWidth,imageHeight,0,0);     //PPM IMAGE
+	RIVImageView *imageView = new RIVImageView("../RenderingInfoVis/teapot8x8x512.bmp",0,0,imageWidth,imageHeight,0,0);     //PPM IMAGE
+	ParallelCoordsView *pview = new ParallelCoordsView(imageWidth,0,width-imageWidth,height,20,20);
+	pview->SetData(&dataset);
+
+	imageView->ComputeLayout();
     pview->ComputeLayout();
-    
+	
 	views.push_back(pview);
     views.push_back(imageView);
-    
 }
 
 int main(int argc, char *argv[])
@@ -143,8 +193,8 @@ int main(int argc, char *argv[])
   /* create the window and store the handle to it */
   wd = glutCreateWindow("Experiment with line drawing" /* title */ );
 
-  /* Initialize the views */
-  initializeViews();
+  /* Initialize the data and the views */
+  initialize();
 
   /* --- register callbacks with GLUT --- */
 
@@ -156,6 +206,12 @@ int main(int argc, char *argv[])
 
   /* register function that handles mouse */
   glutMouseFunc(mouse);
+
+  /* Transparency stuff */
+  glEnable (GL_BLEND); 
+  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  glutMotionFunc(motion);
 
   /* start the GLUT main loop */
   glutMainLoop();

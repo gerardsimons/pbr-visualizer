@@ -23,7 +23,7 @@ pair<float,float> RIVDataSet::MinMax(int index) {
 }
 
 size_t RIVDataSet::NumberOfRecords() {
-	printf("float_records_size = %lu\n",float_records.size());
+	//printf("float_records_size = %lu\n",float_records.size());
 	return float_records.size();
 }
 
