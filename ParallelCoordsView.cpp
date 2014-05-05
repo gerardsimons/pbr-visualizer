@@ -21,7 +21,7 @@ ParallelCoordsView::~ParallelCoordsView(void) {
 void ParallelCoordsView::Draw() {
 
 	if(needsRedraw) {
-		//printf("ParallCoordsView::Draw()\n");
+		printf("ParallCoordsView::Draw()\n");
 
 		float textColor[3] = {0,0,0};
 
@@ -33,34 +33,44 @@ void ParallelCoordsView::Draw() {
 		int marginHeight = 20;
 
 		
-
+		//Draw the vertical lines of the axis
 		glBegin(GL_LINES);
 		for(size_t i = 0 ; i < axes.size() ; i++) {
 			ParallelCoordsAxis *axis = &axes[i];
         
 			glVertex3f(axis->x, axis->y, 0);
 			glVertex3f(axis->x, axis->y + axis->height, 0);
+
+			vector<float> scale = axis->scale;
+
+			//Draw the scales indicator
+			for(size_t j = 0 ; j < scale.size() ; j++) {
+				int height = axis->PositionOnScale(scale[j]);
+				glVertex3f(axis->x,height,0);
+				glVertex3f(axis->x + 20,height,0);
+			}
 		}
 		glEnd();
     
+		//Draw texts
 		for(size_t i = 0 ; i < axes.size() ; i++) {
 			ParallelCoordsAxis *axis = &axes[i];
 			string text = axis->record->name;
         
-			glVertex3f(axis->x, axis->y, 0);
-			glVertex3f(axis->x, axis->y, 0);
-        
 			DrawText(text.c_str(),text.size() + 1,axis->x,axis->y - 15,textColor,.1F);
+
+			vector<float> scale = axis->scale;
+
+			//Draw the scales indicator
+			for(size_t j = 0 ; j < scale.size() ; j++) {
+				float value = axis->ValueOnScale(scale[j]);				
+				int height = axis->PositionOnScale(scale[j]);
+				char text[15];
+				sprintf(text,"%.2f",value);
+				DrawText(text,10,axis->x - 6,height,textColor,.1F);
+			}
 		}
 	
-		//Find the min-max for each axis
-		vector<pair<float,float>> minmax_values;
-		for(size_t i = 0 ; i < columns ; i++) {
-			RIVRecord *record = dataset->GetRecord(i);	
-			pair<float,float> min_max = record->MinMax();
-			minmax_values.push_back(min_max);
-		}
-
 		size_t records_per_column = dataset->NumberOfValuesPerRecord();
 		//printf("record_per_column = %d\n",records_per_column);
 
@@ -79,24 +89,25 @@ void ParallelCoordsView::Draw() {
 				//printf("axis_index = %d\n",axis_index);	
 				ParallelCoordsAxis *axis = &axes[axis_index];
 
-				pair<float,float> *min_max = &minmax_values[axis_index];
-				float value = dataset->GetRecord(axis_index)->Value(record_i);	
+				pair<float,float> *min_max = axis->record->MinMax();
+				float* value = dataset->GetRecordValue(axis_index,record_i);
 
-				float x = axis->x;
+				if(value != 0) {
+					float x = axis->x;
 
-				//indicating the ratio of height, where max = 1 and min = 0
-				float heightRatio;
-				if(min_max->second == min_max->first) { //Special case to avoid divide-by-zero
-					heightRatio = .5F;
-				}	
-				else heightRatio = (value - min_max->first) / (min_max->second - min_max->first); 
+					//indicating the ratio of height, where max = 1 and min = 0
+					float heightRatio;
+					if(min_max->second == min_max->first) { //Special case to avoid divide-by-zero
+						heightRatio = .5F;
+					}	
+					else heightRatio = (*value - min_max->first) / (min_max->second - min_max->first); 
 
-				float y = heightRatio * axis->height + startY + marginHeight;
+					float y = heightRatio * axis->height + startY + marginHeight;
 
-				//printf("heightratio = %f\n",heightRatio);
-				//printf("value point (x,y) = (%f,%f)\n",x,y);
-			
-				glVertex3f(x, y, 0);
+					//printf("heightratio = %f\n",heightRatio);
+					//printf("value point (x,y) = (%f,%f)\n",x,y);
+					glVertex3f(x, y, 0);
+				}
 			}
 			glEnd();
 		}
@@ -108,7 +119,6 @@ void ParallelCoordsView::ComputeLayout() {
     axes.clear(); //Remove the old axes
     
     size_t nr_of_axes = dataset->NumberOfRecords();
-    
 	
     
     //Fixed y for all axes
@@ -122,6 +132,8 @@ void ParallelCoordsView::ComputeLayout() {
         RIVRecord* record = dataset->GetRecord(i);
         
         ParallelCoordsAxis axis(x,y,axisHeight,record);
+		axis.ComputeScale(4);
+
         axes.push_back(axis);
     }
 }

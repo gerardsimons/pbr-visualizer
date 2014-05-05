@@ -24,8 +24,8 @@ public:
 	~RIVRecord(void) { /* ... */ };
 
 	size_t size();
-	float Value(int index);
-	std::pair<float,float> MinMax();
+	float* Value(int index);
+	std::pair<float,float>* MinMax();
 };
 
 #endif

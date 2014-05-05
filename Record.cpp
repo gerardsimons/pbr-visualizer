@@ -4,7 +4,7 @@ size_t RIVRecord::size() {
 	return values.size();
 }
 
-std::pair<float,float> RIVRecord::MinMax() {
+std::pair<float,float>* RIVRecord::MinMax() {
     
     if(!min_max_computed) {
         float min = std::numeric_limits<float>::max();
@@ -23,11 +23,11 @@ std::pair<float,float> RIVRecord::MinMax() {
         }
         min_max = std::pair<float,float>(min,max);
         //TODO: min_max caching does not work properly, uncomment below to enable caching!
-        //min_max_computed = true;
+        min_max_computed = true;
     }
-	return min_max;	//return std::pair<float,float>(1.F,1.F);
+	return &min_max;	//return std::pair<float,float>(1.F,1.F);
 }
 
-float RIVRecord::Value(int index) {
-	return values[index];
+float* RIVRecord::Value(int index) {
+	return &values[index];
 }

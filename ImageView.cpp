@@ -9,8 +9,11 @@
 #include "ImageView.h"
 #include "BMPImage.h"
 #include "loadppm.h"
+#include "Filter.h"
 
 #include <math.h>
+
+
 
 RIVImageView::RIVImageView(char* filename, int x, int y, int width, int height, int paddingX, int paddingY) : RIVDataView(x,y,width,height, paddingX, paddingY) {
 
@@ -70,10 +73,10 @@ void RIVImageView::Draw() {
 		if(selection.start.x != -1) {
 			glColor4f(0.317F,.553F, .741F,.5F); //Nice light blue color for selection
 			glBegin(GL_QUADS);
-				glVertex3f(selection.start.x,selection.start.y,1);			
-				glVertex3f(selection.end.x,selection.start.y,1);
-				glVertex3f(selection.end.x,selection.end.y,1);
-				glVertex3f(selection.start.x,selection.end.y,1);
+				glVertex3f(selection.start.x * imageMagnificationX,selection.start.y  * imageMagnificationY,1);			
+				glVertex3f(selection.end.x  * imageMagnificationX,selection.start.y  * imageMagnificationY,1);
+				glVertex3f(selection.end.x  * imageMagnificationX,selection.end.y  * imageMagnificationY,1);
+				glVertex3f(selection.start.x  * imageMagnificationX,selection.end.y  * imageMagnificationY,1);
 			glEnd();
 		}
 		//needsRedraw = false; //TODO: This does not work when losing and regaining focus!
@@ -111,6 +114,14 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 			printf("selection (x,y) = (%d,%d)\n",selection.start.x,selection.start.y);
 			printf("selection (endX,endY) = (%d,%d)\n",selection.end.x,selection.end.y);
 
+			dataset->ClearFilters();
+
+			Filter *xFilter = new RangeFilter("x",selection.start.x,selection.end.x);
+			Filter *yFilter = new RangeFilter("y",selection.start.y,selection.end.y);
+		
+			dataset->AddFilter(xFilter);
+			dataset->AddFilter(yFilter);
+
 			isDragging = false;
 		}
 		return true;
@@ -123,10 +134,10 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 }
 
 Point RIVImageView::screenToPixelSpace(int x, int y) {
-	Point pixel;
-	int pixelX = round((float)x / imageMagnificationX) * imageMagnificationX + paddingX;
-	int pixelY = round((float)y / imageMagnificationY) * imageMagnificationY + paddingY;
+	int pixelX = round((float)x / imageMagnificationX);
+	int pixelY = round((float)y / imageMagnificationY);
 
+	Point pixel;
 	pixel.x = min(max(pixelX,0),imageWidth);
 	pixel.y = min(max(pixelY,0),imageHeight);
 
@@ -138,7 +149,6 @@ bool RIVImageView::HandleMouseMotion(int x, int y) {
 	if(isDragging) {
 		Point pixel = screenToPixelSpace(x,y);
 		selection.end = pixel;
-
 		return true;
 	}
 	else return false;

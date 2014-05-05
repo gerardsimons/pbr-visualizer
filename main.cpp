@@ -132,7 +132,7 @@ void initialize() {
 	data.push_back(3.F);
 	data.push_back(4.F);
 
-	RIVRecord recordOne("attribute1",data);
+	RIVRecord recordOne("# intersections",data);
 	dataset.AddRecord(recordOne);
 
 	data.clear();
@@ -142,7 +142,7 @@ void initialize() {
 	data.push_back(22.F);
 	//data.push_back(5.F);
 
-	RIVRecord recordTwo("attribute2",data);
+	RIVRecord recordTwo("throughput 1",data);
 	dataset.AddRecord(recordTwo);
 
 	data.clear();
@@ -151,10 +151,30 @@ void initialize() {
 	data.push_back(5.F);
 	data.push_back(8.F);
 
-	RIVRecord recordThree("attribute3",data);
-    RIVRecord recordFour("attribute4",data);
+	RIVRecord recordThree("throughput 2",data);
+    RIVRecord recordFour("throughput 3",data);
 	dataset.AddRecord(recordThree);
     dataset.AddRecord(recordFour);
+
+	//Pixel x data
+	data.clear();
+	data.push_back(0.F);
+	data.push_back(1.F);
+	data.push_back(0.F);
+	data.push_back(1.F);
+
+	RIVRecord recordX("x",data);
+	dataset.AddRecord(recordX);
+
+	//Pixel y data
+	data.clear();
+	data.push_back(0.F);
+	data.push_back(0.F);
+	data.push_back(1.F);
+	data.push_back(1.F);
+
+	RIVRecord recordY("y",data);
+	dataset.AddRecord(recordY);
 
     int imageWidth = 500;
     int imageHeight = 500;
@@ -162,8 +182,10 @@ void initialize() {
 	//CAUTION: Below path is Windows / Visual Studio Specific
 	//CAUTION: Image should be power of two!
     //RIVImageView *imageView = new RIVImageView("../RenderingInfoVis/teapot128x128x512.ppm",0,0,imageWidth,imageHeight,0,0);     //PPM IMAGE
-	RIVImageView *imageView = new RIVImageView("../RenderingInfoVis/teapot8x8x512.bmp",0,0,imageWidth,imageHeight,0,0);     //PPM IMAGE
-	ParallelCoordsView *pview = new ParallelCoordsView(imageWidth,0,width-imageWidth,height,20,20);
+	RIVImageView *imageView = new RIVImageView("../RenderingInfoVis/Resources/teapot2x2x512.bmp",0,0,imageWidth,imageHeight,0,0);     //BMP IMAGE
+	ParallelCoordsView *pview = new ParallelCoordsView(imageWidth,0,width-imageWidth,height,50,20);
+
+	imageView->SetData(&dataset);
 	pview->SetData(&dataset);
 
 	imageView->ComputeLayout();
