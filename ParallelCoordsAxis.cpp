@@ -20,6 +20,7 @@ float ParallelCoordsAxis::PositionOnScale(float value) {
 	if(value >= 0.F && value <= 1.F) {
 		return y + value * height;
 	}
+    return .0F / .0F;
 }
 
 //Returns the value 
@@ -28,6 +29,7 @@ float ParallelCoordsAxis::ValueOnScale(float value) {
 	if(value >= 0.F && value <= 1.F) {
 		return (1 - value) * min_max->first + value * min_max->second;
 	}
+    return .0F / .0F;
 }
 
 void ParallelCoordsAxis::ComputeScale(int n) {

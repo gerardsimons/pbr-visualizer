@@ -30,7 +30,7 @@ typedef struct SelectionBox {
 
 class RIVImageView : public RIVDataView {
 public:
-    RIVImageView(char* filename, int x, int y, int width, int height, int paddingX, int paddingY);
+    RIVImageView(std::string filename, int x, int y, int width, int height, int paddingX, int paddingY);
     ~RIVImageView();
     void Draw(); //Override
     void ComputeLayout(); //Override

@@ -15,10 +15,10 @@
 
 
 
-RIVImageView::RIVImageView(char* filename, int x, int y, int width, int height, int paddingX, int paddingY) : RIVDataView(x,y,width,height, paddingX, paddingY) {
+RIVImageView::RIVImageView(std::string filename, int x, int y, int width, int height, int paddingX, int paddingY) : RIVDataView(x,y,width,height, paddingX, paddingY) {
 
     //PPMImage image(filename);
-	BMPImage image(filename,true);
+	BMPImage image(filename.c_str(),true);
 
     glGenTextures(1, &imageTexture);
     glBindTexture(GL_TEXTURE_2D, imageTexture);

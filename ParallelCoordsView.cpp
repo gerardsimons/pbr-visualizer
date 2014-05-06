@@ -145,6 +145,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 		//How to define this range
 		return true;
 	}
+    return false;
 }
 
 bool ParallelCoordsView::HandleMouseMotion(int x, int y) {

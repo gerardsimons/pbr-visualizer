@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include <math.h>
 
 #include "DataView.h"
 #include "ParallelCoordsView.h"
@@ -128,8 +129,16 @@ void reshape(int w, int h)
 
 void initialize() {
 
+    #ifdef _WIN32
+        std::string resourcesPath = "../RenderingInfoVis/Resources/";
+    #elif __APPLE__
+        std::string resourcesPath = "../../../Resources/";
+    #endif
+    
+    std::string fileName = "teapot2x2x512.exr";
+    
+    DataFileReader::LoadData(resourcesPath + fileName + ".bin");
 
-	DataFileReader::LoadData("../RenderingInfoVis/Resources/teapot2x2x512.exr.bin");
 
 	vector<float> data;
 	data.push_back(1.F);
@@ -187,7 +196,7 @@ void initialize() {
 	//CAUTION: Below path is Windows / Visual Studio Specific
 	//CAUTION: Image should be power of two!
     //RIVImageView *imageView = new RIVImageView("../RenderingInfoVis/teapot128x128x512.ppm",0,0,imageWidth,imageHeight,0,0);     //PPM IMAGE
-	RIVImageView *imageView = new RIVImageView("../RenderingInfoVis/Resources/teapot2x2x512.bmp",0,0,imageWidth,imageHeight,0,0);     //BMP IMAGE
+	RIVImageView *imageView = new RIVImageView(resourcesPath + fileName + ".bmp",0,0,imageWidth,imageHeight,0,0);     //BMP IMAGE
 	ParallelCoordsView *pview = new ParallelCoordsView(imageWidth,0,width-imageWidth,height,50,20);
 
 	imageView->SetData(&dataset);

@@ -11,8 +11,8 @@ DataFileReader::~DataFileReader(void)
 {
 }
 
-void DataFileReader::LoadData(char* fileName) {
-	FILE *inputFile = fopen(fileName,"rb");
+void DataFileReader::LoadData(std::string fileName) {
+	FILE *inputFile = fopen(fileName.c_str(),"rb");
 	if(inputFile == 0) {
 		throw "Error opening file.";
 	}
