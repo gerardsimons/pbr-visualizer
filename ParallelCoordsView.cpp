@@ -21,7 +21,7 @@ ParallelCoordsView::~ParallelCoordsView(void) {
 void ParallelCoordsView::Draw() {
 
 	if(needsRedraw) {
-		printf("ParallCoordsView::Draw()\n");
+		//printf("ParallCoordsView::Draw()\n");
 
 		float textColor[3] = {0,0,0};
 

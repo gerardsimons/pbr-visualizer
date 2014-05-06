@@ -61,13 +61,14 @@ RIVRecord* RIVDataSet::GetRecord(int record) {
 }
 
 void RIVDataSet::ApplyFilters() {
+	filtered_value_indices.clear();
 	for(size_t i = 0 ; i < float_records.size() ; i++) {
 		RIVRecord *record = &float_records[i];
 		for(size_t j = 0 ; j < record->size() ; j++) {
 			float *value = record->Value(j);
 			for(size_t k = 0 ; k < filters.size() ; k++) {
 				Filter *filter = filters[k];
-				if(record->name == filter->GetAttributeName() &&!filter->PassesFilter(record->name,*value)) {
+				if(!filter->PassesFilter(record->name,*value)) {
 					filtered_value_indices.push_back(j);
 				}
 			}
@@ -77,7 +78,6 @@ void RIVDataSet::ApplyFilters() {
 
 void RIVDataSet::AddFilter(Filter* filter) {
 	filters.push_back(filter);
-	ComputeFilteredIndices();
 }
 
 void RIVDataSet::ClearFilters() {

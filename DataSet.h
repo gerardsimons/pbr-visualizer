@@ -19,8 +19,6 @@ private :
 	vector<Filter*> filters;
 	vector<int> filtered_value_indices; //Record value indices that do not pass the filters.
 
-	void ApplyFilters();
-	
 public:
 	RIVDataSet(void);
 	~RIVDataSet(void);
@@ -34,6 +32,7 @@ public:
 	void AddFilter(Filter*);
 	bool HasFilters();
 	void ClearFilters();
+	void ApplyFilters();
 };
 
 #endif

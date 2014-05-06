@@ -41,6 +41,7 @@ private:
 	float imageMagnificationX,imageMagnificationY;
 	bool isDragging;
 	Point screenToPixelSpace(int,int);
+	void clearSelection();
 	//In screenspace
 	Point imageStart;
 	Point imageEnd;

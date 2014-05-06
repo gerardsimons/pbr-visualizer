@@ -52,8 +52,6 @@ void RIVImageView::Draw() {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,  GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,  GL_NEAREST);
 		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-
     
 		glBegin(GL_QUADS);
 			glTexCoord2f(0.0f,1.0f);
@@ -98,7 +96,7 @@ int round(float d)
 }
 
 bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
-	if(RIVDataView::containsPoint(x,y)) {
+	if(isDragging || RIVDataView::containsPoint(x,y)) {
 		//If start dragging > init selection
 		if(state == GLUT_DOWN) {
 			//init selection
@@ -114,23 +112,36 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 			printf("selection (x,y) = (%d,%d)\n",selection.start.x,selection.start.y);
 			printf("selection (endX,endY) = (%d,%d)\n",selection.end.x,selection.end.y);
 
-			dataset->ClearFilters();
+			if(selection.end.x > selection.start.x && selection.end.y > selection.start.y) {
+				dataset->ClearFilters();
 
-			Filter *xFilter = new RangeFilter("x",selection.start.x,selection.end.x);
-			Filter *yFilter = new RangeFilter("y",selection.start.y,selection.end.y);
+				Filter *xFilter = new RangeFilter("x",selection.start.x,selection.end.x);
+				Filter *yFilter = new RangeFilter("y",selection.start.y,selection.end.y);
 		
-			dataset->AddFilter(xFilter);
-			dataset->AddFilter(yFilter);
+				dataset->AddFilter(xFilter);
+				dataset->AddFilter(yFilter);
 
+				dataset->ApplyFilters();
+			}
+			else {
+				clearSelection(); 
+			}
 			isDragging = false;
 		}
 		return true;
 	}
 	else {
 		//Clear any possible selection
-		selection.start.x = -1;
+		clearSelection();
 		return false;
 	}
+}
+
+void RIVImageView::clearSelection() {
+	//Set the selection to off
+	selection.start.x = -1;
+	//Clear any filters that may have been applied to the dataset
+	dataset->ClearFilters();
 }
 
 Point RIVImageView::screenToPixelSpace(int x, int y) {
@@ -138,8 +149,13 @@ Point RIVImageView::screenToPixelSpace(int x, int y) {
 	int pixelY = round((float)y / imageMagnificationY);
 
 	Point pixel;
-	pixel.x = min(max(pixelX,0),imageWidth);
-	pixel.y = min(max(pixelY,0),imageHeight);
+
+	//How many pixels does the original image have?
+	int nrOfXPixels = round(imageWidth / imageMagnificationX);
+	int nrOfYPixels = round(imageHeight / imageMagnificationY);
+
+	pixel.x = min(max(pixelX,0),nrOfXPixels);
+	pixel.y = min(max(pixelY,0),nrOfYPixels);
 
 	return pixel;
 }

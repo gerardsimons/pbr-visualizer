@@ -6,6 +6,7 @@
 #include "ParallelCoordsView.h"
 #include "DataSet.h"
 #include "ImageView.h"
+#include "DataFileReader.h"
 
 #if defined(__APPLE__)
 #include <GLUT/glut.h>
@@ -126,6 +127,10 @@ void reshape(int w, int h)
 
 
 void initialize() {
+
+
+	DataFileReader::LoadData("../RenderingInfoVis/Resources/teapot2x2x512.exr.bin");
+
 	vector<float> data;
 	data.push_back(1.F);
 	data.push_back(2.F);
