@@ -8,7 +8,7 @@
 
 #include "ParallelCoordsAxis.h"
 
-ParallelCoordsAxis::ParallelCoordsAxis(int x,int y, int height, RIVRecord* record) {
+ParallelCoordsAxis::ParallelCoordsAxis(int x,int y, int height, RIVRecord<float>* record) {
     this->x = x;
     this->y = y;
     this->height = height;

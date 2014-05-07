@@ -14,7 +14,7 @@ class RIVDataSet
 {
 private :
 	//map<string,vector<int>> int_records;
-	vector<RIVRecord> float_records;
+	vector<RIVRecord<float>> float_records;
 
 	vector<Filter*> filters;
 
@@ -25,11 +25,11 @@ public:
 	RIVDataSet(void);
 	~RIVDataSet(void);
 	//void AddData(string name,vector<int>);
-	void AddRecord(RIVRecord);
+	void AddRecord(RIVRecord<float>);
 	pair<float,float>* MinMax(int);
 	size_t NumberOfRecords();
 	size_t NumberOfValuesPerRecord();
-	RIVRecord* GetRecord(int);
+	RIVRecord<float>* GetRecord(int);
 	float* GetRecordValue(int,int);
 	void AddFilter(Filter*);
 	bool HasFilters();

@@ -133,7 +133,7 @@ RIVDataSet loadMockData() {
 	data.push_back(3.F);
 	data.push_back(4.F);
 
-	RIVRecord recordOne("# intersections",data);
+	RIVRecord<float> recordOne("# intersections",data);
 	dataset.AddRecord(recordOne);
 
 	data.clear();
@@ -143,7 +143,7 @@ RIVDataSet loadMockData() {
 	data.push_back(22.F);
 	//data.push_back(5.F);
 
-	RIVRecord recordTwo("throughput 1",data);
+	RIVRecord<float> recordTwo("throughput 1",data);
 	dataset.AddRecord(recordTwo);
 
 	data.clear();
@@ -152,8 +152,8 @@ RIVDataSet loadMockData() {
 	data.push_back(5.F);
 	data.push_back(8.F);
 
-	RIVRecord recordThree("throughput 2",data);
-    RIVRecord recordFour("throughput 3",data);
+	RIVRecord<float> recordThree("throughput 2",data);
+    RIVRecord<float> recordFour("throughput 3",data);
 	dataset.AddRecord(recordThree);
     dataset.AddRecord(recordFour);
 
@@ -164,7 +164,7 @@ RIVDataSet loadMockData() {
 	data.push_back(0.F);
 	data.push_back(1.F);
 
-	RIVRecord recordX("x",data);
+	RIVRecord<float> recordX("x",data);
 	dataset.AddRecord(recordX);
 
 	//Pixel y data
@@ -174,7 +174,7 @@ RIVDataSet loadMockData() {
 	data.push_back(1.F);
 	data.push_back(1.F);
 
-	RIVRecord recordY("y",data);
+	RIVRecord<float> recordY("y",data);
 	dataset.AddRecord(recordY);
 
 	return dataset;

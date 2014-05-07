@@ -55,12 +55,12 @@ RIVDataSet DataFileReader::LoadData(std::string fileName) {
 		++lineNumber;
 	}
 	RIVDataSet dataset;
-	RIVRecord xRecord("x",xPixelData);
-	RIVRecord yRecord("y",yPixelData);
-	RIVRecord tpOne("throughput 1",throughPutOne);
-	RIVRecord tpTwo("throughput 2",throughPutTwo);
-	RIVRecord tpThree("throughput 3",throughPutThree);
-	RIVRecord isects("intersections",intersections);
+	RIVRecord<float> xRecord("x",xPixelData);
+	RIVRecord<float> yRecord("y",yPixelData);
+	RIVRecord<float> tpOne("throughput 1",throughPutOne);
+	RIVRecord<float> tpTwo("throughput 2",throughPutTwo);
+	RIVRecord<float> tpThree("throughput 3",throughPutThree);
+	RIVRecord<float> isects("intersections",intersections);
 
 	dataset.AddRecord(xRecord);
 	dataset.AddRecord(yRecord);

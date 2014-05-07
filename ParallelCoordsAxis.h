@@ -11,7 +11,7 @@
 
 class ParallelCoordsAxis {
 public:
-    ParallelCoordsAxis(int x,int y,int height,RIVRecord* record);
+    ParallelCoordsAxis(int x,int y,int height,RIVRecord<float>* record);
 	void ComputeScale(int n);
 	
 	//Returns the Y position of a value along the scale
@@ -22,5 +22,5 @@ public:
 	std::vector<float> scale;
     int x,y;
     int height;
-    RIVRecord* record;
+    RIVRecord<float>* record;
 };

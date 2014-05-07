@@ -92,7 +92,7 @@ void ParallelCoordsView::Draw() {
 				//printf("axis_index = %d\n",axis_index);	
 				ParallelCoordsAxis *axis = &axes[axis_index];
 
-				pair<float,float> *min_max = axis->record->MinMax();
+				pair<float,float> *min_max = dataset->GetRecord(axis_index)->MinMax();
 				float* value = dataset->GetRecordValue(axis_index,record_i);
 
 				float* color = computeColor(lineIndex,totalNumberOfLines);
@@ -149,7 +149,7 @@ void ParallelCoordsView::ComputeLayout() {
     for(size_t i = 0 ; i < nr_of_axes ; i++) {
         int x = delta * i + startX + paddingX;
         
-        RIVRecord* record = dataset->GetRecord(i);
+        RIVRecord<float>* record = dataset->GetRecord(i);
         ParallelCoordsAxis axis(x,y,axisHeight,record);
 
 		axis.ComputeScale(4);

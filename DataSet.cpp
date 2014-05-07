@@ -15,12 +15,12 @@ RIVDataSet::~RIVDataSet(void) {
 //	int_records[name] = values;
 //}
 
-void RIVDataSet::AddRecord(RIVRecord record) {
+void RIVDataSet::AddRecord(RIVRecord<float> record) {
 	float_records.push_back(record);
 }
 
 pair<float,float>* RIVDataSet::MinMax(int index) {
-	RIVRecord *record = &float_records[index];
+	RIVRecord<float> *record = &float_records[index];
 	return record->MinMax();
 }
 
@@ -43,7 +43,7 @@ size_t RIVDataSet::NumberOfValuesPerRecord() {
 
 //Get the value of record given by the indices
 float* RIVDataSet::GetRecordValue(int recordIndex, int valueIndex) {
-	RIVRecord *record = &float_records[recordIndex];
+	RIVRecord<float> *record = &float_records[recordIndex];
 	
 	if(filtered_values.size() > 0) {
 		//for(size_t i = 0 ; i < filtered_value_indices.size() ; i++) {
@@ -58,7 +58,7 @@ float* RIVDataSet::GetRecordValue(int recordIndex, int valueIndex) {
 	return record->Value(valueIndex);
 }
 
-RIVRecord* RIVDataSet::GetRecord(int record) {
+RIVRecord<float>* RIVDataSet::GetRecord(int record) {
 	return &float_records[record];
 }
 
@@ -66,7 +66,7 @@ void RIVDataSet::ApplyFilters() {
 	//filtered_value_indices.clear();
 	filtered_values.clear();
 	for(size_t i = 0 ; i < float_records.size() ; i++) {
-		RIVRecord *record = &float_records[i];
+		RIVRecord<float> *record = &float_records[i];
 		for(size_t j = 0 ; j < record->size() ; j++) {
 			if(filtered_values[j] == false) {
 				float *value = record->Value(j);
