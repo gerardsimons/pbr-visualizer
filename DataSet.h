@@ -17,7 +17,9 @@ private :
 	vector<RIVRecord> float_records;
 
 	vector<Filter*> filters;
-	vector<int> filtered_value_indices; //Record value indices that do not pass the filters.
+
+	map<int,bool> filtered_values; //Whether or not the value was filtered by any applied filters
+	//vector<int> filtered_value_indices; //Record value indices that do not pass the filters. //CAUTION: Obsolete, not efficient
 
 public:
 	RIVDataSet(void);

@@ -21,7 +21,7 @@ public:
 	int width,height;
 	int paddingX,paddingY;
 	//functions
-	void SetData(RIVDataSet *newDataSet) { dataset = newDataSet; } ;
+	void SetData(RIVDataSet *newDataSet);
 	void Invalidate() { needsRedraw = true; }
 	//must implement
     virtual void ComputeLayout() = 0;

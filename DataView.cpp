@@ -20,8 +20,12 @@ RIVDataView::RIVDataView(void)
 	delete &height;
 }
 
+void RIVDataView::SetData(RIVDataSet *dataset) {
+	this->dataset = dataset;
+}
+
 bool RIVDataView::containsPoint(int x, int y) {
-	//TODO: Deal with padding/margins
+	//TODO: Deal with padding/margins?
 	bool xInRange = x > startX && x < startX + width;
 	bool yInRange = y > startY && y < startY + height;
 

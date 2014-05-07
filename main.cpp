@@ -112,6 +112,7 @@ void reshape(int w, int h)
   height = h;
 
   /* Invalidate all views */
+  invalidateAllViews();
 
   /* tell OpenGL to use the whole window for drawing */
   glViewport(0, 0, (GLsizei) width, (GLsizei) height);
@@ -122,24 +123,10 @@ void reshape(int w, int h)
   glLoadIdentity();
   gluOrtho2D(0.0, width, 0.0, height);
 
-  invalidateAllViews();
+  
 }
 
-
-
-void initialize() {
-
-    #ifdef _WIN32
-        std::string resourcesPath = "../RenderingInfoVis/Resources/";
-    #elif __APPLE__
-        std::string resourcesPath = "../../../Resources/";
-    #endif
-    
-    std::string fileName = "teapot2x2x512.exr";
-    
-    DataFileReader::LoadData(resourcesPath + fileName + ".bin");
-
-
+RIVDataSet loadMockData() {
 	vector<float> data;
 	data.push_back(1.F);
 	data.push_back(2.F);
@@ -190,12 +177,26 @@ void initialize() {
 	RIVRecord recordY("y",data);
 	dataset.AddRecord(recordY);
 
-    int imageWidth = 500;
-    int imageHeight = 500;
+	return dataset;
+}
 
-	//CAUTION: Below path is Windows / Visual Studio Specific
+void initialize() {
+
+    #ifdef _WIN32
+        std::string resourcesPath = "../RenderingInfoVis/Resources/";
+    #elif __APPLE__
+        std::string resourcesPath = "../../../Resources/";
+    #endif
+
+	int imageWidth = 500;
+    int imageHeight = 500;
+    
+    std::string fileName = "teapot32x32x1.exr";
+    
+	dataset = DataFileReader::LoadData(resourcesPath + fileName + ".bin");
+    /* dataset = &loadData(resourcesPath + fileName + ".bin"); */
+
 	//CAUTION: Image should be power of two!
-    //RIVImageView *imageView = new RIVImageView("../RenderingInfoVis/teapot128x128x512.ppm",0,0,imageWidth,imageHeight,0,0);     //PPM IMAGE
 	RIVImageView *imageView = new RIVImageView(resourcesPath + fileName + ".bmp",0,0,imageWidth,imageHeight,0,0);     //BMP IMAGE
 	ParallelCoordsView *pview = new ParallelCoordsView(imageWidth,0,width-imageWidth,height,50,20);
 
@@ -205,8 +206,8 @@ void initialize() {
 	imageView->ComputeLayout();
     pview->ComputeLayout();
 	
+	views.push_back(imageView);
 	views.push_back(pview);
-    views.push_back(imageView);
 }
 
 int main(int argc, char *argv[])

@@ -45,13 +45,15 @@ size_t RIVDataSet::NumberOfValuesPerRecord() {
 float* RIVDataSet::GetRecordValue(int recordIndex, int valueIndex) {
 	RIVRecord *record = &float_records[recordIndex];
 	
-	if(filtered_value_indices.size() > 0) {
-		for(size_t i = 0 ; i < filtered_value_indices.size() ; i++) {
-			int filtered_index = filtered_value_indices[i];
-			if(filtered_index == valueIndex) {
-				return 0; //Should be filtered out.
-			}
-		}
+	if(filtered_values.size() > 0) {
+		//for(size_t i = 0 ; i < filtered_value_indices.size() ; i++) {
+		//	int filtered_index = filtered_value_indices[i];
+		//	if(filtered_index == valueIndex) {
+		//		return 0; //Should be filtered out.
+		//	}
+		//}
+		bool filtered = filtered_values[valueIndex];
+		if(filtered) return 0;
 	}
 	return record->Value(valueIndex);
 }
@@ -61,15 +63,20 @@ RIVRecord* RIVDataSet::GetRecord(int record) {
 }
 
 void RIVDataSet::ApplyFilters() {
-	filtered_value_indices.clear();
+	//filtered_value_indices.clear();
+	filtered_values.clear();
 	for(size_t i = 0 ; i < float_records.size() ; i++) {
 		RIVRecord *record = &float_records[i];
 		for(size_t j = 0 ; j < record->size() ; j++) {
-			float *value = record->Value(j);
-			for(size_t k = 0 ; k < filters.size() ; k++) {
-				Filter *filter = filters[k];
-				if(!filter->PassesFilter(record->name,*value)) {
-					filtered_value_indices.push_back(j);
+			if(filtered_values[j] == false) {
+				float *value = record->Value(j);
+				for(size_t k = 0 ; k < filters.size() ; k++) {
+					Filter *filter = filters[k];
+					if(!filter->PassesFilter(record->name,*value)) {
+						//filtered_value_indices.push_back(j);
+						filtered_values[j] = true;
+						break; //If it does not pass this filter, it does not matter if it passes the other ones
+					}
 				}
 			}
 		}
@@ -82,7 +89,8 @@ void RIVDataSet::AddFilter(Filter* filter) {
 
 void RIVDataSet::ClearFilters() {
 	filters.clear();
-	filtered_value_indices.clear();
+	filtered_values.clear();
+	//filtered_value_indices.clear();
 }
 
 bool RIVDataSet::HasFilters() {

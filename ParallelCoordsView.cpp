@@ -65,7 +65,7 @@ void ParallelCoordsView::Draw() {
 			for(size_t j = 0 ; j < scale.size() ; j++) {
 				float value = axis->ValueOnScale(scale[j]);				
 				int height = axis->PositionOnScale(scale[j]);
-				char text[15];
+				char text[150];
 				sprintf(text,"%.2f",value);
 				DrawText(text,10,axis->x - 6,height,textColor,.1F);
 			}
@@ -76,9 +76,12 @@ void ParallelCoordsView::Draw() {
 
 		//Draw the lines
 		glColor3f(1.0, 0.0, 0.0);
-		glLineWidth(3.F);
+		glLineWidth(1.F);
     
 		float delta = 1.F / (columns + 1) * width;
+
+		size_t lineIndex = 0;
+		size_t totalNumberOfLines = dataset->NumberOfValuesPerRecord();
 
 		//for each record
 		for(size_t record_i = 0 ; record_i < records_per_column ; record_i++) {
@@ -91,6 +94,9 @@ void ParallelCoordsView::Draw() {
 
 				pair<float,float> *min_max = axis->record->MinMax();
 				float* value = dataset->GetRecordValue(axis_index,record_i);
+
+				float* color = computeColor(lineIndex,totalNumberOfLines);
+				glColor3f(color[0],color[1],color[2]);
 
 				if(value != 0) {
 					float x = axis->x;
@@ -109,10 +115,24 @@ void ParallelCoordsView::Draw() {
 					glVertex3f(x, y, 0);
 				}
 			}
+			++lineIndex;
 			glEnd();
 		}
 		//needsRedraw = false; //TODO: This does not work when losing and regaining focus!
 	}
+}
+
+float* ParallelCoordsView::computeColor(int lineIndex, int totalNrOfLines) {
+	float minColor[] = {1.F,1.F,0.F}; //yellow
+	float maxColor[] = {0.F,0.F,1.F}; //blue
+
+	float ratio = (lineIndex + 1) / (float) (totalNrOfLines + 1);
+
+	float color[3];
+	for(size_t i = 0 ; i < 3 ; i++) {
+		color[i] = ratio * minColor[i] + (1 - ratio) * maxColor[i];
+	}
+	return color;
 }
 
 void ParallelCoordsView::ComputeLayout() {
@@ -130,8 +150,8 @@ void ParallelCoordsView::ComputeLayout() {
         int x = delta * i + startX + paddingX;
         
         RIVRecord* record = dataset->GetRecord(i);
-        
         ParallelCoordsAxis axis(x,y,axisHeight,record);
+
 		axis.ComputeScale(4);
 
         axes.push_back(axis);

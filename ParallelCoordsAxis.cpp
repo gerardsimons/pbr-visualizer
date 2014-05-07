@@ -20,7 +20,7 @@ float ParallelCoordsAxis::PositionOnScale(float value) {
 	if(value >= 0.F && value <= 1.F) {
 		return y + value * height;
 	}
-    return .0F / .0F;
+	return std::numeric_limits<float>::quiet_NaN();
 }
 
 //Returns the value 
@@ -29,12 +29,12 @@ float ParallelCoordsAxis::ValueOnScale(float value) {
 	if(value >= 0.F && value <= 1.F) {
 		return (1 - value) * min_max->first + value * min_max->second;
 	}
-    return .0F / .0F;
+    return std::numeric_limits<float>::quiet_NaN();
 }
 
 void ParallelCoordsAxis::ComputeScale(int n) {
 	scale.push_back(0.F);
-	//TWhat scale is best to use?
+	//What scale is best to use?
 	for(size_t i = 1 ; i < n ; i++) {
 		float value = (i / (float)n);
 		//Round to 1 decimal
