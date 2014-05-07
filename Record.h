@@ -6,13 +6,8 @@
 #include <string>
 #include <vector>
 
-class RIVRecord {
-public:
-	std::string name;
-	virtual size_t Size() = 0;
-}
 
-class RIVFloatRecord
+class RIVRecord
 {
 
 private:
@@ -28,14 +23,9 @@ public:
 	RIVRecord(std::string _name, std::vector<float> _values) { name = _name; values = _values; min_max_computed = false; };
 	~RIVRecord(void) { /* ... */ };
 
-	size_t Size();
-	
+	size_t size();
 	float* Value(int index);
 	std::pair<float,float>* MinMax();
 };
-
-class RIVIntegerRecord {
-	std::vector<float> values;
-}
 
 #endif
