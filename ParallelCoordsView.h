@@ -19,7 +19,7 @@ public:
 
 private:
     void DrawText(const char*,int,int,int,float[3],float);
-    float* ParallelCoordsView::computeColor(int lineIndex, int totalNrOfLines);
+    float* computeColor(int lineIndex, int totalNrOfLines);
     //Properties
     std::vector<ParallelCoordsAxis> axes;
 };

@@ -41,7 +41,7 @@ void ParallelCoordsView::Draw() {
 			glVertex3f(axis->x, axis->y, 0);
 			glVertex3f(axis->x, axis->y + axis->height, 0);
 
-			vector<float> scale = axis->scale;
+            std::vector<float> scale = axis->scale;
 
 			//Draw the scales indicator
 			for(size_t j = 0 ; j < scale.size() ; j++) {
@@ -55,11 +55,11 @@ void ParallelCoordsView::Draw() {
 		//Draw texts
 		for(size_t i = 0 ; i < axes.size() ; i++) {
 			ParallelCoordsAxis *axis = &axes[i];
-			string text = axis->record->name;
+            std::string text = axis->record->name;
         
 			DrawText(text.c_str(),text.size() + 1,axis->x,axis->y - 15,textColor,.1F);
 
-			vector<float> scale = axis->scale;
+            std::vector<float> scale = axis->scale;
 
 			//Draw the scales indicator
 			for(size_t j = 0 ; j < scale.size() ; j++) {
@@ -92,7 +92,7 @@ void ParallelCoordsView::Draw() {
 				//printf("axis_index = %d\n",axis_index);	
 				ParallelCoordsAxis *axis = &axes[axis_index];
 
-				pair<float,float> *min_max = dataset->GetRecord(axis_index)->MinMax();
+                std::pair<float,float> *min_max = dataset->GetRecord(axis_index)->MinMax();
 				float* value = dataset->GetRecordValue(axis_index,record_i);
 
 				float* color = computeColor(lineIndex,totalNumberOfLines);
