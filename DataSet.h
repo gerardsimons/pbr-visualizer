@@ -13,8 +13,6 @@ template<typename... Ts>
 class RIVDataSet {
 public:
     RIVVector<RIVRecord<Ts...>> records;
-    RIVVector<Filter*> filters;
-    
 };
 
 //class RIVDataSet
