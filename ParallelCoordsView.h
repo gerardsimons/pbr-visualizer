@@ -3,8 +3,6 @@
 #include "DataView.h"
 #include "ParallelCoordsAxis.h"
 
-
-
 class ParallelCoordsView : public RIVDataView
 {
 public:
@@ -13,13 +11,19 @@ public:
 
     //Implemented virtual functions
     void Draw();
+    
+
+    
     void ComputeLayout();
 	bool HandleMouse(int,int,int,int);
 	bool HandleMouseMotion(int,int);
 
 private:
+    //Draw helper functions
+    void DrawAxes();
     void DrawText(const char*,int,int,int,float[3],float);
-    float* computeColor(int lineIndex, int totalNrOfLines);
+    float* computeColor(size_t lineIndex, size_t totalNrOfLines);
+    
     //Properties
     std::vector<ParallelCoordsAxis> axes;
 };

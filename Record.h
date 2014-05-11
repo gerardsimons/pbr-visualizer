@@ -6,30 +6,53 @@
 #include <string>
 #include <vector>
 
-template <class T>
+#include "RIVVector.h"
+
+//template<typename ...Ts>
+//class RIVRecord {
+//public:
+//    std::string name;
+//    std::vector<Ts...> values;
+//    RIVRecord(std::string name) {
+//        this->name = name;
+//    }
+//    
+//    RIVRecord();
+//    
+//    template<typename T>
+//    void AddValue(T value) {
+//        values.push_back(value);
+//    }
+//};
+
+
+template <typename T>
 class RIVRecord
 {
 
 private:
-	std::vector<T> values;
+
 public:
 	//Name of the data
 	std::string name;
+    std::vector<T> values;
+    
     bool min_max_computed; //Because null is not possible
-
 
     std::pair<T,T> min_max; //Cached min max
 
 	//Constructor & Destructor
-	RIVRecord(std::string _name, std::vector<T> _values) { name = _name; values = _values; min_max_computed = false; };
-	~RIVRecord(void) { /* ... */ };
-
-	size_t size() {
-		return values.size();
-	}
+	RIVRecord(std::string _name) { name = _name; };
+    ~RIVRecord() {
+        /* Destroy some stuff? */
+    }
+    
+    void SetValues(std::vector<T> values) {
+        this->values = values;
+    }
 
 	//Templated methods
-	T* Value(int index) {
+	T* Value(size_t index) {
 		return &values[index];
 	}
 
@@ -40,7 +63,7 @@ public:
 
 			if(!values.empty()) {
 				for(size_t i = 0 ; i < values.size() ; i++) {
-					float value = values[i];
+					auto value = values[i];
 					if(value > max) {
 						max = value;
 					}
@@ -56,5 +79,6 @@ public:
 		return &min_max;
 	}
 };
+
 
 #endif

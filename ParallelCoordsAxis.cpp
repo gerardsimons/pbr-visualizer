@@ -25,10 +25,10 @@ float ParallelCoordsAxis::PositionOnScale(float value) {
 
 //Returns the value 
 float ParallelCoordsAxis::ValueOnScale(float value) {
-	std::pair<float,float> *min_max = record->MinMax();
-	if(value >= 0.F && value <= 1.F) {
-		return (1 - value) * min_max->first + value * min_max->second;
-	}
+//	std::pair<float,float> *min_max = record->MinMax();
+//	if(value >= 0.F && value <= 1.F) {
+//		return (1 - value) * min_max->first + value * min_max->second;
+//	}
     return std::numeric_limits<float>::quiet_NaN();
 }
 

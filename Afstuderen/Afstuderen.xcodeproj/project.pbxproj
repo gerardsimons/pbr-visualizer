@@ -7,8 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E1290900191CCBC900822217 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E12908FF191CCBC900822217 /* main.cpp */; };
-		E1290902191CCBC900822217 /* Afstuderen.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = E1290901191CCBC900822217 /* Afstuderen.1 */; };
+		E1290932191CF4FB00822217 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1290931191CF4FB00822217 /* OpenGL.framework */; };
+		E1290934191CF50100822217 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1290933191CF50100822217 /* GLUT.framework */; };
+		E1290936191CF50A00822217 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1290935191CF50A00822217 /* Cocoa.framework */; };
+		E129094F191CF53000822217 /* BMPImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290937191CF53000822217 /* BMPImage.cpp */; };
+		E1290950191CF53000822217 /* DataFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290939191CF53000822217 /* DataFileReader.cpp */; };
+		E1290951191CF53000822217 /* DataSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E129093B191CF53000822217 /* DataSet.cpp */; };
+		E1290953191CF53000822217 /* Filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E129093F191CF53000822217 /* Filter.cpp */; };
+		E1290954191CF53000822217 /* ImageView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290941191CF53000822217 /* ImageView.cpp */; };
+		E1290955191CF53000822217 /* loadppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290943191CF53000822217 /* loadppm.cpp */; };
+		E1290956191CF53000822217 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290945191CF53000822217 /* main.cpp */; };
+		E1290957191CF53000822217 /* ParallelCoordsAxis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290946191CF53000822217 /* ParallelCoordsAxis.cpp */; };
+		E1290958191CF53000822217 /* ParallelCoordsView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290948191CF53000822217 /* ParallelCoordsView.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -18,7 +28,6 @@
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				E1290902191CCBC900822217 /* Afstuderen.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -26,8 +35,30 @@
 
 /* Begin PBXFileReference section */
 		E12908FC191CCBC900822217 /* Afstuderen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Afstuderen; sourceTree = BUILT_PRODUCTS_DIR; };
-		E12908FF191CCBC900822217 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		E1290901191CCBC900822217 /* Afstuderen.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Afstuderen.1; sourceTree = "<group>"; };
+		E1290931191CF4FB00822217 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		E1290933191CF50100822217 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		E1290935191CF50A00822217 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		E1290937191CF53000822217 /* BMPImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BMPImage.cpp; path = ../BMPImage.cpp; sourceTree = "<group>"; };
+		E1290938191CF53000822217 /* BMPImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BMPImage.h; path = ../BMPImage.h; sourceTree = "<group>"; };
+		E1290939191CF53000822217 /* DataFileReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DataFileReader.cpp; path = ../DataFileReader.cpp; sourceTree = "<group>"; };
+		E129093A191CF53000822217 /* DataFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataFileReader.h; path = ../DataFileReader.h; sourceTree = "<group>"; };
+		E129093B191CF53000822217 /* DataSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DataSet.cpp; path = ../DataSet.cpp; sourceTree = "<group>"; };
+		E129093C191CF53000822217 /* DataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataSet.h; path = ../DataSet.h; sourceTree = "<group>"; };
+		E129093E191CF53000822217 /* DataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataView.h; path = ../DataView.h; sourceTree = "<group>"; };
+		E129093F191CF53000822217 /* Filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Filter.cpp; path = ../Filter.cpp; sourceTree = "<group>"; };
+		E1290940191CF53000822217 /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Filter.h; path = ../Filter.h; sourceTree = "<group>"; };
+		E1290941191CF53000822217 /* ImageView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ImageView.cpp; path = ../ImageView.cpp; sourceTree = "<group>"; };
+		E1290942191CF53000822217 /* ImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageView.h; path = ../ImageView.h; sourceTree = "<group>"; };
+		E1290943191CF53000822217 /* loadppm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = loadppm.cpp; path = ../loadppm.cpp; sourceTree = "<group>"; };
+		E1290944191CF53000822217 /* loadppm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = loadppm.h; path = ../loadppm.h; sourceTree = "<group>"; };
+		E1290945191CF53000822217 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../main.cpp; sourceTree = "<group>"; };
+		E1290946191CF53000822217 /* ParallelCoordsAxis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParallelCoordsAxis.cpp; path = ../ParallelCoordsAxis.cpp; sourceTree = "<group>"; };
+		E1290947191CF53000822217 /* ParallelCoordsAxis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParallelCoordsAxis.h; path = ../ParallelCoordsAxis.h; sourceTree = "<group>"; };
+		E1290948191CF53000822217 /* ParallelCoordsView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParallelCoordsView.cpp; path = ../ParallelCoordsView.cpp; sourceTree = "<group>"; };
+		E1290949191CF53000822217 /* ParallelCoordsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParallelCoordsView.h; path = ../ParallelCoordsView.h; sourceTree = "<group>"; };
+		E129094A191CF53000822217 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		E129094C191CF53000822217 /* Record.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Record.h; path = ../Record.h; sourceTree = "<group>"; };
+		E129094D191CF53000822217 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = ../Resources; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +66,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1290936191CF50A00822217 /* Cocoa.framework in Frameworks */,
+				E1290934191CF50100822217 /* GLUT.framework in Frameworks */,
+				E1290932191CF4FB00822217 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,7 +78,30 @@
 		E12908F3191CCBC900822217 = {
 			isa = PBXGroup;
 			children = (
-				E12908FE191CCBC900822217 /* Afstuderen */,
+				E1290937191CF53000822217 /* BMPImage.cpp */,
+				E1290938191CF53000822217 /* BMPImage.h */,
+				E1290939191CF53000822217 /* DataFileReader.cpp */,
+				E129093A191CF53000822217 /* DataFileReader.h */,
+				E129093B191CF53000822217 /* DataSet.cpp */,
+				E129093C191CF53000822217 /* DataSet.h */,
+				E129093E191CF53000822217 /* DataView.h */,
+				E129093F191CF53000822217 /* Filter.cpp */,
+				E1290940191CF53000822217 /* Filter.h */,
+				E1290941191CF53000822217 /* ImageView.cpp */,
+				E1290942191CF53000822217 /* ImageView.h */,
+				E1290943191CF53000822217 /* loadppm.cpp */,
+				E1290944191CF53000822217 /* loadppm.h */,
+				E1290945191CF53000822217 /* main.cpp */,
+				E1290946191CF53000822217 /* ParallelCoordsAxis.cpp */,
+				E1290947191CF53000822217 /* ParallelCoordsAxis.h */,
+				E1290948191CF53000822217 /* ParallelCoordsView.cpp */,
+				E1290949191CF53000822217 /* ParallelCoordsView.h */,
+				E129094A191CF53000822217 /* README.md */,
+				E129094C191CF53000822217 /* Record.h */,
+				E129094D191CF53000822217 /* Resources */,
+				E1290935191CF50A00822217 /* Cocoa.framework */,
+				E1290933191CF50100822217 /* GLUT.framework */,
+				E1290931191CF4FB00822217 /* OpenGL.framework */,
 				E12908FD191CCBC900822217 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -55,15 +112,6 @@
 				E12908FC191CCBC900822217 /* Afstuderen */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		E12908FE191CCBC900822217 /* Afstuderen */ = {
-			isa = PBXGroup;
-			children = (
-				E12908FF191CCBC900822217 /* main.cpp */,
-				E1290901191CCBC900822217 /* Afstuderen.1 */,
-			);
-			path = Afstuderen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -117,7 +165,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1290900191CCBC900822217 /* main.cpp in Sources */,
+				E1290953191CF53000822217 /* Filter.cpp in Sources */,
+				E1290950191CF53000822217 /* DataFileReader.cpp in Sources */,
+				E1290954191CF53000822217 /* ImageView.cpp in Sources */,
+				E129094F191CF53000822217 /* BMPImage.cpp in Sources */,
+				E1290958191CF53000822217 /* ParallelCoordsView.cpp in Sources */,
+				E1290951191CF53000822217 /* DataSet.cpp in Sources */,
+				E1290957191CF53000822217 /* ParallelCoordsAxis.cpp in Sources */,
+				E1290956191CF53000822217 /* main.cpp in Sources */,
+				E1290955191CF53000822217 /* loadppm.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,7 +212,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -189,7 +245,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -227,6 +283,7 @@
 				E1290907191CCBC900822217 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

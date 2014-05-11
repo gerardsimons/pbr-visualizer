@@ -11,13 +11,7 @@
 //	float_records.push_back(record);
 //}
 //
-//std::pair<float,float>* RIVDataSet::MinMax(int index) {
-//	RIVRecord<float> *record = &float_records[index];
-//	return record->MinMax();
-//}
-//
 //size_t RIVDataSet::NumberOfRecords() {
-//	//printf("float_records_size = %lu\n",float_records.size());
 //	return float_records.size();
 //}
 //
@@ -38,12 +32,6 @@
 //	RIVRecord<float> *record = &float_records[recordIndex];
 //	
 //	if(filtered_values.size() > 0) {
-//		//for(size_t i = 0 ; i < filtered_value_indices.size() ; i++) {
-//		//	int filtered_index = filtered_value_indices[i];
-//		//	if(filtered_index == valueIndex) {
-//		//		return 0; //Should be filtered out.
-//		//	}
-//		//}
 //		bool filtered = filtered_values[valueIndex];
 //		if(filtered) return 0;
 //	}

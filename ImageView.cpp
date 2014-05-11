@@ -132,8 +132,6 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 		
 				dataset->AddFilter(xFilter);
 				dataset->AddFilter(yFilter);
-
-				dataset->ApplyFilters();
 			}
 			else {
 				clearSelection(); 

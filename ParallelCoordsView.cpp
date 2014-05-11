@@ -18,68 +18,86 @@ ParallelCoordsView::~ParallelCoordsView(void) {
 	//Additional deleting unique to parallel coords view ?
 }
 
+void ParallelCoordsView::DrawAxes() {
+    glBegin(GL_LINES);
+
+    axes.clear();
+    //size_t nr_of_axes = dataset->TotalNumberOfRecords();
+    size_t nr_of_float_records = dataset->NumberOfFloatRecords();
+    size_t nr_of_short_records = dataset->NumberOfShortRecords();
+    
+    /**                 FOR ALL FLOAT RECORDS               **/
+    int y = startY + paddingY;
+    int axisHeight = height - 2 * paddingY;
+    float delta = 1.F / (nr_of_float_records - 1) * (width - 2 * paddingX);
+    
+    //Iterate over float records
+    for(size_t i = 0 ; i < nr_of_float_records ; i++) {
+        int x = delta * i + startX + paddingX;
+        
+        RIVRecord<float> record = *dataset->GetFloatRecord(i);
+        ParallelCoordsAxis axis(x,y,axisHeight,&record);
+        
+		axis.ComputeScale(4);
+        
+        glVertex3f(axis.x, axis.y, 0);
+        glVertex3f(axis.x, axis.y + axis.height, 0);
+        
+        axes.push_back(axis);
+    }
+    glEnd();
+    
+    float textColor[3] = {0,0,0};
+    
+    //Draw texts
+    for(size_t i = 0 ; i < axes.size() ; i++) {
+        ParallelCoordsAxis *axis = &axes[i];
+        std::string text = axis->record->name;
+        
+        DrawText(text.c_str(),text.size() + 1,axis->x,axis->y - 15,textColor,.1F);
+        
+        std::vector<float> scale = axis->scale;
+        
+        //Draw the scales indicator
+        for(size_t j = 0 ; j < scale.size() ; j++) {
+            float value = axis->ValueOnScale(scale[j]);
+            int height = axis->PositionOnScale(scale[j]);
+            char text[150];
+            sprintf(text,"%.2f",value);
+            DrawText(text,10,axis->x - 6,height,textColor,.1F);
+        }
+    }
+    
+    /**             FOR ALL SHORT RECORDS           **/
+    
+    
+}
+
 void ParallelCoordsView::Draw() {
 
 	if(needsRedraw) {
 		//printf("ParallCoordsView::Draw()\n");
 
-		float textColor[3] = {0,0,0};
+
 
 		//Draw the axes
 		glLineWidth(1);
 		glColor3f(0.0, 0.0, 0.0);
 
-		size_t columns = dataset->NumberOfRecords();
+		size_t columns = dataset->NumberOfFloatRecords();
 		int marginHeight = 20;
 
-		
-		//Draw the vertical lines of the axis
-		glBegin(GL_LINES);
-		for(size_t i = 0 ; i < axes.size() ; i++) {
-			ParallelCoordsAxis *axis = &axes[i];
-        
-			glVertex3f(axis->x, axis->y, 0);
-			glVertex3f(axis->x, axis->y + axis->height, 0);
+        DrawAxes();
 
-            std::vector<float> scale = axis->scale;
-
-			//Draw the scales indicator
-			for(size_t j = 0 ; j < scale.size() ; j++) {
-				int height = axis->PositionOnScale(scale[j]);
-				glVertex3f(axis->x,height,0);
-				glVertex3f(axis->x + 20,height,0);
-			}
-		}
-		glEnd();
-    
-		//Draw texts
-		for(size_t i = 0 ; i < axes.size() ; i++) {
-			ParallelCoordsAxis *axis = &axes[i];
-            std::string text = axis->record->name;
-        
-			DrawText(text.c_str(),text.size() + 1,axis->x,axis->y - 15,textColor,.1F);
-
-            std::vector<float> scale = axis->scale;
-
-			//Draw the scales indicator
-			for(size_t j = 0 ; j < scale.size() ; j++) {
-				float value = axis->ValueOnScale(scale[j]);				
-				int height = axis->PositionOnScale(scale[j]);
-				char text[150];
-				sprintf(text,"%.2f",value);
-				DrawText(text,10,axis->x - 6,height,textColor,.1F);
-			}
-		}
+		return;
 	
 		size_t records_per_column = dataset->NumberOfValuesPerRecord();
 		//printf("record_per_column = %d\n",records_per_column);
 
-		//Draw the lines
+
 		glColor3f(1.0, 0.0, 0.0);
 		glLineWidth(1.F);
     
-		float delta = 1.F / (columns + 1) * width;
-
 		size_t lineIndex = 0;
 		size_t totalNumberOfLines = dataset->NumberOfValuesPerRecord();
 
@@ -92,7 +110,7 @@ void ParallelCoordsView::Draw() {
 				//printf("axis_index = %d\n",axis_index);	
 				ParallelCoordsAxis *axis = &axes[axis_index];
 
-                std::pair<float,float> *min_max = dataset->GetRecord(axis_index)->MinMax();
+                std::pair<float,float> *min_max = dataset->GetFloatRecord(axis_index)->MinMax();
 				float* value = dataset->GetRecordValue(axis_index,record_i);
 
 				float* color = computeColor(lineIndex,totalNumberOfLines);
@@ -122,7 +140,7 @@ void ParallelCoordsView::Draw() {
 	}
 }
 
-float* ParallelCoordsView::computeColor(int lineIndex, int totalNrOfLines) {
+float* ParallelCoordsView::computeColor(size_t lineIndex, size_t totalNrOfLines) {
 	float minColor[] = {1.F,1.F,0.F}; //yellow
 	float maxColor[] = {0.F,0.F,1.F}; //blue
 
@@ -138,24 +156,7 @@ float* ParallelCoordsView::computeColor(int lineIndex, int totalNrOfLines) {
 void ParallelCoordsView::ComputeLayout() {
     axes.clear(); //Remove the old axes
     
-    size_t nr_of_axes = dataset->NumberOfRecords();
-	
     
-    //Fixed y for all axes
-    int y = startY + paddingY;
-    int axisHeight = height - 2 * paddingY;
-    float delta = 1.F / (nr_of_axes - 1) * (width - 2 * paddingX);
-    
-    for(size_t i = 0 ; i < nr_of_axes ; i++) {
-        int x = delta * i + startX + paddingX;
-        
-        RIVRecord<float>* record = dataset->GetRecord(i);
-        ParallelCoordsAxis axis(x,y,axisHeight,record);
-
-		axis.ComputeScale(4);
-
-        axes.push_back(axis);
-    }
 }
 
 bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {

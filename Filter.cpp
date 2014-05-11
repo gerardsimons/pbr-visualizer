@@ -5,10 +5,6 @@ Filter::~Filter() {
 	delete &attributeName;
 }
 
-std::string Filter::GetAttributeName() {
-	return attributeName;
-}
-
 RangeFilter::~RangeFilter() {
 	delete &minValue;
 	delete &maxValue;

@@ -127,57 +127,64 @@ void reshape(int w, int h)
 }
 
 RIVDataSet loadMockData() {
-	vector<float> data;
-	data.push_back(1.F);
-	data.push_back(2.F);
-	data.push_back(3.F);
-	data.push_back(4.F);
-
-	RIVRecord<float> recordOne("# intersections",data);
-	dataset.AddRecord(recordOne);
-
-	data.clear();
-	data.push_back(1.F);
-	data.push_back(2.F);
-	data.push_back(21.F);
-	data.push_back(22.F);
-	//data.push_back(5.F);
-
-	RIVRecord<float> recordTwo("throughput 1",data);
-	dataset.AddRecord(recordTwo);
-
-	data.clear();
-	data.push_back(1.F);
-	data.push_back(2.F);
-	data.push_back(5.F);
-	data.push_back(8.F);
-
-	RIVRecord<float> recordThree("throughput 2",data);
-    RIVRecord<float> recordFour("throughput 3",data);
-	dataset.AddRecord(recordThree);
-    dataset.AddRecord(recordFour);
-
-	//Pixel x data
-	data.clear();
-	data.push_back(0.F);
-	data.push_back(1.F);
-	data.push_back(0.F);
-	data.push_back(1.F);
-
-	RIVRecord<float> recordX("x",data);
-	dataset.AddRecord(recordX);
-
-	//Pixel y data
-	data.clear();
-	data.push_back(0.F);
-	data.push_back(0.F);
-	data.push_back(1.F);
-	data.push_back(1.F);
-
-	RIVRecord<float> recordY("y",data);
-	dataset.AddRecord(recordY);
-
-	return dataset;
+//	vector<float> data;
+//	data.push_back(1.F);
+//	data.push_back(2.F);
+//	data.push_back(3.F);
+//	data.push_back(4.F);
+//
+//	RIVRecord<float> recordOne("# intersections");
+//    recordOne.SetValues(data);
+//	dataset.AddRecord(recordOne);
+//
+//	data.clear();
+//	data.push_back(1.F);
+//	data.push_back(2.F);
+//	data.push_back(21.F);
+//	data.push_back(22.F);
+//	//data.push_back(5.F);
+//
+//	RIVRecord<float> recordTwo("throughput 1");
+//    recordTwo.SetValues(data);
+//	dataset.AddRecord(recordTwo);
+//
+//	data.clear();
+//	data.push_back(1.F);
+//	data.push_back(2.F);
+//	data.push_back(5.F);
+//	data.push_back(8.F);
+//
+//	RIVRecord<float> recordThree("throughput 2");
+//    RIVRecord<float> recordFour("throughput 3");
+//    recordThree.SetValues(data);
+//    recordFour.SetValues(data);
+//    
+//	dataset.AddRecord(recordThree);
+//    dataset.AddRecord(recordFour);
+//
+//	//Pixel x data
+//	data.clear();
+//	data.push_back(0.F);
+//	data.push_back(1.F);
+//	data.push_back(0.F);
+//	data.push_back(1.F);
+//
+//	RIVRecord<float> recordX("x");
+//    recordX.SetValues(data);
+//	dataset.AddRecord(recordX);
+//
+//	//Pixel y data
+//	data.clear();
+//	data.push_back(0.F);
+//	data.push_back(0.F);
+//	data.push_back(1.F);
+//	data.push_back(1.F);
+//
+//	RIVRecord<float> recordY("y");
+//	dataset.AddRecord(recordY);
+//
+//	return dataset;
+    return RIVDataSet();
 }
 
 void initialize() {
