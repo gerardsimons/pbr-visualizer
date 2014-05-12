@@ -32,6 +32,7 @@ public:
 	int startX,startY;
 	int width,height;
 	int paddingX,paddingY;
+    bool isDragging;
 	//functions
 	void SetData(RIVDataSet *newDataSet) { dataset = newDataSet; needsRedraw = true;}
 	void Invalidate() { needsRedraw = true; }

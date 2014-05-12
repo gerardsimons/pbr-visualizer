@@ -61,6 +61,26 @@ private :
     std::vector<Filter*> filters;
 
     std::map<size_t,bool> filteredIndices;
+    
+    template<typename T>
+    void filterRecords(std::vector<RIVRecord<T>> records, Filter* filter) {
+        for(RIVRecord<T> record : records) {
+            
+            for(size_t j = 0 ; j < record.values.size() ; j++) {
+                
+//                if(record.name == filter->attributeName) {
+//                    printf("filter time.\n");
+//                }
+                if(filteredIndices[j]) continue; //Already filtered
+                T value = *record.Value(j);
+                if(filter->PassesFilter(record.name, value) == false) {
+                    filteredIndices[j] = true;
+//                    printf("filtered out %f\n",(float)value);
+                }
+
+            }
+        }
+    }
 
 public:
     
@@ -75,24 +95,9 @@ public:
     void AddFilter(Filter* filter) {
         filters.push_back(filter);
         
-        //See what value indices I should filter, add these to the map for fast retrieval later
-        for(auto i : float_records) {
-            for(size_t j = 0 ; j < i.values.size() ; j++) {
-                if(filteredIndices[j]) continue; //Already filtered
-                if(filter->PassesFilter(i.name, j) == false) {
-                    filteredIndices[j] = true;
-                }
-            }
-        }
-        //Ahh the duplicated code, the horror
-        for(auto i : short_records) {
-            for(size_t j = 0 ; j < i.values.size() ; j++) {
-                if(filteredIndices[j]) continue; //Already filtered
-                if(filter->PassesFilter(i.name, j) == false) {
-                    filteredIndices[j] = true;
-                }
-            }
-        }
+        filterRecords(float_records, filter);
+        filterRecords(short_records, filter);
+        
     }
     
     void ClearFilters() {
@@ -112,12 +117,12 @@ public:
         return short_records.size();
     }
     
-    RIVRecord<float>* GetFloatRecord(size_t recordIndex) {
-        return &float_records[recordIndex];
+    RIVRecord<float>& GetFloatRecord(size_t recordIndex) {
+        return float_records[recordIndex];
     }
     
-    RIVRecord<unsigned short>* GetUnsignedShortRecord(size_t recordIndex) {
-        return &short_records[recordIndex];
+    RIVRecord<unsigned short>& GetUnsignedShortRecord(size_t recordIndex) {
+        return short_records[recordIndex];
     }
     
     size_t NumberOfValuesPerRecord() {

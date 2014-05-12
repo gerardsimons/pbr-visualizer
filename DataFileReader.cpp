@@ -5,11 +5,13 @@
 
 DataFileReader::DataFileReader(void)
 {
+    
 }
 
 
 DataFileReader::~DataFileReader(void)
 {
+    
 }
 
 RIVDataSet DataFileReader::LoadData(std::string fileName) {
@@ -36,6 +38,8 @@ RIVDataSet DataFileReader::LoadData(std::string fileName) {
     
     while(!feof(inputFile)) {
         
+        printf("reading line %d\n",lineNumber);
+        
         //Read x
         unsigned short x;
         fread(&x,sizeof(unsigned short),1,inputFile);
@@ -55,11 +59,10 @@ RIVDataSet DataFileReader::LoadData(std::string fileName) {
         
         yPixelData.push_back(y);
         
-        float throughput[3];
-        fread(throughput,sizeof(float),3,inputFile);
-        sprintf(buffer, "%f,%f,%f,",throughput[0],throughput[1],throughput[2]);
-        fprintf(outputFile, buffer);
-        
+        float throughput[3] = {-1.F,-1.F,-1.F};
+        //fread(throughput,sizeof(float),3,inputFile);
+        //sprintf(buffer, "%f,%f,%f,",throughput[0],throughput[1],throughput[2]);
+        //fprintf(outputFile, buffer);
         
         throughPutOne.push_back(throughput[0]);
         
@@ -79,7 +82,7 @@ RIVDataSet DataFileReader::LoadData(std::string fileName) {
         
         //printf("%d = %hu,%hu,[%f,%f,%f],%hu\n",lineNumber,x,y,throughput[0],throughput[1],throughput[2],size);
         ++lineNumber;
-        if(lineNumber > 2000) {
+        if(lineNumber > 1000000) {
             break;
         }
     }
@@ -104,6 +107,7 @@ RIVDataSet DataFileReader::LoadData(std::string fileName) {
     dataset.AddRecord(isects);
     
     fclose(outputFile);
+    fclose(inputFile);
     
     return dataset;
 };

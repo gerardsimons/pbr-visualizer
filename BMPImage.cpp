@@ -34,7 +34,7 @@ bool BMPImage::loadTexture(const char* imagepath, int alpha)
 	unsigned int imageSize;   // = width*height*3
 
 	FILE * file = fopen(imagepath,"rb");
-	if (!file)                              {printf("Image could not be opened\n"); return 0;}
+	if (!file)                              {printf("Image %s could not be opened\n",imagepath); return 0;}
 
 	if ( fread(header, 1, 54, file)!=54 )
 	{ // If not 54 bytes read : problem

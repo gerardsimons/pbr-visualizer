@@ -56,7 +56,7 @@ public:
 		return &values[index];
 	}
 
-	std::pair<T,T>* MinMax() {
+	std::pair<T,T>& MinMax() {
 		if(!min_max_computed) {
 			float min = std::numeric_limits<float>::max();
 			float max = std::numeric_limits<float>::min();
@@ -76,7 +76,7 @@ public:
 			//TODO: min_max caching does not work properly, uncomment below to enable caching!
 			min_max_computed = true;
 		}
-		return &min_max;
+		return min_max;
 	}
 };
 

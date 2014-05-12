@@ -187,24 +187,33 @@ RIVDataSet loadMockData() {
     return RIVDataSet();
 }
 
-void initialize() {
-
-    #ifdef _WIN32
-        std::string resourcesPath = "../RenderingInfoVis/Resources/";
-    #elif __APPLE__
-        std::string resourcesPath = "../../../Resources/";
-    #endif
+void initialize(int argc, char* argv[]) {
+    std::string fullPath;
+    printf("%d additional arguments given", argc - 1);
+    if(argc <= 1) {
+        //Default values
+        #ifdef _WIN32
+            std::string resourcesPath = "../RenderingInfoVis/Resources/";
+        #elif __APPLE__
+            std::string resourcesPath = "../../../Resources/";
+        #endif
+        std::string fileName = "teapot32x32x1.exr";
+        
+        fullPath = resourcesPath + fileName;
+    } else if(argc == 2) {
+        fullPath = argv[1];
+    }
+    
+    printf("using fullpath = %s\n",fullPath.c_str());
 
 	int imageWidth = 500;
     int imageHeight = 500;
     
-    std::string fileName = "teapot32x32x1.exr";
-    
-	dataset = DataFileReader::LoadData(resourcesPath + fileName + ".bin");
+	dataset = DataFileReader::LoadData(fullPath + ".bin");
     /* dataset = &loadData(resourcesPath + fileName + ".bin"); */
 
 	//CAUTION: Image should be power of two!
-	RIVImageView *imageView = new RIVImageView(resourcesPath + fileName + ".bmp",0,0,imageWidth,imageHeight,0,0);     //BMP IMAGE
+	RIVImageView *imageView = new RIVImageView(fullPath + ".bmp",0,0,imageWidth,imageHeight,0,0);     //BMP IMAGE
 	ParallelCoordsView *pview = new ParallelCoordsView(imageWidth,0,width-imageWidth,height,50,20);
 
 	imageView->SetData(&dataset);
@@ -235,10 +244,10 @@ int main(int argc, char *argv[])
   glutInitWindowPosition(posX,posY);
 
   /* create the window and store the handle to it */
-  wd = glutCreateWindow("Experiment with line drawing" /* title */ );
+  wd = glutCreateWindow("Rendering InfoVis" /* title */ );
 
   /* Initialize the data and the views */
-  initialize();
+  initialize(argc, argv);
 
   /* --- register callbacks with GLUT --- */
 

@@ -11,13 +11,20 @@ RangeFilter::~RangeFilter() {
 }
 
 RangeFilter::RangeFilter(std::string attributeName, float minValue, float maxValue) : Filter(attributeName) {
-	this->minValue = minValue;
-	this->maxValue = maxValue;
+    
+    //Normalize
+    if(minValue <= maxValue) {
+        this->minValue = minValue;
+        this->maxValue = maxValue;
+    } else {
+        this->minValue = maxValue;
+        this->maxValue = minValue;
+    }
 }
 
 bool RangeFilter::PassesFilter(std::string attribute,float value) {
 	if(attribute == attributeName) {
-		 return (value >= minValue && value < maxValue);
+		 return (value >= minValue && value <= maxValue);
 	}
 	return true;
 }

@@ -7,8 +7,9 @@
 //
 
 #include "ParallelCoordsAxis.h"
+#include <algorithm>
 
-ParallelCoordsAxis::ParallelCoordsAxis(int x,int y, int height, float minValue, float maxValue, std::string* name) {
+ParallelCoordsAxis::ParallelCoordsAxis(int x,int y, int height, float minValue, float maxValue, const std::string& name) {
     this->x = x;
     this->y = y;
     this->height = height;
@@ -17,12 +18,24 @@ ParallelCoordsAxis::ParallelCoordsAxis(int x,int y, int height, float minValue, 
     this->maxValue = maxValue;
 }
 
+ParallelCoordsAxis::ParallelCoordsAxis() {
+    
+}
+
+//A ratio value indicating where an arbitrary Y position is according the axis (0 = bottom, 1 = top)
+float ParallelCoordsAxis::ScaleValueForY(int yPos) {
+    float value = (yPos - y) / (float)(height);
+    printf("scaleValue = %f\n",value);
+    return value;
+}
+
 //Returns the Y position of a value along the scale
 float ParallelCoordsAxis::PositionOnScale(float value) {
+    value = std::max(0.F,std::min(value,1.F));
 	if(value >= 0.F && value <= 1.F) {
 		return y + value * height;
 	}
-	return std::numeric_limits<float>::quiet_NaN();
+	else return std::numeric_limits<float>::quiet_NaN();
 }
 
 //Returns the value 
@@ -30,7 +43,7 @@ float ParallelCoordsAxis::ValueOnScale(float value) {
 	if(value >= 0.F && value <= 1.F) {
 		return (1 - value) * minValue + value * maxValue;
 	}
-    return std::numeric_limits<float>::quiet_NaN();
+    else return std::numeric_limits<float>::quiet_NaN();
 }
 
 void ParallelCoordsAxis::ComputeScale(int n) {

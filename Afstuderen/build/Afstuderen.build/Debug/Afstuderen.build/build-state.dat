@@ -359,12 +359,12 @@ t1399669356
 s1144
 
 N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o
-t1399657229
-s8732
+t1399918005
+s8740
 
 N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o
-t1399890413
-s382004
+t1399917943
+s382100
 
 N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.o
 t1399657554
@@ -376,37 +376,37 @@ t1399657228
 s1676
 
 N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o
-t1399657228
-s46644
+t1399913601
+s46708
 
 N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o
-t1399834546
-s295532
+t1399913706
+s324956
 
 N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o
-t1399835506
-s91940
+t1399913508
+s101232
 
 N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o
-t1399890571
-s321828
+t1399913602
+s408140
 
 N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/loadppm.o
 t1399657229
 s140372
 
 N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o
-t1399887880
-s335544
+t1399916327
+s342200
 
 N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen
-t1399890559
-s197232
+t1399918006
+s210048
 
 N/Users/gerardsimons/Git/afstuderen/BMPImage.cpp
-c0000000053692DEC000000000000074F
-t1399401964
-s1871
+c0000000053710DB2000000000000075C
+t1399918002
+s1884
 
 N/Users/gerardsimons/Git/afstuderen/BMPImage.h
 c0000000053692DEC0000000000000199
@@ -414,9 +414,9 @@ t1399401964
 s409
 
 N/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp
-c000000005370A1EB0000000000000BB2
-t1399890411
-s2994
+c0000000053710D750000000000000C1F
+t1399917941
+s3103
 
 N/Users/gerardsimons/Git/afstuderen/DataFileReader.h
 c00000000537097F700000000000000F3
@@ -429,9 +429,9 @@ t1399657463
 s2022
 
 N/Users/gerardsimons/Git/afstuderen/DataSet.h
-c00000000536FBD2900000000000012C4
-t1399831849
-s4804
+c000000005370FAE100000000000012EC
+t1399913185
+s4844
 
 N/Users/gerardsimons/Git/afstuderen/DataView.cpp
 c00000000536CE0A70000000000000000
@@ -439,49 +439,54 @@ t1399644327
 s0
 
 N/Users/gerardsimons/Git/afstuderen/DataView.h
-c00000000536D42DC0000000000000447
-t1399669468
-s1095
+c000000005370AE66000000000000045C
+t1399893606
+s1116
 
 N/Users/gerardsimons/Git/afstuderen/Filter.cpp
-c00000000536CC1F40000000000000210
-t1399636468
-s528
+c000000005370FC7F00000000000002AC
+t1399913599
+s684
 
 N/Users/gerardsimons/Git/afstuderen/Filter.h
 c00000000536CC1FF0000000000000229
 t1399636479
 s553
 
+N/Users/gerardsimons/Git/afstuderen/Geometry.h
+c000000005370B0780000000000000171
+t1399894136
+s369
+
 N/Users/gerardsimons/Git/afstuderen/ImageView.cpp
-c00000000536D181B000000000000145F
-t1399658523
-s5215
+c000000005370FCE80000000000001467
+t1399913704
+s5223
 
 N/Users/gerardsimons/Git/afstuderen/ImageView.h
-c00000000536935A20000000000000436
-t1399403938
-s1078
+c000000005370BB9D000000000000039F
+t1399896989
+s927
 
 N/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp
-c00000000536FCB570000000000000479
-t1399835479
-s1145
+c000000005370FC160000000000000606
+t1399913494
+s1542
 
 N/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.h
-c00000000536FCB710000000000000286
-t1399835505
-s646
+c000000005370ED08000000000000035A
+t1399909640
+s858
 
 N/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp
-c000000005370A2890000000000001B0E
-t1399890569
-s6926
+c000000005370FC5E0000000000002DCA
+t1399913566
+s11722
 
 N/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.h
-c00000000536FB76B0000000000000284
-t1399830379
-s644
+c000000005370DE8700000000000002F0
+t1399905927
+s752
 
 N/Users/gerardsimons/Git/afstuderen/RIVVector.h
 c00000000536D19F600000000000007E5
@@ -489,9 +494,9 @@ t1399658998
 s2021
 
 N/Users/gerardsimons/Git/afstuderen/Record.h
-c00000000536D48E9000000000000061F
-t1399671017
-s1567
+c000000005370C941000000000000061E
+t1399900481
+s1566
 
 N/Users/gerardsimons/Git/afstuderen/loadppm.cpp
 c0000000053692DEC000000000000054E
@@ -504,9 +509,9 @@ t1399402649
 s381
 
 N/Users/gerardsimons/Git/afstuderen/main.cpp
-c00000000536D41760000000000001780
-t1399669110
-s6016
+c000000005371072600000000000018B3
+t1399916326
+s6323
 
 CBuild AST from /Users/gerardsimons/Git/afstuderen/Afstuderen/Afstuderen/main.cpp
 r0
@@ -546,11 +551,11 @@ r0
 
 CCheck dependencies
 r0
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependencies7de7c70ada20b941^e833c80ada20b941^---0#1#1#--18"Check dependencies36"A1B9EA44-45DD-4C9A-90AF-1E9DE5912706-
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependencies8ca0f9954521b941^9208fd954521b941^---0#1#1#--18"Check dependencies36"0B7A0E30-79DF-4FD1-8741-242F455FEF07-
 
 CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o /Users/gerardsimons/Git/afstuderen/BMPImage.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s421350028.557102
-e421350029.164614
+s421610805.016511
+e421610805.981241
 r1
 xCompileC
 xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o
@@ -561,12 +566,12 @@ xc++
 xcom.apple.compilers.llvm.clang.1_0.compiler
 d/Users/gerardsimons/Git/afstuderen/BMPImage.cpp
 d/Users/gerardsimons/Git/afstuderen/BMPImage.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection55"Compile /Users/gerardsimons/Git/afstuderen/BMPImage.cpp197"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o /Users/gerardsimons/Git/afstuderen/BMPImage.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler40df8e8c4a1db941^9f002a8d4a1db941^---0#0#1#-19%DVTDocumentLocation2@54"file:///Users/gerardsimons/Git/afstuderen/BMPImage.cpp0000000000000000^2956"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o /Users/gerardsimons/Git/afstuderen/BMPImage.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.dia -c /Users/gerardsimons/Git/afstuderen/BMPImage.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o36"F2261702-0F96-4907-8AC4-340CF5271EC5-
-b76F3477F-D92F-40DA-8195-A1EA58948F4C
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection55"Compile /Users/gerardsimons/Git/afstuderen/BMPImage.cpp197"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o /Users/gerardsimons/Git/afstuderen/BMPImage.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler835204354521b941^3480fb354521b941^---0#0#1#-19%DVTDocumentLocation2@54"file:///Users/gerardsimons/Git/afstuderen/BMPImage.cpp0000000000000000^2956"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o /Users/gerardsimons/Git/afstuderen/BMPImage.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.dia -c /Users/gerardsimons/Git/afstuderen/BMPImage.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o36"30A461C8-3567-423B-A0BB-0D0959DE14D3-
+b8C0B3F50-07C1-4CEA-9B86-6D0D48386AB4
 
 CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o /Users/gerardsimons/Git/afstuderen/DataFileReader.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s421583212.488937
-e421583213.298376
+s421610742.454639
+e421610743.795732
 r1
 xCompileC
 xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o
@@ -581,21 +586,18 @@ d/Users/gerardsimons/Git/afstuderen/DataSet.h
 d/Users/gerardsimons/Git/afstuderen/Record.h
 d/Users/gerardsimons/Git/afstuderen/RIVVector.h
 d/Users/gerardsimons/Git/afstuderen/Filter.h
-o/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp:48:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
+o/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp:52:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
 o        fprintf(outputFile, buffer);
 o                            ^~~~~~
-o/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp:54:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
+o/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp:58:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
 o        fprintf(outputFile, buffer);
 o                            ^~~~~~
-o/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp:61:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
+o/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp:77:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
 o        fprintf(outputFile, buffer);
 o                            ^~~~~~
-o/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp:74:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
-o        fprintf(outputFile, buffer);
-o                            ^~~~~~
-o4 warnings generated.
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection61"Compile /Users/gerardsimons/Git/afstuderen/DataFileReader.cpp209"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o /Users/gerardsimons/Git/afstuderen/DataFileReader.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler20417d6cd920b941^8d634c6dd920b941^-914"/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp:48:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]        fprintf(outputFile, buffer);                            ^~~~~~/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp:54:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]        fprintf(outputFile, buffer);                            ^~~~~~/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp:61:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]        fprintf(outputFile, buffer);                            ^~~~~~/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp:74:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]        fprintf(outputFile, buffer);                            ^~~~~~4 warnings generated.4(36%IDEClangDiagnosticActivityLogMessage2@60"Format string is not a string literal (potentially insecure)-421583213#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^47#28#47#28#1127#0#19"Format String Issue1(3@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^47#28#47#34#1127#0#-2@60"Format string is not a string literal (potentially insecure)-421583213#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^53#28#53#28#1305#0#19"Format String Issue1(3@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^53#28#53#34#1305#0#-2@60"Format string is not a string literal (potentially insecure)-421583213#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^60#28#60#28#1555#0#19"Format String Issue1(3@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^60#28#60#34#1555#0#-2@60"Format string is not a string literal (potentially insecure)-421583213#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^73#28#73#28#1951#0#19"Format String Issue1(3@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^73#28#73#34#1951#0#-0#0#1#-19%DVTDocumentLocation4@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^2992"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o /Users/gerardsimons/Git/afstuderen/DataFileReader.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.dia -c /Users/gerardsimons/Git/afstuderen/DataFileReader.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o36"2EBA78BB-A337-4BC4-BB8B-5559558F00DC-
-bB92E89E1-1CBC-4135-807E-FFDC8DC62AFF
+o3 warnings generated.
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection61"Compile /Users/gerardsimons/Git/afstuderen/DataFileReader.cpp209"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o /Users/gerardsimons/Git/afstuderen/DataFileReader.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler7b8274f64421b941^13b6cbf74421b941^-691"/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp:52:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]        fprintf(outputFile, buffer);                            ^~~~~~/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp:58:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]        fprintf(outputFile, buffer);                            ^~~~~~/Users/gerardsimons/Git/afstuderen/DataFileReader.cpp:77:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]        fprintf(outputFile, buffer);                            ^~~~~~3 warnings generated.3(36%IDEClangDiagnosticActivityLogMessage2@60"Format string is not a string literal (potentially insecure)-421610743#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^51#28#51#28#1194#0#19"Format String Issue1(3@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^51#28#51#34#1194#0#-2@60"Format string is not a string literal (potentially insecure)-421610743#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^57#28#57#28#1372#0#19"Format String Issue1(3@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^57#28#57#34#1372#0#-2@60"Format string is not a string literal (potentially insecure)-421610743#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^76#28#76#28#2034#0#19"Format String Issue1(3@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^76#28#76#34#2034#0#-0#0#1#-19%DVTDocumentLocation4@60"file:///Users/gerardsimons/Git/afstuderen/DataFileReader.cpp0000000000000000^2992"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o /Users/gerardsimons/Git/afstuderen/DataFileReader.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.dia -c /Users/gerardsimons/Git/afstuderen/DataFileReader.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o36"138B1EC1-BE93-4640-A78E-852C8D476EDB-
+bD8848A33-CD74-4D38-9235-5C6B38BF0A80
 
 CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.o /Users/gerardsimons/Git/afstuderen/DataSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
 s421350354.016937
@@ -628,8 +630,8 @@ lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection55"Compile
 b76F3477F-D92F-40DA-8195-A1EA58948F4C
 
 CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o /Users/gerardsimons/Git/afstuderen/Filter.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s421350028.555452
-e421350028.987541
+s421606400.654972
+e421606401.673408
 r1
 xCompileC
 xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o
@@ -640,12 +642,12 @@ xc++
 xcom.apple.compilers.llvm.clang.1_0.compiler
 d/Users/gerardsimons/Git/afstuderen/Filter.cpp
 d/Users/gerardsimons/Git/afstuderen/Filter.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection53"Compile /Users/gerardsimons/Git/afstuderen/Filter.cpp193"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o /Users/gerardsimons/Git/afstuderen/Filter.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilera1498e8c4a1db941^37c4fc8c4a1db941^---0#0#1#-19%DVTDocumentLocation2@52"file:///Users/gerardsimons/Git/afstuderen/Filter.cpp0000000000000000^2944"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o /Users/gerardsimons/Git/afstuderen/Filter.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.dia -c /Users/gerardsimons/Git/afstuderen/Filter.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o36"AA3385EF-BD83-44B1-8C8F-834CFD5F2779-
-b76F3477F-D92F-40DA-8195-A1EA58948F4C
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection53"Compile /Users/gerardsimons/Git/afstuderen/Filter.cpp193"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o /Users/gerardsimons/Git/afstuderen/Filter.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilerefc5a7003421b941^8465ac013421b941^---0#0#1#-19%DVTDocumentLocation2@52"file:///Users/gerardsimons/Git/afstuderen/Filter.cpp0000000000000000^2944"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o /Users/gerardsimons/Git/afstuderen/Filter.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.dia -c /Users/gerardsimons/Git/afstuderen/Filter.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o36"A90A60E1-D96A-44E6-9EC7-9B3D73F3D5D6-
+b5867F69F-0273-4FF8-B3BA-C903C0E88029
 
 CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o /Users/gerardsimons/Git/afstuderen/ImageView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s421527345.329538
-e421527346.446338
+s421606505.663992
+e421606506.772681
 r1
 xCompileC
 xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o
@@ -661,14 +663,15 @@ d/Users/gerardsimons/Git/afstuderen/DataSet.h
 d/Users/gerardsimons/Git/afstuderen/Record.h
 d/Users/gerardsimons/Git/afstuderen/RIVVector.h
 d/Users/gerardsimons/Git/afstuderen/Filter.h
+d/Users/gerardsimons/Git/afstuderen/Geometry.h
 d/Users/gerardsimons/Git/afstuderen/BMPImage.h
 d/Users/gerardsimons/Git/afstuderen/loadppm.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection56"Compile /Users/gerardsimons/Git/afstuderen/ImageView.cpp199"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o /Users/gerardsimons/Git/afstuderen/ImageView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilerd09c5531ff1fb941^aa437232ff1fb941^---0#0#1#-19%DVTDocumentLocation2@55"file:///Users/gerardsimons/Git/afstuderen/ImageView.cpp0000000000000000^2962"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o /Users/gerardsimons/Git/afstuderen/ImageView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.dia -c /Users/gerardsimons/Git/afstuderen/ImageView.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o36"E405ED59-4509-48F5-81FB-D9B429823FBB-
-bABB7D3F7-8665-44CC-940D-443151861804
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection56"Compile /Users/gerardsimons/Git/afstuderen/ImageView.cpp199"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o /Users/gerardsimons/Git/afstuderen/ImageView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler2618aa693421b941^14cfc56a3421b941^---0#0#1#-19%DVTDocumentLocation2@55"file:///Users/gerardsimons/Git/afstuderen/ImageView.cpp0000000000000000^2962"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o /Users/gerardsimons/Git/afstuderen/ImageView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.dia -c /Users/gerardsimons/Git/afstuderen/ImageView.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o36"FBD367E1-9438-4B10-8329-967C9E8DDCB0-
+bCC55B017-12EB-48AD-B418-FF34104DDAD5
 
 CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s421528306.318868
-e421528306.862095
+s421606307.666489
+e421606308.887007
 r1
 xCompileC
 xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o
@@ -681,12 +684,13 @@ d/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp
 d/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.h
 d/Users/gerardsimons/Git/afstuderen/Record.h
 d/Users/gerardsimons/Git/afstuderen/RIVVector.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection65"Compile /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp217"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler32cc51f20220b941^96b2dcf20220b941^---0#0#1#-19%DVTDocumentLocation2@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp0000000000000000^3016"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.dia -c /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o36"32949425-290C-472D-BBA8-DFC051EFB430-
-b7E43F9DA-F39A-454B-99C1-02B32C2A7716
+d/Users/gerardsimons/Git/afstuderen/Geometry.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection65"Compile /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp217"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilerbfb6aaa33321b941^3813e3a43321b941^---0#0#1#-19%DVTDocumentLocation2@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp0000000000000000^3016"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.dia -c /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o36"269ABB5A-F96E-4B89-8D35-CF0BA0AD7C38-
+b2DCC6ABC-6350-470F-B8A5-FE4606BAD04A
 
 CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s421583370.782219
-e421583371.415005
+s421606400.655777
+e421606402.063304
 r1
 xCompileC
 xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o
@@ -703,21 +707,26 @@ d/Users/gerardsimons/Git/afstuderen/Record.h
 d/Users/gerardsimons/Git/afstuderen/RIVVector.h
 d/Users/gerardsimons/Git/afstuderen/Filter.h
 d/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.h
-o/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:80:49: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
-o        DrawText((*text).c_str(),(*text).size() + 1,axis->x,axis->y - 15,textColor,.1F);
-o        ~~~~~~~~                 ~~~~~~~~~~~~~~~^~~
-o/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:122:49: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
-o                                float* value = dataset->GetFloatRecordValue(axis_index,record_i);
-o                                               ~~~~~~~                      ^~~~~~~~~~
-o/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:144:58: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
-o                                unsigned short* value = dataset->GetShortRecordValue(axis_index,record_i);
-o                                                        ~~~~~~~                      ^~~~~~~~~~
-o/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:183:9: warning: address of stack memory associated with local variable 'color' returned [-Wreturn-stack-address]
+d/Users/gerardsimons/Git/afstuderen/Geometry.h
+o/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:109:43: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]
+o        drawText(text.c_str(),text.size() + 1,axis.x,axis.y - 15,textColor,.1F);
+o        ~~~~~~~~              ~~~~~~~~~~~~^~~
+o/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:150:57: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+o            float* value = dataset->GetFloatRecordValue(axis_index,record_i);
+o                           ~~~~~~~                      ^~~~~~~~~~
+o/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:172:66: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
+o            unsigned short* value = dataset->GetShortRecordValue(axis_index,record_i);
+o                                    ~~~~~~~                      ^~~~~~~~~~
+o/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:226:9: warning: address of stack memory associated with local variable 'color' returned [-Wreturn-stack-address]
 o        return color;
 o               ^~~~~
-o4 warnings generated.
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection65"Compile /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp217"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler6d57c80ada20b941^813d6a0bda20b941^-1292"/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:80:49: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]        DrawText((*text).c_str(),(*text).size() + 1,axis->x,axis->y - 15,textColor,.1F);        ~~~~~~~~                 ~~~~~~~~~~~~~~~^~~/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:122:49: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]                                float* value = dataset->GetFloatRecordValue(axis_index,record_i);                                               ~~~~~~~                      ^~~~~~~~~~/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:144:58: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]                                unsigned short* value = dataset->GetShortRecordValue(axis_index,record_i);                                                        ~~~~~~~                      ^~~~~~~~~~/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:183:9: warning: address of stack memory associated with local variable 'color' returned [-Wreturn-stack-address]        return color;               ^~~~~4 warnings generated.4(36%IDEClangDiagnosticActivityLogMessage2@69"Implicit conversion loses integer precision: 'unsigned long' to 'int'-421583371#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^79#48#79#48#2436#0#22"Value Conversion Issue2(3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^79#33#79#51#2421#17#3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^79#8#79#16#2396#0#-2@84"Implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int'-421583371#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^121#48#121#48#3848#0#22"Value Conversion Issue2(3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^121#48#121#58#3848#0#3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^121#19#121#26#3819#0#-2@84"Implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int'-421583371#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^143#57#143#57#4749#0#22"Value Conversion Issue2(3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^143#57#143#67#4749#0#3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^143#28#143#35#4720#0#-2@71"Address of stack memory associated with local variable 'color' returned-421583371#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^182#8#182#8#5904#0#14"Semantic Issue1(3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^182#8#182#13#5904#0#-0#0#1#-19%DVTDocumentLocation4@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^3016"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.dia -c /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o36"EAC7D343-9614-403F-90CF-F0C74638F40A-
-bCCC02D4F-102A-4974-BE46-1FB88B4542F5
+o/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:317:51: warning: format specifies type 'int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]
+o        printf("Drag selection box on axis #%d\n",selectedAxisIndex);
+o                                            ~~    ^~~~~~~~~~~~~~~~~
+o                                            %zu
+o5 warnings generated.
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection65"Compile /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp217"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler1bf2a7003421b941^3b3410023421b941^-1556"/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:109:43: warning: implicit conversion loses integer precision: 'unsigned long' to 'int' [-Wshorten-64-to-32]        drawText(text.c_str(),text.size() + 1,axis.x,axis.y - 15,textColor,.1F);        ~~~~~~~~              ~~~~~~~~~~~~^~~/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:150:57: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]            float* value = dataset->GetFloatRecordValue(axis_index,record_i);                           ~~~~~~~                      ^~~~~~~~~~/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:172:66: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]            unsigned short* value = dataset->GetShortRecordValue(axis_index,record_i);                                    ~~~~~~~                      ^~~~~~~~~~/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:226:9: warning: address of stack memory associated with local variable 'color' returned [-Wreturn-stack-address]        return color;               ^~~~~/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:317:51: warning: format specifies type 'int' but the argument has type 'size_t' (aka 'unsigned long') [-Wformat]        printf("Drag selection box on axis #%d\n",selectedAxisIndex);                                            ~~    ^~~~~~~~~~~~~~~~~                                            %zu5 warnings generated.5(36%IDEClangDiagnosticActivityLogMessage2@69"Implicit conversion loses integer precision: 'unsigned long' to 'int'-421606402#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^108#42#108#42#3298#0#22"Value Conversion Issue2(3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^108#30#108#45#3286#14#3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^108#8#108#16#3264#0#-2@84"Implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int'-421606402#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^149#56#149#56#4726#0#22"Value Conversion Issue2(3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^149#56#149#66#4726#0#3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^149#27#149#34#4697#0#-2@84"Implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int'-421606402#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^171#65#171#65#5749#0#22"Value Conversion Issue2(3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^171#65#171#75#5749#0#3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^171#36#171#43#5720#0#-2@71"Address of stack memory associated with local variable 'color' returned-421606402#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^225#8#225#8#7446#0#14"Semantic Issue1(3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^225#8#225#13#7446#0#-2@84"Format specifies type 'int' but the argument has type 'size_t' (aka 'unsigned long')-421606402#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^316#50#316#50#10612#0#19"Format String Issue3(3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^316#50#316#67#10612#0#3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^316#44#316#46#10606#2#3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^316#44#316#46#10606#2#-0#0#1#-19%DVTDocumentLocation4@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^3016"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.dia -c /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o36"7AF54741-57B2-4D8B-9E7F-0990FF2372B6-
+b5867F69F-0273-4FF8-B3BA-C903C0E88029
 
 CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Record.o /Users/gerardsimons/Git/afstuderen/Record.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
 r0
@@ -742,8 +751,8 @@ CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ma
 r0
 
 CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o /Users/gerardsimons/Git/afstuderen/main.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s421580679.383964
-e421580680.617923
+s421609126.764455
+e421609127.694555
 r1
 xCompileC
 xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o
@@ -760,14 +769,15 @@ d/Users/gerardsimons/Git/afstuderen/RIVVector.h
 d/Users/gerardsimons/Git/afstuderen/Filter.h
 d/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.h
 d/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.h
+d/Users/gerardsimons/Git/afstuderen/Geometry.h
 d/Users/gerardsimons/Git/afstuderen/ImageView.h
 d/Users/gerardsimons/Git/afstuderen/DataFileReader.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection51"Compile /Users/gerardsimons/Git/afstuderen/main.cpp189"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o /Users/gerardsimons/Git/afstuderen/main.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler4e606287cf20b941^b6319e88cf20b941^---0#0#1#-19%DVTDocumentLocation2@50"file:///Users/gerardsimons/Git/afstuderen/main.cpp0000000000000000^2932"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o /Users/gerardsimons/Git/afstuderen/main.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.dia -c /Users/gerardsimons/Git/afstuderen/main.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o36"E495B8D9-2660-4343-BFA0-391BE53FA09A-
-bB3C6D4B0-FDE7-4B79-9ECE-F53E18832B6B
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection51"Compile /Users/gerardsimons/Git/afstuderen/main.cpp189"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o /Users/gerardsimons/Git/afstuderen/main.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler3ecfc3a63e21b941^ffcfb1a73e21b941^---0#0#1#-19%DVTDocumentLocation2@50"file:///Users/gerardsimons/Git/afstuderen/main.cpp0000000000000000^2932"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o /Users/gerardsimons/Git/afstuderen/main.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.dia -c /Users/gerardsimons/Git/afstuderen/main.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o36"CFF3A74F-B91B-4F82-93B8-753F494BE4E9-
+b2DA270C2-CE1C-4FFE-A32E-DCEAE10DE03B
 
 CLd /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen normal x86_64
-s421583371.417059
-e421583371.459492
+s421610805.996477
+e421610806.175723
 r1
 xLd
 x/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen
@@ -791,6 +801,8 @@ d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/
 d/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/5.1/lib/darwin/libclang_rt.osx.a
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/AppKit.framework/AppKit
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreData.framework/CoreData
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcache.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcommonCrypto.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcompiler_rt.dylib
@@ -821,8 +833,6 @@ d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libunc.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libunwind.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libxpc.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Foundation.framework/Foundation
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
@@ -846,6 +856,6 @@ d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
 d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection73"Link /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen39"Ld build/Debug/Afstuderen normal x86_64f6d06a0bda20b941^94a2750bda20b941^---0#0#1#--967"Ld build/Debug/Afstuderen normal x86_64    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export MACOSX_DEPLOYMENT_TARGET=10.8    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -L/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -filelist /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Afstuderen.LinkFileList -mmacosx-version-min=10.8 -stdlib=libc++ -framework Cocoa -framework GLUT -framework OpenGL -Xlinker -dependency_info -Xlinker /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Afstuderen_dependency_info.dat -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen36"7882810C-EF92-4C56-BC76-424422079AA2-
-bCCC02D4F-102A-4974-BE46-1FB88B4542F5
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection73"Link /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen39"Ld build/Debug/Afstuderen normal x86_641826ff354521b941^4cfd2c364521b941^---0#0#1#--967"Ld build/Debug/Afstuderen normal x86_64    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export MACOSX_DEPLOYMENT_TARGET=10.8    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -L/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -filelist /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Afstuderen.LinkFileList -mmacosx-version-min=10.8 -stdlib=libc++ -framework Cocoa -framework GLUT -framework OpenGL -Xlinker -dependency_info -Xlinker /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Afstuderen_dependency_info.dat -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen36"A1B38771-36FE-42BE-A834-7CE8B2507D18-
+b8C0B3F50-07C1-4CEA-9B86-6D0D48386AB4
 

@@ -127,8 +127,8 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 					selection.end.y = tempY;
 				}
 
-				Filter *xFilter = new RangeFilter("x",selection.start.x,selection.end.x);
-				Filter *yFilter = new RangeFilter("y",selection.start.y,selection.end.y);
+				Filter *xFilter = new RangeFilter("x",selection.start.x,selection.end.x - 1);
+				Filter *yFilter = new RangeFilter("y",selection.start.y,selection.end.y - 1);
 		
 				dataset->AddFilter(xFilter);
 				dataset->AddFilter(yFilter);

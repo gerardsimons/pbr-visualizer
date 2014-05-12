@@ -59,6 +59,7 @@
 		E129094A191CF53000822217 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		E129094C191CF53000822217 /* Record.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Record.h; path = ../Record.h; sourceTree = "<group>"; };
 		E129094D191CF53000822217 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = ../Resources; sourceTree = "<group>"; };
+		E18D187C1920F309006F10D5 /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Geometry.h; path = ../Geometry.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +79,7 @@
 		E12908F3191CCBC900822217 = {
 			isa = PBXGroup;
 			children = (
+				E18D187C1920F309006F10D5 /* Geometry.h */,
 				E1290937191CF53000822217 /* BMPImage.cpp */,
 				E1290938191CF53000822217 /* BMPImage.h */,
 				E1290939191CF53000822217 /* DataFileReader.cpp */,

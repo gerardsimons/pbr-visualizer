@@ -10,23 +10,13 @@
 #define IMAGEVIEW_H
 
 #include "DataView.h"
+#include "Geometry.h"
 
 #if defined(__APPLE__)
 #include <GLUT/GLUT.h>
 #else
 #include <GL/glut.h>
 #endif
-
-typedef struct Point {
-	int x;
-	int y;
-} Point;
-
-//Used to highlight the pixels
-typedef struct SelectionBox {
-	Point start;
-	Point end;
-} SelectionBox;
 
 class RIVImageView : public RIVDataView {
 public:
@@ -39,7 +29,7 @@ public:
 private:
     GLuint imageTexture;
 	float imageMagnificationX,imageMagnificationY;
-	bool isDragging;
+
 	Point screenToPixelSpace(int,int);
 	void clearSelection();
 	//In screenspace
@@ -47,7 +37,8 @@ private:
 	Point imageEnd;
 	//image size in pixels
 	int imageWidth, imageHeight;
-	SelectionBox selection;
+    
+	Area selection;
 };
 
 #endif /* IMAGEVIEW_H */
