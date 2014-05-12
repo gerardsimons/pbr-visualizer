@@ -116,7 +116,7 @@ public:
         return &float_records[recordIndex];
     }
     
-    RIVRecord<unsigned short>* GetUnsignedIntRecord(size_t recordIndex) {
+    RIVRecord<unsigned short>* GetUnsignedShortRecord(size_t recordIndex) {
         return &short_records[recordIndex];
     }
     
@@ -133,8 +133,18 @@ public:
     }
     
     //Get the value of record given by the indices
-    float* GetRecordValue(int recordIndex, size_t valueIndex) {
+    float* GetFloatRecordValue(int recordIndex, size_t valueIndex) {
         RIVRecord<float> *record = &float_records[recordIndex];
+        
+        if(filteredIndices.size() > 0) {
+            bool filtered = filteredIndices[valueIndex];
+            if(filtered) return 0;
+        }
+        return record->Value(valueIndex);
+    }
+    
+    unsigned short* GetShortRecordValue(int recordIndex, size_t valueIndex) {
+        RIVRecord<unsigned short> *record = &short_records[recordIndex];
         
         if(filteredIndices.size() > 0) {
             bool filtered = filteredIndices[valueIndex];

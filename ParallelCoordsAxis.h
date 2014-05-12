@@ -9,9 +9,10 @@
 #include <string>
 #include "Record.h"
 
+
 class ParallelCoordsAxis {
 public:
-    ParallelCoordsAxis(int x,int y,int height,RIVRecord<float>* record);
+    ParallelCoordsAxis(int x,int y,int height,float min, float max, std::string *name);
 	void ComputeScale(int n);
 	
 	//Returns the Y position of a value along the scale
@@ -21,6 +22,7 @@ public:
 	//properties
 	std::vector<float> scale;
     int x,y;
+    float minValue, maxValue; //TODO: template
     int height;
-    RIVRecord<float>* record;
+    std::string* name; //Usually points to a record's name
 };

@@ -19,24 +19,47 @@ ParallelCoordsView::~ParallelCoordsView(void) {
 }
 
 void ParallelCoordsView::DrawAxes() {
-    glBegin(GL_LINES);
-
+    
+    glColor3f(0,0,0);
+    glLineWidth(1.F);
+    
     axes.clear();
-    //size_t nr_of_axes = dataset->TotalNumberOfRecords();
+    size_t total_nr_of_records = dataset->TotalNumberOfRecords();
     size_t nr_of_float_records = dataset->NumberOfFloatRecords();
     size_t nr_of_short_records = dataset->NumberOfShortRecords();
     
     /**                 FOR ALL FLOAT RECORDS               **/
     int y = startY + paddingY;
     int axisHeight = height - 2 * paddingY;
-    float delta = 1.F / (nr_of_float_records - 1) * (width - 2 * paddingX);
+    float delta = 1.F / (total_nr_of_records - 1) * (width - 2 * paddingX);
     
-    //Iterate over float records
+    glBegin(GL_LINES);
     for(size_t i = 0 ; i < nr_of_float_records ; i++) {
         int x = delta * i + startX + paddingX;
         
-        RIVRecord<float> record = *dataset->GetFloatRecord(i);
-        ParallelCoordsAxis axis(x,y,axisHeight,&record);
+        RIVRecord<float> *record = dataset->GetFloatRecord(i);
+        
+        std::pair<float,float> *minMax = record->MinMax();
+        
+        ParallelCoordsAxis axis(x,y,axisHeight,minMax->first,minMax->second,&record->name);
+        
+		axis.ComputeScale(4);
+        
+        glVertex3f(axis.x, axis.y, 0);
+        glVertex3f(axis.x, axis.y + axis.height, 0);
+        
+        axes.push_back(axis);
+    }
+
+    
+    /**                 FOR ALL SHORT RECORDS               **/
+    for(size_t j = 0 ; j < nr_of_short_records ; j++) {
+        int x = delta * (j + nr_of_float_records) + startX + paddingX;
+        
+        RIVRecord<unsigned short> *record = dataset->GetUnsignedShortRecord(j);
+        
+        std::pair<unsigned short,unsigned short> *minMax = record->MinMax();
+        ParallelCoordsAxis axis(x,y,axisHeight,minMax->first,minMax->second,&record->name);
         
 		axis.ComputeScale(4);
         
@@ -52,87 +75,94 @@ void ParallelCoordsView::DrawAxes() {
     //Draw texts
     for(size_t i = 0 ; i < axes.size() ; i++) {
         ParallelCoordsAxis *axis = &axes[i];
-        std::string text = axis->record->name;
+        std::string *text = axis->name;
         
-        DrawText(text.c_str(),text.size() + 1,axis->x,axis->y - 15,textColor,.1F);
+        DrawText((*text).c_str(),(*text).size() + 1,axis->x,axis->y - 15,textColor,.1F);
         
         std::vector<float> scale = axis->scale;
         
-        //Draw the scales indicator
+        //Draw the scales indicators
         for(size_t j = 0 ; j < scale.size() ; j++) {
             float value = axis->ValueOnScale(scale[j]);
             int height = axis->PositionOnScale(scale[j]);
-            char text[150];
+            char text[150]; 
             sprintf(text,"%.2f",value);
             DrawText(text,10,axis->x - 6,height,textColor,.1F);
         }
     }
-    
-    /**             FOR ALL SHORT RECORDS           **/
-    
-    
 }
 
 void ParallelCoordsView::Draw() {
 
 	if(needsRedraw) {
-		//printf("ParallCoordsView::Draw()\n");
-
-
-
-		//Draw the axes
-		glLineWidth(1);
-		glColor3f(0.0, 0.0, 0.0);
-
-		size_t columns = dataset->NumberOfFloatRecords();
-		int marginHeight = 20;
 
         DrawAxes();
-
-		return;
-	
-		size_t records_per_column = dataset->NumberOfValuesPerRecord();
-		//printf("record_per_column = %d\n",records_per_column);
-
 
 		glColor3f(1.0, 0.0, 0.0);
 		glLineWidth(1.F);
     
 		size_t lineIndex = 0;
 		size_t totalNumberOfLines = dataset->NumberOfValuesPerRecord();
+        size_t records_per_column = dataset->NumberOfValuesPerRecord();
 
-		//for each record
+		/**             FOR EACH FLOAT RECORD           **/
 		for(size_t record_i = 0 ; record_i < records_per_column ; record_i++) {
 			//For each axis/column
 			//printf("record_i = %d\n",record_i);
+            float* color = computeColor(lineIndex,totalNumberOfLines);
+            glColor3f(color[0],color[1],color[2]);
+            
 			glBegin(GL_LINE_STRIP);
-			for(size_t axis_index = 0 ; axis_index < axes.size() ; axis_index++) {
-				//printf("axis_index = %d\n",axis_index);	
+        
+			for(size_t axis_index = 0 ; axis_index < dataset->NumberOfFloatRecords() ; axis_index++) {
+
 				ParallelCoordsAxis *axis = &axes[axis_index];
 
                 std::pair<float,float> *min_max = dataset->GetFloatRecord(axis_index)->MinMax();
-				float* value = dataset->GetRecordValue(axis_index,record_i);
-
-				float* color = computeColor(lineIndex,totalNumberOfLines);
-				glColor3f(color[0],color[1],color[2]);
+				float* value = dataset->GetFloatRecordValue(axis_index,record_i);
 
 				if(value != 0) {
 					float x = axis->x;
-
-					//indicating the ratio of height, where max = 1 and min = 0
+                    
 					float heightRatio;
 					if(min_max->second == min_max->first) { //Special case to avoid divide-by-zero
 						heightRatio = .5F;
 					}	
 					else heightRatio = (*value - min_max->first) / (min_max->second - min_max->first); 
 
-					float y = heightRatio * axis->height + startY + marginHeight;
-
-					//printf("heightratio = %f\n",heightRatio);
-					//printf("value point (x,y) = (%f,%f)\n",x,y);
+					float y = heightRatio * axis->height + startY + paddingY;
+                    printf("x=%f\n",x);
+                    printf("y=%f\n",y);
 					glVertex3f(x, y, 0);
 				}
 			}
+            for(size_t axis_index = 0 ; axis_index < dataset->NumberOfShortRecords() ; axis_index++) {
+                
+				ParallelCoordsAxis *axis = &axes[axis_index + dataset->NumberOfFloatRecords()];
+                std::pair<unsigned short,unsigned short> *min_max = dataset->GetUnsignedShortRecord(axis_index)->MinMax();
+                
+				unsigned short* value = dataset->GetShortRecordValue(axis_index,record_i);
+
+				if(value != 0) {
+                    
+                    printf("value=%hu\n",*value);
+					float x = axis->x;
+
+                    
+					float heightRatio;
+					if(min_max->second == min_max->first) { //Special case to avoid divide-by-zero
+						heightRatio = .5F;
+					}
+					else heightRatio = (*value - min_max->first) / (float)(min_max->second - min_max->first);
+                    
+//                    printf("heighratio = %f\n",heightRatio);
+					float y = heightRatio * axis->height + startY + paddingY;
+                    printf("x=%f\n",x);
+                    printf("y=%f\n",y);
+					glVertex3f(x, y, 0);
+				}
+			}
+            
 			++lineIndex;
 			glEnd();
 		}
@@ -177,6 +207,8 @@ void ParallelCoordsView::DrawText(const char *text, int size, int x, int y, floa
     
     //Estimate center, seems to be the magic number for font pixel size
     float xCenter = 60 * sizeModifier * size / 2.F;
+    
+    printf("drawing chars = %s\n",text);
     
     glLineWidth(1);
 	glColor3f(*color,*(color+1),*(color+2));

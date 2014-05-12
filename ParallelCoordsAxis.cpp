@@ -8,11 +8,13 @@
 
 #include "ParallelCoordsAxis.h"
 
-ParallelCoordsAxis::ParallelCoordsAxis(int x,int y, int height, RIVRecord<float>* record) {
+ParallelCoordsAxis::ParallelCoordsAxis(int x,int y, int height, float minValue, float maxValue, std::string* name) {
     this->x = x;
     this->y = y;
     this->height = height;
-    this->record = record;
+    this->name = name;
+    this->minValue = minValue;
+    this->maxValue = maxValue;
 }
 
 //Returns the Y position of a value along the scale
@@ -25,10 +27,9 @@ float ParallelCoordsAxis::PositionOnScale(float value) {
 
 //Returns the value 
 float ParallelCoordsAxis::ValueOnScale(float value) {
-//	std::pair<float,float> *min_max = record->MinMax();
-//	if(value >= 0.F && value <= 1.F) {
-//		return (1 - value) * min_max->first + value * min_max->second;
-//	}
+	if(value >= 0.F && value <= 1.F) {
+		return (1 - value) * minValue + value * maxValue;
+	}
     return std::numeric_limits<float>::quiet_NaN();
 }
 
