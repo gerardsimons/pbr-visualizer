@@ -41,12 +41,13 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName) {
     
     if (is.is_open())
     {
+        std::string buffer;
         while ( getline (is,line) )
         {
+            ++lineNumber;
             if(lineNumber > skipLines) {
                 int commaCount = 0;
-                
-                std::string buffer;
+                buffer.clear();
                 for(size_t i = 0 ; i < line.size() ; i++) {
                     char c = line[i];
                     if(c == ',') {
@@ -54,9 +55,9 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName) {
 //                        printf("buffer = %s\n",buffer.c_str());
                         switch(commaCount) {
                             case 1:
-                                x = (unsigned short) std::stoi(buffer,nullptr,0);
+                                x = (unsigned short) std::stoul(buffer,nullptr,0);
                             case 2:
-                                y = (unsigned short) std::stoi(buffer,nullptr,0);
+                                y = (unsigned short) std::stoul(buffer,nullptr,0);
                             case 3:
                                 throughput[0] = std::stof(buffer,nullptr);
                             case 4:
@@ -64,11 +65,15 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName) {
                             case 5:
                                 throughput[1] = std::stof(buffer,nullptr);
                             case 6:
-                                y = (unsigned short) std::stoi(buffer,nullptr,0);
+                                size = (unsigned short) std::stoul(buffer,nullptr,0);
+                                if(size > 5) {
+                                    printf("weird at line %d, buffer = %s\n",lineNumber,buffer.c_str());
+                                }
                         }
                         buffer.clear();
                     }
                     else if(c == '[' || c == ']') { //Ignore, they exist just for readability
+                        printf("char %c ignored.\n",c);
                         continue;
                     }
                     else {
@@ -85,7 +90,7 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName) {
                 
                 
             }
-            ++lineNumber;
+
         }
         is.close();
     }
