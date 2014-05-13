@@ -59,7 +59,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/gerardsimons/afstuderen/teapot2x2x1.exr"
+            argument = "/Users/gerardsimons/Git/afstuderen/Resources/teapot32x32x1.exr"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

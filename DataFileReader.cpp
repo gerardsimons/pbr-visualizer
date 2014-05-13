@@ -19,9 +19,10 @@ DataFileReader::~DataFileReader(void)
 
 RIVDataSet DataFileReader::ReadAsciiData(std::string fileName) {
     std::ifstream is;
-    is.open (fileName, std::ios::binary | std::ios::in );
+    is.open (fileName, std::ios::in );
     
     is.seekg (0, std::ios::beg);
+    
     
     std::vector<unsigned short> xPixelData;
     std::vector<unsigned short> yPixelData;
@@ -34,6 +35,8 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName) {
     unsigned short y;
     float throughput[3] = {-1.F,-1.F,-1.F};
     unsigned short size;
+    
+
     
     std::string line;
     int skipLines = 13;
@@ -77,6 +80,7 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName) {
                         continue;
                     }
                     else {
+                        printf("char %c pushed to buffer.\n",c);
                         buffer.push_back(c);
                     }
                 }

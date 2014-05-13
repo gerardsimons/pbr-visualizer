@@ -1,0 +1,15 @@
+******************************************************************************************
+BSDF_REFLECTION=1
+BSDF_TRANSMISSION=2
+BSDF_DIFFUSE=4
+BSDF_GLOSSY=8
+BSDF_SPECULAR=16
+BSDF_ALL_TYPES=28
+BSDF_ALL_REFLECTION=29
+BSDF_ALL_TRANSMISSION=30
+BSDF_ALL=31
+******************************************************************************************
+
+imageX,imageY,throughput,#isects,isect_positions,primitive_ids,shape_ids,spectra,interaction_types,light_ids
+
+13,5,0.101070,0.101070,0.101070,0
