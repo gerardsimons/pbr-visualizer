@@ -209,7 +209,8 @@ void initialize(int argc, char* argv[]) {
 	int imageWidth = 500;
     int imageHeight = 500;
     
-	dataset = DataFileReader::LoadData(fullPath + ".bin");
+	//dataset = DataFileReader::ReadBinaryData(fullPath + ".bin");
+    dataset = DataFileReader::ReadAsciiData(fullPath + ".txt");
     /* dataset = &loadData(resourcesPath + fileName + ".bin"); */
 
 	//CAUTION: Image should be power of two!

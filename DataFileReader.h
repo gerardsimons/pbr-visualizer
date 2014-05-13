@@ -12,8 +12,8 @@ private:
 public:
 	~DataFileReader(void);
     
-
-	static RIVDataSet LoadData(std::string fileName);
+    static RIVDataSet ReadAsciiData(std::string fileName);
+	static RIVDataSet ReadBinaryData(std::string fileName);
 };
 #endif
 
