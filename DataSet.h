@@ -15,15 +15,15 @@
 
 class RIVDataSet {
 private:
-    std::vector<RIVTable> tables;
+    std::vector<RIVTable*> tables;
 public:
-    void AddTable(RIVTable table);
+    void AddTable(RIVTable* table);
     void AddFilter(Filter* filter);
     void ClearFilters();
     void ClearFilter(std::string attributeName);
     size_t TotalNumberOfRecords();
     size_t NumberOfTables();
-    std::vector<RIVTable>* GetTables();
+    std::vector<RIVTable*>* GetTables();
     void Print();
     void PrintUnfiltered();
 };

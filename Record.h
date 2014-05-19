@@ -29,42 +29,52 @@ public:
 
 class RIVFloatRecord : public RIVRecord {
     std::vector<float> values;
-        std::pair<float,float> minMax;
+    std::pair<float,float> minMax;
 public:
     RIVFloatRecord(std::string _name) { name = _name; };
     float Value(size_t i) { return values[i]; };
-    void Print() {
-        std::cout << "RIVRecord " << name << " containing " << values.size() << " " << typeid(float).name() << " values.\n";
-    }
     void SetValues(std::vector<float> _values) {
         values = _values;
+        minMaxComputed = false;
     }
     size_t Size() {
         return values.size();
     }
     
     const std::pair<float,float>& MinMax() {
+//        printf("MINMAX OF RECORD \"%s\" CALLED\n",name.c_str());
 		if(!minMaxComputed) {
 			float min = std::numeric_limits<float>::max();
 			float max = std::numeric_limits<float>::min();
-            
-			if(!values.empty()) {
-				for(size_t i = 0 ; i < values.size() ; i++) {
-					auto value = values[i];
-					if(value > max) {
-						max = value;
-					}
-					if(value < min) {
-						min = value;
-					}
-				}
-			}
+			for(float value : values) {
+                if(value < min) {
+                    min = value;
+                }
+                if(value > max) {
+                    max = value;
+                }
+            }
 			minMax = std::pair<float,float>(min,max);
 			//TODO: min_max caching does not work properly, uncomment below to enable caching!
+
+            if(min == max) {
+//                printf("min == max for record %s\n",name.c_str());
+            }
+//            printf("min,max == %f,%f\n",min,max);
 			minMaxComputed = true;
+//            printf("After min max: ");
+//            Print();
 		}
-		return minMax;
+
+//            printf("MINMAX ALREADY COMPUTED (%f,%f)\n",minMax.first,minMax.second);
+        return minMax;
+        
 	}
+    
+    void Print() {
+        printf("RIVFloatRecord %s has %lu records. ",name.c_str(), values.size());
+        minMaxComputed ? printf(" (min,max) = (%f,%f)\n",minMax.first, minMax.second) : printf("no minmax yet computed.\n");
+    }
 };
 
 class RIVUnsignedShortRecord : public RIVRecord {

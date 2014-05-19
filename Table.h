@@ -30,7 +30,7 @@ public:
     TableIterator(size_t _maxIndex) { maxIndex = _maxIndex; };
     void BackToStart() { index = 0; };
     virtual bool HasNext() {
-        printf("TableIterator HasNext called.\n");
+//        printf("TableIterator HasNext called.\n");
         return index < maxIndex;
     };
     virtual size_t GetNext() {
@@ -55,13 +55,13 @@ public:
     bool HasNext() {
         if(index >= maxIndex) {
             return false;
-            printf("End of iterator!\n");
+//            printf("End of iterator!\n");
         }
         else {
             bool filtered = (*indexPointers)[index];
             if(!filtered) {
                 return true;
-                printf("Unfiltered value found at %hz!\n",index);
+//                printf("Unfiltered value found at %hz!\n",index);
             }
             else {
                 ++index;
@@ -90,20 +90,17 @@ public:
 class RIVTable {
 private:
     std::vector<RIVRecord*> records;
-    std::vector<RIVReference> references;
+    std::vector<RIVReference*> references;
     
     TableIterator* iterator;
     
-    size_t rows = 0;
-    
-    const int columnWidth = 20;
+    size_t rows = 0; //Keeps a running count of the rows (that is the length of a record)
     
     std::vector<Filter*> filters;
     
     std::string name;
     
     std::map<size_t,bool> filteredRows;
-    
     
     void filterRecords(Filter *);
     void filterRecords(); //Filter on all filters present in the filters vector
@@ -113,17 +110,20 @@ public:
     
     void AddRecord(RIVRecord* record);
     void AddFilter(Filter *filter);
-    void AddReference(const RIVReference& reference);
+    void AddReference(RIVReference* reference);
+    
+    void FilterRow(size_t,RIVReference* reference = 0);
     
     void ClearFilters();
     void ClearFilter(std::string filterName);
     
     bool ContainsColumn(std::string);
     
+    /* Casting help functions */
     static RIVFloatRecord* CastToFloatRecord(RIVRecord* record);
     static RIVUnsignedShortRecord* CastToUnsignedShortRecord(RIVRecord* record);
     
-    bool IsFiltered() { return filters.size() > 0; }; //Any filters applied?
+    bool IsFiltered() { return filteredRows.size() > 0; }; //Any filters applied?
 
     TableIterator* GetIterator();
     void FunctionOnRecords(void(*someFunction)(const RIVRecord*));

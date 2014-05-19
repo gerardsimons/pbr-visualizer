@@ -10,7 +10,7 @@
 #define RIVDataSet_Reference_h
 
 #include <stdio.h>
-#include <vector>
+#include <map>
 
 #include "Table.h"
 
@@ -18,14 +18,17 @@ class RIVTable;
 
 class RIVReference {
 public:
-    RIVTable *sourceTable;
+    //The source table is implicit as a reference is supplied to a table
     RIVTable *targetTable;
+    RIVTable *sourceTable;
     
-    std::vector<size_t> sourceIndices;
-    std::vector<size_t> targetIndices;
+    std::map<size_t,size_t>* indexReferences;
     
     RIVReference(RIVTable *_sourceTable, RIVTable *_targetTable);
+    bool HasReference(size_t); //Does it have a reference from a given source index
     void AddReference(size_t sourceIndex, size_t targetIndex);
+    void SetReferences(std::map<size_t,size_t>*);
+    size_t* GetIndexReference(size_t);
 };
 
 #endif

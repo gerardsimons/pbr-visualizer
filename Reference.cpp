@@ -9,13 +9,26 @@
 #include "Reference.h"
 
 
-RIVReference::RIVReference(RIVTable *_sourceTable, RIVTable *_targetTable) {
-    
+RIVReference::RIVReference(RIVTable* _sourceTable, RIVTable *_targetTable) {
     sourceTable = _sourceTable;
     targetTable = _targetTable;
 }
 
 void RIVReference::AddReference(size_t sourceIndex, size_t targetIndex) {
-    sourceIndices.push_back(sourceIndex);
-    targetIndices.push_back(targetIndex);
+    (*indexReferences)[sourceIndex] = targetIndex;
+}
+
+void RIVReference::SetReferences(std::map<size_t,size_t>* references) {
+    this->indexReferences = references;
+}
+
+size_t* RIVReference::GetIndexReference(size_t sourceIndex) {
+    if(HasReference(sourceIndex)) {
+        return &(*indexReferences)[sourceIndex];
+    }
+    else return 0;
+}
+
+bool RIVReference::HasReference(size_t sourceIndex) {
+    return indexReferences->count(sourceIndex) != 0;
 }

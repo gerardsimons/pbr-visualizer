@@ -10,6 +10,7 @@
 #include <algorithm>
 
 ParallelCoordsAxis::ParallelCoordsAxis(int x,int y, int height, float minValue, float maxValue, const std::string& name) {
+    
     this->x = x;
     this->y = y;
     this->height = height;

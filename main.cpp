@@ -18,7 +18,7 @@
 const float DEG2RAD = 3.14159/180;
 
 /* window width and height */
-int width = 1200; 
+int width = 1600;
 int height = 600;
 
 /* window position */
@@ -204,8 +204,8 @@ void initialize(int argc, char* argv[]) {
     
     printf("using fullpath = %s\n",fullPath.c_str());
 
-	int imageWidth = 500;
-    int imageHeight = 500;
+	int imageWidth = 250;
+    int imageHeight = 250;
     
 	//dataset = DataFileReader::ReadBinaryData(fullPath + ".bin");
     dataset = DataFileReader::ReadAsciiData(fullPath + ".txt");

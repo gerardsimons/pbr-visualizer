@@ -40,12 +40,12 @@ void ParallelCoordsView::createAxes() {
     
     float delta = 1.F / (total_nr_of_records - 1) * (width - 2 * paddingX);
 
-    std::vector<RIVTable>* tablePointers = dataset->GetTables();
+    std::vector<RIVTable*>* tablePointers = dataset->GetTables();
     
     int axisIndex = 0;
     
     for(size_t j = 0 ; j < tablePointers->size() ; j++) {
-        RIVTable *table = &tablePointers->at(j);
+        RIVTable *table = tablePointers->at(j);
         ParallelCoordsAxisGroup axisGroup;
         size_t numberOfRecords = table->NumberOfColumns();
         for(size_t i = 0 ; i < numberOfRecords ; ++i) {
@@ -54,7 +54,8 @@ void ParallelCoordsView::createAxes() {
             if(floatRecord) {
                 int x = delta * (axisIndex) + startX + paddingX;
                 
-                const std::pair<float,float> &minMax = floatRecord->MinMax();
+                std::pair<float,float> minMax = floatRecord->MinMax();
+                
                 ParallelCoordsAxis axis(x,y,axisHeight,minMax.first,minMax.second,record->name);
                 
                 axis.ComputeScale(4);
@@ -157,7 +158,7 @@ void ParallelCoordsView::drawLines() {
         glColor3f(1.0, 0.0, 0.0);
         glLineWidth(1.F);
         
-        printf("Redrawing lines\n");
+//        printf("Redrawing lines\n");
 
         for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
             RIVTable *table = axisGroup.table;
@@ -165,21 +166,21 @@ void ParallelCoordsView::drawLines() {
             size_t numberOfRows = table->NumberOfRows();
             size_t recordIndex = 0;
             
+            if(table->GetName() == "intersections") {
+                
+            }
+            
             TableIterator *iterator = table->GetIterator();
-            printf("iterator type = %s\n", typeid(iterator).name());
+            printf("iterator for %s : ", table->GetName().c_str());
             iterator->Print();
             
             
 //            printf("%zu rows for table %s\n",numberOfRows,table->GetName().c_str());
 //            for(size_t recordIndex = 0 ; recordIndex < numberOfRows ; recordIndex++) {
             while(iterator->HasNext()) {
-                
-
-
-                
                 recordIndex = iterator->GetNext();
                 
-                printf("Record index %zu\n",recordIndex);
+//                printf("Record index %zu\n",recordIndex);
                 
                 glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
                 
@@ -202,8 +203,8 @@ void ParallelCoordsView::drawLines() {
                         else heightRatio = (value - min_max.first) / (float)(min_max.second - min_max.first);
                         
                         float y = heightRatio * axis.height + startY + paddingY;
-                        printf("glVertex3f(%f,%f)\n",x,y);
-                        printf("Drawing line %zu\n",lineIndex);
+//                        printf("glVertex3f(%f,%f)\n",x,y);
+//                        printf("Drawing line %zu\n",lineIndex);
                         glVertex3f(x, y, 0);
                         if(heightRatio < 0 || heightRatio > 1) {
                             
@@ -234,8 +235,8 @@ void ParallelCoordsView::drawLines() {
                             //                    printf("heighratio = %f\n",heightRatio);
                             float y = heightRatio * axis.height + startY + paddingY;
 
-                            printf("glVertex3f(%f,%f)\n",x,y);
-                            printf("Drawing line %zu\n",lineIndex);
+//                            printf("glVertex3f(%f,%f)\n",x,y);
+//                            printf("Drawing line %zu\n",lineIndex);
                             glVertex3f(x, y, 0);
                             if(heightRatio < 0 || heightRatio > 1) {
                                 
