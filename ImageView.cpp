@@ -123,12 +123,14 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 					selection.start.y = selection.end.y;
 					selection.end.y = tempY;
 				}
-
+//
 				Filter *xFilter = new RangeFilter("x",selection.start.x,selection.end.x - 1);
 				Filter *yFilter = new RangeFilter("y",selection.start.y,selection.end.y - 1);
 		
 				dataset->AddFilter(xFilter);
 				dataset->AddFilter(yFilter);
+                
+                dataset->Print();
 			}
 			else {
 				clearSelection(); 
@@ -148,7 +150,8 @@ void RIVImageView::clearSelection() {
 	//Set the selection to off
 	selection.start.x = -1;
 	//Clear any filters that may have been applied to the dataset
-	dataset->ClearFilters();
+	dataset->ClearFilter("x");
+    dataset->ClearFilter("y");
 }
 
 Point RIVImageView::screenToPixelSpace(int x, int y) {

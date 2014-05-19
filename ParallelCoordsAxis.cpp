@@ -25,7 +25,7 @@ ParallelCoordsAxis::ParallelCoordsAxis() {
 //A ratio value indicating where an arbitrary Y position is according the axis (0 = bottom, 1 = top)
 float ParallelCoordsAxis::ScaleValueForY(int yPos) {
     float value = (yPos - y) / (float)(height);
-    printf("scaleValue = %f\n",value);
+//    printf("scaleValue = %f\n",value);
     return value;
 }
 

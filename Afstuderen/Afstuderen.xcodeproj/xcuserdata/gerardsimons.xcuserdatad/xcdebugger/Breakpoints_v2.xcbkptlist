@@ -8,15 +8,176 @@
          <BreakpointContent
             shouldBeEnabled = "No"
             ignoreCount = "0"
-            condition = "selectedAxis != 0"
             continueAfterRunningActions = "No"
-            filePath = "../ParallelCoordsView.cpp"
-            timestampString = "421597243.44622"
+            filePath = "../Table.cpp"
+            timestampString = "422023782.583785"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
-            landmarkName = "ParallelCoordsView::drawAxes()"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
+            landmarkName = "RIVTable::filterRecords(Filter* filter)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestData.h"
+            timestampString = "421957889.832948"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
+            landmarkName = "TEST_F(DataTest, MethodBarDoesAbc)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestData.h"
+            timestampString = "421957611.974916"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
+            landmarkName = "SetUp()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TestData.h"
+            timestampString = "421957889.832948"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "96"
+            endingLineNumber = "96">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(anonymous namespace)::DataTest_MethodBarDoesAbc_Test::DataTest_MethodBarDoesAbc_Test()"
+                  moduleName = "Afstuderen"
+                  urlString = "file:///Users/gerardsimons/Git/afstuderen/Afstuderen/TestData.h"
+                  timestampString = "421957890.141743"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(anonymous namespace)::DataTest_MethodBarDoesAbc_Test::DataTest_MethodBarDoesAbc_Test()"
+                  moduleName = "Afstuderen"
+                  urlString = "file:///Users/gerardsimons/Git/afstuderen/Afstuderen/TestData.h"
+                  timestampString = "421957890.14208"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(anonymous namespace)::DataTest_MethodBarDoesAbc_Test::~DataTest_MethodBarDoesAbc_Test()"
+                  moduleName = "Afstuderen"
+                  urlString = "file:///Users/gerardsimons/Git/afstuderen/Afstuderen/TestData.h"
+                  timestampString = "421957890.142389"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(anonymous namespace)::DataTest_MethodBarDoesAbc_Test::~DataTest_MethodBarDoesAbc_Test()"
+                  moduleName = "Afstuderen"
+                  urlString = "file:///Users/gerardsimons/Git/afstuderen/Afstuderen/TestData.h"
+                  timestampString = "421957890.14269"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(anonymous namespace)::DataTest_MethodBarDoesAbc_Test::TestBody()"
+                  moduleName = "Afstuderen"
+                  urlString = "file:///Users/gerardsimons/Git/afstuderen/Afstuderen/TestData.h"
+                  timestampString = "421957890.142961"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "102"
+                  endingLineNumber = "102"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(anonymous namespace)::DataTest_MethodBarDoesAbc_Test::~DataTest_MethodBarDoesAbc_Test()"
+                  moduleName = "Afstuderen"
+                  urlString = "file:///Users/gerardsimons/Git/afstuderen/Afstuderen/TestData.h"
+                  timestampString = "421957890.143227"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__cxx_global_var_init"
+                  moduleName = "Afstuderen"
+                  urlString = "file:///Users/gerardsimons/Git/afstuderen/Afstuderen/TestData.h"
+                  timestampString = "421957890.143497"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "4">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../ImageView.cpp"
+            timestampString = "422020705.428925"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
+            landmarkName = "RIVImageView::HandleMouse(int button, int state, int x, int y)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -27,12 +188,146 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../ParallelCoordsView.cpp"
-            timestampString = "421604437.665944"
+            timestampString = "421970535.487918"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "301"
-            endingLineNumber = "301"
-            landmarkName = "ParallelCoordsView::HandleMouse(int button, int state, int x, int y)"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
+            landmarkName = "ParallelCoordsView::drawLines()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Table.h"
+            timestampString = "422021255.336533"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "84"
+            endingLineNumber = "84"
+            landmarkName = "class FilteredTableIterator"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "RIVTable::RIVTable(RIVTable const&amp;)"
+                  moduleName = "Afstuderen"
+                  urlString = "file:///Users/gerardsimons/Git/afstuderen/Table.h"
+                  timestampString = "421967046.573848"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "67"
+                  endingLineNumber = "67"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "RIVTable::~RIVTable()"
+                  moduleName = "Afstuderen"
+                  urlString = "file:///Users/gerardsimons/Git/afstuderen/Table.h"
+                  timestampString = "421967046.57414"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "67"
+                  endingLineNumber = "67"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "RIVTable::~RIVTable()"
+                  moduleName = "Afstuderen"
+                  urlString = "file:///Users/gerardsimons/Git/afstuderen/Table.h"
+                  timestampString = "421967046.574367"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "67"
+                  endingLineNumber = "67"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "RIVTable::RIVTable(RIVTable const&amp;)"
+                  moduleName = "Afstuderen"
+                  urlString = "file:///Users/gerardsimons/Git/afstuderen/Table.h"
+                  timestampString = "421967046.575721"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "67"
+                  endingLineNumber = "67"
+                  offsetFromSymbolStart = "35">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "RIVTable::RIVTable(RIVTable&amp;&amp;)"
+                  moduleName = "Afstuderen"
+                  urlString = "file:///Users/gerardsimons/Git/afstuderen/Table.h"
+                  timestampString = "421967046.575971"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "67"
+                  endingLineNumber = "67"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "RIVTable::RIVTable(RIVTable&amp;&amp;)"
+                  moduleName = "Afstuderen"
+                  urlString = "file:///Users/gerardsimons/Git/afstuderen/Table.h"
+                  timestampString = "421967046.576209"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "67"
+                  endingLineNumber = "67"
+                  offsetFromSymbolStart = "113">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Table.h"
+            timestampString = "422021255.336533"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
+            landmarkName = "class FilteredTableIterator"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Table.cpp"
+            timestampString = "422023971.464035"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
+            landmarkName = "RIVTable::GetIterator()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -43,12 +338,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../ParallelCoordsView.cpp"
-            timestampString = "421599084.07863"
+            timestampString = "422017451.152593"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "270"
-            endingLineNumber = "270"
-            landmarkName = "ParallelCoordsView::HandleMouse(int button, int state, int x, int y)"
+            startingLineNumber = "84"
+            endingLineNumber = "84"
+            landmarkName = "ParallelCoordsView::createAxes()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -59,12 +354,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../ParallelCoordsView.cpp"
-            timestampString = "421604437.665944"
+            timestampString = "422018475.647816"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "293"
-            endingLineNumber = "293"
-            landmarkName = "ParallelCoordsView::HandleMouse(int button, int state, int x, int y)"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
+            landmarkName = "ParallelCoordsView::drawLines()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -75,12 +370,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../ParallelCoordsView.cpp"
-            timestampString = "421598979.233885"
+            timestampString = "422018481.296401"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
-            landmarkName = "ParallelCoordsView::drawAxes()"
+            startingLineNumber = "174"
+            endingLineNumber = "174"
+            landmarkName = "ParallelCoordsView::drawLines()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -90,14 +385,26 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../DataSet.h"
-            timestampString = "421605581.055074"
+            filePath = "../DataSet.cpp"
+            timestampString = "422021985.407204"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "98"
-            endingLineNumber = "98"
-            landmarkName = "AddFilter(Filter* filter)"
-            landmarkType = "5">
+            startingLineNumber = "32"
+            endingLineNumber = "32">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Table.cpp"
+            timestampString = "422023873.651492"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "121"
+            endingLineNumber = "121">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

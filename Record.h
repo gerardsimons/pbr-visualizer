@@ -1,66 +1,53 @@
-//TODO: template?
-#ifndef RIVRECORD_H
-#define RIVRECORD_H
+//
+//  Record.h
+//  RIVDataSet
+//
+//  Created by Gerard Simons on 15/05/14.
+//  Copyright (c) 2014 Gerard Simons. All rights reserved.
+//
 
-#include <stdio.h>
-#include <string>
+#ifndef __RIVDataSet__Record__
+#define __RIVDataSet__Record__
+
 #include <vector>
+#include <iostream>
 
-#include "RIVVector.h"
-
-//template<typename ...Ts>
-//class RIVRecord {
-//public:
-//    std::string name;
-//    std::vector<Ts...> values;
-//    RIVRecord(std::string name) {
-//        this->name = name;
-//    }
-//    
-//    RIVRecord();
-//    
-//    template<typename T>
-//    void AddValue(T value) {
-//        values.push_back(value);
-//    }
-//};
+typedef unsigned short ushort;
 
 
-template <typename T>
-class RIVRecord
-{
-
-private:
-
+class RIVRecord {
 public:
-	//Name of the data
-	std::string name;
-    std::vector<T> values;
-    
-    bool min_max_computed; //Because null is not possible
+    std::string name;
+protected:
+    bool minMaxComputed;
+public:
+    virtual ~RIVRecord() {
+        //do jack shit
+    }
+    virtual size_t Size() = 0;
+};
 
-    std::pair<T,T> min_max; //Cached min max
-
-	//Constructor & Destructor
-	RIVRecord(std::string _name) { name = _name; };
-    ~RIVRecord() {
-        /* Destroy some stuff? */
+class RIVFloatRecord : public RIVRecord {
+    std::vector<float> values;
+        std::pair<float,float> minMax;
+public:
+    RIVFloatRecord(std::string _name) { name = _name; };
+    float Value(size_t i) { return values[i]; };
+    void Print() {
+        std::cout << "RIVRecord " << name << " containing " << values.size() << " " << typeid(float).name() << " values.\n";
+    }
+    void SetValues(std::vector<float> _values) {
+        values = _values;
+    }
+    size_t Size() {
+        return values.size();
     }
     
-    void SetValues(std::vector<T> values) {
-        this->values = values;
-    }
-
-	//Templated methods
-	T* Value(size_t index) {
-		return &values[index];
-	}
-
-	std::pair<T,T>& MinMax() {
-		if(!min_max_computed) {
+    const std::pair<float,float>& MinMax() {
+		if(!minMaxComputed) {
 			float min = std::numeric_limits<float>::max();
 			float max = std::numeric_limits<float>::min();
-
+            
 			if(!values.empty()) {
 				for(size_t i = 0 ; i < values.size() ; i++) {
 					auto value = values[i];
@@ -72,13 +59,56 @@ public:
 					}
 				}
 			}
-			min_max = std::pair<float,float>(min,max);
+			minMax = std::pair<float,float>(min,max);
 			//TODO: min_max caching does not work properly, uncomment below to enable caching!
-			min_max_computed = true;
+			minMaxComputed = true;
 		}
-		return min_max;
+		return minMax;
+	}
+};
+
+class RIVUnsignedShortRecord : public RIVRecord {
+private:
+    std::pair<ushort,ushort> minMax;
+public:
+    RIVUnsignedShortRecord(std::string _name) { name = _name; };
+    std::vector<ushort> values;
+    ushort Value(size_t i) { return values[i]; };
+    void Print() {
+        std::cout << "RIVRecord " << name << " containing " << values.size() << " " << typeid(int).name() << " values.\n";
+    }
+    void SetValues(std::vector<ushort> _values) {
+        values = _values;
+        minMaxComputed = false;
+    }
+    size_t Size() {
+        return values.size();
+    }
+    
+    const std::pair<ushort,ushort>& MinMax() {
+		if(!minMaxComputed) {
+			float min = std::numeric_limits<float>::max();
+			float max = std::numeric_limits<float>::min();
+            
+			if(!values.empty()) {
+				for(size_t i = 0 ; i < values.size() ; i++) {
+					auto value = values[i];
+					if(value > max) {
+						max = value;
+					}
+					if(value < min) {
+						min = value;
+					}
+				}
+			}
+			minMax = std::pair<float,float>(min,max);
+			//TODO: min_max caching does not work properly, uncomment below to enable caching!
+			minMaxComputed = true;
+		}
+		return minMax;
 	}
 };
 
 
-#endif
+
+#endif /* defined(__RIVDataSet__Record__) */

@@ -1,177 +1,31 @@
-#ifndef DATASET_H
-#define DATASET_H
-
-#include "Record.h"
-#include "Filter.h"
-#include "RIVVector.h"
-
-#include <map>
-#include <string>
-#include <vector>
-#include <iostream>
-
-//template<typename ...Ts>
-//class RIVDataSet {
-//private:
-//    std::map<int,bool> filteredIndices;
-//public:
 //
-//    RIVDataSet();
-//    ~RIVDataSet();
-//    
-//    RIVVector<RIVRecord<Ts...>> records;
-//    std::vector<Filter *> filters;
-//    
-//    std::map<int,bool> valueFilterMap;
-//    
-//    <typename T>
-//    RIVRecord<T> GetRecord(int recordIndex) {
-//        return records.template data<RIVRecord<T>();
-//    };
-//    
-//    <typename T>
-//    RIVValue<T> GetRecordValue(int recordIndex,int valueIndex) {
-//        
-//    }
-//    
-//    void AddFilter(const Filter &filter) {
-//        filters.push_back(filter);  
-//        for(auto i : records.template data<RIVRecord<Ts...>>()) {
-//            std::cout << i.name << ": [";
-//            for(size_t j = 0 ; j < i.values.size() ; j++) {
-//                float *value = i->Value(j);
-//                std::cout << &value << " ";
-//                if(filteredIndices[j]) continue; //Already filtered
-//                if(filter.PassesFilter(i.name, j) == false) {
-//                    filteredIndices[j] = true;
-//                }
-//            }
-//            std::cout << "]";
-//        }
-//    }
-//};
+//  DataSet.h
+//  RIVDataSet
+//
+//  Created by Gerard Simons on 15/05/14.
+//  Copyright (c) 2014 Gerard Simons. All rights reserved.
+//
 
-class RIVDataSet
-{
-private :
-	//map<string,vector<int>> int_records;
-    std::vector<RIVRecord<float>> float_records;
-    std::vector<RIVRecord<unsigned short>> short_records;
+#ifndef __RIVDataSet__DataSet__
+#define __RIVDataSet__DataSet__
 
-    std::vector<Filter*> filters;
+#include <vector>
+#include "Table.h"
+#include "Filter.h"
 
-    std::map<size_t,bool> filteredIndices;
-    
-    template<typename T>
-    void filterRecords(std::vector<RIVRecord<T>> records, Filter* filter) {
-        for(RIVRecord<T> record : records) {
-            
-            for(size_t j = 0 ; j < record.values.size() ; j++) {
-                
-//                if(record.name == filter->attributeName) {
-//                    printf("filter time.\n");
-//                }
-                if(filteredIndices[j]) continue; //Already filtered
-                T value = *record.Value(j);
-                if(filter->PassesFilter(record.name, value) == false) {
-                    filteredIndices[j] = true;
-//                    printf("filtered out %f\n",(float)value);
-                }
-
-            }
-        }
-    }
-
+class RIVDataSet {
+private:
+    std::vector<RIVTable> tables;
 public:
-    
-    void AddRecord(RIVRecord<float> record) {
-        float_records.push_back(record);
-    }
-    
-    void AddRecord(RIVRecord<unsigned short> record) {
-        short_records.push_back(record);
-    }
-    
-    void AddFilter(Filter* filter) {
-        filters.push_back(filter);
-        
-        filterRecords(float_records, filter);
-        filterRecords(short_records, filter);
-        
-    }
-    
-    void ClearFilters() {
-        filteredIndices.clear();
-        filters.clear();
-    }
-    
-    size_t TotalNumberOfRecords() {
-        return float_records.size() + short_records.size();
-    }
-    
-    size_t NumberOfFloatRecords() {
-        return float_records.size();
-    }
-    
-    size_t NumberOfShortRecords() {
-        return short_records.size();
-    }
-    
-    RIVRecord<float>& GetFloatRecord(size_t recordIndex) {
-        return float_records[recordIndex];
-    }
-    
-    RIVRecord<unsigned short>& GetUnsignedShortRecord(size_t recordIndex) {
-        return short_records[recordIndex];
-    }
-    
-    size_t NumberOfValuesPerRecord() {
-        //TODO: make sure all columns have the same number of records
-        if(!float_records.empty())
-        {
-            return float_records[0].values.size();
-        }
-        else {
-            printf("Empty record.");
-            return 0;
-        }
-    }
-    
-    //Get the value of record given by the indices
-    float* GetFloatRecordValue(int recordIndex, size_t valueIndex) {
-        RIVRecord<float> *record = &float_records[recordIndex];
-        
-        if(filteredIndices.size() > 0) {
-            bool filtered = filteredIndices[valueIndex];
-            if(filtered) return 0;
-        }
-        return record->Value(valueIndex);
-    }
-    
-    unsigned short* GetShortRecordValue(int recordIndex, size_t valueIndex) {
-        RIVRecord<unsigned short> *record = &short_records[recordIndex];
-        
-        if(filteredIndices.size() > 0) {
-            bool filtered = filteredIndices[valueIndex];
-            if(filtered) return 0;
-        }
-        return record->Value(valueIndex);
-    }
-
-//	void AddRecord(RIVRecord<float>);
-//    void AddRecord(RIVRecord<unsigned short>);
-//    
-//    //std::pair<float,float>* MinMax(int);
-//	size_t NumberOfRecords();
-//	size_t NumberOfValuesPerRecord(); //Assuming all records have the same number of values
-//    
-//	RIVRecord<float>* GetRecord(int);
-//	float* GetRecordValue(int,int);
-//	void AddFilter(Filter*);
-//	bool HasFilters();
-//	void ClearFilters();
-//	void ApplyFilters();
+    void AddTable(RIVTable table);
+    void AddFilter(Filter* filter);
+    void ClearFilters();
+    void ClearFilter(std::string attributeName);
+    size_t TotalNumberOfRecords();
+    size_t NumberOfTables();
+    std::vector<RIVTable>* GetTables();
+    void Print();
+    void PrintUnfiltered();
 };
 
-#endif
-
+#endif /* defined(__RIVDataSet__DataSet__) */

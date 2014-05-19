@@ -29,7 +29,9 @@ public:
     int x,y;
     float minValue, maxValue; //TODO: template
     int height;
+    
     std::string name; //Usually points to a record's name
+    RIVRecord* RecordPointer;
     
     bool HasSelectionBox;
     Area selection;

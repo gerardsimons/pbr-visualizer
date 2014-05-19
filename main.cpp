@@ -15,8 +15,6 @@
 #include <GL/glut.h>
 #endif
 
-
-
 const float DEG2RAD = 3.14159/180;
 
 /* window width and height */
@@ -25,7 +23,7 @@ int height = 600;
 
 /* window position */
 int posX = 0;
-int posY = 400;
+int posY = 0;
 
 int wd;                   /* GLUT window handle */
 
@@ -189,7 +187,7 @@ RIVDataSet loadMockData() {
 
 void initialize(int argc, char* argv[]) {
     std::string fullPath;
-    printf("%d additional arguments given", argc - 1);
+    printf("%d additional arguments given\n", argc - 1);
     if(argc <= 1) {
         //Default values
         #ifdef _WIN32
@@ -248,7 +246,7 @@ int main(int argc, char *argv[])
   wd = glutCreateWindow("Rendering InfoVis" /* title */ );
 
   /* Initialize the data and the views */
-  initialize(argc, argv);
+    initialize(argc, argv);
 
   /* --- register callbacks with GLUT --- */
 
@@ -269,6 +267,7 @@ int main(int argc, char *argv[])
 
   /* start the GLUT main loop */
   glutMainLoop();
+    
 
   return EXIT_SUCCESS;
 }

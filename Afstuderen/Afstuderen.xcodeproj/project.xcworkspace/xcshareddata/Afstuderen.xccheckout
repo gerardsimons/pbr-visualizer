@@ -5,13 +5,15 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>AAB8D4C8-62AD-4CA1-A791-0D580BBC2E29</string>
+	<string>24553913-86EA-45F2-8106-FBF2F00B5F52</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Afstuderen</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>447A4CD6-B8BF-4601-B24B-7E5B059FD73E</key>
 		<string>https://github.com/gerardsimons/afstuderen.git</string>
+		<key>675F55BB-80B8-47F4-99F0-0FF199B34D78</key>
+		<string>http://googletest.googlecode.com/svn/trunk</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Afstuderen/Afstuderen.xcodeproj/project.xcworkspace</string>
@@ -19,6 +21,13 @@
 	<dict>
 		<key>447A4CD6-B8BF-4601-B24B-7E5B059FD73E</key>
 		<string>../../..</string>
+		<key>675F55BB-80B8-47F4-99F0-0FF199B34D78</key>
+		<string>../../../../googletest-read-only</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>675F55BB-80B8-47F4-99F0-0FF199B34D78</key>
+		<string>http://googletest.googlecode.com/svn</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/gerardsimons/afstuderen.git</string>
@@ -35,6 +44,20 @@
 			<string>447A4CD6-B8BF-4601-B24B-7E5B059FD73E</string>
 			<key>IDESourceControlWCCName</key>
 			<string>afstuderen</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryBranchesRelativeLocationKey</key>
+			<string>branches</string>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlRepositoryTagsRelativeLocationKey</key>
+			<string>tags</string>
+			<key>IDESourceControlRepositoryTrunkRelativeLocationKey</key>
+			<string>trunk</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>675F55BB-80B8-47F4-99F0-0FF199B34D78</string>
+			<key>IDESourceControlWCCName</key>
+			<string>googletest-read-only</string>
 		</dict>
 	</array>
 </dict>

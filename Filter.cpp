@@ -24,7 +24,15 @@ RangeFilter::RangeFilter(std::string attributeName, float minValue, float maxVal
 
 bool RangeFilter::PassesFilter(std::string attribute,float value) {
 	if(attribute == attributeName) {
-		 return (value >= minValue && value <= maxValue);
+        bool passes = (value >= minValue && value <= maxValue);
+        return passes;
+	}
+	return true;
+}
+
+bool RangeFilter::PassesFilter(std::string attribute,unsigned short value) {
+	if(attribute == attributeName) {
+        return (value >= minValue && value <= maxValue);
 	}
 	return true;
 }

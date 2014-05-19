@@ -28,6 +28,16 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       buildConfiguration = "Debug">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E1C8E5981927781700F5D3C3"
+               BuildableName = "Afstuderen Tests.xctest"
+               BlueprintName = "Afstuderen Tests"
+               ReferencedContainer = "container:Afstuderen.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
@@ -59,12 +69,8 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/gerardsimons/Git/afstuderen/Resources/teapot32x32x1.exr"
+            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Teapot Data/Full/teapot32x32x1_test.exr&quot;"
             isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = ""
-            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
