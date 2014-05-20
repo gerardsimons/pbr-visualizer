@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 #include <fstream>
+#include <regex>
 
 
 DataFileReader::DataFileReader(void)
@@ -16,6 +17,70 @@ DataFileReader::DataFileReader(void)
 DataFileReader::~DataFileReader(void)
 {
     
+}
+
+bool is_number(const std::string& s)
+{
+    std::string::const_iterator it = s.begin();
+    while (it != s.end() && std::isdigit(*it)) ++it;
+    return !s.empty() && it == s.end();
+}
+
+std::vector<float> DataFileReader::ReadModelData(std::string fileName) {
+    std::ifstream is;
+    is.open (fileName, std::ios::in );
+    
+    is.seekg (0, std::ios::beg);
+    
+    std::vector<float> vertices;
+    
+    std::string ignoreChars = "\"[]";
+    
+    std::regex rx("Point");
+    
+    if (is.is_open())
+    {
+        bool shapeFound = false;
+        bool pointFound = false;
+        
+        std::string token;
+        std::string line;
+        while (getline(is,line)) {
+            for(char c : line) {
+                if(c == ' ') {
+                    //Process token
+                    if(!shapeFound) {
+                        if(token == "Shape") {
+                            shapeFound = true;
+                        }
+                    }
+                    else if(!pointFound){ //Look for point declaration
+                        if(std::regex_search(token.begin(), token.end(),rx)) {
+                            pointFound = true;
+                        }
+                    }
+                    else if(is_number(token)) {
+                        //Add to vertex
+                        float vertex = std::stof(token);
+                        vertices.push_back(vertex);
+                    }
+                    else {
+                        //This line is done
+                        break;
+                    }
+                }
+                else {
+                    for(char ignoreC : ignoreChars) {
+                        if(ignoreC == c) {
+                            continue;
+                        }
+                    }
+                    token.push_back(c);
+                }
+            }
+        }
+    }
+    return vertices;
 }
 
 std::vector<std::string> explode(std::string line, char delimiter, std::string ignoreChars) {
@@ -53,7 +118,6 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName) {
     is.open (fileName, std::ios::in );
     
     is.seekg (0, std::ios::beg);
-    
     
     std::vector<unsigned short> xPixelData;
     std::vector<unsigned short> yPixelData;
@@ -240,9 +304,11 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName) {
 //        printf("%lu : %lu\n",it->first,it->second);
 //    }
 
+    /*
     printf("*******************   DATASET READ   *******************\n");
     dataset.Print();
     printf("****************    END DATASET READ    ****************\n");
+    */
     
     return dataset;
 }

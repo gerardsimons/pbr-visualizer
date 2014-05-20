@@ -2,6 +2,7 @@
 #define DATAVIEW_H
 
 #include "DataSet.h"
+#include "Geometry.h"
 
 class RIVDataView
 {
@@ -21,11 +22,15 @@ protected:
     };
     
 	~RIVDataView(void) { /* Delete some stuff I guess */ };
+    
+    void ToViewSpaceCoordinates(int* x, int* y) {
+        (*x) -= startX;
+        (*y) -= startY;
+    };
 
+    //Should be converted to view space coordinates!
 	bool containsPoint(int x, int y) {
-        int endX = startX + width;
-        int endY = startY + height;
-        return(x > startX && x < endX && y > startY && y < endY);
+        return(x > 0 && x < width && y > 0 && y < height);
     }
 public:
 	//properties

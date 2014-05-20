@@ -37,6 +37,25 @@ RIVImageView::RIVImageView(std::string filename, int x, int y, int width, int he
 }
 
 void RIVImageView::Draw() {
+    
+    //Setup viewport and 2D projection
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0.0, width, 0.0, height);
+    
+    glMatrixMode(GL_MODELVIEW);
+    glViewport(startX,startY,width,height);  //Use the whole window for rendering
+    
+    //Color the view port
+    glColor3f(0.F,1.F,0.F);
+    glBegin(GL_QUADS);
+    glVertex3f(0,0,0);
+    glVertex3f(width,0,0);
+    glVertex3f(width,height,0);
+    glVertex3f(0,height,0);
+    glEnd();
+//    return;
+    
 	if(needsRedraw) {
 		glBindTexture(GL_TEXTURE_2D, imageTexture);
     
@@ -93,6 +112,7 @@ int round(float d)
 }
 
 bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
+    ToViewSpaceCoordinates(&x, &y);
 	if(isDragging || RIVDataView::containsPoint(x,y)) {
 		//If start dragging > init selection
 		if(state == GLUT_DOWN) {
@@ -130,7 +150,7 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 				dataset->AddFilter(xFilter);
 				dataset->AddFilter(yFilter);
                 
-                dataset->Print();
+//                dataset->Print();
 			}
 			else {
 				clearSelection(); 

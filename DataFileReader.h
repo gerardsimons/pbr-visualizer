@@ -14,6 +14,8 @@ public:
     
     static RIVDataSet ReadAsciiData(std::string fileName);
 	static RIVDataSet ReadBinaryData(std::string fileName);
+    
+    static std::vector<float> ReadModelData(std::string fileName);
 };
 #endif
 

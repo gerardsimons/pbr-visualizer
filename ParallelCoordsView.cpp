@@ -51,8 +51,8 @@ void ParallelCoordsView::createAxes() {
         for(size_t i = 0 ; i < numberOfRecords ; ++i) {
             RIVRecord* record = table->GetRecord(i);
             RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(record);
+            int x = delta * (axisIndex) + 0 + paddingX;
             if(floatRecord) {
-                int x = delta * (axisIndex) + startX + paddingX;
                 
                 std::pair<float,float> minMax = floatRecord->MinMax();
                 
@@ -67,7 +67,6 @@ void ParallelCoordsView::createAxes() {
             }
             RIVUnsignedShortRecord* shortRecord = RIVTable::CastToUnsignedShortRecord(record);
             if(shortRecord) {
-                int x = delta * (axisIndex) + startX + paddingX;
                 
                 const std::pair<ushort,ushort> &minMax = shortRecord->MinMax();
                 ParallelCoordsAxis axis(x,y,axisHeight,minMax.first,minMax.second,record->name);
@@ -148,10 +147,10 @@ void ParallelCoordsView::drawAxes() {
 }
 
 void ParallelCoordsView::drawLines() {
-    
     if(linesAreDirty) {
         std::clock_t start;
         double duration;
+        size_t lineIndex = 0;
         
         start = std::clock();
         
@@ -162,17 +161,14 @@ void ParallelCoordsView::drawLines() {
 
         for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
             RIVTable *table = axisGroup.table;
-            size_t lineIndex = 0;
+
             size_t numberOfRows = table->NumberOfRows();
             size_t recordIndex = 0;
             
-            if(table->GetName() == "intersections") {
-                
-            }
             
             TableIterator *iterator = table->GetIterator();
-            printf("iterator for %s : ", table->GetName().c_str());
-            iterator->Print();
+//            printf("iterator for %s : ", table->GetName().c_str());
+//            iterator->Print();
             
             
 //            printf("%zu rows for table %s\n",numberOfRows,table->GetName().c_str());
@@ -184,7 +180,7 @@ void ParallelCoordsView::drawLines() {
                 
                 glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
                 
-                float* color = computeColor(lineIndex, numberOfRows);
+                float* color = computeColor(recordIndex, numberOfRows);
                 glColor3f(color[1], color[1], color[2]);
                 for(ParallelCoordsAxis axis : axisGroup.axes) {
                     RIVRecord *ptr = axis.RecordPointer;
@@ -254,18 +250,37 @@ void ParallelCoordsView::drawLines() {
 
         }
 //        linesAreDirty = false;
+        duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+        printf("drew %zu lines in %f seconds.\n",lineIndex,duration);
     }
-//    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-//    printf("CLOCKS_PER_SEC=%d\n",CLOCKS_PER_SEC);
-//    printf("draw lines took %f\n",duration);
-}
+    }
+
 
 void ParallelCoordsView::Draw() {
+    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0.0, width, 0.0, height);
+    
+    glMatrixMode(GL_MODELVIEW);
+    glViewport(startX,startY,width,height);  //Use the whole window for rendering
+    
+    //Color the view port
+//    glColor3f(1.F,1.F,0.F);
+//    glBegin(GL_QUADS);
+//        glVertex3f(0,0,0);
+//        glVertex3f(width,0,0);
+//        glVertex3f(width,height,0);
+//        glVertex3f(0,height,0);
+//    glEnd();
+    
     //Draw the axes, including text and scales, should be created beforehand
     drawAxes();
         
     //Draw the lines from each axis
     drawLines();
+    
+    glFlush();
 }
 
 float* ParallelCoordsView::computeColor(size_t lineIndex, size_t totalNrOfLines) {
@@ -294,6 +309,7 @@ void ParallelCoordsView::ComputeLayout() {
 }
 
 bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
+    ToViewSpaceCoordinates(&x, &y);
 	if(isDragging || containsPoint(x,y)) {
 		//What axis was selected
         if(state == GLUT_DOWN) {

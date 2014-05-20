@@ -79,13 +79,13 @@ void RIVTable::filterRecords(Filter* filter) {
 }
                                                
 void RIVTable::FilterRow(size_t rowIndex, RIVReference* sourceReference) {
-    printf("Table %s filter row %lu\n",name.c_str(),rowIndex);
+//    printf("Table %s filter row %lu\n",name.c_str(),rowIndex);
     filteredRows[rowIndex] = true;
     for(RIVReference *reference : references) {
         RIVTable* targetTable = reference->targetTable;
         size_t* targetIndex = reference->GetIndexReference(rowIndex);
         if(targetIndex != 0 && ( sourceReference == 0 || targetTable->name != sourceReference->sourceTable->name)) { //Do not update a table who just updated this table
-            printf("Force table %s to filter row %zu\n",targetTable->name.c_str(),*targetIndex);
+//            printf("Force table %s to filter row %zu\n",targetTable->name.c_str(),*targetIndex);
             targetTable->FilterRow(*targetIndex,reference);
         }
     }

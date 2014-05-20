@@ -20,4 +20,10 @@ typedef struct Area {
 	Point end;
 } Area;
 
+typedef struct Point3D {
+    float x;
+    float y;
+    float z;
+} Point3D;
+
 #endif
