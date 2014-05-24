@@ -32,10 +32,9 @@ private:
     //Draw helper functions
     void drawAxes();
     void drawLines();
-    
     void drawText(char*,int,int,int,float[3],float);
     void drawText(std::string,int,int,float[3],float);
-    float* computeColor(size_t lineIndex, size_t totalNrOfLines);
+//    float* computeColor(size_t lineIndex, size_t totalNrOfLines);
     
     //Properties
     std::vector<ParallelCoordsAxisGroup> axisGroups;

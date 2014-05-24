@@ -1,7 +1,7 @@
 #include "ParallelCoordsView.h"
 #include "DataView.h"
 #include "Geometry.h"
-
+#include "helper.h"
 #include "DataSet.h"
 #include "Table.h"
 
@@ -39,7 +39,7 @@ void ParallelCoordsView::createAxes() {
     int axisHeight = height - 2 * paddingY;
     
     float delta = 1.F / (total_nr_of_records - 1) * (width - 2 * paddingX);
-
+    
     std::vector<RIVTable*>* tablePointers = dataset->GetTables();
     
     int axisIndex = 0;
@@ -77,7 +77,7 @@ void ParallelCoordsView::createAxes() {
                 
                 axisGroup.axes.push_back(axis);
             }
-
+            
         }
         axisGroup.table = table;
         axisGroups.push_back(axisGroup);
@@ -88,15 +88,15 @@ void ParallelCoordsView::drawAxes() {
     if(axesAreDirty) {
         glColor3f(1,1,1);
         glLineWidth(1.F);
-
+        
         glBegin(GL_LINES);
         for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
-                for(ParallelCoordsAxis &axis : axisGroup.axes) {
-                    glColor3f(0,0,0);
-                    glVertex3f(axis.x,axis.y,0);
-                    glVertex3f(axis.x,axis.y+axis.height,0);
-                }
+            for(ParallelCoordsAxis &axis : axisGroup.axes) {
+                glColor3f(0,0,0);
+                glVertex3f(axis.x,axis.y,0);
+                glVertex3f(axis.x,axis.y+axis.height,0);
             }
+        }
         glEnd();
         
         glColor3f(1,0,0);
@@ -126,7 +126,7 @@ void ParallelCoordsView::drawAxes() {
                 std::string text = axis.name;
                 
                 drawText(text,axis.x,axis.y - 15,textColor,.1F);
-            
+                
                 std::vector<float> &scale = axis.scale;
                 
                 //Draw the scales indicators
@@ -157,31 +157,26 @@ void ParallelCoordsView::drawLines() {
         glColor3f(1.0, 0.0, 0.0);
         glLineWidth(1.F);
         
-//        printf("Redrawing lines\n");
-
+        //        printf("Redrawing lines\n");
+        
         for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
             RIVTable *table = axisGroup.table;
-
+            
+//            printf("Drawing lines for table %s\n",table->GetName().c_str());
+//            table->PrintUnfiltered();
+            
             size_t numberOfRows = table->NumberOfRows();
-            size_t recordIndex = 0;
-            
-            
+            size_t row = 0;
             TableIterator *iterator = table->GetIterator();
-//            printf("iterator for %s : ", table->GetName().c_str());
 //            iterator->Print();
-            
-            
-//            printf("%zu rows for table %s\n",numberOfRows,table->GetName().c_str());
-//            for(size_t recordIndex = 0 ; recordIndex < numberOfRows ; recordIndex++) {
-            while(iterator->HasNext()) {
-                recordIndex = iterator->GetNext();
+            while(iterator->GetNext(row)) {
                 
-//                printf("Record index %zu\n",recordIndex);
-                
+//                printf("Row : %zu\n",row);
                 glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
                 
-                float* color = computeColor(recordIndex, numberOfRows);
-                glColor3f(color[1], color[1], color[2]);
+                float ratio = row / (float)numberOfRows;
+                float* color = linearInterpolateColor(ratio, colorBlue, colorYellow);
+                glColor3f(color[0], color[1], color[2]);
                 for(ParallelCoordsAxis axis : axisGroup.axes) {
                     RIVRecord *ptr = axis.RecordPointer;
                     RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(ptr);
@@ -189,7 +184,7 @@ void ParallelCoordsView::drawLines() {
                         //Code here
                         const std::pair<float,float> &min_max = floatRecord->MinMax();
                         
-                        float value = floatRecord->Value(recordIndex);
+                        float value = floatRecord->Value(row);
                         float x = axis.x;
                         
                         float heightRatio;
@@ -199,16 +194,17 @@ void ParallelCoordsView::drawLines() {
                         else heightRatio = (value - min_max.first) / (float)(min_max.second - min_max.first);
                         
                         float y = heightRatio * axis.height + startY + paddingY;
-//                        printf("glVertex3f(%f,%f)\n",x,y);
-//                        printf("Drawing line %zu\n",lineIndex);
+                        //                        printf("glVertex3f(%f,%f)\n",x,y);
+                        //                        printf("Drawing line %zu\n",lineIndex);
                         glVertex3f(x, y, 0);
                         if(heightRatio < 0 || heightRatio > 1) {
                             
-                            //throw new std::string("A line was being drawn outside ot the parallel coordinates view");
                             printf("This should not happen!!!!!\n");
                             printf("Weird results for record %s (x,y) = (%f,%f)\n",floatRecord->name.c_str(),x,y);
                             std::cout << "value = " << value << "\n";
-                            printf("END");
+                            printf("\n");
+                            
+                            throw new std::string("A line was being drawn outside ot the parallel coordinates view");
                         }
                         continue;
                         
@@ -218,93 +214,76 @@ void ParallelCoordsView::drawLines() {
                         //Code here
                         const std::pair<unsigned short,unsigned short> &min_max = shortRecord->MinMax();
                         
-                        ushort value = shortRecord->Value(recordIndex);
+                        ushort value = shortRecord->Value(row);
                         
-                            float x = axis.x;
+                        float x = axis.x;
+                        
+                        float heightRatio;
+                        if(min_max.second == min_max.first) { //Special case to avoid divide-by-zero
+                            heightRatio = .5F;
+                        }
+                        else heightRatio = (value - min_max.first) / (float)(min_max.second - min_max.first);
+                        
+                        //                    printf("heighratio = %f\n",heightRatio);
+                        float y = heightRatio * axis.height + startY + paddingY;
+                        
+                        //                            printf("glVertex3f(%f,%f)\n",x,y);
+                        //                            printf("Drawing line %zu\n",lineIndex);
+                        glVertex3f(x, y, 0);
+                        if(heightRatio < 0 || heightRatio > 1) {
                             
-                            float heightRatio;
-                            if(min_max.second == min_max.first) { //Special case to avoid divide-by-zero
-                                heightRatio = .5F;
-                            }
-                            else heightRatio = (value - min_max.first) / (float)(min_max.second - min_max.first);
+                            printf("This should not happen!!!!!\n");
+                            printf("Weird results for record %s (x,y) = (%f,%f)\n",shortRecord->name.c_str(),x,y);
+                            std::cout << "value = " << value << "\n";
+                            printf("END");
                             
-                            //                    printf("heighratio = %f\n",heightRatio);
-                            float y = heightRatio * axis.height + startY + paddingY;
-
-//                            printf("glVertex3f(%f,%f)\n",x,y);
-//                            printf("Drawing line %zu\n",lineIndex);
-                            glVertex3f(x, y, 0);
-                            if(heightRatio < 0 || heightRatio > 1) {
-                                
-                                //throw new std::string("A line was being drawn outside ot the parallel coordinates view");
-                                printf("This should not happen!!!!!\n");
-                                printf("Weird results for record %s (x,y) = (%f,%f)\n",shortRecord->name.c_str(),x,y);
-                                std::cout << "value = " << value << "\n";
-                                printf("END");
-                            }
+                            throw new std::string("A line was being drawn outside ot the parallel coordinates view");
+                        }
                     }
                 }
                 glEnd();
                 lineIndex++;
             }
-
+            
         }
-//        linesAreDirty = false;
+        linesAreDirty = false;
         duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
         printf("drew %zu lines in %f seconds.\n",lineIndex,duration);
     }
-    }
+}
 
 
 void ParallelCoordsView::Draw() {
     
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(0.0, width, 0.0, height);
-    
-    glMatrixMode(GL_MODELVIEW);
-    glViewport(startX,startY,width,height);  //Use the whole window for rendering
-    
-    //Color the view port
-//    glColor3f(1.F,1.F,0.F);
-//    glBegin(GL_QUADS);
-//        glVertex3f(0,0,0);
-//        glVertex3f(width,0,0);
-//        glVertex3f(width,height,0);
-//        glVertex3f(0,height,0);
-//    glEnd();
-    
-    //Draw the axes, including text and scales, should be created beforehand
-    drawAxes();
+    if(linesAreDirty || axesAreDirty) {
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0.0, width, 0.0, height);
         
-    //Draw the lines from each axis
-    drawLines();
-    
-    glFlush();
+        glMatrixMode(GL_MODELVIEW);
+        glViewport(startX,startY,width,height);  //Use the whole window for rendering
+        
+        //Color the view port
+        //    glColor3f(1.F,1.F,0.F);
+        //    glBegin(GL_QUADS);
+        //        glVertex3f(0,0,0);
+        //        glVertex3f(width,0,0);
+        //        glVertex3f(width,height,0);
+        //        glVertex3f(0,height,0);
+        //    glEnd();
+        
+        //Draw the axes, including text and scales, should be created beforehand
+        drawAxes();
+        
+        //Draw the lines from each axis
+        drawLines();
+        
+        glFlush();
+    }
 }
-
-float* ParallelCoordsView::computeColor(size_t lineIndex, size_t totalNrOfLines) {
-    
-//    printf("lineIndex = %zu, totalNrOfLines = %zu\n",lineIndex,totalNrOfLines);
-    
-	float minColor[] = {1.F,1.F,0.F}; //yellow
-	float maxColor[] = {0.F,0.F,1.F}; //blue
-
-	float ratio = (lineIndex) / (float) (totalNrOfLines);
-    
-//    printf("Ratio color = %f\n",ratio);
-    ratio = fmax(fmin(ratio,1.F),0.F);
-
-	float color[3];
-	for(size_t i = 0 ; i < 3 ; i++) {
-		color[i] = ratio * minColor[i] + (1 - ratio) * maxColor[i];
-	}
-	return color;
-}
-
 
 void ParallelCoordsView::ComputeLayout() {
-//    axesOrder = {"x","y","throughput 1","#intersections","intersection X","intersection Y","intersection Z"};
+    //    axesOrder = {"x","y","throughput 1","#intersections","intersection X","intersection Y","intersection Z"};
     createAxes();
 }
 
@@ -354,7 +333,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                 Filter* rangeFilter = new RangeFilter(selectedAxis->name,lowerBound,upperBound);
                 
                 dataset->ClearFilters();
-//                dataset->ClearFilter(rangeFilter->attributeName);
+                //                dataset->ClearFilter(rangeFilter->attributeName);
                 dataset->AddFilter(rangeFilter);
                 
                 axesAreDirty = true;
@@ -363,8 +342,6 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
             }
             return true;
         }
-		//What range was selected
-		//How to define this range
 		return true;
 	}
     return false;
@@ -372,7 +349,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 
 bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
     
-//    printf("(x,y)=(%d,%d)\n",x,y);
+    //    printf("(x,y)=(%d,%d)\n",x,y);
     
     if(isDragging && selectedAxis != 0) {
         
@@ -403,7 +380,7 @@ void ParallelCoordsView::drawText(char *text, int size, int x, int y, float *col
 	}
     glPopMatrix();
     glPopMatrix();
-
+    
 }
 
 void ParallelCoordsView::drawText(std::string text, int x, int y, float *color, float sizeModifier) {

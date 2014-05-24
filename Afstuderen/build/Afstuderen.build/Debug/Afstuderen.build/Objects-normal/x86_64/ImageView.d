@@ -6,7 +6,7 @@ dependencies: /Users/gerardsimons/Git/afstuderen/ImageView.cpp \
   /Users/gerardsimons/Git/afstuderen/Filter.h \
   /Users/gerardsimons/Git/afstuderen/Record.h \
   /Users/gerardsimons/Git/afstuderen/Reference.h \
-  /Users/gerardsimons/Git/afstuderen/Afstuderen/helper.h \
+  /Users/gerardsimons/Git/afstuderen/helper.h \
   /Users/gerardsimons/Git/afstuderen/Geometry.h \
   /Users/gerardsimons/Git/afstuderen/BMPImage.h \
   /Users/gerardsimons/Git/afstuderen/loadppm.h

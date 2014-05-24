@@ -13,6 +13,8 @@
 #include "Table.h"
 #include "Filter.h"
 
+class RIVTable;
+
 class RIVDataSet {
 private:
     std::vector<RIVTable*> tables;

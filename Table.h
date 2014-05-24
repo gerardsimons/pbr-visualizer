@@ -15,12 +15,14 @@
 
 #include <math.h>
 
+#include "DataView.h"
 #include "Filter.h"
 #include "Record.h"
 #include "Reference.h"
 #include "helper.h"
 
 class RIVReference;
+class RIVDataView;
 
 class TableIterator {
 protected:
@@ -29,14 +31,19 @@ protected:
 public:
     TableIterator(size_t _maxIndex) { maxIndex = _maxIndex; };
     void BackToStart() { index = 0; };
-    virtual bool HasNext() {
-//        printf("TableIterator HasNext called.\n");
-        return index < maxIndex;
-    };
-    virtual size_t GetNext() {
-        size_t temp = index;
-        index++;
-        return temp;
+    //    virtual bool HasNext() {
+    ////        printf("TableIterator HasNext called.\n");
+    //        return index < maxIndex;
+    //    };
+    virtual bool GetNext(size_t& row) {
+        if(index >= maxIndex) {
+            return false;
+        }
+        else {
+            row = index;
+            index++;
+            return (index - 1) < maxIndex;
+        }
     }
     virtual void Print() const {
         printf("TableIterator (maxIndex = %zu) \n", maxIndex);
@@ -47,42 +54,28 @@ class FilteredTableIterator : public TableIterator {
 private:
     std::map<size_t,bool>* indexPointers;
 public:
-    FilteredTableIterator(std::map<size_t,bool> * _indexPointers) : TableIterator(_indexPointers->size()){
+    FilteredTableIterator(std::map<size_t,bool> * _indexPointers, size_t maxIndex) : TableIterator(maxIndex){
         indexPointers = _indexPointers;
         index = 0;
     };
     
-    bool HasNext() {
-        if(index >= maxIndex) {
-            return false;
-//            printf("End of iterator!\n");
-        }
-        else {
+    virtual bool GetNext(size_t &row) {
+        if(index < maxIndex) {
             bool filtered = (*indexPointers)[index];
-            if(!filtered) {
-                return true;
-//                printf("Unfiltered value found at %hz!\n",index);
+            while(filtered && index < maxIndex) {
+                index++;
+                filtered = (*indexPointers)[index];
+                //                printf("index = %zu\n",index);
             }
-            else {
-                ++index;
-                return HasNext();
-            }
-        }
-    }
-    
-    size_t GetNext() {
-        bool filtered = (*indexPointers)[index];
-        while(filtered) {
-            filtered = (*indexPointers)[index];
+            row = index;
             index++;
+            return !filtered && index <= maxIndex;
         }
-//        printf("return next unfiltered index = %hz\n",index);
-        index++;
-        return index - 1;
+        return false;
     }
     
     void Print() const {
-        printf("FilteredTableIterator index = %hz map of iterator object has %zu values :\n", index, indexPointers->size());
+        printf("FilteredTableIterator index = %zu map of iterator object has %zu values :\n", index, maxIndex);
         printMap(*indexPointers);
     }
 };
@@ -91,6 +84,9 @@ class RIVTable {
 private:
     std::vector<RIVRecord*> records;
     std::vector<RIVReference*> references;
+    std::vector<RIVDataView*> onChangeListeners;
+    
+    bool filtered = false;
     
     TableIterator* iterator;
     
@@ -111,8 +107,11 @@ public:
     void AddRecord(RIVRecord* record);
     void AddFilter(Filter *filter);
     void AddReference(RIVReference* reference);
+    void AddOnChangeListeners(RIVDataView *dataview);
     
-    void FilterRow(size_t,RIVReference* reference = 0);
+    void FilterRow(size_t,bool filter,RIVReference* reference = 0);
+//    void UnfilterRow(size_t,RIVReference* reference = 0);
+    void FilterRowsUnlinkedTo(RIVTable *table);
     
     void ClearFilters();
     void ClearFilter(std::string filterName);
@@ -123,15 +122,18 @@ public:
     static RIVFloatRecord* CastToFloatRecord(RIVRecord* record);
     static RIVUnsignedShortRecord* CastToUnsignedShortRecord(RIVRecord* record);
     
-    bool IsFiltered() { return filteredRows.size() > 0; }; //Any filters applied?
+    bool IsFiltered() { return filtered; }; //Any filters applied?
 
     TableIterator* GetIterator();
     void FunctionOnRecords(void(*someFunction)(const RIVRecord*));
     
     std::string GetName() { return name; };
+    size_t GetNumRows(){ return rows; };
+    const RIVReference* GetReferenceToTable(std::string tableName);
     
     size_t NumberOfColumns(); //Columns
     size_t NumberOfRows();
+    std::vector<RIVRecord*> GetRecords();
     
     //Print functions
     void PrintAll(); //Print all the rows

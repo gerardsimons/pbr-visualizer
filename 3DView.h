@@ -12,12 +12,20 @@
 #include "DataView.h"
 
 class RIV3DView : public RIVDataView {
+private:
+    std::vector<float> modelData;
+    Point3D eye;
+    
+    Point3D ScreenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
     RIV3DView(int,int,int,int,int,int);
     virtual void ComputeLayout();
 	virtual void Draw();
 	virtual bool HandleMouse(int button, int state, int x, int y);
 	virtual bool HandleMouseMotion(int x, int y);
+    
+    void SetModelData(std::vector<float>);
+    void MoveCamera(float,float,float);
     
     //The models to draw
 

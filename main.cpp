@@ -19,7 +19,7 @@
 const float DEG2RAD = 3.14159/180;
 
 /* window width and height */
-int width = 1600;
+int width = 1400;
 int height = 600;
 
 /* window position */
@@ -46,7 +46,7 @@ void display(void)
 {
     /* clear the screen to white */
     glClearColor(1.0, 1.0, 1.0, 0.0);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     /* Draw the views */
 //    for(size_t i = 0 ; i < views.size() ; i++) {
@@ -73,7 +73,7 @@ void display(void)
     glEnd();
     glFlush();
     
-
+    glutSwapBuffers();
 }
 
 /* Handles mouse input */
@@ -84,6 +84,8 @@ void mouse(int button, int state, int x, int y) {
 	lastMouseY = y;
 	for(size_t i = 0 ; i < views.size() ; i++) {
 		if(views[i]->HandleMouse(button,state,x,y)) {
+//            printf("View %s caught the mouse interaction\n",typeid(views[i]).name());
+//            if(state == GLUT_UP)
 			glutPostRedisplay();
 			return;
 		}
@@ -94,21 +96,53 @@ void motion(int x, int y) {
 	y = height - y;
 	for(size_t i = 0 ; i < views.size() ; i++) {
 		if(views[i]->HandleMouseMotion(x,y)) {
+//            printf("View %s caught the motion interaction\n",typeid(views[i]).name());
 			glutPostRedisplay();
 			return;
 		}
 	}
 }
 
+void invalidateAllViews() {
+	for(size_t i = 0 ; i < views.size() ; i++) {
+        views[i]->Invalidate();
+    }
+}
+
+void keys(int keyCode, int x, int y) {
+//    printf("Pressed %d at (%d,%d)\n",keyCode,x,y);
+    bool postRedisplay = true;
+    switch(keyCode) {
+        case 27: //ESC key
+            printf("Clear filters\n");
+//            invalidateAllViews();
+            dataset.ClearFilters();
+            break;
+        case GLUT_KEY_UP:
+            sceneView->MoveCamera(0,0,1.F);
+            break;
+        case GLUT_KEY_DOWN:
+            sceneView->MoveCamera(0,0,-1.F);
+            break;
+        case GLUT_KEY_LEFT:
+            sceneView->MoveCamera(-1.F,0,0);
+            break;
+        case GLUT_KEY_RIGHT:
+            sceneView->MoveCamera(1.F,0,0);
+            break;
+        default:
+            postRedisplay = false;
+    }
+    if(postRedisplay) {
+        glutPostRedisplay();
+    }
+}
+
 void idle() {
     //Do animations?
 }
 
-void invalidateAllViews() {
-//	for(size_t i = 0 ; i < views.size() ; i++) {
-//        views[i]->Invalidate();
-//    }
-}
+
 
 /* Called when window is resized,
  also when window is first created,
@@ -123,16 +157,11 @@ void reshape(int w, int h)
     
     /* Invalidate all views */
     invalidateAllViews();
-    
-    /* tell OpenGL to use the whole window for drawing */
-//    glViewport(0, 0, (GLsizei) width, (GLsizei) height);
-    
-    /* do an orthographic parallel projection with the coordinate
-     system set to first quadrant, limited by screen/window size */
 }
 
 void initialize(int argc, char* argv[]) {
     std::string fullPath;
+    std::string pbrtPath;
     printf("%d additional arguments given\n", argc - 1);
     if(argc <= 1) {
         //Default values
@@ -146,19 +175,29 @@ void initialize(int argc, char* argv[]) {
         fullPath = resourcesPath + fileName;
     } else if(argc == 2) {
         fullPath = argv[1];
+        pbrtPath = fullPath + ".pbrt";
+    }
+    else if(argc == 3) { //Explicit PBRT file path defined
+        fullPath = argv[1];
+        pbrtPath = argv[2];
     }
     
     printf("using fullpath = %s\n",fullPath.c_str());
     
-	int imageWidth = 250;
-    int imageHeight = 250;
+//	int imageWidth = (.2F * width);
+//    int imageHeight = (.2F * width);
     
-    int imageSceneWidth = 250;
-    int imageSceneHeight = 250;
+    int imageWidth = 0.1F * width;
+    int imageHeight = 0.1F * width;
+    
+    int imageSceneWidth = .3F * width;
+    int imageSceneHeight = .3F * width;
     
 	//dataset = DataFileReader::ReadBinaryData(fullPath + ".bin");
-    dataset = DataFileReader::ReadAsciiData(fullPath + ".txt");
-    DataFileReader::ReadModelData(fullPath + ".pbrt");
+    dataset = DataFileReader::ReadAsciiData(fullPath + ".txt",100000);
+    std::vector<float> modelData;
+    
+    modelData = DataFileReader::ReadModelData(pbrtPath);
     /* dataset = &loadData(resourcesPath + fileName + ".bin"); */
     
 	//CAUTION: Image should be power of two!
@@ -170,8 +209,13 @@ void initialize(int argc, char* argv[]) {
 	parallelCoordsView = new ParallelCoordsView(imageWidth,0,width-imageWidth-imageSceneWidth,height,50,20);
     sceneView = new RIV3DView(width-imageSceneWidth,0,imageSceneWidth,imageSceneHeight,0,0);
     
+//    sceneView = new RIV3DView(0,0,width,height,0,0);
+    
 	imageView->SetData(&dataset);
 	parallelCoordsView->SetData(&dataset);
+    sceneView->SetData(&dataset);
+    
+    sceneView->SetModelData(modelData);
     
 	imageView->ComputeLayout();
     parallelCoordsView->ComputeLayout();
@@ -184,14 +228,14 @@ void initialize(int argc, char* argv[]) {
 
 int main(int argc, char *argv[])
 {
-    
+    srand(time(NULL));
     /* initialize GLUT, let it extract command-line
      GLUT options that you may provide */
     glutInit(&argc, argv);
     
-    /* specify the display to be single
-     buffered and color as RGBA values */
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
+    //Use double buffering!
+//    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     
     /* set the initial window size */
     glutInitWindowSize(width, height);
@@ -215,6 +259,8 @@ int main(int argc, char *argv[])
     
     /* register function that handles mouse */
     glutMouseFunc(mouse);
+    
+    glutSpecialFunc(keys);
     
     /* Transparency stuff */
     glEnable (GL_BLEND);

@@ -37,6 +37,7 @@ RIVImageView::RIVImageView(std::string filename, int x, int y, int width, int he
 }
 
 void RIVImageView::Draw() {
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     
     //Setup viewport and 2D projection
     glMatrixMode(GL_PROJECTION);
@@ -104,7 +105,6 @@ void RIVImageView::ComputeLayout() {
 	imageEnd.x = startX + width - paddingX * 2;
 	imageEnd.y = startY + height - paddingY * 2;
 }
-
 
 int round(float d)
 {

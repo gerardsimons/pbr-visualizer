@@ -23,7 +23,9 @@
 		E1290956191CF53000822217 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290945191CF53000822217 /* main.cpp */; };
 		E1290957191CF53000822217 /* ParallelCoordsAxis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290946191CF53000822217 /* ParallelCoordsAxis.cpp */; };
 		E1290958191CF53000822217 /* ParallelCoordsView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290948191CF53000822217 /* ParallelCoordsView.cpp */; };
-		E17C94C2192A6ACB00E8BE52 /* 3DView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17C94C0192A6ACB00E8BE52 /* 3DView.cpp */; };
+		E14C95C1192F7E17000A8CAC /* helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E14C95BF192F7E17000A8CAC /* helper.cpp */; };
+		E14C95C4192F7E28000A8CAC /* 3DView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E14C95C2192F7E28000A8CAC /* 3DView.cpp */; };
+		E14C95C6192F7F0B000A8CAC /* DataView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E14C95C5192F7F0B000A8CAC /* DataView.cpp */; };
 		E1C8E59C1927781700F5D3C3 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1C8E59B1927781700F5D3C3 /* XCTest.framework */; };
 		E1C8E5A21927781700F5D3C3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1C8E5A01927781700F5D3C3 /* InfoPlist.strings */; };
 		E1C8E5A41927781700F5D3C3 /* Afstuderen_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E1C8E5A31927781700F5D3C3 /* Afstuderen_Tests.m */; };
@@ -84,9 +86,11 @@
 		E1290949191CF53000822217 /* ParallelCoordsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParallelCoordsView.h; path = ../ParallelCoordsView.h; sourceTree = "<group>"; };
 		E129094A191CF53000822217 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		E129094D191CF53000822217 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = ../Resources; sourceTree = "<group>"; };
-		E14D215C1926495E005D5C3F /* helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = helper.h; sourceTree = "<group>"; };
-		E17C94C0192A6ACB00E8BE52 /* 3DView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 3DView.cpp; sourceTree = "<group>"; };
-		E17C94C1192A6ACB00E8BE52 /* 3DView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3DView.h; sourceTree = "<group>"; };
+		E14C95BF192F7E17000A8CAC /* helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helper.cpp; path = ../helper.cpp; sourceTree = "<group>"; };
+		E14C95C0192F7E17000A8CAC /* helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = helper.h; path = ../helper.h; sourceTree = "<group>"; };
+		E14C95C2192F7E28000A8CAC /* 3DView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = 3DView.cpp; path = ../3DView.cpp; sourceTree = "<group>"; };
+		E14C95C3192F7E28000A8CAC /* 3DView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = 3DView.h; path = ../3DView.h; sourceTree = "<group>"; };
+		E14C95C5192F7F0B000A8CAC /* DataView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DataView.cpp; path = ../DataView.cpp; sourceTree = "<group>"; };
 		E18D187C1920F309006F10D5 /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Geometry.h; path = ../Geometry.h; sourceTree = "<group>"; };
 		E1C8E5991927781700F5D3C3 /* Afstuderen Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Afstuderen Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1C8E59B1927781700F5D3C3 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -121,11 +125,12 @@
 		E12908F3191CCBC900822217 = {
 			isa = PBXGroup;
 			children = (
-				E17C94C0192A6ACB00E8BE52 /* 3DView.cpp */,
-				E17C94C1192A6ACB00E8BE52 /* 3DView.h */,
+				E14C95BF192F7E17000A8CAC /* helper.cpp */,
+				E14C95C0192F7E17000A8CAC /* helper.h */,
+				E14C95C2192F7E28000A8CAC /* 3DView.cpp */,
+				E14C95C3192F7E28000A8CAC /* 3DView.h */,
 				E126B6CC19252BD90075EE1D /* DataSet.cpp */,
 				E126B6CD19252BD90075EE1D /* DataSet.h */,
-				E14D215C1926495E005D5C3F /* helper.h */,
 				E126B6CE19252BD90075EE1D /* Filter.cpp */,
 				E126B6CF19252BD90075EE1D /* Filter.h */,
 				E126B6D019252BD90075EE1D /* Record.cpp */,
@@ -140,6 +145,7 @@
 				E1290939191CF53000822217 /* DataFileReader.cpp */,
 				E129093A191CF53000822217 /* DataFileReader.h */,
 				E129093E191CF53000822217 /* DataView.h */,
+				E14C95C5192F7F0B000A8CAC /* DataView.cpp */,
 				E1290941191CF53000822217 /* ImageView.cpp */,
 				E1290942191CF53000822217 /* ImageView.h */,
 				E1290943191CF53000822217 /* loadppm.cpp */,
@@ -286,18 +292,20 @@
 			files = (
 				E1290950191CF53000822217 /* DataFileReader.cpp in Sources */,
 				E1290954191CF53000822217 /* ImageView.cpp in Sources */,
+				E14C95C6192F7F0B000A8CAC /* DataView.cpp in Sources */,
 				E126B6D619252BD90075EE1D /* DataSet.cpp in Sources */,
 				E129094F191CF53000822217 /* BMPImage.cpp in Sources */,
 				E126B6DA19252BD90075EE1D /* Table.cpp in Sources */,
 				E1290958191CF53000822217 /* ParallelCoordsView.cpp in Sources */,
 				E126B6D919252BD90075EE1D /* Reference.cpp in Sources */,
+				E14C95C4192F7E28000A8CAC /* 3DView.cpp in Sources */,
 				E126B6D719252BD90075EE1D /* Filter.cpp in Sources */,
 				E126B6D819252BD90075EE1D /* Record.cpp in Sources */,
+				E14C95C1192F7E17000A8CAC /* helper.cpp in Sources */,
 				E1290957191CF53000822217 /* ParallelCoordsAxis.cpp in Sources */,
 				E113BE63192521E200F6525A /* ParallelCoordsAxisGroup.cpp in Sources */,
 				E1290956191CF53000822217 /* main.cpp in Sources */,
 				E1290955191CF53000822217 /* loadppm.cpp in Sources */,
-				E17C94C2192A6ACB00E8BE52 /* 3DView.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

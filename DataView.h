@@ -4,6 +4,7 @@
 #include "DataSet.h"
 #include "Geometry.h"
 
+class RIVDataSet;
 class RIVDataView
 {
 protected:
@@ -38,6 +39,8 @@ public:
 	int width,height;
 	int paddingX,paddingY;
     bool isDragging;
+    const static float colorBlue[3];
+    const static float colorYellow[3];
 	//functions
 	void SetData(RIVDataSet *newDataSet) { dataset = newDataSet; needsRedraw = true;}
 	void Invalidate() { needsRedraw = true; }

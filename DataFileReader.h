@@ -12,8 +12,8 @@ private:
 public:
 	~DataFileReader(void);
     
-    static RIVDataSet ReadAsciiData(std::string fileName);
-	static RIVDataSet ReadBinaryData(std::string fileName);
+    static RIVDataSet ReadAsciiData(std::string fileName,size_t pathsLimit);
+	static RIVDataSet ReadBinaryData(std::string fileName); //TODO: not working, fails at some float bytes
     
     static std::vector<float> ReadModelData(std::string fileName);
 };
