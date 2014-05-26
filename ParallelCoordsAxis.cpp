@@ -30,13 +30,27 @@ float ParallelCoordsAxis::ScaleValueForY(int yPos) {
     return value;
 }
 
-//Returns the Y position of a value along the scale
-float ParallelCoordsAxis::PositionOnScale(float value) {
-    value = std::max(0.F,std::min(value,1.F));
-	if(value >= 0.F && value <= 1.F) {
-		return y + value * height;
+float ParallelCoordsAxis::PositionOnScaleForViewY(int viewY) {
+    
+    //Bound the viewY to axes boundaries
+    viewY = std::min(std::max(viewY,y),y + height);
+    
+    return PositionOnScaleForScalar(ScaleValueForY(viewY));
+}
+
+//Returns the Y position of a value along the scale indicated by a ratio of low and high
+float ParallelCoordsAxis::PositionOnScaleForScalar(float scalar) {
+	if(scalar >= 0.F && scalar <= 1.F) {
+		return y + scalar * height;
 	}
-	else return std::numeric_limits<float>::quiet_NaN();
+	else {
+        throw new std::string("scalar out of bounds : %f \n",scalar);
+        return std::numeric_limits<float>::quiet_NaN();
+    }
+}
+
+float ParallelCoordsAxis::PositionOnScaleForValue(float value) {
+    return PositionOnScaleForScalar((value - minValue) / (maxValue - minValue));
 }
 
 //Returns the value 

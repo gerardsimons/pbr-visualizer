@@ -19,13 +19,12 @@ public:
     //Implemented virtual functions
     void Draw();
     
-    void ComputeLayout();
-	bool HandleMouse(int,int,int,int);
-	bool HandleMouseMotion(int,int);
-
+    virtual void ComputeLayout();
+	virtual bool HandleMouse(int,int,int,int);
+	virtual bool HandleMouseMotion(int,int);
+    virtual void OnFilterChange();
 private:
     std::vector<std::string> axesOrder;
-    
     //Create functions
     void createAxes();
     

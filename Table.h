@@ -123,10 +123,10 @@ public:
     static RIVUnsignedShortRecord* CastToUnsignedShortRecord(RIVRecord* record);
     
     bool IsFiltered() { return filtered; }; //Any filters applied?
-
-    TableIterator* GetIterator();
     void FunctionOnRecords(void(*someFunction)(const RIVRecord*));
-    
+
+    const std::vector<RIVReference*>* GetReferences();
+    TableIterator* GetIterator();
     std::string GetName() { return name; };
     size_t GetNumRows(){ return rows; };
     const RIVReference* GetReferenceToTable(std::string tableName);

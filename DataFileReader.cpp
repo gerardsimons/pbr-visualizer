@@ -142,7 +142,7 @@ std::vector<std::string> explode(std::string line, char delimiter, std::string i
 	return exploded;
 }
 
-RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit = -1) {
+RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit) {
     std::ifstream is;
     is.open (fileName, std::ios::in );
     
@@ -162,39 +162,41 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
 //        }
         is.seekg (0, std::ios::beg);
         
-        std::vector<unsigned short> xPixelData;
-        std::vector<unsigned short> yPixelData;
+        std::vector<ushort> xPixelData;
+        std::vector<ushort> yPixelData;
         std::vector<float> throughPutOne;  //We only use the first one for now, as they all seem the same every time
         std::vector<float> throughPutTwo;
         std::vector<float> throughPutThree;
         
-        std::vector<unsigned short> nrOfIntersections;
+        std::vector<ushort> nrOfIntersections;
         
         std::vector<float> intersectionPosX;
         std::vector<float> intersectionPosY;
         std::vector<float> intersectionPosZ;
-        std::vector<unsigned short> primitveIds;
-        std::vector<unsigned short> shapeIds;
+        std::vector<ushort> primitveIds;
+        std::vector<ushort> shapeIds;
         std::vector<float> spectraOne;
         std::vector<float> spectraTwo;
         std::vector<float> spectraThree;
+        std::vector<ushort> interactionTypes;
+        std::vector<ushort> lightIds;
         
-        unsigned short x;
-        unsigned short y;
+        ushort x;
+        ushort y;
         float throughput[3] = {-1.F,-1.F,-1.F};
-        unsigned short intersections_size;
+        ushort intersections_size;
         
         float intersectPosX;
         float intersectPosY;
         float intersectPosZ;
         
-        unsigned short primitiveId;
-        unsigned short shapeId;
+        ushort primitiveId;
+        ushort shapeId;
         float spectrumOne;
         float spectrumTwo;
         float spectrumThree;
-        unsigned short interactionType;
-        unsigned short lightId;
+        ushort interactionType;
+        ushort lightId;
         
         std::string ignoreList = "[]{}";
         
@@ -204,8 +206,6 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
         size_t intersectionIndex = 0;
         
         std::map<size_t,std::pair<size_t,size_t>> *references = new std::map<size_t,std::pair<size_t,size_t>>();
-        
-        
         
         std::string buffer;
         while (getline(is,line) && (lineNumber < pathsLimit || pathsLimit == -1)) {
@@ -236,6 +236,11 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
                 size_t endSpectrum = endShapeIds + intersections_size * 3;
                 size_t endInteractions = endSpectrum + intersections_size;
                 
+                //sanity checks
+//                if(throughput[0] > 1.F) printf("lineNumber %zu has insane throughput[0]\n",lineNumber);
+//                if(throughput[1] > 1.F) printf("lineNumber %zu has insane throughput[1]\n",lineNumber);
+//                if(throughput[2] > 1.F) printf("lineNumber %zu has insane throughput[2]\n",lineNumber);
+                
                 //                    printf("line %d : \n",lineNumber);
                 //                    printf("endIntersections = %d endPrimitiveIds = %d endShapeIds = %d\n",endIntersections,endPrimitiveIds,endShapeIds);
                 
@@ -255,6 +260,7 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
                         spectrumThree = std::stof(exploded[endShapeIds + i * 3 + 3],0);
                         interactionType = std::stoul(exploded[endSpectrum + 1 + i]);
                         lightId = std::stoul(exploded[endInteractions + 1 + i]);
+                    
                         
                         intersectionPosX.push_back(intersectPosX);
                         intersectionPosY.push_back(intersectPosY);
@@ -264,6 +270,12 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
                         spectraOne.push_back(spectrumOne);
                         spectraTwo.push_back(spectrumTwo);
                         spectraThree.push_back(spectrumThree);
+                        interactionTypes.push_back(interactionType);
+                        lightIds.push_back(lightId);
+                        
+//                        if(spectrumOne > 1.F) printf("lineNumber %zu has insane spectrum[0]\n",lineNumber);
+//                        if(spectrumTwo > 1.F) printf("lineNumber %zu has insane spectrum[1]\n",lineNumber);
+//                        if(spectrumThree > 1.F) printf("lineNumber %zu has insane spectrum[2]\n",lineNumber);
                         
                         ++intersectionIndex;
                     }
@@ -306,6 +318,11 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
         spectrumTwoRecord->SetValues(spectraTwo);
         RIVFloatRecord *spectrumThreeRecord = new RIVFloatRecord("spectrum 3");
         spectrumThreeRecord->SetValues(spectraThree);
+        RIVUnsignedShortRecord *interactionTypesRecord = new RIVUnsignedShortRecord("interaction types");
+        interactionTypesRecord->SetValues(interactionTypes);
+        RIVUnsignedShortRecord *lightIdsRecord = new RIVUnsignedShortRecord("light ids");
+        lightIdsRecord->SetValues(lightIds);
+        
         
         pathTable->AddRecord(xRecord);
         pathTable->AddRecord(yRecord);
@@ -323,6 +340,8 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
         intersectionsTable->AddRecord(spectrumOneRecord);
         intersectionsTable->AddRecord(spectrumTwoRecord);
         intersectionsTable->AddRecord(spectrumThreeRecord);
+        intersectionsTable->AddRecord(interactionTypesRecord);
+        intersectionsTable->AddRecord(lightIdsRecord);
         
         RIVReference *reference = new RIVReference(pathTable, intersectionsTable);
         reference->SetReferences(references);
@@ -351,7 +370,6 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
         printf("%zu path data records read.\n",pathTable->GetNumRows());
         printf("%zu intersection data records read.\n",intersectionsTable->GetNumRows());
         
-        
         is.close();
     }
     return dataset;
@@ -370,12 +388,12 @@ RIVDataSet DataFileReader::ReadBinaryData(std::string fileName) {
         throw "Error opening file.";
     }
     
-    std::vector<unsigned short> xPixelData;
-    std::vector<unsigned short> yPixelData;
+    std::vector<ushort> xPixelData;
+    std::vector<ushort> yPixelData;
     std::vector<float> throughPutOne;
     std::vector<float> throughPutTwo;
     std::vector<float> throughPutThree;
-    std::vector<unsigned short> intersections;
+    std::vector<ushort> intersections;
     
     int lineNumber = 1;
     
@@ -386,12 +404,12 @@ RIVDataSet DataFileReader::ReadBinaryData(std::string fileName) {
         printf("reading line %d\n",lineNumber);
         
         //Read x
-        unsigned short x;
-        unsigned short y;
+        ushort x;
+        ushort y;
         float throughput[3] = {-1.F,-1.F,-1.F};
-        unsigned short size;
+        ushort size;
         
-        fread(&x,sizeof(unsigned short),1,inputFile);
+        fread(&x,sizeof(ushort),1,inputFile);
         
         char buffer[30];
         sprintf(buffer, "%hu,",x);
@@ -400,7 +418,7 @@ RIVDataSet DataFileReader::ReadBinaryData(std::string fileName) {
         
         //Read y
         
-        fread(&y,sizeof(unsigned short),1,inputFile);
+        fread(&y,sizeof(ushort),1,inputFile);
         sprintf(buffer, "%hu,",y);
         fprintf(outputFile, buffer);
         
@@ -410,7 +428,7 @@ RIVDataSet DataFileReader::ReadBinaryData(std::string fileName) {
         
         //Read the number of intersections
         
-        fread(&size,sizeof(unsigned short),1,inputFile);
+        fread(&size,sizeof(ushort),1,inputFile);
         sprintf(buffer, "%hu\n",size);
         fprintf(outputFile, buffer);
         

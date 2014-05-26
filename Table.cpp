@@ -170,13 +170,18 @@ void RIVTable::ClearFilters() {
 }
 
 void RIVTable::ClearFilter(std::string name) {
+    bool recomputeNeeded = false;
     for(size_t i = 0 ; i < filters.size() ; i++) {
         Filter *filter = filters[i];
         if(filter->attributeName == name) {
             std::vector<Filter*>::iterator it = filters.begin();
             std::advance(it, i);
             filters.erase(it);
+            recomputeNeeded = true;
         }
+    }
+    if(recomputeNeeded) {
+        filterRecords();
     }
 }
 
@@ -321,6 +326,10 @@ const RIVReference* RIVTable::GetReferenceToTable(std::string tableName) {
         }
     }
     return 0;
+}
+
+const std::vector<RIVReference*>* RIVTable::GetReferences() {
+    return &references;
 }
 
 void RIVTable::PrintFilteredRowMap() {

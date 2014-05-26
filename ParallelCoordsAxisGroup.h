@@ -17,6 +17,29 @@ class ParallelCoordsAxisGroup {
 public:
     std::vector<ParallelCoordsAxis> axes;
     RIVTable* table;
+    
+    ParallelCoordsAxisGroup* connectedGroup = 0;
+    ParallelCoordsAxis* connectorAxis;
+    
+    ParallelCoordsAxis* LastAxis() {
+        if(axes.size() > 0) {
+            return &axes[axes.size() - 1];
+        }
+        else {
+            printf("Axis group is empty.");
+            return 0;
+        }
+    }
+    
+    ParallelCoordsAxis* FirstAxis() {
+        if(axes.size() > 0) {
+            return &axes[0];
+        }
+        else {
+            printf("Axis group is empty.");
+            return 0;
+        }
+    }
 };
 
 #endif /* defined(__Afstuderen__ParallelCoordsAxisGroup__) */

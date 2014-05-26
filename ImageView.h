@@ -22,10 +22,11 @@ class RIVImageView : public RIVDataView {
 public:
     RIVImageView(std::string filename, int x, int y, int width, int height, int paddingX, int paddingY);
     ~RIVImageView();
-    void Draw(); //Override
-    void ComputeLayout(); //Override
-	bool HandleMouse(int,int,int,int);
-	bool HandleMouseMotion(int x, int y);
+    virtual void Draw(); //Override
+    virtual void ComputeLayout(); //Override
+	virtual bool HandleMouse(int,int,int,int);
+	virtual bool HandleMouseMotion(int x, int y);
+    virtual void OnFilterChange();
 private:
     GLuint imageTexture;
 	float imageMagnificationX,imageMagnificationY;

@@ -3,6 +3,7 @@
 #include <vector>
 #include <math.h>
 
+#include "Filter.h"
 #include "DataView.h"
 #include "ParallelCoordsView.h"
 #include "DataSet.h"
@@ -19,8 +20,13 @@
 const float DEG2RAD = 3.14159/180;
 
 /* window width and height */
+//int width = 1680;
+//int height = 1000;
+
 int width = 1400;
-int height = 600;
+int height = 800;
+
+bool isDirty = true;
 
 /* window position */
 int posX = 0;
@@ -44,34 +50,32 @@ RIVDataSet dataset;
 /* Draw the window - this is where all the GL actions are */
 void display(void)
 {
-    /* clear the screen to white */
-    glClearColor(1.0, 1.0, 1.0, 0.0);
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    
-    /* Draw the views */
-//    for(size_t i = 0 ; i < views.size() ; i++) {
-//        views[i]->Draw();
-//    }
 
+
+
+//
+//    
     
     imageView->Draw();
     parallelCoordsView->Draw();
     sceneView->Draw();
     
-    glColor3f(1.F,0,0);
+//    glColor3f(1.F,0,0);
     
-    float radius = 10.F;
+//    float radius = 10.F;
+//    
+//    glBegin(GL_LINE_LOOP);
+//    
+//    for (int i=0; i < 360; i++)
+//    {
+//        float degInRad = i*DEG2RAD;
+//        glVertex2f(cos(degInRad)*radius + lastMouseX,sin(degInRad)*radius + lastMouseY);
+//    }
+//    
+//    glEnd();
+//    glFlush();
     
-    glBegin(GL_LINE_LOOP);
-    
-    for (int i=0; i < 360; i++)
-    {
-        float degInRad = i*DEG2RAD;
-        glVertex2f(cos(degInRad)*radius + lastMouseX,sin(degInRad)*radius + lastMouseY);
-    }
-    
-    glEnd();
-    glFlush();
+//    copy_buffer();
     
     glutSwapBuffers();
 }
@@ -84,7 +88,7 @@ void mouse(int button, int state, int x, int y) {
 	lastMouseY = y;
 	for(size_t i = 0 ; i < views.size() ; i++) {
 		if(views[i]->HandleMouse(button,state,x,y)) {
-//            printf("View %s caught the mouse interaction\n",typeid(views[i]).name());
+            printf("View %s caught the MOUSE    interaction\n",views[i]->identifier.c_str());
 //            if(state == GLUT_UP)
 			glutPostRedisplay();
 			return;
@@ -92,11 +96,16 @@ void mouse(int button, int state, int x, int y) {
 	}
 }
 
+std::string lastMotionCatch = "";
+
 void motion(int x, int y) {
 	y = height - y;
 	for(size_t i = 0 ; i < views.size() ; i++) {
 		if(views[i]->HandleMouseMotion(x,y)) {
-//            printf("View %s caught the motion interaction\n",typeid(views[i]).name());
+            if(views[i]->identifier != lastMotionCatch) {
+                printf("View %s caught the MOTION interaction\n",views[i]->identifier.c_str());
+                lastMotionCatch = views[i]->identifier;
+            }
 			glutPostRedisplay();
 			return;
 		}
@@ -117,6 +126,11 @@ void keys(int keyCode, int x, int y) {
             printf("Clear filters\n");
 //            invalidateAllViews();
             dataset.ClearFilters();
+            break;
+        case 98: // 'b' key
+            glutSwapBuffers();
+//            copy_buffer();
+            postRedisplay = false;
             break;
         case GLUT_KEY_UP:
             sceneView->MoveCamera(0,0,1.F);
@@ -149,7 +163,6 @@ void idle() {
  before the first call to display(). */
 void reshape(int w, int h)
 {
-    
     printf("reshape called.\n");
     /* save new screen dimensions */
     width = w;
@@ -187,14 +200,14 @@ void initialize(int argc, char* argv[]) {
 //	int imageWidth = (.2F * width);
 //    int imageHeight = (.2F * width);
     
-    int imageWidth = 0.1F * width;
-    int imageHeight = 0.1F * width;
+    int imageWidth = .4F * height;
+    int imageHeight = .4F * height;
     
-    int imageSceneWidth = .3F * width;
-    int imageSceneHeight = .3F * width;
+    int imageSceneWidth = .4F * height;
+    int imageSceneHeight = .4F * height;
     
 	//dataset = DataFileReader::ReadBinaryData(fullPath + ".bin");
-    dataset = DataFileReader::ReadAsciiData(fullPath + ".txt",100000);
+    dataset = DataFileReader::ReadAsciiData(fullPath + ".txt");
     std::vector<float> modelData;
     
     modelData = DataFileReader::ReadModelData(pbrtPath);
@@ -206,8 +219,9 @@ void initialize(int argc, char* argv[]) {
 //    RIV3DView *sceneView = new RIV3DView(width-imageSceneWidth,0,imageSceneWidth,imageSceneHeight,0,0);
     
     imageView = new RIVImageView(fullPath + ".bmp",0,0,imageWidth,imageHeight,0,0);
-	parallelCoordsView = new ParallelCoordsView(imageWidth,0,width-imageWidth-imageSceneWidth,height,50,20);
-    sceneView = new RIV3DView(width-imageSceneWidth,0,imageSceneWidth,imageSceneHeight,0,0);
+    sceneView = new RIV3DView(imageWidth,0,imageSceneWidth,imageSceneHeight,0,0);
+    
+	parallelCoordsView = new ParallelCoordsView(0,imageHeight,width,height - imageHeight,50,20);
     
 //    sceneView = new RIV3DView(0,0,width,height,0,0);
     
@@ -220,6 +234,9 @@ void initialize(int argc, char* argv[]) {
 	imageView->ComputeLayout();
     parallelCoordsView->ComputeLayout();
     sceneView->ComputeLayout();
+    
+    dataset.AddFilterListener(sceneView);
+    dataset.AddFilterListener(parallelCoordsView);
 	
     views.push_back(imageView);
     views.push_back(parallelCoordsView);
@@ -264,7 +281,18 @@ int main(int argc, char *argv[])
     
     /* Transparency stuff */
     glEnable (GL_BLEND);
+    
+    glDrawBuffer(GL_FRONT); //Front is red
+//    glClearColor(1,0,0, 0.0);
+    glClearColor(1,1,1, 0.0);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    
+    glDrawBuffer(GL_BACK);
+    glClearColor(1,1,1, 0.0); //Back is green
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     
     glutMotionFunc(motion);
     

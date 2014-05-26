@@ -12,15 +12,21 @@
 #include <vector>
 #include "Table.h"
 #include "Filter.h"
+#include "DataView.h"
 
+//Forward declaration
+class RIVDataView;
 class RIVTable;
 
 class RIVDataSet {
 private:
     std::vector<RIVTable*> tables;
+    std::vector<RIVDataView*> onFilterListeners;
+    void notifyListeners();
 public:
     void AddTable(RIVTable* table);
     void AddFilter(Filter* filter);
+    void AddFilterListener(RIVDataView* view);
     void ClearFilters();
     void ClearFilter(std::string attributeName);
     size_t TotalNumberOfRecords();

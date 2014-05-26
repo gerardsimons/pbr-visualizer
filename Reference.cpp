@@ -21,14 +21,14 @@ void RIVReference::SetReferences(std::map<size_t,std::pair<size_t,size_t>>* refe
     this->indexReferences = references;
 }
 
-std::pair<size_t,size_t>* RIVReference::GetIndexReference(size_t sourceIndex) {
+std::pair<size_t,size_t>* RIVReference::GetIndexReference(size_t sourceIndex) const {
     if(HasReference(sourceIndex)) {
         return &(*indexReferences)[sourceIndex];
     }
     else return 0;
 }
 
-bool RIVReference::HasReference(size_t sourceIndex) {
+bool RIVReference::HasReference(size_t sourceIndex) const {
     return indexReferences != 0 && indexReferences->count(sourceIndex) != 0;
 }
 

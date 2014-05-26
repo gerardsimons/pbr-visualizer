@@ -17,6 +17,7 @@
 
 RIVImageView::RIVImageView(std::string filename, int x, int y, int width, int height, int paddingX, int paddingY) : RIVDataView(x,y,width,height, paddingX, paddingY) {
 
+    identifier = "ImageView";
     //PPMImage image(filename);
 	BMPImage image(filename.c_str(),true);
 
@@ -37,6 +38,13 @@ RIVImageView::RIVImageView(std::string filename, int x, int y, int width, int he
 }
 
 void RIVImageView::Draw() {
+    
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(startX, startY, width, height);
+    glClearColor(1.0, 1.0, 1.0, 0.0);
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glDisable(GL_SCISSOR_TEST);
+    
     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     
     //Setup viewport and 2D projection
@@ -98,6 +106,10 @@ void RIVImageView::Draw() {
 	}
 }
 
+void RIVImageView::OnFilterChange() {
+    //Do nothing for imageview
+}
+
 void RIVImageView::ComputeLayout() { 		
 	imageStart.x = startX + paddingX;
 	imageStart.y = startY + paddingY;
@@ -126,8 +138,8 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 		else if(state == GLUT_UP) {
 			//Finish selection
 
-			printf("selection (x,y) = (%d,%d)\n",selection.start.x,selection.start.y);
-			printf("selection (endX,endY) = (%d,%d)\n",selection.end.x,selection.end.y);
+			printf("selection (startX,endX) = (%d,%d)\n",selection.start.x,selection.end.x);
+            printf("selection (startY,endY) = (%d,%d)\n",selection.start.y,selection.end.y);
 
 			if(selection.end.x != selection.start.x && selection.end.y != selection.start.y) {
 				dataset->ClearFilters();
@@ -146,6 +158,9 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 //
 				Filter *xFilter = new RangeFilter("x",selection.start.x,selection.end.x - 1);
 				Filter *yFilter = new RangeFilter("y",selection.start.y,selection.end.y - 1);
+                
+//                Filter *xFilter = new RangeFilter("x",9,22);
+//                Filter *yFilter = new RangeFilter("y",5,6);
 		
 				dataset->AddFilter(xFilter);
 				dataset->AddFilter(yFilter);
@@ -169,6 +184,9 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 void RIVImageView::clearSelection() {
 	//Set the selection to off
 	selection.start.x = -1;
+    selection.start.y = -1;
+    selection.end.x = -1;
+    selection.end.y = -1;
 	//Clear any filters that may have been applied to the dataset
 	dataset->ClearFilter("x");
     dataset->ClearFilter("y");

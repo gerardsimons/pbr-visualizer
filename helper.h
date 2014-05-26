@@ -12,6 +12,20 @@
 #include <iostream>
 #include <stdio.h>
 #include <map>
+#include <vector>
+#include <GLUT/GLUT.h>
+
+template <typename T>
+size_t find(std::vector<T> haystack, T needle) {
+    int i = 0 ;
+    for(T value : haystack) {
+        if(value == needle) {
+            return i;
+        }
+        i++;
+    }
+    return -1;
+}
 
 template<typename T,typename U>
 void printMap(std::map<T,U> map) {
@@ -35,6 +49,9 @@ void printMatrix(size_t rows, size_t columns, T* matrix) {
         std::cout << "]\n";
     }
 }
+
+void copy_buffer();
+void copy_buffer_back_to_front();
 
 float* linearInterpolateColor(float,const float[3], const float[3]);
 

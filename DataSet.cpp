@@ -15,21 +15,29 @@ void RIVDataSet::AddTable(RIVTable* table) {
 
 void RIVDataSet::AddFilter(Filter *filter) {
     //Find the table containing the attribute
-    for(RIVTable *table : tables) {
-        if(table->ContainsColumn(filter->attributeName)) {
-            //Apply the filter to the table)
-            table->AddFilter(filter);
+    if(filter != 0) {
+        for(RIVTable *table : tables) {
+            if(table->ContainsColumn(filter->attributeName)) {
+                //Apply the filter to the table)
+                table->AddFilter(filter);
+            }
         }
+        notifyListeners();
+    }
+    else {
+        throw std::string("Supplied filter was a NULL pointer.");
     }
 }
 
 void RIVDataSet::ClearFilters() {
+    printf("Clearing all filters on the dataset.\n");
     for(RIVTable* table : tables) {
         table->ClearFilters();
     }
 }
 
 void RIVDataSet::ClearFilter(std::string filterName) {
+    printf("Clearing filter %s on all tables\n",filterName.c_str());
     for(RIVTable *table : tables) {
         table->ClearFilter(filterName);
     }
@@ -50,6 +58,16 @@ std::vector<RIVTable*>* RIVDataSet::GetTables() {
 
 size_t RIVDataSet::NumberOfTables() {
     return tables.size();
+}
+
+void RIVDataSet::notifyListeners() {
+    for(RIVDataView *dataview : onFilterListeners) {
+        dataview->OnFilterChange();
+    }
+}
+
+void RIVDataSet::AddFilterListener(RIVDataView* view) {
+    onFilterListeners.push_back(view);
 }
 
 void RIVDataSet::Print() {

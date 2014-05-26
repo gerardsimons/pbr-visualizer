@@ -20,7 +20,9 @@ public:
 	void ComputeScale(int n);
 	
 	//Returns the Y position of a value along the scale
-	float PositionOnScale(float value);
+    float PositionOnScaleForViewY(int);
+	float PositionOnScaleForValue(float value);
+    float PositionOnScaleForScalar(float scalar);
 	float ValueOnScale(float value);
     float ScaleValueForY(int yPos);
 
@@ -30,7 +32,7 @@ public:
     float minValue, maxValue; //TODO: template
     int height;
     
-    std::string name; //Usually points to a record's name
+    std::string name; //Usually points to a record's name, acts as unique ID!
     RIVRecord* RecordPointer;
     
     bool HasSelectionBox;
