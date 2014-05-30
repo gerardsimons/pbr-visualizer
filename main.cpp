@@ -1,4 +1,4 @@
-#include <stdio.h>
+    #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
@@ -88,7 +88,7 @@ void mouse(int button, int state, int x, int y) {
 	lastMouseY = y;
 	for(size_t i = 0 ; i < views.size() ; i++) {
 		if(views[i]->HandleMouse(button,state,x,y)) {
-            printf("View %s caught the MOUSE    interaction\n",views[i]->identifier.c_str());
+            printf("View %s caught the MOUSE interaction\n",views[i]->identifier.c_str());
 //            if(state == GLUT_UP)
 			glutPostRedisplay();
 			return;
@@ -175,6 +175,7 @@ void reshape(int w, int h)
 void initialize(int argc, char* argv[]) {
     std::string fullPath;
     std::string pbrtPath;
+    std::string bmpPath;
     printf("%d additional arguments given\n", argc - 1);
     if(argc <= 1) {
         //Default values
@@ -189,10 +190,16 @@ void initialize(int argc, char* argv[]) {
     } else if(argc == 2) {
         fullPath = argv[1];
         pbrtPath = fullPath + ".pbrt";
+        bmpPath = fullPath + ".bmp";
     }
     else if(argc == 3) { //Explicit PBRT file path defined
         fullPath = argv[1];
         pbrtPath = argv[2];
+    }
+    else if(argc == 4) {
+        fullPath = argv[1];
+        pbrtPath = argv[2];
+        bmpPath = argv[3];
     }
     
     printf("using fullpath = %s\n",fullPath.c_str());
@@ -206,8 +213,10 @@ void initialize(int argc, char* argv[]) {
     int imageSceneWidth = .4F * height;
     int imageSceneHeight = .4F * height;
     
+    BMPImage image = BMPImage((bmpPath).c_str(),false);
+    
 	//dataset = DataFileReader::ReadBinaryData(fullPath + ".bin");
-    dataset = DataFileReader::ReadAsciiData(fullPath + ".txt");
+    dataset = DataFileReader::ReadAsciiData(fullPath + ".txt",image);
     std::vector<float> modelData;
     
     modelData = DataFileReader::ReadModelData(pbrtPath);
@@ -218,12 +227,23 @@ void initialize(int argc, char* argv[]) {
 //	ParallelCoordsView *parallelCoordsView = new ParallelCoordsView(imageWidth,0,width-imageWidth-imageSceneWidth,height,50,20);
 //    RIV3DView *sceneView = new RIV3DView(width-imageSceneWidth,0,imageSceneWidth,imageSceneHeight,0,0);
     
-    imageView = new RIVImageView(fullPath + ".bmp",0,0,imageWidth,imageHeight,0,0);
-    sceneView = new RIV3DView(imageWidth,0,imageSceneWidth,imageSceneHeight,0,0);
+//    RIVColorProperty *colorProperty = new RIVColorLinearProperty("path");
     
-	parallelCoordsView = new ParallelCoordsView(0,imageHeight,width,height - imageHeight,50,20);
+    RIVRecord* redRecord = dataset.FindRecord("R");
+    RIVRecord* greenRecord = dataset.FindRecord("G");
+    RIVRecord* blueRecord = dataset.FindRecord("B");
     
-//    sceneView = new RIV3DView(0,0,width,height,0,0);
+    RIVColorProperty *colorProperty = new RIVColorRGBProperty("image",redRecord,greenRecord,blueRecord);
+
+    sceneView = new RIV3DView(imageWidth,0,imageSceneWidth,imageSceneHeight,0,0,colorProperty);
+    
+	parallelCoordsView = new ParallelCoordsView(0,imageHeight,width,height - imageHeight,50,20,colorProperty);
+    
+//    BMPImage image = BMPImage((fullPath + ".bmp").c_str(),true);
+
+    imageView = new RIVImageView(image,0,0,imageWidth,imageHeight,0,0,colorProperty);
+    
+//    RIVTable *imageTable = DataFileReader::ReadImageData(image);
     
 	imageView->SetData(&dataset);
 	parallelCoordsView->SetData(&dataset);
@@ -234,6 +254,11 @@ void initialize(int argc, char* argv[]) {
 	imageView->ComputeLayout();
     parallelCoordsView->ComputeLayout();
     sceneView->ComputeLayout();
+    
+//    Filter *blueFilter = new RangeFilter("B",200,255);
+//    Filter *greenFilter = new RangeFilter("G",240,255);
+//    dataset.AddFilter(greenFilter);
+//    dataset.AddFilter(blueFilter);
     
     dataset.AddFilterListener(sceneView);
     dataset.AddFilterListener(parallelCoordsView);

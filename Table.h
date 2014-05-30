@@ -115,7 +115,7 @@ public:
     
     void ClearFilters();
     void ClearFilter(std::string filterName);
-    
+    RIVRecord* GetRecord(std::string name) const;
     bool ContainsColumn(std::string);
     
     /* Casting help functions */
@@ -127,17 +127,18 @@ public:
 
     const std::vector<RIVReference*>* GetReferences();
     TableIterator* GetIterator();
-    std::string GetName() { return name; };
-    size_t GetNumRows(){ return rows; };
-    const RIVReference* GetReferenceToTable(std::string tableName);
+    std::string GetName() const { return name; };
+    size_t GetNumRows() const { return rows; };
+    const RIVReference* GetReferenceToTable(std::string tableName,std::vector<std::string> *visitedTables = 0) const;
+    const RIVTable* FindTable(std::string tableName, std::vector<std::string> *visitedTables = 0);
     
     size_t NumberOfColumns(); //Columns
     size_t NumberOfRows();
     std::vector<RIVRecord*> GetRecords();
     
     //Print functions
-    void PrintAll(); //Print all the rows
-    void PrintUnfiltered(); //Print only those rows that are not filtered
+    void Print(size_t maxPrint = 1000, bool printFiltered = true); //Print all the rows
+//    void PrintUnfiltered(); //Print only those rows that are not filtered
     void PrintFilteredRowMap(); //Print the underlying filter map
     std::string RowToString(size_t row);
 };

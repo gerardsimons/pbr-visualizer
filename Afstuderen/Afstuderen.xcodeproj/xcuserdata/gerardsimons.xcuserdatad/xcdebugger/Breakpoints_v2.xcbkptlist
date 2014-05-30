@@ -9,13 +9,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../ParallelCoordsView.cpp"
-            timestampString = "422804702.823538"
+            filePath = "../BMPImage.cpp"
+            timestampString = "423156521.8742"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "281"
-            endingLineNumber = "281"
-            landmarkName = "ParallelCoordsView::drawLines()"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "BMPImage::loadTexture(const char* imagepath, int alpha)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -25,13 +25,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../ParallelCoordsView.cpp"
-            timestampString = "422804702.823538"
+            filePath = "../DataFileReader.cpp"
+            timestampString = "423151745.387466"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
-            landmarkName = "ParallelCoordsView::createAxes()"
+            startingLineNumber = "225"
+            endingLineNumber = "225"
+            landmarkName = "DataFileReader::ReadAsciiData(const std::string&amp; fileName, const BMPImage&amp; image, const size_t pathsLimit)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -41,191 +41,29 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../ParallelCoordsView.cpp"
-            timestampString = "422804702.823538"
+            filePath = "../BMPImage.cpp"
+            timestampString = "423156521.8742"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "93"
-            endingLineNumber = "93"
-            landmarkName = "ParallelCoordsView::createAxes()"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "BMPImage::loadTexture(const char* imagepath, int alpha)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../ParallelCoordsView.cpp"
-            timestampString = "422804702.823538"
+            filePath = "../ColorProperty.cpp"
+            timestampString = "423153400.980345"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
-            landmarkName = "ParallelCoordsView::createAxes()"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ParallelCoordsView::createAxes()"
-                  moduleName = "Afstuderen"
-                  urlString = "file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp"
-                  timestampString = "422804703.124009"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "95"
-                  endingLineNumber = "95"
-                  offsetFromSymbolStart = "1637">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ParallelCoordsView::createAxes()"
-                  moduleName = "Afstuderen"
-                  urlString = "file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp"
-                  timestampString = "422804703.124171"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "95"
-                  endingLineNumber = "95"
-                  offsetFromSymbolStart = "1664">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ParallelCoordsView::createAxes()"
-                  moduleName = "Afstuderen"
-                  urlString = "file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp"
-                  timestampString = "422804703.124372"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "95"
-                  endingLineNumber = "95"
-                  offsetFromSymbolStart = "1679">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ParallelCoordsView::createAxes()"
-                  moduleName = "Afstuderen"
-                  urlString = "file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp"
-                  timestampString = "422804703.124501"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "95"
-                  endingLineNumber = "95"
-                  offsetFromSymbolStart = "2395">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ParallelCoordsView::createAxes()"
-                  moduleName = "Afstuderen"
-                  urlString = "file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp"
-                  timestampString = "422804703.124692"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "95"
-                  endingLineNumber = "95"
-                  offsetFromSymbolStart = "2410">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ParallelCoordsView::createAxes()"
-                  moduleName = "Afstuderen"
-                  urlString = "file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp"
-                  timestampString = "422804703.124824"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "95"
-                  endingLineNumber = "95"
-                  offsetFromSymbolStart = "2824">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ParallelCoordsView::createAxes()"
-                  moduleName = "Afstuderen"
-                  urlString = "file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp"
-                  timestampString = "422804703.125012"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "95"
-                  endingLineNumber = "95"
-                  offsetFromSymbolStart = "3300">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ParallelCoordsView::createAxes()"
-                  moduleName = "Afstuderen"
-                  urlString = "file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp"
-                  timestampString = "422804703.125143"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "95"
-                  endingLineNumber = "95"
-                  offsetFromSymbolStart = "3310">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../ParallelCoordsView.cpp"
-            timestampString = "422804702.823538"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "165"
-            endingLineNumber = "165"
-            landmarkName = "ParallelCoordsView::drawLines()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../ParallelCoordsView.cpp"
-            timestampString = "422804702.823538"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "371"
-            endingLineNumber = "371"
-            landmarkName = "ParallelCoordsView::ComputeLayout()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../ParallelCoordsAxis.cpp"
-            timestampString = "422806401.36262"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
-            landmarkName = "ParallelCoordsAxis::PositionOnScaleForViewY(int viewY)"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
+            landmarkName = "RIVColorRGBProperty::Color(const RIVTable* table, const size_t&amp; row)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

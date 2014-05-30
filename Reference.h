@@ -26,13 +26,13 @@ public:
         delete indexReferences; //Very important as index references is created as new in reverse function
     }
     
-    std::map<size_t,std::pair<size_t,size_t>>* indexReferences;
+    std::map<size_t,std::vector<size_t>>* indexReferences;
     
     RIVReference(RIVTable *_sourceTable, RIVTable *_targetTable);
     bool HasReference(size_t) const; //Does it have a reference from a given source index
 //    void AddReference(size_t sourceIndex, size_t targetIndex);
-    void SetReferences(std::map<size_t,std::pair<size_t,size_t>>*);
-    std::pair<size_t,size_t>* GetIndexReference(size_t) const;
+    void SetReferences(std::map<size_t,std::vector<size_t>>*);
+    std::vector<size_t>* GetIndexReferences(size_t) const;
     RIVReference* ReverseReference();
 };
 

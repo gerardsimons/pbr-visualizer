@@ -25,6 +25,8 @@
 
 #include "Table.h"
 
+
+
 RIVTable::RIVTable(std::string name) {
     this->name = name;
 }
@@ -48,7 +50,6 @@ void RIVTable::filterRecords() {
     }
 }
 
-//The second argument may be a reference that triggered this filter, this is useful to avoid looping filter behaviour
 void RIVTable::filterRecords(Filter* filter) {
     for(RIVRecord* record : records) {
         RIVFloatRecord* floatRecord = CastToFloatRecord(record);
@@ -66,7 +67,7 @@ void RIVTable::filterRecords(Filter* filter) {
         }
         RIVUnsignedShortRecord* shortRecord = CastToUnsignedShortRecord(record);
         if(shortRecord) {
-            for(size_t j = 0 ; j < shortRecord->values.size() ; j++) {
+            for(size_t j = 0 ; j < shortRecord->GetValues().size() ; j++) {
                 if(filteredRows[j]) continue; //Already filtered
                 unsigned short value = shortRecord->Value(j);
                 if(filter->PassesFilter(record->name, value) == false) {
@@ -106,17 +107,16 @@ void RIVTable::FilterRow(size_t rowIndex, bool filterOrUnfilter, RIVReference* s
     if(filterOrUnfilter) filtered = true;
     for(RIVReference *reference : references) {
         RIVTable* targetTable = reference->targetTable;
-        std::pair<size_t,size_t>* targetIndexRange = reference->GetIndexReference(rowIndex);
+        std::vector<size_t>* targetIndexRange = reference->GetIndexReferences(rowIndex);
         if(targetIndexRange != 0 && ( sourceReference == 0 || targetTable->name != sourceReference->sourceTable->name)) { //Do not update a table who just updated this table
             //            printf("Force table %s to filter row %zu\n",targetTable->name.c_str(),*targetIndex);
-            if(targetIndexRange->second >= targetIndexRange->first) {
-                bool runOnce = true;
-                for(size_t filterIndex = targetIndexRange->first ; runOnce || filterIndex < targetIndexRange->second ; ++filterIndex) {
-                    runOnce = false;
-                    targetTable->FilterRow(filterIndex,filterOrUnfilter,reference);
-                }
+            
+            for(size_t filterIndex : *targetIndexRange) {
+                
+                targetTable->FilterRow(filterIndex,filterOrUnfilter,reference);
             }
-            else throw "Target index range was malformed (second < first)";
+            
+            
         }
     }
 }
@@ -226,7 +226,7 @@ std::string generateString(char c, size_t number) {
 }
 
 std::string RIVTable::RowToString(size_t row) {
-    std::string rowText = "|";
+    std::string rowText = std::to_string(row) + "|";
     for(size_t i = 0 ; i < records.size() ; i++) {
         RIVRecord* record = records[i];
         RIVFloatRecord *floatRecord = CastToFloatRecord(record);
@@ -268,17 +268,20 @@ std::string RIVTable::RowToString(size_t row) {
     return rowText;
 }
 
-void RIVTable::PrintAll() {
-    printf("Table called %s has %zu records %zu rows and %zu references.\n",name.c_str(),records.size(),rows,references.size());
+void RIVTable::Print(size_t maxPrint, bool printFiltered) {
+    printf("Table called %s has %zu records %zu rows and %zu references.\n First %zu rows:\n",name.c_str(),records.size(),rows,references.size(),maxPrint);
     std::string headerText = "|";
     std::string headerOrnament;
     
-    int columnWidth = 15;
+    int columnWidth = 17;
     
     for(size_t i = 0 ; i < records.size() ; i++) {
         RIVRecord* record = records[i];
         
         size_t textWidth = record->name.size();
+        if(textWidth > columnWidth) {
+            columnWidth = textWidth;
+        }
         int padding = (int)((columnWidth - textWidth) / 2.F);
         
         headerText += generateString(' ',padding);
@@ -294,22 +297,27 @@ void RIVTable::PrintAll() {
     printf("%s\n",headerText.c_str());
     printf("%s\n",headerOrnament.c_str());
     
-    for(size_t j = 0 ; j < rows ; j++) {
+    for(size_t j = 0 ; j < rows && (j < maxPrint || maxPrint < 0) ; j++) {
         std::string rowText = RowToString(j);
-        
-        for(RIVReference *reference : references) {
-            std::pair<size_t,size_t> *referenceIndexRange = reference->GetIndexReference(j);
-            if(referenceIndexRange) {
-                rowText += "---> " + reference->targetTable->name + " rows ";
-                bool firstRun = true;
-                for(size_t i = referenceIndexRange->first ; firstRun || i < referenceIndexRange->second ; i++) {
-                    firstRun = false;
-                    rowText += std::to_string(i) + ",";
+        if(printFiltered || !filteredRows[j]) {
+            for(RIVReference *reference : references) {
+                std::vector<size_t> *referenceIndexRange = reference->GetIndexReferences(j);
+                if(referenceIndexRange && !referenceIndexRange->empty()) {
+                    rowText += "---> " + reference->targetTable->name + "{";
+                    
+                    for(size_t i = 0 ; i < referenceIndexRange->size(); ++i) {
+                        
+                        rowText += std::to_string((*referenceIndexRange)[i]);
+                        if(i < referenceIndexRange->size() - 1) {
+                            rowText +=  ",";
+                        }
+                    }
+                    rowText += "}";
                 }
             }
-        }
-        if(filteredRows[j]) {
-            rowText += "* FILTERED *";
+            if(filteredRows[j]) {
+                rowText += "***";
+            }
         }
         
         printf("%s\n",rowText.c_str());
@@ -319,12 +327,55 @@ void RIVTable::PrintAll() {
     //    PrintFilteredRowMap();
 }
 
-const RIVReference* RIVTable::GetReferenceToTable(std::string tableName) {
-    for(const RIVReference *reference : references) {
+const RIVReference* RIVTable::GetReferenceToTable(std::string tableName, std::vector<std::string> *visitedTables) const {
+    if(!visitedTables) {
+        visitedTables = new std::vector<std::string>();
+    }
+    visitedTables->push_back(this->name);
+    for(const RIVReference* reference: references) {
         if(reference->targetTable->name == tableName) {
             return reference;
         }
+        else {
+            for(std::string visitedName : *visitedTables) {
+                if(name != reference->targetTable->name) {
+                    const RIVReference *found = reference->targetTable->GetReferenceToTable(tableName, visitedTables);
+                    if(found) {
+                        return found;
+                    }
+                }
+            }
+        }
     }
+    delete visitedTables;
+    return 0;
+}
+
+const RIVTable* RIVTable::FindTable(std::string tableName, std::vector<std::string>* visitedTables) {
+    if(this->name == tableName) {
+        return this;
+        delete visitedTables;
+    }
+    if(visitedTables) {
+        for(std::string name : *visitedTables) {
+            if(name == this->name) {
+                return 0;
+            }
+        }
+    }
+    else {
+        if(!visitedTables) {
+            visitedTables = new std::vector<std::string>();
+        }
+        visitedTables->push_back(this->name);
+        for(RIVReference *reference : references) {
+            const RIVTable* foundTable = reference->targetTable->FindTable(tableName, visitedTables);
+            if(foundTable) {
+                return foundTable;
+            }
+        }
+    }
+    delete visitedTables;
     return 0;
 }
 
@@ -352,52 +403,12 @@ TableIterator* RIVTable::GetIterator() {
     return iterator;
 }
 
-void AddOnChangeListener(void(*onChangeFunction)(const RIVTable*)) {
-    
+RIVRecord* RIVTable::GetRecord(std::string name) const {
+    for(RIVRecord* record : records) {
+        if(record->name == name) {
+            return record;
+        }
+    }
+    return 0;
 }
 
-void RIVTable::PrintUnfiltered() {
-    printf("Table called %s has %zu columns %zu rows and %zu references.\n",name.c_str(),records.size(),rows,references.size());
-    std::string headerText = "|";
-    std::string headerOrnament;
-    
-    int columnWidth = 15;
-    
-    for(size_t i = 0 ; i < records.size() ; i++) {
-        RIVRecord* record = records[i];
-        
-        size_t textWidth = record->name.size();
-        int padding = (int)((columnWidth - textWidth) / 2.F);
-        
-        headerText += generateString(' ',padding);
-        headerText += record->name.c_str();
-        headerText += generateString(' ',padding);
-        headerText += "|";
-    }
-    for(size_t j = 0 ; j < headerText.size() ; j++) {
-        headerOrnament += "-";
-    }
-    
-    printf("%s\n",headerOrnament.c_str());
-    printf("%s\n",headerText.c_str());
-    printf("%s\n",headerOrnament.c_str());
-    
-    for(size_t j = 0 ; j < rows ; j++) {
-        std::string rowText = RowToString(j);
-        if(!filteredRows[j]) {
-            for(RIVReference *reference : references) {
-                std::pair<size_t,size_t> *referenceIndexRange = reference->GetIndexReference(j);
-                if(referenceIndexRange) {
-                    rowText += "---> " + reference->targetTable->name + " rows ";
-                    bool firstRun = true;
-                    for(size_t i = referenceIndexRange->first ; firstRun || i < referenceIndexRange->second ; i++) {
-                        firstRun = false;
-                        rowText += std::to_string(i) + ",";
-                    }
-                }
-            }
-            printf("%s\n",rowText.c_str());
-        }
-        printf("%s\n",headerOrnament.c_str());
-    }
-}

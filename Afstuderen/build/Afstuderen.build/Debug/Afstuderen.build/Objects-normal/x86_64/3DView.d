@@ -7,4 +7,5 @@ dependencies: /Users/gerardsimons/Git/afstuderen/3DView.cpp \
   /Users/gerardsimons/Git/afstuderen/Record.h \
   /Users/gerardsimons/Git/afstuderen/Reference.h \
   /Users/gerardsimons/Git/afstuderen/helper.h \
-  /Users/gerardsimons/Git/afstuderen/Geometry.h
+  /Users/gerardsimons/Git/afstuderen/Geometry.h \
+  /Users/gerardsimons/Git/afstuderen/ColorProperty.h

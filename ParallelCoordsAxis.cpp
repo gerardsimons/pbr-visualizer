@@ -50,7 +50,11 @@ float ParallelCoordsAxis::PositionOnScaleForScalar(float scalar) {
 }
 
 float ParallelCoordsAxis::PositionOnScaleForValue(float value) {
-    return PositionOnScaleForScalar((value - minValue) / (maxValue - minValue));
+    float scalar = (value - minValue) / (maxValue - minValue);
+    if(minValue == maxValue) {
+        scalar = 0.5F;
+    }
+    return PositionOnScaleForScalar(scalar);
 }
 
 //Returns the value 

@@ -18,7 +18,7 @@ private:
     bool isDirty = true;
     Point3D ScreenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
-    RIV3DView(int,int,int,int,int,int);
+    RIV3DView(int,int,int,int,int,int,RIVColorProperty*);
      void ComputeLayout();
 	 void Draw();
 	 bool HandleMouse(int button, int state, int x, int y);

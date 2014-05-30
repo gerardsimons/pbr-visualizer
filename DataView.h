@@ -3,24 +3,29 @@
 
 #include "DataSet.h"
 #include "Geometry.h"
+#include "ColorProperty.h"
 #include <string>
 
 class RIVDataSet;
+class RIVColorProperty;
+
 class RIVDataView
 {
 protected:
 	RIVDataSet *dataset;
+    RIVColorProperty* colorProperty;
 
 	bool needsRedraw;
 
 	//constructor destructor
-	RIVDataView(int x, int y, int _width, int _height, int _paddingX, int _paddingY) {
+	RIVDataView(int x, int y, int _width, int _height, int _paddingX, int _paddingY, RIVColorProperty* colorProperty_) {
         startX = x;
         startY = y;
         width = _width;
         height = _height;
         paddingX = _paddingX;
         paddingY = _paddingY;
+        colorProperty = colorProperty_;
     };
     
 	~RIVDataView(void) { /* Delete some stuff I guess */ };

@@ -3,6 +3,7 @@
 #include "DataView.h"
 #include "ParallelCoordsAxis.h"
 #include "ParallelCoordsAxisGroup.h"
+#include "ColorProperty.h"
 
 #if defined(__APPLE__)
 #include <GLUT/glut.h>
@@ -13,7 +14,7 @@
 class ParallelCoordsView : public RIVDataView
 {
 public:
-    ParallelCoordsView(int x, int y, int width, int height, int paddingX, int paddingY);
+    ParallelCoordsView(int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty);
 	~ParallelCoordsView(void);
 
     //Implemented virtual functions

@@ -23,6 +23,7 @@
 		E1290956191CF53000822217 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290945191CF53000822217 /* main.cpp */; };
 		E1290957191CF53000822217 /* ParallelCoordsAxis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290946191CF53000822217 /* ParallelCoordsAxis.cpp */; };
 		E1290958191CF53000822217 /* ParallelCoordsView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290948191CF53000822217 /* ParallelCoordsView.cpp */; };
+		E13B4C341938947200F1FCCF /* ColorProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E13B4C321938947200F1FCCF /* ColorProperty.cpp */; };
 		E14C95C1192F7E17000A8CAC /* helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E14C95BF192F7E17000A8CAC /* helper.cpp */; };
 		E14C95C4192F7E28000A8CAC /* 3DView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E14C95C2192F7E28000A8CAC /* 3DView.cpp */; };
 		E14C95C6192F7F0B000A8CAC /* DataView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E14C95C5192F7F0B000A8CAC /* DataView.cpp */; };
@@ -86,6 +87,8 @@
 		E1290949191CF53000822217 /* ParallelCoordsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParallelCoordsView.h; path = ../ParallelCoordsView.h; sourceTree = "<group>"; };
 		E129094A191CF53000822217 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		E129094D191CF53000822217 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = ../Resources; sourceTree = "<group>"; };
+		E13B4C321938947200F1FCCF /* ColorProperty.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColorProperty.cpp; path = ../ColorProperty.cpp; sourceTree = "<group>"; };
+		E13B4C331938947200F1FCCF /* ColorProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorProperty.h; path = ../ColorProperty.h; sourceTree = "<group>"; };
 		E14C95BF192F7E17000A8CAC /* helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helper.cpp; path = ../helper.cpp; sourceTree = "<group>"; };
 		E14C95C0192F7E17000A8CAC /* helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = helper.h; path = ../helper.h; sourceTree = "<group>"; };
 		E14C95C2192F7E28000A8CAC /* 3DView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = 3DView.cpp; path = ../3DView.cpp; sourceTree = "<group>"; };
@@ -125,6 +128,8 @@
 		E12908F3191CCBC900822217 = {
 			isa = PBXGroup;
 			children = (
+				E13B4C321938947200F1FCCF /* ColorProperty.cpp */,
+				E13B4C331938947200F1FCCF /* ColorProperty.h */,
 				E14C95BF192F7E17000A8CAC /* helper.cpp */,
 				E14C95C0192F7E17000A8CAC /* helper.h */,
 				E14C95C2192F7E28000A8CAC /* 3DView.cpp */,
@@ -290,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E13B4C341938947200F1FCCF /* ColorProperty.cpp in Sources */,
 				E1290950191CF53000822217 /* DataFileReader.cpp in Sources */,
 				E1290954191CF53000822217 /* ImageView.cpp in Sources */,
 				E14C95C6192F7F0B000A8CAC /* DataView.cpp in Sources */,

@@ -4,6 +4,7 @@
 
 #include <string>
 #include "DataSet.h"
+#include "BMPImage.h"
 
 class DataFileReader
 {
@@ -12,10 +13,11 @@ private:
 public:
 	~DataFileReader(void);
     
-    static RIVDataSet ReadAsciiData(std::string fileName,size_t pathsLimit = -1);
-	static RIVDataSet ReadBinaryData(std::string fileName); //TODO: not working, fails at some float bytes
+    static RIVDataSet ReadAsciiData(const std::string& fileName,const BMPImage &image, const size_t pathsLimit = -1);
+	static RIVDataSet ReadBinaryData(const std::string& fileName); //TODO: not working, fails at some float bytes
+    static RIVTable* ReadImageData(const BMPImage& image);
     
-    static std::vector<float> ReadModelData(std::string fileName);
+    static std::vector<float> ReadModelData(const std::string& fileName);
 };
 #endif
 

@@ -11,6 +11,7 @@
 
 #include "DataView.h"
 #include "Geometry.h"
+#include "BMPImage.h"
 
 #if defined(__APPLE__)
 #include <GLUT/GLUT.h>
@@ -20,7 +21,7 @@
 
 class RIVImageView : public RIVDataView {
 public:
-    RIVImageView(std::string filename, int x, int y, int width, int height, int paddingX, int paddingY);
+    RIVImageView(const BMPImage& image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* colorProperty);
     ~RIVImageView();
     virtual void Draw(); //Override
     virtual void ComputeLayout(); //Override

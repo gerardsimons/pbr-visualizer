@@ -10,7 +10,7 @@
 
 bool currentBuffer;
 
-ParallelCoordsView::ParallelCoordsView(int x, int y, int width, int height, int paddingX, int paddingY) : RIVDataView(x,y,width,height, paddingX, paddingY) {
+ParallelCoordsView::ParallelCoordsView(int x, int y, int width, int height, int paddingX, int paddingY, RIVColorProperty *colorProperty) : RIVDataView(x,y,width,height, paddingX, paddingY,colorProperty) {
     linesAreDirty = true;
     axesAreDirty = true;
     selectedAxis = 0;
@@ -84,7 +84,8 @@ void ParallelCoordsView::createAxes() {
         if(j < tablePointers->size() - 1) { //Only connect if not last
             //What is the next table group?
             RIVTable* nextTable = (*tablePointers)[j + 1];
-            if(table->GetReferenceToTable(nextTable->GetName())) { //If a reference exists, connect the groups
+            const RIVTable* result = table->FindTable(nextTable->GetName());
+            if(result) { //If a reference exists, connect the groups
                 //But the next axisgroup is not yet made, so cache it until it is made
                 fromConnection = &axisGroup;
                 axisGroup.connectorAxis = lastAxis;
@@ -170,9 +171,6 @@ void ParallelCoordsView::drawLines() {
         glColor3f(1.0, 0.0, 0.0);
         glLineWidth(1.F);
         
-        //On what table should I base the colors?
-        std::string colorTableReferenceName = "path";
-        
         //        printf("Redrawing lines\n");
         
         for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
@@ -180,7 +178,6 @@ void ParallelCoordsView::drawLines() {
             
 //            printf("Drawing lines for table %s\n",table->GetName().c_str());
 //            table->PrintUnfiltered();
-
             
             size_t numberOfRows = table->NumberOfRows();
             size_t row = 0;
@@ -193,20 +190,9 @@ void ParallelCoordsView::drawLines() {
             while(iterator->GetNext(row)) {
 //                printf("Row : %zu\n",row);
                 glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
-                float ratio = row / (float)numberOfRows;
-                if(table->GetName() != colorTableReferenceName) {
-                    //Search for references
-                    const RIVReference* colorReference = table->GetReferenceToTable(colorTableReferenceName);
-                    if(colorReference) {
-                        size_t colorIndex = colorReference->GetIndexReference(row)->second;
-                        ratio = colorIndex / (float)colorReference->targetTable->GetNumRows();
-                    }
-                    else {
-                        throw new std::string("Could not find color reference table " + colorTableReferenceName);
-                    }
-                }
-                float* color = linearInterpolateColor(ratio, colorBlue, colorYellow);
+                float* color = colorProperty->Color(table, row);
                 glColor3f(color[0], color[1], color[2]);
+//                delete color;
                 for(ParallelCoordsAxis &axis : axisGroup.axes) {
                     RIVRecord *ptr = axis.RecordPointer;
                     RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(ptr);
@@ -216,14 +202,12 @@ void ParallelCoordsView::drawLines() {
                     if(axisGroup.connectorAxis->name == axis.name && !axisGroup.connectedGroup) {
                         axisXCache.clear();
                         axisYCache.clear();
-                        printf("Connector axis  found. Caching the coordinates.");
+//                        printf("Connector axis  found. Caching the coordinates.");
                         cacheCoords = true;
                     }
                     
                     if(floatRecord) {
                         //Code here
-                        const std::pair<float,float> &min_max = floatRecord->MinMax();
-                        
                         float value = floatRecord->Value(row);
                         float x = axis.x;
                         float y = axis.PositionOnScaleForValue(value);
@@ -244,20 +228,15 @@ void ParallelCoordsView::drawLines() {
                     RIVUnsignedShortRecord* shortRecord = RIVTable::CastToUnsignedShortRecord(ptr);
                     if(shortRecord) {
                         //Code here
-                        const std::pair<unsigned short,unsigned short> &min_max = shortRecord->MinMax();
                         
                         ushort value = shortRecord->Value(row);
                         
                         float x = axis.x;
                         float y = axis.PositionOnScaleForValue(value);
-                        
                         if(cacheCoords == true) {
                             axisXCache.push_back(x);
                             axisYCache.push_back(y);
                         }
-                        
-                        //                            printf("glVertex3f(%f,%f)\n",x,y);
-                        //                            printf("Drawing line %zu\n",lineIndex);
                         glVertex3f(x, y, 0);
                         
                         if(y > axis.y + axis.height || y < axis.y) {
@@ -274,51 +253,40 @@ void ParallelCoordsView::drawLines() {
                 glEnd();
                 lineIndex++;
                 
-                for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
-                    break; //Not working! axixGroup connectedGroup is garbled, faulty table pointer etc.
-                    if(axisGroup.connectedGroup != 0) { //There is a axis group connect to this one
-                        
-                        RIVTable *table = axisGroup.connectedGroup->table;
-                            
-                        //Connect these two axes
-                        ParallelCoordsAxis *toAxis = axisGroup.connectorAxis;
-                        ParallelCoordsAxis *fromAxis = axisGroup.connectedGroup->connectorAxis;
-                            
-                        if(table->GetName() != colorTableReferenceName) {
-                            //Search for references
-                            const RIVReference* colorReference = table->GetReferenceToTable(colorTableReferenceName);
-                            if(colorReference) {
-                                size_t colorIndex = colorReference->GetIndexReference(row)->second;
-                                ratio = colorIndex / (float)colorReference->targetTable->GetNumRows();
-                            }
-                            else {
-                                throw new std::string("Could not find color reference table " + colorTableReferenceName);
-                            }
-                        }
-                            
-                        glBegin(GL_LINES);
-                        
-                        size_t lineInex = 0;
-                        size_t numberOfRows = table->NumberOfRows();
-                        size_t row = 0;
-                        TableIterator *iterator = table->GetIterator();
-                        
-                        //            iterator->Print();
-                        while(iterator->GetNext(row)) {
-                            //                printf("Row : %zu\n",row);
-                            float ratio = row / (float)numberOfRows;
-                            float* color = linearInterpolateColor(ratio, colorBlue, colorYellow);
-                            glColor3f(color[0], color[1], color[2]);
-                            
-                            RIVRecord *fromRecord = fromAxis->RecordPointer;
-                            RIVRecord *toRecord = toAxis->RecordPointer;
-                            
-                            lineIndex++;
-                        }
-                            
-                        glEnd();
-                    }
-                }
+//                for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
+//                    break; //Not working! axixGroup connectedGroup is garbled, faulty table pointer etc.
+//                    if(axisGroup.connectedGroup != 0) { //There is a axis group connect to this one
+//                        
+//                        RIVTable *table = axisGroup.connectedGroup->table;
+//                            
+//                        //Connect these two axes
+//                        ParallelCoordsAxis *toAxis = axisGroup.connectorAxis;
+//                        ParallelCoordsAxis *fromAxis = axisGroup.connectedGroup->connectorAxis;
+//                            
+//                        
+//                            
+//                        glBegin(GL_LINES);
+//                        
+//                        size_t lineInex = 0;
+//                        size_t numberOfRows = table->NumberOfRows();
+//                        size_t row = 0;
+//                        TableIterator *iterator = table->GetIterator();
+//                        
+//                        //            iterator->Print();
+//                        while(iterator->GetNext(row)) {
+//                            //                printf("Row : %zu\n",row);
+//                            float* color = colorProperty->Color(table, row);
+//                            glColor3f(color[0], color[1], color[2]);
+//                            
+//                            RIVRecord *fromRecord = fromAxis->RecordPointer;
+//                            RIVRecord *toRecord = toAxis->RecordPointer;
+//                            
+//                            lineIndex++;
+//                        }
+//                            
+//                        glEnd();
+//                    }
+//                }
             }
         }
         linesAreDirty = false;
@@ -419,6 +387,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                     dataset->ClearFilter(selectedAxis->name);
                     Filter* rangeFilter = new RangeFilter(selectedAxis->name,lowerBound,upperBound);
                     dataset->AddFilter(rangeFilter);
+                    dataset->Print(false);
                 }
                 else {
                     printf("Clear selection on axis %s\n",selectedAxis->name.c_str());

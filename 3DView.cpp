@@ -13,7 +13,7 @@
 
 #include <GLUT/glut.h>
 
-RIV3DView::RIV3DView(int x, int y, int width, int height, int paddingX, int paddingY) : RIVDataView(x,y,width,height,paddingX,paddingY) {
+RIV3DView::RIV3DView(int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty) : RIVDataView(x,y,width,height,paddingX,paddingY,colorProperty) {
     identifier = "3DView";
 };
 
@@ -129,20 +129,6 @@ void RIV3DView::Draw() {
                 size_t num_rows = table->GetNumRows();
                 size_t row;
                 while(iterator->GetNext(row)) {
-                    
-                    float ratio = row / (float)num_rows;
-                    if(table->GetName() != colorTableReferenceName) {
-                        //Search for references
-                        const RIVReference* colorReference = table->GetReferenceToTable(colorTableReferenceName);
-                        if(colorReference) {
-                            size_t colorIndex = colorReference->GetIndexReference(row)->second;
-                            ratio = colorIndex / (float)colorReference->targetTable->GetNumRows();
-                        }
-                        else {
-                            throw new std::string("Could not find color reference table " + colorTableReferenceName);
-                        }
-                    }
-                    
                     float *isectX = 0;
                     float *isectY = 0;
                     float *isectZ = 0;
@@ -169,7 +155,7 @@ void RIV3DView::Draw() {
                                 glColor3f(0,0,1);
                             }
                             else {
-                                float* color = linearInterpolateColor(ratio, colorBlue, colorYellow);
+                                float* color = colorProperty->Color(table,row);
                                 glColor3f(color[0],color[1],color[2]);
                             }
                             glPushMatrix();

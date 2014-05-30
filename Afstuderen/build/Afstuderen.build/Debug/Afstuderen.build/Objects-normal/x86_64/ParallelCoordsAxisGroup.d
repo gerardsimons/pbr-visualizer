@@ -8,5 +8,6 @@ dependencies: \
   /Users/gerardsimons/Git/afstuderen/DataView.h \
   /Users/gerardsimons/Git/afstuderen/DataSet.h \
   /Users/gerardsimons/Git/afstuderen/Filter.h \
+  /Users/gerardsimons/Git/afstuderen/ColorProperty.h \
   /Users/gerardsimons/Git/afstuderen/Reference.h \
   /Users/gerardsimons/Git/afstuderen/helper.h

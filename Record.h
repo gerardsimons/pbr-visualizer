@@ -24,23 +24,29 @@ public:
     virtual ~RIVRecord() {
         //do jack shit
     }
-    virtual size_t Size() = 0;
+    virtual size_t Size() const = 0;
+    virtual float ScaleValue(const size_t& row) = 0;
 };
 
 class RIVFloatRecord : public RIVRecord {
+private:
     std::vector<float> values;
     std::pair<float,float> minMax;
 public:
     RIVFloatRecord(std::string _name) { name = _name; };
-    float Value(size_t i) { return values[i]; };
+    float Value(const size_t& i) const { return values[i]; };
     void SetValues(std::vector<float> _values) {
         values = _values;
         minMaxComputed = false;
     }
-    size_t Size() {
+    size_t Size() const {
         return values.size();
     }
-    
+    float ScaleValue(const size_t& row) {
+        std::pair<float,float> minMax = MinMax();
+        const float& value = Value(row);
+        return (value - minMax.first) / (minMax.second - minMax.first);
+    }
     const std::pair<float,float>& MinMax() {
 //        printf("MINMAX OF RECORD \"%s\" CALLED\n",name.c_str());
 		if(!minMaxComputed) {
@@ -80,21 +86,37 @@ public:
 class RIVUnsignedShortRecord : public RIVRecord {
 private:
     std::pair<ushort,ushort> minMax;
-public:
-    RIVUnsignedShortRecord(std::string _name) { name = _name; };
     std::vector<ushort> values;
+public:
+    RIVUnsignedShortRecord(std::string name_) {
+        name = name_;
+        minMaxComputed = false;
+    };
+    RIVUnsignedShortRecord(std::string name_, ushort min, ushort max) {
+        name = name_;
+        minMax.first = min;
+        minMax.second = max;
+        minMaxComputed = true;
+    };
     ushort Value(size_t i) { return values[i]; };
     void Print() {
         std::cout << "RIVRecord " << name << " containing " << values.size() << " " << typeid(int).name() << " values.\n";
     }
+    std::vector<ushort>& GetValues() {
+        return values;
+    }
     void SetValues(std::vector<ushort> _values) {
         values = _values;
-        minMaxComputed = false;
     }
-    size_t Size() {
+    size_t Size() const {
         return values.size();
     }
-    
+    float ScaleValue(const size_t& row) {
+        std::pair<ushort,ushort> minMax = MinMax();
+        const ushort& value = Value(row);
+        float scaleValue = (value - minMax.first) / (float)(minMax.second - minMax.first);
+        return scaleValue;
+    }
     const std::pair<ushort,ushort>& MinMax() {
 		if(!minMaxComputed) {
 			float min = std::numeric_limits<float>::max();

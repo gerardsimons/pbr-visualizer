@@ -76,6 +76,10 @@
             argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Teapot Data/Full/teapot.pbrt&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
+         <CommandLineArgument
+            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Teapot Data/Full/teapot32x32x1.exr.bmp&quot;"
+            isEnabled = "YES">
+         </CommandLineArgument>
       </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>

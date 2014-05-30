@@ -70,16 +70,25 @@ void RIVDataSet::AddFilterListener(RIVDataView* view) {
     onFilterListeners.push_back(view);
 }
 
-void RIVDataSet::Print() {
+void RIVDataSet::Print(size_t maxPrint, bool printFiltered) {
     printf("Dataset containing %zu tables:\n\n",tables.size());
     for(RIVTable *table : tables) {
-        table->PrintAll();
+        table->Print(maxPrint, printFiltered);
     }
 }
 
+RIVRecord* RIVDataSet::FindRecord(std::string name) {
+    for(RIVTable* table : tables) {
+        RIVRecord* record = table->GetRecord(name);
+        if(record) return record;
+    }
+    return 0;
+}
+/*
 void RIVDataSet::PrintUnfiltered() {
     printf("Dataset containing %zu tables:\n\n",tables.size());
     for(RIVTable *table : tables) {
         table->PrintUnfiltered();
     }
 }
+*/

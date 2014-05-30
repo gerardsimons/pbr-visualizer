@@ -7,7 +7,6 @@
 //
 
 #include "ImageView.h"
-#include "BMPImage.h"
 #include "loadppm.h"
 #include "Filter.h"
 
@@ -15,11 +14,9 @@
 
 
 
-RIVImageView::RIVImageView(std::string filename, int x, int y, int width, int height, int paddingX, int paddingY) : RIVDataView(x,y,width,height, paddingX, paddingY) {
+RIVImageView::RIVImageView(const BMPImage &image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty) : RIVDataView(x,y,width,height, paddingX, paddingY,colorProperty) {
 
     identifier = "ImageView";
-    //PPMImage image(filename);
-	BMPImage image(filename.c_str(),true);
 
     glGenTextures(1, &imageTexture);
     glBindTexture(GL_TEXTURE_2D, imageTexture);
@@ -29,7 +26,12 @@ RIVImageView::RIVImageView(std::string filename, int x, int y, int width, int he
 
 	isDragging = false;
 
-    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.sizeX, image.sizeY,GL_BGRA_EXT, GL_UNSIGNED_BYTE, image.data); //For BMP images use this
+    if(image.hasAlpha) {
+        gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.sizeX, image.sizeY,GL_BGRA_EXT, GL_UNSIGNED_BYTE, image.data); //For BMP images use this
+    }
+    else {
+        gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, image.sizeX, image.sizeY,GL_BGR_EXT, GL_UNSIGNED_BYTE, image.data); //For BMP images use this
+    }
 	//gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, image.sizeX, image.sizeY,GL_RGB, GL_UNSIGNED_BYTE, image.data); //for P6 formatted PPM use this
 
 	//Compute magnification
@@ -176,7 +178,7 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 	}
 	else {
 		//Clear any possible selection
-		clearSelection();
+//		clearSelection();
 		return false;
 	}
 }

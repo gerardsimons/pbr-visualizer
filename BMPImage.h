@@ -15,11 +15,14 @@
 #endif
 
 class BMPImage {
+private:
+    bool loadTexture(const char* imagePath, int alpha);
 public:
 	BMPImage(const char* imagePath,bool hasAlpha);
+    bool hasAlpha;
 	int sizeX,sizeY;
 	GLubyte *data;
-	bool loadTexture(const char* imagePath, int alpha);
+    short* RGB(int x, int y) const;
 	virtual ~BMPImage();
 };
 

@@ -17,6 +17,7 @@
 //Forward declaration
 class RIVDataView;
 class RIVTable;
+class RIVRecord;
 
 class RIVDataSet {
 private:
@@ -29,11 +30,12 @@ public:
     void AddFilterListener(RIVDataView* view);
     void ClearFilters();
     void ClearFilter(std::string attributeName);
+    RIVRecord* FindRecord(std::string name);
     size_t TotalNumberOfRecords();
     size_t NumberOfTables();
     std::vector<RIVTable*>* GetTables();
-    void Print();
-    void PrintUnfiltered();
+    void Print(size_t maxPrint = 1000, bool printFiltered = true);
+//    void PrintUnfiltered();
 };
 
 #endif /* defined(__RIVDataSet__DataSet__) */

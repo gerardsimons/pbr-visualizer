@@ -29,7 +29,7 @@ bool is_number(const std::string& s)
     return !s.empty();
 }
 
-std::vector<float> DataFileReader::ReadModelData(std::string fileName) {
+std::vector<float> DataFileReader::ReadModelData(const std::string& fileName) {
     std::ifstream is;
     is.open (fileName, std::ios::in );
     
@@ -142,7 +142,7 @@ std::vector<std::string> explode(std::string line, char delimiter, std::string i
 	return exploded;
 }
 
-RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit) {
+RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPImage& image, const size_t pathsLimit) {
     std::ifstream is;
     is.open (fileName, std::ios::in );
     
@@ -164,10 +164,8 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
         
         std::vector<ushort> xPixelData;
         std::vector<ushort> yPixelData;
-        std::vector<float> throughPutOne;  //We only use the first one for now, as they all seem the same every time
-        std::vector<float> throughPutTwo;
-        std::vector<float> throughPutThree;
         
+        std::vector<float> throughPutOne;  //We only use the first one for now, as they all seem the same every time
         std::vector<ushort> nrOfIntersections;
         
         std::vector<float> intersectionPosX;
@@ -205,8 +203,57 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
         size_t pathIndex = 0;
         size_t intersectionIndex = 0;
         
-        std::map<size_t,std::pair<size_t,size_t>> *references = new std::map<size_t,std::pair<size_t,size_t>>();
+        RIVTable* imageTable = new RIVTable("image");
         
+        RIVUnsignedShortRecord *imageRedRecord = new RIVUnsignedShortRecord("R",0,255);
+        RIVUnsignedShortRecord *imageGreenRecord = new RIVUnsignedShortRecord("G",0,255);
+        RIVUnsignedShortRecord *imageBlueRecord = new RIVUnsignedShortRecord("B",0,255);
+      // Do not usually include these, only include x,y with actual path values (from pbrt out files)
+        RIVUnsignedShortRecord *xPixelRecord = new RIVUnsignedShortRecord("x");
+        RIVUnsignedShortRecord *yPixelRecord = new RIVUnsignedShortRecord("y");
+        
+        size_t iteration = 0;
+        int channels = 3 + image.hasAlpha;
+        
+        std::vector<ushort> redChannel;
+        std::vector<ushort> greenChannel;
+        std::vector<ushort> blueChannel;
+        std::vector<ushort> xPixels;
+        std::vector<ushort> yPixels;
+        
+        //Fill the image table, sorted on x,y
+        for(size_t x = 0 ; x < image.sizeX ; x++) {
+            for(size_t y = 0 ; y < image.sizeY ; y++) {
+                
+                short* rgb = image.RGB(x,y);
+                int R = rgb[0];
+                int G = rgb[1];
+                int B = rgb[2];
+                
+//                int B = image.data[pixelPosition];
+//                int G = image.data[pixelPosition + 1];
+//                int R = image.data[pixelPosition + 2];
+//                int A = image.data[pixelPosition + 3];
+                
+//                printf("image.data pixel %lu (%d,%d) (R,G,B) = (%d,%d,%d)\n",pixelPosition / channels, (x+1), (y+1), R,G,B);
+                
+                ++iteration;
+                
+                xPixels.push_back(x+1);
+                yPixels.push_back(y+1);
+                redChannel.push_back(R);
+                greenChannel.push_back(G);
+                blueChannel.push_back(B);
+                
+            }
+        }
+        
+        
+//        size_t test_count = 0;
+        
+        
+        std::map<size_t,std::vector<size_t>> *imagePathReferences = new std::map<size_t,std::vector<size_t>>();
+        std::map<size_t,std::vector<size_t>> *pathIsectReferences = new std::map<size_t,std::vector<size_t>>();
         std::string buffer;
         while (getline(is,line) && (lineNumber < pathsLimit || pathsLimit == -1)) {
             ++lineNumber;
@@ -220,15 +267,51 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
                 throughput[2] = std::stof(exploded[4],0);
                 intersections_size = std::stoul(exploded[5],nullptr,0);
                 
+                
+                //Hacky way because it is ordered on x,y
+                size_t imageTableIndex = (x - 1) * image.sizeX + (y - 1);
+//                printf("imagetableindex for x = %d, y = %d = %zu\n",x,y,imageTableIndex);
+//                std::vector<RIVRecord*> imageRecords = imageTable->GetRecords();
+
+                    std::vector<size_t> *indices = &(*imagePathReferences)[imageTableIndex];
+                    indices->push_back(pathIndex);
+
+                
+                
+//                while(iterator->GetNext(imageRow) && (!xFound || !yFound)) {
+////                    printf("imagerow = %zu\n",imageRow);
+//                    size_t numberOfRecords = imageTable->NumberOfColumns();
+//                    bool found = false;
+//                    for(size_t recordI = 0 ; recordI < numberOfRecords ; ++recordI) {
+//                        RIVRecord* record = imageTable->GetRecord(recordI);
+//                        RIVUnsignedShortRecord* shortRecord = RIVTable::CastToUnsignedShortRecord(record);
+//                        if(shortRecord) {
+//                            if(shortRecord->name == "x" && shortRecord->Value(imageRow) == x) {
+//                                xFound = true;
+//                            }
+//                            if(shortRecord->name == "y" && shortRecord->Value(imageRow) == y) {
+//                                yFound = true;
+//                            }
+//                            if(xFound && yFound) {
+//                                (*imagePathReferences)[pathIndex] = std::pair<size_t,size_t>(pathIndex,pathIndex);
+////                                printf("image to path connection created.\n");
+////                                test_count++;
+//                                found = true;
+//                                break;
+//                            }
+//                        }
+//                    }
+//                    if(found) break;
+//                }
+                
                 //Do this at least once, even if there are no intersections!
                 
                 xPixelData.push_back(x);
                 yPixelData.push_back(y);
                 throughPutOne.push_back(throughput[0]);
-                throughPutTwo.push_back(throughput[1]);
-                throughPutThree.push_back(throughput[2]);
+//                throughPutTwo.push_back(throughput[1]);
+//                throughPutThree.push_back(throughput[2]);
                 nrOfIntersections.push_back(intersections_size);
-                
                 
                 size_t endIntersections = 5 + intersections_size * 3;
                 size_t endPrimitiveIds = endIntersections + intersections_size;
@@ -246,10 +329,9 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
                 
                 if(intersections_size > 0) {
                     //                    (*references)[pathIndex].first = intersectionIndex;
-                    std::pair<size_t,size_t> range;
-                    range.first = intersectionIndex;
+                    std::vector<size_t> range;
                     for(size_t i = 0 ; i < intersections_size ; i++) {
-                        
+                        range.push_back(intersectionIndex);
                         intersectPosX = std::stof(exploded[6 + i * 3],0);
                         intersectPosY = std::stof(exploded[7 + i * 3],0);
                         intersectPosZ = std::stof(exploded[8 + i * 3],0);
@@ -279,8 +361,7 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
                         
                         ++intersectionIndex;
                     }
-                    range.second = intersectionIndex;
-                    (*references)[pathIndex] = range;
+                    (*pathIsectReferences)[pathIndex] = range;
                 }
                 ++pathIndex;
             }
@@ -295,10 +376,10 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
         yRecord->SetValues(yPixelData);
         RIVFloatRecord *tpOne = new RIVFloatRecord("throughput 1");
         tpOne->SetValues(throughPutOne);
-        RIVFloatRecord *tpTwo = new RIVFloatRecord("throughput 2");
-        tpTwo->SetValues(throughPutTwo);
-        RIVFloatRecord *tpThree = new RIVFloatRecord("throughput 3");
-        tpThree->SetValues(throughPutThree);
+//        RIVFloatRecord *tpTwo = new RIVFloatRecord("throughput 2");
+//        tpTwo->SetValues(throughPutTwo);
+//        RIVFloatRecord *tpThree = new RIVFloatRecord("throughput 3");
+//        tpThree->SetValues(throughPutThree);
         RIVUnsignedShortRecord *isects = new RIVUnsignedShortRecord("#intersections");
         isects->SetValues(nrOfIntersections);
         
@@ -323,6 +404,18 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
         RIVUnsignedShortRecord *lightIdsRecord = new RIVUnsignedShortRecord("light ids");
         lightIdsRecord->SetValues(lightIds);
         
+        imageRedRecord->SetValues(redChannel);
+        imageGreenRecord->SetValues(greenChannel);
+        imageBlueRecord->SetValues(blueChannel);
+//        xPixelRecord->SetValues(xPixels);
+//        yPixelRecord->SetValues(yPixels);
+        
+        imageTable->AddRecord(imageRedRecord);
+        imageTable->AddRecord(imageGreenRecord);
+        imageTable->AddRecord(imageBlueRecord);
+//        imageTable->AddRecord(xPixelRecord);
+//        imageTable->AddRecord(yPixelRecord);
+        
         
         pathTable->AddRecord(xRecord);
         pathTable->AddRecord(yRecord);
@@ -343,13 +436,21 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
         intersectionsTable->AddRecord(interactionTypesRecord);
         intersectionsTable->AddRecord(lightIdsRecord);
         
+        RIVReference *imagePathReference = new RIVReference(imageTable,pathTable);
+        imagePathReference->SetReferences(imagePathReferences);
+        RIVReference *pathImageReference = imagePathReference->ReverseReference();
+        
+        imageTable->AddReference(imagePathReference);
+        pathTable->AddReference(pathImageReference);
+        
         RIVReference *reference = new RIVReference(pathTable, intersectionsTable);
-        reference->SetReferences(references);
+        reference->SetReferences(pathIsectReferences);
         RIVReference *reverseReference = reference->ReverseReference();
         
         pathTable->AddReference(reference);
         intersectionsTable->AddReference(reverseReference);
         
+        dataset.AddTable(imageTable);
         dataset.AddTable(pathTable);
         dataset.AddTable(intersectionsTable);
         
@@ -361,12 +462,10 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
         //        printf("%lu : (%lu,%lu)\n",it->first,it->second.first, it->second.second);
         //    }
         
-
-        
-//         printf("*******************   DATASET READ   *******************\n");
-//         dataset.Print();
-//         printf("****************    END DATASET READ    ****************\n");
-        
+         printf("*******************   DATASET READ   *******************\n");
+         dataset.Print(1000);
+         printf("****************    END DATASET READ    ****************\n");
+//
         printf("%zu path data records read.\n",pathTable->GetNumRows());
         printf("%zu intersection data records read.\n",intersectionsTable->GetNumRows());
         
@@ -375,9 +474,57 @@ RIVDataSet DataFileReader::ReadAsciiData(std::string fileName, size_t pathsLimit
     return dataset;
 }
 
+//Read data from the image, return as table
+RIVTable* DataFileReader::ReadImageData(const BMPImage& image) {
+    RIVTable* imageTable = new RIVTable("image");
+    
+    RIVUnsignedShortRecord *imageRedRecord = new RIVUnsignedShortRecord("R");
+    RIVUnsignedShortRecord *imageGreenRecord = new RIVUnsignedShortRecord("G");
+    RIVUnsignedShortRecord *imageBlueRecord = new RIVUnsignedShortRecord("B");
+    
+    std::vector<ushort> redChannel;
+    std::vector<ushort> greenChannel;
+    std::vector<ushort> blueChannel;
+    
+    int channels = 3 + image.hasAlpha;
+    
+    int iteration = 0;
+    
+    for(size_t x = 0 ; x < image.sizeX ; x++) {
+        for(size_t y = 0 ; y < image.sizeY ; y++) {
+            size_t pixelPosition = iteration * channels;
+            
+            int B = image.data[pixelPosition];
+            int G = image.data[pixelPosition + 1];
+            int R = image.data[pixelPosition + 2];
+//            int A = image.data[pixelPosition + 3];
+            
+            printf("image.data pixel %lu (%d,%d) (R,G,B) = (%d,%d,%d)\n",pixelPosition / channels, (x+1), (y+1), R,G,B);
+            
+            ++iteration;
+            
+            redChannel.push_back(R);
+            greenChannel.push_back(G);
+            blueChannel.push_back(B);
+//                int A = image.data[pixelPosition]; ignore alpha channels
+            
+        }
+    }
+    
+    printf("total number of iterations = %d\n",iteration);
+    
+    imageRedRecord->SetValues(redChannel);
+    imageGreenRecord->SetValues(greenChannel);
+    imageBlueRecord->SetValues(blueChannel);
 
+    imageTable->AddRecord(imageRedRecord);
+    imageTable->AddRecord(imageGreenRecord);
+    imageTable->AddRecord(imageBlueRecord);
 
-RIVDataSet DataFileReader::ReadBinaryData(std::string fileName) {
+    return imageTable;
+}
+
+RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName) {
     printf("Trying to load %s\n",fileName.c_str());
     
     FILE *inputFile = fopen(fileName.c_str(),"rb");
