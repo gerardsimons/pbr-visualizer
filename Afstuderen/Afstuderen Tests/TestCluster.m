@@ -1,25 +1,23 @@
 //
-//  Afstuderen_Tests.m
-//  Afstuderen Tests
+//  TestCluster.m
+//  Afstuderen
 //
-//  Created by Gerard Simons on 17/05/14.
+//  Created by Gerard Simons on 02/06/14.
 //  Copyright (c) 2014 Gerard Simons. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
-#import "DataSet.h"
 
-@interface Afstuderen_Tests : XCTestCase
+@interface TestCluster : XCTestCase
 
 @end
 
-@implementation Afstuderen_Tests
+@implementation TestCluster
 
 - (void)setUp
 {
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
-    RIVDataSet dataset;
 }
 
 - (void)tearDown

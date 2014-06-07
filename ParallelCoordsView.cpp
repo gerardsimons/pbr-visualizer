@@ -1,3 +1,4 @@
+
 #include "ParallelCoordsView.h"
 #include "DataView.h"
 #include "Geometry.h"
@@ -162,11 +163,10 @@ void ParallelCoordsView::drawAxes() {
 
 void ParallelCoordsView::drawLines() {
     if(linesAreDirty) {
-        std::clock_t start;
         double duration;
         size_t lineIndex = 0;
         
-        start = std::clock();
+
         
         glColor3f(1.0, 0.0, 0.0);
         glLineWidth(1.F);
@@ -185,6 +185,8 @@ void ParallelCoordsView::drawLines() {
             
             std::vector<float> axisXCache;
             std::vector<float> axisYCache;
+            
+            RIVCluster* cluster = NULL;
             
 //            iterator->Print();
             while(iterator->GetNext(row)) {
@@ -290,8 +292,6 @@ void ParallelCoordsView::drawLines() {
             }
         }
         linesAreDirty = false;
-        duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
-        printf("drew %zu lines in %f seconds.\n",lineIndex,duration);
     }
 }
 
@@ -426,7 +426,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
     return false;
 }
 
-void ParallelCoordsView::OnFilterChange() {
+void ParallelCoordsView::OnDataSetChanged() {
 //    printf("ParallelCoordsView received a on filter changed callback.\n");
     linesAreDirty = true;
     axesAreDirty = true;

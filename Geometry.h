@@ -10,6 +10,13 @@
 #define Afstuderen_Geometry_h
 
 #include <GLUT/GLUT.h>
+#include <math.h>
+#include <ostream>
+#include <iostream>
+
+inline float euclideanDistance(float x1, float x2, float y1, float y2, float z1, float z2) {
+    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 -y1) + (z2 - z1) * (z2 - z1));
+}
 
 typedef struct Point {
 	int x;
@@ -34,8 +41,28 @@ public:
     }
     Point3D() { x = 0; y = 0 ; z = 0;};
     
+    float EuclideanDistanceTo(Point3D& P) {
+//        float distance = sqrt(pow(P.x - x,2) + pow(P.y - y,2) + pow(P.z - z,2));
+        
+//        std::cout << "distance " << *this << " to " << P << " is " << distance << "\n";
+        
+//        return distance;
+        return sqrt(pow(P.x - x,2) + pow(P.y - y,2) + pow(P.z - z,2));
+    }
+    float ManhattanDistanceTo(Point3D& P) {
+        return abs(P.x - x) + abs(P.y - y) + abs(P.z - z);
+    }
+    bool operator==(Point3D& p) {
+        return p.x == x && p.y == y && p.z == z;
+    }
     void Print() {
         printf("(%f,%f,%f)\n",x,y,z);
+    }
+    
+    friend std::ostream& operator<<(std::ostream& os, const Point3D& p)
+    {
+        os << "(" << p.x << "," << p.y << ',' << p.z << ")";
+        return os;
     }
 };
 

@@ -17,6 +17,8 @@
 #include <GL/glut.h>
 #endif
 
+#include <gtest/gtest.h>
+
 const float DEG2RAD = 3.14159/180;
 
 /* window width and height */
@@ -229,11 +231,12 @@ void initialize(int argc, char* argv[]) {
     
 //    RIVColorProperty *colorProperty = new RIVColorLinearProperty("path");
     
-    RIVRecord* redRecord = dataset.FindRecord("R");
-    RIVRecord* greenRecord = dataset.FindRecord("G");
-    RIVRecord* blueRecord = dataset.FindRecord("B");
-    
-    RIVColorProperty *colorProperty = new RIVColorRGBProperty("image",redRecord,greenRecord,blueRecord);
+//    RIVRecord* redRecord = dataset.FindRecord("R");
+//    RIVRecord* greenRecord = dataset.FindRecord("G");
+//    RIVRecord* blueRecord = dataset.FindRecord("B");
+//    
+//    RIVColorProperty *colorProperty = new RIVColorRGBProperty("image",redRecord,greenRecord,blueRecord);
+    RIVColorProperty *colorProperty = new RIVColorLinearProperty("path");
 
     sceneView = new RIV3DView(imageWidth,0,imageSceneWidth,imageSceneHeight,0,0,colorProperty);
     
@@ -266,10 +269,38 @@ void initialize(int argc, char* argv[]) {
     views.push_back(imageView);
     views.push_back(parallelCoordsView);
     views.push_back(sceneView);
+    
+    //clustering
+    RIVTable *intersectTable = dataset.GetTable("intersections");
+    intersectTable->Cluster("intersection X","intersection Y","intersection Z",3,100);
+}
+
+//Unofficial testing
+bool tests(int argc, char** argv) {
+//    std::vector<size_t> pool;
+//    //Generate pool
+//    for(size_t i = 2 ; i < 12 ; i++) {
+//        pool.push_back(i);
+//    }
+//    //Testing nonreplacementsampler
+//    NonReplacementSampler<size_t> sampler = NonReplacementSampler<size_t>(&pool);
+//    for(int i = 0 ; i < 10 ; i++) {
+//        printf("Sample #%d = %zu\n",i,sampler.RequestSample());
+//    }
+    
+//    if(dataset.IsSet()) {
+//        RIVTable *intersectTable = dataset.GetTable("intersections");
+////        intersectTable->ClusterWithSize("intersection X","intersection Y","intersection Z",1000);
+//
+//    }
+    
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
 
 int main(int argc, char *argv[])
 {
+
     srand(time(NULL));
     /* initialize GLUT, let it extract command-line
      GLUT options that you may provide */
@@ -317,12 +348,12 @@ int main(int argc, char *argv[])
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     
     glutMotionFunc(motion);
-    
-    //Enable when animations are required
-//    glutIdleFunc(idle);
+
+//    if(!tests(argc, argv)) {
+//        return EXIT_FAILURE;
+//    }
     
     /* start the GLUT main loop */
     glutMainLoop();

@@ -25,13 +25,14 @@ enum INTERPOLATION_SCHEME {
 
 class RIVColorProperty {
 protected:
+
+    float alternateColor[3];
+public:
     //DEFAULT COLORS
     const static float colorBlue[3];
     const static float colorYellow[3];
     const static float colorBlack[3];
     
-    float alternateColor[3];
-public:
     virtual float* Color(const RIVTable*,const size_t&) = 0;
     RIVColorProperty(float* alternateColor_) {
         memcpy(alternateColor,alternateColor_,sizeof(alternateColor));

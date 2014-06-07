@@ -4,6 +4,7 @@
 #include "DataSet.h"
 #include "Geometry.h"
 #include "ColorProperty.h"
+
 #include <string>
 
 class RIVDataSet;
@@ -56,7 +57,6 @@ public:
 	virtual void Draw() = 0; 
 	virtual bool HandleMouse(int button, int state, int x, int y) = 0;
 	virtual bool HandleMouseMotion(int x, int y) = 0;
-    virtual void OnFilterChange() = 0;
 };
 
 // your code

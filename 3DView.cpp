@@ -31,7 +31,11 @@ float zFar = 20.F;
 
 Box3D selectionBox;
 
+const float sphereSizeDefault = .1F;
+
 const float perspectiveAngle = 45.0F;
+
+bool drawClusterMembers = true;
 
 void RIV3DView::ComputeLayout() {
     eye.x = 0.F;
@@ -123,49 +127,57 @@ void RIV3DView::Draw() {
         GLUquadric* quadric = gluNewQuadric();
         
         //Draw intersections
-        for(RIVTable *table : *dataset->GetTables()) {
-            if(table->GetName() == "intersections") { //Only interested in the intersections table
-                TableIterator *iterator = table->GetIterator();
-                size_t num_rows = table->GetNumRows();
-                size_t row;
-                while(iterator->GetNext(row)) {
-                    float *isectX = 0;
-                    float *isectY = 0;
-                    float *isectZ = 0;
-                    for(RIVRecord *record : table->GetRecords()) {
-                        RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(record);
-                        if(floatRecord) {
-                            if(floatRecord->name == "intersection X") {
-                                float x = floatRecord->Value(row);
-                                isectX = &x;
-                            }
-                            else if(floatRecord->name == "intersection Y") {
-                                float y = floatRecord->Value(row);
-                                isectY = &y;
-                            }
-                            else if(floatRecord->name == "intersection Z") {
-                                float z = floatRecord->Value(row);
-                                isectZ=&z;
-                            }
-                        }
-                        if(isectX && isectY && isectZ) {
-                            //                    printf("Drawn sphere\n");
-                            Point3D point(*isectX,*isectY,*isectZ);
-                            if((selectionBox.initialized && selectionBox.ContainsPoint(point)) || !selectionBox.initialized) {
-                                glColor3f(0,0,1);
-                            }
-                            else {
-                                float* color = colorProperty->Color(table,row);
-                                glColor3f(color[0],color[1],color[2]);
-                            }
-                            glPushMatrix();
-                            glTranslatef(*isectX, *isectY, *isectZ);
-                            gluSphere(quadric, .1F, 4, 4);
-                            glPopMatrix();
-                        }
-                    }
+        RIVTable *table = dataset->GetTable("intersections");
+        //Get the records we want;
+        RIVFloatRecord* xRecord = table->GetRecord<RIVFloatRecord>("intersection X");
+        RIVFloatRecord* yRecord = table->GetRecord<RIVFloatRecord>("intersection Y");
+        RIVFloatRecord* zRecord = table->GetRecord<RIVFloatRecord>("intersection Z");
+        TableIterator *iterator = table->GetIterator();
+        
+        size_t row;
+        RIVCluster* cluster = NULL;
+        RIVClusterSet* clusterSet = NULL; //The cluster set the cluster belongs to
+        
+        while(iterator->GetNext(row,cluster,clusterSet,true)) {
+//            printf("row = %zu\n",row);
+            float isectX = xRecord->Value(row);
+            float isectY = yRecord->Value(row);
+            float isectZ = zRecord->Value(row);
+            Point3D point(isectX,isectY,isectZ);
+            if((selectionBox.initialized && selectionBox.ContainsPoint(point)) || !selectionBox.initialized) {
+                glColor3f(0,0,1);
+            }
+            else {
+                float* color = colorProperty->Color(table,row);
+                glColor3f(color[0],color[1],color[2]);
+            }
+            glPushMatrix();
+            glTranslatef(isectX, isectY, isectZ);
+            float medoidShereSize = sphereSizeDefault;
+            float sizeMultiplier = 5.F;
+            if(cluster != NULL && clusterSet != NULL) {
+//                printf("Found cluster of size %zu\n",cluster->MembersSize() + 1);
+                sizeMultiplier += clusterSet->RelativeSizeOf(cluster);
+//                                std::cout << *cluster;
+            }
+            //Draw the cluster medoid according to relative number of members in the cluster
+            gluSphere(quadric, medoidShereSize * sizeMultiplier, sizeMultiplier * 4, sizeMultiplier * 4);
+            glPopMatrix();
+            
+            if(drawClusterMembers && cluster != NULL) { //also draw the cluster members
+                std::vector<size_t> memberIndices = cluster->GetMemberIndices();
+                for(size_t& member : memberIndices) {
+                    float memberX = xRecord->Value(member);
+                    float memberY = yRecord->Value(member);
+                    float memberZ = zRecord->Value(member);
+                    glPushMatrix();
+                    glTranslatef(memberX, memberY, memberZ);
+                    gluSphere(quadric, sphereSizeDefault, 4, 4);
+                    glPopMatrix();
                 }
             }
+            
+
         }
         glPopMatrix();
         
@@ -181,7 +193,7 @@ void RIV3DView::Draw() {
     }
 }
 
-void RIV3DView::OnFilterChange() {
+void RIV3DView::OnDataSetChanged() {
     printf("3D View received on filter change.");
     isDirty = true;
 }

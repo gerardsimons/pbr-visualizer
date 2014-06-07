@@ -11,19 +11,19 @@
 #include <GL/glut.h>
 #endif
 
-class ParallelCoordsView : public RIVDataView
+class ParallelCoordsView : public RIVDataView, public RIVDataSetListener
 {
 public:
     ParallelCoordsView(int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty);
 	~ParallelCoordsView(void);
 
-    //Implemented virtual functions
+    //Implemented virtual functions prescribed by DataView
     void Draw();
-    
     virtual void ComputeLayout();
 	virtual bool HandleMouse(int,int,int,int);
 	virtual bool HandleMouseMotion(int,int);
-    virtual void OnFilterChange();
+    //implement virtual functions prescribed by DataSetListener
+    virtual void OnDataSetChanged();
 private:
     std::vector<std::string> axesOrder;
     //Create functions

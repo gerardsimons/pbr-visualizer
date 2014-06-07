@@ -11,7 +11,7 @@
 
 #include "DataView.h"
 
-class RIV3DView : public RIVDataView {
+class RIV3DView : public RIVDataView, public RIVDataSetListener {
 private:
     std::vector<float> modelData;
     Point3D eye;
@@ -23,7 +23,7 @@ public:
 	 void Draw();
 	 bool HandleMouse(int button, int state, int x, int y);
 	 bool HandleMouseMotion(int x, int y);
-     void OnFilterChange();
+     void OnDataSetChanged();
     
     void SetModelData(std::vector<float>);
     void MoveCamera(float,float,float);

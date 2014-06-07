@@ -108,7 +108,7 @@ void RIVImageView::Draw() {
 	}
 }
 
-void RIVImageView::OnFilterChange() {
+void RIVImageView::OnDataSetChanged() {
     //Do nothing for imageview
 }
 

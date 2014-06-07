@@ -19,7 +19,7 @@
 #include <GL/glut.h>
 #endif
 
-class RIVImageView : public RIVDataView {
+class RIVImageView : public RIVDataView, public RIVDataSetListener {
 public:
     RIVImageView(const BMPImage& image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* colorProperty);
     ~RIVImageView();
@@ -27,7 +27,7 @@ public:
     virtual void ComputeLayout(); //Override
 	virtual bool HandleMouse(int,int,int,int);
 	virtual bool HandleMouseMotion(int x, int y);
-    virtual void OnFilterChange();
+    virtual void OnDataSetChanged();
 private:
     GLuint imageTexture;
 	float imageMagnificationX,imageMagnificationY;
