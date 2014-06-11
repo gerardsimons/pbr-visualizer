@@ -463,13 +463,16 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
         //    }
         
          printf("*******************   DATASET READ   *******************\n");
-         dataset.Print(1000);
+         dataset.Print(100);
          printf("****************    END DATASET READ    ****************\n");
 //
         printf("%zu path data records read.\n",pathTable->GetNumRows());
         printf("%zu intersection data records read.\n",intersectionsTable->GetNumRows());
         
         is.close();
+    }
+    else {
+        throw "Could not open file " + fileName;
     }
     return dataset;
 }
@@ -589,9 +592,6 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName) {
         
         //printf("%d = %hu,%hu,[%f,%f,%f],%hu\n",lineNumber,x,y,throughput[0],throughput[1],throughput[2],size);
         ++lineNumber;
-        if(lineNumber > 1000000) {
-            break;
-        }
     }
     
     RIVDataSet dataset;

@@ -1,17 +1,40 @@
 dependencies: /Users/gerardsimons/Git/afstuderen/main.cpp \
-  /Users/gerardsimons/Git/afstuderen/Filter.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/Filter.h \
   /Users/gerardsimons/Git/afstuderen/DataView.h \
-  /Users/gerardsimons/Git/afstuderen/DataSet.h \
-  /Users/gerardsimons/Git/afstuderen/Table.h \
-  /Users/gerardsimons/Git/afstuderen/Record.h \
-  /Users/gerardsimons/Git/afstuderen/Reference.h \
-  /Users/gerardsimons/Git/afstuderen/helper.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/Table.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/Record.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/Reference.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h \
   /Users/gerardsimons/Git/afstuderen/Geometry.h \
+  /Users/gerardsimons/Git/afstuderen/helper.h \
+  /Users/gerardsimons/Git/afstuderen/ClusterSet.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h \
   /Users/gerardsimons/Git/afstuderen/ColorProperty.h \
   /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.h \
   /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.h \
   /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.h \
   /Users/gerardsimons/Git/afstuderen/ImageView.h \
   /Users/gerardsimons/Git/afstuderen/BMPImage.h \
-  /Users/gerardsimons/Git/afstuderen/DataFileReader.h \
-  /Users/gerardsimons/Git/afstuderen/3DView.h
+  /Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.h \
+  /Users/gerardsimons/Git/afstuderen/3DView.h \
+  /Users/gerardsimons/Git/afstuderen/Afstuderen/ColorPallete.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-internal.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-port.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-message.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-string.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-filepath.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-type-util.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-death-test.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-death-test-internal.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-param-test.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-linked_ptr.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-printers.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util-generated.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_prod.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-test-part.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-typed-test.h \
+  /Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_pred_impl.h

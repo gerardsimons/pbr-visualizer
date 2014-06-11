@@ -25,7 +25,7 @@ void RIVDataSet::AddFilter(Filter *filter) {
         notifyListeners();
     }
     else {
-        throw std::string("Supplied filter was a NULL pointer.");
+        throw std::string("Supplied filter is a NULL pointer.");
     }
 }
 
@@ -44,7 +44,7 @@ void RIVDataSet::ClearFilter(std::string filterName) {
 
 }
 
-size_t RIVDataSet::TotalNumberOfRecords() {
+size_t RIVDataSet::TotalNumberOfRecords() const {
     size_t size = 0;
     for(RIVTable *table : tables) {
         size += table->NumberOfColumns();
@@ -56,7 +56,7 @@ std::vector<RIVTable*>* RIVDataSet::GetTables() {
     return &tables;
 }
 
-size_t RIVDataSet::NumberOfTables() {
+size_t RIVDataSet::NumberOfTables() const {
     return tables.size();
 }
 
@@ -72,14 +72,14 @@ void RIVDataSet::AddFilterListener(RIVDataSetListener* listener) {
     }
 }
 
-void RIVDataSet::Print(size_t maxPrint, bool printFiltered) {
+void RIVDataSet::Print(size_t maxPrint, bool printFiltered) const {
     printf("Dataset containing %zu tables:\n\n",tables.size());
     for(RIVTable *table : tables) {
         table->Print(maxPrint, printFiltered);
     }
 }
 
-RIVRecord* RIVDataSet::FindRecord(std::string name) {
+RIVRecord* RIVDataSet::FindRecord(std::string name) const {
     RIVRecord* record = 0;
     for(RIVTable* table : tables) {
         record = table->GetRecord(name);
@@ -88,4 +88,18 @@ RIVRecord* RIVDataSet::FindRecord(std::string name) {
         }
     }
     return record;
+}
+
+RIVTable* RIVDataSet::GetTable(const std::string& tableName) const {
+    for(RIVTable *table : tables) {
+        if(table->GetName() == tableName) {
+            return table;
+        }
+    } //No such table
+    throw "No such table.";
+    return NULL;
+}
+
+bool RIVDataSet::IsSet() const {
+    return tables.size() != 0;
 }

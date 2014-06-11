@@ -8,39 +8,34 @@
 
 /* Begin PBXBuildFile section */
 		E113BE63192521E200F6525A /* ParallelCoordsAxisGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E113BE61192521E200F6525A /* ParallelCoordsAxisGroup.cpp */; };
-		E126B6D619252BD90075EE1D /* DataSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E126B6CC19252BD90075EE1D /* DataSet.cpp */; };
-		E126B6D719252BD90075EE1D /* Filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E126B6CE19252BD90075EE1D /* Filter.cpp */; };
-		E126B6D819252BD90075EE1D /* Record.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E126B6D019252BD90075EE1D /* Record.cpp */; };
-		E126B6D919252BD90075EE1D /* Reference.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E126B6D219252BD90075EE1D /* Reference.cpp */; };
-		E126B6DA19252BD90075EE1D /* Table.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E126B6D419252BD90075EE1D /* Table.cpp */; };
 		E1290932191CF4FB00822217 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1290931191CF4FB00822217 /* OpenGL.framework */; };
 		E1290934191CF50100822217 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1290933191CF50100822217 /* GLUT.framework */; };
 		E1290936191CF50A00822217 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1290935191CF50A00822217 /* Cocoa.framework */; };
 		E129094F191CF53000822217 /* BMPImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290937191CF53000822217 /* BMPImage.cpp */; };
-		E1290950191CF53000822217 /* DataFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290939191CF53000822217 /* DataFileReader.cpp */; };
 		E1290954191CF53000822217 /* ImageView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290941191CF53000822217 /* ImageView.cpp */; };
 		E1290955191CF53000822217 /* loadppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290943191CF53000822217 /* loadppm.cpp */; };
 		E1290956191CF53000822217 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290945191CF53000822217 /* main.cpp */; };
 		E1290957191CF53000822217 /* ParallelCoordsAxis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290946191CF53000822217 /* ParallelCoordsAxis.cpp */; };
 		E1290958191CF53000822217 /* ParallelCoordsView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290948191CF53000822217 /* ParallelCoordsView.cpp */; };
 		E13B4C341938947200F1FCCF /* ColorProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E13B4C321938947200F1FCCF /* ColorProperty.cpp */; };
+		E13F45B81941ECA200CC225C /* Afstuderen_Tests.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = E13F45B71941ECA200CC225C /* Afstuderen_Tests.1 */; };
+		E13F48361941F8B700CC225C /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13F45BC1941ECCD00CC225C /* gtest.framework */; };
 		E14C95C1192F7E17000A8CAC /* helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E14C95BF192F7E17000A8CAC /* helper.cpp */; };
 		E14C95C4192F7E28000A8CAC /* 3DView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E14C95C2192F7E28000A8CAC /* 3DView.cpp */; };
 		E14C95C6192F7F0B000A8CAC /* DataView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E14C95C5192F7F0B000A8CAC /* DataView.cpp */; };
-		E1C8E59C1927781700F5D3C3 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1C8E59B1927781700F5D3C3 /* XCTest.framework */; };
-		E1C8E5A21927781700F5D3C3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1C8E5A01927781700F5D3C3 /* InfoPlist.strings */; };
-		E1C8E5A41927781700F5D3C3 /* Afstuderen_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = E1C8E5A31927781700F5D3C3 /* Afstuderen_Tests.m */; };
+		E15FA633193CECA8000DD70C /* Cluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E15FA631193CECA8000DD70C /* Cluster.cpp */; };
+		E17EA9F219432FE600411FA7 /* ClusterSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9F019432FE600411FA7 /* ClusterSet.cpp */; };
+		E17EA9FB1943A5C000411FA7 /* reporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9F81943A5C000411FA7 /* reporter.cpp */; };
+		E17EA9FC1943A5C000411FA7 /* testCluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9F91943A5C000411FA7 /* testCluster.cpp */; };
+		E17EA9FD1943A5C000411FA7 /* testClusterSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9FA1943A5C000411FA7 /* testClusterSet.cpp */; };
+		E1BD6466193F758100370D69 /* Iterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BD6464193F758100370D69 /* Iterator.cpp */; };
+		E1D1573D193CB54B0059A86B /* DataFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D15730193CB54B0059A86B /* DataFileReader.cpp */; };
+		E1D1573E193CB54B0059A86B /* DataSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D15732193CB54B0059A86B /* DataSet.cpp */; };
+		E1D1573F193CB54B0059A86B /* Filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D15734193CB54B0059A86B /* Filter.cpp */; };
+		E1D15740193CB54B0059A86B /* Record.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D15736193CB54B0059A86B /* Record.cpp */; };
+		E1D15741193CB54B0059A86B /* Reference.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D15738193CB54B0059A86B /* Reference.cpp */; };
+		E1D15742193CB54B0059A86B /* Table.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D1573B193CB54B0059A86B /* Table.cpp */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		E1C8E5A61927781700F5D3C3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E12908F4191CCBC900822217 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E12908FB191CCBC900822217;
-			remoteInfo = Afstuderen;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		E12908FA191CCBC900822217 /* CopyFiles */ = {
@@ -52,29 +47,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		E13F45B11941ECA200CC225C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				E13F45B81941ECA200CC225C /* Afstuderen_Tests.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		E113BE61192521E200F6525A /* ParallelCoordsAxisGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParallelCoordsAxisGroup.cpp; path = ../ParallelCoordsAxisGroup.cpp; sourceTree = "<group>"; };
 		E113BE62192521E200F6525A /* ParallelCoordsAxisGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParallelCoordsAxisGroup.h; path = ../ParallelCoordsAxisGroup.h; sourceTree = "<group>"; };
-		E126B6CC19252BD90075EE1D /* DataSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DataSet.cpp; path = ../DataSet.cpp; sourceTree = "<group>"; };
-		E126B6CD19252BD90075EE1D /* DataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataSet.h; path = ../DataSet.h; sourceTree = "<group>"; };
-		E126B6CE19252BD90075EE1D /* Filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Filter.cpp; path = ../Filter.cpp; sourceTree = "<group>"; };
-		E126B6CF19252BD90075EE1D /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Filter.h; path = ../Filter.h; sourceTree = "<group>"; };
-		E126B6D019252BD90075EE1D /* Record.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Record.cpp; path = ../Record.cpp; sourceTree = "<group>"; };
-		E126B6D119252BD90075EE1D /* Record.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Record.h; path = ../Record.h; sourceTree = "<group>"; };
-		E126B6D219252BD90075EE1D /* Reference.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Reference.cpp; path = ../Reference.cpp; sourceTree = "<group>"; };
-		E126B6D319252BD90075EE1D /* Reference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reference.h; path = ../Reference.h; sourceTree = "<group>"; };
-		E126B6D419252BD90075EE1D /* Table.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Table.cpp; path = ../Table.cpp; sourceTree = "<group>"; };
-		E126B6D519252BD90075EE1D /* Table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Table.h; path = ../Table.h; sourceTree = "<group>"; };
 		E12908FC191CCBC900822217 /* Afstuderen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Afstuderen; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1290931191CF4FB00822217 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		E1290933191CF50100822217 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		E1290935191CF50A00822217 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		E1290937191CF53000822217 /* BMPImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BMPImage.cpp; path = ../BMPImage.cpp; sourceTree = "<group>"; };
 		E1290938191CF53000822217 /* BMPImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BMPImage.h; path = ../BMPImage.h; sourceTree = "<group>"; };
-		E1290939191CF53000822217 /* DataFileReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DataFileReader.cpp; path = ../DataFileReader.cpp; sourceTree = "<group>"; };
-		E129093A191CF53000822217 /* DataFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataFileReader.h; path = ../DataFileReader.h; sourceTree = "<group>"; };
 		E129093E191CF53000822217 /* DataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataView.h; path = ../DataView.h; sourceTree = "<group>"; };
 		E1290941191CF53000822217 /* ImageView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ImageView.cpp; path = ../ImageView.cpp; sourceTree = "<group>"; };
 		E1290942191CF53000822217 /* ImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageView.h; path = ../ImageView.h; sourceTree = "<group>"; };
@@ -89,18 +82,43 @@
 		E129094D191CF53000822217 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = ../Resources; sourceTree = "<group>"; };
 		E13B4C321938947200F1FCCF /* ColorProperty.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColorProperty.cpp; path = ../ColorProperty.cpp; sourceTree = "<group>"; };
 		E13B4C331938947200F1FCCF /* ColorProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorProperty.h; path = ../ColorProperty.h; sourceTree = "<group>"; };
+		E13F45B31941ECA200CC225C /* Afstuderen Tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Afstuderen Tests"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E13F45B51941ECA200CC225C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		E13F45B71941ECA200CC225C /* Afstuderen_Tests.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Afstuderen_Tests.1; sourceTree = "<group>"; };
+		E13F45BC1941ECCD00CC225C /* gtest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gtest.framework; path = ../../../Documents/Frameworks/GTest/gtest.framework; sourceTree = "<group>"; };
 		E14C95BF192F7E17000A8CAC /* helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helper.cpp; path = ../helper.cpp; sourceTree = "<group>"; };
 		E14C95C0192F7E17000A8CAC /* helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = helper.h; path = ../helper.h; sourceTree = "<group>"; };
 		E14C95C2192F7E28000A8CAC /* 3DView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = 3DView.cpp; path = ../3DView.cpp; sourceTree = "<group>"; };
 		E14C95C3192F7E28000A8CAC /* 3DView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = 3DView.h; path = ../3DView.h; sourceTree = "<group>"; };
 		E14C95C5192F7F0B000A8CAC /* DataView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DataView.cpp; path = ../DataView.cpp; sourceTree = "<group>"; };
+		E15FA631193CECA8000DD70C /* Cluster.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cluster.cpp; sourceTree = "<group>"; };
+		E15FA632193CECA8000DD70C /* Cluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cluster.h; sourceTree = "<group>"; };
+		E17EA9F019432FE600411FA7 /* ClusterSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ClusterSet.cpp; path = ../ClusterSet.cpp; sourceTree = "<group>"; };
+		E17EA9F119432FE600411FA7 /* ClusterSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ClusterSet.h; path = ../ClusterSet.h; sourceTree = "<group>"; };
+		E17EA9F81943A5C000411FA7 /* reporter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = reporter.cpp; path = ../reporter.cpp; sourceTree = "<group>"; };
+		E17EA9F91943A5C000411FA7 /* testCluster.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = testCluster.cpp; path = ../testCluster.cpp; sourceTree = "<group>"; };
+		E17EA9FA1943A5C000411FA7 /* testClusterSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = testClusterSet.cpp; path = ../testClusterSet.cpp; sourceTree = "<group>"; };
 		E18D187C1920F309006F10D5 /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Geometry.h; path = ../Geometry.h; sourceTree = "<group>"; };
-		E1C8E5991927781700F5D3C3 /* Afstuderen Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Afstuderen Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1BD6464193F758100370D69 /* Iterator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Iterator.cpp; sourceTree = "<group>"; };
+		E1BD6465193F758100370D69 /* Iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Iterator.h; sourceTree = "<group>"; };
+		E1BD646C193F92D300370D69 /* reporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = reporter.h; path = ../reporter.h; sourceTree = "<group>"; };
 		E1C8E59B1927781700F5D3C3 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		E1C8E59F1927781700F5D3C3 /* Afstuderen Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Afstuderen Tests-Info.plist"; sourceTree = "<group>"; };
-		E1C8E5A11927781700F5D3C3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		E1C8E5A31927781700F5D3C3 /* Afstuderen_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Afstuderen_Tests.m; sourceTree = "<group>"; };
-		E1C8E5A51927781700F5D3C3 /* Afstuderen Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Afstuderen Tests-Prefix.pch"; sourceTree = "<group>"; };
+		E1D15730193CB54B0059A86B /* DataFileReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataFileReader.cpp; sourceTree = "<group>"; };
+		E1D15731193CB54B0059A86B /* DataFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFileReader.h; sourceTree = "<group>"; };
+		E1D15732193CB54B0059A86B /* DataSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataSet.cpp; sourceTree = "<group>"; };
+		E1D15733193CB54B0059A86B /* DataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSet.h; sourceTree = "<group>"; };
+		E1D15734193CB54B0059A86B /* Filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Filter.cpp; sourceTree = "<group>"; };
+		E1D15735193CB54B0059A86B /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
+		E1D15736193CB54B0059A86B /* Record.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Record.cpp; sourceTree = "<group>"; };
+		E1D15737193CB54B0059A86B /* Record.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Record.h; sourceTree = "<group>"; };
+		E1D15738193CB54B0059A86B /* Reference.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Reference.cpp; sourceTree = "<group>"; };
+		E1D15739193CB54B0059A86B /* Reference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reference.h; sourceTree = "<group>"; };
+		E1D1573A193CB54B0059A86B /* RIVVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RIVVector.h; sourceTree = "<group>"; };
+		E1D1573B193CB54B0059A86B /* Table.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Table.cpp; sourceTree = "<group>"; };
+		E1D1573C193CB54B0059A86B /* Table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Table.h; sourceTree = "<group>"; };
+		E1D15761193CC9A20059A86B /* DataSetListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataSetListener.h; sourceTree = "<group>"; };
+		E1D15762193CCC370059A86B /* DataSetListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataSetListener.h; sourceTree = "<group>"; };
+		E1E47B02194749CB007681B1 /* ColorPallete.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColorPallete.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,17 +126,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E13F48361941F8B700CC225C /* gtest.framework in Frameworks */,
 				E1290936191CF50A00822217 /* Cocoa.framework in Frameworks */,
 				E1290934191CF50100822217 /* GLUT.framework in Frameworks */,
 				E1290932191CF4FB00822217 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E1C8E5961927781700F5D3C3 /* Frameworks */ = {
+		E13F45B01941ECA200CC225C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1C8E59C1927781700F5D3C3 /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,27 +146,18 @@
 		E12908F3191CCBC900822217 = {
 			isa = PBXGroup;
 			children = (
+				E1E47B02194749CB007681B1 /* ColorPallete.h */,
 				E13B4C321938947200F1FCCF /* ColorProperty.cpp */,
 				E13B4C331938947200F1FCCF /* ColorProperty.h */,
 				E14C95BF192F7E17000A8CAC /* helper.cpp */,
 				E14C95C0192F7E17000A8CAC /* helper.h */,
 				E14C95C2192F7E28000A8CAC /* 3DView.cpp */,
 				E14C95C3192F7E28000A8CAC /* 3DView.h */,
-				E126B6CC19252BD90075EE1D /* DataSet.cpp */,
-				E126B6CD19252BD90075EE1D /* DataSet.h */,
-				E126B6CE19252BD90075EE1D /* Filter.cpp */,
-				E126B6CF19252BD90075EE1D /* Filter.h */,
-				E126B6D019252BD90075EE1D /* Record.cpp */,
-				E126B6D119252BD90075EE1D /* Record.h */,
-				E126B6D219252BD90075EE1D /* Reference.cpp */,
-				E126B6D319252BD90075EE1D /* Reference.h */,
-				E126B6D419252BD90075EE1D /* Table.cpp */,
-				E126B6D519252BD90075EE1D /* Table.h */,
+				E17EA9F91943A5C000411FA7 /* testCluster.cpp */,
+				E17EA9FA1943A5C000411FA7 /* testClusterSet.cpp */,
 				E18D187C1920F309006F10D5 /* Geometry.h */,
 				E1290937191CF53000822217 /* BMPImage.cpp */,
 				E1290938191CF53000822217 /* BMPImage.h */,
-				E1290939191CF53000822217 /* DataFileReader.cpp */,
-				E129093A191CF53000822217 /* DataFileReader.h */,
 				E129093E191CF53000822217 /* DataView.h */,
 				E14C95C5192F7F0B000A8CAC /* DataView.cpp */,
 				E1290941191CF53000822217 /* ImageView.cpp */,
@@ -156,18 +165,23 @@
 				E1290943191CF53000822217 /* loadppm.cpp */,
 				E1290944191CF53000822217 /* loadppm.h */,
 				E1290945191CF53000822217 /* main.cpp */,
+				E17EA9F81943A5C000411FA7 /* reporter.cpp */,
+				E1BD646C193F92D300370D69 /* reporter.h */,
 				E113BE61192521E200F6525A /* ParallelCoordsAxisGroup.cpp */,
 				E113BE62192521E200F6525A /* ParallelCoordsAxisGroup.h */,
 				E1290946191CF53000822217 /* ParallelCoordsAxis.cpp */,
 				E1290947191CF53000822217 /* ParallelCoordsAxis.h */,
 				E1290948191CF53000822217 /* ParallelCoordsView.cpp */,
 				E1290949191CF53000822217 /* ParallelCoordsView.h */,
+				E17EA9F019432FE600411FA7 /* ClusterSet.cpp */,
+				E17EA9F119432FE600411FA7 /* ClusterSet.h */,
 				E129094A191CF53000822217 /* README.md */,
+				E1D1572F193CB54B0059A86B /* RIVData */,
 				E129094D191CF53000822217 /* Resources */,
 				E1290935191CF50A00822217 /* Cocoa.framework */,
 				E1290933191CF50100822217 /* GLUT.framework */,
 				E1290931191CF4FB00822217 /* OpenGL.framework */,
-				E1C8E59D1927781700F5D3C3 /* Afstuderen Tests */,
+				E13F45B41941ECA200CC225C /* Afstuderen Tests */,
 				E1C8E59A1927781700F5D3C3 /* Frameworks */,
 				E12908FD191CCBC900822217 /* Products */,
 			);
@@ -177,36 +191,54 @@
 			isa = PBXGroup;
 			children = (
 				E12908FC191CCBC900822217 /* Afstuderen */,
-				E1C8E5991927781700F5D3C3 /* Afstuderen Tests.xctest */,
+				E13F45B31941ECA200CC225C /* Afstuderen Tests */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E13F45B41941ECA200CC225C /* Afstuderen Tests */ = {
+			isa = PBXGroup;
+			children = (
+				E13F45B51941ECA200CC225C /* main.cpp */,
+				E13F45B71941ECA200CC225C /* Afstuderen_Tests.1 */,
+			);
+			path = "Afstuderen Tests";
 			sourceTree = "<group>";
 		};
 		E1C8E59A1927781700F5D3C3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E13F45BC1941ECCD00CC225C /* gtest.framework */,
 				E1C8E59B1927781700F5D3C3 /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		E1C8E59D1927781700F5D3C3 /* Afstuderen Tests */ = {
+		E1D1572F193CB54B0059A86B /* RIVData */ = {
 			isa = PBXGroup;
 			children = (
-				E1C8E5A31927781700F5D3C3 /* Afstuderen_Tests.m */,
-				E1C8E59E1927781700F5D3C3 /* Supporting Files */,
+				E15FA631193CECA8000DD70C /* Cluster.cpp */,
+				E15FA632193CECA8000DD70C /* Cluster.h */,
+				E1D15762193CCC370059A86B /* DataSetListener.h */,
+				E1D15730193CB54B0059A86B /* DataFileReader.cpp */,
+				E1D15731193CB54B0059A86B /* DataFileReader.h */,
+				E1D15732193CB54B0059A86B /* DataSet.cpp */,
+				E1D15733193CB54B0059A86B /* DataSet.h */,
+				E1D15734193CB54B0059A86B /* Filter.cpp */,
+				E1D15735193CB54B0059A86B /* Filter.h */,
+				E1D15736193CB54B0059A86B /* Record.cpp */,
+				E1D15737193CB54B0059A86B /* Record.h */,
+				E1D15738193CB54B0059A86B /* Reference.cpp */,
+				E1D15739193CB54B0059A86B /* Reference.h */,
+				E1D1573A193CB54B0059A86B /* RIVVector.h */,
+				E1D1573B193CB54B0059A86B /* Table.cpp */,
+				E1D1573C193CB54B0059A86B /* Table.h */,
+				E1D15761193CC9A20059A86B /* DataSetListener.h */,
+				E1BD6464193F758100370D69 /* Iterator.cpp */,
+				E1BD6465193F758100370D69 /* Iterator.h */,
 			);
-			path = "Afstuderen Tests";
-			sourceTree = "<group>";
-		};
-		E1C8E59E1927781700F5D3C3 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				E1C8E59F1927781700F5D3C3 /* Afstuderen Tests-Info.plist */,
-				E1C8E5A01927781700F5D3C3 /* InfoPlist.strings */,
-				E1C8E5A51927781700F5D3C3 /* Afstuderen Tests-Prefix.pch */,
-			);
-			name = "Supporting Files";
+			name = RIVData;
+			path = ../RIVData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -229,23 +261,22 @@
 			productReference = E12908FC191CCBC900822217 /* Afstuderen */;
 			productType = "com.apple.product-type.tool";
 		};
-		E1C8E5981927781700F5D3C3 /* Afstuderen Tests */ = {
+		E13F45B21941ECA200CC225C /* Afstuderen Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E1C8E5AA1927781700F5D3C3 /* Build configuration list for PBXNativeTarget "Afstuderen Tests" */;
+			buildConfigurationList = E13F45BB1941ECA200CC225C /* Build configuration list for PBXNativeTarget "Afstuderen Tests" */;
 			buildPhases = (
-				E1C8E5951927781700F5D3C3 /* Sources */,
-				E1C8E5961927781700F5D3C3 /* Frameworks */,
-				E1C8E5971927781700F5D3C3 /* Resources */,
+				E13F45AF1941ECA200CC225C /* Sources */,
+				E13F45B01941ECA200CC225C /* Frameworks */,
+				E13F45B11941ECA200CC225C /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				E1C8E5A71927781700F5D3C3 /* PBXTargetDependency */,
 			);
 			name = "Afstuderen Tests";
 			productName = "Afstuderen Tests";
-			productReference = E1C8E5991927781700F5D3C3 /* Afstuderen Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
+			productReference = E13F45B31941ECA200CC225C /* Afstuderen Tests */;
+			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
 
@@ -255,11 +286,6 @@
 			attributes = {
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Gerard Simons";
-				TargetAttributes = {
-					E1C8E5981927781700F5D3C3 = {
-						TestTargetID = E12908FB191CCBC900822217;
-					};
-				};
 			};
 			buildConfigurationList = E12908F7191CCBC900822217 /* Build configuration list for PBXProject "Afstuderen" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -274,75 +300,50 @@
 			projectRoot = "";
 			targets = (
 				E12908FB191CCBC900822217 /* Afstuderen */,
-				E1C8E5981927781700F5D3C3 /* Afstuderen Tests */,
+				E13F45B21941ECA200CC225C /* Afstuderen Tests */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXResourcesBuildPhase section */
-		E1C8E5971927781700F5D3C3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E1C8E5A21927781700F5D3C3 /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E12908F8191CCBC900822217 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1D1573D193CB54B0059A86B /* DataFileReader.cpp in Sources */,
 				E13B4C341938947200F1FCCF /* ColorProperty.cpp in Sources */,
-				E1290950191CF53000822217 /* DataFileReader.cpp in Sources */,
+				E1D15741193CB54B0059A86B /* Reference.cpp in Sources */,
 				E1290954191CF53000822217 /* ImageView.cpp in Sources */,
 				E14C95C6192F7F0B000A8CAC /* DataView.cpp in Sources */,
-				E126B6D619252BD90075EE1D /* DataSet.cpp in Sources */,
 				E129094F191CF53000822217 /* BMPImage.cpp in Sources */,
-				E126B6DA19252BD90075EE1D /* Table.cpp in Sources */,
+				E1BD6466193F758100370D69 /* Iterator.cpp in Sources */,
+				E17EA9FB1943A5C000411FA7 /* reporter.cpp in Sources */,
+				E1D15742193CB54B0059A86B /* Table.cpp in Sources */,
 				E1290958191CF53000822217 /* ParallelCoordsView.cpp in Sources */,
-				E126B6D919252BD90075EE1D /* Reference.cpp in Sources */,
+				E17EA9F219432FE600411FA7 /* ClusterSet.cpp in Sources */,
+				E17EA9FD1943A5C000411FA7 /* testClusterSet.cpp in Sources */,
 				E14C95C4192F7E28000A8CAC /* 3DView.cpp in Sources */,
-				E126B6D719252BD90075EE1D /* Filter.cpp in Sources */,
-				E126B6D819252BD90075EE1D /* Record.cpp in Sources */,
 				E14C95C1192F7E17000A8CAC /* helper.cpp in Sources */,
 				E1290957191CF53000822217 /* ParallelCoordsAxis.cpp in Sources */,
+				E1D15740193CB54B0059A86B /* Record.cpp in Sources */,
+				E15FA633193CECA8000DD70C /* Cluster.cpp in Sources */,
+				E17EA9FC1943A5C000411FA7 /* testCluster.cpp in Sources */,
+				E1D1573F193CB54B0059A86B /* Filter.cpp in Sources */,
 				E113BE63192521E200F6525A /* ParallelCoordsAxisGroup.cpp in Sources */,
 				E1290956191CF53000822217 /* main.cpp in Sources */,
+				E1D1573E193CB54B0059A86B /* DataSet.cpp in Sources */,
 				E1290955191CF53000822217 /* loadppm.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		E1C8E5951927781700F5D3C3 /* Sources */ = {
+		E13F45AF1941ECA200CC225C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E1C8E5A41927781700F5D3C3 /* Afstuderen_Tests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		E1C8E5A71927781700F5D3C3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E12908FB191CCBC900822217 /* Afstuderen */;
-			targetProxy = E1C8E5A61927781700F5D3C3 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		E1C8E5A01927781700F5D3C3 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E1C8E5A11927781700F5D3C3 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		E1290903191CCBC900822217 /* Debug */ = {
@@ -422,6 +423,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug",
+					/Users/gerardsimons/Documents/Frameworks/GTest,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -434,46 +436,39 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug",
+					/Users/gerardsimons/Documents/Frameworks/GTest,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
-		E1C8E5A81927781700F5D3C3 /* Debug */ = {
+		E13F45B91941ECA200CC225C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
+					/Users/gerardsimons/Documents/Frameworks/GTest,
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Afstuderen Tests/Afstuderen Tests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "Afstuderen Tests/Afstuderen Tests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
 		};
-		E1C8E5A91927781700F5D3C3 /* Release */ = {
+		E13F45BA1941ECA200CC225C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
+					/Users/gerardsimons/Documents/Frameworks/GTest,
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Afstuderen Tests/Afstuderen Tests-Prefix.pch";
-				INFOPLIST_FILE = "Afstuderen Tests/Afstuderen Tests-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};
@@ -498,11 +493,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E1C8E5AA1927781700F5D3C3 /* Build configuration list for PBXNativeTarget "Afstuderen Tests" */ = {
+		E13F45BB1941ECA200CC225C /* Build configuration list for PBXNativeTarget "Afstuderen Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E1C8E5A81927781700F5D3C3 /* Debug */,
-				E1C8E5A91927781700F5D3C3 /* Release */,
+				E13F45B91941ECA200CC225C /* Debug */,
+				E13F45BA1941ECA200CC225C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

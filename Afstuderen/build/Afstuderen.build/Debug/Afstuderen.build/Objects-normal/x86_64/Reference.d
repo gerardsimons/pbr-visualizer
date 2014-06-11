@@ -1,10 +1,14 @@
-dependencies: /Users/gerardsimons/Git/afstuderen/Reference.cpp \
-  /Users/gerardsimons/Git/afstuderen/Reference.h \
-  /Users/gerardsimons/Git/afstuderen/Table.h \
+dependencies: /Users/gerardsimons/Git/afstuderen/RIVData/Reference.cpp \
+  /Users/gerardsimons/Git/afstuderen/RIVData/Reference.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/Table.h \
   /Users/gerardsimons/Git/afstuderen/DataView.h \
-  /Users/gerardsimons/Git/afstuderen/DataSet.h \
-  /Users/gerardsimons/Git/afstuderen/Filter.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/Filter.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h \
   /Users/gerardsimons/Git/afstuderen/Geometry.h \
   /Users/gerardsimons/Git/afstuderen/ColorProperty.h \
-  /Users/gerardsimons/Git/afstuderen/Record.h \
-  /Users/gerardsimons/Git/afstuderen/helper.h
+  /Users/gerardsimons/Git/afstuderen/RIVData/Record.h \
+  /Users/gerardsimons/Git/afstuderen/helper.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h \
+  /Users/gerardsimons/Git/afstuderen/ClusterSet.h

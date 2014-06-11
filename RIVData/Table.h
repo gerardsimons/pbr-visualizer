@@ -19,72 +19,21 @@
 #include "Filter.h"
 #include "Record.h"
 #include "Reference.h"
+#include "Iterator.h"
+#include "DataSetListener.h"
 #include "helper.h"
+#include "Cluster.h"
 
 class RIVReference;
 class RIVDataView;
-
-class TableIterator {
-protected:
-    size_t index = 0;
-    size_t maxIndex = 0;
-public:
-    TableIterator(size_t _maxIndex) { maxIndex = _maxIndex; };
-    void BackToStart() { index = 0; };
-    //    virtual bool HasNext() {
-    ////        printf("TableIterator HasNext called.\n");
-    //        return index < maxIndex;
-    //    };
-    virtual bool GetNext(size_t& row) {
-        if(index >= maxIndex) {
-            return false;
-        }
-        else {
-            row = index;
-            index++;
-            return (index - 1) < maxIndex;
-        }
-    }
-    virtual void Print() const {
-        printf("TableIterator (maxIndex = %zu) \n", maxIndex);
-    }
-};
-
-class FilteredTableIterator : public TableIterator {
-private:
-    std::map<size_t,bool>* indexPointers;
-public:
-    FilteredTableIterator(std::map<size_t,bool> * _indexPointers, size_t maxIndex) : TableIterator(maxIndex){
-        indexPointers = _indexPointers;
-        index = 0;
-    };
-    
-    virtual bool GetNext(size_t &row) {
-        if(index < maxIndex) {
-            bool filtered = (*indexPointers)[index];
-            while(filtered && index < maxIndex) {
-                index++;
-                filtered = (*indexPointers)[index];
-                //                printf("index = %zu\n",index);
-            }
-            row = index;
-            index++;
-            return !filtered && index <= maxIndex;
-        }
-        return false;
-    }
-    
-    void Print() const {
-        printf("FilteredTableIterator index = %zu map of iterator object has %zu values :\n", index, maxIndex);
-        printMap(*indexPointers);
-    }
-};
 
 class RIVTable {
 private:
     std::vector<RIVRecord*> records;
     std::vector<RIVReference*> references;
-    std::vector<RIVDataView*> onChangeListeners;
+    std::vector<RIVDataSetListener*> onChangeListeners;
+    std::vector<size_t> selectedRows;
+    RIVClusterSet clusterSet;
     
     bool filtered = false;
     
@@ -101,8 +50,13 @@ private:
     void filterRecords(Filter *);
     void filterRecords(); //Filter on all filters present in the filters vector
 public:
-    RIVTable(std::string name);;
-    RIVRecord* GetRecord(size_t index) ;
+    RIVTable(std::string name);
+    RIVRecord* GetRecord(size_t index);
+    RIVRecord* GetRecord(std::string recordName);
+    template <typename T>
+    T* GetRecord(std::string name) {
+        return dynamic_cast<T*>(GetRecord(name));
+    }
     
     void AddRecord(RIVRecord* record);
     void AddFilter(Filter *filter);
@@ -135,6 +89,9 @@ public:
     size_t NumberOfColumns(); //Columns
     size_t NumberOfRows();
     std::vector<RIVRecord*> GetRecords();
+    
+    void ClusterWithSize(const std::string& xRecordName, const std::string& yRecordName, const std::string& zRecordName, const size_t& clusterSize, const size_t& maxRepeat);
+    RIVClusterSet* Cluster(const std::string& xRecord, const std::string& yRecord, const std::string& zRecord, const size_t& K, const size_t& maxRepeat);
     
     //Print functions
     void Print(size_t maxPrint = 1000, bool printFiltered = true); //Print all the rows

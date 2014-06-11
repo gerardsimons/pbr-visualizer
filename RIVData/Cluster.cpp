@@ -7,12 +7,6 @@
 //
 
 #include "Cluster.h"
+#include "helper.h"
 
 //K-means clustering in 3D space
-void RIVCluster::Cluster(const unsigned int K) {
-    RIVCluster clusters[K];
-    
-    //Choose K mediods randomly
-    
-    //
-}

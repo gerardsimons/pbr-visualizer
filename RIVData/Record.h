@@ -76,7 +76,9 @@ public:
         return minMax;
         
 	}
-    
+    std::vector<float>* GetValuesPointer() {
+        return &values;
+    }
     void Print() {
         printf("RIVFloatRecord %s has %lu records. ",name.c_str(), values.size());
         minMaxComputed ? printf(" (min,max) = (%f,%f)\n",minMax.first, minMax.second) : printf("no minmax yet computed.\n");

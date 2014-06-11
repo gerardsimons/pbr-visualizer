@@ -11,6 +11,7 @@
 
 #include "Record.h"
 #include "Table.h"
+#include "helper.h"
 #include <stdio.h>
 #include <string>
 
@@ -33,7 +34,8 @@ public:
     const static float colorYellow[3];
     const static float colorBlack[3];
     
-    virtual float* Color(const RIVTable*,const size_t&) = 0;
+    virtual float const* Color(const RIVTable*,const size_t&) = 0;
+    virtual void Setup() {};
     RIVColorProperty(float* alternateColor_) {
         memcpy(alternateColor,alternateColor_,sizeof(alternateColor));
     }
@@ -45,21 +47,38 @@ public:
 class RIVColorLinearProperty : public RIVColorProperty {
 private:
     //The table whose index defines the color
-    std::string colorTableName;
+    RIVTable* colorReference;
+
     float colorOne[3];
     float colorTwo[3];
+    
+    LinearInterpolator<size_t>* colorInterpolator;
+//    std::vector<float[3]> interpolatedColors;
 public:
-    RIVColorLinearProperty(std::string colorTableName_, float* colorOne_, float* colorTwo_, float* alternateColor_) : RIVColorProperty(alternateColor_){
-        colorTableName = colorTableName_;
-        memcpy(colorOne, colorOne_, sizeof(colorOne));
-        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
+    RIVColorLinearProperty(RIVTable *colorReference_, float* colorOne_, float* colorTwo_, float* alternateColor_);
+    ~RIVColorLinearProperty() {
+        delete colorInterpolator;
     }
-    RIVColorLinearProperty(std::string colorTableName_) : RIVColorProperty() {
-        colorTableName = colorTableName_;
-        memcpy(colorOne, colorBlue, sizeof(colorOne));
-        memcpy(colorTwo, colorYellow, sizeof(colorTwo));
+    RIVColorLinearProperty(RIVTable *colorReference_);
+    RIVColorLinearProperty(RIVTable *colorReference_,std::vector<size_t>& interpolationValues);
+    float const* Color(const RIVTable* sourceTable, const size_t& row);
+};
+
+class RIVColorDiscreteProperty : public RIVColorProperty {
+private:
+    std::vector<float const*> colors;
+    size_t colorsToUse;
+    size_t colorPointer;
+public:
+    RIVColorDiscreteProperty(std::vector<float const*> colors_, const size_t& colorsToUse_) {
+        colorsToUse = colorsToUse_;
+        colors = colors_;
     }
-    float* Color(const RIVTable* table, const size_t& row);
+    float const* Color(const RIVTable* table, const size_t& row) {
+        size_t index = colorPointer % colorsToUse;
+        colorPointer++;
+        return colors[index];
+    }
 };
 
 class RIVColorRGBProperty : public RIVColorProperty {

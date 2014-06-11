@@ -32,8 +32,8 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E1C8E5981927781700F5D3C3"
-               BuildableName = "Afstuderen Tests.xctest"
+               BlueprintIdentifier = "E13F45B21941ECA200CC225C"
+               BuildableName = "Afstuderen Tests"
                BlueprintName = "Afstuderen Tests"
                ReferencedContainer = "container:Afstuderen.xcodeproj">
             </BuildableReference>
@@ -81,6 +81,13 @@
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "DYLD_FRAMEWORK_PATH"
+            value = "/Users/gerardsimons/Documents/Frameworks/GTest"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

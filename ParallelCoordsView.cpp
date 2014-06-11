@@ -166,33 +166,23 @@ void ParallelCoordsView::drawLines() {
         double duration;
         size_t lineIndex = 0;
         
-
-        
         glColor3f(1.0, 0.0, 0.0);
         glLineWidth(1.F);
-        
-        //        printf("Redrawing lines\n");
         
         for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
             RIVTable *table = axisGroup.table;
             
-//            printf("Drawing lines for table %s\n",table->GetName().c_str());
-//            table->PrintUnfiltered();
-            
-            size_t numberOfRows = table->NumberOfRows();
             size_t row = 0;
             TableIterator *iterator = table->GetIterator();
             
             std::vector<float> axisXCache;
             std::vector<float> axisYCache;
             
-            RIVCluster* cluster = NULL;
-            
 //            iterator->Print();
             while(iterator->GetNext(row)) {
 //                printf("Row : %zu\n",row);
                 glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
-                float* color = colorProperty->Color(table, row);
+                float const* color = colorProperty->Color(table, row);
                 glColor3f(color[0], color[1], color[2]);
 //                delete color;
                 for(ParallelCoordsAxis &axis : axisGroup.axes) {

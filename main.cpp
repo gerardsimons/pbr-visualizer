@@ -10,6 +10,7 @@
 #include "ImageView.h"
 #include "DataFileReader.h"
 #include "3DView.h"
+#include "ColorPallete.h"
 
 #if defined(__APPLE__)
 #include <GLUT/glut.h>
@@ -27,6 +28,9 @@ const float DEG2RAD = 3.14159/180;
 
 int width = 1400;
 int height = 800;
+
+RIVClusterSet* clusters; //HERE ONLY FOR DEBUG REASONS
+const size_t clusterK = 6 ;
 
 bool isDirty = true;
 
@@ -134,6 +138,25 @@ void keys(int keyCode, int x, int y) {
 //            copy_buffer();
             postRedisplay = false;
             break;
+        case 99: // 'c' key
+            if(sceneView) {
+                sceneView->ToggleDrawClusterMembers();
+                postRedisplay = true;
+            }
+            break;
+        case 114: // 'r' key, recluster {
+        {
+            RIVTable *intersectTable = dataset.GetTable("intersections");
+            RIVClusterSet* clusters = intersectTable->Cluster("intersection X","intersection Y","intersection Z",clusterK,1);
+            postRedisplay = true;
+            break;
+        }
+        case 111: // 'o' key, optimize clusters (debug feature)
+        {
+            clusters->OptimizeClusters();
+            postRedisplay = true;
+            break;
+        }
         case GLUT_KEY_UP:
             sceneView->MoveCamera(0,0,1.F);
             break;
@@ -236,9 +259,8 @@ void initialize(int argc, char* argv[]) {
 //    RIVRecord* blueRecord = dataset.FindRecord("B");
 //    
 //    RIVColorProperty *colorProperty = new RIVColorRGBProperty("image",redRecord,greenRecord,blueRecord);
-    RIVColorProperty *colorProperty = new RIVColorLinearProperty("path");
-
-    sceneView = new RIV3DView(imageWidth,0,imageSceneWidth,imageSceneHeight,0,0,colorProperty);
+    RIVTable *pathTable = dataset.GetTable("path");
+    RIVColorProperty *colorProperty = new RIVColorLinearProperty(pathTable);
     
 	parallelCoordsView = new ParallelCoordsView(0,imageHeight,width,height - imageHeight,50,20,colorProperty);
     
@@ -250,13 +272,11 @@ void initialize(int argc, char* argv[]) {
     
 	imageView->SetData(&dataset);
 	parallelCoordsView->SetData(&dataset);
-    sceneView->SetData(&dataset);
-    
-    sceneView->SetModelData(modelData);
+
     
 	imageView->ComputeLayout();
     parallelCoordsView->ComputeLayout();
-    sceneView->ComputeLayout();
+
     
 //    Filter *blueFilter = new RangeFilter("B",200,255);
 //    Filter *greenFilter = new RangeFilter("G",240,255);
@@ -268,11 +288,28 @@ void initialize(int argc, char* argv[]) {
 	
     views.push_back(imageView);
     views.push_back(parallelCoordsView);
-    views.push_back(sceneView);
     
     //clustering
     RIVTable *intersectTable = dataset.GetTable("intersections");
-    intersectTable->Cluster("intersection X","intersection Y","intersection Z",3,100);
+    clusters = intersectTable->Cluster("intersection X","intersection Y","intersection Z",clusterK,1);
+    //Change coloring of 3D view according to clusters
+    std::vector<size_t> medoidIndices = clusters->GetMedoidIndices();
+//    RIVColorProperty* clusteredColorProperty = new RIVColorLinearProperty("intersections",clusters->GetMedionIndices());
+
+    Filter* intersectionFilter = new RangeFilter("intersection X",-100.F,-200.F);
+    intersectTable->AddFilter(intersectionFilter);
+    
+    
+    std::vector<float const*> colorPallette = colors::allColors();
+    
+//    RIVColorProperty* clusterColorProperty = new RIVColorLinearProperty(intersectTable, medoidIndices);
+    RIVColorProperty* clusterColorProperty = new RIVColorDiscreteProperty(colorPallette,clusterK);
+    sceneView = new RIV3DView(imageWidth,0,imageSceneWidth,imageSceneHeight,0,0,clusterColorProperty);
+    views.push_back(sceneView);
+    
+    sceneView->ComputeLayout();
+    sceneView->SetData(&dataset);
+    sceneView->SetModelData(modelData);
 }
 
 //Unofficial testing
@@ -300,7 +337,6 @@ bool tests(int argc, char** argv) {
 
 int main(int argc, char *argv[])
 {
-
     srand(time(NULL));
     /* initialize GLUT, let it extract command-line
      GLUT options that you may provide */

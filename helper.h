@@ -18,23 +18,29 @@
 template<typename T>
 class LinearInterpolator {
 private:
-    T min;
-    T max;
+    std::vector<T> values;
 public:
     LinearInterpolator(T& min_,T& max_) {
-        min = min_;
-        max = max_;
+        values.push_back(min_);
+        values.push_back(max_);
+    }
+    LinearInterpolator(const std::vector<T>& values_) {
+        if(values_.size() < 2) {
+            throw "At least 2 values are required to interpolate.";
+        }
+        values = values_;
     }
     float Interpolate(T& value) {
-        if(value < min) {
-            return 0.F;
+        //What segment
+        size_t segment = 1;
+        for(size_t i = 0 ; i < values.size() - 1 ; i++) {
+            if(value >= values[i] && value <= values[i + 1]) {
+                float interpolated = (value + values[i]) / (float)(values[i + 1] + values[i]);
+                return interpolated;
+            }
         }
-        else if(value > max) {
-            return 1.F;
-        }
-        else {
-            return (value - min) / (max - min);
-        }
+        throw "Interpolation parameter out of range.";
+//        return fraction * values[0] + (1 - fraction) * values[values.size() - 1];
     }
 };
 

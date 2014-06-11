@@ -19,24 +19,6 @@ RIV3DView::RIV3DView(int x, int y, int width, int height, int paddingX, int padd
 
 //TODO : Move these to the header file
 
-GLfloat xRotated = 0.F;
-GLfloat yRotated = 0.F;
-GLfloat zRotated = 0.F;
-
-Point3D cursorNear;
-Point3D cursorFar;
-
-float zNear = 1.F;
-float zFar = 20.F;
-
-Box3D selectionBox;
-
-const float sphereSizeDefault = .1F;
-
-const float perspectiveAngle = 45.0F;
-
-bool drawClusterMembers = true;
-
 void RIV3DView::ComputeLayout() {
     eye.x = 0.F;
     eye.y = 0.F;
@@ -51,6 +33,11 @@ void RIV3DView::ComputeLayout() {
     cursorFar.x = 0.F;
     cursorFar.x = 0.F;
     cursorFar.z = zFar;
+}
+
+void RIV3DView::ToggleDrawClusterMembers() {
+    drawClusterMembers = !drawClusterMembers;
+    isDirty = true;
 }
 
 void RIV3DView::Draw() {
@@ -68,7 +55,7 @@ void RIV3DView::Draw() {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         
-        gluPerspective(perspectiveAngle,(GLdouble)width/(GLdouble)height,zNear,zFar);
+        gluPerspective(45.F,(GLdouble)width/(GLdouble)height,zNear,zFar);
         //    gluOrtho2D(0, width, 0, height);
         //    glOrtho(0, width, 0, height, zNear, zFar);
         
@@ -88,6 +75,7 @@ void RIV3DView::Draw() {
         //    glVertex3f(cursorFar.x+.1F,cursorFar.y+.1F,cursorFar.z);
         //    glVertex3f(cursorFar.x-.1F,cursorFar.y-.1F,cursorFar.z);
         //    glEnd();
+//        glEnable(GL_DEPTH);
         
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
@@ -144,13 +132,8 @@ void RIV3DView::Draw() {
             float isectY = yRecord->Value(row);
             float isectZ = zRecord->Value(row);
             Point3D point(isectX,isectY,isectZ);
-            if((selectionBox.initialized && selectionBox.ContainsPoint(point)) || !selectionBox.initialized) {
-                glColor3f(0,0,1);
-            }
-            else {
-                float* color = colorProperty->Color(table,row);
-                glColor3f(color[0],color[1],color[2]);
-            }
+            float const* color = colorProperty->Color(table,row);
+            glColor4f(color[0], color[1], color[2], .5F);
             glPushMatrix();
             glTranslatef(isectX, isectY, isectZ);
             float medoidShereSize = sphereSizeDefault;
@@ -161,6 +144,7 @@ void RIV3DView::Draw() {
 //                                std::cout << *cluster;
             }
             //Draw the cluster medoid according to relative number of members in the cluster
+
             gluSphere(quadric, medoidShereSize * sizeMultiplier, sizeMultiplier * 4, sizeMultiplier * 4);
             glPopMatrix();
             
@@ -172,6 +156,7 @@ void RIV3DView::Draw() {
                     float memberZ = zRecord->Value(member);
                     glPushMatrix();
                     glTranslatef(memberX, memberY, memberZ);
+//                    glColor4f(color[0],color[1],color[2],.5F);
                     gluSphere(quadric, sphereSizeDefault, 4, 4);
                     glPopMatrix();
                 }

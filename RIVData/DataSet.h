@@ -30,11 +30,13 @@ public:
     void AddFilterListener(RIVDataSetListener* listener);
     void ClearFilters();
     void ClearFilter(std::string attributeName);
-    RIVRecord* FindRecord(std::string name);
-    size_t TotalNumberOfRecords();
-    size_t NumberOfTables();
+    RIVRecord* FindRecord(std::string name) const;
+    size_t TotalNumberOfRecords() const;
+    size_t NumberOfTables() const;
     std::vector<RIVTable*>* GetTables();
-    void Print(size_t maxPrint = 1000, bool printFiltered = true);
+    RIVTable* GetTable(const std::string&) const;
+    void Print(size_t maxPrint = 1000, bool printFiltered = true) const;
+    bool IsSet() const;
 //    void PrintUnfiltered();
 };
 

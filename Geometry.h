@@ -14,7 +14,10 @@
 #include <ostream>
 #include <iostream>
 
-inline float euclideanDistance(float x1, float x2, float y1, float y2, float z1, float z2) {
+inline double euclideanDistance(double x1, double x2, double y1, double y2, double z1, double z2) {
+//    double distance = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 -y1) + (z2 - z1) * (z2 - z1));
+//    printf("(%f-%f)*(%f-%f)+(%f-%f)*(%f-%f)+(%f-%f)*(%f-%f)=%f\n",x1,x2,x1,x2,y1,y2,y1,y2,z1,z2,z1,z2,distance);
+//    return distance;
     return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 -y1) + (z2 - z1) * (z2 - z1));
 }
 
