@@ -9,6 +9,10 @@
 #ifndef __Afstuderen__GraphicsProperty__
 #define __Afstuderen__GraphicsProperty__
 
-#include <iostream>
+#include 
+
+class RIVGraphicsProperty {
+    
+};
 
 #endif /* defined(__Afstuderen__GraphicsProperty__) */
