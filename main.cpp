@@ -1,4 +1,4 @@
-    #include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
@@ -240,12 +240,14 @@ void initialize(int argc, char* argv[]) {
     
     BMPImage image = BMPImage((bmpPath).c_str(),false);
     
-	//dataset = DataFileReader::ReadBinaryData(fullPath + ".bin");
     dataset = DataFileReader::ReadAsciiData(fullPath + ".txt",image);
-    std::vector<float> modelData;
     
+    //clustering
+    dataset.ClusterTable("intersections","intersection X","intersection Y","intersection Z",clusterK,1);
+    
+    //Set the vertices data from the PBRT file
+    std::vector<float> modelData;
     modelData = DataFileReader::ReadModelData(pbrtPath);
-    /* dataset = &loadData(resourcesPath + fileName + ".bin"); */
     
 	//CAUTION: Image should be power of two!
 //	RIVImageView *imageView = new RIVImageView(fullPath + ".bmp",0,0,imageWidth,imageHeight,0,0);
@@ -259,57 +261,39 @@ void initialize(int argc, char* argv[]) {
 //    RIVRecord* blueRecord = dataset.FindRecord("B");
 //    
 //    RIVColorProperty *colorProperty = new RIVColorRGBProperty("image",redRecord,greenRecord,blueRecord);
+    RIVTable *imageTable = dataset.GetTable("image");
     RIVTable *pathTable = dataset.GetTable("path");
+    imageTable->FilterRowsUnlinkedTo(pathTable);
     RIVColorProperty *colorProperty = new RIVColorLinearProperty(pathTable);
-    
-	parallelCoordsView = new ParallelCoordsView(0,imageHeight,width,height - imageHeight,50,20,colorProperty);
-    
-//    BMPImage image = BMPImage((fullPath + ".bmp").c_str(),true);
 
-    imageView = new RIVImageView(image,0,0,imageWidth,imageHeight,0,0,colorProperty);
+    //Linear cluster coloring
+    std::vector<size_t> medoidIndices = dataset.GetClusterSet()->GetMedoidIndices();
+    RIVColorProperty* clusterColorProperty = new RIVColorLinearProperty(dataset.GetTable("intersections"), medoidIndices,DISCRETE);
+    clusterColorProperty->EnableColorByCluster();
     
-//    RIVTable *imageTable = DataFileReader::ReadImageData(image);
+    std::vector<float const*> colorPallette = colors::allColors();
     
+    //Declare views
+	parallelCoordsView = new ParallelCoordsView(0,imageHeight,width,height - imageHeight,50,20,clusterColorProperty);
+    imageView = new RIVImageView(image,0,0,imageWidth,imageHeight,0,0,clusterColorProperty);
+    sceneView = new RIV3DView(imageWidth,0,imageSceneWidth,imageSceneHeight,0,0,clusterColorProperty);
+    
+    //Set data source of views
 	imageView->SetData(&dataset);
 	parallelCoordsView->SetData(&dataset);
-
+    sceneView->SetData(&dataset);
+    sceneView->SetModelData(modelData);
     
 	imageView->ComputeLayout();
     parallelCoordsView->ComputeLayout();
-
-    
-//    Filter *blueFilter = new RangeFilter("B",200,255);
-//    Filter *greenFilter = new RangeFilter("G",240,255);
-//    dataset.AddFilter(greenFilter);
-//    dataset.AddFilter(blueFilter);
+    sceneView->ComputeLayout();
     
     dataset.AddFilterListener(sceneView);
     dataset.AddFilterListener(parallelCoordsView);
 	
+    views.push_back(sceneView);
     views.push_back(imageView);
     views.push_back(parallelCoordsView);
-    
-    //clustering
-    RIVTable *intersectTable = dataset.GetTable("intersections");
-    clusters = intersectTable->Cluster("intersection X","intersection Y","intersection Z",clusterK,1);
-    //Change coloring of 3D view according to clusters
-    std::vector<size_t> medoidIndices = clusters->GetMedoidIndices();
-//    RIVColorProperty* clusteredColorProperty = new RIVColorLinearProperty("intersections",clusters->GetMedionIndices());
-
-    Filter* intersectionFilter = new RangeFilter("intersection X",-100.F,-200.F);
-    intersectTable->AddFilter(intersectionFilter);
-    
-    
-    std::vector<float const*> colorPallette = colors::allColors();
-    
-//    RIVColorProperty* clusterColorProperty = new RIVColorLinearProperty(intersectTable, medoidIndices);
-    RIVColorProperty* clusterColorProperty = new RIVColorDiscreteProperty(colorPallette,clusterK);
-    sceneView = new RIV3DView(imageWidth,0,imageSceneWidth,imageSceneHeight,0,0,clusterColorProperty);
-    views.push_back(sceneView);
-    
-    sceneView->ComputeLayout();
-    sceneView->SetData(&dataset);
-    sceneView->SetModelData(modelData);
 }
 
 //Unofficial testing
@@ -331,8 +315,85 @@ bool tests(int argc, char** argv) {
 //
 //    }
     
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+//    std::vector<size_t> testValues;
+//    testValues.push_back(0);
+//    testValues.push_back(5);
+//    testValues.push_back(7);
+//    testValues.push_back(15);
+//    
+//    DiscreteInterpolator<size_t> interpolator = DiscreteInterpolator<size_t>(testValues);
+//    for(size_t i = 0 ; i < 20 ; i++) {
+//        printf("%zu = %f\n",i,interpolator.Interpolate(i));
+//    }
+    
+//    ::testing::InitGoogleTest(&argc, argv);
+//    return RUN_ALL_TESTS();
+//    return false;
+    return true;
+    
+    RIVTable tableOne = RIVTable("table_1");
+    RIVTable tableTwo = RIVTable("table_2");
+    RIVTable tableThree = RIVTable("table_3");
+    
+    RIVFloatRecord recordOne = RIVFloatRecord("record_1");
+    RIVFloatRecord recordTwo = RIVFloatRecord("record_2");
+    RIVFloatRecord recordThree = RIVFloatRecord("record_3");
+    
+    std::vector<float> valuesOne;
+    valuesOne.push_back(1.F); // ---> referes to row 1 of table two
+    valuesOne.push_back(2.F);
+    valuesOne.push_back(3.F);
+    
+    std::vector<float> valuesTwo;
+    valuesTwo.push_back(11.F);
+    valuesTwo.push_back(12.F); // ---> refers to row 0 and 2 or table three
+    
+    std::vector<float> valuesThree;
+    valuesThree.push_back(111.F);
+    valuesThree.push_back(112.F);
+    valuesThree.push_back(113.F);
+    valuesThree.push_back(114.F);
+    valuesThree.push_back(115.F);
+    
+    recordOne.SetValues(valuesOne);
+    recordTwo.SetValues(valuesTwo);
+    recordThree.SetValues(valuesThree);
+    
+    tableOne.AddRecord(&recordOne);
+    tableTwo.AddRecord(&recordTwo);
+    tableThree.AddRecord(&recordThree);
+    
+    // Reference from table one to table two
+    RIVReference reference = RIVReference(&tableOne, &tableTwo);
+    std::map<size_t,std::vector<size_t>> indexReferences;
+    std::vector<size_t> targetIndices;
+    targetIndices.push_back(1);
+    indexReferences[0] = targetIndices;
+    reference.SetReferences(indexReferences);
+    tableOne.AddReference(reference);
+    tableTwo.AddReference(reference.ReverseReference());
+    
+    //Reference from table two to table three
+    RIVReference referenceTwo = RIVReference(&tableTwo, &tableThree);
+    std::map<size_t,std::vector<size_t>> indexTwoReferences;
+    std::vector<size_t> targetTwoIndices;
+    targetTwoIndices.push_back(3);
+    targetTwoIndices.push_back(4);
+    indexTwoReferences[1] = targetTwoIndices;
+    referenceTwo.SetReferences(indexTwoReferences);
+    tableTwo.AddReference(referenceTwo);
+    tableThree.AddReference(referenceTwo.ReverseReference());
+    
+    RIVReferenceChain chain;
+    tableTwo.GetReferenceChainToTable(tableThree.GetName(), chain);
+    
+    std::cout << "table_one row 0 is linked to table_three rows : [";
+    std::vector<size_t> resolvedRows = chain.ResolveRow(0);
+    for(size_t i : chain.ResolveRow(0)) {
+        std::cout << i;
+    }
+    
+    return true;
 }
 
 int main(int argc, char *argv[])
@@ -387,9 +448,9 @@ int main(int argc, char *argv[])
     
     glutMotionFunc(motion);
 
-//    if(!tests(argc, argv)) {
-//        return EXIT_FAILURE;
-//    }
+    if(!tests(argc, argv)) {
+        return EXIT_FAILURE;
+    }
     
     /* start the GLUT main loop */
     glutMainLoop();

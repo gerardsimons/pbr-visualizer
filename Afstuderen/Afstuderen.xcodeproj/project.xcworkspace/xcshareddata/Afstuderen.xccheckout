@@ -5,24 +5,24 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>BEEAFABE-7B48-4997-9F69-DF583D45FD92</string>
+	<string>302AE19F-761C-44E3-95EF-6E9F3A15ED81</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Afstuderen</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>447A4CD6-B8BF-4601-B24B-7E5B059FD73E</key>
-		<string>https://github.com/gerardsimons/afstuderen.git</string>
 		<key>675F55BB-80B8-47F4-99F0-0FF199B34D78</key>
 		<string>http://googletest.googlecode.com/svn/trunk</string>
+		<key>D8486EBC-A884-4CDC-AAE6-94D962E8513F</key>
+		<string>https://github.com/gerardsimons/afstuderen.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Afstuderen/Afstuderen.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>447A4CD6-B8BF-4601-B24B-7E5B059FD73E</key>
-		<string>../../..</string>
 		<key>675F55BB-80B8-47F4-99F0-0FF199B34D78</key>
 		<string>../../../../googletest-read-only</string>
+		<key>D8486EBC-A884-4CDC-AAE6-94D962E8513F</key>
+		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectRepositoryRootDictionary</key>
 	<dict>
@@ -34,14 +34,14 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>447A4CD6-B8BF-4601-B24B-7E5B059FD73E</string>
+	<string>D8486EBC-A884-4CDC-AAE6-94D962E8513F</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>447A4CD6-B8BF-4601-B24B-7E5B059FD73E</string>
+			<string>D8486EBC-A884-4CDC-AAE6-94D962E8513F</string>
 			<key>IDESourceControlWCCName</key>
 			<string>afstuderen</string>
 		</dict>

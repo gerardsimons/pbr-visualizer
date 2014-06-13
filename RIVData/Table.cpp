@@ -82,16 +82,16 @@ void RIVTable::filterRecords(Filter* filter) {
     }
     
     //Filter unlinked records of linked tables
-    for(RIVReference *reference : references) {
-        RIVTable *targetTable = reference->targetTable;
+    for(RIVReference &reference : references) {
+        RIVTable *targetTable = reference.targetTable;
         targetTable->FilterRowsUnlinkedTo(this);
     }
 }
 
 void RIVTable::FilterRowsUnlinkedTo(RIVTable *table) {
     for(size_t row = 0 ; row < rows ; ++row) {
-        for(RIVReference *reference : references) {
-            if(reference->targetTable->GetName() == table->GetName() && !reference->HasReference(row)) {
+        for(RIVReference &reference : references) {
+            if(reference.targetTable->GetName() == table->GetName() && !reference.HasReference(row)) {
                 FilterRow(row,true);
             }
         }
@@ -105,13 +105,13 @@ void RIVTable::FilterRow(size_t rowIndex, bool filterOrUnfilter, RIVReference* s
     //    printf("Table %s filter row %lu\n",name.c_str(),rowIndex);
     filteredRows[rowIndex] = filterOrUnfilter;
     if(filterOrUnfilter) filtered = true;
-    for(RIVReference *reference : references) {
-        RIVTable* targetTable = reference->targetTable;
-        std::vector<size_t>* targetIndexRange = reference->GetIndexReferences(rowIndex);
+    for(RIVReference &reference : references) {
+        RIVTable* targetTable = reference.targetTable;
+        std::vector<size_t>* targetIndexRange = reference.GetIndexReferences(rowIndex);
         if(targetIndexRange != 0 && ( sourceReference == 0 || targetTable->name != sourceReference->sourceTable->name)) { //Do not update a table who just updated this table
             //            printf("Force table %s to filter row %zu\n",targetTable->name.c_str(),*targetIndex);
             for(size_t filterIndex : *targetIndexRange) {
-                targetTable->FilterRow(filterIndex,filterOrUnfilter,reference);
+                targetTable->FilterRow(filterIndex,filterOrUnfilter,&reference);
             }
         }
     }
@@ -186,7 +186,7 @@ void RIVTable::AddFilter(Filter *filter) {
     filterRecords(filter);
 }
 
-void RIVTable::AddReference(RIVReference* reference) {
+void RIVTable::AddReference(const RIVReference& reference) {
     references.push_back(reference);
 }
 
@@ -294,10 +294,10 @@ void RIVTable::Print(size_t maxPrint, bool printFiltered) {
     for(size_t j = 0 ; j < rows && (j < maxPrint) ; j++) {
         std::string rowText = RowToString(j);
         if(printFiltered || !filteredRows[j]) {
-            for(RIVReference *reference : references) {
-                std::vector<size_t> *referenceIndexRange = reference->GetIndexReferences(j);
+            for(RIVReference &reference : references) {
+                std::vector<size_t> *referenceIndexRange = reference.GetIndexReferences(j);
                 if(referenceIndexRange && !referenceIndexRange->empty()) {
-                    rowText += "---> " + reference->targetTable->name + "{";
+                    rowText += "---> " + reference.targetTable->name + "{";
                     
                     for(size_t i = 0 ; i < referenceIndexRange->size(); ++i) {
                         
@@ -321,29 +321,125 @@ void RIVTable::Print(size_t maxPrint, bool printFiltered) {
     //    PrintFilteredRowMap();
 }
 
-const RIVReference* RIVTable::GetReferenceToTable(std::string tableName, std::vector<std::string> *visitedTables) const {
-    if(!visitedTables) {
+//Tries to find a table by visiting references recursively and seeing if any reference target table names matches the one given.
+//DEPRECATED; this only will work for depth of one, not for a chain of references (see new GetReferenceChainToTable)
+//RIVReference* RIVTable::GetReferenceToTable(std::string tableName, std::vector<std::string> *visitedTables) {
+//    if(!visitedTables) {
+//        visitedTables = new std::vector<std::string>();
+//    }
+//    visitedTables->push_back(this->name);
+//    for(RIVReference& reference: references) {
+//        if(reference.targetTable->name == tableName) {
+//            return &reference;
+//        }
+//    }
+//    for(RIVReference& reference : references) {
+//        for(std::string visitedName : *visitedTables) {
+//            if(visitedName != reference.targetTable->name) {
+//                RIVReference *found = reference.targetTable->GetReferenceToTable(tableName, visitedTables);
+//                if(found) {
+//                    return found;
+//                }
+//            }
+//        }
+//    }
+//    delete visitedTables;
+//    return NULL;
+//}
+
+//bool RIVTable::GetReferenceChainToTable(std::string tableName, RIVReferenceChain& chainToTarget, std::vector<std::string> *visitedTables) {
+//    if(visitedTables == NULL) {
+//        visitedTables = new std::vector<std::string>();
+//    }
+//    visitedTables->push_back(this->name);
+//    for(RIVReference& reference: references) {
+//        if(reference.targetTable->name == tableName) {
+//            chainToTarget.AddReference(&reference);
+//            return true;
+//        }
+//    }
+//    for(RIVReference& reference : references) {
+//        for(std::string visitedName : *visitedTables) {
+//            if(visitedName != reference.targetTable->name) {
+////                RIVReference *found = reference.targetTable->GetReferenceToTable(tableName, visitedTables);
+////                if(found) {
+////                    chainToTarget.AddReference(found);
+////                    return true;
+////                }
+//                chainToTarget.AddReference(&reference);
+//                if(reference.targetTable->GetReferenceChainToTable(tableName, chainToTarget,visitedTables)) {
+//                    return true;
+//                }
+//            }
+//        }
+//    }
+//    delete visitedTables;
+//    return false;
+//}
+
+//bool RIVTable::GetReferenceChainToTable(std::string tableNameSearch, RIVReferenceChain& chainToTarget, std::vector<std::string> *visitedTables) {
+//    //Start of recursion
+//    if(visitedTables == NULL) {
+//        visitedTables = new std::vector<std::string>();
+//    }
+//    //End of recursion, target found
+//    if(name == tableNameSearch) {
+//        delete visitedTables;
+//        return true;
+//    }
+//    visitedTables->push_back(name);
+//    for(RIVReference& reference : references) {
+//        bool visited = false;
+//        for(std::string visitedName : *visitedTables) {
+//            if(visitedName == reference.targetTable->name) { //If we did not already visit this table
+//                visited = true;
+//                break;
+//            }
+//        }
+//        if(!visited) {
+//            chainToTarget.AddReference(&reference);
+//            if(reference.targetTable->GetReferenceChainToTable(tableNameSearch, chainToTarget, visitedTables)) {
+//                return true;
+//            }
+//        }
+//    }
+//        
+//    return false;
+//}
+
+bool RIVTable::GetReferenceChainToTable(std::string tableNameSearch, RIVReferenceChain& chainToTarget, std::vector<std::string> *visitedTables) {
+    //Start of recursion
+    if(visitedTables == NULL) {
         visitedTables = new std::vector<std::string>();
     }
-    visitedTables->push_back(this->name);
-    for(const RIVReference* reference: references) {
-        if(reference->targetTable->name == tableName) {
-            return reference;
+    //End of recursion, target found
+    if(name == tableNameSearch) {
+        delete visitedTables;
+        return true;
+    }
+    visitedTables->push_back(name);
+    for(RIVReference& reference : references) {
+        bool visited = false;
+        for(std::string visitedName : *visitedTables) {
+            if(visitedName == reference.targetTable->name) { //If we did not already visit this table
+                visited = true;
+                break;
+            }
         }
-        else {
-            for(std::string visitedName : *visitedTables) {
-                if(name != reference->targetTable->name) {
-                    const RIVReference *found = reference->targetTable->GetReferenceToTable(tableName, visitedTables);
-                    if(found) {
-                        return found;
-                    }
-                }
+        if(!visited) {
+            chainToTarget.AddReference(&reference);
+            if(reference.targetTable->GetReferenceChainToTable(tableNameSearch, chainToTarget, visitedTables)) {
+                return true;
+            }
+            else {
+                chainToTarget.PopReference();
             }
         }
     }
-    delete visitedTables;
-    return 0;
+    //It's a dead end
+    return false;
 }
+
 
 const RIVTable* RIVTable::FindTable(std::string tableName, std::vector<std::string>* visitedTables) {
     if(this->name == tableName) {
@@ -362,8 +458,8 @@ const RIVTable* RIVTable::FindTable(std::string tableName, std::vector<std::stri
             visitedTables = new std::vector<std::string>();
         }
         visitedTables->push_back(this->name);
-        for(RIVReference *reference : references) {
-            const RIVTable* foundTable = reference->targetTable->FindTable(tableName, visitedTables);
+        for(RIVReference &reference : references) {
+            const RIVTable* foundTable = reference.targetTable->FindTable(tableName, visitedTables);
             if(foundTable) {
                 return foundTable;
             }
@@ -373,7 +469,11 @@ const RIVTable* RIVTable::FindTable(std::string tableName, std::vector<std::stri
     return NULL;
 }
 
-const std::vector<RIVReference*>* RIVTable::GetReferences() {
+RIVCluster* RIVTable::ClusterForRow(const size_t& row) const {
+    return clusterSet.ClusterForMemberIndex(row); //Will return NULL if row is not contained in any cluster, or there has been no clustering
+}
+
+const std::vector<RIVReference>* RIVTable::GetReferences() {
     return &references;
 }
 
@@ -442,125 +542,8 @@ RIVClusterSet* RIVTable::Cluster(const std::string& xRecordName, const std::stri
 //    clusterSet = new RIVClusterSet(K,xRecord->GetValuesPointer(),yRecord->GetValuesPointer(),zRecord->GetValuesPointer());
 //    clusterSet->Cluster(maxRepeat);
     clusterSet = RIVClusterSet::MakeCluster(maxRepeat, K, xRecord->GetValuesPointer(), yRecord->GetValuesPointer(), zRecord->GetValuesPointer());
+    isClustered = true;
+//    clusterSet.CreateClusterRegister();
     
     return &clusterSet;
 }
-
-/*
-void RIVTable::Cluster(const std::string& xRecordName, const std::string& yRecordName, const std::string& zRecordName, const size_t& K) {
-    if(!(ContainsColumn(xRecordName) && ContainsColumn(yRecordName) && ContainsColumn(zRecordName))) {
-        throw "Table does not contain said records.";
-    }
-    RIVFloatRecord *xRecord = RIVTable::CastToFloatRecord(GetRecord(xRecordName));
-    RIVFloatRecord *yRecord = RIVTable::CastToFloatRecord(GetRecord(yRecordName));
-    RIVFloatRecord *zRecord = RIVTable::CastToFloatRecord(GetRecord(zRecordName));
-    if(K < 1) {
-        throw std::string("Invalid cluster size " + std::to_string(K));
-    }
-    if(xRecord->Size() == 0) {
-        throw "Cannot cluster 0 values.";
-    }
-    std::vector<RIVCluster*> bestClusters;
-    
-    float bestScore = std::numeric_limits<float>::max();
-    
-    size_t lower = 0;
-    
-    const size_t& numRows = NumberOfRows();
-    unsigned long maxRepeat = 100;
-    
-    //Repeat this N! times (number of possible combinations) or cap at given max repeat, as N! quickly becomes infeasible
-    unsigned long repeat = factorization(numRows,maxRepeat);
-    std::string clusterTask = "Clustering N= " + std::to_string(numRows) + " K=" + std::to_string(K) + " repeat=" + std::to_string(repeat);
-    reporter::startTask(clusterTask,repeat);
-    
-    for(size_t k = 0 ; k < repeat ; k++) {
-        
-        size_t* medoidIndices = randInRange(lower,NumberOfRows(),K);
-        std::vector<RIVCluster*> clusters;
-        for(size_t i = 0 ; i < K ; ++i) {
-            size_t index = medoidIndices[i];
-            RIVCluster* cluster = new RIVCluster(index,xRecord->GetValuesPointer(),yRecord->GetValuesPointer(),zRecord->GetValuesPointer(),i);
-            clusters.push_back(cluster);
-        }
-        //        printf("Finished initial creation of clusters\n");
-        //Create K random medoids, and assign other rows randomly to a cluster
-        for(size_t i = 0 ; i < numRows ; ++i) {
-            if(!arrayContains(medoidIndices,K,i)) {
-                //Assign to closest cluster
-                Point3D *point = new Point3D(xRecord->Value(i),yRecord->Value(i),zRecord->Value(i));
-                RIVCluster *bestCluster = clusters[0];
-                Point3D *closestMedoid = bestCluster->GetMedoid();
-                
-                float bestDistance = closestMedoid->EuclideanDistanceTo(*point);
-                
-                for(size_t j = 1 ; j < clusters.size() ; j++) {
-                    Point3D *medoid = clusters[j]->GetMedoid();
-                    if(medoid->EuclideanDistanceTo(*point) < bestDistance) {
-                        closestMedoid = medoid;
-                        bestCluster = clusters[j];
-                    }
-                }
-                delete point;
-                bestCluster->AddMember(i);
-            }
-        }
-        //        printf("Finished assignment of values to closest clusters.\n");
-        
-        //Swap medoids and members, and find best configuration
-        for(RIVCluster* cluster : clusters) {
-            size_t changes = 1; //So that it does it at least once
-            std::string optimizeClusterTask = "Optimization of cluster #" + std::to_string(cluster->id) + " size = " + std::to_string(cluster->Size());
-            reporter::startTask(optimizeClusterTask);
-            while(changes > 0) {
-                changes = 0;
-                //                std::cout << "Optimizing cluster " << *cluster;
-                
-                Point3D* bestMedoid = cluster->GetMedoid();
-                float bestCost = cluster->Cost();
-                //                printf("Cost to beat = %f\n",bestCost);
-                for(size_t j = 0 ; j < cluster->MembersSize() ; ++j) {
-                    //                    float cost = cluster->Cost();
-                    //                    printf("Cost to beat = %f\n",cluster->Cost());
-                    cluster->SwapMedoid(j);
-                    float newCost = cluster->Cost();
-                    //                    printf("cost for medoid %zu = %f\n",j,newCost);
-                    if(newCost < bestCost) {
-                        bestMedoid = cluster->GetMedoid();
-                        //                        std::cout << "Better clustering " << *cluster;
-                        //                        printf("New best cost for cluster #%zu = %f\n",cluster->id,newCost);
-                        bestCost = newCost;
-                        ++changes;
-                    }
-                    else {
-                        cluster->SwapBack();
-                    }
-                }
-                reporter::update(optimizeClusterTask);
-//                printf("%zu changes made to clusters.\n",changes);
-            }
-            reporter::stop(optimizeClusterTask);
-        }        //Compute total cost
-        float totalCost = 0.F;
-        for(RIVCluster*& cluster : clusters) {
-            totalCost += cluster->Cost();
-        }
-        //        printf("totalCost = %f\n",totalCost);
-        if(bestClusters.empty() || totalCost < bestScore) {
-            //            printf("new best cluster has cost %f\n",totalCost);
-            bestClusters = clusters;
-            bestScore = totalCost;
-        }
-        delete[] medoidIndices;
-        reporter::update(clusterTask,k);
-    }
-    
-    //Do something with the best clusters
-    std::cout << "Best clustering found:\n";
-    for(RIVCluster* cluster : bestClusters) {
-        std::cout << "cluster #" << cluster->id << " size=" << cluster->Size() << " and cost=" << cluster->LastCost() << "\n";
-    }
-    
-    clusterSet = new RIVClusterSet(bestClusters);
-}
-*/

@@ -12,6 +12,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Cluster.h"
+#include "Interpolator.h"
 //#include "reporter.h"
 
 class RIVClusterSet {
@@ -23,7 +24,8 @@ private:
     std::vector<float>* xValues;
     std::vector<float>* yValues;
     std::vector<float>* zValues;
-    
+
+    //TODO: create map as a register of what index belongs to what clusters
     const static int MAX_COMBINATIONS = 10000;
     
     NonReplacementSampler<size_t> sampler;
@@ -43,9 +45,11 @@ public:
     std::vector<RIVCluster*> GetClusters();
     void Initialize();
     void Initialize(std::vector<size_t> indices);
+    bool SaveToFile(const std::string& fileName);
     std::vector<size_t> GetMedoidIndices();
     void AssignMembers();
     void OptimizeClusters();
+    RIVCluster* ClusterForMemberIndex(const size_t& mIndex) const;
     double TotalCost();
     static RIVClusterSet MakeCluster(const size_t& maxRepeat, const size_t& K, std::vector<float>* xValues, std::vector<float>* yValues, std::vector<float>* zValues);
     std::pair<size_t,size_t>* MinMaxClusterSize();

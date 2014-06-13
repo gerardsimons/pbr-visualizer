@@ -252,8 +252,8 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
 //        size_t test_count = 0;
         
         
-        std::map<size_t,std::vector<size_t>> *imagePathReferences = new std::map<size_t,std::vector<size_t>>();
-        std::map<size_t,std::vector<size_t>> *pathIsectReferences = new std::map<size_t,std::vector<size_t>>();
+        std::map<size_t,std::vector<size_t>> imagePathReferences = std::map<size_t,std::vector<size_t>>();
+        std::map<size_t,std::vector<size_t>> pathIsectReferences = std::map<size_t,std::vector<size_t>>();
         std::string buffer;
         while (getline(is,line) && (lineNumber < pathsLimit || pathsLimit == -1)) {
             ++lineNumber;
@@ -273,7 +273,7 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
 //                printf("imagetableindex for x = %d, y = %d = %zu\n",x,y,imageTableIndex);
 //                std::vector<RIVRecord*> imageRecords = imageTable->GetRecords();
 
-                    std::vector<size_t> *indices = &(*imagePathReferences)[imageTableIndex];
+                    std::vector<size_t> *indices = &(imagePathReferences)[imageTableIndex];
                     indices->push_back(pathIndex);
 
                 
@@ -361,7 +361,7 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
                         
                         ++intersectionIndex;
                     }
-                    (*pathIsectReferences)[pathIndex] = range;
+                    (pathIsectReferences)[pathIndex] = range;
                 }
                 ++pathIndex;
             }
@@ -436,18 +436,18 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
         intersectionsTable->AddRecord(interactionTypesRecord);
         intersectionsTable->AddRecord(lightIdsRecord);
         
-        RIVReference *imagePathReference = new RIVReference(imageTable,pathTable);
-        imagePathReference->SetReferences(imagePathReferences);
-        RIVReference *pathImageReference = imagePathReference->ReverseReference();
+        RIVReference imagePathReference = RIVReference(imageTable,pathTable);
+        imagePathReference.SetReferences(imagePathReferences);
+        RIVReference pathImageReference = imagePathReference.ReverseReference();
         
         imageTable->AddReference(imagePathReference);
         pathTable->AddReference(pathImageReference);
         
-        RIVReference *reference = new RIVReference(pathTable, intersectionsTable);
-        reference->SetReferences(pathIsectReferences);
-        RIVReference *reverseReference = reference->ReverseReference();
+        RIVReference referenceToIntersections = RIVReference(pathTable, intersectionsTable);
+        referenceToIntersections.SetReferences(pathIsectReferences);
+        RIVReference reverseReference = referenceToIntersections.ReverseReference();
         
-        pathTable->AddReference(reference);
+        pathTable->AddReference(referenceToIntersections);
         intersectionsTable->AddReference(reverseReference);
         
         dataset.AddTable(imageTable);

@@ -17,6 +17,10 @@
 		E1290956191CF53000822217 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290945191CF53000822217 /* main.cpp */; };
 		E1290957191CF53000822217 /* ParallelCoordsAxis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290946191CF53000822217 /* ParallelCoordsAxis.cpp */; };
 		E1290958191CF53000822217 /* ParallelCoordsView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290948191CF53000822217 /* ParallelCoordsView.cpp */; };
+		E12D2B861949B7F1003DF76A /* Interpolator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E12D2B841949B7F1003DF76A /* Interpolator.cpp */; };
+		E13777201948DBF5000F9807 /* testCluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9F91943A5C000411FA7 /* testCluster.cpp */; };
+		E13777211948DBF5000F9807 /* testClusterSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9FA1943A5C000411FA7 /* testClusterSet.cpp */; };
+		E139EA3E194B724B0019C68F /* GraphicsProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E139EA3C194B724B0019C68F /* GraphicsProperty.cpp */; };
 		E13B4C341938947200F1FCCF /* ColorProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E13B4C321938947200F1FCCF /* ColorProperty.cpp */; };
 		E13F45B81941ECA200CC225C /* Afstuderen_Tests.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = E13F45B71941ECA200CC225C /* Afstuderen_Tests.1 */; };
 		E13F48361941F8B700CC225C /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13F45BC1941ECCD00CC225C /* gtest.framework */; };
@@ -26,7 +30,6 @@
 		E15FA633193CECA8000DD70C /* Cluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E15FA631193CECA8000DD70C /* Cluster.cpp */; };
 		E17EA9F219432FE600411FA7 /* ClusterSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9F019432FE600411FA7 /* ClusterSet.cpp */; };
 		E17EA9FB1943A5C000411FA7 /* reporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9F81943A5C000411FA7 /* reporter.cpp */; };
-		E17EA9FC1943A5C000411FA7 /* testCluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9F91943A5C000411FA7 /* testCluster.cpp */; };
 		E17EA9FD1943A5C000411FA7 /* testClusterSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9FA1943A5C000411FA7 /* testClusterSet.cpp */; };
 		E1BD6466193F758100370D69 /* Iterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BD6464193F758100370D69 /* Iterator.cpp */; };
 		E1D1573D193CB54B0059A86B /* DataFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D15730193CB54B0059A86B /* DataFileReader.cpp */; };
@@ -80,6 +83,10 @@
 		E1290949191CF53000822217 /* ParallelCoordsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParallelCoordsView.h; path = ../ParallelCoordsView.h; sourceTree = "<group>"; };
 		E129094A191CF53000822217 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		E129094D191CF53000822217 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = ../Resources; sourceTree = "<group>"; };
+		E12D2B841949B7F1003DF76A /* Interpolator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Interpolator.cpp; sourceTree = "<group>"; };
+		E12D2B851949B7F1003DF76A /* Interpolator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Interpolator.h; sourceTree = "<group>"; };
+		E139EA3C194B724B0019C68F /* GraphicsProperty.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphicsProperty.cpp; sourceTree = "<group>"; };
+		E139EA3D194B724B0019C68F /* GraphicsProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphicsProperty.h; sourceTree = "<group>"; };
 		E13B4C321938947200F1FCCF /* ColorProperty.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColorProperty.cpp; path = ../ColorProperty.cpp; sourceTree = "<group>"; };
 		E13B4C331938947200F1FCCF /* ColorProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorProperty.h; path = ../ColorProperty.h; sourceTree = "<group>"; };
 		E13F45B31941ECA200CC225C /* Afstuderen Tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Afstuderen Tests"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,6 +153,10 @@
 		E12908F3191CCBC900822217 = {
 			isa = PBXGroup;
 			children = (
+				E139EA3C194B724B0019C68F /* GraphicsProperty.cpp */,
+				E139EA3D194B724B0019C68F /* GraphicsProperty.h */,
+				E12D2B841949B7F1003DF76A /* Interpolator.cpp */,
+				E12D2B851949B7F1003DF76A /* Interpolator.h */,
 				E1E47B02194749CB007681B1 /* ColorPallete.h */,
 				E13B4C321938947200F1FCCF /* ColorProperty.cpp */,
 				E13B4C331938947200F1FCCF /* ColorProperty.h */,
@@ -313,6 +324,7 @@
 				E1D1573D193CB54B0059A86B /* DataFileReader.cpp in Sources */,
 				E13B4C341938947200F1FCCF /* ColorProperty.cpp in Sources */,
 				E1D15741193CB54B0059A86B /* Reference.cpp in Sources */,
+				E12D2B861949B7F1003DF76A /* Interpolator.cpp in Sources */,
 				E1290954191CF53000822217 /* ImageView.cpp in Sources */,
 				E14C95C6192F7F0B000A8CAC /* DataView.cpp in Sources */,
 				E129094F191CF53000822217 /* BMPImage.cpp in Sources */,
@@ -320,6 +332,7 @@
 				E17EA9FB1943A5C000411FA7 /* reporter.cpp in Sources */,
 				E1D15742193CB54B0059A86B /* Table.cpp in Sources */,
 				E1290958191CF53000822217 /* ParallelCoordsView.cpp in Sources */,
+				E139EA3E194B724B0019C68F /* GraphicsProperty.cpp in Sources */,
 				E17EA9F219432FE600411FA7 /* ClusterSet.cpp in Sources */,
 				E17EA9FD1943A5C000411FA7 /* testClusterSet.cpp in Sources */,
 				E14C95C4192F7E28000A8CAC /* 3DView.cpp in Sources */,
@@ -327,7 +340,6 @@
 				E1290957191CF53000822217 /* ParallelCoordsAxis.cpp in Sources */,
 				E1D15740193CB54B0059A86B /* Record.cpp in Sources */,
 				E15FA633193CECA8000DD70C /* Cluster.cpp in Sources */,
-				E17EA9FC1943A5C000411FA7 /* testCluster.cpp in Sources */,
 				E1D1573F193CB54B0059A86B /* Filter.cpp in Sources */,
 				E113BE63192521E200F6525A /* ParallelCoordsAxisGroup.cpp in Sources */,
 				E1290956191CF53000822217 /* main.cpp in Sources */,
@@ -340,6 +352,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E13777201948DBF5000F9807 /* testCluster.cpp in Sources */,
+				E13777211948DBF5000F9807 /* testClusterSet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

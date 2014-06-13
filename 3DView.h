@@ -42,7 +42,7 @@ public:
      void OnDataSetChanged();
     
     void ToggleDrawClusterMembers();
-    void SetModelData(std::vector<float>);
+    void SetModelData(const std::vector<float>&);
     void MoveCamera(float,float,float);
     
     //The models to draw

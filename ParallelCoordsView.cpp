@@ -178,67 +178,71 @@ void ParallelCoordsView::drawLines() {
             std::vector<float> axisXCache;
             std::vector<float> axisYCache;
             
-//            iterator->Print();
-            while(iterator->GetNext(row)) {
-//                printf("Row : %zu\n",row);
+            RIVCluster* cluster = NULL;
+            RIVClusterSet* clusterSet = NULL;
+            
+            while(iterator->GetNext(row,cluster,clusterSet,true)) {
                 glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
+                
                 float const* color = colorProperty->Color(table, row);
-                glColor3f(color[0], color[1], color[2]);
-//                delete color;
-                for(ParallelCoordsAxis &axis : axisGroup.axes) {
-                    RIVRecord *ptr = axis.RecordPointer;
-                    RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(ptr);
-                    
-                    //If this is a connector axis we should cache the coords
-                    bool cacheCoords = false;
-                    if(axisGroup.connectorAxis->name == axis.name && !axisGroup.connectedGroup) {
-                        axisXCache.clear();
-                        axisYCache.clear();
-//                        printf("Connector axis  found. Caching the coordinates.");
-                        cacheCoords = true;
-                    }
-                    
-                    if(floatRecord) {
-                        //Code here
-                        float value = floatRecord->Value(row);
-                        float x = axis.x;
-                        float y = axis.PositionOnScaleForValue(value);
+                if(color != NULL) {
+                    glColor3f(color[0], color[1], color[2]);
+    //                delete color;
+                    for(ParallelCoordsAxis &axis : axisGroup.axes) {
+                        RIVRecord *ptr = axis.RecordPointer;
+                        RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(ptr);
+                        
+                        //If this is a connector axis we should cache the coords
+                        bool cacheCoords = false;
+                        if(axisGroup.connectorAxis->name == axis.name && !axisGroup.connectedGroup) {
+                            axisXCache.clear();
+                            axisYCache.clear();
+    //                        printf("Connector axis  found. Caching the coordinates.");
+                            cacheCoords = true;
+                        }
+                        
+                        if(floatRecord) {
+                            //Code here
+                            float value = floatRecord->Value(row);
+                            float x = axis.x;
+                            float y = axis.PositionOnScaleForValue(value);
 
-                        //                        printf("glVertex3f(%f,%f)\n",x,y);
-                        //                        printf("Drawing line %zu\n",lineIndex);
-                        if(cacheCoords == true) {
-                            axisXCache.push_back(x);
-                            axisYCache.push_back(y);
+                            //                        printf("glVertex3f(%f,%f)\n",x,y);
+                            //                        printf("Drawing line %zu\n",lineIndex);
+                            if(cacheCoords == true) {
+                                axisXCache.push_back(x);
+                                axisYCache.push_back(y);
+                            }
+    //                        printf("glVertex3f(%f,%f,%f)\n",x,y,0);
+                            glVertex3f(x, y, 0);
+                            if(y > axis.y + axis.height || y < axis.y) {
+                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
+                            }
+                            continue;
                         }
-                        
-                        glVertex3f(x, y, 0);
-                        if(y > axis.y + axis.height || y < axis.y) {
-                            throw new std::string("A line was being drawn outside ot the parallel coordinates view");
-                        }
-                        continue;
-                    }
-                    RIVUnsignedShortRecord* shortRecord = RIVTable::CastToUnsignedShortRecord(ptr);
-                    if(shortRecord) {
-                        //Code here
-                        
-                        ushort value = shortRecord->Value(row);
-                        
-                        float x = axis.x;
-                        float y = axis.PositionOnScaleForValue(value);
-                        if(cacheCoords == true) {
-                            axisXCache.push_back(x);
-                            axisYCache.push_back(y);
-                        }
-                        glVertex3f(x, y, 0);
-                        
-                        if(y > axis.y + axis.height || y < axis.y) {
+                        RIVUnsignedShortRecord* shortRecord = RIVTable::CastToUnsignedShortRecord(ptr);
+                        if(shortRecord) {
+                            //Code here
                             
-//                            printf("This should not happen!!!!!\n");
-//                            printf("Weird results for record %s (x,y) = (%f,%f)\n",shortRecord->name.c_str(),x,y);
-//                            std::cout << "value = " << value << "\n";
-//                            printf("END");
-//                            
-                            throw new std::string("A line was being drawn outside ot the parallel coordinates view");
+                            ushort value = shortRecord->Value(row);
+                            
+                            float x = axis.x;
+                            float y = axis.PositionOnScaleForValue(value);
+                            if(cacheCoords == true) {
+                                axisXCache.push_back(x);
+                                axisYCache.push_back(y);
+                            }
+                            glVertex3f(x, y, 0);
+                            
+                            if(y > axis.y + axis.height || y < axis.y) {
+                                
+    //                            printf("This should not happen!!!!!\n");
+    //                            printf("Weird results for record %s (x,y) = (%f,%f)\n",shortRecord->name.c_str(),x,y);
+    //                            std::cout << "value = " << value << "\n";
+    //                            printf("END");
+    //                            
+                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
+                            }
                         }
                     }
                 }

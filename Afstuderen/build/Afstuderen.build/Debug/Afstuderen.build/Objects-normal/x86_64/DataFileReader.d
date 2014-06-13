@@ -8,6 +8,7 @@ dependencies: \
   /Users/gerardsimons/Git/afstuderen/ColorProperty.h \
   /Users/gerardsimons/Git/afstuderen/RIVData/Record.h \
   /Users/gerardsimons/Git/afstuderen/helper.h \
+  /Users/gerardsimons/Git/afstuderen/Afstuderen/Interpolator.h \
   /Users/gerardsimons/Git/afstuderen/RIVData/Filter.h \
   /Users/gerardsimons/Git/afstuderen/RIVData/Reference.h \
   /Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h \

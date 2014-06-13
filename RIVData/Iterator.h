@@ -22,8 +22,11 @@ protected:
 public:
     TableIterator(size_t maxIndex_, RIVClusterSet* clusterSet_);
     void BackToStart();
-    virtual bool GetNext(size_t& row, RIVCluster*& cluster, RIVClusterSet*& clusterSet, bool byCluster = false);
     virtual bool GetNext(size_t& row);
+    //Returns the next cluster, row is set to the medoid index, cluster and clusterSet are filled according to the cluster found
+    virtual bool GetNextCluster(size_t& row, RIVCluster*& cluster, RIVClusterSet*& clusterSet);
+    //Return the next row and its cluster information (if any requested, indicated by bool)
+    virtual bool GetNext(size_t& row, RIVCluster*& cluster, RIVClusterSet*& parentSet,bool requestCluster = false);
     virtual void Print() const;
 };
 
@@ -36,8 +39,9 @@ public:
         index = 0;
     };
     
-    virtual bool GetNext(size_t &row,RIVCluster* cluster = NULL);
-    
+    virtual bool GetNext(size_t &row);
+//    virtual bool GetNextCluster(size_t& row, RIVCluster*& cluster, RIVClusterSet*& clusterSet);
+    virtual bool GetNext(size_t& row, RIVCluster*& cluster, RIVClusterSet*& parentSet,bool requestCluster = false);
     void Print() const;
 };
 

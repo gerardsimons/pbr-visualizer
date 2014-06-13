@@ -17,7 +17,7 @@
 //
 
 
-
+#include <fstream>
 #include <iostream>
 #include <algorithm>
 #include "Cluster.h"
@@ -64,7 +64,15 @@ RIVCluster* RIVClusterSet::GetCluster(size_t index) {
     throw "Warning: requested cluster out of cluster set bounds.";
     return NULL;
 }
-
+//TODO: make cache map for this
+RIVCluster* RIVClusterSet::ClusterForMemberIndex(const size_t& mIndex) const {
+    for(RIVCluster* cluster : clusters) {
+        if(cluster->HasMember(mIndex) || cluster->GetMedoidIndex() == mIndex) {
+            return cluster;
+        }
+    }
+    return NULL;
+}
 std::vector<RIVCluster*> RIVClusterSet::GetClusters() {
     return clusters;
 }
@@ -122,6 +130,17 @@ std::vector<size_t> RIVClusterSet::GetMedoidIndices() {
     }
     return medoidIndices;
 }
+bool RIVClusterSet::SaveToFile(const std::string& fileName) {
+    std::ofstream output;
+    output.open (fileName);
+    if(output.is_open()) {
+        for(RIVCluster* child : clusters) {
+            child->SaveToFileStream(output);
+        }
+        output.close();
+    }
+    return 0;
+}
 void RIVClusterSet::AssignMembers() {
     if(!initialized) {
         throw std::string("Initialization is required before assignment is possible.");
@@ -175,6 +194,9 @@ double RIVClusterSet::TotalCost() {
 //}
 
 RIVClusterSet RIVClusterSet::MakeCluster(const size_t& maxRepeat, const size_t& K, std::vector<float>* xValues, std::vector<float>* yValues, std::vector<float>* zValues) {
+    if(xValues->size() < K) {
+        throw "More clusters requested than values given.";
+    }
     unsigned long long nrOfCombinations = choose(xValues->size(), K);
     
     size_t repeat = std::min(maxRepeat,(size_t)nrOfCombinations);

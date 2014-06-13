@@ -96,10 +96,24 @@ RIVTable* RIVDataSet::GetTable(const std::string& tableName) const {
             return table;
         }
     } //No such table
-    throw "No such table.";
     return NULL;
 }
 
 bool RIVDataSet::IsSet() const {
     return tables.size() != 0;
+}
+
+RIVClusterSet* RIVDataSet::GetClusterSet() {
+    return clusterSet;
+}
+
+void RIVDataSet::ClusterTable(const std::string& tableName, const std::string& columnNameX, const std::string& columnNameY, const std::string& columnNameZ, const size_t& K, const size_t& maxRepeat) {
+    RIVTable *table = GetTable(tableName);
+    if(!table) {
+        throw "No such table.";
+    }
+    else {
+        clusterSet = table->Cluster(columnNameX, columnNameY, columnNameZ, K, maxRepeat);
+        
+    }
 }

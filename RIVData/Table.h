@@ -25,17 +25,19 @@
 #include "Cluster.h"
 
 class RIVReference;
+class RIVReferenceChain;
 class RIVDataView;
 
 class RIVTable {
 private:
     std::vector<RIVRecord*> records;
-    std::vector<RIVReference*> references;
+    std::vector<RIVReference> references;
     std::vector<RIVDataSetListener*> onChangeListeners;
     std::vector<size_t> selectedRows;
     RIVClusterSet clusterSet;
     
     bool filtered = false;
+    bool isClustered = false;
     
     TableIterator* iterator;
     
@@ -60,12 +62,14 @@ public:
     
     void AddRecord(RIVRecord* record);
     void AddFilter(Filter *filter);
-    void AddReference(RIVReference* reference);
+    void AddReference(const RIVReference& reference);
     void AddOnChangeListeners(RIVDataView *dataview);
     
     void FilterRow(size_t,bool filter,RIVReference* reference = 0);
 //    void UnfilterRow(size_t,RIVReference* reference = 0);
     void FilterRowsUnlinkedTo(RIVTable *table);
+    
+    RIVCluster* ClusterForRow(const size_t& row) const;
     
     void ClearFilters();
     void ClearFilter(std::string filterName);
@@ -77,19 +81,25 @@ public:
     static RIVUnsignedShortRecord* CastToUnsignedShortRecord(RIVRecord* record);
     
     bool IsFiltered() { return filtered; }; //Any filters applied?
+    bool IsClustered() { return isClustered; };
+    
     void FunctionOnRecords(void(*someFunction)(const RIVRecord*));
 
-    const std::vector<RIVReference*>* GetReferences();
+    const std::vector<RIVReference>* GetReferences();
     TableIterator* GetIterator();
     std::string GetName() const { return name; };
     size_t GetNumRows() const { return rows; };
-    const RIVReference* GetReferenceToTable(std::string tableName,std::vector<std::string> *visitedTables = 0) const;
+    
+//    RIVReference* GetReferenceToTable(std::string tableName,std::vector<std::string> *visitedTables = 0); //DEPRECATED
+    bool GetReferenceChainToTable(std::string tableName, RIVReferenceChain& chainToTarget, std::vector<std::string> *visitedTables = 0) ;
+    
     const RIVTable* FindTable(std::string tableName, std::vector<std::string> *visitedTables = 0);
     
     size_t NumberOfColumns(); //Columns
     size_t NumberOfRows();
     std::vector<RIVRecord*> GetRecords();
     
+    RIVClusterSet* GetClusterSet() { return &clusterSet; };
     void ClusterWithSize(const std::string& xRecordName, const std::string& yRecordName, const std::string& zRecordName, const size_t& clusterSize, const size_t& maxRepeat);
     RIVClusterSet* Cluster(const std::string& xRecord, const std::string& yRecord, const std::string& zRecord, const size_t& K, const size_t& maxRepeat);
     

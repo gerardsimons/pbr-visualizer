@@ -16,25 +16,17 @@ TableIterator::TableIterator(size_t maxIndex_, RIVClusterSet* clusterSet_) {
     clusterSet = clusterSet_;
 };
 void TableIterator::BackToStart() { index = 0; };
-bool TableIterator::GetNext(size_t& row, RIVCluster*& cluster, RIVClusterSet*& parentSet, bool byCluster) {
-    if(index >= maxIndex || (clusterSet && byCluster && clusterIndex >= clusterSet->Size())) {
+bool TableIterator::GetNextCluster(size_t& row, RIVCluster*& cluster, RIVClusterSet*& parentSet) {
+    if(index >= maxIndex || (clusterSet && clusterIndex >= clusterSet->Size())) {
         return false;
     }
     else {
-        //If any cluster data is given, and an actual cluster is requested
-        if(clusterSet && byCluster) {
-            cluster = clusterSet->GetCluster(clusterIndex);
-            parentSet = clusterSet;
-            row = cluster->GetMedoidIndex();
-            clusterIndex++;
-            index = row;
-            return (clusterIndex - 1) < clusterSet->Size();
-        }
-        else {
-            row = index;
-            index++;
-            return (index - 1) < maxIndex;
-        }
+        cluster = clusterSet->GetCluster(clusterIndex);
+        parentSet = clusterSet;
+        row = cluster->GetMedoidIndex();
+        clusterIndex++;
+        index = row;
+        return (clusterIndex - 1) < clusterSet->Size();
     }
 }
 bool TableIterator::GetNext(size_t& row) {
@@ -47,11 +39,25 @@ bool TableIterator::GetNext(size_t& row) {
         return (index - 1) < maxIndex;
     }
 }
+bool TableIterator::GetNext(size_t& row, RIVCluster*& cluster, RIVClusterSet*& parentSet,bool requestCluster) {
+    if(index >= maxIndex) {
+        return false;
+    }
+    else {
+        row = index;
+        if(requestCluster) {
+            cluster = clusterSet->ClusterForMemberIndex(index);
+            parentSet = clusterSet;
+        }
+        index++;
+        return (index - 1) < maxIndex;
+    }
+}
 void TableIterator::Print() const {
     printf("TableIterator (maxIndex = %zu) \n", maxIndex);
 }
 
-bool FilteredTableIterator::GetNext(size_t &row,RIVCluster* cluster) {
+bool FilteredTableIterator::GetNext(size_t& row) {
     if(index < maxIndex) {
         bool filtered = (*indexPointers)[index];
         while(filtered && index < maxIndex) {
@@ -65,6 +71,42 @@ bool FilteredTableIterator::GetNext(size_t &row,RIVCluster* cluster) {
     }
     return false;
 }
+
+bool FilteredTableIterator::GetNext(size_t& row, RIVCluster*& cluster, RIVClusterSet*& parentSet,bool requestCluster) {
+    if(index < maxIndex) {
+        bool filtered = (*indexPointers)[index];
+        while(filtered && index < maxIndex) {
+            index++;
+            filtered = (*indexPointers)[index];
+            //                printf("index = %zu\n",index);
+        }
+        row = index;
+        if(clusterSet) {
+            cluster = clusterSet->ClusterForMemberIndex(row);
+            parentSet = clusterSet;
+        }
+        index++;
+        return !filtered && index <= maxIndex;
+    }
+    return false;
+}
+
+//TODO: How would such a function make sense for a filtered dataset?
+
+//bool FilteredTableIterator::GetNextCluster(size_t &row, RIVCluster *&cluster, RIVClusterSet *&clusterSet) {
+//    if(index < maxIndex) {
+//        bool filtered = (*indexPointers)[index];
+//        while(filtered && index < maxIndex) {
+//            index++;
+//            filtered = (*indexPointers)[index];
+//            //                printf("index = %zu\n",index);
+//        }
+//        row = index;
+//        index++;
+//        return !filtered && index <= maxIndex;
+//    }
+//    return false;
+//}
 
 void FilteredTableIterator::Print() const {
     printf("FilteredTableIterator index = %zu map of iterator object has %zu values :\n", index, maxIndex);

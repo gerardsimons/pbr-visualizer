@@ -12,6 +12,20 @@ const float RIVColorProperty::colorBlue[3] = {0,0,1};
 const float RIVColorProperty::colorYellow[3] = {1,1,0};
 const float RIVColorProperty::colorBlack[3] = {0,0,0};
 
+void RIVColorLinearProperty::init(const INTERPOLATION_SCHEME& scheme, const std::vector<size_t>& interpolationValues) {
+    switch(scheme) {
+        case CONTINUOUS:
+        {
+            colorInterpolator = new LinearInterpolator<size_t>(interpolationValues);
+        }
+        case DISCRETE:
+        {
+            colorInterpolator = new DiscreteInterpolator<size_t>(interpolationValues);
+        }
+            
+    }
+}
+
 RIVColorLinearProperty::RIVColorLinearProperty(RIVTable *colorReference_, float* colorOne_, float* colorTwo_, float* alternateColor_) : RIVColorProperty(alternateColor_){
     //        colorTableName = colorTableName_;
     colorReference = colorReference_;
@@ -19,7 +33,11 @@ RIVColorLinearProperty::RIVColorLinearProperty(RIVTable *colorReference_, float*
     memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
     size_t lower = 0;
     size_t upper = colorReference->GetNumRows();
-    colorInterpolator = new LinearInterpolator<size_t>(lower,upper);
+    std::vector<size_t> interpolationValues;
+    interpolationValues.push_back(lower);
+    interpolationValues.push_back(upper);
+    init(CONTINUOUS,interpolationValues);
+    clusterColorInterpolator = NULL;
 }
 
 RIVColorLinearProperty::RIVColorLinearProperty(RIVTable* colorReference_) : RIVColorProperty() {
@@ -28,72 +46,107 @@ RIVColorLinearProperty::RIVColorLinearProperty(RIVTable* colorReference_) : RIVC
     memcpy(colorTwo, colorYellow, sizeof(colorTwo));
     size_t lower = 0;
     size_t upper = colorReference->GetNumRows();
-    colorInterpolator = new LinearInterpolator<size_t>(lower,upper);
+    std::vector<size_t> interpolationValues;
+    interpolationValues.push_back(lower);
+    interpolationValues.push_back(upper);
+    init(CONTINUOUS,interpolationValues);
+    clusterColorInterpolator = NULL;
 }
 
-RIVColorLinearProperty::RIVColorLinearProperty(RIVTable* colorReference_, std::vector<size_t>& interpolationValues) : RIVColorProperty() {
+RIVColorLinearProperty::RIVColorLinearProperty(RIVTable* colorReference_, std::vector<size_t>& interpolationValues, const INTERPOLATION_SCHEME& scheme) : RIVColorProperty() {
     colorReference = colorReference_;
     memcpy(colorOne, colorBlue, sizeof(colorOne));
     memcpy(colorTwo, colorYellow, sizeof(colorTwo));
-    colorInterpolator = new LinearInterpolator<size_t>(interpolationValues);
+    init(scheme,interpolationValues);
+    clusterColorInterpolator = NULL;
 }
 
-float const* RIVColorLinearProperty::Color(const RIVTable* table, const size_t& row) {
-    float ratio = 0.F;
-    if(table->GetName() == colorReference->GetName()) {
-        ratio = row / (float) table->GetNumRows();
+//This is the public function usually called by views that base their color on some table (the reference table).
+//Color is either based on the row (or the cluster of the row) of the reference table. If a link exists between the given table & row
+//and the reference table. Additionally information about the cluster may be given, in order to avoid unnecessary look ups when the given
+//table is the color reference table.
+float const* RIVColorLinearProperty::Color(RIVTable* table, const size_t& row) {
+    if(colorByClusterMode) {
+        return colorByCluster(table,row);
+    }
+    else {
+        return colorByRow(table, row);
+    }
+}
+
+float const* RIVColorLinearProperty::colorByRow(RIVTable* sourceTable, const size_t& row) {
+    if(sourceTable->GetName() == colorReference->GetName()) {
+        float ratio = colorInterpolator->Interpolate(row);
         return linearInterpolateColor(ratio, colorOne, colorTwo);
     }
     else {
-        //Find the table
-        const RIVReference* reference = table->GetReferenceToTable(colorReference->GetName());
-        if(table->GetName() == "intersections") {
-            
-        }
-        if(colorReference) {
-            std::vector<size_t>* targetRange = reference->GetIndexReferences(row);
-            if(targetRange){
-                size_t colorIndex = (*targetRange)[0];
-//                ratio = colorIndex / (float)reference->targetTable->GetNumRows();
-                
-//                return linearInterpolateColor(ratio, colorOne, colorTwo);
-                float interpolated = colorInterpolator->Interpolate(colorIndex);
-                float R = interpolated * colorOne[0] + (1-interpolated) * colorTwo[0];
-                float G = interpolated * colorOne[1] + (1-interpolated) * colorTwo[1];
-                float B = interpolated * colorOne[2] + (1-interpolated) * colorTwo[2];
-                float color[3] = {R,G,B};
-                return color;
+        //Find the table through its references
+        RIVReferenceChain chainToColorTable;
+        if(sourceTable->GetReferenceChainToTable(colorReference->GetName(),chainToColorTable)) {
+            //Find target index
+            const std::vector<size_t>& targetRange = chainToColorTable.ResolveRow(row);
+            if(targetRange.size() > 0){
+                size_t colorIndex = (targetRange)[0];
+                //Repeat using the new row and table
+                return Color(colorReference,colorIndex);
             }
         }
     }
-    return alternateColor;
+    if(useAlternateColors)
+        return alternateColor;
+    else
+        return NULL;
 }
 
-float* RIVColorRGBProperty::Color(const RIVTable* table, const size_t& row) {
-    size_t tableRow = row;
-    //Find correct table    
-    if(table->GetName() != colorTableName) {
-        const RIVReference* ref = table->GetReferenceToTable(colorTableName);
-        if(ref) {
-            std::vector<size_t> *indices = ref->GetIndexReferences(row);
-            if(indices && indices->size() != 0) {
-                tableRow = indices->at(0);
-            }
-            else {
-                //No reference!
-                return alternateColor;
+float const* RIVColorLinearProperty::colorByCluster(RIVTable* sourceTable,const size_t& row) {
+    if(clusterColorInterpolator == NULL) {
+        initClusterColorInterpolator();
+    }
+    if(sourceTable->GetName() == colorReference->GetName()) {
+        RIVCluster* cluster = sourceTable->ClusterForRow(row);
+        size_t mIndex = cluster->GetMedoidIndex();
+        float interpolatedValue = clusterColorInterpolator->Interpolate(mIndex);
+        return linearInterpolateColor(interpolatedValue,colorOne,colorTwo);
+    }
+    else {
+        //Find cluster in color reference table, assuming it has one
+        RIVReferenceChain chainToColorTable;
+        if(sourceTable->GetReferenceChainToTable(colorReference->GetName(),chainToColorTable)) {
+            //Find target index
+            const std::vector<size_t>& targetRange = chainToColorTable.ResolveRow(row);
+            if(targetRange.size() > 0){
+                size_t colorIndex = (targetRange)[0];
+                //Repeat using the new row and table
+                return Color(colorReference,colorIndex);
             }
         }
-        else {
-            throw "Color reference could not be resolved.";
+//        RIVReference* reference = table->GetReferenceToTable(colorReference->GetName());
+//        if(colorReference) {
+//            std::vector<size_t>* targetRange = reference->GetIndexReferences(row);
+//            if(targetRange && targetRange->size() > 0){
+//                //Ask the clusterset what cluster the target index belongs to
+//                return colorByCluster(reference->targetTable, (*targetRange)[0]);
+//            }
+//        }
+    }
+    if(useAlternateColors)
+        return alternateColor;
+    else
+        return NULL;
+}
+
+void RIVColorLinearProperty::initClusterColorInterpolator() {
+    RIVClusterSet* clusterSet = colorReference->GetClusterSet();
+    const std::vector<size_t>& medoids = clusterSet->GetMedoidIndices();
+    clusterColorInterpolator = new DiscreteInterpolator<size_t>(medoids);
+}
+
+void RIVColorLinearProperty::EnableColorByCluster() {
+    if(colorReference->IsClustered()) {
+        if(!colorByClusterMode) {
+            initClusterColorInterpolator();
+            colorByClusterMode = true;
         }
     }
-    float R = redRecord->ScaleValue(tableRow);
-    float G = greenRecord->ScaleValue(tableRow);
-    float B = blueRecord->ScaleValue(tableRow);
-
-//    printf("[R,G,B] row %zu = [%d,%d,%d]\n",tableRow,(int)(R * 255),(int)(G * 255), (int)(B * 255));
-    float color[3] = {R,G,B};
-    
-    return color;
+    else throw "Table is not a clustered table.";
 }

@@ -13,36 +13,8 @@
 #include <stdio.h>
 #include <map>
 #include <vector>
+#include <algorithm>
 #include <GLUT/GLUT.h>
-
-template<typename T>
-class LinearInterpolator {
-private:
-    std::vector<T> values;
-public:
-    LinearInterpolator(T& min_,T& max_) {
-        values.push_back(min_);
-        values.push_back(max_);
-    }
-    LinearInterpolator(const std::vector<T>& values_) {
-        if(values_.size() < 2) {
-            throw "At least 2 values are required to interpolate.";
-        }
-        values = values_;
-    }
-    float Interpolate(T& value) {
-        //What segment
-        size_t segment = 1;
-        for(size_t i = 0 ; i < values.size() - 1 ; i++) {
-            if(value >= values[i] && value <= values[i + 1]) {
-                float interpolated = (value + values[i]) / (float)(values[i + 1] + values[i]);
-                return interpolated;
-            }
-        }
-        throw "Interpolation parameter out of range.";
-//        return fraction * values[0] + (1 - fraction) * values[values.size() - 1];
-    }
-};
 
 template <typename T>
 class Sampler {
@@ -84,7 +56,7 @@ public:
         Reset();
     }
     NonReplacementSampler(T lowerbound, T upperbound) {
-        if(upperbound <= lowerbound) {
+        if(upperbound < lowerbound) {
             throw "Invalid bounds.";
         }
         origin = new std::vector<T>;
@@ -172,7 +144,7 @@ bool arrayContains(T* array, size_t size, T value) {
 
 template <typename T>
 void printVector(const std::vector<T>& values) {
-    std::cout << "[ ";
+    std::cout << "vector = [ ";
     for(size_t i = 0 ; i < values.size() ; ++i) {
         T value = values[i];
         std::cout << value << " ";

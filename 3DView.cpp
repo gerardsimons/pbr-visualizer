@@ -13,11 +13,12 @@
 
 #include <GLUT/glut.h>
 
+//TODO : Move these to the header file
+const float sizeMultiplier = 5.F;
+
 RIV3DView::RIV3DView(int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty) : RIVDataView(x,y,width,height,paddingX,paddingY,colorProperty) {
     identifier = "3DView";
 };
-
-//TODO : Move these to the header file
 
 void RIV3DView::ComputeLayout() {
     eye.x = 0.F;
@@ -103,7 +104,6 @@ void RIV3DView::Draw() {
         glBegin(GL_TRIANGLES);
         for(size_t i = 0 ; i < modelData.size() ; i += 3) {
             glVertex3f(modelData[i],modelData[i+1],modelData[i+2]);
-            
         }
         glEnd();
         
@@ -128,41 +128,28 @@ void RIV3DView::Draw() {
         
         while(iterator->GetNext(row,cluster,clusterSet,true)) {
 //            printf("row = %zu\n",row);
-            float isectX = xRecord->Value(row);
-            float isectY = yRecord->Value(row);
-            float isectZ = zRecord->Value(row);
-            Point3D point(isectX,isectY,isectZ);
-            float const* color = colorProperty->Color(table,row);
-            glColor4f(color[0], color[1], color[2], .5F);
-            glPushMatrix();
-            glTranslatef(isectX, isectY, isectZ);
-            float medoidShereSize = sphereSizeDefault;
-            float sizeMultiplier = 5.F;
-            if(cluster != NULL && clusterSet != NULL) {
-//                printf("Found cluster of size %zu\n",cluster->MembersSize() + 1);
-                sizeMultiplier += clusterSet->RelativeSizeOf(cluster);
-//                                std::cout << *cluster;
-            }
-            //Draw the cluster medoid according to relative number of members in the cluster
+            float const* color = colorProperty->Color(table, row); //Check if any color can be computed for the given row
+            if(color != NULL) {
+                float isectX = xRecord->Value(row);
+                float isectY = yRecord->Value(row);
+                float isectZ = zRecord->Value(row);
+                Point3D point(isectX,isectY,isectZ);
 
-            gluSphere(quadric, medoidShereSize * sizeMultiplier, sizeMultiplier * 4, sizeMultiplier * 4);
-            glPopMatrix();
-            
-            if(drawClusterMembers && cluster != NULL) { //also draw the cluster members
-                std::vector<size_t> memberIndices = cluster->GetMemberIndices();
-                for(size_t& member : memberIndices) {
-                    float memberX = xRecord->Value(member);
-                    float memberY = yRecord->Value(member);
-                    float memberZ = zRecord->Value(member);
-                    glPushMatrix();
-                    glTranslatef(memberX, memberY, memberZ);
-//                    glColor4f(color[0],color[1],color[2],.5F);
-                    gluSphere(quadric, sphereSizeDefault, 4, 4);
-                    glPopMatrix();
+                glColor4f(color[0], color[1], color[2], .5F);
+                glPushMatrix();
+                glTranslatef(isectX, isectY, isectZ);
+                float medoidShereSize = sphereSizeDefault;
+                if(cluster != NULL && clusterSet != NULL && row == cluster->GetMedoidIndex()) { //This row is a cluster medoid, draw its size according to its number of members
+    //                printf("Found cluster of size %zu\n",cluster->MembersSize() + 1);
+                    gluSphere(quadric, medoidShereSize * sizeMultiplier * (1 +clusterSet->RelativeSizeOf(cluster)), sizeMultiplier * 4, sizeMultiplier * 4);
+    //                                std::cout << *cluster;
                 }
+                else if(drawClusterMembers) { //also draw the cluster members
+    //                glColor4f(color[0],color[1],color[2],.5F);
+                    gluSphere(quadric, sphereSizeDefault, 4, 4);
+                }
+                glPopMatrix();
             }
-            
-
         }
         glPopMatrix();
         
@@ -191,7 +178,7 @@ void RIV3DView::MoveCamera(float x, float y, float z) {
     zNear += z;
     zFar += z;
     
-    printf("new eye (x,y,z) = (%f,%f,%f)\n",eye.x,eye.y,eye.z);
+//    printf("new eye (x,y,z) = (%f,%f,%f)\n",eye.x,eye.y,eye.z);
     isDirty = true;
 }
 
@@ -225,8 +212,8 @@ Point3D RIV3DView::ScreenToWorldCoordinates(int screenX, int screenY, float zPla
     return worldPos;
 }
 
-void RIV3DView::SetModelData(std::vector<float> _modelData) {
-    if(_modelData.size() % 3 != 0) {
+void RIV3DView::SetModelData(const std::vector<float>& _modelData) {
+    if(_modelData.size() == 0 ||_modelData.size() % 3 != 0) {
         throw "Malformed vertex data.";
     }
     modelData = _modelData;
