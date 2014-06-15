@@ -15,6 +15,7 @@
 #include <vector>
 #include <algorithm>
 #include <GLUT/GLUT.h>
+#include <iterator>
 
 template <typename T>
 class Sampler {
@@ -38,6 +39,14 @@ public:
     }
 };
 
+template<class T>
+inline void deletePointerVector(std::vector<T*> v)
+{
+    for (typename std::vector<T*>::iterator i = v.begin(); i != v.end(); i++)
+    {
+        delete *i;
+    }
+}
 
 template <typename T>
 class NonReplacementSampler {

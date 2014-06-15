@@ -11,6 +11,7 @@
 #include "DataFileReader.h"
 #include "3DView.h"
 #include "ColorPallete.h"
+#include "ColorProperty.h"
 
 #if defined(__APPLE__)
 #include <GLUT/glut.h>
@@ -30,7 +31,7 @@ int width = 1400;
 int height = 800;
 
 RIVClusterSet* clusters; //HERE ONLY FOR DEBUG REASONS
-const size_t clusterK = 6 ;
+const size_t clusterK = 2;
 
 bool isDirty = true;
 
@@ -264,12 +265,18 @@ void initialize(int argc, char* argv[]) {
     RIVTable *imageTable = dataset.GetTable("image");
     RIVTable *pathTable = dataset.GetTable("path");
     imageTable->FilterRowsUnlinkedTo(pathTable);
-    RIVColorProperty *colorProperty = new RIVColorLinearProperty(pathTable);
+    RIVColorProperty *colorProperty = new RIVInterpolatedColorProperty(pathTable,colors::GREEN,colors::RED);
 
     //Linear cluster coloring
     std::vector<size_t> medoidIndices = dataset.GetClusterSet()->GetMedoidIndices();
-    RIVColorProperty* clusterColorProperty = new RIVColorLinearProperty(dataset.GetTable("intersections"), medoidIndices,DISCRETE);
-    clusterColorProperty->EnableColorByCluster();
+    RIVTable *intersectionsTable = dataset.GetTable("intersections");
+    RIVInterpolatedColorProperty* clusterColorProperty = new RIVInterpolatedColorProperty(intersectionsTable);
+//    clusterColorProperty->EnableColorByCluster();
+    
+    RIVClusterSet* clusterSet = intersectionsTable->GetClusterSet();
+    std::vector<size_t> medoids = clusterSet->GetMedoidIndices();
+    
+    clusterColorProperty->AddInterpolationScheme(medoids, new DiscreteInterpolator<size_t>(medoids));
     
     std::vector<float const*> colorPallette = colors::allColors();
     

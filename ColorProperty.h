@@ -9,18 +9,23 @@
 #ifndef __Afstuderen__ColorProperty__
 #define __Afstuderen__ColorProperty__
 
-#include "Record.h"
-#include "Table.h"
-#include "helper.h"
+#include "Property.h"
+
 #include <stdio.h>
 #include <string>
-#include "Interpolator.h"
 
-class RIVTable;
+class RIVRecord;
 
+//Interface for a color property
 class RIVColorProperty {
 protected:
     float alternateColor[3];
+    RIVColorProperty(float* alternateColor_) {
+        memcpy(alternateColor,alternateColor_,sizeof(alternateColor));
+    }
+    RIVColorProperty() {
+        memcpy(alternateColor,colorBlack,sizeof(alternateColor));
+    }
 public:
     //DEFAULT COLORS
     const static float colorBlue[3];
@@ -28,67 +33,37 @@ public:
     const static float colorBlack[3];
     
     virtual float const* Color(RIVTable*,const size_t&) = 0;
-    virtual void EnableColorByCluster() = 0;
-    virtual void Setup() {};
-    RIVColorProperty(float* alternateColor_) {
-        memcpy(alternateColor,alternateColor_,sizeof(alternateColor));
-    }
-    RIVColorProperty() {
-        memcpy(alternateColor,colorBlack,sizeof(alternateColor));
-    }
 };
 
-enum INTERPOLATION_SCHEME {
-    DISCRETE,
-    CONTINUOUS
-};
+//enum INTERPOLATION_SCHEME {
+//    DISCRETE,
+//    CONTINUOUS
+//};
 
 //Color changes linearly from colorOne to colorTwo either by using a linear interpolator to create a smooth gradient,
-//or by using a discrete interpolator which rounds interpolated values down to create discretized values
-class RIVColorLinearProperty : public RIVColorProperty {
+//or by using a discrete interpolator which rounds interpolated values down to create discretized values/colors
+class RIVInterpolatedColorProperty : public RIVColorProperty, public RIVInterpolatedProperty {
 private:
-    //The table whose index defines the color
-    RIVTable* colorReference;
-    
-    //The type of interpolation used
-    INTERPOLATION_SCHEME interpolationMode;
-    
-    //If this bool is set, colorreference should contain a clusterset, and coloring is based on the cluster a row is part of (or linked to indirectly)
-    //Rather than
-    bool colorByClusterMode;
     //When a row has no reference to the color reference through linkage, should a default color be returned or simply NULL?
     bool useAlternateColors = false;
 
     //The two color to interpolate between //TODO: better names?
     float colorOne[3];
     float colorTwo[3];
-    
-    //Regular interpolator, linearly interpolates the color of a given row
-    Interpolator<size_t>* colorInterpolator;
-    //Used to determine the color for a certain cluster member
-    Interpolator<size_t>* clusterColorInterpolator;
-    
-    void initClusterColorInterpolator();
-    
-    //helper function, shared by constructors to avoid duplicate code
-    void init(const INTERPOLATION_SCHEME& scheme, const std::vector<size_t>& interpolationValues);
-    //Find the cluster this row is part of if any, this assumes the referenceTable is a clustered table (contains a clusterset)
-    float const* colorByCluster(RIVTable* sourceTable, const size_t& row);
-    //This method looks to find the row linked to the given source table's row, or simply the row if the table is the color reference table.
-    float const* colorByRow(RIVTable* sourceTable, const size_t& row);
+
+    //What to do when multiple rows (returned by reference chain) have different membmerships to different color interpolators? This function deals with this
+    float const* colorForMultipleResolvedRows(const std::vector<size_t>& rows);
 public:
-    RIVColorLinearProperty(RIVTable *colorReference_, float* colorOne_, float* colorTwo_, float* alternateColor_ ,INTERPOLATION_SCHEME mode);
-    ~RIVColorLinearProperty() {
-        delete colorInterpolator;
-    }
-    RIVColorLinearProperty(RIVTable *colorReference_);
-    RIVColorLinearProperty(RIVTable *colorReference_, float* colorOne_, float* colorTwo_, float* alternateColor_);
-    RIVColorLinearProperty(RIVTable *colorReference_,std::vector<size_t>& interpolationValues, const INTERPOLATION_SCHEME& scheme);
+    RIVInterpolatedColorProperty(RIVTable *colorReference_, float* colorOne_, float* colorTwo_, float* alternateColor_ ,INTERPOLATION_SCHEME mode);
+    //Uses a continuous interpolator
+    RIVInterpolatedColorProperty(RIVTable *colorReference_);
+    RIVInterpolatedColorProperty(RIVTable *colorReference_, float* colorOne_, float* colorTwo_, float* alternateColor_);
+    RIVInterpolatedColorProperty(RIVTable *colorReference_, float const* colorOne_, float const* colorTwo_);
+    RIVInterpolatedColorProperty(RIVTable *colorReference_,std::vector<size_t>& interpolationValues, const INTERPOLATION_SCHEME& scheme);
     
-    void EnableColorByCluster();
     float const* Color(RIVTable* sourceTable, const size_t& row);
 };
-
+//Returns color by cycling through a fixed pre-determined set of colors
 class RIVColorDiscreteProperty : public RIVColorProperty {
 private:
     std::vector<float const*> colors;
@@ -105,7 +80,7 @@ public:
         return colors[index];
     }
 };
-
+//Each R,G and B channel is set interpolated independently according to three given
 class RIVColorRGBProperty : public RIVColorProperty {
 private:
     std::string colorTableName;

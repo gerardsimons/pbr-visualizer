@@ -10,6 +10,7 @@
 #define __Afstuderen__Interpolator__
 
 #include <vector>
+#include <algorithm>
 
 //Abstract base class
 template<typename T>
