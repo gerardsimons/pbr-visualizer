@@ -15,14 +15,25 @@
 
 BMPImage::BMPImage(const char* imagePath, bool hasAlpha) {
     this->hasAlpha = hasAlpha;
+    ID = 139;
 	loadTexture(imagePath, hasAlpha);
 	// TODO Auto-generated constructor stub
 }
+
+//BMPImage::BMPImage(const BMPImage& copyImage) {
+//    printf("BMPImage copy constructor called.\n");
+//    hasAlpha = copyImage.hasAlpha;
+//    data = copyImage.data;
+//    sizeX = copyImage.sizeX;
+//    sizeY = copyImage.sizeY;
+//}
 
 BMPImage::~BMPImage() {
 	// TODO Auto-generated destructor stub
     delete data;
 }
+
+
 
 bool BMPImage::loadTexture(const char* imagepath, int alpha)
 {   
@@ -87,9 +98,11 @@ bool BMPImage::loadTexture(const char* imagepath, int alpha)
     return true;
 }
 
-short* BMPImage::RGB(int x, int y) const {
+
+
+unsigned short* BMPImage::RGB(int x, int y) const {
     int channels = 3 + hasAlpha;
-    short rgb[3];
+    unsigned short rgb[3];
     int pixelPosition = (x * sizeX + y) * channels;
     rgb[2] = data[pixelPosition];
     rgb[1] = data[pixelPosition + 1];

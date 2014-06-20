@@ -12,7 +12,7 @@
 #include <iostream>
 #include <algorithm>
 #include "Cluster.h"
-#include "Interpolator.h"
+#include "Evaluator.h"
 //#include "reporter.h"
 
 class RIVClusterSet {
@@ -41,8 +41,11 @@ public:
     ~RIVClusterSet();
     RIVClusterSet();
     void AddCluster(RIVCluster* cluster);
-    RIVCluster* GetCluster(size_t index);
-    std::vector<RIVCluster*> GetClusters();
+    
+    RIVCluster* GetCluster(const size_t& index) const;
+    std::vector<RIVCluster*>& GetClusters();
+//    std::vector<RIVCluster*>* GetClustersPointer();
+    
     void Initialize();
     void Initialize(std::vector<size_t> indices);
     bool SaveToFile(const std::string& fileName);

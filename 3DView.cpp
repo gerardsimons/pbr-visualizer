@@ -10,20 +10,34 @@
 #include "helper.h"
 #include "Geometry.h"
 #include "helper.h"
+#include "reporter.h"
+#include "trackball.h"
+
+#include "graphics_helper.h"
 
 #include <GLUT/glut.h>
 
 //TODO : Move these to the header file
 const float sizeMultiplier = 5.F;
 
-RIV3DView::RIV3DView(int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty) : RIVDataView(x,y,width,height,paddingX,paddingY,colorProperty) {
+RIV3DView::RIV3DView(int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(x,y,width,height,paddingX,paddingY,colorProperty,sizeProperty) {
     identifier = "3DView";
 };
 
-void RIV3DView::ComputeLayout() {
+RIV3DView::RIV3DView(RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(colorProperty,sizeProperty) {
+    identifier = "3DView";
+};
+
+void RIV3DView::ComputeLayout(float startX, float startY, float width, float height, float paddingX, float paddingY) {
+    
+    this->startX = startX;
+    this->startY = startY;
+    this->width = width;
+    this->height = height;
+    
     eye.x = 0.F;
     eye.y = 0.F;
-    eye.z = 0.F;
+    eye.z = 4.F;
     
     selectionBox = Box3D(0,0,0,1.F,1.F,1.F);
     
@@ -34,6 +48,13 @@ void RIV3DView::ComputeLayout() {
     cursorFar.x = 0.F;
     cursorFar.x = 0.F;
     cursorFar.z = zFar;
+    
+//    glMatrixMode(GL_MODELVIEW);
+//    glLoadIdentity();
+
+    
+    tbInitTransform();
+    tbHelp();
 }
 
 void RIV3DView::ToggleDrawClusterMembers() {
@@ -42,128 +63,105 @@ void RIV3DView::ToggleDrawClusterMembers() {
 }
 
 void RIV3DView::Draw() {
-    if(isDirty) {
-        
-//        copy_buffer();
-//        copy_buffer_back_to_front();
-//        printf("Drawing 3D view.\n");
-        glEnable(GL_SCISSOR_TEST);
-        glScissor(startX, startY, width, height);
-        glClearColor(1.0, 1.0, 1.0, 0.0);
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-        glDisable(GL_SCISSOR_TEST);
-        
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        
-        gluPerspective(45.F,(GLdouble)width/(GLdouble)height,zNear,zFar);
-        //    gluOrtho2D(0, width, 0, height);
-        //    glOrtho(0, width, 0, height, zNear, zFar);
-        
-        glViewport(startX,startY,width,height);
-        
-        //    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-        //
-        //    glColor3f(0.F,0.F,1.F);
-        //    glBegin(GL_QUADS);
-        //    glVertex3f(cursorNear.x-.1F,cursorNear.y+.1F,cursorNear.z);
-        //    glVertex3f(cursorNear.x+.1F,cursorNear.y-.1F,cursorNear.z);
-        //    glVertex3f(cursorNear.x+.1F,cursorNear.y+.1F,cursorNear.z);
-        //    glVertex3f(cursorNear.x-.1F,cursorNear.y-.1F,cursorNear.z);
-        //    glColor3f(1,0,0);
-        //    glVertex3f(cursorFar.x-.1F,cursorFar.y+.1F,cursorFar.z);
-        //    glVertex3f(cursorFar.x+.1F,cursorFar.y-.1F,cursorFar.z);
-        //    glVertex3f(cursorFar.x+.1F,cursorFar.y+.1F,cursorFar.z);
-        //    glVertex3f(cursorFar.x-.1F,cursorFar.y-.1F,cursorFar.z);
-        //    glEnd();
-//        glEnable(GL_DEPTH);
-        
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-        glLoadIdentity();
-        glTranslatef(0, 0, -10);
-        glPushMatrix();
-        //Draw model!
-        glRotatef(-xRotated,1.0,0.0,0.0);
-        // rotation about Y axis
-        glRotatef(-yRotated,0.0,1.0,0.0);
-        // rotation about Z axis
-        glRotatef(-zRotated,0.0,0.0,1.0);
-        glTranslatef(-eye.x,-eye.y,-eye.z); //Camera transformation
-        
-        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-        //Draw selection box
-//        if(selectionBox.initialized) {
-//            selectionBox.Draw();
-//        }
-        
-        glColor3f(.5f,.2f,1.0f);
-        
-        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-        
-        glBegin(GL_TRIANGLES);
-        for(size_t i = 0 ; i < modelData.size() ; i += 3) {
-            glVertex3f(modelData[i],modelData[i+1],modelData[i+2]);
-        }
-        glEnd();
-        
-        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-        
-        std::string colorTableReferenceName = "path";
-        
-        glColor3f(1, 0, 0);
-        GLUquadric* quadric = gluNewQuadric();
-        
-        //Draw intersections
-        RIVTable *table = dataset->GetTable("intersections");
-        //Get the records we want;
-        RIVFloatRecord* xRecord = table->GetRecord<RIVFloatRecord>("intersection X");
-        RIVFloatRecord* yRecord = table->GetRecord<RIVFloatRecord>("intersection Y");
-        RIVFloatRecord* zRecord = table->GetRecord<RIVFloatRecord>("intersection Z");
-        TableIterator *iterator = table->GetIterator();
-        
-        size_t row;
-        RIVCluster* cluster = NULL;
-        RIVClusterSet* clusterSet = NULL; //The cluster set the cluster belongs to
-        
-        while(iterator->GetNext(row,cluster,clusterSet,true)) {
-//            printf("row = %zu\n",row);
-            float const* color = colorProperty->Color(table, row); //Check if any color can be computed for the given row
-            if(color != NULL) {
-                float isectX = xRecord->Value(row);
-                float isectY = yRecord->Value(row);
-                float isectZ = zRecord->Value(row);
-                Point3D point(isectX,isectY,isectZ);
+    
+    glEnable(GL_DEPTH_TEST);
+    
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(startX, startY, width, height);
 
-                glColor4f(color[0], color[1], color[2], .5F);
-                glPushMatrix();
-                glTranslatef(isectX, isectY, isectZ);
-                float medoidShereSize = sphereSizeDefault;
-                if(cluster != NULL && clusterSet != NULL && row == cluster->GetMedoidIndex()) { //This row is a cluster medoid, draw its size according to its number of members
-    //                printf("Found cluster of size %zu\n",cluster->MembersSize() + 1);
-                    gluSphere(quadric, medoidShereSize * sizeMultiplier * (1 +clusterSet->RelativeSizeOf(cluster)), sizeMultiplier * 4, sizeMultiplier * 4);
-    //                                std::cout << *cluster;
-                }
-                else if(drawClusterMembers) { //also draw the cluster members
-    //                glColor4f(color[0],color[1],color[2],.5F);
-                    gluSphere(quadric, sphereSizeDefault, 4, 4);
-                }
-                glPopMatrix();
-            }
-        }
-        glPopMatrix();
-        
-        glFlush();
-        
-        // Pop rotation matrices
-        glPopMatrix();
-        glPopMatrix();
-        glPopMatrix();
-        glPopMatrix(); //Pop eye translation matrix
-        //    glPopMatrix();
-//        isDirty = false;
+    glClearColor (0.0, 0.0, 0.0, 0.0);
+    glClear( GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT);
+    
+    glViewport(startX, startY, (GLsizei) width, (GLsizei) height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    //glOrtho (-1.1, 1.1, -1.1,1.1, -1000.0, 1000.0);
+    gluPerspective (50, (float)width/height, 1, 10);
+    
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(-eye.x,-eye.y,-eye.z);
+    
+    tbVisuTransform();
+    
+//    drawArm();
+    drawCoordSystem();
+    
+    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    
+    glColor3f(.5f,.2f,1.0f); //Purple
+//    glMatrixMode(GL_MODELVIEW);
+    
+    /** Draw the model **/
+    glBegin(GL_TRIANGLES);
+    const std::vector<float>& vertices = modelData.GetVertices();
+    for(size_t i = 0 ; i < vertices.size() ; i += 3) {
+        glVertex3f(vertices[i], vertices[i+1], vertices[i+2]);
     }
+    glEnd();
+    
+    /* Draw the intersection positions */
+    GLUquadric* quadric = gluNewQuadric();
+    
+    //Draw intersections
+    RIVTable *table = dataset->GetTable("intersections");
+    //Get the records we want;
+    RIVFloatRecord* xRecord = table->GetRecord<RIVFloatRecord>("intersection X");
+    RIVFloatRecord* yRecord = table->GetRecord<RIVFloatRecord>("intersection Y");
+    RIVFloatRecord* zRecord = table->GetRecord<RIVFloatRecord>("intersection Z");
+    //Get the iterator, this iterator is aware of what rows are filtered and not
+    TableIterator *iterator = table->GetIterator();
+    
+    size_t row = 0;
+    RIVCluster* cluster = NULL;
+    RIVClusterSet* clusterSet = NULL; //The cluster set the cluster belongs to
+    
+    //Draw
+    glColor3f(1, 1, 1);
+    Point3D modelCenter = modelData.GetCenter();
+
+//    glPushMatrix();
+//    glLoadIdentity();
+//    glTranslatef(-modelCenter.x, -modelCenter.y, -modelCenter.z);
+    glScalef(modelData.GetScale(), modelData.GetScale(), modelData.GetScale());
+    glTranslatef(-modelCenter.x, -modelCenter.y, -modelCenter.z);
+    gluSphere(quadric, .1F, 8, 8);
+    
+    while(iterator->GetNext(row,cluster,clusterSet,true)) {
+//        printf("row = %zu\n",row);
+        float const* color = colorProperty->Color(table, row); //Check if any color can be computed for the given row
+
+        if(color != NULL) {
+            glColor3f(color[0], color[1], color[2]);
+            
+            float isectX = xRecord->Value(row);
+            float isectY = -yRecord->Value(row); //HACK, Cornell has flipped Y coordinates
+            float isectZ = zRecord->Value(row);
+            Point3D point(isectX,isectY,isectZ);
+            
+            float size = sizeProperty->ComputeSize(table, row);
+            
+            glPushMatrix();
+            glTranslatef(isectX, isectY, isectZ);
+            glScalef(1/modelData.GetScale(), 1/modelData.GetScale(), 1/modelData.GetScale());
+            if(cluster != NULL && clusterSet != NULL && row == cluster->GetMedoidIndex()) { //This row is a cluster medoid, draw its size according to its number of members
+                gluSphere(quadric, size, 8, 8);
+                //                                std::cout << *cluster;
+            }
+            else if(drawClusterMembers) { //also draw the cluster members
+                //                glColor4f(color[0],color[1],color[2],.5F);
+                float size = sizeProperty->ComputeSize(table, row);
+                //                    printf("\Member sphere size = %f\n",size);
+                gluSphere(quadric, size, 4, 4);
+            }
+            glPopMatrix();
+        }
+    }
+    glPopMatrix();
+    
+    glFlush();
 }
+
 
 void RIV3DView::OnDataSetChanged() {
     printf("3D View received on filter change.");
@@ -182,7 +180,7 @@ void RIV3DView::MoveCamera(float x, float y, float z) {
     isDirty = true;
 }
 
-Point3D RIV3DView::ScreenToWorldCoordinates(int screenX, int screenY, float zPlane) {
+Point3D RIV3DView::screenToWorldCoordinates(int screenX, int screenY, float zPlane) {
     
     Point3D worldPos;
     
@@ -212,38 +210,42 @@ Point3D RIV3DView::ScreenToWorldCoordinates(int screenX, int screenY, float zPla
     return worldPos;
 }
 
-void RIV3DView::SetModelData(const std::vector<float>& _modelData) {
-    if(_modelData.size() == 0 ||_modelData.size() % 3 != 0) {
-        throw "Malformed vertex data.";
-    }
-    modelData = _modelData;
+void RIV3DView::SetModelData(const MeshModel& model) {
+    modelData = model;
 }
 
+bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
+    ToViewSpaceCoordinates(&x, &y);
+    printf("isDragging = %d\n",isDragging);
+	if(isDragging || containsPoint(x,y)) {
+        if(state == GLUT_DOWN) {
+            isDragging = true;
+            tbMouseFunc(button, state, x, y);
+            return true;
+        }
+    }
+    isDragging = false;
+    return false;
+}
+
+//void RIV3DView::Reshape(float w, float h) {
+//;
+//}
+
+bool RIV3DView::HandleMouseMotion(int x, int y) {
+    ToViewSpaceCoordinates(&x, &y);
+    if(isDragging) {
+        tbMotionFunc(x, y);
+        return true;
+    }
+    return false;
+}
+
+/*
 int lastX = -1;
 int lastY = -1;
 
 bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
-    if(state == GLUT_DOWN) {
-        cursorNear = ScreenToWorldCoordinates(x, y, 0.001);
-        cursorFar = ScreenToWorldCoordinates(x, y, 0.999);
-        
-        float widthBox = .1F;
-        float heightBox = .1F;
-        Point3D startBox;
-        startBox.x = cursorNear.x - .5F * widthBox;
-        startBox.y = cursorNear.y - .5F * heightBox;
-        startBox.z = cursorNear.z;
-        
-        selectionBox = Box3D(startBox.x,startBox.y,startBox.z,widthBox,heightBox,-1.F);
-        //        selectionBox = new Box3D(-.5F,-.5F,0,1.F,1.F,1.F);
-        
-        //        printf ("zNearCursor : ");=
-        //        cursorNear.Print();
-        //        printf("New selection box pointStart=");
-        //        selectionBox.points[0].Print();
-        //        return true;
-        isDirty = true;
-    }
     ToViewSpaceCoordinates(&x, &y);
 	if(isDragging || containsPoint(x,y)) {
         ToViewSpaceCoordinates(&x, &y);
@@ -276,3 +278,4 @@ bool RIV3DView::HandleMouseMotion(int x, int y) {
     }
     return false;
 }
+*/

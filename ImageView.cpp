@@ -14,32 +14,70 @@
 
 
 
-RIVImageView::RIVImageView(const BMPImage &image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty) : RIVDataView(x,y,width,height, paddingX, paddingY,colorProperty) {
+RIVImageView::RIVImageView(const BMPImage &image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty,RIVSizeProperty* sizeProperty) : RIVDataView(x,y,width,height, paddingX, paddingY,colorProperty,sizeProperty) ,renderedImage(image){
 
+    ComputeLayout(x, y, width, height, paddingX, paddingY);
+    
     identifier = "ImageView";
-
-    glGenTextures(1, &imageTexture);
-    glBindTexture(GL_TEXTURE_2D, imageTexture);
 
 	imageWidth = width;
 	imageHeight = height;
 
 	isDragging = false;
 
-    if(image.hasAlpha) {
+    createTextureImage(image);
+    
+    clearSelection();
+}
+
+//This shit aint working, the data gets garbled up?!
+void RIVImageView::createTextureImage() {
+    glGenTextures(1, &imageTexture);
+    glBindTexture(GL_TEXTURE_2D, imageTexture);
+    
+    std::cout << renderedImage;
+    
+    printf("image ID = %d\n",renderedImage.ID);
+    printf("image data pointer = %p\n",renderedImage.data);
+    
+    if(renderedImage.hasAlpha) {
+        gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, renderedImage.sizeX, renderedImage.sizeY,GL_BGRA_EXT, GL_UNSIGNED_BYTE, renderedImage.data); //For BMP images use this
+    }
+    else {
+        gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, renderedImage.sizeX, renderedImage.sizeY,GL_BGR_EXT, GL_UNSIGNED_BYTE, renderedImage.data); //For BMP images use this
+    }
+	//gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, image.sizeX, image.sizeY,GL_RGB, GL_UNSIGNED_BYTE, image.data); //for P6 formatted PPM use this
+    
+	//Compute magnification
+	imageMagnificationX = (width - 2 * paddingX) / (float)renderedImage.sizeX;
+	imageMagnificationY = (height - 2 * paddingY) / (float)renderedImage.sizeY;
+}
+
+void RIVImageView::createTextureImage(const BMPImage& image) {
+    glGenTextures(1, &imageTexture);
+    glBindTexture(GL_TEXTURE_2D, imageTexture);
+    
+    std::cout << image;
+    
+    printf("image ID = %d\n",image.ID);
+    printf("image data pointer = %p\n",image.data);
+    
+    if(renderedImage.hasAlpha) {
         gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.sizeX, image.sizeY,GL_BGRA_EXT, GL_UNSIGNED_BYTE, image.data); //For BMP images use this
     }
     else {
         gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, image.sizeX, image.sizeY,GL_BGR_EXT, GL_UNSIGNED_BYTE, image.data); //For BMP images use this
     }
 	//gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, image.sizeX, image.sizeY,GL_RGB, GL_UNSIGNED_BYTE, image.data); //for P6 formatted PPM use this
-
+    
 	//Compute magnification
 	imageMagnificationX = (width - 2 * paddingX) / (float)image.sizeX;
 	imageMagnificationY = (height - 2 * paddingY) / (float)image.sizeY;
 }
 
 void RIVImageView::Draw() {
+    
+    glViewport(startX,startY,width,height);  //Use the whole window for rendering
     
     glEnable(GL_SCISSOR_TEST);
     glScissor(startX, startY, width, height);
@@ -48,23 +86,25 @@ void RIVImageView::Draw() {
     glDisable(GL_SCISSOR_TEST);
     
     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    glDisable(GL_DEPTH_TEST);
     
     //Setup viewport and 2D projection
     glMatrixMode(GL_PROJECTION);
+//    glPushMatrix();
     glLoadIdentity();
     gluOrtho2D(0.0, width, 0.0, height);
     
     glMatrixMode(GL_MODELVIEW);
-    glViewport(startX,startY,width,height);  //Use the whole window for rendering
+    glLoadIdentity();
     
     //Color the view port
-    glColor3f(0.F,1.F,0.F);
-    glBegin(GL_QUADS);
-    glVertex3f(0,0,0);
-    glVertex3f(width,0,0);
-    glVertex3f(width,height,0);
-    glVertex3f(0,height,0);
-    glEnd();
+//    glColor3f(0.F,1.F,0.F);
+//    glBegin(GL_QUADS);
+//    glVertex3f(0,0,0);
+//    glVertex3f(width,0,0);
+//    glVertex3f(width,height,0);
+//    glVertex3f(0,height,0);
+//    glEnd();
 //    return;
     
 	if(needsRedraw) {
@@ -79,6 +119,11 @@ void RIVImageView::Draw() {
 		// texture addition
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,  GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,  GL_NEAREST);
+        
+//        std::cout << "imageStart.x = " << imageStart.x << std::endl;
+//        std::cout << "imageStart.y = " << imageStart.y << std::endl;
+//        std::cout << "imageEnd.x = " << imageEnd.x << std::endl;
+//        std::cout << "imageEnd.y = " << imageEnd.y << std::endl;
     
 		glBegin(GL_QUADS);
 			glTexCoord2f(0.0f,1.0f);
@@ -112,12 +157,24 @@ void RIVImageView::OnDataSetChanged() {
     //Do nothing for imageview
 }
 
-void RIVImageView::ComputeLayout() { 		
+void RIVImageView::ComputeLayout(float newStartX, float newStartY, float newWidth, float newHeight, float paddingX, float paddingY) {
+    
+    this->paddingX = paddingX;
+    this->paddingY = paddingY;
+    
+    startX = newStartX;
+    startY = newStartY;
+    
+    width = newWidth;
+    height = newHeight;
+    
 	imageStart.x = startX + paddingX;
 	imageStart.y = startY + paddingY;
 
 	imageEnd.x = startX + width - paddingX * 2;
 	imageEnd.y = startY + height - paddingY * 2;
+    
+    createTextureImage();
 }
 
 int round(float d)
@@ -132,8 +189,8 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 		if(state == GLUT_DOWN) {
 			//init selection
 			if(!isDragging) {
-				selection.start = screenToPixelSpace(x,y);
-
+				selection.start = viewToPixelSpace(x,y);
+                printf("selection (startX,endX) = (%d,%d)\n",selection.start.x,selection.end.x);
 				isDragging = true;
 			}
 		}
@@ -189,12 +246,15 @@ void RIVImageView::clearSelection() {
     selection.start.y = -1;
     selection.end.x = -1;
     selection.end.y = -1;
+    
 	//Clear any filters that may have been applied to the dataset
-	dataset->ClearFilter("x");
-    dataset->ClearFilter("y");
+    if(dataset) {
+        dataset->ClearFilter("x");
+        dataset->ClearFilter("y");
+    }
 }
 
-Point RIVImageView::screenToPixelSpace(int x, int y) {
+Point RIVImageView::viewToPixelSpace(int x, int y) {
 	int pixelX = round((float)x / imageMagnificationX);
 	int pixelY = round((float)y / imageMagnificationY);
 
@@ -211,9 +271,8 @@ Point RIVImageView::screenToPixelSpace(int x, int y) {
 }
 
 bool RIVImageView::HandleMouseMotion(int x, int y) {
-	
 	if(isDragging) {
-		Point pixel = screenToPixelSpace(x,y);
+		Point pixel = viewToPixelSpace(x,y);
 		selection.end = pixel;
 		return true;
 	}

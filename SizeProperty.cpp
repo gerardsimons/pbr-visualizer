@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Gerard Simons. All rights reserved.
 //
 
-#include "DimensionProperty.h"
+#include "SizeProperty.h"
 
-float RIVDiscreteDimensionsProperty::Dimension(const size_t &row, RIVTable *sourceTable) {
-    return 1.f;
-}
+

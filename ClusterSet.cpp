@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Gerard Simons. All rights reserved.
 //
 
-#include "ClusterSet.h"
+
 
 //
 //  ClusterSet.h
@@ -20,6 +20,9 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+
+#include "ClusterSet.h"
+#include "reporter.h"
 #include "Cluster.h"
 //#include "reporter.h"
 
@@ -57,7 +60,7 @@ RIVClusterSet::RIVClusterSet(const size_t& K_, std::vector<float>* xValues_, std
 void RIVClusterSet::AddCluster(RIVCluster* cluster) {
     clusters.push_back(cluster);
 }
-RIVCluster* RIVClusterSet::GetCluster(size_t index) {
+RIVCluster* RIVClusterSet::GetCluster(const size_t& index) const {
     if(index < clusters.size()) {
         return clusters[index];
     }
@@ -73,9 +76,12 @@ RIVCluster* RIVClusterSet::ClusterForMemberIndex(const size_t& mIndex) const {
     }
     return NULL;
 }
-std::vector<RIVCluster*> RIVClusterSet::GetClusters() {
+std::vector<RIVCluster*>& RIVClusterSet::GetClusters() {
     return clusters;
 }
+//std::vector<RIVCluster*>* RIVClusterSet::GetClustersPointer() {
+//    return &clusters;
+//}
 //This should hold after assigning the members
 void RIVClusterSet::SanityCheck() {
     for(size_t i = 0 ; i < clusters.size() ; ++i) {
@@ -197,6 +203,7 @@ RIVClusterSet RIVClusterSet::MakeCluster(const size_t& maxRepeat, const size_t& 
     if(xValues->size() < K) {
         throw "More clusters requested than values given.";
     }
+    
     unsigned long long nrOfCombinations = choose(xValues->size(), K);
     
     size_t repeat = std::min(maxRepeat,(size_t)nrOfCombinations);
@@ -213,8 +220,9 @@ RIVClusterSet RIVClusterSet::MakeCluster(const size_t& maxRepeat, const size_t& 
     
     //        printf("Repeating optimization %zu times.\n",initializationIndices.size());
     std::string taskName = "Cluster K=" + std::to_string(K) + " repeat=" + std::to_string(repeat);
-    printf("start %s [",taskName.c_str());
-    size_t updateRounds = ceil(repeat / 100.0);
+    reporter::startTask(taskName,repeat);
+//    printf("start %s [",taskName.c_str());
+//    size_t updateRounds = ceil(repeat / 100.0);
     //        reporter::startTask(taskName,repeat);
     
     RIVClusterSet bestClusterSet;
@@ -222,53 +230,34 @@ RIVClusterSet RIVClusterSet::MakeCluster(const size_t& maxRepeat, const size_t& 
     
     for(size_t i = 0 ; i < repeat ; i++) { //Try each combination
         RIVClusterSet clusterSet = RIVClusterSet(K,xValues,yValues,zValues);
-        //            printf("Initialization indices = ");
-        //            printVector(indices);
-        //            printf("\nPoints = ");
-        //            for(size_t i : indices) {
-        //                std::cout << Point3D(xValues->at(i),yValues->at(i),zValues->at(i));
-        
-        //            }
-        //Reinitialize
-        if(i % updateRounds == 0) {
-            printf(".");
-        }
         
         if(useCombinations) {
             clusterSet.Initialize(initializationIndices[i]);
         }
         else { //Just use random chance (with replacement)
             clusterSet.Initialize();
-            
-//            std::vector<size_t> correctIndices;
-//            correctIndices.push_back(0);
-//            correctIndices.push_back(1);
-//            clusterSet.Initialize(correctIndices);
         }
         
         //Assign the other values to closest cluster
         clusterSet.AssignMembers();
-        clusterSet.SanityCheck();
+
         //Optimize clusters
         clusterSet.OptimizeClusters();
-
-        
-        //What is the cost?
-//        double cost = clusterSet.TotalCost();
-
 
         if(clusterSet.cost < bestCost) {
             //                bestClusters = clusters;
             bestCost = clusterSet.cost;
             bestClusterSet = clusterSet;
-            printf("New best clustering cost = %f\n",clusterSet.cost);
+//            printf("New best clustering cost = %f\n",clusterSet.cost);
 //            std::cout << bestClusterSet;
         }
-        //            reporter::update(taskName,1.F);
+        reporter::update(taskName,1.F);
     }
-    printf(" DONE]\n");
+//    printf(" DONE]\n");
+    printf("Medoids : ");
+    printVector(bestClusterSet.GetMedoidIndices());
     //        clusters = bestClusters;
-    //            reporter::stop(taskName);
+    reporter::stop(taskName);
 //    printf("Best clustering: ");
 //    for(RIVCluster *cluster : bestClusterSet.GetClusters()) {
 //        //                    printf("%d ",cluster->GetMedoidIndex());
@@ -299,7 +288,7 @@ std::pair<size_t,size_t>* RIVClusterSet::MinMaxClusterSize() {
 float RIVClusterSet::RelativeSizeOf(RIVCluster* cluster) {
     MinMaxClusterSize();
     size_t thisClusterSize = cluster->Size();
-    return interpolator->Interpolate(thisClusterSize);
+    return interpolator->Evaluate(thisClusterSize);
 }
 size_t RIVClusterSet::MaxSize() {
     MinMaxClusterSize();

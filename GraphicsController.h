@@ -14,7 +14,7 @@
 typedef struct RIVGraphics {
     float* color;
     float size;
-};
+} RIVGraphics;
 
 //Determines graphical attributes for a given table's row
 class RIVGraphicsController {

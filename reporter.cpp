@@ -16,10 +16,12 @@
 
 
 #include "reporter.h"
-#include <string>
 #include <iostream>
 
 namespace reporter {
+    
+    std::map<std::string,Task*> runningTasks;
+    
     Task::Task(std::string name_,float maxRounds_) {
         name = name_;
         maxRounds = maxRounds_;
@@ -52,12 +54,10 @@ namespace reporter {
     }
 }
 
-std::map<std::string,reporter::Task*> runningTasks;
-
-void startTask(std::string taskName,float maxRounds_ = 100) {
-    if(!runningTasks[taskName]) {
+void reporter::startTask(std::string taskName,float maxRounds_) {
+    if(!reporter::runningTasks[taskName]) {
         reporter::Task* newTask = new reporter::Task(taskName,maxRounds_);
-        runningTasks[taskName] = newTask;
+        reporter::runningTasks[taskName] = newTask;
         newTask->start();
     }
     else {
@@ -65,28 +65,25 @@ void startTask(std::string taskName,float maxRounds_ = 100) {
     }
 }
 
-void update(std::string taskName, float completed) {
-    reporter::Task* runningTask = runningTasks[taskName];
+void reporter::update(std::string taskName, float completed) {
+    reporter::Task* runningTask = reporter::runningTasks[taskName];
     if(runningTask) {
         runningTask->update(completed);
     }
     else throw std::string("No such task is running.");
 }
-void update(std::string taskName) {
-    reporter::Task* runningTask = runningTasks[taskName];
+void reporter::update(std::string taskName) {
+    reporter::Task* runningTask = reporter::runningTasks[taskName];
     if(runningTask) {
         runningTask->update();
     }
     else throw std::string("No such task is running.");
 }
-void stop(std::string taskName) {
-    reporter::Task* runningTask = runningTasks[taskName];
+void reporter::stop(std::string taskName) {
+    reporter::Task* runningTask = reporter::runningTasks[taskName];
     if(runningTask) {
         runningTask->stop();
-        runningTasks.erase(taskName);
+        reporter::runningTasks.erase(taskName);
     }
     else throw std::string("No such task is running.");
 }
-
-
-

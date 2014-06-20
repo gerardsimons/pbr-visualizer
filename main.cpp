@@ -12,6 +12,7 @@
 #include "3DView.h"
 #include "ColorPallete.h"
 #include "ColorProperty.h"
+#include "SizeProperty.h"
 
 #if defined(__APPLE__)
 #include <GLUT/glut.h>
@@ -61,26 +62,27 @@ void display(void)
 
 
 //
-//    
+//
     
-    imageView->Draw();
+    
     parallelCoordsView->Draw();
+    imageView->Draw();
     sceneView->Draw();
     
 //    glColor3f(1.F,0,0);
     
 //    float radius = 10.F;
 //    
-//    glBegin(GL_LINE_LOOP);
-//    
-//    for (int i=0; i < 360; i++)
-//    {
-//        float degInRad = i*DEG2RAD;
-//        glVertex2f(cos(degInRad)*radius + lastMouseX,sin(degInRad)*radius + lastMouseY);
-//    }
-//    
-//    glEnd();
-//    glFlush();
+    glBegin(GL_LINE_LOOP);
+    float radius = 10.F;
+    for (int i=0; i < 360; i++)
+    {
+        float degInRad = i*DEG2RAD;
+        glVertex2f(cos(degInRad)*radius + lastMouseX,sin(degInRad)*radius + lastMouseY);
+    }
+    
+    glEnd();
+    glFlush();
     
 //    copy_buffer();
     
@@ -119,6 +121,15 @@ void motion(int x, int y) {
 	}
 }
 
+///* Handles mouse input */
+//void mouse(int button, int state, int x, int y) {
+//    sceneView->HandleMouse(button, state, x, y);
+//}
+
+//void motion(int x, int y) {
+//	sceneView->HandleMouseMotion(x, y);
+//}
+
 void invalidateAllViews() {
 	for(size_t i = 0 ; i < views.size() ; i++) {
         views[i]->Invalidate();
@@ -148,7 +159,7 @@ void keys(int keyCode, int x, int y) {
         case 114: // 'r' key, recluster {
         {
             RIVTable *intersectTable = dataset.GetTable("intersections");
-            RIVClusterSet* clusters = intersectTable->Cluster("intersection X","intersection Y","intersection Z",clusterK,1);
+            intersectTable->Cluster("intersection X","intersection Y","intersection Z",clusterK,1);
             postRedisplay = true;
             break;
         }
@@ -156,6 +167,11 @@ void keys(int keyCode, int x, int y) {
         {
             clusters->OptimizeClusters();
             postRedisplay = true;
+            break;
+        }
+        case 116: // 't' key, use as temp key for some to-test function
+        {
+            imageView->createTextureImage();
             break;
         }
         case GLUT_KEY_UP:
@@ -182,8 +198,6 @@ void idle() {
     //Do animations?
 }
 
-
-
 /* Called when window is resized,
  also when window is first created,
  before the first call to display(). */
@@ -193,6 +207,21 @@ void reshape(int w, int h)
     /* save new screen dimensions */
     width = w;
     height = h;
+    
+    //Determine dimension and positions of other views
+    
+    //PCV goes on top spanning the whole width, half of the height
+    if(parallelCoordsView != NULL) {
+        parallelCoordsView->ComputeLayout(0,height / 2.F,width, height / 2.F,50,50);
+    }
+    //Image view goes bottom left, square height / 2 x height / 2
+    //TODO: when the view is very narrow the width should be used
+    if(imageView != NULL) {
+//        imageView->ComputeLayout(0,0,height / 2.F, height / 2.F,0,0);
+    }
+    if(sceneView != NULL) {
+        sceneView->ComputeLayout(height / 2.F,0,height / 2.F, height / 2.F,0,0);
+    }
     
     /* Invalidate all views */
     invalidateAllViews();
@@ -230,25 +259,17 @@ void initialize(int argc, char* argv[]) {
     
     printf("using fullpath = %s\n",fullPath.c_str());
     
-//	int imageWidth = (.2F * width);
-//    int imageHeight = (.2F * width);
-    
-    int imageWidth = .4F * height;
-    int imageHeight = .4F * height;
-    
-    int imageSceneWidth = .4F * height;
-    int imageSceneHeight = .4F * height;
-    
     BMPImage image = BMPImage((bmpPath).c_str(),false);
     
-    dataset = DataFileReader::ReadAsciiData(fullPath + ".txt",image);
+//    std::cout << image;
+    
+    dataset = DataFileReader::ReadAsciiData(fullPath + ".txt",image,0);
     
     //clustering
-    dataset.ClusterTable("intersections","intersection X","intersection Y","intersection Z",clusterK,1);
-    
+
     //Set the vertices data from the PBRT file
-    std::vector<float> modelData;
-    modelData = DataFileReader::ReadModelData(pbrtPath);
+
+    MeshModel model = DataFileReader::ReadModelData(pbrtPath);
     
 	//CAUTION: Image should be power of two!
 //	RIVImageView *imageView = new RIVImageView(fullPath + ".bmp",0,0,imageWidth,imageHeight,0,0);
@@ -264,36 +285,32 @@ void initialize(int argc, char* argv[]) {
 //    RIVColorProperty *colorProperty = new RIVColorRGBProperty("image",redRecord,greenRecord,blueRecord);
     RIVTable *imageTable = dataset.GetTable("image");
     RIVTable *pathTable = dataset.GetTable("path");
-    imageTable->FilterRowsUnlinkedTo(pathTable);
-    RIVColorProperty *colorProperty = new RIVInterpolatedColorProperty(pathTable,colors::GREEN,colors::RED);
+    RIVTable *intersectionstTable = dataset.GetTable("intersections");
+    
+//    imageTable->FilterRowsUnlinkedTo(pathTable);
+    
+    RIVRecord* xIsectRecord = intersectionstTable->GetRecord("intersection X");
+    
+//    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty(pathTable,colors::GREEN,colors::RED);
+    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionstTable,xIsectRecord,colors::GREEN,colors::RED);
+    RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(.05F);
 
-    //Linear cluster coloring
-    std::vector<size_t> medoidIndices = dataset.GetClusterSet()->GetMedoidIndices();
-    RIVTable *intersectionsTable = dataset.GetTable("intersections");
-    RIVInterpolatedColorProperty* clusterColorProperty = new RIVInterpolatedColorProperty(intersectionsTable);
-//    clusterColorProperty->EnableColorByCluster();
-    
-    RIVClusterSet* clusterSet = intersectionsTable->GetClusterSet();
-    std::vector<size_t> medoids = clusterSet->GetMedoidIndices();
-    
-    clusterColorProperty->AddInterpolationScheme(medoids, new DiscreteInterpolator<size_t>(medoids));
-    
-    std::vector<float const*> colorPallette = colors::allColors();
-    
     //Declare views
-	parallelCoordsView = new ParallelCoordsView(0,imageHeight,width,height - imageHeight,50,20,clusterColorProperty);
-    imageView = new RIVImageView(image,0,0,imageWidth,imageHeight,0,0,clusterColorProperty);
-    sceneView = new RIV3DView(imageWidth,0,imageSceneWidth,imageSceneHeight,0,0,clusterColorProperty);
+//	parallelCoordsView = new ParallelCoordsView(0,imageHeight,width,height - imageHeight,50,20,colorProperty,sizeProperty);
+//    imageView = new RIVImageView(image,0,0,imageWidth,imageHeight,0,0,colorProperty,sizeProperty);
+//    sceneView = new RIV3DView(imageWidth,0,imageSceneWidth,imageSceneHeight,0,0,colorProperty,sizeProperty);
+    
+    parallelCoordsView = new ParallelCoordsView(colorProperty,sizeProperty);
+//    parallelCoordsView->SetPadding(50,50);
+    imageView = new RIVImageView(image, 0, 0, height / 2.F, height / 2.F, 0, 0, colorProperty, sizeProperty);
+    sceneView = new RIV3DView(colorProperty,sizeProperty);
     
     //Set data source of views
 	imageView->SetData(&dataset);
 	parallelCoordsView->SetData(&dataset);
     sceneView->SetData(&dataset);
-    sceneView->SetModelData(modelData);
     
-	imageView->ComputeLayout();
-    parallelCoordsView->ComputeLayout();
-    sceneView->ComputeLayout();
+    sceneView->SetModelData(model);
     
     dataset.AddFilterListener(sceneView);
     dataset.AddFilterListener(parallelCoordsView);
@@ -303,104 +320,50 @@ void initialize(int argc, char* argv[]) {
     views.push_back(parallelCoordsView);
 }
 
-//Unofficial testing
-bool tests(int argc, char** argv) {
-//    std::vector<size_t> pool;
-//    //Generate pool
-//    for(size_t i = 2 ; i < 12 ; i++) {
-//        pool.push_back(i);
-//    }
-//    //Testing nonreplacementsampler
-//    NonReplacementSampler<size_t> sampler = NonReplacementSampler<size_t>(&pool);
-//    for(int i = 0 ; i < 10 ; i++) {
-//        printf("Sample #%d = %zu\n",i,sampler.RequestSample());
-//    }
+
+void clusterAndColor() {
+    dataset.ClusterTable("intersections","intersection X","intersection Y","intersection Z",clusterK,1);
+    std::vector<size_t> medoidIndices = dataset.GetClusterSet()->GetMedoidIndices();
+    RIVTable *intersectionsTable = dataset.GetTable("intersections");
+    RIVEvaluatedColorProperty<size_t>* colorByCluster = new RIVEvaluatedColorProperty<size_t>(intersectionsTable);
+    RIVClusterSet& clusterSet = intersectionsTable->GetClusterSet();
     
-//    if(dataset.IsSet()) {
-//        RIVTable *intersectTable = dataset.GetTable("intersections");
-////        intersectTable->ClusterWithSize("intersection X","intersection Y","intersection Z",1000);
-//
-//    }
+    float nrOfClusters = (float)clusterSet.Size();
     
-//    std::vector<size_t> testValues;
-//    testValues.push_back(0);
-//    testValues.push_back(5);
-//    testValues.push_back(7);
-//    testValues.push_back(15);
-//    
-//    DiscreteInterpolator<size_t> interpolator = DiscreteInterpolator<size_t>(testValues);
-//    for(size_t i = 0 ; i < 20 ; i++) {
-//        printf("%zu = %f\n",i,interpolator.Interpolate(i));
-//    }
+    std::map<size_t,float> indexToClusterSize;
+    std::map<size_t,float> indexToClusterMembership;
     
-//    ::testing::InitGoogleTest(&argc, argv);
-//    return RUN_ALL_TESTS();
-//    return false;
-    return true;
-    
-    RIVTable tableOne = RIVTable("table_1");
-    RIVTable tableTwo = RIVTable("table_2");
-    RIVTable tableThree = RIVTable("table_3");
-    
-    RIVFloatRecord recordOne = RIVFloatRecord("record_1");
-    RIVFloatRecord recordTwo = RIVFloatRecord("record_2");
-    RIVFloatRecord recordThree = RIVFloatRecord("record_3");
-    
-    std::vector<float> valuesOne;
-    valuesOne.push_back(1.F); // ---> referes to row 1 of table two
-    valuesOne.push_back(2.F);
-    valuesOne.push_back(3.F);
-    
-    std::vector<float> valuesTwo;
-    valuesTwo.push_back(11.F);
-    valuesTwo.push_back(12.F); // ---> refers to row 0 and 2 or table three
-    
-    std::vector<float> valuesThree;
-    valuesThree.push_back(111.F);
-    valuesThree.push_back(112.F);
-    valuesThree.push_back(113.F);
-    valuesThree.push_back(114.F);
-    valuesThree.push_back(115.F);
-    
-    recordOne.SetValues(valuesOne);
-    recordTwo.SetValues(valuesTwo);
-    recordThree.SetValues(valuesThree);
-    
-    tableOne.AddRecord(&recordOne);
-    tableTwo.AddRecord(&recordTwo);
-    tableThree.AddRecord(&recordThree);
-    
-    // Reference from table one to table two
-    RIVReference reference = RIVReference(&tableOne, &tableTwo);
-    std::map<size_t,std::vector<size_t>> indexReferences;
-    std::vector<size_t> targetIndices;
-    targetIndices.push_back(1);
-    indexReferences[0] = targetIndices;
-    reference.SetReferences(indexReferences);
-    tableOne.AddReference(reference);
-    tableTwo.AddReference(reference.ReverseReference());
-    
-    //Reference from table two to table three
-    RIVReference referenceTwo = RIVReference(&tableTwo, &tableThree);
-    std::map<size_t,std::vector<size_t>> indexTwoReferences;
-    std::vector<size_t> targetTwoIndices;
-    targetTwoIndices.push_back(3);
-    targetTwoIndices.push_back(4);
-    indexTwoReferences[1] = targetTwoIndices;
-    referenceTwo.SetReferences(indexTwoReferences);
-    tableTwo.AddReference(referenceTwo);
-    tableThree.AddReference(referenceTwo.ReverseReference());
-    
-    RIVReferenceChain chain;
-    tableTwo.GetReferenceChainToTable(tableThree.GetName(), chain);
-    
-    std::cout << "table_one row 0 is linked to table_three rows : [";
-    std::vector<size_t> resolvedRows = chain.ResolveRow(0);
-    for(size_t i : chain.ResolveRow(0)) {
-        std::cout << i;
+    for(size_t j = 0 ; j < clusterSet.Size() ; ++j) {
+        float clusterRatio = j / (nrOfClusters  - 1.F);
+        //        printf("clusterRatio = %f\n",clusterRatio);
+        Evaluator<size_t,float>* eval = new FixedEvaluator<size_t, float>(clusterRatio);
+        RIVCluster* cluster = clusterSet.GetCluster(j);
+        std::vector<size_t> members = cluster->GetMemberIndices();
+        members.push_back(cluster->GetMedoidIndex());
+        
+        colorByCluster->AddEvaluationScheme(members, eval);
     }
     
-    return true;
+    //    DiscreteEvaluator<size_t, float> colorByClusterEvaluator = new DiscreteEvaluator<size_t, float>(indexToClusterMembership);
+    
+    RIVEvaluatedSizeProperty<size_t> *sizeByCluster = new RIVEvaluatedSizeProperty<size_t>(intersectionsTable,.05F);
+    std::vector<float> relativeSizes;
+    float minSize = .4F;
+    float maxSize = .8F;
+    for(RIVCluster* cluster : clusterSet.GetClusters()) {
+        float relativeSize = clusterSet.RelativeSizeOf(cluster);
+        printf("\nTotal size of cluster : %zu\n",cluster->Size());
+        printf("Relative size of cluster : %f\n",relativeSize);
+        //        relativeSizes.push_back(clusterSet.RelativeSizeOf(cluster));
+        Evaluator<size_t, float>* clusterSizeEval = new FixedEvaluator<size_t, float>((1-relativeSize) * minSize + relativeSize * maxSize);
+        sizeByCluster->AddEvaluationScheme(cluster->GetMedoidIndex(), clusterSizeEval);
+    }
+    
+    parallelCoordsView->SetColorProperty(colorByCluster);
+    parallelCoordsView->SetSizeProperty(sizeByCluster);
+    
+    sceneView->SetColorProperty(colorByCluster);
+    sceneView->SetSizeProperty(sizeByCluster);
 }
 
 int main(int argc, char *argv[])
@@ -412,7 +375,8 @@ int main(int argc, char *argv[])
     
     //Use double buffering!
 //    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+//    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
     
     /* set the initial window size */
     glutInitWindowSize(width, height);
@@ -442,6 +406,9 @@ int main(int argc, char *argv[])
     /* Transparency stuff */
     glEnable (GL_BLEND);
     
+    /* Enable depth for 3D view */
+    glEnable(GL_DEPTH_TEST);
+    
     glDrawBuffer(GL_FRONT); //Front is red
 //    glClearColor(1,0,0, 0.0);
     glClearColor(1,1,1, 0.0);
@@ -455,10 +422,6 @@ int main(int argc, char *argv[])
     
     glutMotionFunc(motion);
 
-    if(!tests(argc, argv)) {
-        return EXIT_FAILURE;
-    }
-    
     /* start the GLUT main loop */
     glutMainLoop();
     

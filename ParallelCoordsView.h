@@ -14,14 +14,15 @@
 class ParallelCoordsView : public RIVDataView, public RIVDataSetListener
 {
 public:
-    ParallelCoordsView(int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty);
+    ParallelCoordsView(int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
+    ParallelCoordsView(RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
 	~ParallelCoordsView(void);
 
     //Implemented virtual functions prescribed by DataView
     void Draw();
-    virtual void ComputeLayout();
-	virtual bool HandleMouse(int,int,int,int);
-	virtual bool HandleMouseMotion(int,int);
+    void ComputeLayout(float startX, float startY, float width, float height, float paddingX, float paddingY);
+	bool HandleMouse(int,int,int,int);
+	bool HandleMouseMotion(int,int);
     //implement virtual functions prescribed by DataSetListener
     virtual void OnDataSetChanged();
 private:

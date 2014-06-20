@@ -1,9 +1,9 @@
 //
-//  DataView.cpp
+//  3DModel.cpp
 //  Afstuderen
 //
-//  Created by Gerard Simons on 23/05/14.
+//  Created by Gerard Simons on 19/06/14.
 //  Copyright (c) 2014 Gerard Simons. All rights reserved.
 //
 
-#include "DataView.h"
+#include "3DModel.h"

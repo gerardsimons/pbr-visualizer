@@ -17,6 +17,12 @@
 #include <GLUT/GLUT.h>
 #include <iterator>
 
+template <typename T, size_t N>
+class Vector {
+    T values[N];
+    
+};
+
 template <typename T>
 class Sampler {
 protected:
@@ -152,8 +158,9 @@ bool arrayContains(T* array, size_t size, T value) {
 }
 
 template <typename T>
-void printVector(const std::vector<T>& values) {
-    std::cout << "vector = [ ";
+void printVector(const std::vector<T>& values,std::string name = "") {
+    
+    std::cout << "vector " + name + " = [ ";
     for(size_t i = 0 ; i < values.size() ; ++i) {
         T value = values[i];
         std::cout << value << " ";

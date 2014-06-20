@@ -11,7 +11,7 @@
 
 bool currentBuffer;
 
-ParallelCoordsView::ParallelCoordsView(int x, int y, int width, int height, int paddingX, int paddingY, RIVColorProperty *colorProperty) : RIVDataView(x,y,width,height, paddingX, paddingY,colorProperty) {
+ParallelCoordsView::ParallelCoordsView(int x, int y, int width, int height, int paddingX, int paddingY, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(x,y,width,height, paddingX, paddingY,colorProperty,sizeProperty) {
     linesAreDirty = true;
     axesAreDirty = true;
     selectedAxis = 0;
@@ -19,6 +19,13 @@ ParallelCoordsView::ParallelCoordsView(int x, int y, int width, int height, int 
     //Nothing else to do
 }
 
+ParallelCoordsView::ParallelCoordsView(RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(colorProperty,sizeProperty) {
+    linesAreDirty = true;
+    axesAreDirty = true;
+    selectedAxis = 0;
+    identifier = "ParallelCoordsView";
+    //Nothing else to do
+}
 
 ParallelCoordsView::~ParallelCoordsView(void) {
 	//Additional deleting unique to parallel coords view ?
@@ -163,11 +170,10 @@ void ParallelCoordsView::drawAxes() {
 
 void ParallelCoordsView::drawLines() {
     if(linesAreDirty) {
-        double duration;
+//        double duration;
         size_t lineIndex = 0;
         
         glColor3f(1.0, 0.0, 0.0);
-        glLineWidth(1.F);
         
         for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
             RIVTable *table = axisGroup.table;
@@ -183,8 +189,14 @@ void ParallelCoordsView::drawLines() {
             
             while(iterator->GetNext(row,cluster,clusterSet,true)) {
                 glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
-                
                 float const* color = colorProperty->Color(table, row);
+
+                float size = sizeProperty->ComputeSize(table,row);
+        
+//                printf("PCV Size = %f\n",size);
+                
+                glLineWidth(size);
+                
                 if(color != NULL) {
                     glColor3f(color[0], color[1], color[2]);
     //                delete color;
@@ -216,7 +228,7 @@ void ParallelCoordsView::drawLines() {
     //                        printf("glVertex3f(%f,%f,%f)\n",x,y,0);
                             glVertex3f(x, y, 0);
                             if(y > axis.y + axis.height || y < axis.y) {
-                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
+//                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
                             }
                             continue;
                         }
@@ -241,7 +253,7 @@ void ParallelCoordsView::drawLines() {
     //                            std::cout << "value = " << value << "\n";
     //                            printf("END");
     //                            
-                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
+//                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
                             }
                         }
                     }
@@ -291,13 +303,15 @@ void ParallelCoordsView::drawLines() {
 
 void ParallelCoordsView::Draw() {
 //    printf("linesAreDirty = %d axesAreDirty = %d\n",linesAreDirty,axesAreDirty);
+
     if(linesAreDirty || axesAreDirty) {
-        
+        glDisable(GL_DEPTH_TEST);
+        glViewport(startX,startY,width,height);
 //        copy_buffer();
         glEnable(GL_SCISSOR_TEST);
-//        printf("Clearing parallel coordsview\n");
+        printf("Clearing parallel coordsview\n");
         glScissor(startX, startY, width, height);
-        glClearColor(1.0, 1.0, 1.0, 0.0);
+        glClearColor(1.0, 0.95, 1.0, 0.0);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         glDisable(GL_SCISSOR_TEST);
     
@@ -306,16 +320,16 @@ void ParallelCoordsView::Draw() {
         gluOrtho2D(0.0, width, 0.0, height);
         
         glMatrixMode(GL_MODELVIEW);
-        glViewport(startX,startY,width,height);  //Use the whole window for rendering
+        glLoadIdentity();
         
         //Color the view port
-        //    glColor3f(1.F,1.F,0.F);
-        //    glBegin(GL_QUADS);
-        //        glVertex3f(0,0,0);
-        //        glVertex3f(width,0,0);
-        //        glVertex3f(width,height,0);
-        //        glVertex3f(0,height,0);
-        //    glEnd();
+//        glColor3f(1.F,1.F,0.F);
+//        glBegin(GL_QUADS);
+//            glVertex3f(0,0,0);
+//            glVertex3f(width,0,0);
+//            glVertex3f(width,height,0);
+//            glVertex3f(0,height,0);
+//        glEnd();
         
         //Draw the axes, including text and scales, should be created beforehand
         drawAxes();
@@ -327,10 +341,20 @@ void ParallelCoordsView::Draw() {
     }
 }
 
-void ParallelCoordsView::ComputeLayout() {
+void ParallelCoordsView::ComputeLayout(float startX, float startY, float width, float height, float paddingX, float paddingY) {
     //    axesOrder = {"x","y","throughput 1","#intersections","intersection X","intersection Y","intersection Z"};
-    createAxes();
+    printf("PCV ComputeLayout called.\n");
     
+    this->startX = startX;
+    this->startY = startY;
+    
+    this->width = width;
+    this->height = height;
+    
+    this->paddingX = paddingX;
+    this->paddingY = paddingY;
+    
+    createAxes();
 }
 
 bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
