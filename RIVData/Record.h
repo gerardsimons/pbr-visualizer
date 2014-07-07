@@ -47,6 +47,12 @@ public:
         const float& value = Value(row);
         return (value - minMax.first) / (minMax.second - minMax.first);
     }
+    float Min() {
+        return MinMax().first;
+    }
+    float Max() {
+        return MinMax().second;
+    }
     const std::pair<float,float>& MinMax() {
 //        printf("MINMAX OF RECORD \"%s\" CALLED\n",name.c_str());
 		if(!minMaxComputed) {
@@ -61,20 +67,10 @@ public:
                 }
             }
 			minMax = std::pair<float,float>(min,max);
-			//TODO: min_max caching does not work properly, uncomment below to enable caching!
 
-            if(min == max) {
-//                printf("min == max for record %s\n",name.c_str());
-            }
-//            printf("min,max == %f,%f\n",min,max);
 			minMaxComputed = true;
-//            printf("After min max: ");
-//            Print();
 		}
-
-//            printf("MINMAX ALREADY COMPUTED (%f,%f)\n",minMax.first,minMax.second);
         return minMax;
-        
 	}
     std::vector<float>* GetValuesPointer() {
         return &values;
@@ -118,6 +114,12 @@ public:
         const ushort& value = Value(row);
         float scaleValue = (value - minMax.first) / (float)(minMax.second - minMax.first);
         return scaleValue;
+    }
+    float Min() {
+        return MinMax().first;
+    }
+    float Max() {
+        return MinMax().second;
     }
     const std::pair<ushort,ushort>& MinMax() {
 		if(!minMaxComputed) {

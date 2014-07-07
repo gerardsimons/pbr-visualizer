@@ -22,16 +22,25 @@
 class RIVImageView : public RIVDataView, public RIVDataSetListener {
 public:
     RIVImageView(const BMPImage& image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* colorProperty,RIVSizeProperty* sizeProperty);
+    RIVImageView(const BMPImage& image);
 //    RIVImageView(const BMPImage& image,RIVColorProperty* colorProperty,RIVSizeProperty* sizeProperty);
     ~RIVImageView();
+    
+    static void DrawInstance();
+    static void ReshapeInstance(int,int);
+    static void Mouse(int state,int button,int x,int y);
+    static void Motion(int x, int y);
+    
     virtual void Draw(); //Override
-    void ComputeLayout(float startX, float startY, float width, float height, float paddingX, float paddingY); //Override
+    void Reshape(int newWidth, int newHeight);
 	virtual bool HandleMouse(int,int,int,int);
 	virtual bool HandleMouseMotion(int x, int y);
     virtual void OnDataSetChanged();
     void createTextureImage();
     void createTextureImage(const BMPImage& image);
 private:
+    static RIVImageView* instance;
+    
     GLuint imageTexture;
 	float imageMagnificationX,imageMagnificationY;
 //    void createTextureImage();

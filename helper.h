@@ -45,6 +45,30 @@ public:
     }
 };
 
+//void printHeader(const std::string& text, int width = 50) {
+//    
+//    for(size_t i = 0 ; i < width ; ++width) {
+//        std::cout << "*";
+//    }
+//    std::cout << "\n";
+//    
+//    int left = (width - text.size()) / 2;
+//    for(size_t i = 0 ; i < left ; ++i) {
+//        std::cout << " ";
+//    }
+//    std::cout << text;
+//    int right = (width - text.size() - left);
+//    for(size_t i = 0 ; i < left ; ++i) {
+//        std::cout << " ";
+//    }
+//    std::cout << "\n";
+//
+//    for(size_t i = 0 ; i < width ; ++width) {
+//        std::cout << "*";
+//    }
+//    std::cout << "\n";
+//}
+
 template<class T>
 inline void deletePointerVector(std::vector<T*> v)
 {
@@ -52,6 +76,13 @@ inline void deletePointerVector(std::vector<T*> v)
     {
         delete *i;
     }
+}
+
+void printDelimiterLine(char c = '*',int width = 50);
+
+template<class T>
+void printVar(const char* name, T var) {
+    std::cout << name << " = " << var << std::endl;
 }
 
 template <typename T>

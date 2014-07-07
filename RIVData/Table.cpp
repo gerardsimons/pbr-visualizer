@@ -262,6 +262,17 @@ std::string RIVTable::RowToString(size_t row) {
     return rowText;
 }
 
+bool RIVTable::HasRecord(RIVRecord* requested) {
+    if(records.size() > 0) {
+        for(RIVRecord *record : records) {
+            if(record->name == requested->name) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void RIVTable::Print(size_t maxPrint, bool printFiltered) {
     printf("Table called %s has %zu records %zu rows and %zu references.\n First %zu rows:\n",name.c_str(),records.size(),rows,references.size(),maxPrint);
     std::string headerText = "|";

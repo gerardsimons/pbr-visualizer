@@ -48,12 +48,18 @@ choose(unsigned long long n, unsigned long long k) {
     return r;
 }
 
+void printDelimiterLine(char c,int width) {
+    int i = 0 ;
+    while ( i < width) {
+        std::cout << c;
+        ++i;
+    }
+    std::cout << "\n";
+}
 std::vector<std::vector<size_t>> generateCombinations(unsigned long long n, unsigned long long r, size_t requested) {
     
     std::vector<bool> v(n);
     std::fill(v.begin() + n - r, v.end(), true);
-    
-    unsigned long long maxNrOfCombinations = 100000;
     
     unsigned long long nrOfCombinations = choose(n,r);
     //    printf("Generating %llu combinations\n",nrOfCombinations);

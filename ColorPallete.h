@@ -13,6 +13,7 @@
 
 namespace colors {
 
+    const float BLACK[] = {0,0,0};
     const float RED[] = {1.F,0.F,0.F};
     const float GREEN[] = {0.F,1.F,0.F};
     const float BLUE[] =  {0.F,0.F,1.F};
@@ -22,6 +23,8 @@ namespace colors {
     
     std::vector<float const*> allColors() {
         std::vector<float const*> allColors;
+        
+        allColors.push_back(BLACK);
         allColors.push_back(RED);
         allColors.push_back(GREEN);
         allColors.push_back(BLUE);

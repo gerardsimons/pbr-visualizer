@@ -1,3 +1,2 @@
-dependencies: \
-  /Users/gerardsimons/Git/afstuderen/Afstuderen/Interpolator.cpp \
-  /Users/gerardsimons/Git/afstuderen/Afstuderen/Interpolator.h
+dependencies: /Users/gerardsimons/Git/afstuderen/Interpolator.cpp \
+  /Users/gerardsimons/Git/afstuderen/Interpolator.h

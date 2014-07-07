@@ -10,9 +10,9 @@
 #define __Afstuderen__Cluster__
 
 #include <vector>
-#include "Geometry.h"
 #include "helper.h"
 #include <algorithm>
+#include "Geometry.h"
 
 class RIVCluster {
 private:

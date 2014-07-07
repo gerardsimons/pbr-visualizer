@@ -37,7 +37,7 @@ public:
     size_t NumberOfTables() const;
     std::vector<RIVTable*>* GetTables();
     RIVTable* GetTable(const std::string&) const;
-    void Print(size_t maxPrint = 1000, bool printFiltered = true) const;
+    void Print(size_t maxPrint = -1, bool printFiltered = true) const;
     void ClusterTable(const std::string& tableName, const std::string& columnNameX, const std::string& columnNameY, const std::string& columnNameZ, const size_t& K, const size_t& maxRepeat);
     RIVClusterSet* GetClusterSet();
     bool IsSet() const;

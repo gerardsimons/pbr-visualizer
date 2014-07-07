@@ -15,7 +15,6 @@
 
 #include <math.h>
 
-#include "DataView.h"
 #include "Filter.h"
 #include "Record.h"
 #include "Reference.h"
@@ -82,6 +81,7 @@ public:
     
     bool IsFiltered() { return filtered; }; //Any filters applied?
     bool IsClustered() { return isClustered; };
+    bool HasRecord(RIVRecord* record);
     
     void FunctionOnRecords(void(*someFunction)(const RIVRecord*));
 
@@ -99,7 +99,7 @@ public:
     size_t NumberOfRows();
     std::vector<RIVRecord*> GetRecords();
     
-    RIVClusterSet* GetClusterSet() { return &clusterSet; };
+    RIVClusterSet& GetClusterSet() { return clusterSet; };
     void ClusterWithSize(const std::string& xRecordName, const std::string& yRecordName, const std::string& zRecordName, const size_t& clusterSize, const size_t& maxRepeat);
     RIVClusterSet* Cluster(const std::string& xRecord, const std::string& yRecord, const std::string& zRecord, const size_t& K, const size_t& maxRepeat);
     

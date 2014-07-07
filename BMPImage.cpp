@@ -18,19 +18,21 @@ BMPImage::BMPImage(const char* imagePath, bool hasAlpha) {
     ID = 139;
 	loadTexture(imagePath, hasAlpha);
 	// TODO Auto-generated constructor stub
+    
 }
 
-//BMPImage::BMPImage(const BMPImage& copyImage) {
-//    printf("BMPImage copy constructor called.\n");
-//    hasAlpha = copyImage.hasAlpha;
-//    data = copyImage.data;
-//    sizeX = copyImage.sizeX;
-//    sizeY = copyImage.sizeY;
-//}
+BMPImage::BMPImage() {
+    ID = 0;
+    sizeX = 0;
+    sizeY = 0;
+    data = NULL;
+}
 
 BMPImage::~BMPImage() {
 	// TODO Auto-generated destructor stub
-    delete data;
+    if(data != NULL) {
+        delete data;
+    }
 }
 
 
@@ -86,6 +88,7 @@ bool BMPImage::loadTexture(const char* imagepath, int alpha)
 
     // Create a buffer
     data = new unsigned char [imageSize];
+    dataAllocated = true;
 
     // Read the actual data from the file into the buffer
     fread(data,1,imageSize,file);
@@ -95,6 +98,9 @@ bool BMPImage::loadTexture(const char* imagepath, int alpha)
 
     printf("bytes read = %zu\n",sizeof(data));
     printf("Succesfully read BMPImage\n");
+    
+
+    
     return true;
 }
 

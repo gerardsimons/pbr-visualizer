@@ -17,20 +17,16 @@
 		E1290956191CF53000822217 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290945191CF53000822217 /* main.cpp */; };
 		E1290957191CF53000822217 /* ParallelCoordsAxis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290946191CF53000822217 /* ParallelCoordsAxis.cpp */; };
 		E1290958191CF53000822217 /* ParallelCoordsView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1290948191CF53000822217 /* ParallelCoordsView.cpp */; };
-		E12D2B861949B7F1003DF76A /* Interpolator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E12D2B841949B7F1003DF76A /* Interpolator.cpp */; };
-		E13777201948DBF5000F9807 /* testCluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9F91943A5C000411FA7 /* testCluster.cpp */; };
-		E13777211948DBF5000F9807 /* testClusterSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9FA1943A5C000411FA7 /* testClusterSet.cpp */; };
-		E139EA3E194B724B0019C68F /* GraphicsProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E139EA3C194B724B0019C68F /* GraphicsProperty.cpp */; };
+		E139EA44194B73460019C68F /* GraphicsController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E139EA40194B73460019C68F /* GraphicsController.cpp */; };
 		E13B4C341938947200F1FCCF /* ColorProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E13B4C321938947200F1FCCF /* ColorProperty.cpp */; };
-		E13F45B81941ECA200CC225C /* Afstuderen_Tests.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = E13F45B71941ECA200CC225C /* Afstuderen_Tests.1 */; };
-		E13F48361941F8B700CC225C /* gtest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E13F45BC1941ECCD00CC225C /* gtest.framework */; };
+		E14AA7F119583DF30066139C /* UIView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E14AA7EF19583DF30066139C /* UIView.cpp */; };
+		E14AA7FF195841810066139C /* libAntTweakBar.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E14AA7FE195841800066139C /* libAntTweakBar.a */; };
 		E14C95C1192F7E17000A8CAC /* helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E14C95BF192F7E17000A8CAC /* helper.cpp */; };
 		E14C95C4192F7E28000A8CAC /* 3DView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E14C95C2192F7E28000A8CAC /* 3DView.cpp */; };
-		E14C95C6192F7F0B000A8CAC /* DataView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E14C95C5192F7F0B000A8CAC /* DataView.cpp */; };
 		E15FA633193CECA8000DD70C /* Cluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E15FA631193CECA8000DD70C /* Cluster.cpp */; };
 		E17EA9F219432FE600411FA7 /* ClusterSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9F019432FE600411FA7 /* ClusterSet.cpp */; };
 		E17EA9FB1943A5C000411FA7 /* reporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9F81943A5C000411FA7 /* reporter.cpp */; };
-		E17EA9FD1943A5C000411FA7 /* testClusterSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E17EA9FA1943A5C000411FA7 /* testClusterSet.cpp */; };
+		E1BA13F8194C9C4D0004F562 /* SizeProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BA13F6194C9C4D0004F562 /* SizeProperty.cpp */; };
 		E1BD6466193F758100370D69 /* Iterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1BD6464193F758100370D69 /* Iterator.cpp */; };
 		E1D1573D193CB54B0059A86B /* DataFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D15730193CB54B0059A86B /* DataFileReader.cpp */; };
 		E1D1573E193CB54B0059A86B /* DataSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D15732193CB54B0059A86B /* DataSet.cpp */; };
@@ -50,19 +46,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
-		E13F45B11941ECA200CC225C /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-				E13F45B81941ECA200CC225C /* Afstuderen_Tests.1 in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E10C4FEA194DED9800639FE5 /* Property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Property.h; path = ../Property.h; sourceTree = "<group>"; };
 		E113BE61192521E200F6525A /* ParallelCoordsAxisGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParallelCoordsAxisGroup.cpp; path = ../ParallelCoordsAxisGroup.cpp; sourceTree = "<group>"; };
 		E113BE62192521E200F6525A /* ParallelCoordsAxisGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParallelCoordsAxisGroup.h; path = ../ParallelCoordsAxisGroup.h; sourceTree = "<group>"; };
 		E12908FC191CCBC900822217 /* Afstuderen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Afstuderen; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,30 +69,30 @@
 		E1290948191CF53000822217 /* ParallelCoordsView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParallelCoordsView.cpp; path = ../ParallelCoordsView.cpp; sourceTree = "<group>"; };
 		E1290949191CF53000822217 /* ParallelCoordsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ParallelCoordsView.h; path = ../ParallelCoordsView.h; sourceTree = "<group>"; };
 		E129094A191CF53000822217 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		E129094D191CF53000822217 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Resources; path = ../Resources; sourceTree = "<group>"; };
-		E12D2B841949B7F1003DF76A /* Interpolator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Interpolator.cpp; sourceTree = "<group>"; };
-		E12D2B851949B7F1003DF76A /* Interpolator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Interpolator.h; sourceTree = "<group>"; };
-		E139EA3C194B724B0019C68F /* GraphicsProperty.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphicsProperty.cpp; sourceTree = "<group>"; };
-		E139EA3D194B724B0019C68F /* GraphicsProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphicsProperty.h; sourceTree = "<group>"; };
+		E139EA3F194B73460019C68F /* ColorPallete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorPallete.h; path = ../ColorPallete.h; sourceTree = "<group>"; };
+		E139EA40194B73460019C68F /* GraphicsController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GraphicsController.cpp; path = ../GraphicsController.cpp; sourceTree = "<group>"; };
+		E139EA41194B73460019C68F /* GraphicsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphicsController.h; path = ../GraphicsController.h; sourceTree = "<group>"; };
+		E139EA43194B73460019C68F /* Evaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Evaluator.h; path = ../Evaluator.h; sourceTree = "<group>"; };
 		E13B4C321938947200F1FCCF /* ColorProperty.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ColorProperty.cpp; path = ../ColorProperty.cpp; sourceTree = "<group>"; };
 		E13B4C331938947200F1FCCF /* ColorProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorProperty.h; path = ../ColorProperty.h; sourceTree = "<group>"; };
-		E13F45B31941ECA200CC225C /* Afstuderen Tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Afstuderen Tests"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E13F45B51941ECA200CC225C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		E13F45B71941ECA200CC225C /* Afstuderen_Tests.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Afstuderen_Tests.1; sourceTree = "<group>"; };
 		E13F45BC1941ECCD00CC225C /* gtest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = gtest.framework; path = ../../../Documents/Frameworks/GTest/gtest.framework; sourceTree = "<group>"; };
+		E14AA7EE19583DF30066139C /* tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tests.h; path = ../tests.h; sourceTree = "<group>"; };
+		E14AA7EF19583DF30066139C /* UIView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UIView.cpp; path = ../UIView.cpp; sourceTree = "<group>"; };
+		E14AA7F019583DF30066139C /* UIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIView.h; path = ../UIView.h; sourceTree = "<group>"; };
+		E14AA7F219583E050066139C /* AntTweakBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AntTweakBar.h; path = ../AntTweakBar.h; sourceTree = "<group>"; };
+		E14AA7FE195841800066139C /* libAntTweakBar.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAntTweakBar.a; path = ../../../Documents/Libraries/AntTweakBar/lib/libAntTweakBar.a; sourceTree = "<group>"; };
 		E14C95BF192F7E17000A8CAC /* helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helper.cpp; path = ../helper.cpp; sourceTree = "<group>"; };
 		E14C95C0192F7E17000A8CAC /* helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = helper.h; path = ../helper.h; sourceTree = "<group>"; };
 		E14C95C2192F7E28000A8CAC /* 3DView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = 3DView.cpp; path = ../3DView.cpp; sourceTree = "<group>"; };
 		E14C95C3192F7E28000A8CAC /* 3DView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = 3DView.h; path = ../3DView.h; sourceTree = "<group>"; };
-		E14C95C5192F7F0B000A8CAC /* DataView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DataView.cpp; path = ../DataView.cpp; sourceTree = "<group>"; };
 		E15FA631193CECA8000DD70C /* Cluster.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cluster.cpp; sourceTree = "<group>"; };
 		E15FA632193CECA8000DD70C /* Cluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cluster.h; sourceTree = "<group>"; };
 		E17EA9F019432FE600411FA7 /* ClusterSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ClusterSet.cpp; path = ../ClusterSet.cpp; sourceTree = "<group>"; };
 		E17EA9F119432FE600411FA7 /* ClusterSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ClusterSet.h; path = ../ClusterSet.h; sourceTree = "<group>"; };
 		E17EA9F81943A5C000411FA7 /* reporter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = reporter.cpp; path = ../reporter.cpp; sourceTree = "<group>"; };
-		E17EA9F91943A5C000411FA7 /* testCluster.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = testCluster.cpp; path = ../testCluster.cpp; sourceTree = "<group>"; };
-		E17EA9FA1943A5C000411FA7 /* testClusterSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = testClusterSet.cpp; path = ../testClusterSet.cpp; sourceTree = "<group>"; };
 		E18D187C1920F309006F10D5 /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Geometry.h; path = ../Geometry.h; sourceTree = "<group>"; };
+		E1BA13F6194C9C4D0004F562 /* SizeProperty.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SizeProperty.cpp; path = ../SizeProperty.cpp; sourceTree = "<group>"; };
+		E1BA13F7194C9C4D0004F562 /* SizeProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SizeProperty.h; path = ../SizeProperty.h; sourceTree = "<group>"; };
 		E1BD6464193F758100370D69 /* Iterator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Iterator.cpp; sourceTree = "<group>"; };
 		E1BD6465193F758100370D69 /* Iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Iterator.h; sourceTree = "<group>"; };
 		E1BD646C193F92D300370D69 /* reporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = reporter.h; path = ../reporter.h; sourceTree = "<group>"; };
@@ -125,7 +112,10 @@
 		E1D1573C193CB54B0059A86B /* Table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Table.h; sourceTree = "<group>"; };
 		E1D15761193CC9A20059A86B /* DataSetListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataSetListener.h; sourceTree = "<group>"; };
 		E1D15762193CCC370059A86B /* DataSetListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataSetListener.h; sourceTree = "<group>"; };
-		E1E47B02194749CB007681B1 /* ColorPallete.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColorPallete.h; sourceTree = "<group>"; };
+		E1FFAC611952E681003D7F39 /* trackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trackball.h; path = ../trackball.h; sourceTree = "<group>"; };
+		E1FFAC621952E772003D7F39 /* matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = matrix.h; path = ../matrix.h; sourceTree = "<group>"; };
+		E1FFAC671953166F003D7F39 /* graphics_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = graphics_helper.h; path = ../graphics_helper.h; sourceTree = "<group>"; };
+		E1FFAC691953166F003D7F39 /* MeshModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeshModel.h; path = ../MeshModel.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,17 +123,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E13F48361941F8B700CC225C /* gtest.framework in Frameworks */,
+				E14AA7FF195841810066139C /* libAntTweakBar.a in Frameworks */,
 				E1290936191CF50A00822217 /* Cocoa.framework in Frameworks */,
 				E1290934191CF50100822217 /* GLUT.framework in Frameworks */,
 				E1290932191CF4FB00822217 /* OpenGL.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E13F45B01941ECA200CC225C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,29 +136,36 @@
 		E12908F3191CCBC900822217 = {
 			isa = PBXGroup;
 			children = (
-				E139EA3C194B724B0019C68F /* GraphicsProperty.cpp */,
-				E139EA3D194B724B0019C68F /* GraphicsProperty.h */,
-				E12D2B841949B7F1003DF76A /* Interpolator.cpp */,
-				E12D2B851949B7F1003DF76A /* Interpolator.h */,
-				E1E47B02194749CB007681B1 /* ColorPallete.h */,
+				E14AA7F219583E050066139C /* AntTweakBar.h */,
+				E14AA7EE19583DF30066139C /* tests.h */,
+				E14AA7EF19583DF30066139C /* UIView.cpp */,
+				E14AA7F019583DF30066139C /* UIView.h */,
+				E1FFAC611952E681003D7F39 /* trackball.h */,
+				E1BA13F6194C9C4D0004F562 /* SizeProperty.cpp */,
+				E1BA13F7194C9C4D0004F562 /* SizeProperty.h */,
 				E13B4C321938947200F1FCCF /* ColorProperty.cpp */,
 				E13B4C331938947200F1FCCF /* ColorProperty.h */,
 				E14C95BF192F7E17000A8CAC /* helper.cpp */,
 				E14C95C0192F7E17000A8CAC /* helper.h */,
 				E14C95C2192F7E28000A8CAC /* 3DView.cpp */,
 				E14C95C3192F7E28000A8CAC /* 3DView.h */,
-				E17EA9F91943A5C000411FA7 /* testCluster.cpp */,
-				E17EA9FA1943A5C000411FA7 /* testClusterSet.cpp */,
+				E139EA3F194B73460019C68F /* ColorPallete.h */,
+				E1FFAC671953166F003D7F39 /* graphics_helper.h */,
+				E1FFAC691953166F003D7F39 /* MeshModel.h */,
+				E139EA40194B73460019C68F /* GraphicsController.cpp */,
+				E139EA41194B73460019C68F /* GraphicsController.h */,
+				E139EA43194B73460019C68F /* Evaluator.h */,
+				E1FFAC621952E772003D7F39 /* matrix.h */,
 				E18D187C1920F309006F10D5 /* Geometry.h */,
 				E1290937191CF53000822217 /* BMPImage.cpp */,
 				E1290938191CF53000822217 /* BMPImage.h */,
 				E129093E191CF53000822217 /* DataView.h */,
-				E14C95C5192F7F0B000A8CAC /* DataView.cpp */,
 				E1290941191CF53000822217 /* ImageView.cpp */,
 				E1290942191CF53000822217 /* ImageView.h */,
 				E1290943191CF53000822217 /* loadppm.cpp */,
 				E1290944191CF53000822217 /* loadppm.h */,
 				E1290945191CF53000822217 /* main.cpp */,
+				E10C4FEA194DED9800639FE5 /* Property.h */,
 				E17EA9F81943A5C000411FA7 /* reporter.cpp */,
 				E1BD646C193F92D300370D69 /* reporter.h */,
 				E113BE61192521E200F6525A /* ParallelCoordsAxisGroup.cpp */,
@@ -188,11 +178,9 @@
 				E17EA9F119432FE600411FA7 /* ClusterSet.h */,
 				E129094A191CF53000822217 /* README.md */,
 				E1D1572F193CB54B0059A86B /* RIVData */,
-				E129094D191CF53000822217 /* Resources */,
 				E1290935191CF50A00822217 /* Cocoa.framework */,
 				E1290933191CF50100822217 /* GLUT.framework */,
 				E1290931191CF4FB00822217 /* OpenGL.framework */,
-				E13F45B41941ECA200CC225C /* Afstuderen Tests */,
 				E1C8E59A1927781700F5D3C3 /* Frameworks */,
 				E12908FD191CCBC900822217 /* Products */,
 			);
@@ -202,23 +190,14 @@
 			isa = PBXGroup;
 			children = (
 				E12908FC191CCBC900822217 /* Afstuderen */,
-				E13F45B31941ECA200CC225C /* Afstuderen Tests */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		E13F45B41941ECA200CC225C /* Afstuderen Tests */ = {
-			isa = PBXGroup;
-			children = (
-				E13F45B51941ECA200CC225C /* main.cpp */,
-				E13F45B71941ECA200CC225C /* Afstuderen_Tests.1 */,
-			);
-			path = "Afstuderen Tests";
 			sourceTree = "<group>";
 		};
 		E1C8E59A1927781700F5D3C3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E14AA7FE195841800066139C /* libAntTweakBar.a */,
 				E13F45BC1941ECCD00CC225C /* gtest.framework */,
 				E1C8E59B1927781700F5D3C3 /* XCTest.framework */,
 			);
@@ -272,23 +251,6 @@
 			productReference = E12908FC191CCBC900822217 /* Afstuderen */;
 			productType = "com.apple.product-type.tool";
 		};
-		E13F45B21941ECA200CC225C /* Afstuderen Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E13F45BB1941ECA200CC225C /* Build configuration list for PBXNativeTarget "Afstuderen Tests" */;
-			buildPhases = (
-				E13F45AF1941ECA200CC225C /* Sources */,
-				E13F45B01941ECA200CC225C /* Frameworks */,
-				E13F45B11941ECA200CC225C /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Afstuderen Tests";
-			productName = "Afstuderen Tests";
-			productReference = E13F45B31941ECA200CC225C /* Afstuderen Tests */;
-			productType = "com.apple.product-type.tool";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -311,7 +273,6 @@
 			projectRoot = "";
 			targets = (
 				E12908FB191CCBC900822217 /* Afstuderen */,
-				E13F45B21941ECA200CC225C /* Afstuderen Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -324,36 +285,26 @@
 				E1D1573D193CB54B0059A86B /* DataFileReader.cpp in Sources */,
 				E13B4C341938947200F1FCCF /* ColorProperty.cpp in Sources */,
 				E1D15741193CB54B0059A86B /* Reference.cpp in Sources */,
-				E12D2B861949B7F1003DF76A /* Interpolator.cpp in Sources */,
 				E1290954191CF53000822217 /* ImageView.cpp in Sources */,
-				E14C95C6192F7F0B000A8CAC /* DataView.cpp in Sources */,
 				E129094F191CF53000822217 /* BMPImage.cpp in Sources */,
 				E1BD6466193F758100370D69 /* Iterator.cpp in Sources */,
 				E17EA9FB1943A5C000411FA7 /* reporter.cpp in Sources */,
 				E1D15742193CB54B0059A86B /* Table.cpp in Sources */,
 				E1290958191CF53000822217 /* ParallelCoordsView.cpp in Sources */,
-				E139EA3E194B724B0019C68F /* GraphicsProperty.cpp in Sources */,
 				E17EA9F219432FE600411FA7 /* ClusterSet.cpp in Sources */,
-				E17EA9FD1943A5C000411FA7 /* testClusterSet.cpp in Sources */,
+				E14AA7F119583DF30066139C /* UIView.cpp in Sources */,
 				E14C95C4192F7E28000A8CAC /* 3DView.cpp in Sources */,
+				E139EA44194B73460019C68F /* GraphicsController.cpp in Sources */,
 				E14C95C1192F7E17000A8CAC /* helper.cpp in Sources */,
 				E1290957191CF53000822217 /* ParallelCoordsAxis.cpp in Sources */,
 				E1D15740193CB54B0059A86B /* Record.cpp in Sources */,
 				E15FA633193CECA8000DD70C /* Cluster.cpp in Sources */,
+				E1BA13F8194C9C4D0004F562 /* SizeProperty.cpp in Sources */,
 				E1D1573F193CB54B0059A86B /* Filter.cpp in Sources */,
 				E113BE63192521E200F6525A /* ParallelCoordsAxisGroup.cpp in Sources */,
 				E1290956191CF53000822217 /* main.cpp in Sources */,
 				E1D1573E193CB54B0059A86B /* DataSet.cpp in Sources */,
 				E1290955191CF53000822217 /* loadppm.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E13F45AF1941ECA200CC225C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E13777201948DBF5000F9807 /* testCluster.cpp in Sources */,
-				E13777211948DBF5000F9807 /* testClusterSet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,6 +390,10 @@
 					"/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug",
 					/Users/gerardsimons/Documents/Frameworks/GTest,
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/gerardsimons/Documents/Libraries/AntTweakBar/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -452,36 +407,10 @@
 					"/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug",
 					/Users/gerardsimons/Documents/Frameworks/GTest,
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		E13F45B91941ECA200CC225C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				FRAMEWORK_SEARCH_PATHS = (
+				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/gerardsimons/Documents/Frameworks/GTest,
+					/Users/gerardsimons/Documents/Libraries/AntTweakBar/lib,
 				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		E13F45BA1941ECA200CC225C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/gerardsimons/Documents/Frameworks/GTest,
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -503,15 +432,6 @@
 			buildConfigurations = (
 				E1290906191CCBC900822217 /* Debug */,
 				E1290907191CCBC900822217 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		E13F45BB1941ECA200CC225C /* Build configuration list for PBXNativeTarget "Afstuderen Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E13F45B91941ECA200CC225C /* Debug */,
-				E13F45BA1941ECA200CC225C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

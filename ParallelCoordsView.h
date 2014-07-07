@@ -13,23 +13,10 @@
 
 class ParallelCoordsView : public RIVDataView, public RIVDataSetListener
 {
-public:
-    ParallelCoordsView(int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
-    ParallelCoordsView(RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
-	~ParallelCoordsView(void);
-
-    //Implemented virtual functions prescribed by DataView
-    void Draw();
-    void ComputeLayout(float startX, float startY, float width, float height, float paddingX, float paddingY);
-	bool HandleMouse(int,int,int,int);
-	bool HandleMouseMotion(int,int);
-    //implement virtual functions prescribed by DataSetListener
-    virtual void OnDataSetChanged();
 private:
     std::vector<std::string> axesOrder;
     //Create functions
     void createAxes();
-    
     //Draw helper functions
     void drawAxes();
     void drawLines();
@@ -42,5 +29,24 @@ private:
     ParallelCoordsAxis* selectedAxis;
     bool axesAreDirty = false;
     bool linesAreDirty = false;
+public:
+    ParallelCoordsView();
+    ParallelCoordsView(int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
+    ParallelCoordsView(RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
+	~ParallelCoordsView(void);
+    
+    //Implemented virtual functions prescribed by DataView
+    void Draw();
+    void Reshape(int width, int height);
+	bool HandleMouse(int,int,int,int);
+	bool HandleMouseMotion(int,int);
+    //implement virtual functions prescribed by DataSetListener
+    virtual void OnDataSetChanged();
+    
+    static void ReshapeInstance(int width, int height);
+    static void DrawInstance();
+    static void Mouse(int button, int state, int x, int y);
+    static void Motion(int x, int y);
+    static ParallelCoordsView *instance;
 };
 

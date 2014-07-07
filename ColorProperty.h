@@ -35,6 +35,23 @@ public:
     virtual float const* Color(RIVTable*,const size_t&) = 0;
 };
 
+class RIVFixedColorProperty : public RIVColorProperty{
+private:
+    const float* color = NULL;
+    
+public:
+    RIVFixedColorProperty(const float* color) {
+        this->color = color;
+    }
+    RIVFixedColorProperty( float r,  float g,  float b) {
+        const float c[] = {r,g,b};
+        color = c;
+    }
+    float const* Color(RIVTable*,const size_t&) {
+        return color;
+    }
+};
+
 //enum INTERPOLATION_SCHEME {
 //    DISCRETE,
 //    CONTINUOUS

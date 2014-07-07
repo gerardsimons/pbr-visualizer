@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-#include <gtest/gtest.h>
+#include "gtest.h"
 #include "Cluster.h"
 #include "ClusterSet.h"
 #include "RIVData/DataFileReader.h"

@@ -126,9 +126,11 @@ double RIVCluster::Optimize() {
     return bestCost;
 }
 bool RIVCluster::HasMember(const size_t& memberIndex) {
-    for(size_t member : memberIndices) {
-        if(member == memberIndex) {
-            return true;
+    if(memberIndices.size() > 0) {
+        for(size_t member : memberIndices) {
+            if(member == memberIndex) {
+                return true;
+            }
         }
     }
     return false;

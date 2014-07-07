@@ -17,9 +17,12 @@
 class BMPImage {
 private:
     bool loadTexture(const char* imagePath, int alpha);
+//    bool loaded = false;
 public:
     int ID;
+    bool dataAllocated;
 	BMPImage(const char* imagePath,bool hasAlpha);
+    BMPImage();
 //    BMPImage(const BMPImage& copyImage);;
     bool hasAlpha;
 	int sizeX,sizeY;

@@ -1,5 +1,6 @@
 #include "DataFileReader.h"
 
+
 #include <stdio.h>
 #include <vector>
 #include <iostream>
@@ -29,7 +30,7 @@ bool is_number(const std::string& s)
     return !s.empty();
 }
 
-std::vector<float> DataFileReader::ReadModelData(const std::string& fileName) {
+MeshModel DataFileReader::ReadModelData(const std::string& fileName) {
     std::ifstream is;
     is.open (fileName, std::ios::in );
     
@@ -44,11 +45,11 @@ std::vector<float> DataFileReader::ReadModelData(const std::string& fileName) {
     
     if (is.is_open())
     {
-        
         char delimiter = ' ';
         std::string token;
         std::string line;
         while (getline(is,line)) {
+//            std::cout << line;
             ++lineNumber;
             size_t tokenCount = 0;
             bool shapeFound = false;
@@ -106,7 +107,7 @@ std::vector<float> DataFileReader::ReadModelData(const std::string& fileName) {
         }
     }
     else {
-        printf("Unable to open PBRT file %s\n.",fileName.c_str());
+        throw "Unable to open PBRT file " + fileName;
     }
     printf("Found %zu vertices in PBRT file.\n",vertices.size());
     return vertices;
@@ -148,19 +149,31 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
     
     RIVDataSet dataset;
     
-    size_t pathsFound = 0;
-    
     //First pass, count the number of path records
+    size_t pathsFound = 0;
+    std::string line;
+    if(is.is_open()) {
+        is.seekg (0, std::ios::beg);
+        while (getline(is,line)) {
+            if(line[0] != '%') {
+                ++pathsFound;
+            }
+        }
+        is.seekg (0, std::ios::beg);
+    }
+    is.close();;
+    is.open(fileName,std::ios::in);
+    
+    double probability = 1;
+    if(pathsLimit > 0) { //Probabilistic sampling
+        probability = pathsFound / (double) pathsLimit;
+    }
+    
+
     if (is.is_open())
     {
-        std::string line;
-//        is.seekg (0, std::ios::beg);
-//        while (getline(is,line)) {
-//            if(line[0] != '%') {
-//                ++pathsFound;
-//            }
-//        }
-        is.seekg (0, std::ios::beg);
+
+
         
         std::vector<ushort> xPixelData;
         std::vector<ushort> yPixelData;
@@ -209,11 +222,10 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
         RIVUnsignedShortRecord *imageGreenRecord = new RIVUnsignedShortRecord("G",0,255);
         RIVUnsignedShortRecord *imageBlueRecord = new RIVUnsignedShortRecord("B",0,255);
       // Do not usually include these, only include x,y with actual path values (from pbrt out files)
-        RIVUnsignedShortRecord *xPixelRecord = new RIVUnsignedShortRecord("x");
-        RIVUnsignedShortRecord *yPixelRecord = new RIVUnsignedShortRecord("y");
+//        RIVUnsignedShortRecord *xPixelRecord = new RIVUnsignedShortRecord("x");
+//        RIVUnsignedShortRecord *yPixelRecord = new RIVUnsignedShortRecord("y");
         
         size_t iteration = 0;
-        int channels = 3 + image.hasAlpha;
         
         std::vector<ushort> redChannel;
         std::vector<ushort> greenChannel;
@@ -222,18 +234,13 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
         std::vector<ushort> yPixels;
         
         //Fill the image table, sorted on x,y
-        for(size_t x = 0 ; x < image.sizeX ; x++) {
-            for(size_t y = 0 ; y < image.sizeY ; y++) {
+        for(int x = 0 ; x < image.sizeX ; x++) {
+            for(int y = 0 ; y < image.sizeY ; y++) {
                 
-                short* rgb = image.RGB(x,y);
+                unsigned short* rgb = image.RGB(x,y);
                 int R = rgb[0];
                 int G = rgb[1];
                 int B = rgb[2];
-                
-//                int B = image.data[pixelPosition];
-//                int G = image.data[pixelPosition + 1];
-//                int R = image.data[pixelPosition + 2];
-//                int A = image.data[pixelPosition + 3];
                 
 //                printf("image.data pixel %lu (%d,%d) (R,G,B) = (%d,%d,%d)\n",pixelPosition / channels, (x+1), (y+1), R,G,B);
                 
@@ -248,16 +255,18 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
             }
         }
         
-        
-//        size_t test_count = 0;
-        
-        
         std::map<size_t,std::vector<size_t>> imagePathReferences = std::map<size_t,std::vector<size_t>>();
         std::map<size_t,std::vector<size_t>> pathIsectReferences = std::map<size_t,std::vector<size_t>>();
         std::string buffer;
-        while (getline(is,line) && (lineNumber < pathsLimit || pathsLimit == -1)) {
+        while (getline(is,line)) {
             ++lineNumber;
             if(!line.empty() && line[0] != '%') { //Is a valid path declaration
+                
+                float randomFloat = rand() / RAND_MAX;
+                if(pathsLimit > 0 && randomFloat >= probability)
+                    continue;
+                
+                
                 std::vector<std::string> exploded = explode(line,',',ignoreList);
                 
                 x = std::stoul(exploded[0],nullptr,0);
@@ -266,7 +275,6 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
                 throughput[1] = std::stof(exploded[3],0);
                 throughput[2] = std::stof(exploded[4],0);
                 intersections_size = std::stoul(exploded[5],nullptr,0);
-                
                 
                 //Hacky way because it is ordered on x,y
                 size_t imageTableIndex = (x - 1) * image.sizeX + (y - 1);
@@ -463,7 +471,7 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
         //    }
         
          printf("*******************   DATASET READ   *******************\n");
-         dataset.Print(100);
+         dataset.Print(1000);
          printf("****************    END DATASET READ    ****************\n");
 //
         printf("%zu path data records read.\n",pathTable->GetNumRows());
@@ -502,7 +510,7 @@ RIVTable* DataFileReader::ReadImageData(const BMPImage& image) {
             int R = image.data[pixelPosition + 2];
 //            int A = image.data[pixelPosition + 3];
             
-            printf("image.data pixel %lu (%d,%d) (R,G,B) = (%d,%d,%d)\n",pixelPosition / channels, (x+1), (y+1), R,G,B);
+//            printf("image.data pixel %lu (%d,%d) (R,G,B) = (%d,%d,%d)\n",pixelPosition / channels, (x+1), (y+1), R,G,B);
             
             ++iteration;
             

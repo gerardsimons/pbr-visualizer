@@ -28,20 +28,26 @@ private:
     //Possibly the selection box created by clicking and dragging (NOT IMPLEMENTED)
     Box3D selectionBox;
     
+    static RIV3DView* instance;
     Point3D screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
+    RIV3DView();
     RIV3DView(int,int,int,int,int,int,RIVColorProperty*,RIVSizeProperty*);
     RIV3DView(RIVColorProperty*,RIVSizeProperty*);
-    void ComputeLayout(float startX, float startY, float width, float height, float paddingX, float paddingY);
+    void Reshape(int newWidth, int newHeight);
 	 void Draw();
 	 bool HandleMouse(int button, int state, int x, int y);
 	 bool HandleMouseMotion(int x, int y);
      void OnDataSetChanged();
     
+    static void DrawInstance(); //Override
+    static void ReshapeInstance(int,int);
+    static void Mouse(int button, int state, int x, int y);
+    static void Motion(int x, int y);
+    
     void ToggleDrawClusterMembers();
     void SetModelData(const MeshModel&);
     void MoveCamera(float,float,float);
-    void Reshape(float newWidth, float newHeight);
     
     //The models to draw
 
