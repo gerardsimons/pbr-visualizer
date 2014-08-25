@@ -15,7 +15,7 @@ public:
 	~DataFileReader(void);
     
     static RIVDataSet ReadAsciiData(const std::string& fileName,const BMPImage &image, const size_t pathsLimit = 0);
-	static RIVDataSet ReadBinaryData(const std::string& fileName); //TODO: not working, fails at some float bytes
+	static RIVDataSet ReadBinaryData(const std::string& fileName, const BMPImage &image, const size_t pathsLimit = 0); 
     static RIVTable* ReadImageData(const BMPImage& image);
     
     static MeshModel ReadModelData(const std::string& fileName);

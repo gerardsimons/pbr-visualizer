@@ -14,6 +14,7 @@
 #include "ColorProperty.h"
 #include "SizeProperty.h"
 #include "UIView.h"
+#include "HeatMapView.h"
 
 #if defined(__APPLE__)
 #include <GLUT/glut.h>
@@ -41,11 +42,12 @@ int posY = 0;
 
 int mainWindow;                   /* GLUT window handle */
 
-/* All the sub windows corresponding to the custom views */
+/* All the sub window handles of the custom views */
 int imageViewWindow;
 int sceneViewWindow;
 int parallelViewWindow;
 int uiViewWindow;
+int heatMapViewWindow;
 
 /* For debugging purposes, keep track of mouse location */
 int lastMouseX,lastMouseY = 0;
@@ -56,6 +58,7 @@ std::vector<RIVDataView*> views;
 RIVImageView *imageView = NULL;
 RIV3DView *sceneView = NULL;
 ParallelCoordsView *parallelCoordsView = NULL;
+RIVHeatMapView *heatMapView = NULL;
 UIView *uiView = NULL;
 
 /* The dataset, views have pointers to this in order to draw their views consistently */
@@ -75,7 +78,7 @@ std::string pbrtPath = "";
 void display(void)
 {
     printf("Main display function called.\n");
-     // Clear frame buffer
+    // Clear frame buffer
     glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     
@@ -92,7 +95,7 @@ void mouse(int button, int state, int x, int y) {
 	for(size_t i = 0 ; i < views.size() ; i++) {
 		if(views[i]->HandleMouse(button,state,x,y)) {
             printf("View %s caught the MOUSE interaction\n",views[i]->identifier.c_str());
-//            if(state == GLUT_UP)
+            //            if(state == GLUT_UP)
 			glutPostRedisplay();
 			return;
 		}
@@ -131,18 +134,18 @@ void invalidateAllViews() {
 }
 
 void keys(int keyCode, int x, int y) {
-//    printf("Pressed %d at (%d,%d)\n",keyCode,x,y);
+    //    printf("Pressed %d at (%d,%d)\n",keyCode,x,y);
     bool postRedisplay = true;
     switch(keyCode) {
         case 27: //ESC key
             printf("Clear filters\n");
-//            invalidateAllViews();
+            //            invalidateAllViews();
             dataset.ClearFilters();
             break;
         case 98: // 'b' key
             glutSwapBuffers();
             printf("Manual swap buffers\n");
-//            copy_buffer();
+            //            copy_buffer();
             postRedisplay = true;
             break;
         case 99: // 'c' key
@@ -183,8 +186,8 @@ void keys(int keyCode, int x, int y) {
             uiView->MoveMenu(-10.F,0);
             break;
         case GLUT_KEY_RIGHT:
-//            sceneView->MoveCamera(1.F,0,0);
-                uiView->MoveMenu(10.F,0);
+            //            sceneView->MoveCamera(1.F,0,0);
+            uiView->MoveMenu(10.F,0);
             break;
         default:
             postRedisplay = false;
@@ -216,20 +219,28 @@ void reshape(int w, int h)
     glutSetWindow(parallelViewWindow);
     glutPositionWindow(padding,padding);
     glutReshapeWindow(width-2*padding,height/2-2*padding); //Upper half and full width of the main window
-
-    //image view window
+    //
+    //    //image view window
     glutSetWindow(imageViewWindow);
     glutPositionWindow(padding, height/2+padding);
     glutReshapeWindow(height / 2 - 2*padding, height /2 - 2 *padding); //Square bottom left corner
-    
-    //3D scene view inspector window
+    //
+    //    //3D scene view inspector window
     glutSetWindow(sceneViewWindow);
     glutPositionWindow(padding + height/2, height/2+padding);
     glutReshapeWindow(height / 2 - 2*padding, height /2 - 2 *padding); //Square bottom right next to imageview window
-    
-    glutSetWindow(uiViewWindow);
+
+    //Heat map view
+    glutSetWindow(heatMapViewWindow);
     glutPositionWindow(padding + height, height / 2 + padding);
+    glutReshapeWindow(height / 2 - 2*padding, height /2 - 2 *padding);
+    
+    //    //UI view window
+    glutSetWindow(uiViewWindow);
+    glutPositionWindow(padding + 1.5f * height, height / 2 + padding);
     glutReshapeWindow(height /2 - 2*padding, height/2 - 2 *padding);
+    
+
 }
 
 void generatePaths(int argc, char* argv[]) {
@@ -246,7 +257,8 @@ void generatePaths(int argc, char* argv[]) {
 void loadData() {
     if(!dataPath.empty() && !pbrtPath.empty()) {
         BMPImage image = BMPImage(bmpPath.c_str(),false);
-        dataset = DataFileReader::ReadAsciiData(dataPath + ".txt",image,0);
+        //        dataset = DataFileReader::ReadAsciiData(dataPath + ".txt",image,0);
+        dataset = DataFileReader::ReadBinaryData(dataPath + ".bin",image,0);
         model = DataFileReader::ReadModelData(pbrtPath);
     }
     else throw "Data paths not generated.";
@@ -258,9 +270,10 @@ void createViews() {
         RIVColorProperty *defaultColorProperty = new RIVFixedColorProperty(1,1,1);
         
         parallelViewWindow = glutCreateSubWindow(mainWindow,0,height / 2.F,width,height / 2.F);
-        //        parallelCoordsView->windowHandle = parallelViewWindow;
+
         glutSetWindow(parallelViewWindow);
         glutDisplayFunc(ParallelCoordsView::DrawInstance);
+//        glutDisplayFunc(idle);
         glutReshapeFunc(ParallelCoordsView::ReshapeInstance);
         glutMouseFunc(ParallelCoordsView::Mouse);
         glutMotionFunc(ParallelCoordsView::Motion);
@@ -273,37 +286,49 @@ void createViews() {
         glutSetWindow(imageViewWindow);
         imageView = new RIVImageView(image, 0, 0, height / 2.F, height / 2.F, 0, 0, defaultColorProperty, defaultSizeProperty); //If this is not supplied on constructor, the texture becomes garbled
         glutDisplayFunc(RIVImageView::DrawInstance);
+//        glutDisplayFunc(idle);
         glutReshapeFunc(RIVImageView::ReshapeInstance);
         glutMouseFunc(RIVImageView::Mouse);
         glutMotionFunc(RIVImageView::Motion);
         glutSpecialFunc(keys);
-        
-        //        //3D view window
+        //
         sceneViewWindow = glutCreateSubWindow(mainWindow, 0, 0, 0, 0);
         glutSetWindow(sceneViewWindow);
         glutDisplayFunc(RIV3DView::DrawInstance);
+//        glutDisplayFunc(idle);
         glutReshapeFunc(RIV3DView::ReshapeInstance);
         glutMouseFunc(RIV3DView::Mouse);
         glutMotionFunc(RIV3DView::Motion);
         glutSpecialFunc(keys);
-        
+        //
         uiViewWindow = glutCreateSubWindow(mainWindow, 0, 0, 0, 0);
         glutSetWindow(uiViewWindow);
         glutReshapeFunc(UIView::ReshapeInstance);
         glutDisplayFunc(UIView::DrawInstance);
+//        glutDisplayFunc(idle);
         glutMouseFunc(UIView::Mouse);
         glutMotionFunc(UIView::Motion);
-        glutEntryFunc(UIVIew::Entry);
+        glutEntryFunc(UIView::Entry);
+        
+        heatMapViewWindow = glutCreateSubWindow(mainWindow,0,0,0,0);
+        glutSetWindow(heatMapViewWindow);
+        glutReshapeFunc(RIVHeatMapView::ReshapeInstance);
+        glutDisplayFunc(RIVHeatMapView::DrawInstance);
+//        glutDisplayFunc(RIV3DView::DrawInstance);
+        glutMouseFunc(RIVHeatMapView::Mouse);
+        glutMotionFunc(RIVHeatMapView::Motion);
         
         //Create views
         parallelCoordsView = new ParallelCoordsView();
         sceneView = new RIV3DView();
         uiView = new UIView(defaultColorProperty,defaultSizeProperty);
+        heatMapView = new RIVHeatMapView();
         
         //Set data
         imageView->SetData(&dataset);
         parallelCoordsView->SetData(&dataset);
         sceneView->SetData(&dataset);
+        heatMapView->SetData(&dataset);
         
         //Set the 3D model loaded from the PBRT file
         sceneView->SetModelData(model);
@@ -316,14 +341,7 @@ void createViews() {
         views.push_back(sceneView);
         views.push_back(imageView);
         views.push_back(parallelCoordsView);
-        
-        //Create Parallel view window
-
-//
-//        //UI View window
-//        uiViewWindow = glutCreateSubWindow(mainWindow, 0, 0, 0, 0);
-//        glutSetWindow(uiViewWindow);
-//        glutDisplayFunc(UIView::DrawInstance);
+        views.push_back(heatMapView);
     }
     else {
         throw "Data must be loaded first.";
@@ -337,13 +355,14 @@ void initializeViewProperties() {
     
     //    imageTable->FilterRowsUnlinkedTo(pathTable);
     
-    RIVRecord* xIsectRecord = intersectionstTable->GetRecord("intersection X");
+    RIVRecord* bounceRecord = intersectionstTable->GetRecord("bounce#");
     
     //    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty(pathTable,colors::GREEN,colors::RED);
-    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionstTable,xIsectRecord,colors::GREEN,colors::RED);
+    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionstTable,bounceRecord,colors::GREEN,colors::RED);
     RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(.05F);
     
     parallelCoordsView->SetColorProperty(colorProperty);
+    sceneView->SetSizeProperty(sizeProperty);
     sceneView->SetColorProperty(colorProperty);
     
     //TODO apply color and size properties to views
@@ -404,9 +423,9 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     
     //Use double buffering!
-//    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+    //    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
-//    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
+    //    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
     
     /* set the initial window size */
     glutInitWindowSize(width, height);
@@ -422,7 +441,7 @@ int main(int argc, char **argv)
     
     // display and idle function
     glutDisplayFunc(display);
-//    glutIdleFunc(renderSceneAll);
+    //    glutIdleFunc(renderSceneAll);
     
     /* --- register callbacks with GLUT ---     */
     
@@ -442,7 +461,7 @@ int main(int argc, char **argv)
     /* Transparency stuff */
     glEnable (GL_BLEND);
     
-    glClearColor(1,1,1, 0.0); //Back is green
+    glClearColor(1,1,1, 0.0);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

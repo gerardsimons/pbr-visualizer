@@ -33,7 +33,8 @@ private:
     std::vector<float> values;
     std::pair<float,float> minMax;
 public:
-    RIVFloatRecord(std::string _name) { name = _name; };
+    RIVFloatRecord(const std::string& name) { this->name = name; };
+    RIVFloatRecord(const std::string& name, const std::vector<float>& values) { this->name = name; this->values = values; minMaxComputed = false; };
     float Value(const size_t& i) const { return values[i]; };
     void SetValues(std::vector<float> _values) {
         values = _values;
@@ -86,10 +87,14 @@ private:
     std::pair<ushort,ushort> minMax;
     std::vector<ushort> values;
 public:
-    RIVUnsignedShortRecord(std::string name_) {
-        name = name_;
+    RIVUnsignedShortRecord(const std::string& name) {
+        this->name = name;
         minMaxComputed = false;
     };
+    RIVUnsignedShortRecord(const std::string& name, const std::vector<ushort>& values) {
+        this->name = name;
+        this->values = values;
+    }
     RIVUnsignedShortRecord(std::string name_, ushort min, ushort max) {
         name = name_;
         minMax.first = min;

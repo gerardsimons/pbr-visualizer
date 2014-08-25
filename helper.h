@@ -17,6 +17,9 @@
 #include <GLUT/GLUT.h>
 #include <iterator>
 
+void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v );
+void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v );
+
 template <typename T, size_t N>
 class Vector {
     T values[N];

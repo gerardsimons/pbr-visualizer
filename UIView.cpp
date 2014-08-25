@@ -35,7 +35,7 @@ void TW_CALL BreakOnError(const char *errorMessage)
 }
 
 void UIView::initTweakBar() {
-    printf("Init tweak bar\n");
+//    printf("Init tweak bar\n");
     TwInit(TW_OPENGL, NULL);
     // Initialize AntTweakBar
     tweakBar = TwNewBar("TweakBar");
@@ -123,7 +123,7 @@ void UIView::Reshape(int newWidth, int newHeight) {
 void UIView::Draw() {
     glDisable(GL_DEPTH_TEST);
     
-    printf("UIView Draw!\n");
+//    printf("UIView Draw!\n");
 //
 //    printVar("startX",startX);
 //    printVar("startY",startY);
@@ -191,7 +191,7 @@ void UIView::Motion(int x, int y) {
 }
 
 bool UIView::HandleMouse(int button, int state, int x, int y) {
-    printf("UIView HandleMouse.\n");
+//    printf("UIView HandleMouse.\n");
     if(!TwEventMouseButtonGLUT(button, state, x,y)) {
         y = height - y;
         if(containsPoint(x, y)) {
@@ -203,7 +203,7 @@ bool UIView::HandleMouse(int button, int state, int x, int y) {
 }
 
 bool UIView::HandleMouseMotion(int x, int y) {
-    printf("UIView HandleMouseMotion.\n");
+//    printf("UIView HandleMouseMotion.\n");
     TwEventMouseMotionGLUT(x, y);
     ToViewSpaceCoordinates(&x, &y);
     if(containsPoint(x, y)) {

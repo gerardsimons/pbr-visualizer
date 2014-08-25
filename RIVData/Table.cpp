@@ -37,7 +37,7 @@ void RIVTable::AddRecord(RIVRecord* record) {
         rows = record->Size();
         records.push_back(record);
     }
-    else throw std::string("Tried to add a record of altering size than present records in table.");
+    else throw std::string("Record should have the same size as present records.");
 }
 
 RIVRecord* RIVTable::GetRecord(size_t index) {

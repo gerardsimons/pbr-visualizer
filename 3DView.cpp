@@ -128,7 +128,7 @@ void RIV3DView::ToggleDrawClusterMembers() {
 }
 
 void RIV3DView::Draw() {
-//    printf("\3DView Draw!\n");
+//    printf("3DView Draw!\n");
     glEnable(GL_DEPTH_TEST);
     
 //    glEnable(GL_SCISSOR_TEST);
@@ -158,7 +158,7 @@ void RIV3DView::Draw() {
 //    glMatrixMode(GL_MODELVIEW);
     
     /** Draw the model **/
-    glBegin(GL_TRIANGLES);
+    glBegin(GL_QUADS);
     const std::vector<float>& vertices = modelData.GetVertices();
     for(size_t i = 0 ; i < vertices.size() ; i += 3) {
         glVertex3f(vertices[i], vertices[i+1], vertices[i+2]);
@@ -206,7 +206,7 @@ void RIV3DView::Draw() {
             glColor3f(color[0], color[1], color[2]);
             
             float isectX = xRecord->Value(row);
-            float isectY = -yRecord->Value(row); //HACK, Cornell has flipped Y coordinates
+            float isectY = yRecord->Value(row); //HACK, Cornell has flipped Y coordinates
             float isectZ = zRecord->Value(row);
             Point3D point(isectX,isectY,isectZ);
             

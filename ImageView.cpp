@@ -131,8 +131,8 @@ void RIVImageView::createTextureImage(const BMPImage& image) {
     glGenTextures(1, &imageTexture);
     glBindTexture(GL_TEXTURE_2D, imageTexture);
     
-    printf("image ID = %d\n",image.ID);
-    std::cout << image;
+//    printf("image ID = %d\n",image.ID);
+//    std::cout << image;
     
     if(renderedImage.hasAlpha) {
         gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.sizeX, image.sizeY,GL_BGRA_EXT, GL_UNSIGNED_BYTE, image.data); //For BMP images use this

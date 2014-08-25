@@ -197,6 +197,8 @@ void ParallelCoordsView::drawLines() {
         
         glColor3f(1.0, 0.0, 0.0);
         
+        size_t loop_count = 0;
+        
         for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
             RIVTable *table = axisGroup.table;
             
@@ -220,39 +222,38 @@ void ParallelCoordsView::drawLines() {
                 
                 glLineWidth(size);
                 
+                //Test line
+//                glVertex2f(0, 0);
+//                glVertex2f(width, height);
+                
                 if(color != NULL) {
                     glColor3f(color[0], color[1], color[2]);
-    //                delete color;
+//    //                delete color;
                     for(ParallelCoordsAxis &axis : axisGroup.axes) {
                         RIVRecord *ptr = axis.RecordPointer;
                         RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(ptr);
                         
-                        //If this is a connector axis we should cache the coords
-                        bool cacheCoords = false;
-                        if(axisGroup.connectorAxis->name == axis.name && !axisGroup.connectedGroup) {
-                            axisXCache.clear();
-                            axisYCache.clear();
-    //                        printf("Connector axis  found. Caching the coordinates.");
-                            cacheCoords = true;
-                        }
-                        
+//                        printf("Axis name = %s\n",axis.name.c_str());
+//                        printf("Loop count = %zu\n",loop_count);
+//                        ++loop_count;
+//
                         if(floatRecord) {
-                            //Code here
+//                            //Code here
                             float value = floatRecord->Value(row);
                             float x = axis.x;
                             float y = axis.PositionOnScaleForValue(value);
-
-                            //                        printf("glVertex3f(%f,%f)\n",x,y);
-                            //                        printf("Drawing line %zu\n",lineIndex);
-                            if(cacheCoords == true) {
-                                axisXCache.push_back(x);
-                                axisYCache.push_back(y);
-                            }
-    //                        printf("glVertex3f(%f,%f,%f)\n",x,y,0);
+//
+//                            //                        printf("glVertex3f(%f,%f)\n",x,y);
+//                            //                        printf("Drawing line %zu\n",lineIndex);
+//                            if(cacheCoords == true) {
+//                                axisXCache.push_back(x);
+//                                axisYCache.push_back(y);
+//                            }
+//    //                        printf("glVertex3f(%f,%f,%f)\n",x,y,0);
                             glVertex3f(x, y, 0);
-                            if(y > axis.y + axis.height || y < axis.y) {
-//                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
-                            }
+//                            if(y > axis.y + axis.height || y < axis.y) {
+////                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
+//                            }
                             continue;
                         }
                         RIVUnsignedShortRecord* shortRecord = RIVTable::CastToUnsignedShortRecord(ptr);
@@ -263,10 +264,6 @@ void ParallelCoordsView::drawLines() {
                             
                             float x = axis.x;
                             float y = axis.PositionOnScaleForValue(value);
-                            if(cacheCoords == true) {
-                                axisXCache.push_back(x);
-                                axisYCache.push_back(y);
-                            }
                             glVertex3f(x, y, 0);
                             
                             if(y > axis.y + axis.height || y < axis.y) {
@@ -283,41 +280,6 @@ void ParallelCoordsView::drawLines() {
                 }
                 glEnd();
                 lineIndex++;
-                
-//                for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
-//                    break; //Not working! axixGroup connectedGroup is garbled, faulty table pointer etc.
-//                    if(axisGroup.connectedGroup != 0) { //There is a axis group connect to this one
-//                        
-//                        RIVTable *table = axisGroup.connectedGroup->table;
-//                            
-//                        //Connect these two axes
-//                        ParallelCoordsAxis *toAxis = axisGroup.connectorAxis;
-//                        ParallelCoordsAxis *fromAxis = axisGroup.connectedGroup->connectorAxis;
-//                            
-//                        
-//                            
-//                        glBegin(GL_LINES);
-//                        
-//                        size_t lineInex = 0;
-//                        size_t numberOfRows = table->NumberOfRows();
-//                        size_t row = 0;
-//                        TableIterator *iterator = table->GetIterator();
-//                        
-//                        //            iterator->Print();
-//                        while(iterator->GetNext(row)) {
-//                            //                printf("Row : %zu\n",row);
-//                            float* color = colorProperty->Color(table, row);
-//                            glColor3f(color[0], color[1], color[2]);
-//                            
-//                            RIVRecord *fromRecord = fromAxis->RecordPointer;
-//                            RIVRecord *toRecord = toAxis->RecordPointer;
-//                            
-//                            lineIndex++;
-//                        }
-//                            
-//                        glEnd();
-//                    }
-//                }
             }
         }
         linesAreDirty = false;

@@ -1,6 +1,6 @@
-dependencies: \
-  /Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp \
-  /Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.h \
+dependencies: /Users/gerardsimons/Git/afstuderen/HeatMapView.cpp \
+  /Users/gerardsimons/Git/afstuderen/HeatmapView.h \
+  /Users/gerardsimons/Git/afstuderen/DataView.h \
   /Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h \
   /Users/gerardsimons/Git/afstuderen/RIVData/Table.h \
   /Users/gerardsimons/Git/afstuderen/RIVData/Filter.h \
@@ -13,6 +13,6 @@ dependencies: \
   /Users/gerardsimons/Git/afstuderen/ClusterSet.h \
   /Users/gerardsimons/Git/afstuderen/Evaluator.h \
   /Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h \
-  /Users/gerardsimons/Git/afstuderen/MeshModel.h \
-  /Users/gerardsimons/Git/afstuderen/BMPImage.h \
-  /Users/gerardsimons/Git/afstuderen/RIVData/../reporter.h
+  /Users/gerardsimons/Git/afstuderen/ColorProperty.h \
+  /Users/gerardsimons/Git/afstuderen/Property.h \
+  /Users/gerardsimons/Git/afstuderen/SizeProperty.h

@@ -25,4 +25,5 @@ dependencies: /Users/gerardsimons/Git/afstuderen/main.cpp \
   /Users/gerardsimons/Git/afstuderen/3DView.h \
   /Users/gerardsimons/Git/afstuderen/ColorPallete.h \
   /Users/gerardsimons/Git/afstuderen/UIView.h \
-  /Users/gerardsimons/Git/afstuderen/AntTweakBar.h
+  /Users/gerardsimons/Git/afstuderen/AntTweakBar.h \
+  /Users/gerardsimons/Git/afstuderen/HeatMapView.h

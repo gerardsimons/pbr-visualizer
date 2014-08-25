@@ -8,6 +8,7 @@
 #include <fstream>
 #include <regex>
 
+#include "../reporter.h"
 
 DataFileReader::DataFileReader(void)
 {
@@ -172,9 +173,6 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
 
     if (is.is_open())
     {
-
-
-        
         std::vector<ushort> xPixelData;
         std::vector<ushort> yPixelData;
         
@@ -351,7 +349,6 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
                         interactionType = std::stoul(exploded[endSpectrum + 1 + i]);
                         lightId = std::stoul(exploded[endInteractions + 1 + i]);
                     
-                        
                         intersectionPosX.push_back(intersectPosX);
                         intersectionPosY.push_back(intersectPosY);
                         intersectionPosZ.push_back(intersectPosZ);
@@ -391,26 +388,16 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
         RIVUnsignedShortRecord *isects = new RIVUnsignedShortRecord("#intersections");
         isects->SetValues(nrOfIntersections);
         
-        RIVFloatRecord *isectPosX = new RIVFloatRecord("intersection X");
-        isectPosX->SetValues(intersectionPosX);
-        RIVFloatRecord *isectPosY = new RIVFloatRecord("intersection Y");
-        isectPosY->SetValues(intersectionPosY);
-        RIVFloatRecord *isectPosZ = new RIVFloatRecord("intersection Z");
-        isectPosZ->SetValues(intersectionPosZ);
-        RIVUnsignedShortRecord *primitiveIdRecord = new RIVUnsignedShortRecord("primitive ID");
-        primitiveIdRecord->SetValues(primitveIds);
-        RIVUnsignedShortRecord *shapeIdRecord = new RIVUnsignedShortRecord("shape ID");
-        shapeIdRecord->SetValues(shapeIds);
-        RIVFloatRecord *spectrumOneRecord = new RIVFloatRecord("spectrum 1");
-        spectrumOneRecord->SetValues(spectraOne);
-        RIVFloatRecord *spectrumTwoRecord = new RIVFloatRecord("spectrum 2");
-        spectrumTwoRecord->SetValues(spectraTwo);
-        RIVFloatRecord *spectrumThreeRecord = new RIVFloatRecord("spectrum 3");
-        spectrumThreeRecord->SetValues(spectraThree);
-        RIVUnsignedShortRecord *interactionTypesRecord = new RIVUnsignedShortRecord("interaction types");
-        interactionTypesRecord->SetValues(interactionTypes);
-        RIVUnsignedShortRecord *lightIdsRecord = new RIVUnsignedShortRecord("light ids");
-        lightIdsRecord->SetValues(lightIds);
+        RIVFloatRecord *isectPosX = new RIVFloatRecord("intersection X",intersectionPosX);
+        RIVFloatRecord *isectPosY = new RIVFloatRecord("intersection Y",intersectionPosY);
+        RIVFloatRecord *isectPosZ = new RIVFloatRecord("intersection Z",intersectionPosZ);
+        RIVUnsignedShortRecord *primitiveIdRecord = new RIVUnsignedShortRecord("primitive ID",primitveIds);
+        RIVUnsignedShortRecord *shapeIdRecord = new RIVUnsignedShortRecord("shape ID",shapeIds);
+        RIVFloatRecord *spectrumOneRecord = new RIVFloatRecord("spectrum 1",spectraOne);
+        RIVFloatRecord *spectrumTwoRecord = new RIVFloatRecord("spectrum 2",spectraTwo);
+        RIVFloatRecord *spectrumThreeRecord = new RIVFloatRecord("spectrum 3",spectraThree);
+        RIVUnsignedShortRecord *interactionTypesRecord = new RIVUnsignedShortRecord("interaction types",interactionTypes);
+        RIVUnsignedShortRecord *lightIdsRecord = new RIVUnsignedShortRecord("light ids",lightIds);
         
         imageRedRecord->SetValues(redChannel);
         imageGreenRecord->SetValues(greenChannel);
@@ -535,109 +522,253 @@ RIVTable* DataFileReader::ReadImageData(const BMPImage& image) {
     return imageTable;
 }
 
-RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName) {
-    printf("Trying to load %s\n",fileName.c_str());
+RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, const BMPImage& image, const size_t pathsLimit) {
+    printf("Loading binary dataset from file %s\n",fileName.c_str());
+    
+    std::string taskName = "Binary data reading";
+    reporter::startTask(taskName);
     
     FILE *inputFile = fopen(fileName.c_str(),"rb");
-    //write what was read as ASCII
-    FILE *outputFile = fopen("output.txt","w");
+    
+    //write what was read as ASCII, strictly used only for debugging
+//    FILE *outputFile = fopen("output.txt","w");
     
     if(inputFile == 0) {
         throw "Error opening file.";
     }
     
+    //Path data
     std::vector<ushort> xPixelData;
     std::vector<ushort> yPixelData;
+    std::vector<float> lensUs;
+    std::vector<float> lensVs;
+    std::vector<float> timestamps;
     std::vector<float> throughPutOne;
     std::vector<float> throughPutTwo;
     std::vector<float> throughPutThree;
     std::vector<ushort> intersections;
     
-    int lineNumber = 1;
+    std::vector<ushort> bounceNumbers;
+    std::vector<float> intersectionPosX;
+    std::vector<float> intersectionPosY;
+    std::vector<float> intersectionPosZ;
+    std::vector<ushort> primitveIds;
+    std::vector<ushort> shapeIds;
+    std::vector<float> spectraOne;
+    std::vector<float> spectraTwo;
+    std::vector<float> spectraThree;
+    std::vector<ushort> interactionTypes;
+    std::vector<ushort> lightIds;
     
-    fprintf(outputFile, "x,y,throughput_1,throughput_2,throughput_3,size\n");
+//    fprintf(outputFile, "x,y,lensU,lensV,timestamp,throughput_1,throughput_2,throughput_3,size\n");
     
-    while(!feof(inputFile)) {
+    std::map<size_t,std::vector<size_t>> pathIsectReferences = std::map<size_t,std::vector<size_t>>();
+    
+    size_t isect_index = 0;
+    size_t path_index = 0;
+    
+    while(!feof(inputFile) && (path_index < pathsLimit || pathsLimit == 0)) {
         
-        printf("reading line %d\n",lineNumber);
+//        printf("reading line %d\n",lineNumber);
         
-        //Read x
-        ushort x;
-        ushort y;
+        //Unrounded continuous x pixel data
+        float x;
+        float y;
+        float lensU;
+        float lensV;
+        float timestamp;
         float throughput[3] = {-1.F,-1.F,-1.F};
         ushort size;
         
-        fread(&x,sizeof(ushort),1,inputFile);
-        
-        char buffer[30];
-        sprintf(buffer, "%hu,",x);
-        
-        fprintf(outputFile, buffer);
+        fread(&x,sizeof(float),1,inputFile);
+//        char buffer[30];
+//        sprintf(buffer, "%f,",x);
+//        fprintf(outputFile, buffer);
         
         //Read y
+        fread(&y,sizeof(float),1,inputFile);
+//        sprintf(buffer, "%f,",y);
+//        fprintf(outputFile, buffer);
         
-        fread(&y,sizeof(ushort),1,inputFile);
-        sprintf(buffer, "%hu,",y);
-        fprintf(outputFile, buffer);
+        //read lens U
+        fread(&lensU,sizeof(float),1,inputFile);
+//        sprintf(buffer, "%f,",lensU);
+//        fprintf(outputFile, buffer);
         
+        //read lens V
+        fread(&lensV,sizeof(float),1,inputFile);
+//        sprintf(buffer, "%f,",lensV);
+//        fprintf(outputFile, buffer);
+        
+        //read timestamp
+        fread(&timestamp,sizeof(float),1,inputFile);
+//        sprintf(buffer, "%f,",timestamp);
+//        fprintf(outputFile, buffer);
+        
+        // throughputs
         fread(throughput,sizeof(float),3,inputFile);
-        sprintf(buffer, "%f,%f,%f,",throughput[0],throughput[1],throughput[2]);
-        fprintf(outputFile, buffer);
+//        sprintf(buffer, "%f,%f,%f,",throughput[0],throughput[1],throughput[2]);
+//        fprintf(outputFile, buffer);
         
         //Read the number of intersections
-        
         fread(&size,sizeof(ushort),1,inputFile);
-        sprintf(buffer, "%hu\n",size);
-        fprintf(outputFile, buffer);
+//        sprintf(buffer, "%hu\n",size);
+//        fprintf(outputFile, buffer);
         
         xPixelData.push_back(x);
         yPixelData.push_back(y);
-        
+        lensUs.push_back(lensU);
+        lensVs.push_back(lensV);
+        timestamps.push_back(timestamp);
         throughPutOne.push_back(throughput[0]);
         throughPutTwo.push_back(throughput[1]);
         throughPutThree.push_back(throughput[2]);
         intersections.push_back(size);
         
+        std::vector<size_t> isectIndices;
+
+            
+        //isect_x,isect_y,isect_z,primitive_ids,shape_ids,spectra,interaction_types,light_ids
+        float isectX;
+        float isectY;
+        float isectZ;
+        ushort primitiveId;
+        ushort shapeId;
+        float spectraR;
+        float spectraG;
+        float spectraB;
+        ushort interactionType;
+        ushort lightId;
+        
+        for(ushort i = 0 ; i < size ; ++i) {
+            isectIndices.push_back(isect_index);
+            bounceNumbers.push_back(i+1);
+            
+            fread(&isectX,sizeof(float),1,inputFile);
+            fread(&isectY,sizeof(float),1,inputFile);
+            fread(&isectZ,sizeof(float),1,inputFile);
+            
+            intersectionPosX.push_back(isectX);
+            intersectionPosY.push_back(isectY);
+            intersectionPosZ.push_back(isectZ);
+        }
+        
+        for(ushort i = 0 ; i < size ; ++i) {
+            fread(&primitiveId,sizeof(unsigned short),1,inputFile);
+            
+            primitveIds.push_back(primitiveId);
+        }
+        
+        for(ushort i = 0 ; i < size ; ++i) {
+            fread(&shapeId,sizeof(unsigned short),1,inputFile);
+            
+            shapeIds.push_back(shapeId);
+        }
+        
+        for(ushort i = 0 ; i < size ; ++i) {
+            fread(&spectraR,sizeof(float),1,inputFile);
+            fread(&spectraG,sizeof(float),1,inputFile);
+            fread(&spectraB,sizeof(float),1,inputFile);
+            
+            spectraOne.push_back(spectraR);
+            spectraTwo.push_back(spectraG);
+            spectraThree.push_back(spectraB);
+        }
+        
+        for(ushort i = 0 ; i < size ; ++i) {
+            fread(&interactionType,sizeof(unsigned short),1,inputFile);
+            
+            interactionTypes.push_back(interactionType);
+        }
+        
+        for(ushort i = 0 ; i < size ; ++i) {
+            fread(&lightId,sizeof(unsigned short),1,inputFile);
+            
+            lightIds.push_back(lightId);
+        }
+            
+        isect_index += size;
+        pathIsectReferences[path_index] = isectIndices;
+        
+        
         //printf("%d = %hu,%hu,[%f,%f,%f],%hu\n",lineNumber,x,y,throughput[0],throughput[1],throughput[2],size);
-        ++lineNumber;
+        ++path_index;
+        
     }
     
+    //Declare dataset and table objects
     RIVDataSet dataset;
+    
     RIVTable *pathTable = new RIVTable("path");
     RIVTable *intersectionsTable = new RIVTable("intersections");
     
-    RIVUnsignedShortRecord *xRecord = new RIVUnsignedShortRecord("x");
-    xRecord->SetValues(xPixelData);
-    RIVUnsignedShortRecord *yRecord = new RIVUnsignedShortRecord("y");
-    yRecord->SetValues(yPixelData);
-    RIVFloatRecord *tpOne = new RIVFloatRecord("throughput 1");
-    tpOne->SetValues(throughPutOne);
-    RIVFloatRecord *tpTwo = new RIVFloatRecord("throughput 2");
-    tpTwo->SetValues(throughPutTwo);
-    RIVFloatRecord *tpThree = new RIVFloatRecord("throughput 3");
-    tpThree->SetValues(throughPutThree);
-    RIVUnsignedShortRecord *isects = new RIVUnsignedShortRecord("#intersections");
+    RIVUnsignedShortRecord *xRecord = new RIVUnsignedShortRecord("x",xPixelData);
+    RIVUnsignedShortRecord *yRecord = new RIVUnsignedShortRecord("y",yPixelData);
+    RIVFloatRecord *lensURecord = new RIVFloatRecord("lens U",lensUs);
+    RIVFloatRecord *lensVRecord = new RIVFloatRecord("lens V",lensVs);
+    RIVFloatRecord *timestampRecord = new RIVFloatRecord("timestamp",timestamps);
+    RIVFloatRecord *tpOne = new RIVFloatRecord("throughput 1",throughPutOne);
+    RIVFloatRecord *tpTwo = new RIVFloatRecord("throughput 2",throughPutTwo);
+    RIVFloatRecord *tpThree = new RIVFloatRecord("throughput 3",throughPutThree);
+    RIVUnsignedShortRecord *isects = new RIVUnsignedShortRecord("#intersections",intersections);
     
-    //    isects->SetValues(nrOfIntersections);
-    //    RIVFloatRecord *isectPosX = new RIVFloatRecord("intersection X");
-    //    isectPosX->SetValues(intersectionPosX);
-    //    RIVFloatRecord *isectPosY = new RIVFloatRecord("intersection Y");
-    //    isectPosY->SetValues(intersectionPosY);
-    //    RIVFloatRecord *isectPosZ = new RIVFloatRecord("intersection Z");
-    //    isectPosZ->SetValues(intersectionPosZ);
+    RIVUnsignedShortRecord *bounceNumberRecord = new RIVUnsignedShortRecord("bounce#",bounceNumbers);
+    RIVFloatRecord *isectPosX = new RIVFloatRecord("intersection X",intersectionPosX);
+    RIVFloatRecord *isectPosY = new RIVFloatRecord("intersection Y",intersectionPosY);
+    RIVFloatRecord *isectPosZ = new RIVFloatRecord("intersection Z",intersectionPosZ);
+    RIVUnsignedShortRecord *primitiveIdRecord = new RIVUnsignedShortRecord("primitive ID",primitveIds);
+    RIVUnsignedShortRecord *shapeIdRecord = new RIVUnsignedShortRecord("shape ID",shapeIds);
+    RIVFloatRecord *spectrumOneRecord = new RIVFloatRecord("spectrum 1",spectraOne);
+    RIVFloatRecord *spectrumTwoRecord = new RIVFloatRecord("spectrum 2",spectraTwo);
+    RIVFloatRecord *spectrumThreeRecord = new RIVFloatRecord("spectrum 3",spectraThree);
+    RIVUnsignedShortRecord *interactionTypesRecord = new RIVUnsignedShortRecord("interaction types",interactionTypes);
+    RIVUnsignedShortRecord *lightIdsRecord = new RIVUnsignedShortRecord("light ids",lightIds);
     
     pathTable->AddRecord(xRecord);
     pathTable->AddRecord(yRecord);
+    pathTable->AddRecord(lensURecord);
+    pathTable->AddRecord(lensVRecord);
+    pathTable->AddRecord(timestampRecord);
     pathTable->AddRecord(tpOne);
-    //    dataset.AddRecord(tpTwo);
-    //    dataset.AddRecord(tpThree);
+    pathTable->AddRecord(tpTwo);
+    pathTable->AddRecord(tpThree);
     pathTable->AddRecord(isects);
     
+    intersectionsTable->AddRecord(bounceNumberRecord);
+    intersectionsTable->AddRecord(isectPosX);
+    intersectionsTable->AddRecord(isectPosY);
+    intersectionsTable->AddRecord(isectPosZ);
+    intersectionsTable->AddRecord(primitiveIdRecord);
+    intersectionsTable->AddRecord(shapeIdRecord);
+    intersectionsTable->AddRecord(spectrumOneRecord);
+//    intersectionsTable->AddRecord(spectrumTwoRecord);
+//    intersectionsTable->AddRecord(spectrumThreeRecord);
+//    intersectionsTable->AddRecord(interactionTypesRecord);
+//    intersectionsTable->AddRecord(lightIdsRecord);
+    
+    // Create and apply references to tables
+    RIVReference referenceToIntersections = RIVReference(pathTable, intersectionsTable);
+    referenceToIntersections.SetReferences(pathIsectReferences);
+    RIVReference reverseReference = referenceToIntersections.ReverseReference();
+    
+    pathTable->AddReference(referenceToIntersections);
+    intersectionsTable->AddReference(reverseReference);
+    
+    //Add tables to dataset
     dataset.AddTable(pathTable);
+    dataset.AddTable(intersectionsTable);
     
-    
-    fclose(outputFile);
+//    fclose(outputFile);
     fclose(inputFile);
+    
+    printf("*******************   DATASET READ   *******************\n");
+    dataset.Print(1000);
+    printf("****************    END DATASET READ    ****************\n");
+    //
+    printf("%zu path data records read.\n",pathTable->GetNumRows());
+    printf("%zu intersection data records read.\n",intersectionsTable->GetNumRows());
+    
+    reporter::stop(taskName);
     
     return dataset;
 };

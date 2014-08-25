@@ -34,6 +34,7 @@
 		E1D15740193CB54B0059A86B /* Record.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D15736193CB54B0059A86B /* Record.cpp */; };
 		E1D15741193CB54B0059A86B /* Reference.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D15738193CB54B0059A86B /* Reference.cpp */; };
 		E1D15742193CB54B0059A86B /* Table.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1D1573B193CB54B0059A86B /* Table.cpp */; };
+		E1ED4B0D19A9050D003B6639 /* HeatMapView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1ED4B0B19A9050D003B6639 /* HeatMapView.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -112,6 +113,8 @@
 		E1D1573C193CB54B0059A86B /* Table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Table.h; sourceTree = "<group>"; };
 		E1D15761193CC9A20059A86B /* DataSetListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataSetListener.h; sourceTree = "<group>"; };
 		E1D15762193CCC370059A86B /* DataSetListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataSetListener.h; sourceTree = "<group>"; };
+		E1ED4B0B19A9050D003B6639 /* HeatMapView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = HeatMapView.cpp; path = ../HeatMapView.cpp; sourceTree = "<group>"; };
+		E1ED4B0C19A9050D003B6639 /* HeatMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HeatMapView.h; path = ../HeatMapView.h; sourceTree = "<group>"; };
 		E1FFAC611952E681003D7F39 /* trackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trackball.h; path = ../trackball.h; sourceTree = "<group>"; };
 		E1FFAC621952E772003D7F39 /* matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = matrix.h; path = ../matrix.h; sourceTree = "<group>"; };
 		E1FFAC671953166F003D7F39 /* graphics_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = graphics_helper.h; path = ../graphics_helper.h; sourceTree = "<group>"; };
@@ -136,10 +139,9 @@
 		E12908F3191CCBC900822217 = {
 			isa = PBXGroup;
 			children = (
+				E1ED4B0719A8D253003B6639 /* Views */,
 				E14AA7F219583E050066139C /* AntTweakBar.h */,
 				E14AA7EE19583DF30066139C /* tests.h */,
-				E14AA7EF19583DF30066139C /* UIView.cpp */,
-				E14AA7F019583DF30066139C /* UIView.h */,
 				E1FFAC611952E681003D7F39 /* trackball.h */,
 				E1BA13F6194C9C4D0004F562 /* SizeProperty.cpp */,
 				E1BA13F7194C9C4D0004F562 /* SizeProperty.h */,
@@ -147,8 +149,6 @@
 				E13B4C331938947200F1FCCF /* ColorProperty.h */,
 				E14C95BF192F7E17000A8CAC /* helper.cpp */,
 				E14C95C0192F7E17000A8CAC /* helper.h */,
-				E14C95C2192F7E28000A8CAC /* 3DView.cpp */,
-				E14C95C3192F7E28000A8CAC /* 3DView.h */,
 				E139EA3F194B73460019C68F /* ColorPallete.h */,
 				E1FFAC671953166F003D7F39 /* graphics_helper.h */,
 				E1FFAC691953166F003D7F39 /* MeshModel.h */,
@@ -159,21 +159,12 @@
 				E18D187C1920F309006F10D5 /* Geometry.h */,
 				E1290937191CF53000822217 /* BMPImage.cpp */,
 				E1290938191CF53000822217 /* BMPImage.h */,
-				E129093E191CF53000822217 /* DataView.h */,
-				E1290941191CF53000822217 /* ImageView.cpp */,
-				E1290942191CF53000822217 /* ImageView.h */,
 				E1290943191CF53000822217 /* loadppm.cpp */,
 				E1290944191CF53000822217 /* loadppm.h */,
 				E1290945191CF53000822217 /* main.cpp */,
 				E10C4FEA194DED9800639FE5 /* Property.h */,
 				E17EA9F81943A5C000411FA7 /* reporter.cpp */,
 				E1BD646C193F92D300370D69 /* reporter.h */,
-				E113BE61192521E200F6525A /* ParallelCoordsAxisGroup.cpp */,
-				E113BE62192521E200F6525A /* ParallelCoordsAxisGroup.h */,
-				E1290946191CF53000822217 /* ParallelCoordsAxis.cpp */,
-				E1290947191CF53000822217 /* ParallelCoordsAxis.h */,
-				E1290948191CF53000822217 /* ParallelCoordsView.cpp */,
-				E1290949191CF53000822217 /* ParallelCoordsView.h */,
 				E17EA9F019432FE600411FA7 /* ClusterSet.cpp */,
 				E17EA9F119432FE600411FA7 /* ClusterSet.h */,
 				E129094A191CF53000822217 /* README.md */,
@@ -229,6 +220,28 @@
 			);
 			name = RIVData;
 			path = ../RIVData;
+			sourceTree = "<group>";
+		};
+		E1ED4B0719A8D253003B6639 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E1290941191CF53000822217 /* ImageView.cpp */,
+				E1290942191CF53000822217 /* ImageView.h */,
+				E129093E191CF53000822217 /* DataView.h */,
+				E14C95C2192F7E28000A8CAC /* 3DView.cpp */,
+				E14C95C3192F7E28000A8CAC /* 3DView.h */,
+				E14AA7EF19583DF30066139C /* UIView.cpp */,
+				E14AA7F019583DF30066139C /* UIView.h */,
+				E113BE61192521E200F6525A /* ParallelCoordsAxisGroup.cpp */,
+				E113BE62192521E200F6525A /* ParallelCoordsAxisGroup.h */,
+				E1290946191CF53000822217 /* ParallelCoordsAxis.cpp */,
+				E1290947191CF53000822217 /* ParallelCoordsAxis.h */,
+				E1290948191CF53000822217 /* ParallelCoordsView.cpp */,
+				E1290949191CF53000822217 /* ParallelCoordsView.h */,
+				E1ED4B0B19A9050D003B6639 /* HeatMapView.cpp */,
+				E1ED4B0C19A9050D003B6639 /* HeatMapView.h */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -293,6 +306,7 @@
 				E1290958191CF53000822217 /* ParallelCoordsView.cpp in Sources */,
 				E17EA9F219432FE600411FA7 /* ClusterSet.cpp in Sources */,
 				E14AA7F119583DF30066139C /* UIView.cpp in Sources */,
+				E1ED4B0D19A9050D003B6639 /* HeatMapView.cpp in Sources */,
 				E14C95C4192F7E28000A8CAC /* 3DView.cpp in Sources */,
 				E139EA44194B73460019C68F /* GraphicsController.cpp in Sources */,
 				E14C95C1192F7E17000A8CAC /* helper.cpp in Sources */,

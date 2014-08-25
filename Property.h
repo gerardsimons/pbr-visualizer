@@ -65,8 +65,27 @@ protected:
                 
         }
     }
+    //SUPER HACK ALERT
     void init(RIVTable* propertyReference_, const INTERPOLATION_SCHEME &scheme, const std::vector<ushort> &interpolationValues) {
         //Now what? This is so hacky
+        propertyReference = propertyReference_;
+        //convert to floats
+        std::vector<float> interpolationValuesFloats;
+        for(ushort i : interpolationValues) {
+            interpolationValuesFloats.push_back(i);
+        }
+        switch(scheme) {
+            case CONTINUOUS:
+            {
+                defaultEvaluator = new LinearInterpolator<float>(interpolationValuesFloats);
+                break;
+            }
+            case DISCRETE:
+            {
+                defaultEvaluator = new DiscreteInterpolator<float>(interpolationValuesFloats);
+                break;
+            }
+        }
     }
     void initRecord(RIVRecord* record) {
         RIVFloatRecord *floatRecord =  RIVTable::CastToFloatRecord(record);
@@ -175,6 +194,7 @@ public:
         init(propertyReference_, scheme, interpolationValues);
     }
     RIVEvaluatedProperty(RIVTable *propertyReference_,RIVRecord* referenceRecord) {
+        propertyReference = propertyReference_;
         initRecord(referenceRecord);
         if(referenceFloatRecord) {
             std::vector<float> interpolationValues;
