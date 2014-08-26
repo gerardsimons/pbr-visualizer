@@ -29,6 +29,8 @@ private:
     ParallelCoordsAxis* selectedAxis;
     bool axesAreDirty = false;
     bool linesAreDirty = false;
+    
+    void clearSelection();
 public:
     ParallelCoordsView();
     ParallelCoordsView(int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);

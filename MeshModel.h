@@ -92,6 +92,10 @@ public:
             vertices[i] = (vertices[i] - center.x) * scale;
             vertices[i+1] = (vertices[i+1] - center.y) * scale;
             vertices[i+2] = (vertices[i+2] - center.z) * scale;
+            
+//            vertices[i] = (vertices[i]) * scale;
+//            vertices[i+1] = (vertices[i+1]) * scale;
+//            vertices[i+2] = (vertices[i+2]) * scale;
         }
 
         centered = true;

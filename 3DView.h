@@ -18,15 +18,26 @@ private:
     Point3D eye;
     bool isDirty = true;
     //Whether to draw the members of clusters, or only the cluster medoid
-    bool drawClusterMembers = false;
+    bool drawClusterMembers = true;
     //The mouse cursor in world coordinates at last click
     Point3D cursorNear;
     Point3D cursorFar;
-    //View bounding parameters
-    float zNear = 1.F;
-    float zFar = 20.F;
+    
+    //Buffered graphics point data, generated from the data, stored here for speed
+    std::vector<float> pointsX;
+    std::vector<float> pointsY;
+    std::vector<float> pointsZ;
+    std::vector<float> pointsR;
+    std::vector<float> pointsG;
+    std::vector<float> pointsB;
+    std::vector<float> pointsSize;
+
     //Possibly the selection box created by clicking and dragging (NOT IMPLEMENTED)
     Box3D selectionBox;
+    
+    //Create graphics buffer from unfiltered data rows
+    void createPoints();
+    void drawPaths(int startBounce); //Draw the paths between two consecutive bounces
     
     static RIV3DView* instance;
     Point3D screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
@@ -40,6 +51,7 @@ public:
 	 bool HandleMouseMotion(int x, int y);
      void OnDataSetChanged();
     
+    void SetData(RIVDataSet *newDataSet) { RIVDataView::SetData(newDataSet); createPoints(); };
     static void DrawInstance(); //Override
     static void ReshapeInstance(int,int);
     static void Mouse(int button, int state, int x, int y);

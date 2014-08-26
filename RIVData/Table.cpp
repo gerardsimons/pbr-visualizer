@@ -58,11 +58,11 @@ void RIVTable::filterRecords(Filter* filter) {
             for(size_t j = 0 ; j < floatRecord->Size() ; j++) {
                 if(filteredRows[j]) continue; //Already filtered
                 float value = floatRecord->Value(j);
-                if(filter->PassesFilter(record->name, value)) {
-                    FilterRow(j,false);
+                if(filter->PassesFilter(record->name, value) == false) {
+                    FilterRow(j,true);
                     //                    printf("filtered out %f\n",(float)value);
                 }
-                else FilterRow(j,true);
+                else FilterRow(j,false);
             }
             continue;
         }

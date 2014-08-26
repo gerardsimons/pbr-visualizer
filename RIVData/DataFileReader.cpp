@@ -114,7 +114,7 @@ MeshModel DataFileReader::ReadModelData(const std::string& fileName) {
     return vertices;
 }
 
-std::vector<std::string> explode(std::string line, char delimiter, std::string ignoreChars) {
+std::vector<std::string> explode(std::string line, char delimiter, std::string ignoreChars = "") {
 	std::vector<std::string> exploded;
 	std::string buffer;
 	for(char c : line) {
@@ -528,7 +528,8 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, const BMP
     std::string taskName = "Binary data reading";
     reporter::startTask(taskName);
     
-    FILE *inputFile = fopen(fileName.c_str(),"rb");
+    FILE *inputFile = fopen((fileName + ".bin").c_str(),"rb");
+    std::ifstream summaryFile(fileName + ".summary");
     
     //write what was read as ASCII, strictly used only for debugging
 //    FILE *outputFile = fopen("output.txt","w");
@@ -536,6 +537,18 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, const BMP
     if(inputFile == 0) {
         throw "Error opening file.";
     }
+    if(!summaryFile.is_open()) {
+        throw "Error opening file.";
+    }
+
+    std::string line;
+    std::getline(summaryFile,line);
+    
+    std::vector<std::string> valuesString = explode(line, ',');
+    
+    size_t total_nr_paths = std::atol(valuesString[0].c_str());
+    size_t total_nr_isects = std::atol(valuesString[1].c_str());
+    
     
     //Path data
     std::vector<ushort> xPixelData;
@@ -567,7 +580,9 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, const BMP
     size_t isect_index = 0;
     size_t path_index = 0;
     
-    while(!feof(inputFile) && (path_index < pathsLimit || pathsLimit == 0)) {
+    printf("Going to read %zu paths and %zu intersects\n",total_nr_paths,total_nr_isects);
+    
+    while(!feof(inputFile) && path_index < total_nr_paths && (path_index < pathsLimit || pathsLimit == 0)) {
         
 //        printf("reading line %d\n",lineNumber);
         
@@ -614,6 +629,7 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, const BMP
         fread(&size,sizeof(ushort),1,inputFile);
 //        sprintf(buffer, "%hu\n",size);
 //        fprintf(outputFile, buffer);
+
         
         xPixelData.push_back(x);
         yPixelData.push_back(y);
@@ -641,7 +657,7 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, const BMP
         ushort lightId;
         
         for(ushort i = 0 ; i < size ; ++i) {
-            isectIndices.push_back(isect_index);
+            isectIndices.push_back(isect_index+i);
             bounceNumbers.push_back(i+1);
             
             fread(&isectX,sizeof(float),1,inputFile);

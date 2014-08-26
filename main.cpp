@@ -25,11 +25,11 @@
 const float DEG2RAD = 3.14159/180;
 
 /* window width and height */
-//int width = 1680;
-//int height = 1000;
+int width = 1680;
+int height = 1000;
 
-int width = 1400;
-int height = 800;
+//int width = 1400;
+//int height = 800;
 
 RIVClusterSet* clusters; //HERE ONLY FOR DEBUG REASONS
 const size_t clusterK = 2;
@@ -136,6 +136,7 @@ void invalidateAllViews() {
 void keys(int keyCode, int x, int y) {
     //    printf("Pressed %d at (%d,%d)\n",keyCode,x,y);
     bool postRedisplay = true;
+    float camSpeed = .1F;
     switch(keyCode) {
         case 27: //ESC key
             printf("Clear filters\n");
@@ -173,21 +174,27 @@ void keys(int keyCode, int x, int y) {
             postRedisplay = true;
             break;
         }
+        case 119: // 'w' key, move camera in Y direction
+            sceneView->MoveCamera(0,camSpeed,0);
+            break;
+        case 115:
+            sceneView->MoveCamera(0, -camSpeed, 0);
+            break;
         case GLUT_KEY_UP:
-            sceneView->MoveCamera(0,0,1.F);
-            uiView->MoveMenu(0,-10.F);
+            sceneView->MoveCamera(0,0,camSpeed);
+//            uiView->MoveMenu(0,-10.F);
             break;
         case GLUT_KEY_DOWN:
-            sceneView->MoveCamera(0,0,-1.F);
-            uiView->MoveMenu(0,10);
+            sceneView->MoveCamera(0,0,-camSpeed);
+//            uiView->MoveMenu(0,10);
             break;
         case GLUT_KEY_LEFT:
-            sceneView->MoveCamera(-1.F,0,0);
-            uiView->MoveMenu(-10.F,0);
+            sceneView->MoveCamera(-camSpeed,0,0);
+//            uiView->MoveMenu(-10.F,0);
             break;
         case GLUT_KEY_RIGHT:
-            //            sceneView->MoveCamera(1.F,0,0);
-            uiView->MoveMenu(10.F,0);
+            sceneView->MoveCamera(camSpeed,0,0);
+//            uiView->MoveMenu(10.F,0);
             break;
         default:
             postRedisplay = false;
@@ -258,7 +265,7 @@ void loadData() {
     if(!dataPath.empty() && !pbrtPath.empty()) {
         BMPImage image = BMPImage(bmpPath.c_str(),false);
         //        dataset = DataFileReader::ReadAsciiData(dataPath + ".txt",image,0);
-        dataset = DataFileReader::ReadBinaryData(dataPath + ".bin",image,0);
+        dataset = DataFileReader::ReadBinaryData(dataPath,image,0);
         model = DataFileReader::ReadModelData(pbrtPath);
     }
     else throw "Data paths not generated.";
@@ -359,13 +366,13 @@ void initializeViewProperties() {
     
     //    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty(pathTable,colors::GREEN,colors::RED);
     RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionstTable,bounceRecord,colors::GREEN,colors::RED);
-    RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(.05F);
+    RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
     
     parallelCoordsView->SetColorProperty(colorProperty);
     sceneView->SetSizeProperty(sizeProperty);
     sceneView->SetColorProperty(colorProperty);
     
-    //TODO apply color and size properties to views
+    //TODO: apply color and size properties to views
 }
 
 void clusterAndColor() {
@@ -402,7 +409,7 @@ void clusterAndColor() {
         printf("\nTotal size of cluster : %zu\n",cluster->Size());
         printf("Relative size of cluster : %f\n",relativeSize);
         //        relativeSizes.push_back(clusterSet.RelativeSizeOf(cluster));
-        Evaluator<size_t, float>* clusterSizeEval = new FixedEvaluator<size_t, float>((1-relativeSize) * minSize + relativeSize * maxSize);
+        Evaluator<size_t, float>* clusterSizeEval = new FixedEvaluator<size_t, float>((1 - relativeSize) * minSize + relativeSize * maxSize);
         sizeByCluster->AddEvaluationScheme(cluster->GetMedoidIndex(), clusterSizeEval);
     }
     

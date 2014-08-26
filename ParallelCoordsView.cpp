@@ -396,7 +396,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
             }
             selectedAxis = 0;
         }
-        else if(state == GLUT_UP) { //Stop selection dragging
+        else if(state == GLUT_UP) { //Finish selection
             if(isDragging && selectedAxis != 0) {
                 
                 Area &selection = selectedAxis->selection;
@@ -410,26 +410,42 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                     dataset->ClearFilter(selectedAxis->name);
                     Filter* rangeFilter = new RangeFilter(selectedAxis->name,lowerBound,upperBound);
                     dataset->AddFilter(rangeFilter);
-                    dataset->Print(false);
+//                    dataset->Print(false);
                     printf("Selection finalized on axis %s\n",selectedAxis->name.c_str());
                 }
                 else {
-                    printf("Clear selection on axis %s\n",selectedAxis->name.c_str());
-                    selectedAxis->HasSelectionBox = false;
+
                     dataset->ClearFilter(selectedAxis->name);
-                    selectedAxis = 0;
+                    clearSelection();
+
 //                    dataset->Print();
                 }
                 glutPostRedisplay();
                 axesAreDirty = true;
                 linesAreDirty = true;
                 isDragging = false;
+                
             }
             return true;
         }
 		return true;
 	}
     return false;
+}
+
+void ParallelCoordsView::clearSelection() {
+    if(selectedAxis != NULL) {
+        selectedAxis->selection.start.y = -1;
+        selectedAxis->selection.start.x = -1;
+        selectedAxis->selection.end.x = -1;
+        selectedAxis->selection.end.y = -1;
+        
+        selectedAxis->HasSelectionBox = false;
+        selectedAxis = NULL;
+        
+        
+        printf("Selection cleared.");
+    }
 }
 
 bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
