@@ -66,50 +66,76 @@ private:
     bool useAlternateColors = false;
 
     //The two color to interpolate between //TODO: better names?
-    float colorOne[3];
-    float colorTwo[3];
+//    float colorOne[3];
+//    float colorTwo[3];
+    
+    std::vector<const float*> colorMap; //basically a Nx3 color table
 
     //What to do when multiple rows (returned by reference chain) have different membmerships to different color interpolators? This function deals with this
     float const* colorForMultipleResolvedRows(const std::vector<size_t>& rows);
 public:
-    RIVEvaluatedColorProperty(RIVTable *colorReference_, float* colorOne_, float* colorTwo_, float* alternateColor_ ,INTERPOLATION_SCHEME mode);
-    //Uses a continuous interpolator
     
-    
-    RIVEvaluatedColorProperty(RIVTable *colorReference_, float* colorOne_, float* colorTwo_, float* alternateColor_) : RIVColorProperty(alternateColor_),RIVEvaluatedProperty<T>(colorReference_){
-        memcpy(colorOne, colorOne_, sizeof(colorOne));
-        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
-        //    clusterColorInterpolator = NULL;
-    }
+//    RIVEvaluatedColorProperty(RIVTable *colorReference_, float* colorOne_, float* colorTwo_, float* alternateColor_) : RIVColorProperty(alternateColor_),RIVEvaluatedProperty<T>(colorReference_){
+//        memcpy(colorOne, colorOne_, sizeof(colorOne));
+//        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
+//        //    clusterColorInterpolator = NULL;
+//    }
     RIVEvaluatedColorProperty(RIVTable *colorReference_, float const* colorOne_, float const* colorTwo_) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_){
-        memcpy(colorOne, colorOne_, sizeof(colorOne));
-        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
+//        memcpy(colorOne, colorOne_, sizeof(colorOne));
+//        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
+        
+        colorMap.resize(2);
+        colorMap[0] = colorOne_;
+        colorMap[1] = colorOne_;
     }
-    //This constructor is unnecessary, explicitly call other constructor with blue and yellow from color palette instead
-    RIVEvaluatedColorProperty(RIVTable* colorReference_) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_) {
-        memcpy(colorOne, colorBlue, sizeof(colorOne));
-        memcpy(colorTwo, colorYellow, sizeof(colorTwo));
-    }
-    //Same goes for this one
-    RIVEvaluatedColorProperty(RIVTable* colorReference_, std::vector<size_t>& interpolationValues, const INTERPOLATION_SCHEME& scheme) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_, interpolationValues) {
-        memcpy(colorOne, colorBlue, sizeof(colorOne));
-        memcpy(colorTwo, colorYellow, sizeof(colorTwo));
-    }
-    
     RIVEvaluatedColorProperty(RIVTable *colorReference_, RIVRecord* record, float const* colorOne_, float const* colorTwo_) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
-        memcpy(colorOne, colorOne_, sizeof(colorOne));
-        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
+//        memcpy(colorOne, colorOne_, sizeof(colorOne));
+//        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
+        
+        colorMap.resize(2);
+        colorMap[0] = colorOne_;
+        colorMap[1] = colorTwo_;
+    }
+    RIVEvaluatedColorProperty(RIVTable *colorReference_, RIVRecord* record, const std::vector<const float*>& colorMap) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
+        //        memcpy(colorOne, colorOne_, sizeof(colorOne));
+        //        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
+        
+        this->colorMap = colorMap;
     }
     
     float const* Color(RIVTable* sourceTable, const size_t& row) {
-        float value;
-        if(RIVEvaluatedProperty<T>::Value(sourceTable, row,value)) {
-            return linearInterpolateColor(value, colorOne, colorTwo);
+//        float value;
+//        if(RIVEvaluatedProperty<T>::Value(sourceTable, row,value)) {
+//            return linearInterpolateColor(value, colorOne, colorTwo);
+//        }
+//        else if(useAlternateColors) {
+//            return alternateColor;
+//        }
+//        else return NULL;
+        float value; //Assuming this value will be between 0 and 1
+        float color[3] = {1,0,0}; //Red
+        if(RIVEvaluatedProperty<T>::Value(sourceTable,row,value))  {
+//            printf("Color value = %f\n",value);
+            if(sourceTable->GetName() == "intersections" && value == 1.F) {
+                
+            }
+            for(size_t colorIndex = 0 ; colorIndex < colorMap.size() - 1; ++colorIndex) {
+                
+                float colorIndexRatioLeft  = colorIndex / (float)(colorMap.size() - 1);
+                float colorIndexRatioRight = (colorIndex + 1) / (float)(colorMap.size() - 1);
+                float ratio = value;
+                if(colorIndexRatioLeft <= value && colorIndexRatioRight >= value) {
+                    //Its in between these two indices, use these to interpolate
+//                    return linearInterpolateColor(value, colorMap[colorIndex], colorMap[colorIndex+1]);
+                    ratio = 1.F - ratio;
+                    color[0] = colorMap[colorIndex][0] * ratio + (1.F - ratio) * colorMap[colorIndex + 1][0];
+                    color[1] = colorMap[colorIndex][1] * ratio + (1.F - ratio) * colorMap[colorIndex + 1][1],
+                    color[2] = colorMap[colorIndex][2] * ratio + (1.F - ratio) * colorMap[colorIndex + 1][2];
+                    return color;
+                }
+            }
         }
-        else if(useAlternateColors) {
-            return alternateColor;
-        }
-        else return NULL;
+        return NULL;
     }
 };
 //Returns color by cycling through a fixed pre-determined set of colors

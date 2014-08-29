@@ -367,7 +367,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
             for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
                 for(ParallelCoordsAxis &axis : axisGroup.axes) {
                     int distanceX = abs(axis.x - x);
-                    //                printf("distance=%d\n",distanceX);
+                    printf("distance=%d\n",distanceX);
                     
                     if(distanceX < proximityMax) {
                         //Close enough..
@@ -394,7 +394,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                     }
                 }
             }
-            selectedAxis = 0;
+            selectedAxis = NULL;
         }
         else if(state == GLUT_UP) { //Finish selection
             if(isDragging && selectedAxis != 0) {
@@ -452,7 +452,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
     y = height - y;
 //    printf("PCV HandleMouseMotion\n");
     //    printf("(x,y)=(%d,%d)\n",x,y);
-    ToViewSpaceCoordinates(&x, &y);
+//    ToViewSpaceCoordinates(&x, &y);
     if(isDragging && selectedAxis != 0) {
         Area *selection = &selectedAxis->selection;
         

@@ -21,6 +21,9 @@ namespace colors {
     const float CYAN[] = {0.F,1.F,1.F};
     const float PURPLE[] = {1.F,0.F,1.F};
     
+    const float DARK_RED[] = {0.5F,0,0};
+    const float DARK_BLUE[] = {0,0,0.5F};
+    
     std::vector<float const*> allColors() {
         std::vector<float const*> allColors;
         
@@ -33,6 +36,19 @@ namespace colors {
         allColors.push_back(PURPLE);
         
         return allColors;
+    }
+    
+    std::vector<const float*> jetColorMap() {
+        std::vector<const float*> jetColorMap;
+        
+        jetColorMap.push_back(DARK_BLUE);
+        jetColorMap.push_back(BLUE);
+        jetColorMap.push_back(CYAN);
+        jetColorMap.push_back(YELLOW);
+        jetColorMap.push_back(RED);
+        jetColorMap.push_back(DARK_RED);
+        
+        return jetColorMap;
     }
 }
 

@@ -25,7 +25,7 @@
 const float DEG2RAD = 3.14159/180;
 
 /* window width and height */
-int width = 1680;
+int width = 1600;
 int height = 1000;
 
 //int width = 1400;
@@ -155,6 +155,15 @@ void keys(int keyCode, int x, int y) {
                 postRedisplay = true;
             }
             break;
+        case 108 : // 'l' key, toggle lines drawing
+            sceneView->CyclePathSegment();
+            break;
+        case 91: // '[' key, increase path segment
+            sceneView->MovePathSegment(-.01F);
+            break;
+        case 93:
+            sceneView->MovePathSegment(.01F);
+            break;
         case 114: // 'r' key, recluster {
         {
             RIVTable *intersectTable = dataset.GetTable("intersections");
@@ -206,6 +215,7 @@ void keys(int keyCode, int x, int y) {
 
 void idle() {
     //Do animations?
+    
 }
 
 /* Called when window is resized,
@@ -363,9 +373,13 @@ void initializeViewProperties() {
     //    imageTable->FilterRowsUnlinkedTo(pathTable);
     
     RIVRecord* bounceRecord = intersectionstTable->GetRecord("bounce#");
+    RIVRecord* xRecord = intersectionstTable->GetRecord("intersection X");
     
-    //    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty(pathTable,colors::GREEN,colors::RED);
-    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionstTable,bounceRecord,colors::GREEN,colors::RED);
+//    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty(pathTable,colors::GREEN,colors::RED);
+    
+    std::vector<const float*> jetColorMap = colors::jetColorMap();
+    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionstTable,bounceRecord,jetColorMap);
+//    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionstTable,xRecord,jetColorMap);
     RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
     
     parallelCoordsView->SetColorProperty(colorProperty);
@@ -379,7 +393,7 @@ void clusterAndColor() {
     dataset.ClusterTable("intersections","intersection X","intersection Y","intersection Z",clusterK,1);
     std::vector<size_t> medoidIndices = dataset.GetClusterSet()->GetMedoidIndices();
     RIVTable *intersectionsTable = dataset.GetTable("intersections");
-    RIVEvaluatedColorProperty<size_t>* colorByCluster = new RIVEvaluatedColorProperty<size_t>(intersectionsTable);
+//    RIVEvaluatedColorProperty<size_t>* colorByCluster = new RIVEvaluatedColorProperty<size_t>(intersectionsTable);
     RIVClusterSet& clusterSet = intersectionsTable->GetClusterSet();
     
     float nrOfClusters = (float)clusterSet.Size();
@@ -395,7 +409,7 @@ void clusterAndColor() {
         std::vector<size_t> members = cluster->GetMemberIndices();
         members.push_back(cluster->GetMedoidIndex());
         
-        colorByCluster->AddEvaluationScheme(members, eval);
+//        colorByCluster->AddEvaluationScheme(members, eval);
     }
     
     //    DiscreteEvaluator<size_t, float> colorByClusterEvaluator = new DiscreteEvaluator<size_t, float>(indexToClusterMembership);
@@ -413,10 +427,10 @@ void clusterAndColor() {
         sizeByCluster->AddEvaluationScheme(cluster->GetMedoidIndex(), clusterSizeEval);
     }
     
-    parallelCoordsView->SetColorProperty(colorByCluster);
+//    parallelCoordsView->SetColorProperty(colorByCluster);
     parallelCoordsView->SetSizeProperty(sizeByCluster);
     
-    sceneView->SetColorProperty(colorByCluster);
+//    sceneView->SetColorProperty(colorByCluster);
     sceneView->SetSizeProperty(sizeByCluster);
 }
 

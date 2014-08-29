@@ -91,7 +91,8 @@ public:
     size_t GetNumRows() const { return rows; };
     
 //    RIVReference* GetReferenceToTable(std::string tableName,std::vector<std::string> *visitedTables = 0); //DEPRECATED
-    bool GetReferenceChainToTable(std::string tableName, RIVReferenceChain& chainToTarget, std::vector<std::string> *visitedTables = 0) ;
+    bool GetReferenceChainToTable(std::string tableName, RIVReferenceChain& chainToTarget, std::vector<std::string> *visitedTables = 0);
+    RIVReference* GetReferenceToTable(const std::string& tableName);
     
     const RIVTable* FindTable(std::string tableName, std::vector<std::string> *visitedTables = 0);
     

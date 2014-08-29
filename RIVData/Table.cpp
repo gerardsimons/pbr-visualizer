@@ -52,34 +52,69 @@ void RIVTable::filterRecords() {
 }
 
 void RIVTable::filterRecords(Filter* filter) {
-    for(RIVRecord* record : records) {
-        RIVFloatRecord* floatRecord = CastToFloatRecord(record);
-        if(floatRecord && floatRecord->name == filter->attributeName) {
-            for(size_t j = 0 ; j < floatRecord->Size() ; j++) {
-                if(filteredRows[j]) continue; //Already filtered
-                float value = floatRecord->Value(j);
+    std::map<size_t,bool> filteredRows; //Buffer rows filtered below for easy reference updating
+    
+    for(size_t row = 0 ; row < rows ; row++) {
+        if(filteredRows[row]) continue; //Already filtered
+        for(RIVRecord* record : records) {
+            RIVFloatRecord* floatRecord = CastToFloatRecord(record);
+            if(floatRecord && floatRecord->name == filter->attributeName) {
+                float value = floatRecord->Value(row);
                 if(filter->PassesFilter(record->name, value) == false) {
-                    FilterRow(j,true);
+                    FilterRow(row,true);
+                    filteredRows[row] = true;
                     //                    printf("filtered out %f\n",(float)value);
                 }
-                else FilterRow(j,false);
+                    //                else FilterRow(j,false);
+                
+                continue;
             }
-            continue;
-        }
-        RIVUnsignedShortRecord* shortRecord = CastToUnsignedShortRecord(record);
-        if(shortRecord && shortRecord->name == filter->attributeName) {
-            for(size_t j = 0 ; j < shortRecord->GetValues().size() ; j++) {
-                if(filteredRows[j]) continue; //Already filtered
-                unsigned short value = shortRecord->Value(j);
+            RIVUnsignedShortRecord* shortRecord = CastToUnsignedShortRecord(record);
+            if(shortRecord && shortRecord->name == filter->attributeName) {
+                unsigned short value = shortRecord->Value(row);
                 if(filter->PassesFilter(record->name, value) == false) {
-                    FilterRow(j,true);
+                    FilterRow(row,true);
+                    filteredRows[row] = true;
                     //                    printf("filtered out %hu\n",(ushort)value);
                 }
-                else FilterRow(j,false);
+                //                else FilterRow(j,false);
             }
-            continue;
         }
     }
+
+
+    //Filter references
+    for(RIVReference &reference : references) {
+//        for(size_t filteredRow : filteredRows) {
+        for(std::map<size_t,bool>::iterator it = filteredRows.begin(); it != filteredRows.end(); ++it) { //Iterate over all filtered rows
+            size_t filteredRow = it->first;
+            RIVTable* targetTable = reference.targetTable;
+            std::vector<size_t>* targetIndexRange = reference.GetIndexReferences(filteredRow);
+            for(size_t targetIndex : *targetIndexRange) { //Iterate over all of the target indices in the reference table
+                RIVReference *backReference = reference.targetTable->GetReferenceToTable(name);
+
+                std::vector<size_t> backRows = backReference->indexReferences[targetIndex];
+                bool filterReference = true;
+                for(size_t backRow : backRows) { //Does the filtered map contain ALL of these rows? If so we should filter it in the reference table
+                    if(!filteredRows[backRow]) {
+                        filterReference = false;
+                        break;
+                    }
+                }
+                if(filterReference) {
+                    targetTable->FilterRow(targetIndex, true);
+//                    std::advance(it, backRows.size() - 1);
+                }
+            }
+        }
+    }
+//        if(targetIndexRange != 0 && ( sourceReference == 0 || targetTable->name != sourceReference->sourceTable->name)) { //Do not update a table who just updated this table
+//            //            printf("Force table %s to filter row %zu\n",targetTable->name.c_str(),*targetIndex);
+//            for(size_t filterIndex : *targetIndexRange) {
+//                targetTable->FilterRow(filterIndex,filterOrUnfilter,&reference);
+//            }
+//        }
+//    }
     
     //Filter unlinked records of linked tables
     for(RIVReference &reference : references) {
@@ -98,6 +133,16 @@ void RIVTable::FilterRowsUnlinkedTo(RIVTable *table) {
     }
 }
 
+RIVReference* RIVTable::GetReferenceToTable(const std::string &tableName) {
+    for(size_t row = 0 ; row < references.size() ; ++row) {
+        RIVReference *ref = &references[row];
+        if(ref->targetTable->name == tableName) {
+            return ref;
+        }
+    }
+    return NULL;
+}
+
 void RIVTable::FilterRow(size_t rowIndex, bool filterOrUnfilter, RIVReference* sourceReference) {
     //    if(sourceReference) {
     //        printf("Linked filte§r caused by %s\n",sourceReference->sourceTable->GetName().c_str());
@@ -105,16 +150,16 @@ void RIVTable::FilterRow(size_t rowIndex, bool filterOrUnfilter, RIVReference* s
     //    printf("Table %s filter row %lu\n",name.c_str(),rowIndex);
     filteredRows[rowIndex] = filterOrUnfilter;
     if(filterOrUnfilter) filtered = true;
-    for(RIVReference &reference : references) {
-        RIVTable* targetTable = reference.targetTable;
-        std::vector<size_t>* targetIndexRange = reference.GetIndexReferences(rowIndex);
-        if(targetIndexRange != 0 && ( sourceReference == 0 || targetTable->name != sourceReference->sourceTable->name)) { //Do not update a table who just updated this table
-            //            printf("Force table %s to filter row %zu\n",targetTable->name.c_str(),*targetIndex);
-            for(size_t filterIndex : *targetIndexRange) {
-                targetTable->FilterRow(filterIndex,filterOrUnfilter,&reference);
-            }
-        }
-    }
+//    for(RIVReference &reference : references) {
+//        RIVTable* targetTable = reference.targetTable;
+//        std::vector<size_t>* targetIndexRange = reference.GetIndexReferences(rowIndex);
+//        if(targetIndexRange != 0 && ( sourceReference == 0 || targetTable->name != sourceReference->sourceTable->name)) { //Do not update a table who just updated this table
+//            //            printf("Force table %s to filter row %zu\n",targetTable->name.c_str(),*targetIndex);
+//            for(size_t filterIndex : *targetIndexRange) {
+//                targetTable->FilterRow(filterIndex,filterOrUnfilter,&reference);
+//            }
+//        }
+//    }
 }
 
 std::vector<RIVRecord*> RIVTable::GetRecords() {
@@ -414,7 +459,7 @@ void RIVTable::Print(size_t maxPrint, bool printFiltered) {
 //            }
 //        }
 //    }
-//        
+//
 //    return false;
 //}
 
@@ -550,11 +595,11 @@ RIVClusterSet* RIVTable::Cluster(const std::string& xRecordName, const std::stri
     if(xRecord->Size() == 0) {
         throw "Cannot cluster 0 values.";
     }
-//    clusterSet = new RIVClusterSet(K,xRecord->GetValuesPointer(),yRecord->GetValuesPointer(),zRecord->GetValuesPointer());
-//    clusterSet->Cluster(maxRepeat);
+    //    clusterSet = new RIVClusterSet(K,xRecord->GetValuesPointer(),yRecord->GetValuesPointer(),zRecord->GetValuesPointer());
+    //    clusterSet->Cluster(maxRepeat);
     clusterSet = RIVClusterSet::MakeCluster(maxRepeat, K, xRecord->GetValuesPointer(), yRecord->GetValuesPointer(), zRecord->GetValuesPointer());
     isClustered = true;
-//    clusterSet.CreateClusterRegister();
+    //    clusterSet.CreateClusterRegister();
     
     return &clusterSet;
 }
