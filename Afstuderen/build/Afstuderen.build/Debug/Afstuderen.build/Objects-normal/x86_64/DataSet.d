@@ -10,4 +10,5 @@ dependencies: /Users/gerardsimons/Git/afstuderen/RIVData/DataSet.cpp \
   /Users/gerardsimons/Git/afstuderen/Geometry.h \
   /Users/gerardsimons/Git/afstuderen/ClusterSet.h \
   /Users/gerardsimons/Git/afstuderen/Evaluator.h \
-  /Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
+  /Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/../reporter.h

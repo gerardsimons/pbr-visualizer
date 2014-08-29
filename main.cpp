@@ -118,6 +118,17 @@ void motion(int x, int y) {
 	}
 }
 
+void testFunctions() {
+    //    RangeFilter *bounceNrs = new RangeFilter("bounce#",0,1);
+    //    RIVTable *intersectionstTable = dataset.GetTable("intersections");
+    //    intersectionstTable->AddFilter(bounceNrs);
+    
+    //    RangeFilter *throughputFilter = new RangeFilter("throughput 3",0.17,0.30);
+    RangeFilter *intersectionsNr = new RangeFilter("#intersections",0.5,1.5);
+    RIVTable *intersectionstTable = dataset.GetTable("path");
+    intersectionstTable->AddFilter(intersectionsNr);
+}
+
 ///* Handles mouse input */
 //void mouse(int button, int state, int x, int y) {
 //    sceneView->HandleMouse(button, state, x, y);
@@ -179,8 +190,9 @@ void keys(int keyCode, int x, int y) {
         }
         case 116: // 't' key, use as temp key for some to-test function
         {
-            imageView->createTextureImage();
-            postRedisplay = true;
+//            imageView->createTextureImage();
+//            postRedisplay = true;
+            testFunctions();
             break;
         }
         case 119: // 'w' key, move camera in Y direction
@@ -389,6 +401,8 @@ void initializeViewProperties() {
     //TODO: apply color and size properties to views
 }
 
+
+
 void clusterAndColor() {
     dataset.ClusterTable("intersections","intersection X","intersection Y","intersection Z",clusterK,1);
     std::vector<size_t> medoidIndices = dataset.GetClusterSet()->GetMedoidIndices();
@@ -474,6 +488,8 @@ int main(int argc, char **argv)
     glutMotionFunc(motion);
     
     loadData();
+    
+//    testFunctions();
     
     createViews();
     

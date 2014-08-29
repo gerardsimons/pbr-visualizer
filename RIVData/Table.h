@@ -22,6 +22,7 @@
 #include "DataSetListener.h"
 #include "helper.h"
 #include "Cluster.h"
+#include "../reporter.h"
 
 class RIVReference;
 class RIVReferenceChain;
@@ -65,7 +66,7 @@ public:
     void AddOnChangeListeners(RIVDataView *dataview);
     
     void FilterRow(size_t,bool filter,RIVReference* reference = 0);
-//    void UnfilterRow(size_t,RIVReference* reference = 0);
+    //    void UnfilterRow(size_t,RIVReference* reference = 0);
     void FilterRowsUnlinkedTo(RIVTable *table);
     
     RIVCluster* ClusterForRow(const size_t& row) const;
@@ -84,13 +85,13 @@ public:
     bool HasRecord(RIVRecord* record);
     
     void FunctionOnRecords(void(*someFunction)(const RIVRecord*));
-
+    
     const std::vector<RIVReference>* GetReferences();
     TableIterator* GetIterator();
     std::string GetName() const { return name; };
     size_t GetNumRows() const { return rows; };
     
-//    RIVReference* GetReferenceToTable(std::string tableName,std::vector<std::string> *visitedTables = 0); //DEPRECATED
+    //    RIVReference* GetReferenceToTable(std::string tableName,std::vector<std::string> *visitedTables = 0); //DEPRECATED
     bool GetReferenceChainToTable(std::string tableName, RIVReferenceChain& chainToTarget, std::vector<std::string> *visitedTables = 0);
     RIVReference* GetReferenceToTable(const std::string& tableName);
     
@@ -106,7 +107,7 @@ public:
     
     //Print functions
     void Print(size_t maxPrint = 1000, bool printFiltered = true); //Print all the rows
-//    void PrintUnfiltered(); //Print only those rows that are not filtered
+    //    void PrintUnfiltered(); //Print only those rows that are not filtered
     void PrintFilteredRowMap(); //Print the underlying filter map
     std::string RowToString(size_t row);
 };

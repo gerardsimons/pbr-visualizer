@@ -13,6 +13,6 @@ dependencies: \
   /Users/gerardsimons/Git/afstuderen/ClusterSet.h \
   /Users/gerardsimons/Git/afstuderen/Evaluator.h \
   /Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/../reporter.h \
   /Users/gerardsimons/Git/afstuderen/MeshModel.h \
-  /Users/gerardsimons/Git/afstuderen/BMPImage.h \
-  /Users/gerardsimons/Git/afstuderen/RIVData/../reporter.h
+  /Users/gerardsimons/Git/afstuderen/BMPImage.h

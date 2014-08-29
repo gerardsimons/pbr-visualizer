@@ -11,6 +11,8 @@
 #include <GL/glut.h>
 #endif
 
+#include <typeinfo>
+
 class ParallelCoordsView : public RIVDataView, public RIVDataSetListener
 {
 private:

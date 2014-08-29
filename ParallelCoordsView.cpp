@@ -50,8 +50,6 @@ ParallelCoordsView::~ParallelCoordsView(void) {
 
 }
 
-
-
 void ParallelCoordsView::createAxes() {
     axisGroups.clear();
     if(dataset != NULL) {
@@ -204,14 +202,21 @@ void ParallelCoordsView::drawLines() {
             
             size_t row = 0;
             TableIterator *iterator = table->GetIterator();
+        
+            if(dynamic_cast<FilteredTableIterator*> (iterator)) {
+                printf("Drawn table %s using filtered table iterator.\n",table->GetName().c_str());
+            }
+            else {
+                printf("Drawn table %s using normal table iterator.\n",table->GetName().c_str());
+            }
             
             std::vector<float> axisXCache;
             std::vector<float> axisYCache;
             
-            RIVCluster* cluster = NULL;
-            RIVClusterSet* clusterSet = NULL;
+//            RIVCluster* cluster = NULL;
+//            RIVClusterSet* clusterSet = NULL;
             
-            while(iterator->GetNext(row,cluster,clusterSet,true)) {
+            while(iterator->GetNext(row)) {
                 glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
                 
                 float const* color = colorProperty->Color(table, row);
@@ -339,7 +344,7 @@ void ParallelCoordsView::Reshape(int width, int height) {
 void ParallelCoordsView::Draw() {
 //    printf("linesAreDirty = %d axesAreDirty = %d\n",linesAreDirty,axesAreDirty);
     if(linesAreDirty || axesAreDirty || true) {
-//        printf("\nParallelCoordsView Draw!\n");
+//        printf("ParallelCoordsView Draw!\n");
 
         glClearColor(0.9, 0.9, 0.9, 0.0);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -414,10 +419,8 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                     printf("Selection finalized on axis %s\n",selectedAxis->name.c_str());
                 }
                 else {
-
                     dataset->ClearFilter(selectedAxis->name);
                     clearSelection();
-
 //                    dataset->Print();
                 }
                 glutPostRedisplay();

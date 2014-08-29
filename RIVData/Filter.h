@@ -11,10 +11,18 @@ protected:
 public:
 	virtual bool PassesFilter(std::string name, float value) = 0;
     std::string attributeName;
-	std::string GetAttributeName();
+//	std::string GetAttributeName();
 	~Filter(void);
     virtual void Print() = 0;
 };
+
+//class IndexFilter : public Filter<size_t> {
+//private:
+//    std::vector<size_t> filteredIndices;
+//public:
+//    IndexFilter(const std::string& attributeName, const std::vector<size_t>& filteredIndices);
+//    bool PassesFilter(std::string name, size_t index);
+//};
 
 class RangeFilter : public Filter {
 private:

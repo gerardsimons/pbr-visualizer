@@ -13,6 +13,7 @@ dependencies: /Users/gerardsimons/Git/afstuderen/ImageView.cpp \
   /Users/gerardsimons/Git/afstuderen/ClusterSet.h \
   /Users/gerardsimons/Git/afstuderen/Evaluator.h \
   /Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h \
+  /Users/gerardsimons/Git/afstuderen/RIVData/../reporter.h \
   /Users/gerardsimons/Git/afstuderen/ColorProperty.h \
   /Users/gerardsimons/Git/afstuderen/Property.h \
   /Users/gerardsimons/Git/afstuderen/SizeProperty.h \

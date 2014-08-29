@@ -40,10 +40,8 @@ public:
     };
     
     virtual bool GetNext(size_t &row);
-//    virtual bool GetNextCluster(size_t& row, RIVCluster*& cluster, RIVClusterSet*& clusterSet);
+    //    virtual bool GetNextCluster(size_t& row, RIVCluster*& cluster, RIVClusterSet*& clusterSet);
     virtual bool GetNext(size_t& row, RIVCluster*& cluster, RIVClusterSet*& parentSet,bool requestCluster = false);
     void Print() const;
 };
-
-
-#endif /* defined(__Afstuderen__Iterator__) */
+#endif
