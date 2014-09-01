@@ -195,14 +195,16 @@ void ParallelCoordsView::drawLines() {
         
         glColor3f(1.0, 0.0, 0.0);
         
-        size_t loop_count = 0;
+//        size_t loop_count = 0;
         
         for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
             RIVTable *table = axisGroup.table;
             
             size_t row = 0;
+            if(table->GetName() == "path") {
+                
+            }
             TableIterator *iterator = table->GetIterator();
-        
             if(dynamic_cast<FilteredTableIterator*> (iterator)) {
                 printf("Drawn table %s using filtered table iterator.\n",table->GetName().c_str());
             }
@@ -344,7 +346,7 @@ void ParallelCoordsView::Reshape(int width, int height) {
 void ParallelCoordsView::Draw() {
 //    printf("linesAreDirty = %d axesAreDirty = %d\n",linesAreDirty,axesAreDirty);
     if(linesAreDirty || axesAreDirty || true) {
-//        printf("ParallelCoordsView Draw!\n");
+        printf("ParallelCoordsView Draw!\n");
 
         glClearColor(0.9, 0.9, 0.9, 0.0);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
