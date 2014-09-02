@@ -100,8 +100,8 @@ void RIVTable::filterRecords() {
         reporter::startTask("Filter references.");
         //Filter reference
     //    size_t lastRow = 0;
-        printf("Filter map = \n");
-        printMap(filteredRows);
+//        printf("Filter map = \n");
+//        printMap(filteredRows);
         for(RIVReference &reference : references) {
             //        for(size_t filteredRow : filteredRows) {
     //        for(size_t filteredRow : newlyFilteredRows) { //Iterate over all filtered rows

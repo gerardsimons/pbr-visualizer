@@ -24,7 +24,7 @@ public:
         
     }
     MeshModel(const std::vector<float>& vertices_) {
-        if(vertices_.size() == 0 || vertices.size() % 3 != 0) {
+        if(vertices.size() % 3 != 0) {
             throw "Malformed vertex data.";
         }
         vertices = vertices_;

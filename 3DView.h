@@ -11,6 +11,7 @@
 
 #include "DataView.h"
 #include "MeshModel.h"
+#include <limits>
 
 class RIV3DView : public RIVDataView, public RIVDataSetListener {
 private:

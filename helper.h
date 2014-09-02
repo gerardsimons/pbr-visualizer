@@ -16,7 +16,12 @@
 #include <algorithm>
 #include <iterator>
 
-#include <GLUT/GLUT.h>
+
+#if __APPLE__
+    #include <GLUT/GLUT.h>
+#elif __linux
+#include <GL/glut.h>
+#endif
 
 void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v );
 void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v );

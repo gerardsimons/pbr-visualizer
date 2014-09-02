@@ -9,7 +9,11 @@
 #ifndef Afstuderen_Geometry_h
 #define Afstuderen_Geometry_h
 
-#include <GLUT/GLUT.h>
+#if __APPLE__
+    #include <GLUT/GLUT.h>
+#elif __linux
+#include <GL/glut.h>
+#endif
 #include <math.h>
 #include <ostream>
 #include <iostream>

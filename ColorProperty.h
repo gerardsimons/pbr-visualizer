@@ -12,7 +12,7 @@
 #include "Property.h"
 
 #include <stdio.h>
-#include <string>
+#include <string.h>
 
 class RIVRecord;
 

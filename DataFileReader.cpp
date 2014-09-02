@@ -8,7 +8,7 @@
 #include <fstream>
 #include <regex>
 
-#include "../reporter.h"
+#include "reporter.h"
 
 DataFileReader::DataFileReader(void)
 {
@@ -39,7 +39,7 @@ MeshModel DataFileReader::ReadModelData(const std::string& fileName) {
     std::vector<float> vertices;
     
     std::string ignoreChars = "[]";
-    
+
     std::regex rx("point");
     
     size_t lineNumber = 0;
@@ -61,29 +61,29 @@ MeshModel DataFileReader::ReadModelData(const std::string& fileName) {
                 if(c == delimiter) {
                     //Process token
                     ++tokenCount;
-                    //                    printf("Token = '%s'\n",token.c_str());
+//                                        printf("Token = '%s'\n",token.c_str());
                     if(!shapeFound) {
                         if(token == "Shape") {
                             shapeFound = true;
-                            //                            printf("Shape declaration found at line %zu\n",lineNumber);
+//							printf("Shape declaration found at line %zu\n",lineNumber);
                         }
                     }
                     else if(!pointFound){ //Look for point declaration
-                        
+
                         if(std::regex_search(token.begin(), token.end(),rx)) {
-                            //                            printf("Point declaration found\n");
+//                        	printf("Point declaration found\n");
                             pointFound = true;
                         }
                     }
                     else if(is_number(token)) {
                         //Add to vertex
                         float vertex = std::stof(token);
-                        //                        printf("adding vertex %f\n",vertex);
+//                        printf("adding vertex %f\n",vertex);
                         vertices.push_back(vertex);
                     }
                     else {
                         //This line is done
-                        //                        printf("This line finished at token #%zu = %s\n",tokenCount,token.c_str());
+//                                                printf("This line finished at token #%zu = %s\n",tokenCount,token.c_str());
                         token.clear();
                         break;
                     }

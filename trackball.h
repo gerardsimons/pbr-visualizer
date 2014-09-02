@@ -8,9 +8,11 @@ BTW all comments here are French. :)
 #ifndef TRAQUEBOULE
 #define TRAQUEBOULE
 #ifdef _WIN32
-#include <GL/glut.h>
-#else 
-#include <GLUT/glut.h>
+	#include <GL/glut.h>
+#elif __APPLE__
+    #include <GLUT/GLUT.h>
+#elif __linux
+	#include <GL/glut.h>
 #endif
 #include <math.h>
 #include "matrix.h"

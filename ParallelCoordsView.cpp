@@ -197,6 +197,8 @@ void ParallelCoordsView::drawLines() {
         
 //        size_t loop_count = 0;
         
+        size_t linesDrawn = 0;
+
         for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
             RIVTable *table = axisGroup.table;
             
@@ -256,7 +258,8 @@ void ParallelCoordsView::drawLines() {
 //                                axisXCache.push_back(x);
 //                                axisYCache.push_back(y);
 //                            }
-//    //                        printf("glVertex3f(%f,%f,%f)\n",x,y,0);
+//                            printf("glVertex3f(%f,%f,%f)\n",x,y,0);
+                            ++linesDrawn;
                             glVertex3f(x, y, 0);
 //                            if(y > axis.y + axis.height || y < axis.y) {
 ////                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
@@ -273,6 +276,8 @@ void ParallelCoordsView::drawLines() {
                             float y = axis.PositionOnScaleForValue(value);
                             glVertex3f(x, y, 0);
                             
+//                            printf("glVertex3f(%f,%f,%f)\n",x,y,0);
+
                             if(y > axis.y + axis.height || y < axis.y) {
                                 
     //                            printf("This should not happen!!!!!\n");
@@ -282,6 +287,7 @@ void ParallelCoordsView::drawLines() {
     //                            
 //                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
                             }
+                            ++linesDrawn;
                         }
                     }
                 }
@@ -290,6 +296,7 @@ void ParallelCoordsView::drawLines() {
             }
         }
         linesAreDirty = false;
+        printf("Drawn %zu lines.\n",linesDrawn);
     }
 }
 

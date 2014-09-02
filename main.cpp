@@ -28,6 +28,8 @@ const float DEG2RAD = 3.14159/180;
 int width = 1600;
 int height = 1000;
 
+int padding = 10;
+
 //int width = 1400;
 //int height = 800;
 
@@ -240,8 +242,6 @@ void reshape(int w, int h)
     width = w;
     height = h;
     
-    int padding = 10;
-    
     //Reshape and reposition all windows according to new dimensions
     
     //Parallel view window
@@ -264,7 +264,7 @@ void reshape(int w, int h)
     glutPositionWindow(padding + height, height / 2 + padding);
     glutReshapeWindow(height / 2 - 2*padding, height /2 - 2 *padding);
     
-    //    //UI view window
+    //UI view window
     glutSetWindow(uiViewWindow);
     glutPositionWindow(padding + 1.5f * height, height / 2 + padding);
     glutReshapeWindow(height /2 - 2*padding, height/2 - 2 *padding);
@@ -298,7 +298,7 @@ void createViews() {
         RIVSizeProperty *defaultSizeProperty = new RIVFixedSizeProperty(0.1);
         RIVColorProperty *defaultColorProperty = new RIVFixedColorProperty(1,1,1);
         
-        parallelViewWindow = glutCreateSubWindow(mainWindow,0,height / 2.F,width,height / 2.F);
+        parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding);
 
         glutSetWindow(parallelViewWindow);
         glutDisplayFunc(ParallelCoordsView::DrawInstance);
@@ -313,7 +313,9 @@ void createViews() {
         //image view window
         imageViewWindow = glutCreateSubWindow(mainWindow,0,0,width,height / 2.F);
         glutSetWindow(imageViewWindow);
-        imageView = new RIVImageView(image, 0, 0, height / 2.F, height / 2.F, 0, 0, defaultColorProperty, defaultSizeProperty); //If this is not supplied on constructor, the texture becomes garbled
+        float bottomHalfY = height / 2.f + 2.F * padding;
+        float squareSize = height / 2.F - 2 * padding;
+        imageView = new RIVImageView(image, padding, bottomHalfY, squareSize, squareSize, 0, 0, defaultColorProperty, defaultSizeProperty); //If this is not supplied on constructor, the texture becomes garbled
         glutDisplayFunc(RIVImageView::DrawInstance);
 //        glutDisplayFunc(idle);
         glutReshapeFunc(RIVImageView::ReshapeInstance);
@@ -321,7 +323,7 @@ void createViews() {
         glutMotionFunc(RIVImageView::Motion);
         glutSpecialFunc(keys);
         //
-        sceneViewWindow = glutCreateSubWindow(mainWindow, 0, 0, 0, 0);
+        sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + squareSize * 2, bottomHalfY, squareSize, squareSize);
         glutSetWindow(sceneViewWindow);
         glutDisplayFunc(RIV3DView::DrawInstance);
 //        glutDisplayFunc(idle);
@@ -330,7 +332,7 @@ void createViews() {
         glutMotionFunc(RIV3DView::Motion);
         glutSpecialFunc(keys);
         //
-        uiViewWindow = glutCreateSubWindow(mainWindow, 0, 0, 0, 0);
+        uiViewWindow = glutCreateSubWindow(mainWindow, padding * 7 + squareSize * 4, bottomHalfY, squareSize, squareSize);
         glutSetWindow(uiViewWindow);
 //        glutReshapeFunc(UIView::ReshapeInstance);
 //        glutDisplayFunc(UIView::DrawInstance);
@@ -339,7 +341,7 @@ void createViews() {
 //        glutMotionFunc(UIView::Motion);
 //        glutEntryFunc(UIView::Entry);
         
-        heatMapViewWindow = glutCreateSubWindow(mainWindow,0,0,0,0);
+        heatMapViewWindow = glutCreateSubWindow(mainWindow, padding * 5 + squareSize * 3, bottomHalfY, squareSize, squareSize);
         glutSetWindow(heatMapViewWindow);
         glutReshapeFunc(RIVHeatMapView::ReshapeInstance);
         glutDisplayFunc(RIVHeatMapView::DrawInstance);

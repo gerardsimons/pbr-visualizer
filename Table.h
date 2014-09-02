@@ -22,7 +22,7 @@
 #include "DataSetListener.h"
 #include "helper.h"
 #include "Cluster.h"
-#include "../reporter.h"
+#include "reporter.h"
 
 class RIVReference;
 class RIVReferenceChain;

@@ -209,10 +209,12 @@ void RIVImageView::OnDataSetChanged() {
     
 }
 
+#ifdef __APPLE__
 int round(float d)
 {
   return (int)floor(d + 0.5F);
 }
+#endif
 
 bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 //    ToViewSpaceCoordinates(&x, &y);

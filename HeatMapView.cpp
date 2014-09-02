@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Gerard Simons. All rights reserved.
 //
 
-#include "HeatmapView.h"
+#include "HeatMapView.h"
 #include "helper.h"
 
 RIVHeatMapView* RIVHeatMapView::instance = NULL;

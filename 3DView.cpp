@@ -15,7 +15,11 @@
 
 #include "graphics_helper.h"
 
-#include <GLUT/glut.h>
+#if __APPLE__
+    #include <GLUT/GLUT.h>
+#else
+	#include <GL/glut.h>
+#endif
 
 //Init instance to draw
 RIV3DView* RIV3DView::instance = NULL;

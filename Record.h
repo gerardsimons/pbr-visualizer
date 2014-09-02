@@ -11,6 +11,8 @@
 
 #include <vector>
 #include <iostream>
+#include <limits>
+#include <typeinfo>
 
 typedef unsigned short ushort;
 
