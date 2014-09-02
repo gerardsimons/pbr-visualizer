@@ -202,6 +202,10 @@ void printVector(const std::vector<T>& values,std::string name = "") {
     }
     std::cout << "]\n";
 }
+template <typename T>
+bool vectorContains(const std::vector<T> v, T element) {
+	return (std::find(v.begin(), v.end(), element) != v.end());
+}
 
 void copy_buffer();
 void copy_buffer_back_to_front();
