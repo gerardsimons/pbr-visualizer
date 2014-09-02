@@ -1,1247 +1,0 @@
-TAfstuderen
-v6
-r1
-cCheck dependencies
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o /Users/gerardsimons/Git/afstuderen/Afstuderen/testCluster.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o /Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.o /Users/gerardsimons/Git/afstuderen/ColorProperty.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.o /Users/gerardsimons/Git/afstuderen/RIVData/Reference.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o /Users/gerardsimons/Git/afstuderen/ImageView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.o /Users/gerardsimons/Git/afstuderen/Afstuderen/testClusterSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.o /Users/gerardsimons/Git/afstuderen/DataView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o /Users/gerardsimons/Git/afstuderen/BMPImage.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.o /Users/gerardsimons/Git/afstuderen/RIVData/Iterator.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.o /Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.o /Users/gerardsimons/Git/afstuderen/ClusterSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.o /Users/gerardsimons/Git/afstuderen/3DView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.o /Users/gerardsimons/Git/afstuderen/helper.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Record.o /Users/gerardsimons/Git/afstuderen/RIVData/Record.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.o /Users/gerardsimons/Git/afstuderen/RIVData/Cluster.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o /Users/gerardsimons/Git/afstuderen/RIVData/Filter.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o /Users/gerardsimons/Git/afstuderen/main.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.o /Users/gerardsimons/Git/afstuderen/RIVData/DataSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/loadppm.o /Users/gerardsimons/Git/afstuderen/loadppm.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cLd /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen normal x86_64
-
-N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk
-c0000000053476ED700000000000000AA
-t1397190359
-s170
-
-N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/SDKSettings.plist
-c0000000052A3C6A9000000000000044C
-t1386464937
-s1100
-
-N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/CoreServices/SystemVersion.plist
-c000000005320454D00000000000001DE
-t1394623821
-s478
-
-N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Cocoa.framework/Cocoa
-c0000000052A3C6AA000000000000253C
-t1386464938
-s9532
-
-N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/GLUT.framework/GLUT
-c0000000052A3C6AA00000000000135D4
-t1386464938
-s79316
-
-N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/OpenGL
-c000000005320454E000000000000BB7C
-t1394623822
-s47996
-
-N/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/5.1/include/module.map
-c000000005320454F0000000000000ADC
-t1394623823
-s2780
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/gtest
-c000000005391B67500000000000CA078
-t1402058357
-s827512
-
-N/Users/gerardsimons/Git/afstuderen/3DView.cpp
-c000000005392F4E300000000000025E8
-t1402139875
-s9704
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.o
-t1402151736
-s586756
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Afstuderen.LinkFileList
-c00000000539323320000000000000AE7
-t1402151730
-s2791
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o
-t1402151734
-s10356
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.o
-t1402151737
-s298508
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.o
-t1402151735
-s298532
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.o
-t1402151732
-s542100
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o
-t1402151734
-s2062440
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.o
-t1402151738
-s611984
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.o
-t1402151733
-s298476
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o
-t1402151737
-s52780
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o
-t1402151733
-s547188
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.o
-t1402151735
-s491056
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o
-t1402151736
-s106936
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.o
-t1402151737
-s298564
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o
-t1402151735
-s784808
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Record.o
-t1402151737
-s2028
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.o
-t1402151732
-s592104
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.o
-t1402151736
-s1123384
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.o
-t1402151736
-s304784
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/loadppm.o
-t1402151738
-s140372
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o
-t1402151738
-s731296
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-t1402151732
-s637508
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.o
-t1402151734
-s776020
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen
-t2
-s0
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/testCluster.cpp
-c000000005392F8EA00000000000011CD
-t1402140906
-s4557
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/testClusterSet.cpp
-c00000000539322D50000000000000C15
-t1402151637
-s3093
-
-N/Users/gerardsimons/Git/afstuderen/BMPImage.cpp
-c000000005388A3A80000000000000A2C
-t1401463720
-s2604
-
-N/Users/gerardsimons/Git/afstuderen/ClusterSet.cpp
-c000000005392F86600000000000000A9
-t1402140774
-s169
-
-N/Users/gerardsimons/Git/afstuderen/ColorProperty.cpp
-c000000005388A2A8000000000000084B
-t1401463464
-s2123
-
-N/Users/gerardsimons/Git/afstuderen/DataView.cpp
-c000000005387714B00000000000000A5
-t1401385291
-s165
-
-N/Users/gerardsimons/Git/afstuderen/ImageView.cpp
-c00000000538C968A00000000000018F0
-t1401722506
-s6384
-
-N/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp
-c000000005385D8F60000000000000837
-t1401280758
-s2103
-
-N/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.cpp
-c000000005374EAFD0000000000000026
-t1400171261
-s38
-
-N/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp
-c00000000539080620000000000004353
-t1401978978
-s17235
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.cpp
-c00000000538EFE8800000000000000D9
-t1401880200
-s217
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp
-c000000005390C59400000000000062CF
-t1401996692
-s25295
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.cpp
-c0000000053907E8B00000000000009B5
-t1401978507
-s2485
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/Filter.cpp
-c000000005376317C000000000000038B
-t1400254844
-s907
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.cpp
-c00000000539084880000000000000817
-t1401980040
-s2071
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/Record.cpp
-c000000005374C97800000000000000A2
-t1400162680
-s162
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/Reference.cpp
-c000000005387607200000000000006B9
-t1401380978
-s1721
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp
-c000000005392FAE40000000000004E0F
-t1402141412
-s19983
-
-N/Users/gerardsimons/Git/afstuderen/helper.cpp
-c00000000538F550D0000000000000BA7
-t1401902349
-s2983
-
-N/Users/gerardsimons/Git/afstuderen/loadppm.cpp
-c0000000053692DEC000000000000054E
-t1399401964
-s1358
-
-N/Users/gerardsimons/Git/afstuderen/main.cpp
-c000000005392F3230000000000002603
-t1402139427
-s9731
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/3DView.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/Afstuderen/testCluster.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/Afstuderen/testClusterSet.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/BMPImage.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/ClusterSet.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/ColorProperty.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/DataView.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/ImageView.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/RIVData/Cluster.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/RIVData/DataSet.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/RIVData/Filter.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/RIVData/Iterator.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/RIVData/Record.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/RIVData/Reference.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/helper.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/loadppm.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/main.cpp
-r0
-
-CCheck dependencies
-r0
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependenciesbc0669b25a43b941^1d047db25a43b941^---0#1#1#--18"Check dependencies36"318BE4D8-C0E2-4B7D-A23F-ABF4A098B43C-
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.o /Users/gerardsimons/Git/afstuderen/3DView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844535.186430
-e423844536.786370
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.o
-x/Users/gerardsimons/Git/afstuderen/3DView.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/3DView.cpp
-d/Users/gerardsimons/Git/afstuderen/3DView.h
-d/Users/gerardsimons/Git/afstuderen/DataView.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Table.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Reference.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
-d/Users/gerardsimons/Git/afstuderen/ColorProperty.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection53"Compile /Users/gerardsimons/Git/afstuderen/3DView.cpp193"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.o /Users/gerardsimons/Git/afstuderen/3DView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilere9d22fb75a43b941^db50e1b85a43b941^---0#0#1#-19%DVTDocumentLocation2@52"file:///Users/gerardsimons/Git/afstuderen/3DView.cpp0000000000000000^2646"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.o /Users/gerardsimons/Git/afstuderen/3DView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.dia -c /Users/gerardsimons/Git/afstuderen/3DView.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.o36"C11BEBA7-560B-4A02-9080-AE983C1089F5-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o /Users/gerardsimons/Git/afstuderen/BMPImage.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844533.460769
-e423844534.078019
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o
-x/Users/gerardsimons/Git/afstuderen/BMPImage.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/BMPImage.cpp
-d/Users/gerardsimons/Git/afstuderen/BMPImage.h
-o/Users/gerardsimons/Git/afstuderen/BMPImage.cpp:98:12: warning: address of stack memory associated with local variable 'rgb' returned [-Wreturn-stack-address]
-o    return rgb;
-o           ^~~
-o1 warning generated.
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection55"Compile /Users/gerardsimons/Git/afstuderen/BMPImage.cpp197"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o /Users/gerardsimons/Git/afstuderen/BMPImage.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler800f76b55a43b941^2bfa13b65a43b941^-211"/Users/gerardsimons/Git/afstuderen/BMPImage.cpp:98:12: warning: address of stack memory associated with local variable 'rgb' returned [-Wreturn-stack-address]    return rgb;           ^~~1 warning generated.1(36%IDEClangDiagnosticActivityLogMessage2@69"Address of stack memory associated with local variable 'rgb' returned-423844534#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@54"file:///Users/gerardsimons/Git/afstuderen/BMPImage.cpp0000000000000000^97#11#97#11#2598#0#14"Semantic Issue1(3@54"file:///Users/gerardsimons/Git/afstuderen/BMPImage.cpp0000000000000000^97#11#97#14#2598#0#-0#0#1#-19%DVTDocumentLocation4@54"file:///Users/gerardsimons/Git/afstuderen/BMPImage.cpp0000000000000000^2658"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o /Users/gerardsimons/Git/afstuderen/BMPImage.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.dia -c /Users/gerardsimons/Git/afstuderen/BMPImage.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o36"4DEB36E1-BF49-4496-8135-3C71A55CDD1A-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.o /Users/gerardsimons/Git/afstuderen/RIVData/Cluster.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844536.558146
-e423844537.722367
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.o
-x/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.cpp
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection62"Compile /Users/gerardsimons/Git/afstuderen/RIVData/Cluster.cpp203"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.o /Users/gerardsimons/Git/afstuderen/RIVData/Cluster.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilerc6fa8eb85a43b941^7ff9b8b95a43b941^---0#0#1#-19%DVTDocumentLocation2@61"file:///Users/gerardsimons/Git/afstuderen/RIVData/Cluster.cpp0000000000000000^2668"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.o /Users/gerardsimons/Git/afstuderen/RIVData/Cluster.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.dia -c /Users/gerardsimons/Git/afstuderen/RIVData/Cluster.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.o36"8FA5E24A-4800-4346-99CA-5C5EE954F96B-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.o /Users/gerardsimons/Git/afstuderen/ClusterSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844534.315035
-e423844535.444970
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.o
-x/Users/gerardsimons/Git/afstuderen/ClusterSet.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.cpp
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection57"Compile /Users/gerardsimons/Git/afstuderen/ClusterSet.cpp201"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.o /Users/gerardsimons/Git/afstuderen/ClusterSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler860351b65a43b941^b3ec71b75a43b941^---0#0#1#-19%DVTDocumentLocation2@56"file:///Users/gerardsimons/Git/afstuderen/ClusterSet.cpp0000000000000000^2670"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.o /Users/gerardsimons/Git/afstuderen/ClusterSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.dia -c /Users/gerardsimons/Git/afstuderen/ClusterSet.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.o36"411B6762-8E00-4CAE-BCCD-51D70FA1E51E-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.o /Users/gerardsimons/Git/afstuderen/ColorProperty.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844530.490817
-e423844532.136874
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.o
-x/Users/gerardsimons/Git/afstuderen/ColorProperty.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/ColorProperty.cpp
-d/Users/gerardsimons/Git/afstuderen/ColorProperty.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Table.h
-d/Users/gerardsimons/Git/afstuderen/DataView.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Reference.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-o/Users/gerardsimons/Git/afstuderen/ColorProperty.cpp:62:12: warning: address of stack memory associated with local variable 'color' returned [-Wreturn-stack-address]
-o    return color;
-o           ^~~~~
-o1 warning generated.
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection60"Compile /Users/gerardsimons/Git/afstuderen/ColorProperty.cpp207"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.o /Users/gerardsimons/Git/afstuderen/ColorProperty.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilerfb027eb25a43b941^86e222b45a43b941^-222"/Users/gerardsimons/Git/afstuderen/ColorProperty.cpp:62:12: warning: address of stack memory associated with local variable 'color' returned [-Wreturn-stack-address]    return color;           ^~~~~1 warning generated.1(36%IDEClangDiagnosticActivityLogMessage2@71"Address of stack memory associated with local variable 'color' returned-423844532#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@59"file:///Users/gerardsimons/Git/afstuderen/ColorProperty.cpp0000000000000000^61#11#61#11#2115#0#14"Semantic Issue1(3@59"file:///Users/gerardsimons/Git/afstuderen/ColorProperty.cpp0000000000000000^61#11#61#16#2115#0#-0#0#1#-19%DVTDocumentLocation4@59"file:///Users/gerardsimons/Git/afstuderen/ColorProperty.cpp0000000000000000^2688"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.o /Users/gerardsimons/Git/afstuderen/ColorProperty.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.dia -c /Users/gerardsimons/Git/afstuderen/ColorProperty.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.o36"C2D1EFF3-33F8-4AAB-B964-F25248B6833F-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o /Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844530.489385
-e423844534.314355
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o
-x/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Table.h
-d/Users/gerardsimons/Git/afstuderen/DataView.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/ColorProperty.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Reference.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
-d/Users/gerardsimons/Git/afstuderen/BMPImage.h
-o/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:212:33: warning: unused variable 'xPixelRecord' [-Wunused-variable]
-o        RIVUnsignedShortRecord *xPixelRecord = new RIVUnsignedShortRecord("x");
-o                                ^
-o/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:213:33: warning: unused variable 'yPixelRecord' [-Wunused-variable]
-o        RIVUnsignedShortRecord *yPixelRecord = new RIVUnsignedShortRecord("y");
-o                                ^
-o/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:216:13: warning: unused variable 'channels' [-Wunused-variable]
-o        int channels = 3 + image.hasAlpha;
-o            ^
-o/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:151:12: warning: unused variable 'pathsFound' [-Wunused-variable]
-o    size_t pathsFound = 0;
-o           ^
-o/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:228:40: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
-o                short* rgb = image.RGB(x,y);
-o                             ~~~~~     ^
-o/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:228:42: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
-o                short* rgb = image.RGB(x,y);
-o                             ~~~~~       ^
-o/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:505:100: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
-o            printf("image.data pixel %lu (%d,%d) (R,G,B) = (%d,%d,%d)\n",pixelPosition / channels, (x+1), (y+1), R,G,B);
-o                                          ~~                                                       ^~~~~
-o                                          %lu
-o/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:505:107: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]
-o            printf("image.data pixel %lu (%d,%d) (R,G,B) = (%d,%d,%d)\n",pixelPosition / channels, (x+1), (y+1), R,G,B);
-o                                             ~~                                                           ^~~~~
-o                                             %lu
-o/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:567:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
-o        fprintf(outputFile, buffer);
-o                            ^~~~~~
-o/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:573:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
-o        fprintf(outputFile, buffer);
-o                            ^~~~~~
-o/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:577:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
-o        fprintf(outputFile, buffer);
-o                            ^~~~~~
-o/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:583:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
-o        fprintf(outputFile, buffer);
-o                            ^~~~~~
-o/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:599:15: warning: unused variable 'intersectionsTable' [-Wunused-variable]
-o    RIVTable *intersectionsTable = new RIVTable("intersections");
-o              ^
-o13 warnings generated.
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection69"Compile /Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp217"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o /Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler7c627db25a43b941^a77a52b65a43b941^-3428"/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:212:33: warning: unused variable 'xPixelRecord' [-Wunused-variable]        RIVUnsignedShortRecord *xPixelRecord = new RIVUnsignedShortRecord("x");                                ^/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:213:33: warning: unused variable 'yPixelRecord' [-Wunused-variable]        RIVUnsignedShortRecord *yPixelRecord = new RIVUnsignedShortRecord("y");                                ^/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:216:13: warning: unused variable 'channels' [-Wunused-variable]        int channels = 3 + image.hasAlpha;            ^/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:151:12: warning: unused variable 'pathsFound' [-Wunused-variable]    size_t pathsFound = 0;           ^/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:228:40: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]                short* rgb = image.RGB(x,y);                             ~~~~~     ^/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:228:42: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]                short* rgb = image.RGB(x,y);                             ~~~~~       ^/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:505:100: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]            printf("image.data pixel %lu (%d,%d) (R,G,B) = (%d,%d,%d)\n",pixelPosition / channels, (x+1), (y+1), R,G,B);                                          ~~                                                       ^~~~~                                          %lu/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:505:107: warning: format specifies type 'int' but the argument has type 'unsigned long' [-Wformat]            printf("image.data pixel %lu (%d,%d) (R,G,B) = (%d,%d,%d)\n",pixelPosition / channels, (x+1), (y+1), R,G,B);                                             ~~                                                           ^~~~~                                             %lu/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:567:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]        fprintf(outputFile, buffer);                            ^~~~~~/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:573:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]        fprintf(outputFile, buffer);                            ^~~~~~/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:577:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]        fprintf(outputFile, buffer);                            ^~~~~~/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:583:29: warning: format string is not a string literal (potentially insecure) [-Wformat-security]        fprintf(outputFile, buffer);                            ^~~~~~/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp:599:15: warning: unused variable 'intersectionsTable' [-Wunused-variable]    RIVTable *intersectionsTable = new RIVTable("intersections");              ^13 warnings generated.13(36%IDEClangDiagnosticActivityLogMessage2@30"Unused variable 'xPixelRecord'-423844534#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^211#32#211#32#6579#0#19"Unused Entity Issue--2@30"Unused variable 'yPixelRecord'-423844534#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^212#32#212#32#6659#0#19"Unused Entity Issue--2@26"Unused variable 'channels'-423844534#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^215#12#215#12#6758#0#19"Unused Entity Issue--2@28"Unused variable 'pathsFound'-423844534#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^150#11#150#11#4493#0#19"Unused Entity Issue--2@84"Implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int'-423844534#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^227#39#227#39#7214#0#22"Value Conversion Issue2(3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^227#39#227#40#7214#0#3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^227#29#227#34#7204#0#-2@84"Implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int'-423844534#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^227#41#227#41#7216#0#22"Value Conversion Issue2(3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^227#41#227#42#7216#0#3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^227#29#227#34#7204#0#-2@69"Format specifies type 'int' but the argument has type 'unsigned long'-423844534#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^504#99#504#99#21105#0#19"Format String Issue3(3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^504#99#504#104#21105#4#3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^504#42#504#44#21048#2#3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^504#42#504#44#21048#2#-2@69"Format specifies type 'int' but the argument has type 'unsigned long'-423844534#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^504#106#504#106#21112#0#19"Format String Issue3(3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^504#106#504#111#21112#4#3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^504#45#504#47#21051#2#3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^504#45#504#47#21051#2#-2@60"Format string is not a string literal (potentially insecure)-423844534#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^566#28#566#28#22826#0#19"Format String Issue1(3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^566#28#566#34#22826#0#-2@60"Format string is not a string literal (potentially insecure)-423844534#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^572#28#572#28#22979#0#19"Format String Issue1(3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^572#28#572#34#22979#0#-2@60"Format string is not a string literal (potentially insecure)-423844534#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^576#28#576#28#23158#0#19"Format String Issue1(3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^576#28#576#34#23158#0#-2@60"Format string is not a string literal (potentially insecure)-423844534#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^582#28#582#28#23344#0#19"Format String Issue1(3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^582#28#582#34#23344#0#-2@36"Unused variable 'intersectionsTable'-423844534#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^598#14#598#14#23863#0#19"Unused Entity Issue--0#0#1#-19%DVTDocumentLocation4@68"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp0000000000000000^2710"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o /Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.dia -c /Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o36"F0D9A501-FDAE-416B-A30F-A0DC26040EA9-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.o /Users/gerardsimons/Git/afstuderen/RIVData/DataSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844537.094392
-e423844538.366115
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.o
-x/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.cpp
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Table.h
-d/Users/gerardsimons/Git/afstuderen/DataView.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/ColorProperty.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Reference.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection62"Compile /Users/gerardsimons/Git/afstuderen/RIVData/DataSet.cpp203"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.o /Users/gerardsimons/Git/afstuderen/RIVData/DataSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilerff4118b95a43b941^e4ba5dba5a43b941^---0#0#1#-19%DVTDocumentLocation2@61"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataSet.cpp0000000000000000^2668"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.o /Users/gerardsimons/Git/afstuderen/RIVData/DataSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.dia -c /Users/gerardsimons/Git/afstuderen/RIVData/DataSet.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.o36"D98BA18C-0A79-480C-BE84-FC9A0746E4EC-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.o /Users/gerardsimons/Git/afstuderen/DataView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844532.628112
-e423844533.806861
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.o
-x/Users/gerardsimons/Git/afstuderen/DataView.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/DataView.cpp
-d/Users/gerardsimons/Git/afstuderen/DataView.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Table.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Reference.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
-d/Users/gerardsimons/Git/afstuderen/ColorProperty.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection55"Compile /Users/gerardsimons/Git/afstuderen/DataView.cpp197"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.o /Users/gerardsimons/Git/afstuderen/DataView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler6af6a0b45a43b941^c991ceb55a43b941^---0#0#1#-19%DVTDocumentLocation2@54"file:///Users/gerardsimons/Git/afstuderen/DataView.cpp0000000000000000^2658"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.o /Users/gerardsimons/Git/afstuderen/DataView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.dia -c /Users/gerardsimons/Git/afstuderen/DataView.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.o36"13AC53A1-78B5-45BC-99ED-77A1F0A8E904-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o /Users/gerardsimons/Git/afstuderen/RIVData/Filter.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844536.736946
-e423844537.080962
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o
-x/Users/gerardsimons/Git/afstuderen/RIVData/Filter.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.cpp
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection61"Compile /Users/gerardsimons/Git/afstuderen/RIVData/Filter.cpp201"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o /Users/gerardsimons/Git/afstuderen/RIVData/Filter.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilerf4c3bcb85a43b941^5cc714b95a43b941^---0#0#1#-19%DVTDocumentLocation2@60"file:///Users/gerardsimons/Git/afstuderen/RIVData/Filter.cpp0000000000000000^2662"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o /Users/gerardsimons/Git/afstuderen/RIVData/Filter.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.dia -c /Users/gerardsimons/Git/afstuderen/RIVData/Filter.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o36"0BB6BF02-7976-4EBB-969F-70C8916EA126-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o /Users/gerardsimons/Git/afstuderen/ImageView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844532.137810
-e423844533.458989
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o
-x/Users/gerardsimons/Git/afstuderen/ImageView.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/ImageView.cpp
-d/Users/gerardsimons/Git/afstuderen/ImageView.h
-d/Users/gerardsimons/Git/afstuderen/DataView.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Table.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Reference.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
-d/Users/gerardsimons/Git/afstuderen/ColorProperty.h
-d/Users/gerardsimons/Git/afstuderen/BMPImage.h
-d/Users/gerardsimons/Git/afstuderen/loadppm.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection56"Compile /Users/gerardsimons/Git/afstuderen/ImageView.cpp199"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o /Users/gerardsimons/Git/afstuderen/ImageView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler246123b45a43b941^f18175b55a43b941^---0#0#1#-19%DVTDocumentLocation2@55"file:///Users/gerardsimons/Git/afstuderen/ImageView.cpp0000000000000000^2664"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o /Users/gerardsimons/Git/afstuderen/ImageView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.dia -c /Users/gerardsimons/Git/afstuderen/ImageView.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o36"EF4B3E14-1747-4276-8176-2BFA9E063210-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.o /Users/gerardsimons/Git/afstuderen/RIVData/Iterator.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844533.807925
-e423844535.185810
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.o
-x/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.cpp
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection63"Compile /Users/gerardsimons/Git/afstuderen/RIVData/Iterator.cpp205"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.o /Users/gerardsimons/Git/afstuderen/RIVData/Iterator.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler9ef0ceb55a43b941^7fa12fb75a43b941^---0#0#1#-19%DVTDocumentLocation2@62"file:///Users/gerardsimons/Git/afstuderen/RIVData/Iterator.cpp0000000000000000^2674"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.o /Users/gerardsimons/Git/afstuderen/RIVData/Iterator.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.dia -c /Users/gerardsimons/Git/afstuderen/RIVData/Iterator.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.o36"CF3C0BE9-341B-467F-9661-F51135134415-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844535.712812
-e423844536.736311
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o
-x/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp
-d/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection65"Compile /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp217"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler7495b6b75a43b941^9f3cbcb85a43b941^---0#0#1#-19%DVTDocumentLocation2@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp0000000000000000^2718"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.dia -c /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o36"1906B973-5386-4CEA-927B-533E2CCB36BC-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844536.787691
-e423844537.986599
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.o
-x/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.cpp
-d/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.h
-d/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Table.h
-d/Users/gerardsimons/Git/afstuderen/DataView.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
-d/Users/gerardsimons/Git/afstuderen/ColorProperty.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Reference.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection70"Compile /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.cpp227"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilerdbc0c9b85a43b941^3e94fcb95a43b941^---0#0#1#-19%DVTDocumentLocation2@69"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.cpp0000000000000000^2748"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.dia -c /Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.o36"31D29228-30E5-4D85-8975-DF04702A7419-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844534.084175
-e423844535.711975
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o
-x/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp
-d/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.h
-d/Users/gerardsimons/Git/afstuderen/DataView.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Table.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Reference.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
-d/Users/gerardsimons/Git/afstuderen/ColorProperty.h
-d/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.h
-d/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.h
-o/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:182:20: warning: unused variable 'numberOfRows' [-Wunused-variable]
-o            size_t numberOfRows = table->NumberOfRows();
-o                   ^
-o/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:189:25: warning: unused variable 'cluster' [-Wunused-variable]
-o            RIVCluster* cluster = NULL;
-o                        ^
-o/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:166:16: warning: unused variable 'duration' [-Wunused-variable]
-o        double duration;
-o               ^
-o3 warnings generated.
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection65"Compile /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp217"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilere2e915b65a43b941^3fadb6b75a43b941^-577"/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:182:20: warning: unused variable 'numberOfRows' [-Wunused-variable]            size_t numberOfRows = table->NumberOfRows();                   ^/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:189:25: warning: unused variable 'cluster' [-Wunused-variable]            RIVCluster* cluster = NULL;                        ^/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp:166:16: warning: unused variable 'duration' [-Wunused-variable]        double duration;               ^3 warnings generated.3(36%IDEClangDiagnosticActivityLogMessage2@30"Unused variable 'numberOfRows'-423844535#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^181#19#181#19#6144#0#19"Unused Entity Issue--2@25"Unused variable 'cluster'-423844535#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^188#24#188#24#6406#0#19"Unused Entity Issue--2@26"Unused variable 'duration'-423844535#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^165#15#165#15#5686#0#19"Unused Entity Issue--0#0#1#-19%DVTDocumentLocation4@64"file:///Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp0000000000000000^2718"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.dia -c /Users/gerardsimons/Git/afstuderen/ParallelCoordsView.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o36"C8506AC1-58C9-474F-9391-329F74F3EA13-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Record.o /Users/gerardsimons/Git/afstuderen/RIVData/Record.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844536.181376
-e423844537.093888
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Record.o
-x/Users/gerardsimons/Git/afstuderen/RIVData/Record.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.cpp
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection61"Compile /Users/gerardsimons/Git/afstuderen/RIVData/Record.cpp201"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Record.o /Users/gerardsimons/Git/afstuderen/RIVData/Record.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler62a12eb85a43b941^f31d18b95a43b941^---0#0#1#-19%DVTDocumentLocation2@60"file:///Users/gerardsimons/Git/afstuderen/RIVData/Record.cpp0000000000000000^2662"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Record.o /Users/gerardsimons/Git/afstuderen/RIVData/Record.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Record.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Record.dia -c /Users/gerardsimons/Git/afstuderen/RIVData/Record.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Record.o36"21D906AA-3319-421A-BB78-008FEFAB0D73-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.o /Users/gerardsimons/Git/afstuderen/RIVData/Reference.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844530.491377
-e423844532.156905
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.o
-x/Users/gerardsimons/Git/afstuderen/RIVData/Reference.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/RIVData/Reference.cpp
-d/Users/gerardsimons/Git/afstuderen/RIVData/Reference.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Table.h
-d/Users/gerardsimons/Git/afstuderen/DataView.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/ColorProperty.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection64"Compile /Users/gerardsimons/Git/afstuderen/RIVData/Reference.cpp207"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.o /Users/gerardsimons/Git/afstuderen/RIVData/Reference.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilera56b7eb25a43b941^452e28b45a43b941^---0#0#1#-19%DVTDocumentLocation2@63"file:///Users/gerardsimons/Git/afstuderen/RIVData/Reference.cpp0000000000000000^2680"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.o /Users/gerardsimons/Git/afstuderen/RIVData/Reference.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.dia -c /Users/gerardsimons/Git/afstuderen/RIVData/Reference.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.o36"E5D88F50-27FA-44AC-AE19-211AB3CD6DAD-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.o /Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844534.080601
-e423844536.180601
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.o
-x/Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp
-d/Users/gerardsimons/Git/afstuderen/RIVData/Table.h
-d/Users/gerardsimons/Git/afstuderen/DataView.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/ColorProperty.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Reference.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-d/Users/gerardsimons/Git/afstuderen/reporter.h
-o/Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp:297:62: warning: comparison of unsigned expression < 0 is always false [-Wtautological-compare]
-o    for(size_t j = 0 ; j < rows && (j < maxPrint || maxPrint < 0) ; j++) {
-o                                                    ~~~~~~~~ ^ ~
-o/Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp:280:27: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]
-o            columnWidth = textWidth;
-o                        ~ ^~~~~~~~~
-o2 warnings generated.
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection60"Compile /Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp199"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.o /Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler2bbf14b65a43b941^c24d2eb85a43b941^-560"/Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp:297:62: warning: comparison of unsigned expression < 0 is always false [-Wtautological-compare]    for(size_t j = 0 ; j < rows && (j < maxPrint || maxPrint < 0) ; j++) {                                                    ~~~~~~~~ ^ ~/Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp:280:27: warning: implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int' [-Wshorten-64-to-32]            columnWidth = textWidth;                        ~ ^~~~~~~~~2 warnings generated.2(36%IDEClangDiagnosticActivityLogMessage2@53"Comparison of unsigned expression < 0 is always false-423844536#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@59"file:///Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp0000000000000000^296#61#296#61#9100#0#14"Semantic Issue2(3@59"file:///Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp0000000000000000^296#52#296#60#9091#0#3@59"file:///Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp0000000000000000^296#63#296#64#9102#0#-2@84"Implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int'-423844536#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@59"file:///Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp0000000000000000^279#26#279#26#8542#0#22"Value Conversion Issue2(3@59"file:///Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp0000000000000000^279#26#279#35#8542#0#3@59"file:///Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp0000000000000000^279#24#279#25#8540#0#-0#0#1#-19%DVTDocumentLocation4@59"file:///Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp0000000000000000^2656"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.o /Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.dia -c /Users/gerardsimons/Git/afstuderen/RIVData/Table.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.o36"45D16D29-E8F5-400D-8B43-7F6FB10FC629-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.o /Users/gerardsimons/Git/afstuderen/helper.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844535.445647
-e423844536.556618
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.o
-x/Users/gerardsimons/Git/afstuderen/helper.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/helper.cpp
-d/Users/gerardsimons/Git/afstuderen/helper.h
-o/Users/gerardsimons/Git/afstuderen/helper.cpp:16:12: warning: address of stack memory associated with local variable 'color' returned [-Wreturn-stack-address]
-o    return color;
-o           ^~~~~
-o1 warning generated.
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection53"Compile /Users/gerardsimons/Git/afstuderen/helper.cpp193"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.o /Users/gerardsimons/Git/afstuderen/helper.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler0e2d72b75a43b941^af788eb85a43b941^-215"/Users/gerardsimons/Git/afstuderen/helper.cpp:16:12: warning: address of stack memory associated with local variable 'color' returned [-Wreturn-stack-address]    return color;           ^~~~~1 warning generated.1(36%IDEClangDiagnosticActivityLogMessage2@71"Address of stack memory associated with local variable 'color' returned-423844536#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@52"file:///Users/gerardsimons/Git/afstuderen/helper.cpp0000000000000000^15#11#15#11#394#0#14"Semantic Issue1(3@52"file:///Users/gerardsimons/Git/afstuderen/helper.cpp0000000000000000^15#11#15#16#394#0#-0#0#1#-19%DVTDocumentLocation4@52"file:///Users/gerardsimons/Git/afstuderen/helper.cpp0000000000000000^2646"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.o /Users/gerardsimons/Git/afstuderen/helper.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.dia -c /Users/gerardsimons/Git/afstuderen/helper.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.o36"81B56CBD-4298-466B-9BED-0E68491F121B-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/loadppm.o /Users/gerardsimons/Git/afstuderen/loadppm.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844537.723013
-e423844538.358007
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/loadppm.o
-x/Users/gerardsimons/Git/afstuderen/loadppm.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/loadppm.cpp
-d/Users/gerardsimons/Git/afstuderen/loadppm.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection54"Compile /Users/gerardsimons/Git/afstuderen/loadppm.cpp195"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/loadppm.o /Users/gerardsimons/Git/afstuderen/loadppm.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilercf30b9b95a43b941^87a75bba5a43b941^---0#0#1#-19%DVTDocumentLocation2@53"file:///Users/gerardsimons/Git/afstuderen/loadppm.cpp0000000000000000^2652"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/loadppm.o /Users/gerardsimons/Git/afstuderen/loadppm.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/loadppm.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/loadppm.dia -c /Users/gerardsimons/Git/afstuderen/loadppm.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/loadppm.o36"8956D3D3-D4F8-4687-98B8-C4B9A7BFCC5C-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o /Users/gerardsimons/Git/afstuderen/main.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844537.082596
-e423844538.635490
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o
-x/Users/gerardsimons/Git/afstuderen/main.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/main.cpp
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-d/Users/gerardsimons/Git/afstuderen/DataView.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Table.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Reference.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
-d/Users/gerardsimons/Git/afstuderen/ColorProperty.h
-d/Users/gerardsimons/Git/afstuderen/ParallelCoordsView.h
-d/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxis.h
-d/Users/gerardsimons/Git/afstuderen/ParallelCoordsAxisGroup.h
-d/Users/gerardsimons/Git/afstuderen/ImageView.h
-d/Users/gerardsimons/Git/afstuderen/BMPImage.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.h
-d/Users/gerardsimons/Git/afstuderen/3DView.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-internal.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-port.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-message.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-string.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-filepath.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-type-util.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-death-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-death-test-internal.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-param-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-linked_ptr.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-printers.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util-generated.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_prod.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-test-part.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-typed-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_pred_impl.h
-o/Users/gerardsimons/Git/afstuderen/main.cpp:288:19: warning: unused variable 'intersectTable' [-Wunused-variable]
-o        RIVTable *intersectTable = dataset.GetTable("intersections");
-o                  ^
-o/Users/gerardsimons/Git/afstuderen/main.cpp:294:5: warning: ignoring return value of function declared with warn_unused_result attribute [-Wunused-result]
-o    RUN_ALL_TESTS();
-o    ^~~~~~~~~~~~~
-o/Users/gerardsimons/Git/afstuderen/main.cpp:302:11: warning: implicit conversion loses integer precision: 'time_t' (aka 'long') to 'unsigned int' [-Wshorten-64-to-32]
-o    srand(time(NULL));
-o    ~~~~~ ^~~~~~~~~~
-o/Users/gerardsimons/Git/afstuderen/main.cpp:22:13: warning: unused variable 'DEG2RAD' [-Wunused-const-variable]
-oconst float DEG2RAD = 3.14159/180;
-o            ^
-o4 warnings generated.
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection51"Compile /Users/gerardsimons/Git/afstuderen/main.cpp189"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o /Users/gerardsimons/Git/afstuderen/main.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilere23f15b95a43b941^47afa2ba5a43b941^-792"/Users/gerardsimons/Git/afstuderen/main.cpp:288:19: warning: unused variable 'intersectTable' [-Wunused-variable]        RIVTable *intersectTable = dataset.GetTable("intersections");                  ^/Users/gerardsimons/Git/afstuderen/main.cpp:294:5: warning: ignoring return value of function declared with warn_unused_result attribute [-Wunused-result]    RUN_ALL_TESTS();    ^~~~~~~~~~~~~/Users/gerardsimons/Git/afstuderen/main.cpp:302:11: warning: implicit conversion loses integer precision: 'time_t' (aka 'long') to 'unsigned int' [-Wshorten-64-to-32]    srand(time(NULL));    ~~~~~ ^~~~~~~~~~/Users/gerardsimons/Git/afstuderen/main.cpp:22:13: warning: unused variable 'DEG2RAD' [-Wunused-const-variable]const float DEG2RAD = 3.14159/180;            ^4 warnings generated.4(36%IDEClangDiagnosticActivityLogMessage2@32"Unused variable 'intersectTable'-423844538#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@50"file:///Users/gerardsimons/Git/afstuderen/main.cpp0000000000000000^287#18#287#18#7751#0#19"Unused Entity Issue--2@76"Ignoring return value of function declared with warn_unused_result attribute-423844538#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@50"file:///Users/gerardsimons/Git/afstuderen/main.cpp0000000000000000^293#4#293#4#8051#0#14"Semantic Issue1(3@50"file:///Users/gerardsimons/Git/afstuderen/main.cpp0000000000000000^293#4#293#17#8051#0#-2@84"Implicit conversion loses integer precision: 'time_t' (aka 'long') to 'unsigned int'-423844538#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@50"file:///Users/gerardsimons/Git/afstuderen/main.cpp0000000000000000^301#10#301#10#8139#0#22"Value Conversion Issue2(3@50"file:///Users/gerardsimons/Git/afstuderen/main.cpp0000000000000000^301#10#301#20#8139#9#3@50"file:///Users/gerardsimons/Git/afstuderen/main.cpp0000000000000000^301#4#301#9#8133#0#-2@25"Unused variable 'DEG2RAD'-423844538#18446744073709551615#0#-1#27"com.apple.dt.IDE.diagnostic3@50"file:///Users/gerardsimons/Git/afstuderen/main.cpp0000000000000000^21#12#21#12#366#0#19"Unused Entity Issue--0#0#1#-19%DVTDocumentLocation4@50"file:///Users/gerardsimons/Git/afstuderen/main.cpp0000000000000000^2634"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o /Users/gerardsimons/Git/afstuderen/main.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.dia -c /Users/gerardsimons/Git/afstuderen/main.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o36"38C39FD9-426D-466C-A924-254D5EB35F2E-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o /Users/gerardsimons/Git/afstuderen/Afstuderen/testCluster.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844530.488938
-e423844532.626529
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-x/Users/gerardsimons/Git/afstuderen/Afstuderen/testCluster.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/testCluster.cpp
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-internal.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-port.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-message.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-string.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-filepath.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-type-util.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-death-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-death-test-internal.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-param-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-linked_ptr.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-printers.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util-generated.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_prod.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-test-part.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-typed-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_pred_impl.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection69"Compile /Users/gerardsimons/Git/afstuderen/Afstuderen/testCluster.cpp168"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o testCluster.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compileree7a7db25a43b941^08aca0b45a43b941^---0#0#1#-19%DVTDocumentLocation2@68"file:///Users/gerardsimons/Git/afstuderen/Afstuderen/testCluster.cpp0000000000000000^2652"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o testCluster.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.dia -c /Users/gerardsimons/Git/afstuderen/Afstuderen/testCluster.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o36"7722C01D-3627-45EF-A9AA-F787E2125290-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.o /Users/gerardsimons/Git/afstuderen/Afstuderen/testClusterSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s423844532.158146
-e423844534.082526
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.o
-x/Users/gerardsimons/Git/afstuderen/Afstuderen/testClusterSet.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/testClusterSet.cpp
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-internal.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-port.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-message.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-string.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-filepath.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-type-util.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-death-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-death-test-internal.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-param-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-linked_ptr.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-printers.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util-generated.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_prod.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-test-part.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-typed-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_pred_impl.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection72"Compile /Users/gerardsimons/Git/afstuderen/Afstuderen/testClusterSet.cpp174"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.o testClusterSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilerd99728b45a43b941^b02015b65a43b941^---0#0#1#-19%DVTDocumentLocation2@71"file:///Users/gerardsimons/Git/afstuderen/Afstuderen/testClusterSet.cpp0000000000000000^2670"CompileC build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.o testClusterSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.8 -g -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Afstuderen.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.dia -c /Users/gerardsimons/Git/afstuderen/Afstuderen/testClusterSet.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.o36"B23B0CEE-6B68-4303-81D8-8E86FF2571E2-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-
-CLd /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen normal x86_64
-s423844538.636878
-e423844538.683105
-r0
-xLd
-x/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen
-xnormal
-xx86_64
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Afstuderen.LinkFileList
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/BMPImage.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxis.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Record.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Filter.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/loadppm.o
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/gtest
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Cocoa.framework/Cocoa
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/GLUT.framework/GLUT
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/OpenGL
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libc++.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libSystem.dylib
-d/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/5.1/lib/darwin/libclang_rt.osx.a
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/AppKit.framework/AppKit
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreData.framework/CoreData
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcache.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcommonCrypto.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcompiler_rt.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcopyfile.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcorecrypto.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libdispatch.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libdyld.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libkeymgr.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/liblaunch.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libmacho.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libquarantine.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libremovefile.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_asl.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_blocks.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_c.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_configuration.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_dnssd.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_info.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_kernel.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_m.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_malloc.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_network.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_notify.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_platform.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_pthread.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_sandbox.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_stats.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libunc.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libunwind.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libxpc.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Foundation.framework/Foundation
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreText.framework/CoreText
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ImageIO.framework/ImageIO
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/ATS
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ColorSync.framework/Versions/A/ColorSync
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/CoreServices
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/HIServices.framework/Versions/A/HIServices
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/LangAnalysis.framework/Versions/A/LangAnalysis
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/PrintCore.framework/Versions/A/PrintCore
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/QD.framework/Versions/A/QD
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/SpeechSynthesis.framework/Versions/A/SpeechSynthesis
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libobjc.A.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CFNetwork.framework/CFNetwork
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/CarbonCore
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Metadata
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/OSServices.framework/Versions/A/OSServices
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SearchKit.framework/Versions/A/SearchKit
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.o
-oduplicate symbol __Z6chooseyy in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.o
-oduplicate symbol __Z20generateCombinationsmmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.o
-oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o
-o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.o
-old: 48 duplicate symbols for architecture x86_64
-oclang: error: linker command failed with exit code 1 (use -v to see invocation)
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection73"Link /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen39"Ld build/Debug/Afstuderen normal x86_646a17a3ba5a43b941^50dfaeba5a43b941^-15444"duplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataFileReader.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ColorProperty.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Reference.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ImageView.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testClusterSet.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataView.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Iterator.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Table.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsView.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ClusterSet.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/3DView.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/helper.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Cluster.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/ParallelCoordsAxisGroup.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/main.oduplicate symbol __Z6chooseyy in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.oduplicate symbol __Z20generateCombinationsmmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.oduplicate symbol __Z20generateCombinationsNSt3__16vectorImNS_9allocatorImEEEEmm in:    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/testCluster.o    /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/DataSet.old: 48 duplicate symbols for architecture x86_64clang: error: linker command failed with exit code 1 (use -v to see invocation)2(21%IDEActivityLogMessage2@44"48 duplicate symbols for architecture x86_64-423844538#15315#49#-0#-23%DVTTextDocumentLocation3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@65"Linker command failed with exit code 1 (use -v to see invocation)-423844538#15364#80#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--0#0#1#--1098"Ld build/Debug/Afstuderen normal x86_64    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export MACOSX_DEPLOYMENT_TARGET=10.8    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -L/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/googletest-read-only/xcode/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -filelist /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Afstuderen.LinkFileList -mmacosx-version-min=10.8 -stdlib=libc++ -framework gtest -framework Cocoa -framework GLUT -framework OpenGL -Xlinker -dependency_info -Xlinker /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen.build/Objects-normal/x86_64/Afstuderen_dependency_info.dat -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen36"50C11FB1-1663-4ED8-B563-D8256B0452A6-
-b58C5C95B-BD8B-4395-9DFC-0D2898BD4CED
-

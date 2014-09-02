@@ -33,8 +33,11 @@ private:
     //The mouse cursor in world coordinates at last click
     Point3D cursorNear;
     Point3D cursorFar;
+	
+	RIVTable* isectTable = NULL;
     
     //Buffered graphics point data, generated from the data, stored here for speed, TODO: Only store indices and a pointer to these records?
+	bool sizesAllTheSame; //Because sizes are often set to the same, we take advantage of this to get a big performance boost
     std::vector<float> pointsX;
     std::vector<float> pointsY;
     std::vector<float> pointsZ;

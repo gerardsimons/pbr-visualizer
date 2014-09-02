@@ -22,7 +22,6 @@
 #include <algorithm>
 
 #include "ClusterSet.h"
-#include "reporter.h"
 #include "Cluster.h"
 //#include "reporter.h"
 
@@ -219,8 +218,8 @@ RIVClusterSet RIVClusterSet::MakeCluster(const size_t& maxRepeat, const size_t& 
     
     
     //        printf("Repeating optimization %zu times.\n",initializationIndices.size());
-    std::string taskName = "Cluster K=" + std::to_string(K) + " repeat=" + std::to_string(repeat);
-    reporter::startTask(taskName,repeat);
+//    std::string taskName = "Cluster K=" + std::to_string(K) + " repeat=" + std::to_string(repeat);
+//    reporter::startTask(taskName,repeat);
 //    printf("start %s [",taskName.c_str());
 //    size_t updateRounds = ceil(repeat / 100.0);
     //        reporter::startTask(taskName,repeat);
@@ -251,13 +250,13 @@ RIVClusterSet RIVClusterSet::MakeCluster(const size_t& maxRepeat, const size_t& 
 //            printf("New best clustering cost = %f\n",clusterSet.cost);
 //            std::cout << bestClusterSet;
         }
-        reporter::update(taskName,1.F);
+//        reporter::update(taskName,1.F);
     }
 //    printf(" DONE]\n");
     printf("Medoids : ");
     printVector(bestClusterSet.GetMedoidIndices());
     //        clusters = bestClusters;
-    reporter::stop(taskName);
+//    reporter::stop(taskName);
 //    printf("Best clustering: ");
 //    for(RIVCluster *cluster : bestClusterSet.GetClusters()) {
 //        //                    printf("%d ",cluster->GetMedoidIndex());

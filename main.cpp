@@ -13,7 +13,7 @@
 #include "ColorPallete.h"
 #include "ColorProperty.h"
 #include "SizeProperty.h"
-#include "UIView.h"
+//#include "UIView.h" //
 #include "HeatMapView.h"
 
 #if defined(__APPLE__)
@@ -59,7 +59,7 @@ RIVImageView *imageView = NULL;
 RIV3DView *sceneView = NULL;
 ParallelCoordsView *parallelCoordsView = NULL;
 RIVHeatMapView *heatMapView = NULL;
-UIView *uiView = NULL;
+//UIView *uiView = NULL;
 
 /* The dataset, views have pointers to this in order to draw their views consistently */
 RIVDataSet dataset;
@@ -332,12 +332,12 @@ void createViews() {
         //
         uiViewWindow = glutCreateSubWindow(mainWindow, 0, 0, 0, 0);
         glutSetWindow(uiViewWindow);
-        glutReshapeFunc(UIView::ReshapeInstance);
-        glutDisplayFunc(UIView::DrawInstance);
-//        glutDisplayFunc(idle);
-        glutMouseFunc(UIView::Mouse);
-        glutMotionFunc(UIView::Motion);
-        glutEntryFunc(UIView::Entry);
+//        glutReshapeFunc(UIView::ReshapeInstance);
+//        glutDisplayFunc(UIView::DrawInstance);
+        glutDisplayFunc(idle);
+//        glutMouseFunc(UIView::Mouse);
+//        glutMotionFunc(UIView::Motion);
+//        glutEntryFunc(UIView::Entry);
         
         heatMapViewWindow = glutCreateSubWindow(mainWindow,0,0,0,0);
         glutSetWindow(heatMapViewWindow);
@@ -350,7 +350,7 @@ void createViews() {
         //Create views
         parallelCoordsView = new ParallelCoordsView();
         sceneView = new RIV3DView();
-        uiView = new UIView(defaultColorProperty,defaultSizeProperty);
+//        uiView = new UIView(defaultColorProperty,defaultSizeProperty);
         heatMapView = new RIVHeatMapView();
         
         //Set data

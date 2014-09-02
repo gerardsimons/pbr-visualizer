@@ -9,7 +9,6 @@
 #ifndef TEST_CLUSTER
 #define TEST_CLUSTER
 
-#include "gtest/gtest.h"
 #include "ClusterSet.h"
 #include "Cluster.h"
 //#include <stdio.h>

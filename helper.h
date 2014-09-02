@@ -14,8 +14,9 @@
 #include <map>
 #include <vector>
 #include <algorithm>
-#include <GLUT/GLUT.h>
 #include <iterator>
+
+#include <GLUT/GLUT.h>
 
 void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v );
 void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v );

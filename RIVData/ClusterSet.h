@@ -19,6 +19,7 @@ class RIVClusterSet {
 private:
     std::vector<RIVCluster*> clusters;
     std::pair<size_t,size_t>* minMax = NULL;
+	
     LinearInterpolator<size_t>* interpolator; //Used for computing relative sizes
     
     std::vector<float>* xValues;
@@ -29,7 +30,6 @@ private:
     const static int MAX_COMBINATIONS = 10000;
     
     NonReplacementSampler<size_t> sampler;
-    
 
     double cost = 0.F;
     bool initialized = false;

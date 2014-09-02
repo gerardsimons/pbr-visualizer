@@ -1,560 +1,0 @@
-TAfstuderen Tests
-v6
-r1
-cCheck dependencies
-cCompileC build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testCluster.o /Users/gerardsimons/Git/afstuderen/testCluster.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testClusterSet.o /Users/gerardsimons/Git/afstuderen/testClusterSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cCompileC build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testDataSet.o /Users/gerardsimons/Git/afstuderen/Afstuderen/testDataSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-cLd /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen\ Tests normal x86_64
-
-N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk
-c0000000053476ED700000000000000AA
-t1397190359
-s170
-
-N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/SDKSettings.plist
-c0000000052A3C6A9000000000000044C
-t1386464937
-s1100
-
-N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/CoreServices/SystemVersion.plist
-c000000005320454D00000000000001DE
-t1394623821
-s478
-
-N/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/5.1/include/module.map
-c000000005320454F0000000000000ADC
-t1394623823
-s2780
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-death-test.h
-c00000000538DC21F0000000000002D03
-t1401799199
-s11523
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-message.h
-c00000000538DC21F00000000000023E2
-t1401799199
-s9186
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-param-test.h
-c00000000538DC21F0000000000012858
-t1401799199
-s75864
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-printers.h
-c00000000538DC21F0000000000007B79
-t1401799199
-s31609
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-test-part.h
-c00000000538DC21F000000000000196D
-t1401799199
-s6509
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-typed-test.h
-c00000000538DC21F0000000000002802
-t1401799199
-s10242
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest.h
-c00000000538DC21F0000000000015972
-t1401799199
-s88434
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_pred_impl.h
-c00000000538DC21F0000000000003B29
-t1401799199
-s15145
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_prod.h
-c00000000538DC21F0000000000000914
-t1401799199
-s2324
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-death-test-internal.h
-c00000000538DC21F0000000000003475
-t1401799199
-s13429
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-filepath.h
-c00000000538DC21F0000000000002583
-t1401799199
-s9603
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-internal.h
-c00000000538DC21F000000000000AC71
-t1401799199
-s44145
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-linked_ptr.h
-c00000000538DC21F0000000000001FA5
-t1401799199
-s8101
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util-generated.h
-c00000000538DC21F000000000002EEB0
-t1401799199
-s192176
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util.h
-c00000000538DC21F0000000000005E7F
-t1401799199
-s24191
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-port.h
-c00000000538DC21F0000000000010CBC
-t1401799199
-s68796
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-string.h
-c00000000538DC21F0000000000001B38
-t1401799199
-s6968
-
-N/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-type-util.h
-c00000000538DC21F000000000002D542
-t1401799199
-s185666
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen Tests.build/Objects-normal/x86_64/Afstuderen Tests.LinkFileList
-c00000000539869360000000000000195
-t1402497334
-s405
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen Tests.build/Objects-normal/x86_64/testCluster.o
-t1402497335
-s464108
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen Tests.build/Objects-normal/x86_64/testClusterSet.o
-t1402497335
-s558908
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen Tests.build/Objects-normal/x86_64/testDataSet.o
-t1402497600
-s633104
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen Tests
-t2
-s0
-
-N/Users/gerardsimons/Git/afstuderen/Afstuderen/testDataSet.cpp
-c0000000053986A3E000000000000094D
-t1402497598
-s2381
-
-N/Users/gerardsimons/Git/afstuderen/BMPImage.h
-c000000005385F6DE00000000000001DC
-t1401288414
-s476
-
-N/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-c000000005398324D000000000000083F
-t1402483277
-s2111
-
-N/Users/gerardsimons/Git/afstuderen/ColorProperty.h
-c00000000539851A90000000000000AB6
-t1402491305
-s2742
-
-N/Users/gerardsimons/Git/afstuderen/DataView.h
-c00000000538C965500000000000005FA
-t1401722453
-s1530
-
-N/Users/gerardsimons/Git/afstuderen/Geometry.h
-c00000000539820D1000000000000186A
-t1402478801
-s6250
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-c0000000053983CE200000000000017A5
-t1402485986
-s6053
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.h
-c000000005398650C0000000000000248
-t1402496268
-s584
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h
-c00000000538F15000000000000000461
-t1401885952
-s1121
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
-c00000000538C945B0000000000000130
-t1401721947
-s304
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-c0000000053774EDB0000000000000317
-t1400327899
-s791
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-c000000005392F88D000000000000048A
-t1402140813
-s1162
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-c00000000538F1FB2000000000000103A
-t1401888690
-s4154
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/Reference.h
-c0000000053875FD4000000000000040A
-t1401380820
-s1034
-
-N/Users/gerardsimons/Git/afstuderen/RIVData/Table.h
-c0000000053985F1E0000000000000D29
-t1402494750
-s3369
-
-N/Users/gerardsimons/Git/afstuderen/helper.h
-c00000000539826A100000000000015F0
-t1402480289
-s5616
-
-N/Users/gerardsimons/Git/afstuderen/testCluster.cpp
-c00000000539866E60000000000000FF7
-t1402496742
-s4087
-
-N/Users/gerardsimons/Git/afstuderen/testClusterSet.cpp
-c00000000539862130000000000001370
-t1402495507
-s4976
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/Afstuderen/testDataSet.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/testCluster.cpp
-r0
-
-CBuild AST from /Users/gerardsimons/Git/afstuderen/testClusterSet.cpp
-r0
-
-CCheck dependencies
-r0
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependencies3d10a1bfa148b941^59a4a1bfa148b941^---0#1#1#--18"Check dependencies36"77708366-1363-4122-ABA2-447A97404CA0-
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testCluster.o /Users/gerardsimons/Git/afstuderen/testCluster.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s424190134.038672
-e424190135.409918
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen Tests.build/Objects-normal/x86_64/testCluster.o
-x/Users/gerardsimons/Git/afstuderen/testCluster.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/testCluster.cpp
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-internal.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-port.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-message.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-string.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-filepath.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-type-util.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-death-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-death-test-internal.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-param-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-linked_ptr.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-printers.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util-generated.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_prod.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-test-part.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-typed-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_pred_impl.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-oIn file included from /Users/gerardsimons/Git/afstuderen/testCluster.cpp:13:
-oIn file included from /Users/gerardsimons/Git/afstuderen/ClusterSet.h:14:
-oIn file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../RIVData/Cluster.h:14:
-o/Users/gerardsimons/Git/afstuderen/Afstuderen/../helper.h:35:16: warning: unused variable 'segment' [-Wunused-variable]
-o        size_t segment = 1;
-o               ^
-o1 warning generated.
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection58"Compile /Users/gerardsimons/Git/afstuderen/testCluster.cpp210"CompileC build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testCluster.o /Users/gerardsimons/Git/afstuderen/testCluster.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler06f509b6a048b941^8cf668b7a048b941^-430"In file included from /Users/gerardsimons/Git/afstuderen/testCluster.cpp:13:In file included from /Users/gerardsimons/Git/afstuderen/ClusterSet.h:14:In file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../RIVData/Cluster.h:14:/Users/gerardsimons/Git/afstuderen/Afstuderen/../helper.h:35:16: warning: unused variable 'segment' [-Wunused-variable]        size_t segment = 1;               ^1 warning generated.-0#0#1#-19%DVTDocumentLocation2@57"file:///Users/gerardsimons/Git/afstuderen/testCluster.cpp0000000000000000^3131"CompileC build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testCluster.o /Users/gerardsimons/Git/afstuderen/testCluster.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.9 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Afstuderen\ Tests-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Afstuderen\ Tests-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Afstuderen\ Tests-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Afstuderen\ Tests-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testCluster.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testCluster.dia -c /Users/gerardsimons/Git/afstuderen/testCluster.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testCluster.o36"E6EBE596-8051-4EE9-B735-013E5CB9C49B-
-bDF1DF124-1ABC-4BC8-91C5-79ECF696FCEB
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testClusterSet.o /Users/gerardsimons/Git/afstuderen/testClusterSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s424190134.038840
-e424190135.409934
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen Tests.build/Objects-normal/x86_64/testClusterSet.o
-x/Users/gerardsimons/Git/afstuderen/testClusterSet.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/testClusterSet.cpp
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-internal.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-port.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-message.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-string.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-filepath.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-type-util.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-death-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-death-test-internal.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-param-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-linked_ptr.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-printers.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util-generated.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_prod.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-test-part.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-typed-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_pred_impl.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Table.h
-d/Users/gerardsimons/Git/afstuderen/DataView.h
-d/Users/gerardsimons/Git/afstuderen/ColorProperty.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Reference.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
-d/Users/gerardsimons/Git/afstuderen/BMPImage.h
-oIn file included from /Users/gerardsimons/Git/afstuderen/testClusterSet.cpp:15:
-oIn file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../RIVData/Cluster.h:14:
-o/Users/gerardsimons/Git/afstuderen/Afstuderen/../helper.h:35:16: warning: unused variable 'segment' [-Wunused-variable]
-o        size_t segment = 1;
-o               ^
-o1 warning generated.
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection61"Compile /Users/gerardsimons/Git/afstuderen/testClusterSet.cpp216"CompileC build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testClusterSet.o /Users/gerardsimons/Git/afstuderen/testClusterSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilerb70a0ab6a048b941^b1f968b7a048b941^-359"In file included from /Users/gerardsimons/Git/afstuderen/testClusterSet.cpp:15:In file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../RIVData/Cluster.h:14:/Users/gerardsimons/Git/afstuderen/Afstuderen/../helper.h:35:16: warning: unused variable 'segment' [-Wunused-variable]        size_t segment = 1;               ^1 warning generated.-0#0#1#-19%DVTDocumentLocation2@60"file:///Users/gerardsimons/Git/afstuderen/testClusterSet.cpp0000000000000000^3149"CompileC build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testClusterSet.o /Users/gerardsimons/Git/afstuderen/testClusterSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.9 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Afstuderen\ Tests-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Afstuderen\ Tests-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Afstuderen\ Tests-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Afstuderen\ Tests-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testClusterSet.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testClusterSet.dia -c /Users/gerardsimons/Git/afstuderen/testClusterSet.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testClusterSet.o36"F4DDC450-7DFF-4322-8828-D1D5786BB41C-
-bDF1DF124-1ABC-4BC8-91C5-79ECF696FCEB
-
-CCompileC build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testDataSet.o /Users/gerardsimons/Git/afstuderen/Afstuderen/testDataSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
-s424190399.632985
-e424190400.895450
-r1
-xCompileC
-xbuild/Afstuderen.build/Debug/Afstuderen Tests.build/Objects-normal/x86_64/testDataSet.o
-x/Users/gerardsimons/Git/afstuderen/Afstuderen/testDataSet.cpp
-xnormal
-xx86_64
-xc++
-xcom.apple.compilers.llvm.clang.1_0.compiler
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/testDataSet.cpp
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-internal.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-port.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-message.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-string.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-filepath.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-type-util.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-death-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-death-test-internal.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-param-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-linked_ptr.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-printers.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/internal/gtest-param-util-generated.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_prod.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-test-part.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest-typed-test.h
-d/Users/gerardsimons/Documents/Frameworks/GTest/gtest.framework/Headers/gtest_pred_impl.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Table.h
-d/Users/gerardsimons/Git/afstuderen/DataView.h
-d/Users/gerardsimons/Git/afstuderen/Geometry.h
-d/Users/gerardsimons/Git/afstuderen/ColorProperty.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Record.h
-d/Users/gerardsimons/Git/afstuderen/helper.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Filter.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Reference.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Iterator.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/Cluster.h
-d/Users/gerardsimons/Git/afstuderen/ClusterSet.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataSetListener.h
-d/Users/gerardsimons/Git/afstuderen/RIVData/DataFileReader.h
-d/Users/gerardsimons/Git/afstuderen/BMPImage.h
-oIn file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/testDataSet.cpp:21:
-oIn file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../RIVData/DataSet.h:13:
-oIn file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../RIVData/Table.h:18:
-oIn file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../DataView.h:6:
-oIn file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../ColorProperty.h:14:
-o/Users/gerardsimons/Git/afstuderen/Afstuderen/../helper.h:35:16: warning: unused variable 'segment' [-Wunused-variable]
-o        size_t segment = 1;
-o               ^
-o1 warning generated.
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection69"Compile /Users/gerardsimons/Git/afstuderen/Afstuderen/testDataSet.cpp175"CompileC build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testDataSet.o testDataSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler6325a2bfa148b941^323de5c0a148b941^-634"In file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/testDataSet.cpp:21:In file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../RIVData/DataSet.h:13:In file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../RIVData/Table.h:18:In file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../DataView.h:6:In file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../ColorProperty.h:14:/Users/gerardsimons/Git/afstuderen/Afstuderen/../helper.h:35:16: warning: unused variable 'segment' [-Wunused-variable]        size_t segment = 1;               ^1 warning generated.1(36%IDEClangDiagnosticActivityLogMessage2@25"Unused variable 'segment'-424190400#18446744073709551615#0#5(2@87"In file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/testDataSet.cpp:21:-424190400#18446744073709551615#0#-0#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@68"file:///Users/gerardsimons/Git/afstuderen/Afstuderen/testDataSet.cpp0000000000000000^20#9#20#9#367#0#21"Apple LLVM 5.0 Notice--2@92"In file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../RIVData/DataSet.h:13:-424190400#18446744073709551615#0#-0#27"com.apple.dt.IDE.diagnostic3@59"file:///Users/gerardsimons/Git/afstuderen/RIVData/DataSet.h0000000000000000^12#9#12#9#232#0#21"Apple LLVM 5.0 Notice--2@90"In file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../RIVData/Table.h:18:-424190400#18446744073709551615#0#-0#27"com.apple.dt.IDE.diagnostic3@57"file:///Users/gerardsimons/Git/afstuderen/RIVData/Table.h0000000000000000^17#9#17#9#280#0#21"Apple LLVM 5.0 Notice--2@84"In file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../DataView.h:6:-424190400#18446744073709551615#0#-0#27"com.apple.dt.IDE.diagnostic3@52"file:///Users/gerardsimons/Git/afstuderen/DataView.h0000000000000000^5#9#5#9#91#0#21"Apple LLVM 5.0 Notice--2@90"In file included from /Users/gerardsimons/Git/afstuderen/Afstuderen/../ColorProperty.h:14:-424190400#18446744073709551615#0#-0#27"com.apple.dt.IDE.diagnostic3@57"file:///Users/gerardsimons/Git/afstuderen/ColorProperty.h0000000000000000^13#9#13#9#271#0#21"Apple LLVM 5.0 Notice--1#27"com.apple.dt.IDE.diagnostic3@50"file:///Users/gerardsimons/Git/afstuderen/helper.h0000000000000000^34#15#34#15#773#0#19"Unused Entity Issue--0#0#1#-19%DVTDocumentLocation4@68"file:///Users/gerardsimons/Git/afstuderen/Afstuderen/testDataSet.cpp0000000000000000^3107"CompileC build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testDataSet.o testDataSet.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -DDEBUG=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.9 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Afstuderen\ Tests-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Afstuderen\ Tests-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Afstuderen\ Tests-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Afstuderen\ Tests-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testDataSet.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testDataSet.dia -c /Users/gerardsimons/Git/afstuderen/Afstuderen/testDataSet.cpp -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/testDataSet.o36"4099C108-2138-4BAB-9076-2A6246FAF05B-
-b947C43C1-2477-4C6E-B175-B5C248E0E62E
-
-CLd /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen\ Tests normal x86_64
-s424190400.896120
-e424190400.988515
-r0
-xLd
-x/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen Tests
-xnormal
-xx86_64
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen Tests.build/Objects-normal/x86_64/Afstuderen Tests.LinkFileList
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen Tests.build/Objects-normal/x86_64/testCluster.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen Tests.build/Objects-normal/x86_64/testClusterSet.o
-d/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen Tests.build/Objects-normal/x86_64/testDataSet.o
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libc++.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libSystem.dylib
-d/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/5.1/lib/darwin/libclang_rt.osx.a
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcache.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcommonCrypto.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcompiler_rt.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcopyfile.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcorecrypto.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libdispatch.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libdyld.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libkeymgr.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/liblaunch.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libmacho.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libquarantine.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libremovefile.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_asl.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_blocks.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_c.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_configuration.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_dnssd.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_info.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_kernel.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_m.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_malloc.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_network.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_notify.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_platform.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_pthread.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_sandbox.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_stats.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libunc.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libunwind.dylib
-d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libxpc.dylib
-oUndefined symbols for architecture x86_64:
-o  "RIVDataSet::AddTable(RIVTable*)", referenced from:
-o      (anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o
-o  "RIVClusterSet::Initialize(std::__1::vector<unsigned long, std::__1::allocator<unsigned long> >)", referenced from:
-o      (anonymous namespace)::ClusterSetTest::SetUp() in testClusterSet.o
-o  "RIVClusterSet::GetClusters()", referenced from:
-o      (anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o
-o  "RIVClusterSet::MakeCluster(unsigned long const&, unsigned long const&, std::__1::vector<float, std::__1::allocator<float> >*, std::__1::vector<float, std::__1::allocator<float> >*, std::__1::vector<float, std::__1::allocator<float> >*)", referenced from:
-o      (anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o
-o  "RIVClusterSet::AssignMembers()", referenced from:
-o      (anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o
-o  "RIVClusterSet::TotalCost()", referenced from:
-o      (anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o
-o  "RIVClusterSet::RIVClusterSet(unsigned long const&, std::__1::vector<float, std::__1::allocator<float> >*, std::__1::vector<float, std::__1::allocator<float> >*, std::__1::vector<float, std::__1::allocator<float> >*)", referenced from:
-o      (anonymous namespace)::ClusterSetTest::SetUp() in testClusterSet.o
-o  "RIVClusterSet::~RIVClusterSet()", referenced from:
-o      (anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o
-o  "testing::AssertionSuccess()", referenced from:
-o      testing::AssertionResult testing::internal::CmpHelperEQ<unsigned long, int>(char const*, char const*, unsigned long const&, int const&) in testCluster.o
-o      testing::AssertionResult testing::internal::CmpHelperEQ<float, float>(char const*, char const*, float const&, float const&) in testCluster.o
-o      testing::AssertionResult testing::internal::CmpHelperEQ<unsigned long, unsigned long>(char const*, char const*, unsigned long const&, unsigned long const&) in testCluster.o
-o      testing::AssertionResult testing::internal::CmpHelperEQ<int, unsigned long>(char const*, char const*, int const&, unsigned long const&) in testCluster.o
-o      testing::AssertionResult testing::internal::CmpHelperEQ<float, double>(char const*, char const*, float const&, double const&) in testClusterSet.o
-o      testing::AssertionResult testing::internal::CmpHelperEQ<bool, bool>(char const*, char const*, bool const&, bool const&) in testClusterSet.o
-o      testing::AssertionResult testing::internal::CmpHelperEQ<int, unsigned long>(char const*, char const*, int const&, unsigned long const&) in testClusterSet.o
-o      ...
-o  "testing::Test::TearDown()", referenced from:
-o      vtable for (anonymous namespace)::ClusterSetTest_Cluster_Test in testClusterSet.o
-o      vtable for (anonymous namespace)::ClusterSetTest in testClusterSet.o
-o      vtable for (anonymous namespace)::ClusterSetTest_Initialization_Test in testClusterSet.o
-o  "testing::Test::Test()", referenced from:
-o      (anonymous namespace)::ClusterTest::ClusterTest() in testCluster.o
-o      (anonymous namespace)::ClusterSetTest::ClusterSetTest() in testClusterSet.o
-o      (anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o
-o  "testing::Test::~Test()", referenced from:
-o      (anonymous namespace)::ClusterTest::~ClusterTest() in testCluster.o
-o      (anonymous namespace)::ClusterSetTest::~ClusterSetTest() in testClusterSet.o
-o      (anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o
-o      (anonymous namespace)::DataSetTest::~DataSetTest() in testDataSet.o
-o  "testing::Message::Message()", referenced from:
-o      (anonymous namespace)::ClusterTest_Optimize_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterTest_Cost_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterTest_SwapMedoid_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterTest_Initialization_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o
-o      (anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o
-o      (anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o
-o      ...
-o  "testing::internal::AssertHelper::AssertHelper(testing::TestPartResult::Type, char const*, int, char const*)", referenced from:
-o      (anonymous namespace)::ClusterTest_Optimize_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterTest_Cost_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterTest_SwapMedoid_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterTest_Initialization_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o
-o      (anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o
-o      (anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o
-o      ...
-o  "testing::internal::AssertHelper::~AssertHelper()", referenced from:
-o      (anonymous namespace)::ClusterTest_Optimize_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterTest_Cost_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterTest_SwapMedoid_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterTest_Initialization_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o
-o      (anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o
-o      (anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o
-o      ...
-o  "testing::internal::MakeAndRegisterTestInfo(char const*, char const*, char const*, char const*, void const*, void (*)(), void (*)(), testing::internal::TestFactoryBase*)", referenced from:
-o      ___cxx_global_var_init in testCluster.o
-o      ___cxx_global_var_init2 in testCluster.o
-o      ___cxx_global_var_init4 in testCluster.o
-o      ___cxx_global_var_init6 in testCluster.o
-o      ___cxx_global_var_init in testClusterSet.o
-o      ___cxx_global_var_init2 in testClusterSet.o
-o      ___cxx_global_var_init in testDataSet.o
-o      ...
-o  "testing::internal::IsTrue(bool)", referenced from:
-o      testing::internal::scoped_ptr<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testCluster.o
-o      testing::internal::scoped_ptr<std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testCluster.o
-o      testing::internal::scoped_ptr<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testClusterSet.o
-o      testing::internal::scoped_ptr<std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testClusterSet.o
-o      testing::internal::scoped_ptr<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testDataSet.o
-o      testing::internal::scoped_ptr<std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testDataSet.o
-o  "testing::internal::EqFailure(char const*, char const*, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, bool)", referenced from:
-o      testing::AssertionResult testing::internal::CmpHelperEQ<unsigned long, int>(char const*, char const*, unsigned long const&, int const&) in testCluster.o
-o      testing::AssertionResult testing::internal::CmpHelperEQ<float, float>(char const*, char const*, float const&, float const&) in testCluster.o
-o      testing::AssertionResult testing::internal::CmpHelperEQ<unsigned long, unsigned long>(char const*, char const*, unsigned long const&, unsigned long const&) in testCluster.o
-o      testing::AssertionResult testing::internal::CmpHelperEQ<int, unsigned long>(char const*, char const*, int const&, unsigned long const&) in testCluster.o
-o      testing::AssertionResult testing::internal::CmpHelperEQ<float, double>(char const*, char const*, float const&, double const&) in testClusterSet.o
-o      testing::AssertionResult testing::internal::CmpHelperEQ<bool, bool>(char const*, char const*, bool const&, bool const&) in testClusterSet.o
-o      testing::AssertionResult testing::internal::CmpHelperEQ<int, unsigned long>(char const*, char const*, int const&, unsigned long const&) in testClusterSet.o
-o      ...
-o  "RIVTable::AddRecord(RIVRecord*)", referenced from:
-o      (anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o
-o  "RIVTable::RIVTable(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >)", referenced from:
-o      (anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o
-o  "RIVDataSet::NumberOfTables() const", referenced from:
-o      (anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o
-o  "testing::internal::AssertHelper::operator=(testing::Message const&) const", referenced from:
-o      (anonymous namespace)::ClusterTest_Optimize_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterTest_Cost_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterTest_SwapMedoid_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterTest_Initialization_Test::TestBody() in testCluster.o
-o      (anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o
-o      (anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o
-o      (anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o
-o      ...
-o  "typeinfo for testing::Test", referenced from:
-o      typeinfo for (anonymous namespace)::ClusterTest in testCluster.o
-o      typeinfo for (anonymous namespace)::ClusterSetTest in testClusterSet.o
-o      typeinfo for (anonymous namespace)::DataSetTest in testDataSet.o
-o  "_main", referenced from:
-o     implicit entry/start for main executable
-old: symbol(s) not found for architecture x86_64
-oclang: error: linker command failed with exit code 1 (use -v to see invocation)
-lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection79"Link /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen Tests46"Ld build/Debug/Afstuderen\ Tests normal x86_648274e5c0a148b941^8010fdc0a148b941^-10879"Undefined symbols for architecture x86_64:  "RIVDataSet::AddTable(RIVTable*)", referenced from:      (anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o  "RIVClusterSet::Initialize(std::__1::vector<unsigned long, std::__1::allocator<unsigned long> >)", referenced from:      (anonymous namespace)::ClusterSetTest::SetUp() in testClusterSet.o  "RIVClusterSet::GetClusters()", referenced from:      (anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o  "RIVClusterSet::MakeCluster(unsigned long const&, unsigned long const&, std::__1::vector<float, std::__1::allocator<float> >*, std::__1::vector<float, std::__1::allocator<float> >*, std::__1::vector<float, std::__1::allocator<float> >*)", referenced from:      (anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o  "RIVClusterSet::AssignMembers()", referenced from:      (anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o  "RIVClusterSet::TotalCost()", referenced from:      (anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o  "RIVClusterSet::RIVClusterSet(unsigned long const&, std::__1::vector<float, std::__1::allocator<float> >*, std::__1::vector<float, std::__1::allocator<float> >*, std::__1::vector<float, std::__1::allocator<float> >*)", referenced from:      (anonymous namespace)::ClusterSetTest::SetUp() in testClusterSet.o  "RIVClusterSet::~RIVClusterSet()", referenced from:      (anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o  "testing::AssertionSuccess()", referenced from:      testing::AssertionResult testing::internal::CmpHelperEQ<unsigned long, int>(char const*, char const*, unsigned long const&, int const&) in testCluster.o      testing::AssertionResult testing::internal::CmpHelperEQ<float, float>(char const*, char const*, float const&, float const&) in testCluster.o      testing::AssertionResult testing::internal::CmpHelperEQ<unsigned long, unsigned long>(char const*, char const*, unsigned long const&, unsigned long const&) in testCluster.o      testing::AssertionResult testing::internal::CmpHelperEQ<int, unsigned long>(char const*, char const*, int const&, unsigned long const&) in testCluster.o      testing::AssertionResult testing::internal::CmpHelperEQ<float, double>(char const*, char const*, float const&, double const&) in testClusterSet.o      testing::AssertionResult testing::internal::CmpHelperEQ<bool, bool>(char const*, char const*, bool const&, bool const&) in testClusterSet.o      testing::AssertionResult testing::internal::CmpHelperEQ<int, unsigned long>(char const*, char const*, int const&, unsigned long const&) in testClusterSet.o      ...  "testing::Test::TearDown()", referenced from:      vtable for (anonymous namespace)::ClusterSetTest_Cluster_Test in testClusterSet.o      vtable for (anonymous namespace)::ClusterSetTest in testClusterSet.o      vtable for (anonymous namespace)::ClusterSetTest_Initialization_Test in testClusterSet.o  "testing::Test::Test()", referenced from:      (anonymous namespace)::ClusterTest::ClusterTest() in testCluster.o      (anonymous namespace)::ClusterSetTest::ClusterSetTest() in testClusterSet.o      (anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o  "testing::Test::~Test()", referenced from:      (anonymous namespace)::ClusterTest::~ClusterTest() in testCluster.o      (anonymous namespace)::ClusterSetTest::~ClusterSetTest() in testClusterSet.o      (anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o      (anonymous namespace)::DataSetTest::~DataSetTest() in testDataSet.o  "testing::Message::Message()", referenced from:      (anonymous namespace)::ClusterTest_Optimize_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterTest_Cost_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterTest_SwapMedoid_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterTest_Initialization_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o      (anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o      (anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o      ...  "testing::internal::AssertHelper::AssertHelper(testing::TestPartResult::Type, char const*, int, char const*)", referenced from:      (anonymous namespace)::ClusterTest_Optimize_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterTest_Cost_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterTest_SwapMedoid_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterTest_Initialization_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o      (anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o      (anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o      ...  "testing::internal::AssertHelper::~AssertHelper()", referenced from:      (anonymous namespace)::ClusterTest_Optimize_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterTest_Cost_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterTest_SwapMedoid_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterTest_Initialization_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o      (anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o      (anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o      ...  "testing::internal::MakeAndRegisterTestInfo(char const*, char const*, char const*, char const*, void const*, void (*)(), void (*)(), testing::internal::TestFactoryBase*)", referenced from:      ___cxx_global_var_init in testCluster.o      ___cxx_global_var_init2 in testCluster.o      ___cxx_global_var_init4 in testCluster.o      ___cxx_global_var_init6 in testCluster.o      ___cxx_global_var_init in testClusterSet.o      ___cxx_global_var_init2 in testClusterSet.o      ___cxx_global_var_init in testDataSet.o      ...  "testing::internal::IsTrue(bool)", referenced from:      testing::internal::scoped_ptr<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testCluster.o      testing::internal::scoped_ptr<std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testCluster.o      testing::internal::scoped_ptr<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testClusterSet.o      testing::internal::scoped_ptr<std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testClusterSet.o      testing::internal::scoped_ptr<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testDataSet.o      testing::internal::scoped_ptr<std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testDataSet.o  "testing::internal::EqFailure(char const*, char const*, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, bool)", referenced from:      testing::AssertionResult testing::internal::CmpHelperEQ<unsigned long, int>(char const*, char const*, unsigned long const&, int const&) in testCluster.o      testing::AssertionResult testing::internal::CmpHelperEQ<float, float>(char const*, char const*, float const&, float const&) in testCluster.o      testing::AssertionResult testing::internal::CmpHelperEQ<unsigned long, unsigned long>(char const*, char const*, unsigned long const&, unsigned long const&) in testCluster.o      testing::AssertionResult testing::internal::CmpHelperEQ<int, unsigned long>(char const*, char const*, int const&, unsigned long const&) in testCluster.o      testing::AssertionResult testing::internal::CmpHelperEQ<float, double>(char const*, char const*, float const&, double const&) in testClusterSet.o      testing::AssertionResult testing::internal::CmpHelperEQ<bool, bool>(char const*, char const*, bool const&, bool const&) in testClusterSet.o      testing::AssertionResult testing::internal::CmpHelperEQ<int, unsigned long>(char const*, char const*, int const&, unsigned long const&) in testClusterSet.o      ...  "RIVTable::AddRecord(RIVRecord*)", referenced from:      (anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o  "RIVTable::RIVTable(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >)", referenced from:      (anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o  "RIVDataSet::NumberOfTables() const", referenced from:      (anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o  "testing::internal::AssertHelper::operator=(testing::Message const&) const", referenced from:      (anonymous namespace)::ClusterTest_Optimize_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterTest_Cost_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterTest_SwapMedoid_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterTest_Initialization_Test::TestBody() in testCluster.o      (anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o      (anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o      (anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o      ...  "typeinfo for testing::Test", referenced from:      typeinfo for (anonymous namespace)::ClusterTest in testCluster.o      typeinfo for (anonymous namespace)::ClusterSetTest in testClusterSet.o      typeinfo for (anonymous namespace)::DataSetTest in testDataSet.o  "_main", referenced from:     implicit entry/start for main executableld: symbol(s) not found for architecture x86_64clang: error: linker command failed with exit code 1 (use -v to see invocation)113(21%IDEActivityLogMessage2@51""RIVDataSet::AddTable(RIVTable*)", referenced from:-424190400#43#54#-2#-23%DVTTextDocumentLocation3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@66"(anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o-424190400#97#73#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@115""RIVClusterSet::Initialize(std::__1::vector<unsigned long, std::__1::allocator<unsigned long> >)", referenced from:-424190400#170#118#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@66"(anonymous namespace)::ClusterSetTest::SetUp() in testClusterSet.o-424190400#288#73#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@48""RIVClusterSet::GetClusters()", referenced from:-424190400#361#51#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@89"(anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o-424190400#412#96#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@255""RIVClusterSet::MakeCluster(unsigned long const&, unsigned long const&, std::__1::vector<float, std::__1::allocator<float> >*, std::__1::vector<float, std::__1::allocator<float> >*, std::__1::vector<float, std::__1::allocator<float> >*)", referenced from:-424190400#508#258#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@82"(anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o-424190400#766#89#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@50""RIVClusterSet::AssignMembers()", referenced from:-424190400#855#53#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@89"(anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o-424190400#908#96#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@46""RIVClusterSet::TotalCost()", referenced from:-424190400#1004#49#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@82"(anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o-424190400#1053#89#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@235""RIVClusterSet::RIVClusterSet(unsigned long const&, std::__1::vector<float, std::__1::allocator<float> >*, std::__1::vector<float, std::__1::allocator<float> >*, std::__1::vector<float, std::__1::allocator<float> >*)", referenced from:-424190400#1142#238#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@66"(anonymous namespace)::ClusterSetTest::SetUp() in testClusterSet.o-424190400#1380#73#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@51""RIVClusterSet::~RIVClusterSet()", referenced from:-424190400#1453#54#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@82"(anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o-424190400#1507#89#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@47""testing::AssertionSuccess()", referenced from:-424190400#1596#50#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@152"Testing::AssertionResult testing::internal::CmpHelperEQ<unsigned long, int>(char const*, char const*, unsigned long const&, int const&) in testCluster.o-424190400#1646#159#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@140"Testing::AssertionResult testing::internal::CmpHelperEQ<float, float>(char const*, char const*, float const&, float const&) in testCluster.o-424190400#1805#147#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@172"Testing::AssertionResult testing::internal::CmpHelperEQ<unsigned long, unsigned long>(char const*, char const*, unsigned long const&, unsigned long const&) in testCluster.o-424190400#1952#179#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@152"Testing::AssertionResult testing::internal::CmpHelperEQ<int, unsigned long>(char const*, char const*, int const&, unsigned long const&) in testCluster.o-424190400#2131#159#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@145"Testing::AssertionResult testing::internal::CmpHelperEQ<float, double>(char const*, char const*, float const&, double const&) in testClusterSet.o-424190400#2290#152#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@139"Testing::AssertionResult testing::internal::CmpHelperEQ<bool, bool>(char const*, char const*, bool const&, bool const&) in testClusterSet.o-424190400#2442#146#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@155"Testing::AssertionResult testing::internal::CmpHelperEQ<int, unsigned long>(char const*, char const*, int const&, unsigned long const&) in testClusterSet.o-424190400#2588#162#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@3"...-424190400#2750#10#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@45""testing::Test::TearDown()", referenced from:-424190400#2760#48#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@81"Vtable for (anonymous namespace)::ClusterSetTest_Cluster_Test in testClusterSet.o-424190400#2808#88#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@68"Vtable for (anonymous namespace)::ClusterSetTest in testClusterSet.o-424190400#2896#75#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@88"Vtable for (anonymous namespace)::ClusterSetTest_Initialization_Test in testClusterSet.o-424190400#2971#95#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@41""testing::Test::Test()", referenced from:-424190400#3066#44#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@66"(anonymous namespace)::ClusterTest::ClusterTest() in testCluster.o-424190400#3110#73#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@75"(anonymous namespace)::ClusterSetTest::ClusterSetTest() in testClusterSet.o-424190400#3183#82#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@66"(anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o-424190400#3265#73#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@42""testing::Test::~Test()", referenced from:-424190400#3338#45#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@67"(anonymous namespace)::ClusterTest::~ClusterTest() in testCluster.o-424190400#3383#74#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@76"(anonymous namespace)::ClusterSetTest::~ClusterSetTest() in testClusterSet.o-424190400#3457#83#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@66"(anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o-424190400#3540#73#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@67"(anonymous namespace)::DataSetTest::~DataSetTest() in testDataSet.o-424190400#3613#74#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@47""testing::Message::Message()", referenced from:-424190400#3687#50#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@77"(anonymous namespace)::ClusterTest_Optimize_Test::TestBody() in testCluster.o-424190400#3737#84#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@73"(anonymous namespace)::ClusterTest_Cost_Test::TestBody() in testCluster.o-424190400#3821#80#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@79"(anonymous namespace)::ClusterTest_SwapMedoid_Test::TestBody() in testCluster.o-424190400#3901#86#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@83"(anonymous namespace)::ClusterTest_Initialization_Test::TestBody() in testCluster.o-424190400#3987#90#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@82"(anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o-424190400#4077#89#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@89"(anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o-424190400#4166#96#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@77"(anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o-424190400#4262#84#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@3"...-424190400#4346#10#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@127""testing::internal::AssertHelper::AssertHelper(testing::TestPartResult::Type, char const*, int, char const*)", referenced from:-424190400#4356#130#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@77"(anonymous namespace)::ClusterTest_Optimize_Test::TestBody() in testCluster.o-424190400#4486#84#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@73"(anonymous namespace)::ClusterTest_Cost_Test::TestBody() in testCluster.o-424190400#4570#80#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@79"(anonymous namespace)::ClusterTest_SwapMedoid_Test::TestBody() in testCluster.o-424190400#4650#86#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@83"(anonymous namespace)::ClusterTest_Initialization_Test::TestBody() in testCluster.o-424190400#4736#90#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@82"(anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o-424190400#4826#89#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@89"(anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o-424190400#4915#96#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@77"(anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o-424190400#5011#84#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@3"...-424190400#5095#10#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@68""testing::internal::AssertHelper::~AssertHelper()", referenced from:-424190400#5105#71#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@77"(anonymous namespace)::ClusterTest_Optimize_Test::TestBody() in testCluster.o-424190400#5176#84#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@73"(anonymous namespace)::ClusterTest_Cost_Test::TestBody() in testCluster.o-424190400#5260#80#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@79"(anonymous namespace)::ClusterTest_SwapMedoid_Test::TestBody() in testCluster.o-424190400#5340#86#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@83"(anonymous namespace)::ClusterTest_Initialization_Test::TestBody() in testCluster.o-424190400#5426#90#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@82"(anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o-424190400#5516#89#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@89"(anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o-424190400#5605#96#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@77"(anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o-424190400#5701#84#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@3"...-424190400#5785#10#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@188""testing::internal::MakeAndRegisterTestInfo(char const*, char const*, char const*, char const*, void const*, void (*)(), void (*)(), testing::internal::TestFactoryBase*)", referenced from:-424190400#5795#191#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@39"___cxx_global_var_init in testCluster.o-424190400#5986#46#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@40"___cxx_global_var_init2 in testCluster.o-424190400#6032#47#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@40"___cxx_global_var_init4 in testCluster.o-424190400#6079#47#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@40"___cxx_global_var_init6 in testCluster.o-424190400#6126#47#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@42"___cxx_global_var_init in testClusterSet.o-424190400#6173#49#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@43"___cxx_global_var_init2 in testClusterSet.o-424190400#6222#50#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@39"___cxx_global_var_init in testDataSet.o-424190400#6272#46#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@3"...-424190400#6318#10#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@51""testing::internal::IsTrue(bool)", referenced from:-424190400#6328#54#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@229"Testing::internal::scoped_ptr<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testCluster.o-424190400#6382#236#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@241"Testing::internal::scoped_ptr<std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testCluster.o-424190400#6618#248#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@232"Testing::internal::scoped_ptr<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testClusterSet.o-424190400#6866#239#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@244"Testing::internal::scoped_ptr<std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testClusterSet.o-424190400#7105#251#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@229"Testing::internal::scoped_ptr<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testDataSet.o-424190400#7356#236#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@241"Testing::internal::scoped_ptr<std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> > >::reset(std::__1::basic_stringstream<char, std::__1::char_traits<char>, std::__1::allocator<char> >*) in testDataSet.o-424190400#7592#248#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@268""testing::internal::EqFailure(char const*, char const*, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, bool)", referenced from:-424190400#7840#271#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@152"Testing::AssertionResult testing::internal::CmpHelperEQ<unsigned long, int>(char const*, char const*, unsigned long const&, int const&) in testCluster.o-424190400#8111#159#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@140"Testing::AssertionResult testing::internal::CmpHelperEQ<float, float>(char const*, char const*, float const&, float const&) in testCluster.o-424190400#8270#147#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@172"Testing::AssertionResult testing::internal::CmpHelperEQ<unsigned long, unsigned long>(char const*, char const*, unsigned long const&, unsigned long const&) in testCluster.o-424190400#8417#179#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@152"Testing::AssertionResult testing::internal::CmpHelperEQ<int, unsigned long>(char const*, char const*, int const&, unsigned long const&) in testCluster.o-424190400#8596#159#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@145"Testing::AssertionResult testing::internal::CmpHelperEQ<float, double>(char const*, char const*, float const&, double const&) in testClusterSet.o-424190400#8755#152#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@139"Testing::AssertionResult testing::internal::CmpHelperEQ<bool, bool>(char const*, char const*, bool const&, bool const&) in testClusterSet.o-424190400#8907#146#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@155"Testing::AssertionResult testing::internal::CmpHelperEQ<int, unsigned long>(char const*, char const*, int const&, unsigned long const&) in testClusterSet.o-424190400#9053#162#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@3"...-424190400#9215#10#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@51""RIVTable::AddRecord(RIVRecord*)", referenced from:-424190400#9225#54#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@66"(anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o-424190400#9279#73#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@125""RIVTable::RIVTable(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >)", referenced from:-424190400#9352#128#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@66"(anonymous namespace)::DataSetTest::DataSetTest() in testDataSet.o-424190400#9480#73#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@54""RIVDataSet::NumberOfTables() const", referenced from:-424190400#9553#57#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@77"(anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o-424190400#9610#84#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@93""testing::internal::AssertHelper::operator=(testing::Message const&) const", referenced from:-424190400#9694#96#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@77"(anonymous namespace)::ClusterTest_Optimize_Test::TestBody() in testCluster.o-424190400#9790#84#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@73"(anonymous namespace)::ClusterTest_Cost_Test::TestBody() in testCluster.o-424190400#9874#80#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@79"(anonymous namespace)::ClusterTest_SwapMedoid_Test::TestBody() in testCluster.o-424190400#9954#86#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@83"(anonymous namespace)::ClusterTest_Initialization_Test::TestBody() in testCluster.o-424190400#10040#90#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@82"(anonymous namespace)::ClusterSetTest_Cluster_Test::TestBody() in testClusterSet.o-424190400#10130#89#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@89"(anonymous namespace)::ClusterSetTest_Initialization_Test::TestBody() in testClusterSet.o-424190400#10219#96#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@77"(anonymous namespace)::DataSetTest_TestInit_Test::TestBody() in testDataSet.o-424190400#10315#84#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@3"...-424190400#10399#10#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@46""typeinfo for testing::Test", referenced from:-424190400#10409#49#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@64"Typeinfo for (anonymous namespace)::ClusterTest in testCluster.o-424190400#10458#71#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@70"Typeinfo for (anonymous namespace)::ClusterSetTest in testClusterSet.o-424190400#10529#77#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@64"Typeinfo for (anonymous namespace)::DataSetTest in testDataSet.o-424190400#10606#71#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@25""_main", referenced from:-424190400#10677#28#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--2@40"Implicit entry/start for main executable-424190400#10705#46#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@43"Symbol(s) not found for architecture x86_64-424190400#10751#48#-0#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@65"Linker command failed with exit code 1 (use -v to see invocation)-424190400#10799#80#-2#-3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#30"Apple Mach-O Linker (ld) Error--0#0#1#--1007"Ld build/Debug/Afstuderen\ Tests normal x86_64    cd /Users/gerardsimons/Git/afstuderen/Afstuderen    export MACOSX_DEPLOYMENT_TARGET=10.9    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -L/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug -F/Users/gerardsimons/Documents/Frameworks/GTest -filelist /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/Afstuderen\ Tests.LinkFileList -mmacosx-version-min=10.9 -stdlib=libc++ -Xlinker -dependency_info -Xlinker /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Afstuderen.build/Debug/Afstuderen\ Tests.build/Objects-normal/x86_64/Afstuderen\ Tests_dependency_info.dat -o /Users/gerardsimons/Git/afstuderen/Afstuderen/build/Debug/Afstuderen\ Tests36"FC20AD06-C92B-4451-BB22-7F534C7747D8-
-b947C43C1-2477-4C6E-B175-B5C248E0E62E
-
