@@ -145,6 +145,11 @@ void RIV3DView::ToggleDrawClusterMembers() {
     isDirty = true;
 }
 
+//Test function to draw a simple octree
+void RIV3DView::drawOctree() {
+	
+}
+
 void RIV3DView::Draw() {
 //    printf("3DView Draw!\n");
 	
@@ -198,34 +203,6 @@ void RIV3DView::Draw() {
     gluSphere(quadric, 5, 5, 5);
     glPopMatrix();
 
-//    glTranslatef(-modelCenter.x, -modelCenter.y, -modelCenter.z);
-//    gluSphere(quadric, .1F, 2, 2);
-    
-//    std::string drawTask = "3D View Drawing";
-//    reporter::startTask(drawTask);
-//    printf("\n");
-	glPointSize(pointsSize[0]);
-	
-//    for(size_t i = 0 ; i < pointsX.size() ; ++i) {
-//        glPushMatrix();
-//        glTranslatef(pointsX[i], pointsY[i], pointsZ[i]);
-////        printf("Draw point (%f,%f,%f)\n",pointsX[i],pointsY[i],pointsZ[i]);
-//        glScalef(1/modelData.GetScale(), 1/modelData.GetScale(), 1/modelData.GetScale());
-//        if(drawClusterMembers) { //also draw the cluster members
-//            //                glColor4f(color[0],color[1],color[2],.5F);
-//
-//            //                    printf("\Member sphere size = %f\n",size);
-////            gluSphere(quadric, 5, 2, 2);
-//            glColor3f(pointsR[i], pointsG[i], pointsB[i]);
-//
-//            glBegin(GL_POINTS);
-//            glVertex3f(0, 0, 0);
-//            glEnd();
-//        }
-//        glPopMatrix();
-//    }
-//
-	
 	RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("intersection X");
 	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
 	RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Z");
@@ -241,7 +218,10 @@ void RIV3DView::Draw() {
 	if(isectTable != NULL) {
 		TableIterator* iterator = isectTable->GetIterator();
 		size_t row;
+		glBegin(GL_POINTS);
 		while(iterator->GetNext(row)) {
+			
+//			float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
 			
 			if(!sizesAllTheSame) {
 				glPointSize(pointsSize[row]);
@@ -251,18 +231,15 @@ void RIV3DView::Draw() {
 			float y = yRecord->Value(row);
 			float z = zRecord->Value(row);
 			
-//			float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
-			
 			glPushMatrix();
 //			glTranslatef(x,y,z);
 			
             glColor3f(pointsR[row], pointsG[row], pointsB[row]);
 			
-            glBegin(GL_POINTS);
             glVertex3f(x,y,z);
-            glEnd();
 
 		}
+		glEnd();
 	}
 	
     
@@ -270,13 +247,29 @@ void RIV3DView::Draw() {
     glPopMatrix();
     
     //Draw some lines
-//    drawPaths(segmentStart,segmentStop);
+    drawPaths(segmentStart,segmentStop);
     
     glFlush();
     
     glutSwapBuffers();
 	
 	reporter::stop("3D Draw");
+}
+
+void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize) {
+	size_t row;
+	
+	RIVTable* isectTable = dataset->GetTable("intersections");
+	TableIterator *iterator = isectTable->GetIterator();
+	
+	//Generate the index subset
+	std::vector<size_t> indices;
+	
+	while(iterator->GetNext(row)) {
+		indices.push_back(row);
+	}
+	
+	
 }
 
 void RIV3DView::createPoints() {
@@ -295,14 +288,16 @@ void RIV3DView::createPoints() {
     TableIterator *iterator = isectTable->GetIterator();
     
     size_t row = 0;
-    RIVCluster* cluster = NULL;
-    RIVClusterSet* clusterSet = NULL; //The cluster set the cluster belongs to
 	
 	sizesAllTheSame = true;
     
-    while(iterator->GetNext(row,cluster,clusterSet,true)) {
+    while(iterator->GetNext(row)) {
         float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
-        
+		
+		printf("Computed color for point : ");
+        printArray(color, 3);
+		printf("\n");
+		
         if(color != NULL) {
             
 			float size = sizeProperty->ComputeSize(isectTable, row);

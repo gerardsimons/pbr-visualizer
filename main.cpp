@@ -16,13 +16,15 @@
 //#include "UIView.h" //
 #include "HeatMapView.h"
 
+#include "Octree.h"
+
 #if defined(__APPLE__)
 #include <GLUT/glut.h>
 #else
 #include <GL/glut.h>
 #endif
 
-const float DEG2RAD = 3.14159/180;
+//const float DEG2RAD = 3.14159/180;
 
 /* window width and height */
 int width = 1600;
@@ -323,7 +325,8 @@ void createViews() {
         glutMotionFunc(RIVImageView::Motion);
         glutSpecialFunc(keys);
         //
-        sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + squareSize * 2, bottomHalfY, squareSize, squareSize);
+//        sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + squareSize * 2, bottomHalfY, squareSize, squareSize);
+		        sceneViewWindow = glutCreateSubWindow(mainWindow, 0,0,0,0);
         glutSetWindow(sceneViewWindow);
         glutDisplayFunc(RIV3DView::DrawInstance);
 //        glutDisplayFunc(idle);
@@ -453,6 +456,10 @@ void clusterAndColor() {
 int main(int argc, char **argv)
 {
     generatePaths(argc, argv);
+	
+//	if(!Octree::Test()) {
+//		return 0;
+//	}
     
     srand(time(NULL));
     /* initialize GLUT, let it extract command-line

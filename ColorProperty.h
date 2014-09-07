@@ -113,7 +113,7 @@ public:
 //        }
 //        else return NULL;
         float value; //Assuming this value will be between 0 and 1
-        float color[3] = {1,0,0}; //Red
+        float color[3] = {0,1,0}; //Red
         if(RIVEvaluatedProperty<T>::Value(sourceTable,row,value))  {
 //            printf("Color value = %f\n",value);
             if(sourceTable->GetName() == "intersections" && value == 1.F) {

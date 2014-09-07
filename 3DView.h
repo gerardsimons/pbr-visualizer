@@ -11,6 +11,7 @@
 
 #include "DataView.h"
 #include "MeshModel.h"
+#include "Octree.h"
 #include <limits>
 
 class RIV3DView : public RIVDataView, public RIVDataSetListener {
@@ -22,6 +23,9 @@ private:
     bool isDirty = true;
     //Whether to draw the members of clusters, or only the cluster medoid
     bool drawClusterMembers = true;
+	
+	//Octree generated from 3D points (generated in createPoints)
+	Octree* tree = NULL;
     
     //Path drawing variables
     int maxBounce = 5; //TODO: Deduce this value from the bounce record
@@ -52,8 +56,12 @@ private:
     
     //Create graphics buffer from unfiltered data rows
     void createPoints();
-//    void drawPaths(); //Draw the paths between two consecutive bounces
+	//Generate a octree from the unfiltered intersection points
+	void generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize);
+	
     void drawPaths(float startSegment, float stopSegment); //Draw the paths between two consecutive bounces
+	//Draw octree representation of the generated points
+	void drawOctree();
     
     static RIV3DView* instance;
     Point3D screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
