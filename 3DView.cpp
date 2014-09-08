@@ -68,14 +68,9 @@ void RIV3DView::Reshape(int newWidth, int newHeight) {
     width = newWidth;
     this->height = newHeight;
     
-//    eye.x = 0.F;
-//    eye.y = 0.F;
-//    eye.z = 4.F;
-    
-//    Translate -278.000000 -273.000000 500.000000
     eye.x = 0;
     eye.y = 0;
-    eye.z = 0;
+    eye.z = 2;
     
 //    selectionBox = Box3D(0,0,0,1.F,1.F,1.F);
     
@@ -93,52 +88,11 @@ void RIV3DView::Reshape(int newWidth, int newHeight) {
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(55, (double)width/height, -10000, 10000);
+    gluPerspective(55, (double)width/height, 1, 1000);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
 }
-
-//void RIV3DView::Reshape(float startX, float startY, float width, float height, float paddingX, float paddingY) {
-//    
-//    this->startX = startX;
-//    this->startY = startY;
-//    this->width = width;
-//    this->height = height;
-//    
-//    eye.x = 0.F;
-//    eye.y = 0.F;
-//    eye.z = 4.F;
-//    
-//    selectionBox = Box3D(0,0,0,1.F,1.F,1.F);
-//    
-//    cursorNear.x = 0.F;
-//    cursorNear.x = 0.F;
-//    cursorNear.z = zNear;
-//    
-//    cursorFar.x = 0.F;
-//    cursorFar.x = 0.F;
-//    cursorFar.z = zFar;
-//    
-////    glMatrixMode(GL_MODELVIEW);
-////    glLoadIdentity();
-//    printf("**************** RESHAPE 3D VIEW ****************\n");
-//    printVar("startX",startX);
-//    printVar("startY",startY);
-//    printVar("width",width);
-//    printVar("height",height);
-//    printf("*************************************************\n");
-//
-//    glutSetWindow(windowHandle);
-//    glViewport(startX, startY, width, height);
-//    glMatrixMode(GL_PROJECTION);
-//    glLoadIdentity();
-//    gluPerspective(40, (double)width/height, 1, 10);
-//    glMatrixMode(GL_MODELVIEW);
-//    glLoadIdentity();
-//    
-//
-//}
 
 void RIV3DView::ToggleDrawClusterMembers() {
     drawClusterMembers = !drawClusterMembers;
@@ -147,7 +101,9 @@ void RIV3DView::ToggleDrawClusterMembers() {
 
 //Test function to draw a simple octree
 void RIV3DView::drawOctree() {
-	
+	if(tree) {
+		//Draw the tree to the required depth
+	}
 }
 
 void RIV3DView::Draw() {
@@ -203,51 +159,13 @@ void RIV3DView::Draw() {
     gluSphere(quadric, 5, 5, 5);
     glPopMatrix();
 
-	RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("intersection X");
-	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
-	RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Z");
-	
-	//Only use 1 size
-	float size = sizeProperty->ComputeSize(isectTable, 0);
-	
-	if(sizesAllTheSame) {
-		glPointSize(size);
-		printf("Sizes are all the same!\n");
-	}
-	
-	if(isectTable != NULL) {
-		TableIterator* iterator = isectTable->GetIterator();
-		size_t row;
-		glBegin(GL_POINTS);
-		while(iterator->GetNext(row)) {
-			
-//			float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
-			
-			if(!sizesAllTheSame) {
-				glPointSize(pointsSize[row]);
-			}
-			
-			float x = xRecord->Value(row);
-			float y = yRecord->Value(row);
-			float z = zRecord->Value(row);
-			
-			glPushMatrix();
-//			glTranslatef(x,y,z);
-			
-            glColor3f(pointsR[row], pointsG[row], pointsB[row]);
-			
-            glVertex3f(x,y,z);
+	drawPoints();
 
-		}
-		glEnd();
-	}
-	
-    
 //    reporter::stop(drawTask);
     glPopMatrix();
     
     //Draw some lines
-    drawPaths(segmentStart,segmentStop);
+	drawPaths(segmentStart,segmentStop);
     
     glFlush();
     
@@ -256,7 +174,57 @@ void RIV3DView::Draw() {
 	reporter::stop("3D Draw");
 }
 
+void RIV3DView::drawPoints() {
+	//Draw the points if requested
+	if(drawClusterMembers) {
+		RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("intersection X");
+		RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
+		RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Z");
+		
+		//Only use 1 size
+		float size = sizeProperty->ComputeSize(isectTable, 0);
+		
+		if(sizesAllTheSame) {
+			glPointSize(size);
+			printf("Sizes are all the same!\n");
+		}
+		
+		if(isectTable != NULL) {
+			TableIterator* iterator = isectTable->GetIterator();
+			size_t row;
+			glBegin(GL_POINTS);
+			while(iterator->GetNext(row)) {
+				const float* color = colorProperty->Color(isectTable, row);
+				//			float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
+				
+				if(!sizesAllTheSame) {
+					glPointSize(pointsSize[row]);
+				}
+				
+				float x = xRecord->Value(row);
+				float y = yRecord->Value(row);
+				float z = zRecord->Value(row);
+				
+				glPushMatrix();
+				glColor3fv(color);
+				glVertex3f(x,y,z);
+				
+			}
+			glEnd();
+		}
+	}
+}
+
+//Move this function somewhere else
 void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize) {
+	
+	std::string taskName = "Generating octree";
+	reporter::startTask(taskName);
+	
+	if(tree) {
+		delete tree;
+	}
+	
 	size_t row;
 	
 	RIVTable* isectTable = dataset->GetTable("intersections");
@@ -269,9 +237,27 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 		indices.push_back(row);
 	}
 	
+	RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("intersection X");
+	std::vector<float>* xValues = xRecord->GetValuesPointer();
+	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
+	std::vector<float>* yValues = yRecord->GetValuesPointer();
+	RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Z");
+	std::vector<float>* zValues = zRecord->GetValuesPointer();
+	
+	OctreeConfig config = OctreeConfig(maxDepth, maxCapacity, minNodeSize);
+	
+	tree = new Octree(xValues, yValues, zValues, indices, config);
+	
+	printf("Tree generated with \n");
+	printf("\tDepth %zu\n",tree->Depth());
+	printf("\tNodes = %zu\n",tree->NumberOfNodes());
+	
+	reporter::stop(taskName);
+	
 	
 }
 
+//Create buffered data for points, not working anymore, colors seem to be red all the time.
 void RIV3DView::createPoints() {
     
     //Clear buffer data
@@ -282,7 +268,6 @@ void RIV3DView::createPoints() {
 	
 	std::vector<float> uniqueSizes;
     
-    isectTable = dataset->GetTable("intersections");
     //Get the records we want;
     //Get the iterator, this iterator is aware of what rows are filtered and not
     TableIterator *iterator = isectTable->GetIterator();
@@ -294,9 +279,9 @@ void RIV3DView::createPoints() {
     while(iterator->GetNext(row)) {
         float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
 		
-		printf("Computed color for point : ");
-        printArray(color, 3);
-		printf("\n");
+//		printf("Computed color for point : ");
+//        printArray(color, 3);
+//		printf("\n");
 		
         if(color != NULL) {
             
@@ -488,7 +473,7 @@ void RIV3DView::ReshapeInstance(int width, int height) {
 
 void RIV3DView::OnDataSetChanged() {
 //    printf("3D View received on filter change.");
-    createPoints();
+//    createPoints();
     glutPostRedisplay();
     isDirty = true;
 }

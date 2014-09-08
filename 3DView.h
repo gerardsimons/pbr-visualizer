@@ -76,7 +76,12 @@ public:
     bool HandleMouseMotion(int x, int y);
     void OnDataSetChanged();
     
-    void SetData(RIVDataSet *newDataSet) { RIVDataView::SetData(newDataSet); createPoints(); };
+    void SetData(RIVDataSet *newDataSet) {
+		RIVDataView::SetData(newDataSet);
+		isectTable = dataset->GetTable("intersections");
+		createPoints();
+		generateOctree(100, 10, .001F);
+	};
     static void DrawInstance(); //Override
     static void ReshapeInstance(int,int);
     static void Mouse(int button, int state, int x, int y);

@@ -187,6 +187,9 @@ void RIVImageView::Draw() {
 
 		//reset to previous state
 		glPopAttrib();
+		
+		glEnable(GL_BLEND);
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
 		glDisable(GL_TEXTURE_2D);
 		//if selection, draw

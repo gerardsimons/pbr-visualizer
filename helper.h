@@ -54,30 +54,6 @@ public:
     }
 };
 
-//void printHeader(const std::string& text, int width = 50) {
-//    
-//    for(size_t i = 0 ; i < width ; ++width) {
-//        std::cout << "*";
-//    }
-//    std::cout << "\n";
-//    
-//    int left = (width - text.size()) / 2;
-//    for(size_t i = 0 ; i < left ; ++i) {
-//        std::cout << " ";
-//    }
-//    std::cout << text;
-//    int right = (width - text.size() - left);
-//    for(size_t i = 0 ; i < left ; ++i) {
-//        std::cout << " ";
-//    }
-//    std::cout << "\n";
-//
-//    for(size_t i = 0 ; i < width ; ++width) {
-//        std::cout << "*";
-//    }
-//    std::cout << "\n";
-//}
-
 template<class T>
 inline void deletePointerVector(std::vector<T*> v)
 {
@@ -178,6 +154,21 @@ void printMatrix(size_t rows, size_t columns, T* matrix) {
         }
         std::cout << "]\n";
     }
+}
+
+//T has to be a basic number type (float,double,int, ... ) //TODO: How to enforce this
+template<typename T>
+T maxInArray(T* values, size_t N) {
+	if(N > 0) {
+		T max = values[0];
+		for(size_t i = 1 ; i < N ; ++i) {
+			if(values[i] > max) {
+				max = values[i];
+			}
+		}
+		return max;
+	}
+	else throw "N must be > 0.";
 }
 
 template<typename T>
