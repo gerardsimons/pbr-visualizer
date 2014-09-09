@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "ColorMap.h"
 
 class RIVRecord;
 
@@ -69,7 +70,7 @@ private:
 //    float colorOne[3];
 //    float colorTwo[3];
     
-    std::vector<const float*> colorMap; //basically a Nx3 color table
+	ColorMap colorMap;
 
     //What to do when multiple rows (returned by reference chain) have different membmerships to different color interpolators? This function deals with this
     float const* colorForMultipleResolvedRows(const std::vector<size_t>& rows);
@@ -84,23 +85,33 @@ public:
 //        memcpy(colorOne, colorOne_, sizeof(colorOne));
 //        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
         
-        colorMap.resize(2);
-        colorMap[0] = colorOne_;
-        colorMap[1] = colorOne_;
+		colorMap.AddColor(colorOne_);
+		colorMap.AddColor(colorTwo_);
+		
+//        colorMap[0] = colorOne_;
+//        colorMap[1] = colorOne_;
     }
     RIVEvaluatedColorProperty(RIVTable *colorReference_, RIVRecord* record, float const* colorOne_, float const* colorTwo_) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
 //        memcpy(colorOne, colorOne_, sizeof(colorOne));
 //        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
         
-        colorMap.resize(2);
+//        colorMap.resize(2);
         colorMap[0] = colorOne_;
         colorMap[1] = colorTwo_;
     }
-    RIVEvaluatedColorProperty(RIVTable *colorReference_, RIVRecord* record, const std::vector<const float*>& colorMap) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
+//    RIVEvaluatedColorProperty(RIVTable *colorReference_, RIVRecord* record, const std::vector<const float*>& colors) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
+//        //        memcpy(colorOne, colorOne_, sizeof(colorOne));
+//        //        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
+//        
+//		for(const float* color : colors) {
+//			colorMap.AddColor(color);
+//		}
+//    }
+	RIVEvaluatedColorProperty(RIVTable *colorReference_, RIVRecord* record, const ColorMap& colorMap) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
         //        memcpy(colorOne, colorOne_, sizeof(colorOne));
         //        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
         
-        this->colorMap = colorMap;
+		this->colorMap = colorMap;
     }
     
     float const* Color(RIVTable* sourceTable, const size_t& row) {
@@ -116,24 +127,8 @@ public:
         float color[3] = {0,1,0}; //Red
         if(RIVEvaluatedProperty<T>::Value(sourceTable,row,value))  {
 //            printf("Color value = %f\n",value);
-            if(sourceTable->GetName() == "intersections" && value == 1.F) {
-                
-            }
-            for(size_t colorIndex = 0 ; colorIndex < colorMap.size() - 1; ++colorIndex) {
-                
-                float colorIndexRatioLeft  = colorIndex / (float)(colorMap.size() - 1);
-                float colorIndexRatioRight = (colorIndex + 1) / (float)(colorMap.size() - 1);
-                float ratio = value;
-                if(colorIndexRatioLeft <= value && colorIndexRatioRight >= value) {
-                    //Its in between these two indices, use these to interpolate
-//                    return linearInterpolateColor(value, colorMap[colorIndex], colorMap[colorIndex+1]);
-                    ratio = 1.F - ratio;
-                    color[0] = colorMap[colorIndex][0] * ratio + (1.F - ratio) * colorMap[colorIndex + 1][0];
-                    color[1] = colorMap[colorIndex][1] * ratio + (1.F - ratio) * colorMap[colorIndex + 1][1],
-                    color[2] = colorMap[colorIndex][2] * ratio + (1.F - ratio) * colorMap[colorIndex + 1][2];
-                    return color;
-                }
-            }
+			//
+			return colorMap.Color(value);
         }
         return NULL;
     }

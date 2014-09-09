@@ -179,6 +179,9 @@ void keys(int keyCode, int x, int y) {
         case 93:
             sceneView->MovePathSegment(.01F);
             break;
+		case 104: // the 'h' from heatmap, toggle drawing the octree heatmap
+			sceneView->ToggleDrawHeatmap();
+			break;
         case 114: // 'r' key, recluster {
         {
             RIVTable *intersectTable = dataset.GetTable("intersections");
@@ -394,7 +397,7 @@ void initializeViewProperties() {
     
 //    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty(pathTable,colors::GREEN,colors::RED);
     
-    std::vector<const float*> jetColorMap = colors::jetColorMap();
+    ColorMap jetColorMap = colors::jetColorMap();
     RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionstTable,bounceRecord,jetColorMap);
 //    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionstTable,xRecord,jetColorMap);
     RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);

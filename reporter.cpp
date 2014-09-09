@@ -30,7 +30,7 @@ namespace reporter {
         if(isRunning) {
             throw "Task already running.";
         }
-        printf("Task \"%s\" started.",name.c_str());
+        printf("Task \"%s\" started ......... ",name.c_str());
         isRunning = true;
         startTime = clock();
     }

@@ -22,14 +22,17 @@ private:
     Point3D eye;
     bool isDirty = true;
     //Whether to draw the members of clusters, or only the cluster medoid
-    bool drawClusterMembers = true;
+    bool drawClusterMembers = false;
+	//Whether the generated octree should be drawn (if any is generated)
+	bool drawHeatmapTree = true;
 	
 	//Octree generated from 3D points (generated in createPoints)
-	Octree* tree = NULL;
+	Octree* heatmap = NULL;
+	ColorMap treeColorMap;
     
     //Path drawing variables
     int maxBounce = 5; //TODO: Deduce this value from the bounce record
-    bool showPaths = true;
+    bool showPaths = false;
     
     const float segmentWidth = .1F; // a tenth of the total path length
     float segmentStart = 0;
@@ -58,10 +61,15 @@ private:
     void createPoints();
 	//Generate a octree from the unfiltered intersection points
 	void generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize);
-	
+	//Draw the mesh model loaded from the PBRT file
+	void drawMeshModel();
     void drawPaths(float startSegment, float stopSegment); //Draw the paths between two consecutive bounces
 	//Draw octree representation of the generated points
-	void drawOctree();
+	void drawHeatmap();
+	//Draw the intersection points
+	void drawPoints();
+	//draw the leaf nodes starting from the given node
+	void drawLeafNodes(OctreeNode* node);
     
     static RIV3DView* instance;
     Point3D screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
@@ -90,6 +98,7 @@ public:
     void MovePathSegment(float ratioIncrement);
     void CyclePathSegment(bool direction = true); //Cycle the path segment to draw, direction bool indicates direction of cycling, positive meaning incrementing
     void ToggleDrawClusterMembers();
+	void ToggleDrawHeatmap();
     void SetModelData(const MeshModel&);
     void MoveCamera(float,float,float);
     

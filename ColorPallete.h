@@ -10,6 +10,7 @@
 #define Afstuderen_ColorPallete_h
 
 #include <vector>
+#include "ColorMap.h"
 
 namespace colors {
 
@@ -24,32 +25,8 @@ namespace colors {
     const float DARK_RED[] = {0.5F,0,0};
     const float DARK_BLUE[] = {0,0,0.5F};
     
-    std::vector<float const*> allColors() {
-        std::vector<float const*> allColors;
-        
-        allColors.push_back(BLACK);
-        allColors.push_back(RED);
-        allColors.push_back(GREEN);
-        allColors.push_back(BLUE);
-        allColors.push_back(YELLOW);
-        allColors.push_back(CYAN);
-        allColors.push_back(PURPLE);
-        
-        return allColors;
-    }
-    
-    std::vector<const float*> jetColorMap() {
-        std::vector<const float*> jetColorMap;
-        
-        jetColorMap.push_back(DARK_BLUE);
-        jetColorMap.push_back(BLUE);
-        jetColorMap.push_back(CYAN);
-        jetColorMap.push_back(YELLOW);
-        jetColorMap.push_back(RED);
-        jetColorMap.push_back(DARK_RED);
-        
-        return jetColorMap;
-    }
+    std::vector<float const*> allColors();
+    ColorMap jetColorMap();
 }
 
 #endif

@@ -12,7 +12,7 @@
 #include "helper.h"
 #include "reporter.h"
 #include "trackball.h"
-
+#include "ColorPallete.h"
 #include "graphics_helper.h"
 
 #if __APPLE__
@@ -23,9 +23,6 @@
 
 //Init instance to draw
 RIV3DView* RIV3DView::instance = NULL;
-
-//TODO : Move these to the header file
-const float sizeMultiplier = 5.F;
 
 RIV3DView::RIV3DView() {
     if(instance != NULL) {
@@ -98,11 +95,59 @@ void RIV3DView::ToggleDrawClusterMembers() {
     drawClusterMembers = !drawClusterMembers;
     isDirty = true;
 }
-
+void RIV3DView::ToggleDrawHeatmap() {
+	drawHeatmapTree = !drawHeatmapTree;
+}
+size_t nodesDrawn;
 //Test function to draw a simple octree
-void RIV3DView::drawOctree() {
-	if(tree) {
+void RIV3DView::drawHeatmap() {
+	if(heatmap) {
 		//Draw the tree to the required depth
+		reporter::startTask("Heatmap drawing.");
+		OctreeNode* root = heatmap->GetRoot();
+		nodesDrawn = 0;
+		if(root) {
+			drawLeafNodes(root);
+		}
+		printf("%zu / %zu nodes drawn\n",nodesDrawn,heatmap->NumberOfNodes());
+		reporter::stop("Heatmap drawing.");
+	}
+}
+
+void RIV3DView::drawLeafNodes(OctreeNode* node) {
+	if(node->IsLeafNode() && node->ContainsAnyPoints()) { //Draw it
+		
+		Point3D nodeCenter = node->Center();
+		size_t depth = node->GetDepth();
+		size_t pointsInNode = node->NumberOfPointsContained();
+		
+		//Determine color according to number of children
+		float ratio = pointsInNode / (float)heatmap->GetConfiguration()->MaxNodeCapacity();
+		const float* color = treeColorMap.Color(ratio);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glColor4f(color[0], color[1], color[2],.15F);
+//		printf("node Ratio = %f\n",ratio);
+//		printf("Color = ");
+//		printArray(color, 3);
+//		printf("\n");
+		
+		glPushMatrix();
+		glTranslatef(nodeCenter.x, nodeCenter.y, nodeCenter.z);
+//		glutWireCube(node->GetSize());
+		glutSolidCube(node->GetSize());
+		glPopMatrix();
+		
+		++nodesDrawn;
+		
+//		printf("child center = ");
+//		std::cout << childCenter << "\n";
+//		printf("child size = %f\n",child->GetSize());
+	}
+	else { //Recursively call the function on the children
+		for(int i = 0 ; i < node->NumberOfChildren() ; ++i) {
+			drawLeafNodes(node->GetChild(i));
+		}
 	}
 }
 
@@ -126,16 +171,7 @@ void RIV3DView::Draw() {
     
     drawCoordSystem();
     
-    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-    
-    glColor3f(.5f,.2f,1.0f); //Purple
-    /** Draw the model **/
-    glBegin(GL_QUADS);
-    const std::vector<float>& vertices = modelData.GetVertices();
-    for(size_t i = 0 ; i < vertices.size() ; i += 3) {
-        glVertex3f(vertices[i], vertices[i+1], vertices[i+2]);
-    }
-    glEnd();
+//	drawMeshModel();
     
     /* Draw the intersection positions */
     GLUquadric* quadric = gluNewQuadric();
@@ -159,13 +195,18 @@ void RIV3DView::Draw() {
     gluSphere(quadric, 5, 5, 5);
     glPopMatrix();
 
-	drawPoints();
+	if(drawClusterMembers)
+		drawPoints();
+	
+	if(drawHeatmapTree && heatmap != NULL)
+		drawHeatmap();
 
 //    reporter::stop(drawTask);
     glPopMatrix();
     
     //Draw some lines
-	drawPaths(segmentStart,segmentStop);
+	if(showPaths)
+		drawPaths(segmentStart,segmentStop);
     
     glFlush();
     
@@ -174,45 +215,57 @@ void RIV3DView::Draw() {
 	reporter::stop("3D Draw");
 }
 
+void RIV3DView::drawMeshModel() {
+	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    
+    glColor3f(.5f,.2f,1.0f); //Purple
+    /** Draw the model **/
+    glBegin(GL_QUADS);
+    const std::vector<float>& vertices = modelData.GetVertices();
+    for(size_t i = 0 ; i < vertices.size() ; i += 3) {
+        glVertex3f(vertices[i], vertices[i+1], vertices[i+2]);
+    }
+    glEnd();
+}
+
 void RIV3DView::drawPoints() {
-	//Draw the points if requested
-	if(drawClusterMembers) {
-		RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("intersection X");
-		RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
-		RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Z");
-		
-		//Only use 1 size
-		float size = sizeProperty->ComputeSize(isectTable, 0);
-		
-		if(sizesAllTheSame) {
-			glPointSize(size);
-			printf("Sizes are all the same!\n");
-		}
-		
-		if(isectTable != NULL) {
-			TableIterator* iterator = isectTable->GetIterator();
-			size_t row;
-			glBegin(GL_POINTS);
-			while(iterator->GetNext(row)) {
-				const float* color = colorProperty->Color(isectTable, row);
-				//			float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
-				
-				if(!sizesAllTheSame) {
-					glPointSize(pointsSize[row]);
-				}
-				
-				float x = xRecord->Value(row);
-				float y = yRecord->Value(row);
-				float z = zRecord->Value(row);
-				
-				glPushMatrix();
-				glColor3fv(color);
-				glVertex3f(x,y,z);
-				
-			}
-			glEnd();
-		}
+
+	RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("intersection X");
+	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
+	RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Z");
+	
+	//Only use 1 size
+	float size = sizeProperty->ComputeSize(isectTable, 0);
+	
+	if(sizesAllTheSame) {
+		glPointSize(size);
+		printf("Sizes are all the same!\n");
 	}
+	
+	if(isectTable != NULL) {
+		TableIterator* iterator = isectTable->GetIterator();
+		size_t row;
+		glBegin(GL_POINTS);
+		while(iterator->GetNext(row)) {
+			const float* color = colorProperty->Color(isectTable, row);
+			//			float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
+			
+			if(!sizesAllTheSame) {
+				glPointSize(pointsSize[row]);
+			}
+			
+			float x = xRecord->Value(row);
+			float y = yRecord->Value(row);
+			float z = zRecord->Value(row);
+			
+			glPushMatrix();
+			glColor3fv(color);
+			glVertex3f(x,y,z);
+			
+		}
+		glEnd();
+	}
+
 }
 
 //Move this function somewhere else
@@ -221,8 +274,8 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 	std::string taskName = "Generating octree";
 	reporter::startTask(taskName);
 	
-	if(tree) {
-		delete tree;
+	if(heatmap) {
+		delete heatmap;
 	}
 	
 	size_t row;
@@ -245,16 +298,17 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 	std::vector<float>* zValues = zRecord->GetValuesPointer();
 	
 	OctreeConfig config = OctreeConfig(maxDepth, maxCapacity, minNodeSize);
-	
-	tree = new Octree(xValues, yValues, zValues, indices, config);
+	heatmap = new Octree(xValues, yValues, zValues, indices, config);
 	
 	printf("Tree generated with \n");
-	printf("\tDepth %zu\n",tree->Depth());
-	printf("\tNodes = %zu\n",tree->NumberOfNodes());
+	printf("\tDepth %zu\n",heatmap->Depth());
+	printf("\tNodes = %zu\n",heatmap->NumberOfNodes());
+//	printf("\tMemory size = %.3f KB\n",sizeof(heatmap) / 1000.F); //Not sure if that works like this, probably not
+	
+	//Generate the color map used by the tree
+	treeColorMap = colors::jetColorMap();
 	
 	reporter::stop(taskName);
-	
-	
 }
 
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
@@ -284,7 +338,6 @@ void RIV3DView::createPoints() {
 //		printf("\n");
 		
         if(color != NULL) {
-            
 			float size = sizeProperty->ComputeSize(isectTable, row);
 			if(uniqueSizes.empty()) {
 				uniqueSizes.push_back(size);
@@ -343,8 +396,9 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
                 return;
             }
         }
+		//The table we are drawing from
         RIVTable *table = dataset->GetTable("intersections");
-        //Get the records we want;
+        //Get the records we need from the table
         RIVFloatRecord* xRecord = table->GetRecord<RIVFloatRecord>("intersection X");
         RIVFloatRecord* yRecord = table->GetRecord<RIVFloatRecord>("intersection Y");
         RIVFloatRecord* zRecord = table->GetRecord<RIVFloatRecord>("intersection Z");
