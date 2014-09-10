@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Gerard Simons. All rights reserved.
 //
 
-#include "ColorPallete.h"
+#include "ColorPalette.h"
 
 namespace colors {
 	ColorMap jetColorMap() {

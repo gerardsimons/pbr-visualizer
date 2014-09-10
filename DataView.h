@@ -55,7 +55,6 @@ protected:
 	~RIVDataView(void) { /* Delete some stuff I guess */ };
 public:
 	//properties
-    int windowHandle = -1;
 	int startX,startY;
 	int width,height;
 	int paddingX,paddingY = 0;

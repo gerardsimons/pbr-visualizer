@@ -8,10 +8,13 @@
 
 #include "HeatMapView.h"
 #include "helper.h"
+#include "ColorMap.h"
+#include "ColorPalette.h"
 
 RIVHeatMapView* RIVHeatMapView::instance = NULL;
 
 std::vector<std::vector<float>> heatmap;
+ColorMap colorMap;
 
 //RIVHeatMapView::RIVHeatMapView(RIVColorProperty *controlledColorProp, RIVSizeProperty* controlledSizeProp) {
 //    if(instance != NULL) {
@@ -36,6 +39,7 @@ void RIVHeatMapView::computeHeatMap() {
     xMax = xRecord->Max() + 1;
     yMax = yRecord->Max() + 1;
     
+	colorMap = colors::jetColorMap();
     heatmap.resize( xMax , std::vector<float>( yMax , 0 ) );
     
     TableIterator *iterator = pathTable->GetIterator();
@@ -83,7 +87,7 @@ void RIVHeatMapView::DrawInstance() {
 }
 
 void RIVHeatMapView::Draw() {
-    printf("RIVHeatMapView Draw\n");
+    printf("***** RIVHeatMapView Draw *****\n");
     
     //Determine size of each grid tile
     float xTileSize = width / (float)xMax;
@@ -115,38 +119,8 @@ void RIVHeatMapView::Draw() {
 //        for(size_t y = yMax ; y > 0 ; --y) {
         
             float heatmapValue = heatmap[x][y];
-            float color[3] = {1,0,0}; //Red
-            
-            //Determine which two colors to use
-            for(size_t colorIndex = 0 ; colorIndex < nr_colors - 1; ++colorIndex) {
-                
-                float colorIndexRatioLeft  = colorIndex / (float)(nr_colors - 1);
-                float colorIndexRatioRight = (colorIndex + 1) / (float)(nr_colors - 1);
-                
-                if(colorIndexRatioLeft < heatmapValue && colorIndexRatioRight > heatmapValue) {
-                    //Its in between these two indices, use these to interpolate
-                    float ratio = (heatmapValue - colorIndexRatioLeft) / (colorIndexRatioRight - colorIndexRatioLeft);
-                    
-//                    printf("ratio = %f\n",ratio);
-                    if(ratio < 0 || ratio > 1) {
-                        
-                    }
-                    
-//                    float H = colors[colorIndex][0] * ratio + (1.F - ratio) * colors[colorIndex + 1][0];
-//                    float S = colors[colorIndex][1] * ratio + (1.F - ratio) * colors[colorIndex + 1][1];
-//                    float V = colors[colorIndex][2] * ratio + (1.F - ratio) * colors[colorIndex + 1][2];
-                    //                    HSVtoRGB(&color[0],&color[1],&color[2],H,S,V);
-                    
-                    ratio = 1.F - ratio;
-                    color[0] = colors[colorIndex][0] * ratio + (1.F - ratio) * colors[colorIndex + 1][0];
-                    color[1] = colors[colorIndex][1] * ratio + (1.F - ratio) * colors[colorIndex + 1][1],
-                    color[2] = colors[colorIndex][2] * ratio + (1.F - ratio) * colors[colorIndex + 1][2];
-                    
-
-                
-                    break; //We are done, this is the one
-                }
-            }
+//            float color[3] = {1,0,0}; //Red
+			const float* color = colorMap.Color(heatmapValue);
             
             glColor3f(color[0],color[1],color[2]);
             
@@ -162,10 +136,6 @@ void RIVHeatMapView::Draw() {
     glutSwapBuffers();
 }
 
-//This function should probably be migrated to a RIVColorProperty
-void RIVHeatMapView::heatMapColor(float heatmapValue) {
-    
-}
 
 void RIVHeatMapView::Reshape(int width, int height) {
     printf("RIVHeatMapView Reshape called.\n");

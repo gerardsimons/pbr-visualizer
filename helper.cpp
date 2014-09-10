@@ -24,7 +24,18 @@ float* linearInterpolateColor(float ratio, const float colorOne[3],const float c
     printArray(color, 3);
     return color;
 }
-
+bool almost_equal(double x, double y, double epsilon)
+{
+    double diff = x - y;
+    if (x != 0 && y != 0){
+        diff = diff/y;
+    }
+	
+    if (diff < epsilon && -1.0*diff < epsilon){
+        return true;
+    }
+    return false;
+}
 float linearInterpolate(float value, float start, float end) {
     return (value - start) / (end - start);
 }

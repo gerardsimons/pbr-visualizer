@@ -25,6 +25,7 @@ private:
     bool drawClusterMembers = false;
 	//Whether the generated octree should be drawn (if any is generated)
 	bool drawHeatmapTree = true;
+	bool drawLightPaths = false;
 	
 	//Octree generated from 3D points (generated in createPoints)
 	Octree* heatmap = NULL;
@@ -32,7 +33,6 @@ private:
     
     //Path drawing variables
     int maxBounce = 5; //TODO: Deduce this value from the bounce record
-    bool showPaths = false;
     
     const float segmentWidth = .1F; // a tenth of the total path length
     float segmentStart = 0;
@@ -46,13 +46,12 @@ private:
     
     //Buffered graphics point data, generated from the data, stored here for speed, TODO: Only store indices and a pointer to these records?
 	bool sizesAllTheSame; //Because sizes are often set to the same, we take advantage of this to get a big performance boost
-    std::vector<float> pointsX;
-    std::vector<float> pointsY;
-    std::vector<float> pointsZ;
+	//Indices of the points to draw
+	std::vector<size_t> pointsToDraw;
     std::vector<float> pointsR;
     std::vector<float> pointsG;
     std::vector<float> pointsB;
-    std::vector<float> pointsSize;
+	std::vector<float> pointsSize;
 
     //Possibly the selection box created by clicking and dragging (NOT IMPLEMENTED)
     Box3D selectionBox;
@@ -77,6 +76,8 @@ public:
     RIV3DView();
     RIV3DView(int,int,int,int,int,int,RIVColorProperty*,RIVSizeProperty*);
     RIV3DView(RIVColorProperty*,RIVSizeProperty*);
+	
+	static int windowHandle;
     
     void Reshape(int newWidth, int newHeight);
     void Draw();
@@ -87,9 +88,10 @@ public:
     void SetData(RIVDataSet *newDataSet) {
 		RIVDataView::SetData(newDataSet);
 		isectTable = dataset->GetTable("intersections");
-		createPoints();
-		generateOctree(100, 10, .001F);
 	};
+	
+	void InitializeGraphics();
+	
     static void DrawInstance(); //Override
     static void ReshapeInstance(int,int);
     static void Mouse(int button, int state, int x, int y);
@@ -99,6 +101,7 @@ public:
     void CyclePathSegment(bool direction = true); //Cycle the path segment to draw, direction bool indicates direction of cycling, positive meaning incrementing
     void ToggleDrawClusterMembers();
 	void ToggleDrawHeatmap();
+	void ToggleDrawPaths();
     void SetModelData(const MeshModel&);
     void MoveCamera(float,float,float);
     

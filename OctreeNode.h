@@ -10,15 +10,20 @@
 #define __afstuderen_DO_NOT_DELETE__OctreeNode__
 
 #include <vector>
+#include "Octree.h"
 #include "Geometry.h"
 #include "OctreeConfig.h"
 
 #define MAX_CHILDREN 8
 
+class Octree;
+
 class OctreeNode {
 private:
 	OctreeConfig *config;
 	
+	//The tree it is part of
+	Octree* tree;
 	//All the children
 	OctreeNode* children[MAX_CHILDREN];
 	bool isLeaf; //If it has no children
@@ -38,7 +43,7 @@ private:
 	
 	bool rangeCheck(float lowerBound, float upperBound, float value);
 public:
-	OctreeNode(std::vector<float>* xPositions,std::vector<float>* yPositions,std::vector<float>* zPositions, float x, float y, float z, float size, size_t depth, OctreeConfig* config);
+	OctreeNode(std::vector<float>* xPositions,std::vector<float>* yPositions,std::vector<float>* zPositions, float x, float y, float z, float size, size_t depth, OctreeConfig* config, Octree* tree);
 	~OctreeNode();
 	
 	//Check if according to the octree config parameters, this OctreeNode should be split up further and recursively call this function on the new function until recurson stops
@@ -56,8 +61,10 @@ public:
 	OctreeNode* GetChild(int index);
 	//Search children for max depth
 	size_t MaxDepth();
-	//Whether or not this node is a leaf node (i.e. has no children)
+	//The geometric size of this node
 	float GetSize();
+	//Get a density measure of this node, this is the number of points in the node multiplied by its relative size
+	float Density();
 	size_t GetDepth();
 	bool IsLeafNode();
 	bool Contains(const Point3D& point);

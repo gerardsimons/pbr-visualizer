@@ -7,6 +7,7 @@
 //
 
 #include "Octree.h"
+#include "helper.h"
 
 void Octree::init() {
 	//Find width height and depth of the root cube
@@ -39,7 +40,7 @@ void Octree::init() {
 	float z = minZ + depth / 2.F;
 	
 	//Declare root node
-	root = new OctreeNode(xPositions,yPositions,zPositions,x,y,z,size,1,&config);
+	root = new OctreeNode(xPositions,yPositions,zPositions,x,y,z,size,1,&config,this);
 //	nrOfNodes = root->NumberOfNodes();
 	
 //	std::cout << *this;
@@ -74,6 +75,47 @@ Octree::~Octree() {
 	}
 	
 }
+float Octree::MaxDensity() {
+	if(cachedMaxDensity == NULL) {
+		cachedMaxDensity = new float(maxDensityHelper(root));
+//		printf("Max density found = %f\n",*cachedMaxDensity);
+	}
+	return *cachedMaxDensity;
+}
+size_t Octree::MaxCapacity() {
+	if(!cachedMaxCapacity) {
+		cachedMaxCapacity = new size_t(maxCapacityHelper(root));
+	}
+	return *cachedMaxCapacity;
+}
+
+//Find the max density present in this tree
+float Octree::maxDensityHelper(OctreeNode *node) {
+	if(node->IsLeafNode()) { //End of the line, return the depth of this node
+		return node->Density();
+	}
+	else {
+		float densities[8];
+		for(size_t i = 0 ; i < MAX_CHILDREN ; ++i) {
+			densities[i] = maxDensityHelper(node->GetChild(i));
+		}
+		return maxInArray(densities,8);
+	}
+}
+
+size_t Octree::maxCapacityHelper(OctreeNode *node) {
+	if(node->IsLeafNode()) { //End of the line, return the depth of this node
+		return node->NumberOfPointsContained();
+	}
+	else {
+		size_t pointsInChildren[8];
+		for(size_t i = 0 ; i < MAX_CHILDREN ; ++i) {
+			pointsInChildren[i] = maxCapacityHelper(node->GetChild(i));
+		}
+		return maxInArray(pointsInChildren,8);
+	}
+}
+
 Octree::Octree(std::vector<float>* xPositions, std::vector<float>* yPositions, std::vector<float>* zPositions, OctreeConfig& configuration) :  config(configuration) {
 	
 	this->xPositions = xPositions;
@@ -171,7 +213,7 @@ bool Octree::Test() {
 	printf("TestTree has %zu children.\n",testTree->NumberOfNodes());
 	printf("TestTree has depth %zu\n",testTree->Depth());
 	
-	std::cout << *testTree;
+//	std::cout << *testTree;
 	
 	return false;
 }

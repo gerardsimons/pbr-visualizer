@@ -9,13 +9,12 @@
 #include <math.h>
 #include <stdio.h>
 
+//Static declarations
 ParallelCoordsView* ParallelCoordsView::instance = NULL;
-
-bool currentBuffer;
+int ParallelCoordsView::windowHandle = -1;
 
 ParallelCoordsView::ParallelCoordsView() {
     instance = this;
-    
     
     const float black[] = {0,0,0};
     colorProperty = new RIVFixedColorProperty(black);
@@ -484,7 +483,12 @@ void ParallelCoordsView::OnDataSetChanged() {
     printf("ParallelCoordsView received a on dataset changed callback.\n");
     linesAreDirty = true;
     axesAreDirty = true;
-    glutPostRedisplay();
+	
+	int currentWindow = glutGetWindow();
+	glutSetWindow(ParallelCoordsView::windowHandle);
+	glutPostRedisplay();
+	//Return window to given window
+	glutSetWindow(currentWindow);
 }
 
 void ParallelCoordsView::drawText(char *text, int size, int x, int y, float *color, float sizeModifier) {

@@ -10,7 +10,7 @@
 #include "ImageView.h"
 #include "DataFileReader.h"
 #include "3DView.h"
-#include "ColorPallete.h"
+#include "ColorPalette.h"
 #include "ColorProperty.h"
 #include "SizeProperty.h"
 //#include "UIView.h" //
@@ -182,6 +182,9 @@ void keys(int keyCode, int x, int y) {
 		case 104: // the 'h' from heatmap, toggle drawing the octree heatmap
 			sceneView->ToggleDrawHeatmap();
 			break;
+		case 112: //The 'p' key, toggle drawing paths in 3D view
+			sceneView->ToggleDrawPaths();
+			break;
         case 114: // 'r' key, recluster {
         {
             RIVTable *intersectTable = dataset.GetTable("intersections");
@@ -199,7 +202,8 @@ void keys(int keyCode, int x, int y) {
         {
 //            imageView->createTextureImage();
 //            postRedisplay = true;
-            testFunctions();
+//            testFunctions();
+			sceneView->InitializeGraphics();
             break;
         }
         case 119: // 'w' key, move camera in Y direction
@@ -304,7 +308,7 @@ void createViews() {
         RIVColorProperty *defaultColorProperty = new RIVFixedColorProperty(1,1,1);
         
         parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding);
-
+		ParallelCoordsView::windowHandle = parallelViewWindow;
         glutSetWindow(parallelViewWindow);
         glutDisplayFunc(ParallelCoordsView::DrawInstance);
 //        glutDisplayFunc(idle);
@@ -329,7 +333,8 @@ void createViews() {
         glutSpecialFunc(keys);
         //
 //        sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + squareSize * 2, bottomHalfY, squareSize, squareSize);
-		        sceneViewWindow = glutCreateSubWindow(mainWindow, 0,0,0,0);
+		sceneViewWindow = glutCreateSubWindow(mainWindow, 0,0,0,0);
+		RIV3DView::windowHandle = sceneViewWindow;
         glutSetWindow(sceneViewWindow);
         glutDisplayFunc(RIV3DView::DrawInstance);
 //        glutDisplayFunc(idle);
@@ -388,25 +393,36 @@ void createViews() {
 void initializeViewProperties() {
     RIVTable *imageTable = dataset.GetTable("image");
     RIVTable *pathTable = dataset.GetTable("path");
-    RIVTable *intersectionstTable = dataset.GetTable("intersections");
+    RIVTable *intersectionsTable = dataset.GetTable("intersections");
     
     //    imageTable->FilterRowsUnlinkedTo(pathTable);
     
-    RIVRecord* bounceRecord = intersectionstTable->GetRecord("bounce#");
-    RIVRecord* xRecord = intersectionstTable->GetRecord("intersection X");
+    RIVRecord* bounceRecord = intersectionsTable->GetRecord("bounce#");
+    RIVRecord* xRecord = intersectionsTable->GetRecord("intersection X");
+	
+	RIVRecord* throughputOne = pathTable->GetRecord("throughput 1");
+	RIVRecord* throughputTwo = pathTable->GetRecord("throughput 2");
+	RIVRecord* throughputThree = pathTable->GetRecord("throughput 3");
+	
+	RIVRecord* spectrumR = intersectionsTable->GetRecord("spectrum 1");
+	RIVRecord* spectrumG = intersectionsTable->GetRecord("spectrum 2");
+	RIVRecord* spectrumB = intersectionsTable->GetRecord("spectrum 3");
     
 //    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty(pathTable,colors::GREEN,colors::RED);
     
     ColorMap jetColorMap = colors::jetColorMap();
-    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionstTable,bounceRecord,jetColorMap);
-//    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionstTable,xRecord,jetColorMap);
+    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,bounceRecord,jetColorMap);
+//    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,xRecord,jetColorMap);
+//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,throughputOne,throughputTwo,throughputThree);
+//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(intersectionsTable,spectrumR,spectrumG,spectrumB);
     RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
     
     parallelCoordsView->SetColorProperty(colorProperty);
     sceneView->SetSizeProperty(sizeProperty);
     sceneView->SetColorProperty(colorProperty);
     
-    //TODO: apply color and size properties to views
+	//Create the graphics primitives from the data
+	sceneView->InitializeGraphics();
 }
 
 
@@ -470,9 +486,7 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     
     //Use double buffering!
-    //    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
-    //    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
     
     /* set the initial window size */
     glutInitWindowSize(width, height);

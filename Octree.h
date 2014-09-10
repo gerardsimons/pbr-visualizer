@@ -17,6 +17,8 @@
 #include <vector>
 #include <algorithm>
 
+class OctreeNode;
+
 class Octree {
 private:
 	//The outermost dimensions of this octree, each child with depth N has dimensions of d/2^N where d is either width,height or depth
@@ -28,7 +30,12 @@ private:
 	std::vector<float>* yPositions;
 	std::vector<float>* zPositions;
 	
+	float* cachedMaxDensity = NULL;
 	size_t* cachedDepth = NULL;
+	size_t* cachedMaxCapacity = NULL;
+	
+	float maxDensityHelper(OctreeNode* node);
+	size_t maxCapacityHelper(OctreeNode* node);
 	
 	void init();
 	void checkMinMax(float& currentMin, float& currentMax, float candidate);
@@ -38,10 +45,12 @@ public:
 	Octree(std::vector<float>* xPositions, std::vector<float>* yPositions, std::vector<float>* zPositions, const std::vector<size_t>& indexSubset, OctreeConfig& configuration);
 	//A free wheeling sandbox type test function, includes massive amounts of #YOLO type endeavours
 	static bool Test();
-	friend std::ostream& operator<<(std::ostream& os, const Octree& tree) {
-		os << "Root node : \n" << *tree.root;
-		return os;
-	}
+//	friend std::ostream& operator<<(std::ostream& os, const Octree& tree) {
+//		os << "Root node : \n" << *tree.root;
+//		return os;
+//	}
+	float MaxDensity();
+	size_t MaxCapacity();
 	size_t NumberOfPoints();
 	size_t NumberOfNodes();
 	size_t Depth();

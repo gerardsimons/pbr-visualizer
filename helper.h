@@ -155,7 +155,7 @@ void printMatrix(size_t rows, size_t columns, T* matrix) {
         std::cout << "]\n";
     }
 }
-
+bool almost_equal(double,double,double);
 //T has to be a basic number type (float,double,int, ... ) //TODO: How to enforce this
 template<typename T>
 T maxInArray(T* values, size_t N) {

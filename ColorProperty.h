@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "ColorPalette.h"
 #include "ColorMap.h"
 
 class RIVRecord;
@@ -25,13 +26,10 @@ protected:
         memcpy(alternateColor,alternateColor_,sizeof(alternateColor));
     }
     RIVColorProperty() {
-        memcpy(alternateColor,colorBlack,sizeof(alternateColor));
+        memcpy(alternateColor,colors::BLACK,sizeof(alternateColor));
     }
 public:
     //DEFAULT COLORS
-    const static float colorBlue[3];
-    const static float colorYellow[3];
-    const static float colorBlack[3];
     
     virtual float const* Color(RIVTable*,const size_t&) = 0;
 };
@@ -115,16 +113,7 @@ public:
     }
     
     float const* Color(RIVTable* sourceTable, const size_t& row) {
-//        float value;
-//        if(RIVEvaluatedProperty<T>::Value(sourceTable, row,value)) {
-//            return linearInterpolateColor(value, colorOne, colorTwo);
-//        }
-//        else if(useAlternateColors) {
-//            return alternateColor;
-//        }
-//        else return NULL;
         float value; //Assuming this value will be between 0 and 1
-        float color[3] = {0,1,0}; //Red
         if(RIVEvaluatedProperty<T>::Value(sourceTable,row,value))  {
 //            printf("Color value = %f\n",value);
 			//
@@ -151,21 +140,43 @@ public:
     }
 };
 //Each R,G and B channel is interpolated independently according to three given
+template <typename T>
 class RIVColorRGBProperty : public RIVColorProperty {
 private:
-    std::string colorTableName;
+	//Use three distinct color properties for each RGB channel
+	RIVEvaluatedProperty<T>* redColorProperty;
+	RIVEvaluatedProperty<T>* greenColorProperty;
+	RIVEvaluatedProperty<T>* blueColorProperty;
+	
 
-    RIVRecord* blueRecord;
-    RIVRecord* redRecord;
-    RIVRecord* greenRecord;
 public:
-    RIVColorRGBProperty(std::string tableName_, RIVRecord *redRecord_, RIVRecord* greenRecord_,RIVRecord *blueRecord_) {
-        colorTableName = tableName_;
-        redRecord = redRecord_;
-        blueRecord = blueRecord_;
-        greenRecord = greenRecord_;
+	~RIVColorRGBProperty() {
+		delete redColorProperty;
+		delete greenColorProperty;
+		delete blueColorProperty;
+	}
+    RIVColorRGBProperty(RIVTable* referenceTable, RIVRecord *redRecord, RIVRecord* greenRecord,RIVRecord *blueRecord) {
+		redColorProperty = new RIVEvaluatedProperty<T>(referenceTable,redRecord);
+		greenColorProperty = new RIVEvaluatedProperty<T>(referenceTable,greenRecord);
+		blueColorProperty = new RIVEvaluatedProperty<T>(referenceTable,blueRecord);
     }
-    float *Color(const RIVTable* table, const size_t& row);
+    float const* Color(RIVTable* table, const size_t& row) {
+		float ratioRed = 0;
+		float ratioGreen = 0;
+		float ratioBlue = 0;
+		
+		if(redColorProperty->Value(table,row,ratioRed) && blueColorProperty->Value(table,row,ratioBlue) && greenColorProperty->Value(table,row,ratioGreen)) {
+//			printf("Ratio (r,g,b) = (%f,%f,%f)\n",ratioRed,ratioGreen,ratioBlue);
+			static float const color[3] = {ratioRed,ratioGreen,ratioBlue};
+			if(ratioRed > 0.5) {
+				
+			}
+			return color;
+		}
+		else return NULL;
+		
+
+	}
 };
 
 #endif /* defined(__Afstuderen__ColorProperty__) */

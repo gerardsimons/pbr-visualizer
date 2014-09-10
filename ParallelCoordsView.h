@@ -38,6 +38,8 @@ public:
     ParallelCoordsView(int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
     ParallelCoordsView(RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
 	~ParallelCoordsView(void);
+	
+	static int windowHandle;
     
     //Implemented virtual functions prescribed by DataView
     void Draw();

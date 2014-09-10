@@ -12,7 +12,7 @@
 #include "helper.h"
 #include "reporter.h"
 #include "trackball.h"
-#include "ColorPallete.h"
+#include "ColorPalette.h"
 #include "graphics_helper.h"
 
 #if __APPLE__
@@ -23,6 +23,7 @@
 
 //Init instance to draw
 RIV3DView* RIV3DView::instance = NULL;
+int RIV3DView::windowHandle = -1;
 
 RIV3DView::RIV3DView() {
     if(instance != NULL) {
@@ -107,6 +108,7 @@ void RIV3DView::drawHeatmap() {
 		OctreeNode* root = heatmap->GetRoot();
 		nodesDrawn = 0;
 		if(root) {
+			glPolygonMode(GL_FRONT, GL_FILL);
 			drawLeafNodes(root);
 		}
 		printf("%zu / %zu nodes drawn\n",nodesDrawn,heatmap->NumberOfNodes());
@@ -120,17 +122,33 @@ void RIV3DView::drawLeafNodes(OctreeNode* node) {
 		Point3D nodeCenter = node->Center();
 		size_t depth = node->GetDepth();
 		size_t pointsInNode = node->NumberOfPointsContained();
-		
+		float density = node->Density();
+
 		//Determine color according to number of children
-		float ratio = pointsInNode / (float)heatmap->GetConfiguration()->MaxNodeCapacity();
+		size_t maxCap = heatmap->MaxCapacity();
+		float ratio = (pointsInNode - 1) / (float)(maxCap - 5);
+		
+//		float maxDensity = heatmap->MaxDensity();
+//		float ratio = density / maxDensity;
+//		ratio = 1.F - ratio;
+//		float ratio = (pointsInNode) / ((float)heatmap->GetConfiguration()->MaxNodeCapacity());
 		const float* color = treeColorMap.Color(ratio);
+//		glColor3fv(color);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glColor4f(color[0], color[1], color[2],.15F);
-//		printf("node Ratio = %f\n",ratio);
-//		printf("Color = ");
-//		printArray(color, 3);
-//		printf("\n");
+		glColor4f(color[0], color[1], color[2],.5F);
+		
+//		if(almost_equal(ratio,0.05,.1) || almost_equal(ratio,0,.001)) {
+		if(pointsInNode > 14) {
+//			printf("Points in node = %zu\n",pointsInNode);
+////			printf("Node density = %f\n",density);
+////			printf("Max density = %f\n",maxDensity);
+//			printf("MAX_NODE_CAPACITY = %zu\n",maxCap);
+//			printf("Ratio = %f\n",ratio);
+//			printf("Color = ");
+//			printArray(color, 3);
+//			printf("\n");
+		}
 		
 		glPushMatrix();
 		glTranslatef(nodeCenter.x, nodeCenter.y, nodeCenter.z);
@@ -171,7 +189,7 @@ void RIV3DView::Draw() {
     
     drawCoordSystem();
     
-//	drawMeshModel();
+	drawMeshModel();
     
     /* Draw the intersection positions */
     GLUquadric* quadric = gluNewQuadric();
@@ -189,7 +207,6 @@ void RIV3DView::Draw() {
     //Draw camera position
     glPushMatrix();
     glTranslatef(278, 273, -500);
-//    glTranslatef(0, 0, 0);
     glScalef(1/modelData.GetScale(), 1/modelData.GetScale(), 1/modelData.GetScale());
     glScalef(0.01, 0.01, 0.01);
     gluSphere(quadric, 5, 5, 5);
@@ -201,15 +218,16 @@ void RIV3DView::Draw() {
 	if(drawHeatmapTree && heatmap != NULL)
 		drawHeatmap();
 
-//    reporter::stop(drawTask);
     glPopMatrix();
     
     //Draw some lines
-	if(showPaths)
+	if(drawLightPaths)
 		drawPaths(segmentStart,segmentStop);
-    
+	
+	//Flush the buffer
     glFlush();
     
+	//Swap back and front buffer
     glutSwapBuffers();
 	
 	reporter::stop("3D Draw");
@@ -227,9 +245,51 @@ void RIV3DView::drawMeshModel() {
     }
     glEnd();
 }
+//void RIV3DView::drawPoints() {
+//	
+//	reporter::startTask("Draw points.");
+//	
+//	RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("intersection X");
+//	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
+//	RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Z");
+//	
+//	//Only use 1 size
+//	float size = sizeProperty->ComputeSize(isectTable, 0);
+//	
+//	if(sizesAllTheSame) {
+//		glPointSize(size);
+//		printf("Sizes are all the same!\n");
+//	}
+//	
+//	if(isectTable != NULL) {
+//		TableIterator* iterator = isectTable->GetIterator();
+//		size_t row;
+//		glBegin(GL_POINTS);
+//		while(iterator->GetNext(row)) {
+//			const float* color = colorProperty->Color(isectTable, row);
+//			//			float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
+//			
+//			if(!sizesAllTheSame) {
+//				glPointSize(pointsSize[row]);
+//			}
+//			
+//			float x = xRecord->Value(row);
+//			float y = yRecord->Value(row);
+//			float z = zRecord->Value(row);
+//			
+//			glPushMatrix();
+//			glColor3fv(color);
+//			glVertex3f(x,y,z);
+//			
+//		}
+//		glEnd();
+//	}
+//	reporter::stop("Draw points.");
+//}
 
 void RIV3DView::drawPoints() {
-
+	reporter::startTask("Draw points.");
+	
 	RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("intersection X");
 	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
 	RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Z");
@@ -239,33 +299,33 @@ void RIV3DView::drawPoints() {
 	
 	if(sizesAllTheSame) {
 		glPointSize(size);
-		printf("Sizes are all the same!\n");
+//		printf("Sizes are all the same!\n");
 	}
 	
 	if(isectTable != NULL) {
-		TableIterator* iterator = isectTable->GetIterator();
-		size_t row;
+
 		glBegin(GL_POINTS);
-		while(iterator->GetNext(row)) {
-			const float* color = colorProperty->Color(isectTable, row);
+		for(size_t index : pointsToDraw) {
+//			const float* color = colorProperty->Color(isectTable, index);
+			
 			//			float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
 			
 			if(!sizesAllTheSame) {
-				glPointSize(pointsSize[row]);
+				glPointSize(pointsSize[index]);
 			}
 			
-			float x = xRecord->Value(row);
-			float y = yRecord->Value(row);
-			float z = zRecord->Value(row);
+			float x = xRecord->Value(index);
+			float y = yRecord->Value(index);
+			float z = zRecord->Value(index);
 			
 			glPushMatrix();
-			glColor3fv(color);
+			glColor3f(pointsR[index],pointsG[index],pointsB[index]);
 			glVertex3f(x,y,z);
 			
 		}
 		glEnd();
 	}
-
+	reporter::stop("Draw points.");
 }
 
 //Move this function somewhere else
@@ -311,6 +371,11 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 	reporter::stop(taskName);
 }
 
+void RIV3DView::InitializeGraphics() {
+	createPoints();
+	generateOctree(6, 100, .00001F);
+}
+
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
 void RIV3DView::createPoints() {
     
@@ -318,6 +383,7 @@ void RIV3DView::createPoints() {
     pointsR.clear();
     pointsG.clear();
     pointsB.clear();
+	pointsToDraw.clear();
     pointsSize.clear();
 	
 	std::vector<float> uniqueSizes;
@@ -336,6 +402,8 @@ void RIV3DView::createPoints() {
 //		printf("Computed color for point : ");
 //        printArray(color, 3);
 //		printf("\n");
+		
+		pointsToDraw.push_back(row);
 		
         if(color != NULL) {
 			float size = sizeProperty->ComputeSize(isectTable, row);
@@ -358,7 +426,7 @@ void RIV3DView::createPoints() {
 		pointsSize.clear(); //Not necessary
 	}
     
-    printf("%zu points created.\n",pointsX.size());
+    printf("%zu points created.\n",pointsToDraw.size());
 }
 
 void RIV3DView::MovePathSegment(float ratioIncrement) {
@@ -386,117 +454,119 @@ void RIV3DView::MovePathSegment(float ratioIncrement) {
 
 void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 //    printf("drawPaths(%f,%f)\n",startSegment,stopSegment);
-    if(showPaths) { //Drawing paths is turned off
-        //See if it should consist of two partial segments
-        for(float i = 1 ; i < maxBounce ; i++) {
-            if(startSegment < i / maxBounce && stopSegment > i / maxBounce) {
+
+	//See if it should consist of two partial segments
+	for(float i = 1 ; i < maxBounce ; i++) {
+		if(startSegment < i / maxBounce && stopSegment > i / maxBounce) {
 //                printf("(%f,%f) segment split in (%f,%f) and (%f,%f)\n",startSegment,stopSegment,startSegment,i/maxBounce,i/maxBounce,stopSegment);
-                drawPaths(startSegment, i / maxBounce);
-                drawPaths(i / maxBounce, stopSegment);
-                return;
-            }
-        }
-		//The table we are drawing from
-        RIVTable *table = dataset->GetTable("intersections");
-        //Get the records we need from the table
-        RIVFloatRecord* xRecord = table->GetRecord<RIVFloatRecord>("intersection X");
-        RIVFloatRecord* yRecord = table->GetRecord<RIVFloatRecord>("intersection Y");
-        RIVFloatRecord* zRecord = table->GetRecord<RIVFloatRecord>("intersection Z");
-        RIVUnsignedShortRecord *bounceRecord = table->GetRecord<RIVUnsignedShortRecord>("bounce#");
-        //Get the iterator, this iterator is aware of what rows are filtered and not
-        TableIterator *iterator = table->GetIterator();
-        
-        size_t row = 0;
-        size_t lastRow = 0;
-        ushort lastBounceNr = 0;
-        float lastColor[3] = {0};
-        
-        bool pathStartFound = false;
-        size_t linesDrawn = 0;
-        
-        if(startSegment < 1.F / maxBounce) { //Connect with camera
-            glBegin(GL_LINES);
-            while(iterator->GetNext(row)) {
-                ushort bounceNr = bounceRecord->Value(row);
-                if(bounceNr == 1) {
-                    //Arbitrary camera color
-                    float const* color = colorProperty->Color(table, row); //Check if any color can be computed for the given row
-                    if(color) {
-                        glColor3f(1, 1, 1); //White
-                        float deltaX = xRecord->Value(row) - cameraPosition[0];
-                        float deltaY = yRecord->Value(row) - cameraPosition[1];
-                        float deltaZ = zRecord->Value(row) - cameraPosition[2];
-                        glVertex3f(cameraPosition[0] + deltaX * startSegment * maxBounce,cameraPosition[1] + deltaY * startSegment * maxBounce,cameraPosition[2] + deltaZ * startSegment * maxBounce);
-                        glColor3fv(color);
-                        glVertex3f(cameraPosition[0] + deltaX * stopSegment * maxBounce,cameraPosition[1] + deltaY * stopSegment * maxBounce,cameraPosition[2] + deltaZ * stopSegment * maxBounce);
-                    }
-                }
-            }
-            glEnd();
-            return;
-        }
-        
-        glBegin(GL_LINES);
-        while(iterator->GetNext(row)) {
-            int bounce = floor(startSegment * maxBounce);
-            float const* color = colorProperty->Color(table, row); //Check if any color can be computed for the given row
-            if(color != NULL) {
-                ushort bounceNr = bounceRecord->Value(row);
-                if(!pathStartFound && bounceNr == bounce ) {
-                    //                printf("Row %zu is valid start point for path\n",row);;
-                    pathStartFound = true;
-                }
-                else if(pathStartFound && row == lastRow + 1 && bounceNr == bounce + 1) { //Valid path found, draw
-                    //                printf("Row %zu is valid end point for path\n",row);
-                    //                printf("Last color = ");
-                    //                printArray(lastColor, 3);
-                    
+			drawPaths(startSegment, i / maxBounce);
+			drawPaths(i / maxBounce, stopSegment);
+			return;
+		}
+	}
+	//The table we are drawing from
+	RIVTable *table = dataset->GetTable("intersections");
+	//Get the records we need from the table
+	RIVFloatRecord* xRecord = table->GetRecord<RIVFloatRecord>("intersection X");
+	RIVFloatRecord* yRecord = table->GetRecord<RIVFloatRecord>("intersection Y");
+	RIVFloatRecord* zRecord = table->GetRecord<RIVFloatRecord>("intersection Z");
+	RIVUnsignedShortRecord *bounceRecord = table->GetRecord<RIVUnsignedShortRecord>("bounce#");
+	//Get the iterator, this iterator is aware of what rows are filtered and not
+	TableIterator *iterator = table->GetIterator();
+	
+	size_t row = 0;
+	size_t lastRow = 0;
+	ushort lastBounceNr = 0;
+	float lastColor[3] = {0};
+	
+	bool pathStartFound = false;
+	size_t linesDrawn = 0;
+	
+	if(startSegment < 1.F / maxBounce) { //Connect with camera
+		glBegin(GL_LINES);
+		while(iterator->GetNext(row)) {
+			ushort bounceNr = bounceRecord->Value(row);
+			if(bounceNr == 1) {
+				//Arbitrary camera color
+				float const* color = colorProperty->Color(table, row); //Check if any color can be computed for the given row
+				if(color) {
+					glColor3f(1, 1, 1); //White
+					float deltaX = xRecord->Value(row) - cameraPosition[0];
+					float deltaY = yRecord->Value(row) - cameraPosition[1];
+					float deltaZ = zRecord->Value(row) - cameraPosition[2];
+					glVertex3f(cameraPosition[0] + deltaX * startSegment * maxBounce,cameraPosition[1] + deltaY * startSegment * maxBounce,cameraPosition[2] + deltaZ * startSegment * maxBounce);
+					glColor3fv(color);
+					glVertex3f(cameraPosition[0] + deltaX * stopSegment * maxBounce,cameraPosition[1] + deltaY * stopSegment * maxBounce,cameraPosition[2] + deltaZ * stopSegment * maxBounce);
+				}
+			}
+		}
+		glEnd();
+		return;
+	}
+	
+	glBegin(GL_LINES);
+	while(iterator->GetNext(row)) {
+		int bounce = floor(startSegment * maxBounce);
+		float const* color = colorProperty->Color(table, row); //Check if any color can be computed for the given row
+		if(color != NULL) {
+			ushort bounceNr = bounceRecord->Value(row);
+			if(!pathStartFound && bounceNr == bounce ) {
+				//                printf("Row %zu is valid start point for path\n",row);;
+				pathStartFound = true;
+			}
+			else if(pathStartFound && row == lastRow + 1 && bounceNr == bounce + 1) { //Valid path found, draw
+				//                printf("Row %zu is valid end point for path\n",row);
+				//                printf("Last color = ");
+				//                printArray(lastColor, 3);
+				
 //                    printf("lastBounceNr = %d\n",lastBounceNr);
 //                    printf("bounceNr = %d\n",bounceNr]);
-                    
-                    float lastX = xRecord->Value(lastRow);
-                    float lastY = yRecord->Value(lastRow);
-                    float lastZ = zRecord->Value(lastRow);
-                    
-                    float deltaX = xRecord->Value(row) - lastX;
-                    float deltaY = yRecord->Value(row) - lastY;
-                    float deltaZ = zRecord->Value(row) - lastZ;
-                    
-                    float C_one = linearInterpolate(startSegment * maxBounce, lastBounceNr, bounceNr);
-                    float C_two = linearInterpolate(stopSegment * maxBounce, lastBounceNr, bounceNr);
+				
+				float lastX = xRecord->Value(lastRow);
+				float lastY = yRecord->Value(lastRow);
+				float lastZ = zRecord->Value(lastRow);
+				
+				float deltaX = xRecord->Value(row) - lastX;
+				float deltaY = yRecord->Value(row) - lastY;
+				float deltaZ = zRecord->Value(row) - lastZ;
+				
+				float C_one = linearInterpolate(startSegment * maxBounce, lastBounceNr, bounceNr);
+				float C_two = linearInterpolate(stopSegment * maxBounce, lastBounceNr, bounceNr);
 
-                    //Sanity check
+				//Sanity check
 //                    if(C_one < 0 || C_one > 1 || C_two < 0 || C_two > 1) {
 //                        
 //                    }
-                    glColor3fv(lastColor);
-                    glVertex3f(lastX + deltaX * C_one, lastY + deltaY * C_one, lastZ + deltaZ * C_one);
-                    glColor3fv(color);
-                    glVertex3f(lastX + deltaX * C_two, lastY + deltaY * C_two, lastZ + deltaZ * C_two);
-                    
+				glColor3fv(lastColor);
+				glVertex3f(lastX + deltaX * C_one, lastY + deltaY * C_one, lastZ + deltaZ * C_one);
+				glColor3fv(color);
+				glVertex3f(lastX + deltaX * C_two, lastY + deltaY * C_two, lastZ + deltaZ * C_two);
+				
 
 //                    glVertex3f(lastX + deltaX * segmentStart,lastY + deltaY * segmentStart,lastZ + deltaZ * segmentStart);
 //                    glColor3fv(color);
 //                    glVertex3f(lastX + deltaX * segmentStop,lastY + deltaY * segmentStop,lastZ + deltaZ * segmentStop);
-                    
-                    linesDrawn++;
-                    pathStartFound = false;
-                }
-                //            else if(bounceNr == startBounce) {
-                ////                printf("Last row was not valid after all, it had no successor.\n");
-                //
-                //            }
-                lastRow = row;
-                lastBounceNr = bounceNr;
-                lastColor[0] = color[0];
-                lastColor[1] = color[1];
-                lastColor[2] = color[2];
-            }
-        }
-        glEnd();
-    }
+				
+				linesDrawn++;
+				pathStartFound = false;
+			}
+			//            else if(bounceNr == startBounce) {
+			////                printf("Last row was not valid after all, it had no successor.\n");
+			//
+			//            }
+			lastRow = row;
+			lastBounceNr = bounceNr;
+			lastColor[0] = color[0];
+			lastColor[1] = color[1];
+			lastColor[2] = color[2];
+		}
+	}
+	glEnd();
+    
 }
-
+void RIV3DView::ToggleDrawPaths() {
+	drawLightPaths = !drawLightPaths;
+}
 void RIV3DView::DrawInstance() {
     if(instance != NULL) {
         instance->Draw();
@@ -527,8 +597,14 @@ void RIV3DView::ReshapeInstance(int width, int height) {
 
 void RIV3DView::OnDataSetChanged() {
 //    printf("3D View received on filter change.");
-//    createPoints();
-    glutPostRedisplay();
+    createPoints();
+	
+	int currentWindow = glutGetWindow();
+	glutSetWindow(RIV3DView::windowHandle);
+	glutPostRedisplay();
+	//Return window to given window
+	glutSetWindow(currentWindow);
+	
     isDirty = true;
 }
 

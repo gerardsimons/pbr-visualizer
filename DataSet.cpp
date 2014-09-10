@@ -34,6 +34,7 @@ void RIVDataSet::ClearFilters() {
     for(RIVTable* table : tables) {
         table->ClearFilters();
     }
+	notifyListeners();
 }
 
 void RIVDataSet::ClearFilter(std::string filterName) {
@@ -41,7 +42,7 @@ void RIVDataSet::ClearFilter(std::string filterName) {
     for(RIVTable *table : tables) {
         table->ClearFilter(filterName);
     }
-
+	notifyListeners();
 }
 
 size_t RIVDataSet::TotalNumberOfRecords() const {

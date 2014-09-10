@@ -7,6 +7,7 @@
 #include <map>
 #include <fstream>
 #include <regex>
+#include <algorithm>
 
 #include "reporter.h"
 
@@ -169,7 +170,6 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, const BMPI
     if(pathsLimit > 0) { //Probabilistic sampling
         probability = pathsFound / (double) pathsLimit;
     }
-    
 
     if (is.is_open())
     {
@@ -636,9 +636,10 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, const BMP
         lensUs.push_back(lensU);
         lensVs.push_back(lensV);
         timestamps.push_back(timestamp);
-        throughPutOne.push_back(throughput[0]);
-        throughPutTwo.push_back(throughput[1]);
-        throughPutThree.push_back(throughput[2]);
+		//Clamp throughput RGB
+        throughPutOne.push_back(std::min(1.F,throughput[0]));
+        throughPutTwo.push_back(std::min(1.F,throughput[1]));
+		throughPutThree.push_back(std::min(1.F,throughput[2]));
         intersections.push_back(size);
         
         std::vector<size_t> isectIndices;
@@ -686,9 +687,12 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, const BMP
             fread(&spectraG,sizeof(float),1,inputFile);
             fread(&spectraB,sizeof(float),1,inputFile);
             
-            spectraOne.push_back(spectraR);
-            spectraTwo.push_back(spectraG);
-            spectraThree.push_back(spectraB);
+			//Be sure to clamp the RGB values!
+			
+			
+            spectraOne.push_back(std::min(spectraR, 1.F));
+            spectraTwo.push_back(std::min(spectraG, 1.F));
+            spectraThree.push_back(std::min(spectraB, 1.F));
         }
         
         for(ushort i = 0 ; i < size ; ++i) {
@@ -757,10 +761,10 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, const BMP
     intersectionsTable->AddRecord(primitiveIdRecord);
     intersectionsTable->AddRecord(shapeIdRecord);
     intersectionsTable->AddRecord(spectrumOneRecord);
-//    intersectionsTable->AddRecord(spectrumTwoRecord);
-//    intersectionsTable->AddRecord(spectrumThreeRecord);
-//    intersectionsTable->AddRecord(interactionTypesRecord);
-//    intersectionsTable->AddRecord(lightIdsRecord);
+    intersectionsTable->AddRecord(spectrumTwoRecord);
+    intersectionsTable->AddRecord(spectrumThreeRecord);
+    intersectionsTable->AddRecord(interactionTypesRecord);
+    intersectionsTable->AddRecord(lightIdsRecord);
     
     // Create and apply references to tables
     RIVReference referenceToIntersections = RIVReference(pathTable, intersectionsTable);

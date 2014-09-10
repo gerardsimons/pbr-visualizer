@@ -126,7 +126,6 @@ void RIVImageView::Reshape(int width, int height) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
-
 void RIVImageView::createTextureImage(const BMPImage& image) {
     glGenTextures(1, &imageTexture);
     glBindTexture(GL_TEXTURE_2D, imageTexture);
@@ -254,7 +253,9 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 				}
 //
 				Filter *xFilter = new RangeFilter("x",selection.start.x,selection.end.x - 1);
-				Filter *yFilter = new RangeFilter("y",selection.start.y,selection.end.y - 1);
+				//Be sure to invert the Y coordinates!
+				Filter *yFilter = new RangeFilter("y", renderedImage.sizeY - selection.start.y,renderedImage.sizeY - selection.end.y - 1);
+//				Filter *yFilter = new RangeFilter("y", selection.start.y,selection.end.y - 1);
                 
 //                Filter *xFilter = new RangeFilter("x",9,22);
 //                Filter *yFilter = new RangeFilter("y",5,6);

@@ -13,12 +13,15 @@ void OctreeNode::Refine() { //Split this node into 8, by adding 8 children
 	
 	//Or if the max depth has been reached
 	if(depth >= config->MaxDepthAllowed()) {
-		//			printf("Recursion stopped because the tree has reached its maximum depth.\n");
+//		printf("Recursion stopped because the tree has reached its maximum depth.\n");
 		return;
 	}
 	//Or if there are less points than the minimum required for splitting
 	if(pointIndices.size() <= config->MaxNodeCapacity()) {
 //		printf("Recursion stopped because less points than MAX_NODE_CAPACITY was contained in all leaf nodes.\n");
+//		return;
+	}
+	if(pointIndices.size() == 0) { //When empty definitely stop
 		return;
 	}
 	
@@ -35,7 +38,7 @@ void OctreeNode::Refine() { //Split this node into 8, by adding 8 children
 	for(int xOffset = -1 ; xOffset <= 1 ; xOffset += 2 ) {
 		for(int yOffset = -1 ; yOffset <= 1 ; yOffset += 2) {
 			for(int zOffset = -1 ; zOffset <= 1 ; zOffset += 2) {
-				OctreeNode* newChildNode = new OctreeNode(xPositions,yPositions,zPositions,x + xOffset * halfSize,y + yOffset * halfSize,z + zOffset * halfSize, newSize,depth + 1,config);
+				OctreeNode* newChildNode = new OctreeNode(xPositions,yPositions,zPositions,x + xOffset * halfSize,y + yOffset * halfSize,z + zOffset * halfSize, newSize,depth + 1,config,tree);
 				children[childIndex] = newChildNode;
 				++childIndex;
 			}
@@ -127,13 +130,14 @@ bool OctreeNode::rangeCheck(float lowerBound, float upperBound, float value) {
 bool OctreeNode::ContainsAnyPoints() {
 	return pointIndices.size() > 0;
 }
-OctreeNode::OctreeNode(std::vector<float>* xPositions,std::vector<float>* yPositions,std::vector<float>* zPositions, float x, float y, float z, float size, size_t depth, OctreeConfig* config) {
+OctreeNode::OctreeNode(std::vector<float>* xPositions,std::vector<float>* yPositions,std::vector<float>* zPositions, float x, float y, float z, float size, size_t depth_, OctreeConfig* config, Octree* tree)  : depth(depth_){
 	
 	//Explicitly set children to null
 	for(size_t i = 0 ; i < MAX_CHILDREN ; ++i) {
 		children[i] = NULL;
 	}
 	isLeaf = true;
+	this->tree = tree;
 	
 	this->config = config;
 	
@@ -147,7 +151,18 @@ OctreeNode::OctreeNode(std::vector<float>* xPositions,std::vector<float>* yPosit
 	this->yPositions = yPositions;
 	this->zPositions = zPositions;
 	
-	this->depth = depth;
+//	this->depth = depth;
+}
+float OctreeNode::Density() {
+//	printf("depth = %zu\n",depth);
+//	float relativeVolume = (1.F / depth) * (1.F / depth) * (1.F / depth);
+	float relativeVolume = (1.F / depth);
+	float density = pointIndices.size() / relativeVolume;
+//	if (density>0 && density/density != density/density) {
+//		throw "Infinity error";
+//	}
+//	printf("density = %f\n",density);
+	return density;
 }
 size_t OctreeNode::MaxDepth() {
 	if(isLeaf) { //End of the line, return the depth of this node
