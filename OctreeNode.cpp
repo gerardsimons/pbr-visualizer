@@ -19,7 +19,7 @@ void OctreeNode::Refine() { //Split this node into 8, by adding 8 children
 	//Or if there are less points than the minimum required for splitting
 	if(pointIndices.size() <= config->MaxNodeCapacity()) {
 //		printf("Recursion stopped because less points than MAX_NODE_CAPACITY was contained in all leaf nodes.\n");
-//		return;
+		return;
 	}
 	if(pointIndices.size() == 0) { //When empty definitely stop
 		return;

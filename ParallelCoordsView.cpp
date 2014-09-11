@@ -223,6 +223,9 @@ void ParallelCoordsView::drawLines() {
                 glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
                 
                 float const* color = colorProperty->Color(table, row);
+				if(color == NULL) {
+					
+				}
 
                 float size = sizeProperty->ComputeSize(table,row);
         
@@ -380,7 +383,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
             for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
                 for(ParallelCoordsAxis &axis : axisGroup.axes) {
                     int distanceX = abs(axis.x - x);
-                    printf("distance=%d\n",distanceX);
+//                    printf("distance=%d\n",distanceX);
                     
                     if(distanceX < proximityMax) {
                         //Close enough..

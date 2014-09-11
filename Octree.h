@@ -14,6 +14,7 @@
 #include "OctreeNode.h"
 #include "OctreeConfig.h"
 
+#include <ostream>
 #include <vector>
 #include <algorithm>
 
@@ -45,10 +46,10 @@ public:
 	Octree(std::vector<float>* xPositions, std::vector<float>* yPositions, std::vector<float>* zPositions, const std::vector<size_t>& indexSubset, OctreeConfig& configuration);
 	//A free wheeling sandbox type test function, includes massive amounts of #YOLO type endeavours
 	static bool Test();
-//	friend std::ostream& operator<<(std::ostream& os, const Octree& tree) {
-//		os << "Root node : \n" << *tree.root;
-//		return os;
-//	}
+	friend std::ostream& operator<<(std::ostream& os, const Octree& tree) {
+		os << "Root node : \n" << tree.root;
+		return os;
+	}
 	float MaxDensity();
 	size_t MaxCapacity();
 	size_t NumberOfPoints();

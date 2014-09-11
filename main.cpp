@@ -203,7 +203,8 @@ void keys(int keyCode, int x, int y) {
 //            imageView->createTextureImage();
 //            postRedisplay = true;
 //            testFunctions();
-			sceneView->InitializeGraphics();
+//			sceneView->InitializeGraphics();
+			sceneView->createPoints();
             break;
         }
         case 119: // 'w' key, move camera in Y direction

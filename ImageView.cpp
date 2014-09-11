@@ -238,7 +238,9 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
             printf("selection (startY,endY) = (%d,%d)\n",selection.start.y,selection.end.y);
 
 			if(selection.end.x != selection.start.x && selection.end.y != selection.start.y) {
-				dataset->ClearFilters();
+
+				dataset->ClearFilter("x");
+				dataset->ClearFilter("y");
 
 				//Normalize selection
 				if(selection.end.x < selection.start.x) {

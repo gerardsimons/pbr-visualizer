@@ -51,6 +51,11 @@ RIVRecord* RIVTable::GetRecord(size_t index) {
 void RIVTable::filterRecords() {
 //    filteredRows.clear();
 //    std::map<size_t,bool> filteredRows; //Buffer rows filtered below for easy reference updating
+	printf("\n\n************* Filtering *************\n");
+	for(Filter* filter : filters) {
+		filter->Print();
+	}
+	
     if(filters.size() > 0) {
         reporter::startTask("Complete filtering");
         reporter::startTask("Filter " + std::to_string(rows)+ " rows.");

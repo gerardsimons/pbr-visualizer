@@ -24,7 +24,7 @@ private:
     //Whether to draw the members of clusters, or only the cluster medoid
     bool drawClusterMembers = false;
 	//Whether the generated octree should be drawn (if any is generated)
-	bool drawHeatmapTree = true;
+	bool drawHeatmapTree = false;
 	bool drawLightPaths = false;
 	
 	//Octree generated from 3D points (generated in createPoints)
@@ -34,7 +34,7 @@ private:
     //Path drawing variables
     int maxBounce = 5; //TODO: Deduce this value from the bounce record
     
-    const float segmentWidth = .1F; // a tenth of the total path length
+    const float segmentWidth = .05F; // a tenth of the total path length
     float segmentStart = 0;
     float segmentStop = segmentWidth;
     
@@ -56,8 +56,7 @@ private:
     //Possibly the selection box created by clicking and dragging (NOT IMPLEMENTED)
     Box3D selectionBox;
     
-    //Create graphics buffer from unfiltered data rows
-    void createPoints();
+
 	//Generate a octree from the unfiltered intersection points
 	void generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize);
 	//Draw the mesh model loaded from the PBRT file
@@ -78,6 +77,9 @@ public:
     RIV3DView(RIVColorProperty*,RIVSizeProperty*);
 	
 	static int windowHandle;
+	
+	//Create graphics buffer from unfiltered data rows
+    void createPoints();
     
     void Reshape(int newWidth, int newHeight);
     void Draw();

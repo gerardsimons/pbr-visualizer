@@ -172,7 +172,7 @@ void RIV3DView::drawLeafNodes(OctreeNode* node) {
 void RIV3DView::Draw() {
 //    printf("3DView Draw!\n");
 	
-	reporter::startTask("3D Draw");
+//	reporter::startTask("3D Draw");
 	
     glEnable(GL_DEPTH_TEST);
     glClearColor (0.0, 0.0, 0.0, 0.0);
@@ -230,7 +230,7 @@ void RIV3DView::Draw() {
 	//Swap back and front buffer
     glutSwapBuffers();
 	
-	reporter::stop("3D Draw");
+//	reporter::stop("3D Draw");
 }
 
 void RIV3DView::drawMeshModel() {
@@ -245,50 +245,9 @@ void RIV3DView::drawMeshModel() {
     }
     glEnd();
 }
-//void RIV3DView::drawPoints() {
-//	
-//	reporter::startTask("Draw points.");
-//	
-//	RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("intersection X");
-//	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
-//	RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Z");
-//	
-//	//Only use 1 size
-//	float size = sizeProperty->ComputeSize(isectTable, 0);
-//	
-//	if(sizesAllTheSame) {
-//		glPointSize(size);
-//		printf("Sizes are all the same!\n");
-//	}
-//	
-//	if(isectTable != NULL) {
-//		TableIterator* iterator = isectTable->GetIterator();
-//		size_t row;
-//		glBegin(GL_POINTS);
-//		while(iterator->GetNext(row)) {
-//			const float* color = colorProperty->Color(isectTable, row);
-//			//			float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
-//			
-//			if(!sizesAllTheSame) {
-//				glPointSize(pointsSize[row]);
-//			}
-//			
-//			float x = xRecord->Value(row);
-//			float y = yRecord->Value(row);
-//			float z = zRecord->Value(row);
-//			
-//			glPushMatrix();
-//			glColor3fv(color);
-//			glVertex3f(x,y,z);
-//			
-//		}
-//		glEnd();
-//	}
-//	reporter::stop("Draw points.");
-//}
 
 void RIV3DView::drawPoints() {
-	reporter::startTask("Draw points.");
+//	reporter::startTask("Draw points.");
 	
 	RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("intersection X");
 	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
@@ -305,13 +264,20 @@ void RIV3DView::drawPoints() {
 	if(isectTable != NULL) {
 
 		glBegin(GL_POINTS);
-		for(size_t index : pointsToDraw) {
+		for(size_t i = 0 ; i < pointsToDraw.size() ; ++i) {
+			size_t index = pointsToDraw[i];
 //			const float* color = colorProperty->Color(isectTable, index);
-			
+
+//			if(color[0] != pointsR[i] || color[1] != pointsG[i] || color[2] != pointsB[i]) {
+//				printf("row = %zu\n",index);
+//				printf("Fresh color = ");
+//				printArray(color, 3);
+//				printf("cached color = [%f,%f,%f]",pointsR[i],pointsG[i],pointsB[i]);
+//			}
 			//			float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
 			
 			if(!sizesAllTheSame) {
-				glPointSize(pointsSize[index]);
+				glPointSize(pointsSize[i]);
 			}
 			
 			float x = xRecord->Value(index);
@@ -319,13 +285,14 @@ void RIV3DView::drawPoints() {
 			float z = zRecord->Value(index);
 			
 			glPushMatrix();
-			glColor3f(pointsR[index],pointsG[index],pointsB[index]);
+			glColor3f(pointsR[i],pointsG[i],pointsB[i]);
+//			glColor3fv(color); //Very fresh colors
 			glVertex3f(x,y,z);
 			
 		}
 		glEnd();
 	}
-	reporter::stop("Draw points.");
+//	reporter::stop("Draw points.");
 }
 
 //Move this function somewhere else
@@ -373,7 +340,7 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 
 void RIV3DView::InitializeGraphics() {
 	createPoints();
-	generateOctree(6, 100, .00001F);
+	generateOctree(7, 1, .00001F);
 }
 
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
@@ -395,10 +362,13 @@ void RIV3DView::createPoints() {
     size_t row = 0;
 	
 	sizesAllTheSame = true;
+//	RIVUnsignedShortRecord *bounceRecord = isectTable->GetRecord<RIVUnsignedShortRecord>("bounce#");
     
     while(iterator->GetNext(row)) {
         float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
 		
+//		printf("row = %zu\n",row);
+//		printf("bounce# = %d\n",bounceRecord->Value(row));
 //		printf("Computed color for point : ");
 //        printArray(color, 3);
 //		printf("\n");
@@ -427,6 +397,7 @@ void RIV3DView::createPoints() {
 	}
     
     printf("%zu points created.\n",pointsToDraw.size());
+	
 }
 
 void RIV3DView::MovePathSegment(float ratioIncrement) {
@@ -450,7 +421,6 @@ void RIV3DView::MovePathSegment(float ratioIncrement) {
         segmentStop -= overshoot;
     }
 }
-
 
 void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 //    printf("drawPaths(%f,%f)\n",startSegment,stopSegment);
@@ -679,42 +649,3 @@ bool RIV3DView::HandleMouseMotion(int x, int y) {
     }
     return false;
 }
-
-/*
-int lastX = -1;
-int lastY = -1;
-
-bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
-    ToViewSpaceCoordinates(&x, &y);
-	if(isDragging || containsPoint(x,y)) {
-        ToViewSpaceCoordinates(&x, &y);
-        if(state == GLUT_DOWN && !isDragging) {
-            isDragging = true;
-            lastX = x;
-            lastY = y;
-            isDirty = true;
-            return true;
-        } else if(state == GLUT_UP) {
-            isDragging = false;
-            isDirty = true;
-            return true;
-        }
-    }
-    return false;
-}
-
-bool RIV3DView::HandleMouseMotion(int x, int y) {
-    if(isDragging) {
-        int deltaX = x - startX;
-        int deltaY = y - startY;
-        
-        float modifier = .5F;
-        
-        yRotated = -modifier * deltaX;
-        xRotated = -modifier * deltaY;
-        isDirty = true;
-        return true;
-    }
-    return false;
-}
-*/
