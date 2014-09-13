@@ -12,6 +12,7 @@
 #include "DataView.h"
 #include "MeshModel.h"
 #include "Octree.h"
+#include "Ray.h"
 #include <limits>
 
 class RIV3DView : public RIVDataView, public RIVDataSetListener {
@@ -42,6 +43,11 @@ private:
     Point3D cursorNear;
     Point3D cursorFar;
 	
+	Vec3Df Phit; //Supposedly the point of intersection of the ray with the plane supporting the triangle
+	Ray<float> pickRay;
+	bool meshSelected = false;
+	size_t selectedMeshIndex;
+	
 	RIVTable* isectTable = NULL;
     
     //Buffered graphics point data, generated from the data, stored here for speed, TODO: Only store indices and a pointer to these records?
@@ -56,6 +62,9 @@ private:
     //Possibly the selection box created by clicking and dragging (NOT IMPLEMENTED)
     Box3D selectionBox;
     
+	//Start and end point of selection ray
+	Point3D selectNear;
+	Point3D selectFar;
 
 	//Generate a octree from the unfiltered intersection points
 	void generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize);

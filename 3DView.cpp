@@ -72,13 +72,13 @@ void RIV3DView::Reshape(int newWidth, int newHeight) {
     
 //    selectionBox = Box3D(0,0,0,1.F,1.F,1.F);
     
-//    cursorNear.x = 0.F;
-//    cursorNear.x = 0.F;
-//    cursorNear.z = zNear;
-//    
-//    cursorFar.x = 0.F;
-//    cursorFar.x = 0.F;
-//    cursorFar.z = zFar;
+    cursorNear.x = 0.F;
+    cursorNear.y = 0.F;
+    cursorNear.z = 0.F;
+    
+    cursorFar.x = 0.F;
+    cursorFar.y = 0.F;
+    cursorFar.z = 1.F;
     
     tbInitTransform();
     tbHelp();
@@ -86,7 +86,7 @@ void RIV3DView::Reshape(int newWidth, int newHeight) {
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(55, (double)width/height, 1, 1000);
+    gluPerspective(55, (double)width/height, 1, 10);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -190,9 +190,20 @@ void RIV3DView::Draw() {
     drawCoordSystem();
     
 	drawMeshModel();
+	
+	
     
     /* Draw the intersection positions */
     GLUquadric* quadric = gluNewQuadric();
+	
+	//Draw Phit
+	glColor3f(1, 1, 0);
+	glPushMatrix();
+	glTranslatef(Phit[0], Phit[1], Phit[2]);
+	glScalef(.01, 0.01, 0.01);
+	gluSphere(quadric, 2, 9, 9);
+	glPopMatrix();
+	glEnd();
     
     //Draw
     glColor3f(1, 1, 1);
@@ -200,8 +211,8 @@ void RIV3DView::Draw() {
 
 //    glPushMatrix();
 //    glLoadIdentity();
-    glScalef(modelData.GetScale(), modelData.GetScale(), modelData.GetScale());
-    glTranslatef(-modelCenter.x, -modelCenter.y, -modelCenter.z);
+//    glScalef(modelData.GetScale(), modelData.GetScale(), modelData.GetScale());
+//    glTranslatef(-modelCenter.x, -modelCenter.y, -modelCenter.z);
     
 //    Translate -278.000000 -273.000000 500.000000
     //Draw camera position
@@ -224,6 +235,19 @@ void RIV3DView::Draw() {
 	if(drawLightPaths)
 		drawPaths(segmentStart,segmentStop);
 	
+
+	
+	//Draw selection ray
+	glColor3f(1,1,1);
+	glBegin(GL_LINES);
+	//	glVertex3f(selectNear.x, selectNear.y, selectNear.z);
+	//	glVertex3f(selectFar.x, selectFar.y, selectFar.z);
+	glVertex3f(pickRay.orig[0], pickRay.orig[1], pickRay.orig[2]);
+	Vec3Df dest = pickRay.orig + 10000.F * pickRay.dir;
+	glColor3f(1, 0, 0);
+	glVertex3f(dest[0],dest[1],dest[2]);
+	glEnd();
+	
 	//Flush the buffer
     glFlush();
     
@@ -238,11 +262,33 @@ void RIV3DView::drawMeshModel() {
     
     glColor3f(.5f,.2f,1.0f); //Purple
     /** Draw the model **/
-    glBegin(GL_QUADS);
-    const std::vector<float>& vertices = modelData.GetVertices();
-    for(size_t i = 0 ; i < vertices.size() ; i += 3) {
-        glVertex3f(vertices[i], vertices[i+1], vertices[i+2]);
-    }
+    glBegin(GL_TRIANGLES);
+    const std::vector<TriangleMesh>& meshes = modelData.GetMeshes();
+	size_t meshNumber = 1;
+	for(size_t j = 0 ; j < meshes.size() ; ++j) {
+//		printf("Drawing Mesh %zu\n",meshNumber);
+//		++meshNumber;
+		TriangleMesh mesh = meshes[j];
+		if(meshSelected && j == selectedMeshIndex) {
+			printf("This is the selected mesh\n");
+			const float *color = colors::LIGHT_BLUE;
+			glColor3f(color[0], color[1], color[2]);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+		else {
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glColor3f(.5f,.2f,1.0f); //Purple
+		}
+		for(size_t i = 0 ; i < mesh.indices.size() ; i += 3) {
+			Vec3Df v0 = mesh.GetVertex(mesh.indices[i]);
+			Vec3Df v1 = mesh.GetVertex(mesh.indices[i+1]);
+			Vec3Df v2 = mesh.GetVertex(mesh.indices[i+2]);
+//			printf("glVertex3f(%f,%f,%f)\n",mesh.vertices[v0], mesh.vertices[v1], mesh.vertices[v2]);
+			glVertex3f(v0[0],v0[1],v0[2]);
+			glVertex3f(v1[0],v1[1],v1[2]);
+			glVertex3f(v2[0],v2[1],v2[2]);
+		}
+	}
     glEnd();
 }
 
@@ -272,7 +318,7 @@ void RIV3DView::drawPoints() {
 //				printf("row = %zu\n",index);
 //				printf("Fresh color = ");
 //				printArray(color, 3);
-//				printf("cached color = [%f,%f,%f]",pointsR[i],pointsG[i],pointsB[i]);
+//				printf("cached col		or = [%f,%f,%f]",pointsR[i],pointsG[i],pointsB[i]);
 //			}
 			//			float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
 			
@@ -627,7 +673,38 @@ void RIV3DView::SetModelData(const MeshModel& model) {
 bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 //    printf("RIV3DView HandleMouse\n");
     y = height - y;
-    printf("isDragging = %d\n",isDragging);
+//    printf("isDragging = %d\n",isDragging);
+	selectNear = screenToWorldCoordinates(x, y, 0);
+	selectFar = screenToWorldCoordinates(x, y, 1);
+	
+	std::cout << "selectNear = " << selectNear << std::endl;
+	std::cout << "selectFar = " << selectFar << std::endl;
+	
+//	Vec3Df origin = Vec3Df(modelData.GetScale() * selectNear.x,modelData.GetScale() * selectNear.y,selectNear.z);
+//	Vec3Df dest = modelData.GetScale() * Vec3Df(selectFar.x,selectFar.y,selectFar.z);
+//	Vec3Df origin = Vec3Df(selectNear.x,selectNear.y,selectNear.z);
+//	Vec3Df dest = Vec3Df(selectFar.x,selectFar.y,selectFar.z);
+	
+	Vec3Df dest = Vec3Df(selectNear.x,selectNear.y,selectNear.z);
+	Vec3Df origin = Vec3Df(selectFar.x,selectFar.y,selectFar.z);
+	
+//	origin = Vec3Df(.5F,.5F,2.F);
+//	dest = Vec3Df(.5F,.5F,-2.F);
+	
+	Vec3Df dir = dest - origin;
+//	dir.normalize();
+	
+	pickRay = Ray<float>(origin,dir);
+	if(modelData.TriangleIntersect(pickRay, selectedMeshIndex, Phit)) {
+		printf("Result = %zu\n",selectedMeshIndex);
+		meshSelected = true;
+		
+	}
+	else {
+		meshSelected = false;
+		printf("Intersect failed.\n");
+	}
+	
 	if(isDragging || containsPoint(x,y)) {
         if(state == GLUT_DOWN) {
             isDragging = true;
@@ -635,6 +712,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
             return true;
         }
     }
+
     isDragging = false;
     return false;
 }

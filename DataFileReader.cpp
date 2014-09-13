@@ -37,11 +37,14 @@ MeshModel DataFileReader::ReadModelData(const std::string& fileName) {
     is.open (fileName, std::ios::in );
     
     is.seekg (0, std::ios::beg);
-    std::vector<float> vertices;
+	
+	std::vector<TriangleMesh> triangles;
     
     std::string ignoreChars = "[]";
 
-    std::regex rx("point");
+    std::regex pointsRegEx("point");
+	std::regex indicesRegEx("integer indices");
+	
     
     size_t lineNumber = 0;
     
@@ -53,8 +56,11 @@ MeshModel DataFileReader::ReadModelData(const std::string& fileName) {
         while (getline(is,line)) {
 //            std::cout << line;
             ++lineNumber;
+			std::vector<float> vertices;
+			std::vector<size_t> indices;
             size_t tokenCount = 0;
             bool shapeFound = false;
+			bool indicesFound = false;
             bool pointFound = false;
             //            printf("Reading line %zu\n",lineNumber);
             for(char c : line) {
@@ -66,25 +72,36 @@ MeshModel DataFileReader::ReadModelData(const std::string& fileName) {
                     if(!shapeFound) {
                         if(token == "Shape") {
                             shapeFound = true;
-//							printf("Shape declaration found at line %zu\n",lineNumber);
+							printf("Shape declaration found at line %zu\n",lineNumber);
                         }
                     }
+					else if(!indicesFound) {
+						if(std::regex_search(token.begin(), token.end(),indicesRegEx)) {
+							printf("indices declaration found\n");
+                            indicesFound = true;
+                        }
+					}
+					else if(is_number(token) && !pointFound) {
+						size_t index = std::stol(token);
+						printf("Index found %zu\n",index);
+						indices.push_back(index);
+					}
                     else if(!pointFound){ //Look for point declaration
-
-                        if(std::regex_search(token.begin(), token.end(),rx)) {
-//                        	printf("Point declaration found\n");
+                        if(std::regex_search(token.begin(), token.end(),pointsRegEx)) {
+                        	printf("Point declaration found\n");
                             pointFound = true;
                         }
                     }
                     else if(is_number(token)) {
                         //Add to vertex
                         float vertex = std::stof(token);
-//                        printf("adding vertex %f\n",vertex);
+                        printf("adding vertex %f\n",vertex);
                         vertices.push_back(vertex);
                     }
                     else {
                         //This line is done
-//                                                printf("This line finished at token #%zu = %s\n",tokenCount,token.c_str());
+						printf("This line finished at token #%zu = %s\n",tokenCount,token.c_str());
+						triangles.push_back(TriangleMesh(vertices, indices));
                         token.clear();
                         break;
                     }
@@ -111,8 +128,8 @@ MeshModel DataFileReader::ReadModelData(const std::string& fileName) {
     else {
         throw "Unable to open PBRT file " + fileName;
     }
-    printf("Found %zu vertices in PBRT file.\n",vertices.size());
-    return vertices;
+//    printf("Found %zu vertices in PBRT file.\n",vertices.size());
+    return MeshModel(triangles);
 }
 
 std::vector<std::string> explode(std::string line, char delimiter, std::string ignoreChars = "") {
