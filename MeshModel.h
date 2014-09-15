@@ -10,6 +10,8 @@
 #define __Afstuderen___DModel__
 
 #include <vector>
+#include <stdlib.h>
+
 #include "TriangleMesh.h"
 #include "Geometry.h"
 #include "Vec3D.h"
@@ -18,44 +20,63 @@
 class MeshModel {
 private:
 	std::vector<TriangleMesh> meshes;
+	
     float scale  = 1.F;
-    Point3D center;
-    bool centered = false;
+    Vec3Df position;
+	
+//    bool centered = false;
 public:
     bool centerComputed = false;
     MeshModel() {
-        
+        position = Vec3Df(0,0,0);
     }
     MeshModel(const std::vector<TriangleMesh>& meshes) {
 		this->meshes = meshes;
 //        Center();
         CenterAndScaleToUnit();
     }
-//	Vec3Df GetVertex(size_t vertexIndex) {
-//		size_t index = 3 * vertexIndex;
-//		if(index + 2 < vertices.size()) {
-//			return Vec3Df(vertices[index],vertices[index + 1],vertices[index + 2]);
-//		}
-//		else throw "Vertex out of bounds";
-//	}
-	bool TriangleIntersect(const Ray<float>& r, size_t& resultIndex, Vec3Df& Phit) {
+	bool MeshContaining(const Vec3Df& p, TriangleMesh*& result, size_t& triangleIndex) {
 		for(size_t i = 0 ; i < meshes.size() ; ++i) {
-			float d;
-			if(meshes[i].Intersect(r, Phit, d)) {
-				resultIndex = i;
-				printf("\n******* INTERSECTION WITH %zu *******\n",i);
+			TriangleMesh* mesh = &meshes[i];
+			if(mesh->Contains(p,triangleIndex)) {
+				result = mesh;
+				printf("Mesh #%zu contains p\n",i);
 				return true;
 			}
-				
 		}
-		printf("\n******* NO INTERSECTION *******\n");
+		std::cout << "WARNING: No mesh found to contain " << p << std::endl;
 		return false;
 	}
-    Point3D GetCenter() {
-        if(!centerComputed) {
-            ComputeCenter();
-        }
-        return center;
+	bool TriangleIntersect(const Ray<float>& r, size_t& resultIndex, Vec3Df& Phit) {
+		bool intersects = false;
+//		float bestD = -std::numeric_limits<float>::max();
+		float shortestDistance = -std::numeric_limits<float>::max();
+		Vec3Df bestPhit = Phit;
+		for(size_t i = 0 ; i < meshes.size() ; ++i) {
+			float d;
+			if(meshes[i].Intersect(r, Phit)) {
+//				printf("\n******* INTERSECTION WITH %zu *******\n",i);
+				float distance = (Phit - r.orig).getSquaredLength();
+//				printf("distance = %f\n",distance);
+				if(distance > shortestDistance) {
+					resultIndex = i;
+					shortestDistance = distance;
+					bestPhit = Phit;
+					intersects = true;
+//					printf("is new BEST\n");
+				}
+				else {
+					printf(" is NOT good enough.\n");
+				}
+			}
+		}
+		if(!intersects)
+			printf("\n******* NO INTERSECTION *******\n");
+		Phit = bestPhit;
+		return intersects;
+	}
+    Vec3Df GetPosition() {
+		return position;
     }
     float GetScale() {
         return scale;
@@ -82,19 +103,15 @@ public:
         cY /= numberOfVertices / 3.F;
         cZ /= numberOfVertices / 3.F;
         
-        center = Point3D(cX,cY,cZ);
+        position = Vec3Df(cX,cY,cZ);
         
         centerComputed = true;
     }
     void Translate(float x, float y, float z) {
-//        for(size_t i = 0 ; i < vertices.size() ; i += 3) {
-//            vertices[i] += x;
-//            vertices[i+1] += y;
-//            vertices[i+2] += z;
-//        }
+		position += Vec3Df(x,y,z);
 		throw "Not yet implemented.";
-        centerComputed = false;
-        centered = false;
+//        centerComputed = false;
+//        centered = false;
     }
     void CenterAndScaleToUnit() {
         if(!centerComputed) {
@@ -104,9 +121,9 @@ public:
         //Find the maximum distance
 		for(const TriangleMesh& mesh : meshes) {
 			for (size_t i = 0; i < mesh.vertices.size (); i+=3){
-				float dX= (mesh.vertices[i]-center.x);
-				float dY= (mesh.vertices[i+1]-center.y);
-				float dZ= (mesh.vertices[i+2]-center.z);
+				float dX= (mesh.vertices[i]-position[0]);
+				float dY= (mesh.vertices[i+1]-position[1]);
+				float dZ= (mesh.vertices[i+2]-position[2]);
 				
 				float distance = sqrt(dX*dX+dY*dY+dZ*dZ);
 				if (distance > maxDistance)
@@ -115,33 +132,10 @@ public:
 		}
         //Translate to center and scale by max distance
         scale = 1.F / maxDistance;
-		printf("Scaling model by %f\n",scale);
-//        scale = 1.F;
-		for(TriangleMesh& mesh : meshes) {
-        for  (size_t i = 0; i < mesh.vertices.size (); i+=3)
-        {
-//            mesh.vertices[i] = (mesh.vertices[i] - center.x) * scale;
-//            mesh.vertices[i+1] = (mesh.vertices[i+1] - center.y) * scale;
-//            mesh.vertices[i+2] = (mesh.vertices[i+2] - center.z) * scale;
-            
-            mesh.vertices[i] = (mesh.vertices[i]) * scale;
-            mesh.vertices[i+1] = (mesh.vertices[i+1]) * scale;
-            mesh.vertices[i+2] = (mesh.vertices[i+2]) * scale;
-        }
-		}
-
-        centered = true;
+		printf("Model scale = %f\n",scale);
     }
     void Scale(float scalar) {
-		throw "Not (yet) implemented.";
-//        for (size_t i = 0; i < vertices.size (); i++){
-//            vertices[i] *= scalar;
-//        }
-        scale = scalar;
-        if(!centered) { //If it is not centered, the center might have moved
-            centerComputed = false;
-            centered = false;
-        }
+        scale *= scalar;
     }
 };
 

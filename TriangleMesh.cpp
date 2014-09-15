@@ -7,6 +7,8 @@
 //
 
 #include "TriangleMesh.h"
+#include "helper.h"
+
 Vec3Df TriangleMesh::GetVertex(size_t vertexIndex) const {
 	size_t index = 3 * vertexIndex;
 	if(index + 2 < vertices.size()) {
@@ -15,7 +17,7 @@ Vec3Df TriangleMesh::GetVertex(size_t vertexIndex) const {
 	else throw "Vertex out of bounds";
 }
 
-bool TriangleMesh::Intersect(const Ray<float>& r, Vec3Df& Phit, float& d) {
+bool TriangleMesh::Intersect(const Ray<float>& r, Vec3Df& Phit) {
 //	size_t i = 0;
 	for(size_t index = 0 ; index < indices.size() ; index += 3) {
 //		printf("Testing triangle %zu\n",i);
@@ -28,8 +30,6 @@ bool TriangleMesh::Intersect(const Ray<float>& r, Vec3Df& Phit, float& d) {
 		Vec3Df v0 = GetVertex(indices[index]);
 		Vec3Df v1 = GetVertex(indices[index+1]);
 		Vec3Df v2 = GetVertex(indices[index+2]);
-//		Vec3Df v3 = GetVertex(triangleIndex+3);
-		//			Vec3Df v1 = GetVertex(i);
 		
 		Vec3Df edge1 = v1 - v0;
 		Vec3Df edge2 = v2 - v0;
@@ -42,7 +42,8 @@ bool TriangleMesh::Intersect(const Ray<float>& r, Vec3Df& Phit, float& d) {
 //			printf("Test 1 failed\n");
 			continue; // ray parallel to triangle
 		}
-		d = Vec3Df::dotProduct(N, v0);
+		
+		float d = Vec3Df::dotProduct(N, v0);
 		d = -d;
 		float t = -(Vec3Df::dotProduct(N, r.orig) + d) / nDotRay;
 //		printf("d = %f\n",d);
@@ -53,6 +54,13 @@ bool TriangleMesh::Intersect(const Ray<float>& r, Vec3Df& Phit, float& d) {
 		//			Phit[2] = -Phit[2];
 		
 //		std::cout << "Phit = " << Phit << std::endl;
+		size_t result=0;
+		if(Contains(Phit,result)) {
+			return true;
+		}
+		else {
+			continue;
+		}
 		
 		// inside-out test edge0
 		Vec3Df v0p = Phit - v0;
@@ -87,3 +95,58 @@ bool TriangleMesh::Intersect(const Ray<float>& r, Vec3Df& Phit, float& d) {
 	}
 	return false;
 }
+
+bool TriangleMesh::Contains(const Vec3Df &point, size_t& triangleIndex) {
+	for(size_t index = 0 ; index < indices.size() ; index += 3) {
+		Vec3Df v0 = GetVertex(indices[index]);
+		Vec3Df v1 = GetVertex(indices[index+1]);
+		Vec3Df v2 = GetVertex(indices[index+2]);
+		
+		Vec3Df edge1 = v1 - v0;
+		Vec3Df edge2 = v2 - v0;
+		
+		Vec3Df N = Vec3Df::crossProduct(edge1, edge2);
+		
+		// inside-out test edge0
+		Vec3Df v0p = point - v0;
+		float v = Vec3Df::dotProduct(N, Vec3Df::crossProduct(edge1, v0p));
+		if (v < 0) {
+			//			printf("Test 2 failed\n");
+			continue; // P outside triangle
+		}
+		
+		// inside-out test edge1
+		Vec3Df v1p = point - v1;
+		Vec3Df v1v2 = v2 - v1;
+		float w = Vec3Df::dotProduct(N, Vec3Df::crossProduct(v1v2, v1p));
+		if (w < 0) {
+			//			printf("Test 3 failed\n");
+			continue;
+		}
+		
+		// inside-out test edge2
+		Vec3Df v2p = point - v2;
+		Vec3Df v2v0 = v0 - v2;
+		float u = Vec3Df::dotProduct(N, Vec3Df::crossProduct(v2v0, v2p));
+		if (u < 0) {
+			//			printf("Test 4 failed\n");
+			continue; // P outside triangle
+		}
+		
+		triangleIndex = index / 3; //Should be dividable by 3 always
+		return true;
+	}
+	return false;
+}
+
+void TriangleMesh::AssignShapeId(size_t triangleIndex, ushort shapeID) {
+	printf("Assigning shape ID %d to triangle %zu\n",shapeID, triangleIndex);
+	if(shapeIDAssigned) {
+//		printf("WARNING: Overwriting existing shapeID %d\n",this->shapeID);
+	}
+	shapeIDAssigned = true;
+	shapeIDs[triangleIndex] = shapeID;
+	printMap(shapeIDs);
+}
+
+

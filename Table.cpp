@@ -604,7 +604,7 @@ RIVRecord* RIVTable::GetRecord(std::string recordName) {
             return record;
         }
     }
-    throw std::string("No such record.");
+    throw std::string("No such record" + recordName);
 }
 
 //Cluster with requested cluster size, rather than number of clusters

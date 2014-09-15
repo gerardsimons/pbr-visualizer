@@ -173,6 +173,7 @@ void RIV3DView::Draw() {
 //    printf("3DView Draw!\n");
 	
 //	reporter::startTask("3D Draw");
+	Vec3Df modelPosition = modelData.GetPosition();
 	
     glEnable(GL_DEPTH_TEST);
     glClearColor (0.0, 0.0, 0.0, 0.0);
@@ -180,7 +181,7 @@ void RIV3DView::Draw() {
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(-eye.x,-eye.y,-eye.z);
+	glTranslatef(-eye.x,-eye.y,-eye.z);
 //    glScalef(modelData.GetScale(), modelData.GetScale(), modelData.GetScale());
     
 //    printf("eye (x,y,z) * modelScale = (%f,%f,%f)\n",-eye.x * modelData.GetScale(),-eye.y * modelData.GetScale(),-eye.z * modelData.GetScale());
@@ -188,54 +189,15 @@ void RIV3DView::Draw() {
     tbVisuTransform();
     
     drawCoordSystem();
+	
+	glPushMatrix();
+	glScalef(modelData.GetScale(), modelData.GetScale(), modelData.GetScale());
+	glTranslatef(-modelPosition[0], -modelPosition[1], -modelPosition[2]);
     
 	drawMeshModel();
 	
-	
-    
-    /* Draw the intersection positions */
-    GLUquadric* quadric = gluNewQuadric();
-	
-	//Draw Phit
-	glColor3f(1, 1, 0);
-	glPushMatrix();
-	glTranslatef(Phit[0], Phit[1], Phit[2]);
-	glScalef(.01, 0.01, 0.01);
-	gluSphere(quadric, 2, 9, 9);
-	glPopMatrix();
-	glEnd();
-    
-    //Draw
-    glColor3f(1, 1, 1);
-    Point3D modelCenter = modelData.GetCenter();
-
-//    glPushMatrix();
-//    glLoadIdentity();
-//    glScalef(modelData.GetScale(), modelData.GetScale(), modelData.GetScale());
-//    glTranslatef(-modelCenter.x, -modelCenter.y, -modelCenter.z);
-    
-//    Translate -278.000000 -273.000000 500.000000
-    //Draw camera position
-    glPushMatrix();
-    glTranslatef(278, 273, -500);
-    glScalef(1/modelData.GetScale(), 1/modelData.GetScale(), 1/modelData.GetScale());
-    glScalef(0.01, 0.01, 0.01);
-    gluSphere(quadric, 5, 5, 5);
-    glPopMatrix();
-
 	if(drawClusterMembers)
 		drawPoints();
-	
-	if(drawHeatmapTree && heatmap != NULL)
-		drawHeatmap();
-
-    glPopMatrix();
-    
-    //Draw some lines
-	if(drawLightPaths)
-		drawPaths(segmentStart,segmentStop);
-	
-
 	
 	//Draw selection ray
 	glColor3f(1,1,1);
@@ -243,10 +205,46 @@ void RIV3DView::Draw() {
 	//	glVertex3f(selectNear.x, selectNear.y, selectNear.z);
 	//	glVertex3f(selectFar.x, selectFar.y, selectFar.z);
 	glVertex3f(pickRay.orig[0], pickRay.orig[1], pickRay.orig[2]);
-	Vec3Df dest = pickRay.orig + 10000.F * pickRay.dir;
+	Vec3Df dest = pickRay.orig + 1.F * pickRay.dir;
 	glColor3f(1, 0, 0);
 	glVertex3f(dest[0],dest[1],dest[2]);
 	glEnd();
+	
+    /* Draw the intersection positions */
+    GLUquadric* quadric = gluNewQuadric();
+	
+	//Draw Phit
+	if(meshSelected) {
+		glColor3f(1, 1, 0);
+		glPushMatrix();
+		glTranslatef(Phit[0], Phit[1], Phit[2]);
+	//	std::cout << "Phit = " << Phit << std::endl;
+		glScalef(4, 4, 4);
+		gluSphere(quadric, 2, 9, 9);
+		glPopMatrix();
+	}
+    
+    //Draw
+    glColor3f(1, 1, 1);
+    
+//    Translate -278.000000 -273.000000 500.000000
+    //Draw camera position
+    glPushMatrix();
+    glTranslatef(278, 273, -500);
+//    glScalef(0.01, 0.01, 0.01);
+    gluSphere(quadric, 10, 10, 10);
+    glPopMatrix();
+	
+	if(drawHeatmapTree && heatmap != NULL)
+		drawHeatmap();
+    
+    //Draw some lines
+	if(drawLightPaths)
+		drawPaths(segmentStart,segmentStop);
+	
+
+	
+	glPopMatrix();
 	
 	//Flush the buffer
     glFlush();
@@ -266,17 +264,17 @@ void RIV3DView::drawMeshModel() {
     const std::vector<TriangleMesh>& meshes = modelData.GetMeshes();
 	size_t meshNumber = 1;
 	for(size_t j = 0 ; j < meshes.size() ; ++j) {
-//		printf("Drawing Mesh %zu\n",meshNumber);
+//		printf("Drawing Mesh %zu\n",j);
 //		++meshNumber;
 		TriangleMesh mesh = meshes[j];
 		if(meshSelected && j == selectedMeshIndex) {
-			printf("This is the selected mesh\n");
+//			printf("This is the selected mesh\n");
 			const float *color = colors::LIGHT_BLUE;
 			glColor3f(color[0], color[1], color[2]);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+//			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 		else {
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glColor3f(.5f,.2f,1.0f); //Purple
 		}
 		for(size_t i = 0 ; i < mesh.indices.size() ; i += 3) {
@@ -288,6 +286,7 @@ void RIV3DView::drawMeshModel() {
 			glVertex3f(v1[0],v1[1],v1[2]);
 			glVertex3f(v2[0],v2[1],v2[2]);
 		}
+//		return;
 	}
     glEnd();
 }
@@ -685,9 +684,16 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 //	Vec3Df origin = Vec3Df(selectNear.x,selectNear.y,selectNear.z);
 //	Vec3Df dest = Vec3Df(selectFar.x,selectFar.y,selectFar.z);
 	
-	Vec3Df dest = Vec3Df(selectNear.x,selectNear.y,selectNear.z);
-	Vec3Df origin = Vec3Df(selectFar.x,selectFar.y,selectFar.z);
+	Vec3Df modelPosition = -modelData.GetPosition();
+//	modelPosition = Vec3Df(0,0,0);
+	float modelScale = 1/modelData.GetScale();
+	Vec3Df dest = modelScale * Vec3Df(selectNear.x,selectNear.y,selectNear.z);
+	dest -= modelPosition;
+	Vec3Df origin = modelScale * Vec3Df(selectFar.x,selectFar.y,selectFar.z);
+	origin -= modelPosition;
 	
+//	std::cout << "Ray origin = " << origin << std::endl;
+//	std::cout << "Ray destination = " << dest << std::endl;
 //	origin = Vec3Df(.5F,.5F,2.F);
 //	dest = Vec3Df(.5F,.5F,-2.F);
 	

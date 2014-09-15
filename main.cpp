@@ -299,6 +299,9 @@ void loadData() {
         //        dataset = DataFileReader::ReadAsciiData(dataPath + ".txt",image,0);
         dataset = DataFileReader::ReadBinaryData(dataPath,image,0);
         model = DataFileReader::ReadModelData(pbrtPath);
+		
+		//Extra data processing
+		DataFileReader::AssignShapeIDsToPrimitives(dataset.GetTable("intersections"), model);
     }
     else throw "Data paths not generated.";
 }

@@ -10,12 +10,15 @@
 #define __afstuderen__TriangleMesh__
 
 #include <vector>
+#include <map>
 
 #include "Vec3D.h"
 #include "Ray.h"
 
 class TriangleMesh {
 private:
+	std::map<size_t,ushort> shapeIDs;
+	bool shapeIDAssigned = false;
 public:
 	std::vector<float> vertices;
 	std::vector<size_t> indices;
@@ -24,7 +27,10 @@ public:
 		this->indices = indices;
 	}
 	Vec3Df GetVertex(size_t vertexIndex) const;
-	bool Intersect(const Ray<float>& r, Vec3Df& Phit, float& d);
+	bool Intersect(const Ray<float>& r, Vec3Df& Phit);
+	bool Contains(const Vec3Df& point, size_t& triangleIndex);
+	
+	void AssignShapeId(size_t triangleIndex, ushort shapeID);
 };
 
 #endif /* defined(__afstuderen__TriangleMesh__) */

@@ -72,35 +72,35 @@ MeshModel DataFileReader::ReadModelData(const std::string& fileName) {
                     if(!shapeFound) {
                         if(token == "Shape") {
                             shapeFound = true;
-							printf("Shape declaration found at line %zu\n",lineNumber);
+//							printf("Shape declaration found at line %zu\n",lineNumber);
                         }
                     }
 					else if(!indicesFound) {
 						if(std::regex_search(token.begin(), token.end(),indicesRegEx)) {
-							printf("indices declaration found\n");
+//							printf("indices declaration found\n");
                             indicesFound = true;
                         }
 					}
 					else if(is_number(token) && !pointFound) {
 						size_t index = std::stol(token);
-						printf("Index found %zu\n",index);
+//						printf("Index found %zu\n",index);
 						indices.push_back(index);
 					}
                     else if(!pointFound){ //Look for point declaration
                         if(std::regex_search(token.begin(), token.end(),pointsRegEx)) {
-                        	printf("Point declaration found\n");
+//                        	printf("Point declaration found\n");
                             pointFound = true;
                         }
                     }
                     else if(is_number(token)) {
                         //Add to vertex
                         float vertex = std::stof(token);
-                        printf("adding vertex %f\n",vertex);
+//                        printf("adding vertex %f\n",vertex);
                         vertices.push_back(vertex);
                     }
                     else {
                         //This line is done
-						printf("This line finished at token #%zu = %s\n",tokenCount,token.c_str());
+//						printf("This line finished at token #%zu = %s\n",tokenCount,token.c_str());
 						triangles.push_back(TriangleMesh(vertices, indices));
                         token.clear();
                         break;
@@ -537,6 +537,38 @@ RIVTable* DataFileReader::ReadImageData(const BMPImage& image) {
     imageTable->AddRecord(imageBlueRecord);
 
     return imageTable;
+}
+//It is difficult to understand how exactly PBRT assigns shape IDs to certain meshes, which is why we simply find them again using the intersection and the shape ID data
+void DataFileReader::AssignShapeIDsToPrimitives(RIVTable* isectTable, MeshModel& model) {
+	std::map<ushort,bool> shapeIdsAssigned;
+	
+	TableIterator *it = isectTable->GetIterator();
+	RIVFloatRecord *xRecord = isectTable->GetRecord<RIVFloatRecord>("intersection X");
+	RIVFloatRecord *yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
+	RIVFloatRecord *zRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Z");
+	RIVUnsignedShortRecord *shapeIdRecord = isectTable->GetRecord<RIVUnsignedShortRecord>("shape ID");
+	
+	size_t row;
+	while(it->GetNext(row)) {
+		ushort shapeID = shapeIdRecord->Value(row);
+		if(shapeIdsAssigned[shapeID] == false) {
+			printf("Evaluating shapeID %d\n",shapeID);
+			TriangleMesh* mesh;
+			size_t triangleIndex;
+			Vec3Df p = Vec3Df(xRecord->Value(row),yRecord->Value(row),zRecord->Value(row));
+			if(p[1] > 1) {
+				
+			}
+			std::cout << "Testing p " << p << std::endl;
+			if(model.MeshContaining(p,mesh,triangleIndex)) {
+				mesh->AssignShapeId(triangleIndex, shapeID);
+				shapeIdsAssigned[shapeID] = true;
+				continue;
+			}
+		}
+	}
+	printMap(shapeIdsAssigned);
+	printf("Placeholder\n");
 }
 
 RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, const BMPImage& image, const size_t pathsLimit) {
