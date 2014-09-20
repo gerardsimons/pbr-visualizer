@@ -31,8 +31,8 @@
 
 
 // core/spectrum.cpp*
-#include "stdafx.h"
-#include "spectrum.h"
+#include "core/stdafx.h"
+#include "core/spectrum.h"
 
 // Spectrum Method Definitions
 bool SpectrumSamplesSorted(const float *lambda, const float *vals, int n) {

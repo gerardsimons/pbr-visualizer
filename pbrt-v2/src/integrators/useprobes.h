@@ -37,9 +37,9 @@
 #define PBRT_INTEGRATORS_USEPROBES_H
 
 // integrators/useprobes.h*
-#include "pbrt.h"
-#include "integrator.h"
-#include "sh.h"
+#include "core/pbrt.h"
+#include "core/integrator.h"
+#include "core/sh.h"
 
 // UseRadianceProbes Declarations
 class UseRadianceProbes : public SurfaceIntegrator {

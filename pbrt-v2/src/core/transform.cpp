@@ -31,9 +31,9 @@
 
 
 // core/transform.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "transform.h"
-#include "shape.h"
+#include "core/shape.h"
 
 // Matrix4x4 Method Definitions
 bool SolveLinearSystem2x2(const float A[2][2],

@@ -37,9 +37,9 @@
 #define PBRT_CAMERAS_ORTHOGRAPHIC_H
 
 // cameras/orthographic.h*
-#include "pbrt.h"
-#include "camera.h"
-#include "film.h"
+#include "core/pbrt.h"
+#include "core/camera.h"
+#include "core/film.h"
 
 // OrthographicCamera Declarations
 class OrthoCamera : public ProjectiveCamera {

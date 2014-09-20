@@ -37,7 +37,7 @@
 #define PBRT_SHAPES_DISK_H
 
 // shapes/disk.h*
-#include "shape.h"
+#include "core/shape.h"
 
 // Disk Declarations
 class Disk : public Shape {

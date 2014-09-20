@@ -37,8 +37,8 @@
 #define PBRT_CORE_SPECTRUM_H
 
 // core/spectrum.h*
-#include "pbrt.h"
-#include "parallel.h"
+#include "core/pbrt.h"
+#include "core/parallel.h"
 
 // Spectrum Utility Declarations
 static const int sampledLambdaStart = 400;

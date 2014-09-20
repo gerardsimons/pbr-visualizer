@@ -31,14 +31,14 @@
 
 
 // samplers/adaptive.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "samplers/adaptive.h"
-#include "paramset.h"
-#include "film.h"
-#include "primitive.h"
-#include "intersection.h"
-#include "camera.h"
-#include "montecarlo.h"
+#include "core/paramset.h"
+#include "core/film.h"
+#include "core/primitive.h"
+#include "core/intersection.h"
+#include "core/camera.h"
+#include "core/montecarlo.h"
 
 // AdaptiveSampler Method Definitions
 AdaptiveSampler::AdaptiveSampler(int xstart, int xend,

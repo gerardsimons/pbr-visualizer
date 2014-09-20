@@ -31,11 +31,11 @@
 
 
 // core/reflection.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "reflection.h"
-#include "spectrum.h"
-#include "sampler.h"
-#include "montecarlo.h"
+#include "core/spectrum.h"
+#include "core/sampler.h"
+#include "core/montecarlo.h"
 #include <stdarg.h>
 
 // BxDF Local Definitions

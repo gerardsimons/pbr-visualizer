@@ -31,11 +31,11 @@
 
 
 // lights/projection.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "lights/projection.h"
-#include "montecarlo.h"
-#include "paramset.h"
-#include "imageio.h"
+#include "core/montecarlo.h"
+#include "core/paramset.h"
+#include "core/imageio.h"
 
 // ProjectionLight Method Definitions
 ProjectionLight::ProjectionLight(const Transform &light2world,

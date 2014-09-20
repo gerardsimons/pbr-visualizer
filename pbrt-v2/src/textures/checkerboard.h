@@ -37,13 +37,13 @@
 #define PBRT_TEXTURES_CHECKERBOARD_H
 
 // textures/checkerboard.h*
-#include "pbrt.h"
-#include "texture.h"
-#include "paramset.h"
-#include "montecarlo.h"
-#include "shape.h"
-#include "parallel.h"
-#include "progressreporter.h"
+#include "core/pbrt.h"
+#include "core/texture.h"
+#include "core/paramset.h"
+#include "core/montecarlo.h"
+#include "core/shape.h"
+#include "core/parallel.h"
+#include "core/progressreporter.h"
 
 // CheckerboardTexture Declarations
 template <typename T> class Checkerboard2DTexture : public Texture<T> {

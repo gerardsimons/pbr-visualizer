@@ -5,36 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>3DC49BA6-DA64-46AF-A457-93F2938DC2CE</string>
+	<string>E871880C-DC67-43F1-BFE8-FE46EBFC5C9C</string>
 	<key>IDESourceControlProjectName</key>
 	<string>pbrt</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>7DDBDE15-4665-4305-A457-6F79804CE69B</key>
-		<string>https://github.com/mmp/pbrt-v2.git</string>
+		<key>F07AFB05-2EA7-4E1D-93F2-C61F71AE0B25</key>
+		<string>https://github.com/gerardsimons/afstuderen.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>src/pbrt.xcodeproj/project.xcworkspace</string>
+	<string>pbrt-v2/src/pbrt.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>7DDBDE15-4665-4305-A457-6F79804CE69B</key>
-		<string>../../..</string>
+		<key>F07AFB05-2EA7-4E1D-93F2-C61F71AE0B25</key>
+		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/mmp/pbrt-v2.git</string>
+	<string>https://github.com/gerardsimons/afstuderen.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>7DDBDE15-4665-4305-A457-6F79804CE69B</string>
+	<string>F07AFB05-2EA7-4E1D-93F2-C61F71AE0B25</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>7DDBDE15-4665-4305-A457-6F79804CE69B</string>
+			<string>F07AFB05-2EA7-4E1D-93F2-C61F71AE0B25</string>
 			<key>IDESourceControlWCCName</key>
-			<string>pbrt-v2</string>
+			<string>afstuderen</string>
 		</dict>
 	</array>
 </dict>

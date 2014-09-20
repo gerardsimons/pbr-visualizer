@@ -31,7 +31,7 @@
 
 
 // core/timer.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "timer.h"
 
 // Timer Method Definitions

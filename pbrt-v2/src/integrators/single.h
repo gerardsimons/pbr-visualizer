@@ -37,8 +37,8 @@
 #define PBRT_INTEGRATORS_SINGLE_H
 
 // integrators/single.h*
-#include "volume.h"
-#include "integrator.h"
+#include "core/volume.h"
+#include "core/integrator.h"
 
 // SingleScatteringIntegrator Declarations
 class SingleScatteringIntegrator : public VolumeIntegrator {

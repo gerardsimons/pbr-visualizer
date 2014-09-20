@@ -37,8 +37,8 @@
 #define PBRT_SAMPLERS_STRATIFIED_H
 
 // samplers/stratified.h*
-#include "sampler.h"
-#include "film.h"
+#include "core/sampler.h"
+#include "core/film.h"
 
 // StratifiedSampler Declarations
 class StratifiedSampler : public Sampler {

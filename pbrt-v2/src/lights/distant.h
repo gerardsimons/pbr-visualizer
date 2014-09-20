@@ -37,10 +37,10 @@
 #define PBRT_LIGHTS_DISTANT_H
 
 // lights/distant.h*
-#include "pbrt.h"
-#include "light.h"
-#include "shape.h"
-#include "scene.h"
+#include "core/pbrt.h"
+#include "core/light.h"
+#include "core/shape.h"
+#include "core/scene.h"
 
 // DistantLight Declarations
 class DistantLight : public Light {

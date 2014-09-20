@@ -45,7 +45,7 @@
 //-----------------------------------------------------------------------------
 
 
-#include <ImfWav.h>
+#include "ImfWav.h"
 
 namespace Imf {
 namespace {

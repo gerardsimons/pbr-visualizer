@@ -37,7 +37,7 @@
 #define PBRT_SHAPES_HYPERBOLOID_H
 
 // shapes/hyperboloid.h*
-#include "shape.h"
+#include "core/shape.h"
 
 // Hyperboloid Declarations
 class Hyperboloid : public Shape {

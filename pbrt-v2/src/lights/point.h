@@ -37,9 +37,9 @@
 #define PBRT_LIGHTS_POINT_H
 
 // lights/point.h*
-#include "pbrt.h"
-#include "light.h"
-#include "shape.h"
+#include "core/pbrt.h"
+#include "core/light.h"
+#include "core/shape.h"
 
 // PointLight Declarations
 class PointLight : public Light {

@@ -31,12 +31,12 @@
 
 
 // materials/matte.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "materials/matte.h"
-#include "paramset.h"
-#include "reflection.h"
-#include "diffgeom.h"
-#include "texture.h"
+#include "core/paramset.h"
+#include "core/reflection.h"
+#include "core/diffgeom.h"
+#include "core/texture.h"
 
 // MatteMaterial Method Definitions
 BSDF *MatteMaterial::GetBSDF(const DifferentialGeometry &dgGeom,

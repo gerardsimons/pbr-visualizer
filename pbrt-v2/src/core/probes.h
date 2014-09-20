@@ -37,7 +37,7 @@
 #define PBRT_CORE_PROBES_H
 
 // core/probes.h*
-#include "pbrt.h"
+#include "core/pbrt.h"
 #ifdef PBRT_PROBES_DTRACE
 #include "core/dtrace.h"
 inline void ProbesCleanup() { }

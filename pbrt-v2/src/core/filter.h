@@ -37,7 +37,7 @@
 #define PBRT_CORE_FILTER_H
 
 // core/filter.h*
-#include "pbrt.h"
+#include "core/pbrt.h"
 
 // Filter Declarations
 class Filter {

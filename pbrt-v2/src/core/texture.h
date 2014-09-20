@@ -37,11 +37,11 @@
 #define PBRT_CORE_TEXTURE_H
 
 // core/texture.h*
-#include "pbrt.h"
-#include "spectrum.h"
-#include "geometry.h"
+#include "core/pbrt.h"
+#include "core/spectrum.h"
+#include "core/geometry.h"
 #include "transform.h"
-#include "memory.h"
+#include "core/memory.h"
 
 // Texture Declarations
 class TextureMapping2D {

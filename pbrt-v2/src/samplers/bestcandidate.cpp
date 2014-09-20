@@ -31,10 +31,10 @@
 
 
 // samplers/bestcandidate.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "samplers/bestcandidate.h"
-#include "camera.h"
-#include "montecarlo.h"
+#include "core/camera.h"
+#include "core/montecarlo.h"
 
 // BestCandidateSampler Method Definitions
 #include "samplers/bestcandidate.out"

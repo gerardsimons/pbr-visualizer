@@ -31,9 +31,9 @@
 
 
 // textures/imagemap.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "textures/imagemap.h"
-#include "imageio.h"
+#include "core/imageio.h"
 
 // ImageTexture Method Definitions
 template <typename Tmemory, typename Treturn>

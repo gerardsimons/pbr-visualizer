@@ -37,8 +37,8 @@
 #define PBRT_ACCELERATORS_BVH_H
 
 // accelerators/bvh.h*
-#include "pbrt.h"
-#include "primitive.h"
+#include "core/pbrt.h"
+#include "core/primitive.h"
 struct BVHBuildNode;
 
 // BVHAccel Forward Declarations

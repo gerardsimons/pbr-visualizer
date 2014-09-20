@@ -31,7 +31,7 @@
 
 
 // textures/uv.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "textures/uv.h"
 
 // UVTexture Method Definitions

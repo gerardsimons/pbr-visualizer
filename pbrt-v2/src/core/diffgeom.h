@@ -37,8 +37,8 @@
 #define PBRT_CORE_DIFFGEOM_H
 
 // core/diffgeom.h*
-#include "pbrt.h"
-#include "geometry.h"
+#include "core/pbrt.h"
+#include "core/geometry.h"
 
 // DifferentialGeometry Declarations
 struct DifferentialGeometry {

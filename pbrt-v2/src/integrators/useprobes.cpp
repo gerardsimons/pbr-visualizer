@@ -31,18 +31,18 @@
 
 
 // integrators/useprobes.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "integrators/useprobes.h"
 #include "integrators/photonmap.h"
 #include "integrators/directlighting.h"
 #include "integrators/emission.h"
-#include "parallel.h"
-#include "scene.h"
-#include "progressreporter.h"
-#include "camera.h"
-#include "intersection.h"
-#include "paramset.h"
-#include "montecarlo.h"
+#include "core/parallel.h"
+#include "core/scene.h"
+#include "core/progressreporter.h"
+#include "core/camera.h"
+#include "core/intersection.h"
+#include "core/paramset.h"
+#include "core/montecarlo.h"
 #if defined(PBRT_IS_WINDOWS) || defined(PBRT_IS_LINUX)
 #include <errno.h>
 #else

@@ -31,16 +31,16 @@
 
 
 // core/api.cpp*
-#include "stdafx.h"
-#include "api.h"
-#include "parallel.h"
-#include "paramset.h"
-#include "spectrum.h"
-#include "scene.h"
-#include "renderer.h"
-#include "film.h"
-#include "volume.h"
-#include "probes.h"
+#include "core/stdafx.h"
+#include "core/api.h"
+#include "core/parallel.h"
+#include "core/paramset.h"
+#include "core/spectrum.h"
+#include "core/scene.h"
+#include "core/renderer.h"
+#include "core/film.h"
+#include "core/volume.h"
+#include "core/probes.h"
 
 // API Additional Headers
 #include "accelerators/bvh.h"

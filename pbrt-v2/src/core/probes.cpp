@@ -31,10 +31,10 @@
 
 
 // core/probes.cpp*
-#include "stdafx.h"
-#include "probes.h"
+#include "core/stdafx.h"
+#include "core/probes.h"
 #ifdef PBRT_PROBES_COUNTERS
-#include "parallel.h"
+#include "core/parallel.h"
 #include <map>
 using std::map;
 

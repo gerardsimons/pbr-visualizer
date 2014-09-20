@@ -31,7 +31,7 @@
 
 
 // textures/wrinkled.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "textures/wrinkled.h"
 
 // WrinkledTexture Method Definitions

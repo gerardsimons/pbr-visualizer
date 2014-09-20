@@ -31,13 +31,13 @@
 
 
 // core/sh.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "sh.h"
-#include "scene.h"
+#include "core/scene.h"
 #include "integrator.h"
-#include "intersection.h"
-#include "montecarlo.h"
-#include "imageio.h"
+#include "core/intersection.h"
+#include "core/montecarlo.h"
+#include "core/imageio.h"
 #include <float.h>
 
 // Spherical Harmonics Local Definitions

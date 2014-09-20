@@ -37,7 +37,7 @@
 #define PBRT_CORE_API_H
 
 // core/api.h*
-#include "pbrt.h"
+#include "core/pbrt.h"
 
 // API Function Declarations
 void pbrtInit(const Options &opt);

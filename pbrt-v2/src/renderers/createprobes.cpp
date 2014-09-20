@@ -31,19 +31,19 @@
 
 
 // renderers/createprobes.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "renderers/createprobes.h"
 #include "shapes/sphere.h"
-#include "sh.h"
-#include "parallel.h"
-#include "scene.h"
-#include "progressreporter.h"
-#include "camera.h"
-#include "intersection.h"
-#include "integrator.h"
-#include "volume.h"
-#include "paramset.h"
-#include "montecarlo.h"
+#include "core/sh.h"
+#include "core/parallel.h"
+#include "core/scene.h"
+#include "core/progressreporter.h"
+#include "core/camera.h"
+#include "core/intersection.h"
+#include "core/integrator.h"
+#include "core/volume.h"
+#include "core/paramset.h"
+#include "core/montecarlo.h"
 #if defined(PBRT_IS_WINDOWS) || defined(PBRT_IS_LINUX)
 #include <errno.h>
 #else

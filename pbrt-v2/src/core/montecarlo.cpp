@@ -31,11 +31,11 @@
 
 
 // core/montecarlo.cpp*
-#include "stdafx.h"
-#include "montecarlo.h"
-#include "geometry.h"
-#include "shape.h"
-#include "volume.h"
+#include "core/stdafx.h"
+#include "core/montecarlo.h"
+#include "core/geometry.h"
+#include "core/shape.h"
+#include "core/volume.h"
 
 // Sampling Local Definitions
 static const int primes[] = {

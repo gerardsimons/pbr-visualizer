@@ -37,9 +37,9 @@
 #define PBRT_TEXTURES_CONSTANT_H
 
 // textures/constant.h*
-#include "pbrt.h"
-#include "texture.h"
-#include "paramset.h"
+#include "core/pbrt.h"
+#include "core/texture.h"
+#include "core/paramset.h"
 
 // ConstantTexture Declarations
 template <typename T> class ConstantTexture : public Texture<T> {

@@ -31,11 +31,11 @@
 
 
 // core/integrator.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "integrator.h"
-#include "scene.h"
-#include "intersection.h"
-#include "montecarlo.h"
+#include "core/scene.h"
+#include "core/intersection.h"
+#include "core/montecarlo.h"
 
 // Integrator Method Definitions
 Integrator::~Integrator() {

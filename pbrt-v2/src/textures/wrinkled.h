@@ -37,9 +37,9 @@
 #define PBRT_TEXTURES_WRINKLED_H
 
 // textures/wrinkled.h*
-#include "pbrt.h"
-#include "texture.h"
-#include "paramset.h"
+#include "core/pbrt.h"
+#include "core/texture.h"
+#include "core/paramset.h"
 
 // WrinkledTexture Declarations
 template <typename T> class WrinkledTexture : public Texture<T> {

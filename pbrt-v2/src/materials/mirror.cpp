@@ -31,12 +31,12 @@
 
 
 // materials/mirror.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "materials/mirror.h"
-#include "spectrum.h"
-#include "reflection.h"
-#include "paramset.h"
-#include "texture.h"
+#include "core/spectrum.h"
+#include "core/reflection.h"
+#include "core/paramset.h"
+#include "core/texture.h"
 
 // MirrorMaterial Method Definitions
 BSDF *MirrorMaterial::GetBSDF(const DifferentialGeometry &dgGeom, const DifferentialGeometry &dgShading, MemoryArena &arena) const {

@@ -37,12 +37,12 @@
 #define PBRT_LIGHTS_INFINITE_H
 
 // lights/infinite.h*
-#include "pbrt.h"
-#include "light.h"
-#include "texture.h"
-#include "shape.h"
-#include "scene.h"
-#include "mipmap.h"
+#include "core/pbrt.h"
+#include "core/light.h"
+#include "core/texture.h"
+#include "core/shape.h"
+#include "core/scene.h"
+#include "core/mipmap.h"
 
 // InfiniteAreaLight Declarations
 class InfiniteAreaLight : public Light {

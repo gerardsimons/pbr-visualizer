@@ -37,9 +37,9 @@
 #define PBRT_INTEGRATORS_EMISSION_H
 
 // integrators/emission.h*
-#include "volume.h"
-#include "integrator.h"
-#include "scene.h"
+#include "core/volume.h"
+#include "core/integrator.h"
+#include "core/scene.h"
 
 // EmissionIntegrator Declarations
 class EmissionIntegrator : public VolumeIntegrator {

@@ -37,8 +37,8 @@
 #define PBRT_MATERIALS_SUBSTRATE_H
 
 // materials/substrate.h*
-#include "pbrt.h"
-#include "material.h"
+#include "core/pbrt.h"
+#include "core/material.h"
 
 // SubstrateMaterial Declarations
 class SubstrateMaterial : public Material {

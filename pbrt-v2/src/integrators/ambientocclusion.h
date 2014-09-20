@@ -37,8 +37,8 @@
 #define PBRT_INTEGRATORS_AMBIENTOCCLUSION_H
 
 // integrators/ambientocclusion.h*
-#include "pbrt.h"
-#include "integrator.h"
+#include "core/pbrt.h"
+#include "core/integrator.h"
 
 // AmbientOcclusionIntegrator Declarations
 class AmbientOcclusionIntegrator : public SurfaceIntegrator {

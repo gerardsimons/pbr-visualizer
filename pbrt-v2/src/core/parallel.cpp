@@ -31,9 +31,9 @@
 
 
 // core/parallel.cpp*
-#include "stdafx.h"
-#include "parallel.h"
-#include "memory.h"
+#include "core/stdafx.h"
+#include "core/parallel.h"
+#include "core/memory.h"
 #ifdef PBRT_USE_GRAND_CENTRAL_DISPATCH
 #include <dispatch/dispatch.h>
 #endif // PBRT_USE_GRAND_CENTRAL_DISPATCH

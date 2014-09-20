@@ -31,7 +31,7 @@
 
 
 // textures/dots.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "textures/dots.h"
 
 // DotsTexture Method Definitions

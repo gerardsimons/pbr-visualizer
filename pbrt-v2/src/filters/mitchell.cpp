@@ -31,9 +31,9 @@
 
 
 // filters/mitchell.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "filters/mitchell.h"
-#include "paramset.h"
+#include "core/paramset.h"
 
 // Mitchell Filter Method Definitions
 float MitchellFilter::Evaluate(float x, float y) const {

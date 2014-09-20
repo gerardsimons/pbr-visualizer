@@ -37,8 +37,8 @@
 #define PBRT_MATERIALS_SUBSURFACE_H
 
 // materials/subsurface.h*
-#include "pbrt.h"
-#include "material.h"
+#include "core/pbrt.h"
+#include "core/material.h"
 
 // SubsurfaceMaterial Declarations
 class SubsurfaceMaterial : public Material {

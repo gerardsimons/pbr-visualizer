@@ -1,0 +1,1275 @@
+Tpbrtlib
+v6
+r1
+cCheck dependencies
+cRuleScriptExecution /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtparse.ym normal x86_64
+cCompileDTraceScript core/dtrace.d
+cCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/image-434061CEB0203881.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/film/image.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/box-ACC47F4D44886884.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/box.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/gaussian-9DC73DA1A7788886.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/gaussian.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/mitchell-B50AF88742274972.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/mitchell.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/SDKSettings.plist
+c0000000052A3C6A9000000000000044C
+t1386464937
+s1100
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/CoreServices/SystemVersion.plist
+c000000005320454D00000000000001DE
+t1394623821
+s478
+
+N/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/5.1/include/module.map
+c000000005320454F0000000000000ADC
+t1394623823
+s2780
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/Yacc/pbrtparse.cpp
+t2
+s0
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/Yacc/pbrtparse.hpp
+t2
+s0
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/dtrace.h
+t2
+s0
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/box-ACC47F4D44886884.o
+t2
+s0
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/gaussian-9DC73DA1A7788886.o
+t2
+s0
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/image-434061CEB0203881.o
+t2
+s0
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/mitchell-B50AF88742274972.o
+t2
+s0
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/sinc-A60DB6DBA5176974.o
+t2
+s0
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/dtrace.d
+c00000000534D53CE0000000000002C40
+t1397576654
+s11328
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtparse.ym
+c0000000054181CD800000000000049EA
+t1410866392
+s18922
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/film/image.cpp
+c00000000541818FE0000000000002626
+t1410865406
+s9766
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/box.cpp
+c00000000541818D9000000000000071C
+t1410865369
+s1820
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/gaussian.cpp
+c000000005418191500000000000007BD
+t1410865429
+s1981
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/mitchell.cpp
+c000000005418191100000000000007F5
+t1410865425
+s2037
+
+N/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/sinc.cpp
+c00000000541819210000000000000791
+t1410865441
+s1937
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/bvh.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/grid.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/kdtreeaccel.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/environment.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/orthographic.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/perspective.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/api.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/camera.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/diffgeom.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/error.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/fileutil.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/film.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/filter.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/floatfile.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/geometry.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/imageio.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/integrator.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/intersection.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/light.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/material.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/memory.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/montecarlo.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/parallel.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/paramset.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/parser.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/primitive.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/probes.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/progressreporter.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/quaternion.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/reflection.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/renderer.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/rng.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/sampler.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/scene.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/sh.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/shape.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/shrots.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/spectrum.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/targa.c
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/texture.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/timer.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/transform.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/volume.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/film/image.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/box.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/gaussian.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/mitchell.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/sinc.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/triangle.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/ambientocclusion.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/diffuseprt.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/dipolesubsurface.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/directlighting.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/emission.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/glossyprt.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/igi.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/irradiancecache.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/path.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/photonmap.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/single.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/useprobes.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/whitted.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/diffuse.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/distant.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/goniometric.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/infinite.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/point.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/projection.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/spot.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/main/pbrt.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/glass.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/kdsubsurface.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/matte.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/measured.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/metal.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/mirror.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/mixmat.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/plastic.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/shinymetal.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/substrate.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/subsurface.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/translucent.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/uber.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/aggregatetest.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/createprobes.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/metropolis.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/samplerrenderer.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/surfacepoints.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/adaptive.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/bestcandidate.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/halton.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/lowdiscrepancy.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/random.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/stratified.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/cone.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/cylinder.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/disk.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/heightfield.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/hyperboloid.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/loopsubdiv.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/nurbs.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/paraboloid.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/sphere.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/trianglemesh.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/bilerp.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/checkerboard.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/constant.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/dots.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/fbm.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/imagemap.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/marble.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/mix.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/scale.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/uv.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/windy.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/wrinkled.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/exponential.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/homogeneous.cpp
+r0
+
+CAnalyzeShallow /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/volumegrid.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/bvh.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/grid.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/kdtreeaccel.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/environment.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/orthographic.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/perspective.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/api.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/camera.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/diffgeom.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/error.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/fileutil.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/film.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/filter.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/floatfile.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/geometry.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/imageio.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/integrator.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/intersection.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/light.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/material.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/memory.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/montecarlo.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/parallel.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/paramset.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/parser.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/primitive.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/probes.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/progressreporter.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/quaternion.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/reflection.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/renderer.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/rng.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/sampler.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/scene.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/sh.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/shape.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/shrots.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/spectrum.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/targa.c
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/texture.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/timer.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/transform.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/volume.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/film/image.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/box.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/gaussian.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/mitchell.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/sinc.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/triangle.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/ambientocclusion.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/diffuseprt.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/dipolesubsurface.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/directlighting.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/emission.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/glossyprt.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/igi.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/irradiancecache.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/path.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/photonmap.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/single.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/useprobes.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/whitted.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/diffuse.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/distant.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/goniometric.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/infinite.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/point.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/projection.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/spot.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/main/pbrt.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/glass.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/kdsubsurface.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/matte.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/measured.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/metal.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/mirror.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/mixmat.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/plastic.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/shinymetal.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/substrate.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/subsurface.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/translucent.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/uber.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/aggregatetest.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/createprobes.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/metropolis.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/samplerrenderer.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/surfacepoints.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/adaptive.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/bestcandidate.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/halton.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/lowdiscrepancy.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/random.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/stratified.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/cone.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/cylinder.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/disk.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/heightfield.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/hyperboloid.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/loopsubdiv.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/nurbs.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/paraboloid.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/sphere.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/trianglemesh.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/bilerp.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/checkerboard.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/constant.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/dots.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/fbm.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/imagemap.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/marble.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/mix.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/scale.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/uv.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/windy.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/wrinkled.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/exponential.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/homogeneous.cpp
+r0
+
+CBuild AST from /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/volumegrid.cpp
+r0
+
+CCheck dependencies
+r0
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependencies0fd524437acdb941^7ee179437acdb941^-18011"warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/film/image.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/box.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/gaussian.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/mitchell.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/sinc.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/triangle.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/ambientocclusion.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/diffuseprt.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/dipolesubsurface.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/directlighting.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/emission.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/glossyprt.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/igi.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/irradiancecache.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/path.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/photonmap.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/single.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/useprobes.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/whitted.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/diffuse.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/distant.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/goniometric.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/infinite.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/point.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/projection.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/spot.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/shinymetal.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/glass.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/kdsubsurface.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/matte.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/measured.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/metal.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/mirror.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/mixmat.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/plastic.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/substrate.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/subsurface.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/translucent.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/uber.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/aggregatetest.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/createprobes.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/metropolis.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/samplerrenderer.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/surfacepoints.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/adaptive.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/bestcandidate.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/halton.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/lowdiscrepancy.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/random.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/stratified.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/cone.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/cylinder.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/disk.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/heightfield.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/hyperboloid.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/loopsubdiv.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/nurbs.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/paraboloid.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/sphere.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/trianglemesh.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/bilerp.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/checkerboard.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/constant.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/dots.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/fbm.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/imagemap.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/marble.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/mix.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/scale.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/uv.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/windy.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/wrinkled.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/exponential.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/homogeneous.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/volumegrid.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/targa.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/fileutil.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/stdafx.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/api.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/camera.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/diffgeom.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/error.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/film.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/filter.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/floatfile.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/geometry.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/imageio.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/integrator.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/intersection.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/kdtree.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/light.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/material.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/memory.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/mipmap.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/montecarlo.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/octree.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/parallel.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/paramset.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/parser.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrt.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/primitive.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/probes.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/progressreporter.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/quaternion.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/reflection.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/renderer.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/rng.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/sampler.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/scene.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/sh.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/shape.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/spectrum.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/texture.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/timer.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/transform.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/volume.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/environment.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/orthographic.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/perspective.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/bvh.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/grid.h' of type sourcecode.c.h for architecture x86_64warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/kdtreeaccel.h' of type sourcecode.c.h for architecture x86_64122(21%IDEActivityLogMessage2@141"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/film/image.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/box.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@147"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/gaussian.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@147"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/mitchell.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@143"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/sinc.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@147"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/triangle.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@159"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/ambientocclusion.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@153"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/diffuseprt.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@159"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/dipolesubsurface.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@157"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/directlighting.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@151"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/emission.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@152"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/glossyprt.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@146"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/igi.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@158"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/irradiancecache.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@147"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/path.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@152"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/photonmap.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@149"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/single.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@152"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/useprobes.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@150"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/whitted.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@145"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/diffuse.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@145"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/distant.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@149"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/goniometric.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@146"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/infinite.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@143"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/point.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@148"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/projection.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/spot.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@151"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/shinymetal.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@146"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/glass.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@153"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/kdsubsurface.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@146"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/matte.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@149"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/measured.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@146"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/metal.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@147"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/mirror.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@147"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/mixmat.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@148"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/plastic.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@150"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/substrate.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@151"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/subsurface.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@152"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/translucent.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@145"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/uber.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@154"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/aggregatetest.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@153"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/createprobes.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@151"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/metropolis.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@156"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/samplerrenderer.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@154"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/surfacepoints.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@148"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/adaptive.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@153"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/bestcandidate.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@146"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/halton.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@154"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/lowdiscrepancy.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@146"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/random.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@150"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/stratified.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/cone.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@146"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/cylinder.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/disk.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@149"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/heightfield.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@149"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/hyperboloid.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@148"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/loopsubdiv.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@143"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/nurbs.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@148"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/paraboloid.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@144"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/sphere.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@150"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/trianglemesh.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@146"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/bilerp.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@152"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/checkerboard.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@148"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/constant.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@144"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/dots.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@143"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/fbm.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@148"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/imagemap.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@146"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/marble.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@143"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/mix.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@145"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/scale.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/uv.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@145"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/windy.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@148"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/wrinkled.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@150"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/exponential.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@150"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/homogeneous.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@149"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/volumegrid.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@141"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/targa.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@144"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/fileutil.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/stdafx.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@139"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/api.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/camera.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@144"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/diffgeom.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@141"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/error.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@140"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/film.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/filter.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@145"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/floatfile.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@144"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/geometry.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@143"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/imageio.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@146"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/integrator.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@148"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/intersection.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/kdtree.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@141"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/light.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@144"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/material.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/memory.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/mipmap.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@146"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/montecarlo.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/octree.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@144"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/parallel.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@144"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/paramset.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/parser.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@140"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrt.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@145"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/primitive.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/probes.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@152"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/progressreporter.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@146"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/quaternion.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@146"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/reflection.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@144"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/renderer.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@139"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/rng.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@143"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/sampler.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@141"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/scene.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@138"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/sh.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@141"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/shape.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@144"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/spectrum.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@143"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/texture.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@141"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/timer.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@145"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/transform.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@142"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/volume.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@150"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/environment.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@151"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/orthographic.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@150"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/perspective.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@147"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/bvh.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@148"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/grid.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--2@155"Warning: no rule to process file '/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/kdtreeaccel.h' of type sourcecode.c.h for architecture x86_64-432896579#18446744073709551615#0#-1#27"com.apple.dt.IDE.LogMessage-27"Dependency Analysis Warning--0#1#1#--18"Check dependencies36"D3FF4ECB-E29A-4B64-8380-44259826DA4B-
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/adaptive-FE4286E7D1283972.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/adaptive.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/aggregatetest-8529D5F056B71960.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/aggregatetest.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/ambientocclusion-9492AE9C6FB979.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/ambientocclusion.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/api-3EA6DA42484DDE6C.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/api.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/bestcandidate-EF45453C34185974.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/bestcandidate.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/bilerp-5B87B71DB8A08B77.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/bilerp.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/box-ACC47F4D44886884.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/box.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+s432896579.567832
+e432896579.685338
+r0
+xCompileC
+xbuild/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/box-ACC47F4D44886884.o
+x/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/box.cpp
+xnormal
+xx86_64
+xc++
+xcom.apple.compilers.llvm.clang.1_0.compiler
+o/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/box.cpp:34:10: fatal error: 'core/stdafx.h' file not found
+o#include "core/stdafx.h"
+o         ^
+o1 error generated.
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection70"Compile /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/box.cpp168"CompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/box-ACC47F4D44886884.o filters/box.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler4b7591437acdb941^71c7b3437acdb941^-169"/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/box.cpp:34:10: fatal error: 'core/stdafx.h' file not found#include "core/stdafx.h"         ^1 error generated.1(36%IDEClangDiagnosticActivityLogMessage2@30"'core/stdafx.h' file not found-432896579#18446744073709551615#0#-2#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@69"file:///Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/box.cpp0000000000000000^33#9#33#9#1464#0#29"Lexical or Preprocessor Issue--0#0#1#-19%DVTDocumentLocation4@69"file:///Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/box.cpp0000000000000000^2847"CompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/box-ACC47F4D44886884.o filters/box.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/pbrt-v2/src    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -DPBRT_STATS_NONE -DPBRT_HAS_PTHREADS -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.9 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug/include -I.. -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/box-ACC47F4D44886884.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/box-ACC47F4D44886884.dia -c /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/box.cpp -o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/box-ACC47F4D44886884.o36"17DD6A91-0DFD-4024-8463-C85C7C241BCE-
+bB8D6DBDC-D6E8-499C-BAD4-0E1AF4CF6AA6
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/bvh-5AF54CDB6BB21378.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/bvh.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/camera-7B3332BE05866E75.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/camera.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/checkerboard-72CB7203534F4C63.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/checkerboard.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/cone-BB96B7C7BD77BA6A.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/cone.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/constant-63CE3057B63F6C65.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/constant.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/createprobes-762C9444B9A73962.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/createprobes.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/cylinder-F82310437AB04A73.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/cylinder.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/diffgeom-6C35F11268768E77.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/diffgeom.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/diffuse-10C575BEE871660.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/diffuse.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/diffuseprt-3D20EB2A59A84982.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/diffuseprt.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/dipolesubsurface-2E23A97EBC986984.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/dipolesubsurface.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/directlighting-1F2667D31F888986.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/directlighting.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/disk-E925CE97DDA06A75.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/disk.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/distant-F20F15B051773662.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/distant.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/dots-54D0EEAC192F8C67.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/dots.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/emission-366A22B8BA374A72.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/emission.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/environment-A39C726A780EAC7A.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/environment.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/error-E5FB3BAC914E9B78.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/error.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/exponential-B8359586571FCD6B.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/exponential.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/fbm-45D3AD007C1FAC69.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/fbm.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/fileutil-774CC306E075F73E.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/fileutil.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/film-ECFDC976978D7F66.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/film.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/filter-DE0087CAFA7D9F68.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/filter.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/floatfile-CF03461F5D6DBF6A.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/floatfile.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/gaussian-9DC73DA1A7788886.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/gaussian.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+s432896579.568304
+e432896579.684916
+r0
+xCompileC
+xbuild/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/gaussian-9DC73DA1A7788886.o
+x/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/gaussian.cpp
+xnormal
+xx86_64
+xc++
+xcom.apple.compilers.llvm.clang.1_0.compiler
+o/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/gaussian.cpp:34:10: fatal error: 'core/stdafx.h' file not found
+o#include "core/stdafx.h"
+o         ^
+o1 error generated.
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection75"Compile /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/gaussian.cpp178"CompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/gaussian-9DC73DA1A7788886.o filters/gaussian.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilera0c291437acdb941^12c2b3437acdb941^-174"/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/gaussian.cpp:34:10: fatal error: 'core/stdafx.h' file not found#include "core/stdafx.h"         ^1 error generated.1(36%IDEClangDiagnosticActivityLogMessage2@30"'core/stdafx.h' file not found-432896579#18446744073709551615#0#-2#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@74"file:///Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/gaussian.cpp0000000000000000^33#9#33#9#1469#0#29"Lexical or Preprocessor Issue--0#0#1#-19%DVTDocumentLocation4@74"file:///Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/gaussian.cpp0000000000000000^2877"CompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/gaussian-9DC73DA1A7788886.o filters/gaussian.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/pbrt-v2/src    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -DPBRT_STATS_NONE -DPBRT_HAS_PTHREADS -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.9 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug/include -I.. -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/gaussian-9DC73DA1A7788886.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/gaussian-9DC73DA1A7788886.dia -c /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/gaussian.cpp -o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/gaussian-9DC73DA1A7788886.o36"4FF83007-ED3D-4257-82B9-F1BE006BF25D-
+bB8D6DBDC-D6E8-499C-BAD4-0E1AF4CF6AA6
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/geometry-C0060473C05DDF6C.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/geometry.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/glass-6470FE362C775764.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/glass.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/glossyprt-276CE10D1D276A74.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/glossyprt.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/goniometric-D414925917577666.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/goniometric.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/grid-4BF80B2FCEA2337A.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/grid.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/halton-E048039097087976.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/halton.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/heightfield-DA288CEC40908A77.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/heightfield.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/homogeneous-A93853DABA0FED6D.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/homogeneous.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/hyperboloid-F16C47D1DB3F4B63.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/hyperboloid.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/igi-186F9F6180178A76.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/igi.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/image-434061CEB0203881.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/film/image.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+s432896579.567621
+e432896579.788551
+r0
+xCompileC
+xbuild/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/image-434061CEB0203881.o
+x/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/film/image.cpp
+xnormal
+xx86_64
+xc++
+xcom.apple.compilers.llvm.clang.1_0.compiler
+o/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/film/image.cpp:34:10: fatal error: 'core/stdafx.h' file not found
+o#include "core/stdafx.h"
+o         ^
+o1 error generated.
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection69"Compile /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/film/image.cpp169"CompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/image-434061CEB0203881.o film/image.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilerc76891437acdb941^65dfc9437acdb941^-168"/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/film/image.cpp:34:10: fatal error: 'core/stdafx.h' file not found#include "core/stdafx.h"         ^1 error generated.-0#0#1#-19%DVTDocumentLocation2@68"file:///Users/gerardsimons/Git/afstuderen/pbrt-v2/src/film/image.cpp0000000000000000^2853"CompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/image-434061CEB0203881.o film/image.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/pbrt-v2/src    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -DPBRT_STATS_NONE -DPBRT_HAS_PTHREADS -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.9 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug/include -I.. -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/image-434061CEB0203881.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/image-434061CEB0203881.dia -c /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/film/image.cpp -o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/image-434061CEB0203881.o36"EB9BD4BB-32BD-4654-976B-A91FFE51291D-
+bB8D6DBDC-D6E8-499C-BAD4-0E1AF4CF6AA6
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/imageio-B108C2C8234DFF6E.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/imageio.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/imagemap-36D66B54DF0FCC6B.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/imagemap.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/infinite-10A0EAD4D490066F.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/infinite.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/integrator-ED951B43E0868F77.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/integrator.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/intersection-DE97D9984376AF79.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/intersection.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/irradiancecache-9725DB5E307AA78.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/irradiancecache.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/kdsubsurface-5573BC8A8F677766.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/kdsubsurface.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/kdtreeaccel-3CFAC9843192537C.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/accelerators/kdtreeaccel.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/light-6E5CF3A80F9D8066.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/light.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/loopsubdiv-E26F06263E2F6B65.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/loopsubdiv.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/lowdiscrepancy-F78BBE7631B73A62.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/lowdiscrepancy.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/marble-7362C3D09C485C74.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/marble.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/material-5F5FB1FC728DA068.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/material.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/matte-920015064CA0076F.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/matte.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/measured-8302D35AAF902771.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/measured.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/memory-50627050D57DC06A.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/memory.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/metal-740591AF12804773.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/metal.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/metropolis-672F52991C975964.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/metropolis.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/mirror-8B494C94AD2F085F.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/mirror.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/mitchell-B50AF88742274972.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/mitchell.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+s432896579.568956
+e432896579.685581
+r0
+xCompileC
+xbuild/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/mitchell-B50AF88742274972.o
+x/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/mitchell.cpp
+xnormal
+xx86_64
+xc++
+xcom.apple.compilers.llvm.clang.1_0.compiler
+o/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/mitchell.cpp:34:10: fatal error: 'core/stdafx.h' file not found
+o#include "core/stdafx.h"
+o         ^
+o1 error generated.
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection75"Compile /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/mitchell.cpp178"CompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/mitchell-B50AF88742274972.o filters/mitchell.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler7afd91437acdb941^32cab3437acdb941^-174"/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/mitchell.cpp:34:10: fatal error: 'core/stdafx.h' file not found#include "core/stdafx.h"         ^1 error generated.1(36%IDEClangDiagnosticActivityLogMessage2@30"'core/stdafx.h' file not found-432896579#18446744073709551615#0#-2#27"com.apple.dt.IDE.diagnostic23%DVTTextDocumentLocation3@74"file:///Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/mitchell.cpp0000000000000000^33#9#33#9#1469#0#29"Lexical or Preprocessor Issue--0#0#1#-19%DVTDocumentLocation4@74"file:///Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/mitchell.cpp0000000000000000^2877"CompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/mitchell-B50AF88742274972.o filters/mitchell.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd /Users/gerardsimons/Git/afstuderen/pbrt-v2/src    export LANG=en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu++11 -stdlib=libc++ -fmodules -fmodules-cache-path=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -DPBRT_STATS_NONE -DPBRT_HAS_PTHREADS -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.9 -g -fvisibility-inlines-hidden -Wno-sign-conversion -iquote /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-generated-files.hmap -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-own-target-headers.hmap -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-all-target-headers.hmap -iquote /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-project-headers.hmap -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug/include -I.. -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/x86_64 -I/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources -F/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug -MMD -MT dependencies -MF /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/mitchell-B50AF88742274972.d --serialize-diagnostics /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/mitchell-B50AF88742274972.dia -c /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/mitchell.cpp -o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/mitchell-B50AF88742274972.o36"1EB303C2-2A7A-4A83-8818-9759AC993E08-
+bB8D6DBDC-D6E8-499C-BAD4-0E1AF4CF6AA6
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/mix-64658224FF387C76.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/mix.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/mixmat-7C4C0AE9101F2861.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/mixmat.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/montecarlo-B9E68DCF69E5F06D.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/montecarlo.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/nurbs-D371C47AA11F8B67.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/nurbs.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/orthographic-BAE02D5012BD6D66.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/orthographic.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/paraboloid-C47482CF040FAB69.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/paraboloid.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/parallel-6EF4457558969077.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/parallel.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/paramset-5FF703C9BB86B079.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/paramset.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/parser-50F9C21E1E76D07B.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/parser.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/path-FA751C0A45F7CA7A.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/path.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/pbrt-736E3FE1C9873762.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/main/pbrt.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/pbrtlex.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/Lex/pbrtlex.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/pbrtlex.yy.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/pbrtlex.yy.c normal x86_64 c com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/pbrtparse.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/Yacc/pbrtparse.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/perspective-ABE2EBA475AD8D68.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/cameras/perspective.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/photonmap-3701748603305A83.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/photonmap.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/plastic-6D4EC93D730F4863.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/plastic.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/point-1A3A92937802671.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/point.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/primitive-D1C19A824D8DC16A.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/primitive.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/probes-C2C458D6B07DE16C.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/probes.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/progressreporter-B3C7172B136E016E.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/progressreporter.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/projection-F2A6677D9A704673.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/projection.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/quaternion-A4C9D57F765E2170.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/quaternion.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/random-E88E7CCA94A75A64.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/random.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/reflection-E1562DFB3396B179.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/reflection.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/renderer-D258EC4F9686D17B.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/renderer.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/rng-C35BAAA3F976F17D.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/rng.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/sampler-AFC3270B36DE2970.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/sampler.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/samplerrenderer-583210ED7F877966.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/samplerrenderer.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/scale-5568407962289C78.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/scale.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/scene-A0C5E55F99CE4972.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/scene.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/sh-91C8A3B3FCBE6974.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/sh.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/shape-82CB62085FAE8976.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/shape.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/shinymetal-BCB0C65FA4A1BE1E.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/shinymetal.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/shrots.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/shrots.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/sinc-A60DB6DBA5176974.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/sinc.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/single-280432DA66207A85.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/single.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/spectrum-37D919AE4E5F2980.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/spectrum.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/sphere-B577412366FFCB6B.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/sphere.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/spot-9EA2263351F075F.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/lights/spot.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/stratified-52129A49290F8A67.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/samplers/stratified.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/substrate-5E518791D5FF6865.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/substrate.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/subsurface-4F5445E638EF8867.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/subsurface.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/surfacepoints-4934CF41E2779968.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/renderers/surfacepoints.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/targa-AC38073462238F50.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/targa.c normal x86_64 c com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/texture-28DBD802B14F4982.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/texture.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/timer-19DE9657143F6984.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/timer.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/transform-3122513CAEEE2A70.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/transform.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/translucent-8BE09E61F6281870.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/translucent.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/triangle-9710753008078976.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/filters/triangle.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/trianglemesh-F203999F24385B74.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/shapes/trianglemesh.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/uber-7CE35CB659183872.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/materials/uber.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/useprobes-1906F12EC9109A87.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/useprobes.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/uv-6CABFB5EFCD75D64.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/uv.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/volume-22250F9111DE4A72.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/volume.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/volumegrid-E5C4AC5677487D76.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/volumes/volumegrid.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/whitted-978839DD5A1EE65D.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/integrators/whitted.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/windy-5DAEB9B35FC77D66.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/windy.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/wrinkled-4EB17807C2B79D68.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/textures/wrinkled.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/y.tab.o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/y.tab.m normal x86_64 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileDTraceScript core/dtrace.d
+s432896579.478096
+e432896579.541231
+r1
+xCompileDTraceScript
+xcore/dtrace.d
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection24"Processing core/dtrace.d33"CompileDTraceScript core/dtrace.d58717a437acdb941^6d8f8a437acdb941^---0#0#1#-19%DVTDocumentLocation2@67"file:///Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/dtrace.d0000000000000000^240"CompileDTraceScript core/dtrace.d    cd /Users/gerardsimons/Git/afstuderen/pbrt-v2/src    /usr/sbin/dtrace -h -s core/dtrace.d -o /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/dtrace.h36"62425599-2439-434C-BD35-6A9F68A7AA33-
+bB8D6DBDC-D6E8-499C-BAD4-0E1AF4CF6AA6
+
+CLd /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug/libpbrtlib.dylib normal x86_64
+r0
+
+CLex /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l
+r0
+
+CRename /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/y.tab.c y.tab.m
+r0
+
+CRuleScriptExecution /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l normal x86_64
+r0
+
+CRuleScriptExecution /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtparse.ym normal x86_64
+s432896579.477969
+e432896579.566926
+r1
+xRuleScriptExecution
+x/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtparse.ym
+xnormal
+xx86_64
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection51"RuleScriptExecution core/pbrtparse.ym normal x86_6451"RuleScriptExecution core/pbrtparse.ym normal x86_64de007b437acdb941^d92291437acdb941^---0#0#1#-19%DVTDocumentLocation2@60"file:///Users/gerardsimons/Git/afstuderen/pbrt-v2/src/x86_6400343cfeddffdf42^20500"RuleScriptExecution core/pbrtparse.ym normal x86_64    cd /Users/gerardsimons/Git/afstuderen/pbrt-v2/src    export ACTION=build    export ALTERNATE_GROUP=staff    export ALTERNATE_MODE=u+w,go-w,a+rX    export ALTERNATE_OWNER=gerardsimons    export ALWAYS_SEARCH_USER_PATHS=NO    export ALWAYS_USE_SEPARATE_HEADERMAPS=YES    export APPLE_INTERNAL_DEVELOPER_DIR=/AppleInternal/Developer    export APPLE_INTERNAL_DIR=/AppleInternal    export APPLE_INTERNAL_DOCUMENTATION_DIR=/AppleInternal/Documentation    export APPLE_INTERNAL_LIBRARY_DIR=/AppleInternal/Library    export APPLE_INTERNAL_TOOLS=/AppleInternal/Developer/Tools    export APPLY_RULES_IN_COPY_FILES=NO    export ARCHS=x86_64    export ARCHS_STANDARD=x86_64    export ARCHS_STANDARD_32_64_BIT="x86_64 i386"    export ARCHS_STANDARD_32_BIT=i386    export ARCHS_STANDARD_64_BIT=x86_64    export ARCHS_STANDARD_INCLUDING_64_BIT=x86_64    export AVAILABLE_PLATFORMS="iphonesimulator macosx iphoneos"    export BUILD_COMPONENTS="headers build"    export BUILD_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build    export BUILD_ROOT=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build    export BUILD_STYLE=    export BUILD_VARIANTS=normal    export BUILT_PRODUCTS_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug    export CACHE_ROOT=/var/folders/gk/c645mh1x08v9gbvmxymxvl340000gn/C/com.apple.DeveloperTools/5.1.1-5B1008/Xcode    export CCHROOT=/var/folders/gk/c645mh1x08v9gbvmxymxvl340000gn/C/com.apple.DeveloperTools/5.1.1-5B1008/Xcode    export CHMOD=/bin/chmod    export CHOWN=/usr/sbin/chown    export CLANG_CXX_LANGUAGE_STANDARD=gnu++0x    export CLANG_CXX_LIBRARY=libc++    export CLANG_ENABLE_MODULES=YES    export CLANG_ENABLE_OBJC_ARC=YES    export CLANG_WARN_BOOL_CONVERSION=YES    export CLANG_WARN_CONSTANT_CONVERSION=YES    export CLANG_WARN_DIRECT_OBJC_ISA_USAGE=YES_ERROR    export CLANG_WARN_EMPTY_BODY=YES    export CLANG_WARN_ENUM_CONVERSION=YES    export CLANG_WARN_INT_CONVERSION=YES    export CLANG_WARN_OBJC_ROOT_CLASS=YES_ERROR    export CLANG_WARN__DUPLICATE_METHOD_MATCH=YES    export CLASS_FILE_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/JavaClasses    export CLEAN_PRECOMPS=YES    export CLONE_HEADERS=NO    export CODESIGNING_FOLDER_PATH=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug/libpbrtlib.dylib    export CODE_SIGNING_ALLOWED=YES    export COLOR_DIAGNOSTICS=NO    export COMBINE_HIDPI_IMAGES=NO    export COMPOSITE_SDK_DIRS=/var/folders/gk/c645mh1x08v9gbvmxymxvl340000gn/C/com.apple.DeveloperTools/5.1.1-5B1008/Xcode/CompositeSDKs    export CONFIGURATION=Debug    export CONFIGURATION_BUILD_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug    export CONFIGURATION_TEMP_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug    export COPYING_PRESERVES_HFS_DATA=NO    export COPY_PHASE_STRIP=NO    export COPY_RESOURCES_FROM_STATIC_FRAMEWORKS=YES    export CP=/bin/cp    export CREATE_INFOPLIST_SECTION_IN_BINARY=NO    export CURRENT_ARCH=x86_64    export CURRENT_VARIANT=normal    export DEAD_CODE_STRIPPING=NO    export DEBUGGING_SYMBOLS=YES    export DEBUG_INFORMATION_FORMAT=dwarf    export DEFAULT_COMPILER=com.apple.compilers.llvm.clang.1_0    export DEFAULT_KEXT_INSTALL_PATH=/Library/Extensions    export DEPLOYMENT_LOCATION=NO    export DEPLOYMENT_POSTPROCESSING=NO    export DERIVED_FILES_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources    export DERIVED_FILE_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources    export DERIVED_SOURCES_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources    export DEVELOPER_APPLICATIONS_DIR=/Applications/Xcode.app/Contents/Developer/Applications    export DEVELOPER_BIN_DIR=/Applications/Xcode.app/Contents/Developer/usr/bin    export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer    export DEVELOPER_FRAMEWORKS_DIR=/Applications/Xcode.app/Contents/Developer/Library/Frameworks    export DEVELOPER_FRAMEWORKS_DIR_QUOTED=/Applications/Xcode.app/Contents/Developer/Library/Frameworks    export DEVELOPER_LIBRARY_DIR=/Applications/Xcode.app/Contents/Developer/Library    export DEVELOPER_SDK_DIR=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs    export DEVELOPER_TOOLS_DIR=/Applications/Xcode.app/Contents/Developer/Tools    export DEVELOPER_USR_DIR=/Applications/Xcode.app/Contents/Developer/usr    export DEVELOPMENT_LANGUAGE=English    export DO_HEADER_SCANNING_IN_JAM=NO    export DSTROOT=/tmp/pbrt.dst    export DT_TOOLCHAIN_DIR=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain    export DWARF_DSYM_FILE_NAME=libpbrtlib.dylib.dSYM    export DWARF_DSYM_FILE_SHOULD_ACCOMPANY_PRODUCT=NO    export DWARF_DSYM_FOLDER_PATH=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug    export DYLIB_COMPATIBILITY_VERSION=1    export DYLIB_CURRENT_VERSION=1    export DYLIB_INSTALL_NAME_BASE=/usr/local/lib    export EMBEDDED_PROFILE_NAME=embedded.provisionprofile    export ENABLE_HEADER_DEPENDENCIES=YES    export EXCLUDED_INSTALLSRC_SUBDIRECTORY_PATTERNS=".DS_Store .svn .git .hg CVS"    export EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES="*.nib *.lproj *.framework *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj"    export EXECUTABLE_EXTENSION=dylib    export EXECUTABLE_NAME=libpbrtlib.dylib    export EXECUTABLE_PATH=libpbrtlib.dylib    export EXECUTABLE_PREFIX=lib    export EXECUTABLE_SUFFIX=.dylib    export FILE_LIST=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects/LinkFileList    export FIXED_FILES_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/FixedFiles    export FRAMEWORK_FLAG_PREFIX=-framework    export FRAMEWORK_SEARCH_PATHS="/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug "    export FRAMEWORK_VERSION=A    export FULL_PRODUCT_NAME=libpbrtlib.dylib    export GCC3_VERSION=3.3    export GCC_C_LANGUAGE_STANDARD=gnu99    export GCC_DYNAMIC_NO_PIC=NO    export GCC_ENABLE_OBJC_EXCEPTIONS=YES    export GCC_INLINES_ARE_PRIVATE_EXTERN=YES    export GCC_OPTIMIZATION_LEVEL=0    export GCC_PFE_FILE_C_DIALECTS="c objective-c c++ objective-c++"    export GCC_PREPROCESSOR_DEFINITIONS="DEBUG=1 PBRT_STATS_NONE PBRT_HAS_PTHREADS"    export GCC_SYMBOLS_PRIVATE_EXTERN=NO    export GCC_TREAT_WARNINGS_AS_ERRORS=NO    export GCC_VERSION=com.apple.compilers.llvm.clang.1_0    export GCC_VERSION_IDENTIFIER=com_apple_compilers_llvm_clang_1_0    export GCC_WARN_64_TO_32_BIT_CONVERSION=YES    export GCC_WARN_ABOUT_RETURN_TYPE=YES_ERROR    export GCC_WARN_UNDECLARED_SELECTOR=YES    export GCC_WARN_UNINITIALIZED_AUTOS=YES_AGGRESSIVE    export GCC_WARN_UNUSED_FUNCTION=YES    export GCC_WARN_UNUSED_VARIABLE=YES    export GENERATE_MASTER_OBJECT_FILE=NO    export GENERATE_PKGINFO_FILE=NO    export GENERATE_PROFILING_CODE=NO    export GID=20    export GROUP=staff    export HEADERMAP_INCLUDES_FLAT_ENTRIES_FOR_TARGET_BEING_BUILT=YES    export HEADERMAP_INCLUDES_FRAMEWORK_ENTRIES_FOR_ALL_PRODUCT_TYPES=YES    export HEADERMAP_INCLUDES_NONPUBLIC_NONPRIVATE_HEADERS=YES    export HEADERMAP_INCLUDES_PROJECT_HEADERS=YES    export HEADER_SEARCH_PATHS="/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug/include .."    export ICONV=/usr/bin/iconv    export INFOPLIST_EXPAND_BUILD_SETTINGS=YES    export INFOPLIST_OUTPUT_FORMAT=same-as-input    export INFOPLIST_PREPROCESS=NO    export INPUT_FILE_BASE=pbrtparse    export INPUT_FILE_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core    export INPUT_FILE_NAME=pbrtparse.ym    export INPUT_FILE_PATH=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtparse.ym    export INPUT_FILE_REGION_PATH_COMPONENT=    export INPUT_FILE_SUFFIX=.ym    export INSTALL_DIR=/tmp/pbrt.dst/usr/local/lib    export INSTALL_GROUP=staff    export INSTALL_MODE_FLAG=u+w,go-w,a+rX    export INSTALL_OWNER=gerardsimons    export INSTALL_PATH=/usr/local/lib    export INSTALL_ROOT=/tmp/pbrt.dst    export JAVAC_DEFAULT_FLAGS="-J-Xms64m -J-XX:NewSize=4M -J-Dfile.encoding=UTF8"    export JAVA_APP_STUB=/System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub    export JAVA_ARCHIVE_CLASSES=YES    export JAVA_ARCHIVE_TYPE=JAR    export JAVA_COMPILER=/usr/bin/javac    export JAVA_FRAMEWORK_RESOURCES_DIRS=Resources    export JAVA_JAR_FLAGS=cv    export JAVA_SOURCE_SUBDIR=.    export JAVA_USE_DEPENDENCIES=YES    export JAVA_ZIP_FLAGS=-urg    export JIKES_DEFAULT_FLAGS="+E +OLDCSO"    export KEEP_PRIVATE_EXTERNS=NO    export LD_DEPENDENCY_INFO_FILE=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/pbrtlib_dependency_info.dat    export LD_DYLIB_INSTALL_NAME=/usr/local/lib/libpbrtlib.dylib    export LD_GENERATE_MAP_FILE=NO    export LD_MAP_FILE_PATH=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/pbrtlib-LinkMap-normal-x86_64.txt    export LD_NO_PIE=NO    export LD_QUOTE_LINKER_ARGUMENTS_FOR_COMPILER_DRIVER=YES    export LEGACY_DEVELOPER_DIR=/Applications/Xcode.app/Contents/PlugIns/Xcode3Core.ideplugin/Contents/SharedSupport/Developer    export LEX=lex    export LIBRARY_FLAG_NOSPACE=YES    export LIBRARY_FLAG_PREFIX=-l    export LIBRARY_KEXT_INSTALL_PATH=/Library/Extensions    export LIBRARY_SEARCH_PATHS="/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug "    export LINKER_DISPLAYS_MANGLED_NAMES=NO    export LINK_FILE_LIST_normal_x86_64=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal/x86_64/pbrtlib.LinkFileList    export LINK_WITH_STANDARD_LIBRARIES=YES    export LOCAL_ADMIN_APPS_DIR=/Applications/Utilities    export LOCAL_APPS_DIR=/Applications    export LOCAL_DEVELOPER_DIR=/Library/Developer    export LOCAL_LIBRARY_DIR=/Library    export MACH_O_TYPE=mh_dylib    export MACOSX_DEPLOYMENT_TARGET=10.9    export MAC_OS_X_PRODUCT_BUILD_VERSION=13E28    export MAC_OS_X_VERSION_ACTUAL=1094    export MAC_OS_X_VERSION_MAJOR=1090    export MAC_OS_X_VERSION_MINOR=0904    export MODULE_CACHE_DIR=/Users/gerardsimons/Library/Developer/Xcode/DerivedData/ModuleCache    export NATIVE_ARCH=i386    export NATIVE_ARCH_32_BIT=i386    export NATIVE_ARCH_64_BIT=x86_64    export NATIVE_ARCH_ACTUAL=x86_64    export NO_COMMON=YES    export OBJECT_FILE_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects    export OBJECT_FILE_DIR_normal=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/Objects-normal    export OBJROOT=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build    export ONLY_ACTIVE_ARCH=YES    export OPTIMIZATION_LEVEL=0    export OS=MACOS    export OSAC=/usr/bin/osacompile    export OTHER_INPUT_FILE_FLAGS=    export PACKAGE_TYPE=com.apple.package-type.mach-o-dylib    export PASCAL_STRINGS=YES    export PATH="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/libexec:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/local/bin:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/usr/bin:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/usr/local/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/local/bin:/Applications/Xcode.app/Contents/Developer/Tools:/usr/bin:/bin:/usr/sbin:/sbin"    export PATH_PREFIXES_EXCLUDED_FROM_HEADER_DEPENDENCIES="/usr/include /usr/local/include /System/Library/Frameworks /System/Library/PrivateFrameworks /Applications/Xcode.app/Contents/Developer/Headers /Applications/Xcode.app/Contents/Developer/SDKs /Applications/Xcode.app/Contents/Developer/Platforms"    export PFE_FILE_C_DIALECTS="c objective-c c++"    export PKGINFO_FILE_PATH=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/PkgInfo    export PLATFORM_DEVELOPER_APPLICATIONS_DIR=/Applications/Xcode.app/Contents/Developer/Applications    export PLATFORM_DEVELOPER_BIN_DIR=/Applications/Xcode.app/Contents/Developer/usr/bin    export PLATFORM_DEVELOPER_LIBRARY_DIR=/Applications/Xcode.app/Contents/Developer/Library    export PLATFORM_DEVELOPER_SDK_DIR=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs    export PLATFORM_DEVELOPER_TOOLS_DIR=/Applications/Xcode.app/Contents/Developer/Tools    export PLATFORM_DEVELOPER_USR_DIR=/Applications/Xcode.app/Contents/Developer/usr    export PLATFORM_DIR=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform    export PLATFORM_NAME=macosx    export PLATFORM_PREFERRED_ARCH=x86_64    export PLATFORM_PRODUCT_BUILD_VERSION=5B1008    export PLIST_FILE_OUTPUT_FORMAT=same-as-input    export PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR=YES    export PRECOMP_DESTINATION_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/PrefixHeaders    export PRESERVE_DEAD_CODE_INITS_AND_TERMS=NO    export PRIVATE_HEADERS_FOLDER_PATH=/usr/local/include    export PRODUCT_NAME=pbrtlib    export PRODUCT_SETTINGS_PATH=    export PRODUCT_TYPE=com.apple.product-type.library.dynamic    export PROFILING_CODE=NO    export PROJECT=pbrt    export PROJECT_DERIVED_FILE_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/DerivedSources    export PROJECT_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src    export PROJECT_FILE_PATH=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/pbrt.xcodeproj    export PROJECT_NAME=pbrt    export PROJECT_TEMP_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build    export PROJECT_TEMP_ROOT=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build    export PUBLIC_HEADERS_FOLDER_PATH=/usr/local/include    export RECURSIVE_SEARCH_PATHS_FOLLOW_SYMLINKS=YES    export REMOVE_CVS_FROM_RESOURCES=YES    export REMOVE_GIT_FROM_RESOURCES=YES    export REMOVE_HG_FROM_RESOURCES=YES    export REMOVE_SVN_FROM_RESOURCES=YES    export REZ_COLLECTOR_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/ResourceManagerResources    export REZ_EXECUTABLE=YES    export REZ_OBJECTS_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/ResourceManagerResources/Objects    export REZ_SEARCH_PATHS="/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug "    export RUN_CLANG_STATIC_ANALYZER=YES    export SCAN_ALL_SOURCE_FILES_FOR_INCLUDES=NO    export SCRIPT_INPUT_FILE=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtparse.ym    export SCRIPT_OUTPUT_FILE_0=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/Yacc/pbrtparse.hpp    export SCRIPT_OUTPUT_FILE_1=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build/DerivedSources/Yacc/pbrtparse.cpp    export SCRIPT_OUTPUT_FILE_COUNT=2    export SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk    export SDK_DIR=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk    export SDK_NAME=macosx10.9    export SDK_PRODUCT_BUILD_VERSION=13C64    export SED=/usr/bin/sed    export SEPARATE_STRIP=NO    export SEPARATE_SYMBOL_EDIT=NO    export SET_DIR_MODE_OWNER_GROUP=YES    export SET_FILE_MODE_OWNER_GROUP=NO    export SHALLOW_BUNDLE=NO    export SHARED_DERIVED_FILE_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug/DerivedSources    export SHARED_PRECOMPS_DIR=/var/folders/gk/c645mh1x08v9gbvmxymxvl340000gn/C/com.apple.DeveloperTools/5.1.1-5B1008/Xcode/SharedPrecompiledHeaders    export SKIP_INSTALL=NO    export SOURCE_ROOT=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src    export SRCROOT=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src    export STRINGS_FILE_OUTPUT_ENCODING=UTF-16    export STRIP_INSTALLED_PRODUCT=YES    export STRIP_STYLE=debugging    export SUPPORTED_PLATFORMS=macosx    export SYMROOT=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build    export SYSTEM_ADMIN_APPS_DIR=/Applications/Utilities    export SYSTEM_APPS_DIR=/Applications    export SYSTEM_CORE_SERVICES_DIR=/System/Library/CoreServices    export SYSTEM_DEMOS_DIR=/Applications/Extras    export SYSTEM_DEVELOPER_APPS_DIR=/Applications/Xcode.app/Contents/Developer/Applications    export SYSTEM_DEVELOPER_BIN_DIR=/Applications/Xcode.app/Contents/Developer/usr/bin    export SYSTEM_DEVELOPER_DEMOS_DIR="/Applications/Xcode.app/Contents/Developer/Applications/Utilities/Built Examples"    export SYSTEM_DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer    export SYSTEM_DEVELOPER_DOC_DIR="/Applications/Xcode.app/Contents/Developer/ADC Reference Library"    export SYSTEM_DEVELOPER_GRAPHICS_TOOLS_DIR="/Applications/Xcode.app/Contents/Developer/Applications/Graphics Tools"    export SYSTEM_DEVELOPER_JAVA_TOOLS_DIR="/Applications/Xcode.app/Contents/Developer/Applications/Java Tools"    export SYSTEM_DEVELOPER_PERFORMANCE_TOOLS_DIR="/Applications/Xcode.app/Contents/Developer/Applications/Performance Tools"    export SYSTEM_DEVELOPER_RELEASENOTES_DIR="/Applications/Xcode.app/Contents/Developer/ADC Reference Library/releasenotes"    export SYSTEM_DEVELOPER_TOOLS=/Applications/Xcode.app/Contents/Developer/Tools    export SYSTEM_DEVELOPER_TOOLS_DOC_DIR="/Applications/Xcode.app/Contents/Developer/ADC Reference Library/documentation/DeveloperTools"    export SYSTEM_DEVELOPER_TOOLS_RELEASENOTES_DIR="/Applications/Xcode.app/Contents/Developer/ADC Reference Library/releasenotes/DeveloperTools"    export SYSTEM_DEVELOPER_USR_DIR=/Applications/Xcode.app/Contents/Developer/usr    export SYSTEM_DEVELOPER_UTILITIES_DIR=/Applications/Xcode.app/Contents/Developer/Applications/Utilities    export SYSTEM_DOCUMENTATION_DIR=/Library/Documentation    export SYSTEM_KEXT_INSTALL_PATH=/System/Library/Extensions    export SYSTEM_LIBRARY_DIR=/System/Library    export TARGETNAME=pbrtlib    export TARGET_BUILD_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/Debug    export TARGET_NAME=pbrtlib    export TARGET_TEMP_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build    export TEMP_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build    export TEMP_FILES_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build    export TEMP_FILE_DIR=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrtlib.build    export TEMP_ROOT=/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build    export TOOLCHAINS=com.apple.dt.toolchain.XcodeDefault    export UID=501    export UNSTRIPPED_PRODUCT=NO    export USER=gerardsimons    export USER_APPS_DIR=/Users/gerardsimons/Applications    export USER_LIBRARY_DIR=/Users/gerardsimons/Library    export USE_DYNAMIC_NO_PIC=YES    export USE_HEADERMAP=YES    export USE_HEADER_SYMLINKS=NO    export VALIDATE_PRODUCT=NO    export VALID_ARCHS="i386 x86_64"    export VERBOSE_PBXCP=NO    export VERSION_INFO_BUILDER=gerardsimons    export VERSION_INFO_FILE=pbrtlib_vers.c    export VERSION_INFO_STRING="\"@(#)PROGRAM:pbrtlib  PROJECT:pbrt-\""    export XCODE_APP_SUPPORT_DIR=/Applications/Xcode.app/Contents/Developer/Library/Xcode    export XCODE_PRODUCT_BUILD_VERSION=5B1008    export XCODE_VERSION_ACTUAL=0511    export XCODE_VERSION_MAJOR=0500    export XCODE_VERSION_MINOR=0510    export XPCSERVICES_FOLDER_PATH=/XPCServices    export YACC=yacc    export arch=x86_64    export variant=normal    export vtk-debug-include="~/Git/VTK/VTKBuild/include/vtk-6.2"    export vtk-debug-lib="~/Git/VTK/VTKBuild/lib"    /bin/sh -c cd\ \"$DERIVED_FILES_DIR/Yacc\"\ &&\ /usr/bin/bison\ -d\ -v\ -t\ \"$INPUT_FILE_PATH\"\ -o\ \"$DERIVED_FILES_DIR/Yacc/$INPUT_FILE_BASE.cpp\"\ &&\ \ /bin/mv\ \"$DERIVED_FILES_DIR/Yacc/$INPUT_FILE_BASE.hpp\"\ \"$DERIVED_FILES_DIR/Yacc/$INPUT_FILE_BASE.hh\"36"D5B4B864-10C6-401B-BC2E-7E8E5EA142FF-
+bB8D6DBDC-D6E8-499C-BAD4-0E1AF4CF6AA6
+
+CYacc /Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtparse.ym
+r0
+

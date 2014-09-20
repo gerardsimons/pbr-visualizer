@@ -37,9 +37,9 @@
 #define PBRT_CORE_SH_H
 
 // core/sh.h*
-#include "pbrt.h"
-#include "geometry.h"
-#include "spectrum.h"
+#include "core/pbrt.h"
+#include "core/geometry.h"
+#include "core/spectrum.h"
 
 // Spherical Harmonics Declarations
 inline int SHTerms(int lmax) {

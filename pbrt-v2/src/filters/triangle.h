@@ -37,7 +37,7 @@
 #define PBRT_FILTERS_TRIANGLE_H
 
 // filters/triangle.h*
-#include "filter.h"
+#include "core/filter.h"
 
 // Triangle Filter Declarations
 class TriangleFilter : public Filter {

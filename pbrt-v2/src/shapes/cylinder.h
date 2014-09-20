@@ -37,7 +37,7 @@
 #define PBRT_SHAPES_CYLINDER_H
 
 // shapes/cylinder.h*
-#include "shape.h"
+#include "core/shape.h"
 
 // Cylinder Declarations
 class Cylinder : public Shape {

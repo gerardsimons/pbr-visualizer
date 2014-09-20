@@ -31,10 +31,10 @@
 
 
 // shapes/sphere.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "shapes/sphere.h"
-#include "montecarlo.h"
-#include "paramset.h"
+#include "core/montecarlo.h"
+#include "core/paramset.h"
 
 // Sphere Method Definitions
 Sphere::Sphere(const Transform *o2w, const Transform *w2o, bool ro,

@@ -31,11 +31,11 @@
 
 
 // materials/metal.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "materials/metal.h"
-#include "reflection.h"
-#include "paramset.h"
-#include "texture.h"
+#include "core/reflection.h"
+#include "core/paramset.h"
+#include "core/texture.h"
 
 // MetalMaterial Method Definitions
 MetalMaterial::MetalMaterial(Reference<Texture<Spectrum> > et,

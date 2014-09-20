@@ -31,10 +31,10 @@
 
 
 // accelerators/bvh.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "accelerators/bvh.h"
-#include "probes.h"
-#include "paramset.h"
+#include "core/probes.h"
+#include "core/paramset.h"
 
 // BVHAccel Local Declarations
 struct BVHPrimitiveInfo {

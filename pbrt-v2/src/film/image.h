@@ -37,11 +37,11 @@
 #define PBRT_FILM_IMAGE_H
 
 // film/image.h*
-#include "pbrt.h"
-#include "film.h"
-#include "sampler.h"
-#include "filter.h"
-#include "paramset.h"
+#include "core/pbrt.h"
+#include "core/film.h"
+#include "core/sampler.h"
+#include "core/filter.h"
+#include "core/paramset.h"
 
 // ImageFilm Declarations
 class ImageFilm : public Film {

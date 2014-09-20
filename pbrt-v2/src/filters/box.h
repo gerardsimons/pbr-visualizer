@@ -37,7 +37,7 @@
 #define PBRT_FILTERS_BOX_H
 
 // filters/box.h*
-#include "filter.h"
+#include "core/filter.h"
 
 // Box Filter Declarations
 class BoxFilter : public Filter {

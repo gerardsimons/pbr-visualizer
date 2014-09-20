@@ -37,9 +37,9 @@
 #define PBRT_SHAPES_NURBS_H
 
 // shapes/nurbs.h*
-#include "pbrt.h"
-#include "shape.h"
-#include "geometry.h"
+#include "core/pbrt.h"
+#include "core/shape.h"
+#include "core/geometry.h"
 
 
 // NURBS Declarations

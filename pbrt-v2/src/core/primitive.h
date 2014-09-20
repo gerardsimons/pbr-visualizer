@@ -37,8 +37,8 @@
 #define PBRT_CORE_PRIMITIVE_H
 
 // core/primitive.h*
-#include "pbrt.h"
-#include "shape.h"
+#include "core/pbrt.h"
+#include "core/shape.h"
 #include "material.h"
 
 // Primitive Declarations

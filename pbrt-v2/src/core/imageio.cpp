@@ -31,9 +31,9 @@
 
 
 // core/imageio.cpp*
-#include "stdafx.h"
-#include "imageio.h"
-#include "spectrum.h"
+#include "core/stdafx.h"
+#include "core/imageio.h"
+#include "core/spectrum.h"
 #include "targa.h"
 
 // ImageIO Local Declarations

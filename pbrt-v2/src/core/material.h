@@ -37,8 +37,8 @@
 #define PBRT_CORE_MATERIAL_H
 
 // core/material.h*
-#include "pbrt.h"
-#include "memory.h"
+#include "core/pbrt.h"
+#include "core/memory.h"
 
 // Material Declarations
 class Material : public ReferenceCounted {

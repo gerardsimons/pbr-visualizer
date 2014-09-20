@@ -37,8 +37,8 @@
 #define PBRT_MATERIALS_PLASTIC_H
 
 // materials/plastic.h*
-#include "pbrt.h"
-#include "material.h"
+#include "core/pbrt.h"
+#include "core/material.h"
 
 // PlasticMaterial Declarations
 class PlasticMaterial : public Material {

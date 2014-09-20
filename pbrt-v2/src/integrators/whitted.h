@@ -37,9 +37,9 @@
 #define PBRT_INTEGRATORS_WHITTED_H
 
 // integrators/whitted.h*
-#include "pbrt.h"
-#include "integrator.h"
-#include "scene.h"
+#include "core/pbrt.h"
+#include "core/integrator.h"
+#include "core/scene.h"
 
 // WhittedIntegrator Declarations
 class WhittedIntegrator : public SurfaceIntegrator {

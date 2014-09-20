@@ -37,7 +37,7 @@
 #define PBRT_CORE_GEOMETRY_H
 
 // core/geometry.h*
-#include "pbrt.h"
+#include "core/pbrt.h"
 
 // Geometry Declarations
 class Vector {
@@ -127,7 +127,6 @@ public:
     // Vector Public Data
     float x, y, z;
 };
-
 
 class Point {
 public:
@@ -222,7 +221,6 @@ public:
     // Point Public Data
     float x, y, z;
 };
-
 
 class Normal {
 public:

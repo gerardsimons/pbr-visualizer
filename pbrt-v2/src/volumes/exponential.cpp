@@ -31,9 +31,9 @@
 
 
 // volumes/exponential.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "volumes/exponential.h"
-#include "paramset.h"
+#include "core/paramset.h"
 
 // ExponentialDensity Method Definitions
 ExponentialDensity *CreateExponentialVolumeRegion(const Transform &volume2world,

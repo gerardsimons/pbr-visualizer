@@ -37,9 +37,9 @@
 #define PBRT_INTEGRATORS_DIPOLESUBSURFACE_H
 
 // integrators/dipolesubsurface.h*
-#include "pbrt.h"
-#include "integrator.h"
-#include "kdtree.h"
+#include "core/pbrt.h"
+#include "core/integrator.h"
+#include "core/kdtree.h"
 #include "renderers/surfacepoints.h"
 struct SubsurfaceOctreeNode;
 

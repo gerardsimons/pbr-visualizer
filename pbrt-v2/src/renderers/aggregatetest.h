@@ -37,9 +37,9 @@
 #define PBRT_RENDERERS_AGGREGATETEST_H
 
 // renderers/aggregatetest.h*
-#include "pbrt.h"
-#include "renderer.h"
-#include "memory.h"
+#include "core/pbrt.h"
+#include "core/renderer.h"
+#include "core/memory.h"
 
 // AggregateTest Declarations
 class AggregateTest : public Renderer {

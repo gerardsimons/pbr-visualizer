@@ -31,9 +31,9 @@
 
 
 // core/intersection.cpp*
-#include "stdafx.h"
-#include "intersection.h"
-#include "shape.h"
+#include "core/stdafx.h"
+#include "core/intersection.h"
+#include "core/shape.h"
 #include "primitive.h"
 #include "light.h"
 

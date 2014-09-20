@@ -31,9 +31,9 @@
 
 
 // filters/box.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "filters/box.h"
-#include "paramset.h"
+#include "core/paramset.h"
 
 // Box Filter Method Definitions
 float BoxFilter::Evaluate(float x, float y) const {

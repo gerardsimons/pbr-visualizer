@@ -37,7 +37,7 @@
 #define PBRT_VOLUMES_VOLUMEGRID_H
 
 // volumes/volumegrid.h*
-#include "volume.h"
+#include "core/volume.h"
 
 // VolumeGridDensity Declarations
 class VolumeGridDensity : public DensityRegion {

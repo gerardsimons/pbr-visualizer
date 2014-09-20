@@ -31,11 +31,11 @@
 
 
 // film/image.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "film/image.h"
-#include "spectrum.h"
-#include "parallel.h"
-#include "imageio.h"
+#include "core/spectrum.h"
+#include "core/parallel.h"
+#include "core/imageio.h"
 
 // ImageFilm Method Definitions
 ImageFilm::ImageFilm(int xres, int yres, Filter *filt, const float crop[4],

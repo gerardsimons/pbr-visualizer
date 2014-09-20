@@ -37,10 +37,10 @@
 #define PBRT_MATERIALS_MEASURED_H
 
 // materials/measured.h*
-#include "pbrt.h"
-#include "material.h"
-#include "reflection.h"
-#include "kdtree.h"
+#include "core/pbrt.h"
+#include "core/material.h"
+#include "core/reflection.h"
+#include "core/kdtree.h"
 
 // MeasuredMaterial Declarations
 class MeasuredMaterial : public Material {

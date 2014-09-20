@@ -37,10 +37,10 @@
 #define PBRT_INTEGRATORS_IRRADIANCECACHE_H
 
 // integrators/irradiancecache.h*
-#include "pbrt.h"
-#include "integrator.h"
-#include "octree.h"
-#include "parallel.h"
+#include "core/pbrt.h"
+#include "core/integrator.h"
+#include "core/octree.h"
+#include "core/parallel.h"
 
 // IrradianceCacheIntegrator Forward Declarations
 struct IrradianceSample;

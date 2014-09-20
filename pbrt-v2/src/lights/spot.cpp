@@ -31,10 +31,10 @@
 
 
 // lights/spot.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "lights/spot.h"
-#include "paramset.h"
-#include "montecarlo.h"
+#include "core/paramset.h"
+#include "core/montecarlo.h"
 
 // SpotLight Method Definitions
 SpotLight::SpotLight(const Transform &light2world,

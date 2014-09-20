@@ -37,8 +37,8 @@
 #define PBRT_ACCELERATORS_KDTREEACCEL_H
 
 // accelerators/kdtreeaccel.h*
-#include "pbrt.h"
-#include "primitive.h"
+#include "core/pbrt.h"
+#include "core/primitive.h"
 
 // KdTreeAccel Declarations
 struct KdAccelNode;

@@ -31,11 +31,11 @@
 
 
 // cameras/orthographic.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "cameras/orthographic.h"
-#include "paramset.h"
-#include "sampler.h"
-#include "montecarlo.h"
+#include "core/paramset.h"
+#include "core/sampler.h"
+#include "core/montecarlo.h"
 
 // OrthographicCamera Definitions
 OrthoCamera::OrthoCamera(const AnimatedTransform &cam2world,

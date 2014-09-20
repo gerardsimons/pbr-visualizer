@@ -31,10 +31,10 @@
 
 
 // shapes/loopsubdiv.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "shapes/loopsubdiv.h"
 #include "shapes/trianglemesh.h"
-#include "paramset.h"
+#include "core/paramset.h"
 #include <set>
 #include <map>
 using std::set;

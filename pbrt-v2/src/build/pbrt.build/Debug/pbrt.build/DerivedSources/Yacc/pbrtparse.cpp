@@ -170,9 +170,9 @@
 /* Copy the first part of user declarations.  */
 #line 32 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtparse.ym"
 
-#include "api.h"
-#include "pbrt.h"
-#include "paramset.h"
+#include "core/api.h"
+#include "core/pbrt.h"
+#include "core/paramset.h"
 #include <stdarg.h>
 
 #ifdef PBRT_IS_WINDOWS

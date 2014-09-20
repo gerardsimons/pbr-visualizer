@@ -31,12 +31,12 @@
 
 
 // shapes/trianglemesh.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "shapes/trianglemesh.h"
-#include "texture.h"
+#include "core/texture.h"
 #include "textures/constant.h"
-#include "paramset.h"
-#include "montecarlo.h"
+#include "core/paramset.h"
+#include "core/montecarlo.h"
 
 // TriangleMesh Method Definitions
 TriangleMesh::TriangleMesh(const Transform *o2w, const Transform *w2o,

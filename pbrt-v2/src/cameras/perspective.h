@@ -37,9 +37,9 @@
 #define PBRT_CAMERAS_PERSPECTIVE_H
 
 // cameras/perspective.h*
-#include "pbrt.h"
-#include "camera.h"
-#include "film.h"
+#include "core/pbrt.h"
+#include "core/camera.h"
+#include "core/film.h"
 
 // PerspectiveCamera Declarations
 class PerspectiveCamera : public ProjectiveCamera {

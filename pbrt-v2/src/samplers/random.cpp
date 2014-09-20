@@ -31,10 +31,10 @@
 
 
 // samplers/random.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "samplers/random.h"
-#include "montecarlo.h"
-#include "camera.h"
+#include "core/montecarlo.h"
+#include "core/camera.h"
 
 RandomSampler::RandomSampler(int xstart, int xend,
         int ystart, int yend, int ns, float sopen, float sclose)

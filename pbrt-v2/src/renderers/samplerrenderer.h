@@ -37,9 +37,9 @@
 #define PBRT_RENDERERS_SAMPLERRENDERER_H
 
 // renderers/samplerrenderer.h*
-#include "pbrt.h"
-#include "renderer.h"
-#include "parallel.h"
+#include "core/pbrt.h"
+#include "core/renderer.h"
+#include "core/parallel.h"
 
 // SamplerRenderer Declarations
 class SamplerRenderer : public Renderer {

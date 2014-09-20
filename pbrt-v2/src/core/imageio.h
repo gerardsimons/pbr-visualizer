@@ -37,7 +37,7 @@
 #define PBRT_CORE_IMAGEIO_H
 
 // core/imageio.h*
-#include "pbrt.h"
+#include "core/pbrt.h"
 
 // ImageIO Declarations
 RGBSpectrum *ReadImage(const string &name, int *xSize, int *ySize);

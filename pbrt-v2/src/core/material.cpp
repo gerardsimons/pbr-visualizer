@@ -31,11 +31,11 @@
 
 
 // core/material.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "material.h"
 #include "primitive.h"
-#include "texture.h"
-#include "spectrum.h"
+#include "core/texture.h"
+#include "core/spectrum.h"
 #include "reflection.h"
 
 // Material Method Definitions

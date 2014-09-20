@@ -37,9 +37,9 @@
 #define PBRT_TEXTURES_SCALE_H
 
 // textures/scale.h*
-#include "pbrt.h"
-#include "texture.h"
-#include "paramset.h"
+#include "core/pbrt.h"
+#include "core/texture.h"
+#include "core/paramset.h"
 
 // ScaleTexture Declarations
 template <typename T1, typename T2>

@@ -31,10 +31,10 @@
 
 
 // integrators/directlighting.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "integrators/directlighting.h"
-#include "intersection.h"
-#include "paramset.h"
+#include "core/intersection.h"
+#include "core/paramset.h"
 
 // DirectLightingIntegrator Method Definitions
 DirectLightingIntegrator::DirectLightingIntegrator(LightStrategy st, int md) {

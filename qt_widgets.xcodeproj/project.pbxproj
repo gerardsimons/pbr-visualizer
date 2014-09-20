@@ -1,0 +1,711 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00680BD16790FF543030EE6E /* moc_uiwidget.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 0BE7E900C04F0A82CA17C896 /* moc_uiwidget.cpp */; settings = {ATTRIBUTES = (); }; };
+		06544525FC6F5EF8E8A632C0 /* ImageView.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = EF20DD084DD41BF223D9422C /* ImageView.cpp */; settings = {ATTRIBUTES = (); }; };
+		0AFAC8A78ECFA7A8E1AF4331 /* Octree.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = EED9E0E283CD064ECC56E5FD /* Octree.cpp */; settings = {ATTRIBUTES = (); }; };
+		0C6D4628EE0B0D1479A20551 /* AGL.framework in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = C6766F86E49E9C8701C8E637 /* AGL.framework */; };
+		0E66674B773E0FB0E23F37A3 /* ParallelCoordsView.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 24581167EE3B91AF09932D74 /* ParallelCoordsView.cpp */; settings = {ATTRIBUTES = (); }; };
+		10DDFC7092B7CABFAEE9479B /* moc_heatmapwidget.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 7A351F348CB5E24B4B6AFC86 /* moc_heatmapwidget.cpp */; settings = {ATTRIBUTES = (); }; };
+		12234891B03DDC1896053B0B /* Cluster.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 6030D29B12E6C76CE84FCA39 /* Cluster.cpp */; settings = {ATTRIBUTES = (); }; };
+		14EB63610D49995C4CA3130B /* moc_scenewidget.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = E2DD99E575504A60156822BC /* moc_scenewidget.cpp */; settings = {ATTRIBUTES = (); }; };
+		2627B1CC43FB0AE7C687AC69 /* imagewidget.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 5B1DD520B96ABF1DDBA23A37 /* imagewidget.cpp */; settings = {ATTRIBUTES = (); }; };
+		29C4018B99E9646C975D4C3B /* QtOpenGL.framework in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = 0156CBB4C2D00D9DEFCBDF68 /* QtOpenGL.framework */; };
+		2B093CA6F071B023A473CED0 /* main.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 118FCBAABA162BA17933C789 /* main.cpp */; settings = {ATTRIBUTES = (); }; };
+		2F09F35312A96D0644BCB8B4 /* scenewidget.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 42363689D6C4F207A3150BFD /* scenewidget.cpp */; settings = {ATTRIBUTES = (); }; };
+		2F5885ED9372BB94972100B1 /* DataSet.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 73A9CE2B5FF76CCC93811A52 /* DataSet.cpp */; settings = {ATTRIBUTES = (); }; };
+		39F6CB36DC806179EF21FF53 /* Filter.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = C83E58088EF608FE170ECC32 /* Filter.cpp */; settings = {ATTRIBUTES = (); }; };
+		3C1EC0632BA4FD95251CD1DB /* BMPImage.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = E600330B4329D7F4DABD3A43 /* BMPImage.cpp */; settings = {ATTRIBUTES = (); }; };
+		3C368707103315D80BD1009A /* heatmapwidget.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 16BBF131D4E394C43C86F444 /* heatmapwidget.cpp */; settings = {ATTRIBUTES = (); }; };
+		4425F28C46B65733D1200B38 /* moc_pcwidget.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 59F78B4A8F881208398BE7A8 /* moc_pcwidget.cpp */; settings = {ATTRIBUTES = (); }; };
+		49776FFF3F684830E553ECE4 /* QtCore.framework in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = D98F638C7798CC1DDA980D9A /* QtCore.framework */; };
+		656E40636B0424FF12C0C8E0 /* Record.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = E599CE6DA7DD5DDA1E33CD54 /* Record.cpp */; settings = {ATTRIBUTES = (); }; };
+		69F475D49A9F1FBDFE4951A9 /* ColorMap.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 6A9C347D02B2B622029D1D10 /* ColorMap.cpp */; settings = {ATTRIBUTES = (); }; };
+		69FD1F4BE302BDAD888696D0 /* uiwidget.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 52F8370F58817BFE515F1637 /* uiwidget.cpp */; settings = {ATTRIBUTES = (); }; };
+		6BC75287D2FDA4CBBDE5B800 /* 3DView.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = ADB0A80477C4E407569DDF0A /* 3DView.cpp */; settings = {ATTRIBUTES = (); }; };
+		6FFE813FFE36D19F0C307231 /* QtGui.framework in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = AA9D9004ACE84CD1D55FED5F /* QtGui.framework */; };
+		7B610BD05FA1B7407DC25931 /* Table.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = F1D794816E0BAEA23DB5CA6D /* Table.cpp */; settings = {ATTRIBUTES = (); }; };
+		7EE09FA8EA73CC574C01E775 /* ClusterSet.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = F2C3B5188037029C6D8C592E /* ClusterSet.cpp */; settings = {ATTRIBUTES = (); }; };
+		A0D4D822C714DF16C686CE6C /* pcwidget.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 2363DAD9575E694084B4CE84 /* pcwidget.cpp */; settings = {ATTRIBUTES = (); }; };
+		A5358B5386A59C67FCE5E395 /* TriangleMesh.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = C018AFB6EEB24021AD1DB9EA /* TriangleMesh.cpp */; settings = {ATTRIBUTES = (); }; };
+		A8726DBAB1708155C13A0A2A /* moc_window.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 03CC4BA1004C618C58FF0257 /* moc_window.cpp */; settings = {ATTRIBUTES = (); }; };
+		B963684C7FC9176E3B5F8CEB /* OctreeNode.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = FC175484B36679439E231027 /* OctreeNode.cpp */; settings = {ATTRIBUTES = (); }; };
+		BCEF71E1EDFB18DA77DC750B /* OpenGL.framework in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = DA18A6831232F53228631AD1 /* OpenGL.framework */; };
+		CACC3E8CB5148386F210E906 /* HeatMapView.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 422B852C06684D579B17C600 /* HeatMapView.cpp */; settings = {ATTRIBUTES = (); }; };
+		CEB54AF6FCB4EF585A2082AD /* DataFileReader.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 55AA840C1F7EC9BDF3A26797 /* DataFileReader.cpp */; settings = {ATTRIBUTES = (); }; };
+		D90509ED7F296051CA8F03A2 /* helper.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 3A4EB4FD1176796551B87EB2 /* helper.cpp */; settings = {ATTRIBUTES = (); }; };
+		DB98B1720439FD434A5BE1B0 /* ParallelCoordsAxis.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 7FDD7715C1CA484066E152CD /* ParallelCoordsAxis.cpp */; settings = {ATTRIBUTES = (); }; };
+		E106606119CC63F600746441 /* GLUT.framework in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = E106606019CC63F600746441 /* GLUT.framework */; };
+		E119B781B80EE6022CE8BAD4 /* Reference.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 08D9BD270BB5ECDEE591A390 /* Reference.cpp */; settings = {ATTRIBUTES = (); }; };
+		EB977ABCE8B49CCA6B464D53 /* ColorPalette.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 455961CDEC0F996099F9731B /* ColorPalette.cpp */; settings = {ATTRIBUTES = (); }; };
+		EEE06E30959EE1F3A826EB44 /* Iterator.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = A94148AA51BBB40DC0D5D120 /* Iterator.cpp */; settings = {ATTRIBUTES = (); }; };
+		F5A8F1B08B325F9C4541D452 /* loadppm.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 308BDD78607D368FC29519A3 /* loadppm.cpp */; settings = {ATTRIBUTES = (); }; };
+		FA4632AC8E3D1A74C0E352F8 /* reporter.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = F15280654F3FE5E86462F64B /* reporter.cpp */; settings = {ATTRIBUTES = (); }; };
+		FC203E8953C53F09233D0CFC /* window.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 22B8EB497DD4812281107EF2 /* window.cpp */; settings = {ATTRIBUTES = (); }; };
+		FC7BDB4492DF21D7120123FD /* moc_imagewidget.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 1F8753AC528D87D28332D4B5 /* moc_imagewidget.cpp */; settings = {ATTRIBUTES = (); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0156CBB4C2D00D9DEFCBDF68 /* QtOpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtOpenGL.framework; path = /usr/local/Cellar/qt/4.8.5/lib/QtOpenGL.framework; sourceTree = "<absolute>"; };
+		03CC4BA1004C618C58FF0257 /* moc_window.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moc_window.cpp; sourceTree = SOURCE_ROOT; };
+		08D9BD270BB5ECDEE591A390 /* Reference.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Reference.cpp; path = RIV/Data/Reference.cpp; sourceTree = SOURCE_ROOT; };
+		09019677962D0845A1144345 /* helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = helper.h; path = RIV/helper.h; sourceTree = SOURCE_ROOT; };
+		0BE7E900C04F0A82CA17C896 /* moc_uiwidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moc_uiwidget.cpp; sourceTree = SOURCE_ROOT; };
+		0C115A12B15FB3B39EDF67DF /* Vec3D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Vec3D.h; path = RIV/Geometry/Vec3D.h; sourceTree = SOURCE_ROOT; };
+		0CA6E2A479A56C9508A5990F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = RIV/main.cpp; sourceTree = SOURCE_ROOT; };
+		0FC297EEDF5C4D78E4999505 /* Property.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Property.h; path = RIV/Graphics/Property.h; sourceTree = SOURCE_ROOT; };
+		112235092972FF833416EEFB /* imagewidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imagewidget.h; sourceTree = SOURCE_ROOT; };
+		118FCBAABA162BA17933C789 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = SOURCE_ROOT; };
+		163563C4E0DFFBA2A9CA877E /* Evaluator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Evaluator.h; path = RIV/Graphics/Evaluator.h; sourceTree = SOURCE_ROOT; };
+		16BBF131D4E394C43C86F444 /* heatmapwidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = heatmapwidget.cpp; sourceTree = SOURCE_ROOT; };
+		1CA7872685A6A443608C4248 /* Reference.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Reference.h; path = RIV/Data/Reference.h; sourceTree = SOURCE_ROOT; };
+		1DA679E401E502280B59FE64 /* DataSetListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DataSetListener.h; path = RIV/Data/DataSetListener.h; sourceTree = SOURCE_ROOT; };
+		1F8753AC528D87D28332D4B5 /* moc_imagewidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moc_imagewidget.cpp; sourceTree = SOURCE_ROOT; };
+		2028E461F57CCC93A072BA51 /* ColorProperty.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ColorProperty.h; path = RIV/Graphics/ColorProperty.h; sourceTree = SOURCE_ROOT; };
+		22B8EB497DD4812281107EF2 /* window.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = window.cpp; sourceTree = SOURCE_ROOT; };
+		2363DAD9575E694084B4CE84 /* pcwidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pcwidget.cpp; sourceTree = SOURCE_ROOT; };
+		243CD2344EA4ECEF6BAE1865 /* scenewidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scenewidget.h; sourceTree = SOURCE_ROOT; };
+		24581167EE3B91AF09932D74 /* ParallelCoordsView.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ParallelCoordsView.cpp; path = RIV/Views/ParallelCoordsView.cpp; sourceTree = SOURCE_ROOT; };
+		2643F95C41E5BE34BDF5C847 /* SizeProperty.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SizeProperty.h; path = RIV/Graphics/SizeProperty.h; sourceTree = SOURCE_ROOT; };
+		2B601351BBFD3F9918188CF7 /* window.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = window.h; sourceTree = SOURCE_ROOT; };
+		308BDD78607D368FC29519A3 /* loadppm.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = loadppm.cpp; path = RIV/Graphics/loadppm.cpp; sourceTree = SOURCE_ROOT; };
+		3594C7832E7DDF7E980175EA /* ColorMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ColorMap.h; path = RIV/Graphics/ColorMap.h; sourceTree = SOURCE_ROOT; };
+		37CB75D94B3B4A75ACF32698 /* RIVVector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RIVVector.h; path = RIV/Geometry/RIVVector.h; sourceTree = SOURCE_ROOT; };
+		3A4EB4FD1176796551B87EB2 /* helper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = helper.cpp; path = RIV/helper.cpp; sourceTree = SOURCE_ROOT; };
+		422B852C06684D579B17C600 /* HeatMapView.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HeatMapView.cpp; path = RIV/Views/HeatMapView.cpp; sourceTree = SOURCE_ROOT; };
+		42363689D6C4F207A3150BFD /* scenewidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scenewidget.cpp; sourceTree = SOURCE_ROOT; };
+		455961CDEC0F996099F9731B /* ColorPalette.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ColorPalette.cpp; path = RIV/Graphics/ColorPalette.cpp; sourceTree = SOURCE_ROOT; };
+		463DF4912D56EDAECC6E0CEE /* matrix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = matrix.h; path = RIV/Geometry/matrix.h; sourceTree = SOURCE_ROOT; };
+		4E030CFB64D8ED3C6FE91D02 /* Iterator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Iterator.h; path = RIV/Data/Iterator.h; sourceTree = SOURCE_ROOT; };
+		52F8370F58817BFE515F1637 /* uiwidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = uiwidget.cpp; sourceTree = SOURCE_ROOT; };
+		5327E7F87F8389F178397EC3 /* 3DView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = 3DView.h; path = RIV/Views/3DView.h; sourceTree = SOURCE_ROOT; };
+		540AADC7D4CE7ED95A856BA6 /* Ray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Ray.h; path = RIV/Geometry/Ray.h; sourceTree = SOURCE_ROOT; };
+		55AA840C1F7EC9BDF3A26797 /* DataFileReader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DataFileReader.cpp; path = RIV/Data/DataFileReader.cpp; sourceTree = SOURCE_ROOT; };
+		5648F3FC627217EEC00C8EF9 /* DataView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DataView.h; path = RIV/Views/DataView.h; sourceTree = SOURCE_ROOT; };
+		56F0375F004126F877B7CB49 /* MeshModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MeshModel.h; path = RIV/Geometry/MeshModel.h; sourceTree = SOURCE_ROOT; };
+		59F78B4A8F881208398BE7A8 /* moc_pcwidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moc_pcwidget.cpp; sourceTree = SOURCE_ROOT; };
+		5B1DD520B96ABF1DDBA23A37 /* imagewidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = imagewidget.cpp; sourceTree = SOURCE_ROOT; };
+		5E04A563156F15C30D48D93A /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Geometry.h; path = RIV/Geometry/Geometry.h; sourceTree = SOURCE_ROOT; };
+		6030D29B12E6C76CE84FCA39 /* Cluster.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Cluster.cpp; path = RIV/Data/Cluster.cpp; sourceTree = SOURCE_ROOT; };
+		612F4079E2123EEB5F3C6A7B /* qt_widgets.pro */ = {isa = PBXFileReference; lastKnownFileType = text; path = qt_widgets.pro; sourceTree = SOURCE_ROOT; };
+		6743EE9723004E2A311F989E /* ImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ImageView.h; path = RIV/Views/ImageView.h; sourceTree = SOURCE_ROOT; };
+		6A9C347D02B2B622029D1D10 /* ColorMap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ColorMap.cpp; path = RIV/Graphics/ColorMap.cpp; sourceTree = SOURCE_ROOT; };
+		73A9CE2B5FF76CCC93811A52 /* DataSet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DataSet.cpp; path = RIV/Data/DataSet.cpp; sourceTree = SOURCE_ROOT; };
+		75C9FDCFE0C4D5CC153F87C2 /* ParallelCoordsAxis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ParallelCoordsAxis.h; path = RIV/Views/ParallelCoordsAxis.h; sourceTree = SOURCE_ROOT; };
+		768B24295066764365077DEC /* Filter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Filter.h; path = RIV/Data/Filter.h; sourceTree = SOURCE_ROOT; };
+		7721818531EDE0881F0D9544 /* TriangleMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TriangleMesh.h; path = RIV/Geometry/TriangleMesh.h; sourceTree = SOURCE_ROOT; };
+		7A351F348CB5E24B4B6AFC86 /* moc_heatmapwidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moc_heatmapwidget.cpp; sourceTree = SOURCE_ROOT; };
+		7FDD7715C1CA484066E152CD /* ParallelCoordsAxis.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ParallelCoordsAxis.cpp; path = RIV/Views/ParallelCoordsAxis.cpp; sourceTree = SOURCE_ROOT; };
+		81B8D6EC91D9F318A587CC12 /* DataSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DataSet.h; path = RIV/Data/DataSet.h; sourceTree = SOURCE_ROOT; };
+		82426FC425BEE6ED70EB43BC /* BMPImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BMPImage.h; path = RIV/Graphics/BMPImage.h; sourceTree = SOURCE_ROOT; };
+		8E3E2C1FA92A9AA984A3BF5A /* graphics_helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = graphics_helper.h; path = RIV/Graphics/graphics_helper.h; sourceTree = SOURCE_ROOT; };
+		908B96F9DDFEC954D983261B /* ParallelCoordsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ParallelCoordsView.h; path = RIV/Views/ParallelCoordsView.h; sourceTree = SOURCE_ROOT; };
+		931AC1E4654D05DDC4DF079C /* Table.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Table.h; path = RIV/Data/Table.h; sourceTree = SOURCE_ROOT; };
+		938BCD59EEFC8EF37AB3CBC7 /* heatmapwidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = heatmapwidget.h; sourceTree = SOURCE_ROOT; };
+		9662D0EFF654C7597551F54B /* loadppm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = loadppm.h; path = RIV/Graphics/loadppm.h; sourceTree = SOURCE_ROOT; };
+		96733A9AD1C4E062B40552B4 /* ClusterSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ClusterSet.h; path = RIV/Data/ClusterSet.h; sourceTree = SOURCE_ROOT; };
+		985D7A3DD129AB011592F484 /* ColorPalette.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ColorPalette.h; path = RIV/Graphics/ColorPalette.h; sourceTree = SOURCE_ROOT; };
+		9BD12415907C8F662CEB1D19 /* DataFileReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DataFileReader.h; path = RIV/Data/DataFileReader.h; sourceTree = SOURCE_ROOT; };
+		A0188B957CE346C78CFADD3D /* OctreeNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OctreeNode.h; path = RIV/Octree/OctreeNode.h; sourceTree = SOURCE_ROOT; };
+		A94148AA51BBB40DC0D5D120 /* Iterator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Iterator.cpp; path = RIV/Data/Iterator.cpp; sourceTree = SOURCE_ROOT; };
+		AA9D9004ACE84CD1D55FED5F /* QtGui.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtGui.framework; path = /usr/local/Cellar/qt/4.8.5/lib/QtGui.framework; sourceTree = "<absolute>"; };
+		ADB0A80477C4E407569DDF0A /* 3DView.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = 3DView.cpp; path = RIV/Views/3DView.cpp; sourceTree = SOURCE_ROOT; };
+		AE17F7C97E9950DD4B4FA767 /* ParallelCoordsAxisGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ParallelCoordsAxisGroup.h; path = RIV/Views/ParallelCoordsAxisGroup.h; sourceTree = SOURCE_ROOT; };
+		AEC0A23DB3B16D278543711B /* OctreeConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OctreeConfig.h; path = RIV/Octree/OctreeConfig.h; sourceTree = SOURCE_ROOT; };
+		B99085503DB1FCB74536522D /* sandbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sandbox.h; path = RIV/sandbox.h; sourceTree = SOURCE_ROOT; };
+		C018AFB6EEB24021AD1DB9EA /* TriangleMesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TriangleMesh.cpp; path = RIV/Geometry/TriangleMesh.cpp; sourceTree = SOURCE_ROOT; };
+		C6766F86E49E9C8701C8E637 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
+		C83E58088EF608FE170ECC32 /* Filter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Filter.cpp; path = RIV/Data/Filter.cpp; sourceTree = SOURCE_ROOT; };
+		C96632403FAB7CDB2CD8EC41 /* HeatMapView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = HeatMapView.h; path = RIV/Views/HeatMapView.h; sourceTree = SOURCE_ROOT; };
+		CEC7F64FE1C63B9CE9AECEFA /* Record.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Record.h; path = RIV/Data/Record.h; sourceTree = SOURCE_ROOT; };
+		CED87B880CB0A94EF65C5351 /* trackball.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = trackball.h; path = RIV/trackball.h; sourceTree = SOURCE_ROOT; };
+		D8345B3689CEC0D0B147675E /* Cluster.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Cluster.h; path = RIV/Data/Cluster.h; sourceTree = SOURCE_ROOT; };
+		D98F638C7798CC1DDA980D9A /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtCore.framework; path = /usr/local/Cellar/qt/4.8.5/lib/QtCore.framework; sourceTree = "<absolute>"; };
+		DA18A6831232F53228631AD1 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		DAA031EDEE10F39B026747D2 /* reporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = reporter.h; path = RIV/reporter.h; sourceTree = SOURCE_ROOT; };
+		E101129CFDAAF539EB4DCD50 /* AntTweakBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AntTweakBar.h; path = RIV/AntTweakBar.h; sourceTree = SOURCE_ROOT; };
+		E106605E19CC623D00746441 /* qt_widgets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = qt_widgets.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E106606019CC63F600746441 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		E2DD99E575504A60156822BC /* moc_scenewidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moc_scenewidget.cpp; sourceTree = SOURCE_ROOT; };
+		E599CE6DA7DD5DDA1E33CD54 /* Record.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Record.cpp; path = RIV/Data/Record.cpp; sourceTree = SOURCE_ROOT; };
+		E600330B4329D7F4DABD3A43 /* BMPImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BMPImage.cpp; path = RIV/Graphics/BMPImage.cpp; sourceTree = SOURCE_ROOT; };
+		EC5932E55D667827B5DB634A /* uiwidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = uiwidget.h; sourceTree = SOURCE_ROOT; };
+		EED9E0E283CD064ECC56E5FD /* Octree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Octree.cpp; path = RIV/Octree/Octree.cpp; sourceTree = SOURCE_ROOT; };
+		EF20DD084DD41BF223D9422C /* ImageView.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ImageView.cpp; path = RIV/Views/ImageView.cpp; sourceTree = SOURCE_ROOT; };
+		F15280654F3FE5E86462F64B /* reporter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = reporter.cpp; path = RIV/reporter.cpp; sourceTree = SOURCE_ROOT; };
+		F1D794816E0BAEA23DB5CA6D /* Table.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Table.cpp; path = RIV/Data/Table.cpp; sourceTree = SOURCE_ROOT; };
+		F2C3B5188037029C6D8C592E /* ClusterSet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ClusterSet.cpp; path = RIV/Data/ClusterSet.cpp; sourceTree = SOURCE_ROOT; };
+		FC175484B36679439E231027 /* OctreeNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = OctreeNode.cpp; path = RIV/Octree/OctreeNode.cpp; sourceTree = SOURCE_ROOT; };
+		FCB1F44E0D8070314B60959B /* Octree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Octree.h; path = RIV/Octree/Octree.h; sourceTree = SOURCE_ROOT; };
+		FFCCDC69F008F44FD4F00367 /* pcwidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pcwidget.h; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2A1043669E6E5A7426EA502A /* Frameworks & Libraries */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E106606119CC63F600746441 /* GLUT.framework in Frameworks & Libraries */,
+				29C4018B99E9646C975D4C3B /* QtOpenGL.framework in Frameworks & Libraries */,
+				6FFE813FFE36D19F0C307231 /* QtGui.framework in Frameworks & Libraries */,
+				49776FFF3F684830E553ECE4 /* QtCore.framework in Frameworks & Libraries */,
+				BCEF71E1EDFB18DA77DC750B /* OpenGL.framework in Frameworks & Libraries */,
+				0C6D4628EE0B0D1479A20551 /* AGL.framework in Frameworks & Libraries */,
+			);
+			name = "Frameworks & Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		05596AB53D8D521C69802C27 /* qt_widgets */ = {
+			isa = PBXGroup;
+			children = (
+				E106606019CC63F600746441 /* GLUT.framework */,
+				FB61758D0F0FDA4BA867C3D5 /* Sources */,
+				46E892BBB6BB6952967E0561 /* Temporary Sources */,
+				883D7615C4D2DE3FA1218F12 /* Headers */,
+				7CABE3C80E79AD2B307756D2 /* Sources [qmake] */,
+				ED1E82605DD74B483AF3C982 /* External Frameworks and Libraries */,
+				E106605F19CC623D00746441 /* Products */,
+			);
+			name = qt_widgets;
+			sourceTree = "<Group>";
+		};
+		0777741408C0A75CF9526273 /* RIV */ = {
+			isa = PBXGroup;
+			children = (
+				F636ED5E5AB2056A60296831 /* Data */,
+				962286216E12D6DF80E1C849 /* Geometry */,
+				33EBC06D6BBE88A67E2036FC /* Graphics */,
+				4D5CEAD114458AB562F84C4D /* Octree */,
+				425DB8B6C7096072A8DB1EB5 /* Views */,
+				3A4EB4FD1176796551B87EB2 /* helper.cpp */,
+				0CA6E2A479A56C9508A5990F /* main.cpp */,
+				F15280654F3FE5E86462F64B /* reporter.cpp */,
+			);
+			name = RIV;
+			sourceTree = "<Group>";
+		};
+		33EBC06D6BBE88A67E2036FC /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				E600330B4329D7F4DABD3A43 /* BMPImage.cpp */,
+				6A9C347D02B2B622029D1D10 /* ColorMap.cpp */,
+				455961CDEC0F996099F9731B /* ColorPalette.cpp */,
+				308BDD78607D368FC29519A3 /* loadppm.cpp */,
+			);
+			name = Graphics;
+			sourceTree = "<Group>";
+		};
+		3608CB1EC3F0570B679F98A9 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				D8345B3689CEC0D0B147675E /* Cluster.h */,
+				96733A9AD1C4E062B40552B4 /* ClusterSet.h */,
+				9BD12415907C8F662CEB1D19 /* DataFileReader.h */,
+				81B8D6EC91D9F318A587CC12 /* DataSet.h */,
+				1DA679E401E502280B59FE64 /* DataSetListener.h */,
+				768B24295066764365077DEC /* Filter.h */,
+				4E030CFB64D8ED3C6FE91D02 /* Iterator.h */,
+				CEC7F64FE1C63B9CE9AECEFA /* Record.h */,
+				1CA7872685A6A443608C4248 /* Reference.h */,
+				931AC1E4654D05DDC4DF079C /* Table.h */,
+			);
+			name = Data;
+			sourceTree = "<Group>";
+		};
+		425DB8B6C7096072A8DB1EB5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				ADB0A80477C4E407569DDF0A /* 3DView.cpp */,
+				422B852C06684D579B17C600 /* HeatMapView.cpp */,
+				EF20DD084DD41BF223D9422C /* ImageView.cpp */,
+				7FDD7715C1CA484066E152CD /* ParallelCoordsAxis.cpp */,
+				24581167EE3B91AF09932D74 /* ParallelCoordsView.cpp */,
+			);
+			name = Views;
+			sourceTree = "<Group>";
+		};
+		46E892BBB6BB6952967E0561 /* Temporary Sources */ = {
+			isa = PBXGroup;
+			children = (
+				E2DD99E575504A60156822BC /* moc_scenewidget.cpp */,
+				1F8753AC528D87D28332D4B5 /* moc_imagewidget.cpp */,
+				7A351F348CB5E24B4B6AFC86 /* moc_heatmapwidget.cpp */,
+				03CC4BA1004C618C58FF0257 /* moc_window.cpp */,
+				0BE7E900C04F0A82CA17C896 /* moc_uiwidget.cpp */,
+				59F78B4A8F881208398BE7A8 /* moc_pcwidget.cpp */,
+			);
+			name = "Temporary Sources";
+			sourceTree = "<Group>";
+		};
+		4D5CEAD114458AB562F84C4D /* Octree */ = {
+			isa = PBXGroup;
+			children = (
+				EED9E0E283CD064ECC56E5FD /* Octree.cpp */,
+				FC175484B36679439E231027 /* OctreeNode.cpp */,
+			);
+			name = Octree;
+			sourceTree = "<Group>";
+		};
+		6E193108F14FCD907071A910 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5327E7F87F8389F178397EC3 /* 3DView.h */,
+				5648F3FC627217EEC00C8EF9 /* DataView.h */,
+				C96632403FAB7CDB2CD8EC41 /* HeatMapView.h */,
+				6743EE9723004E2A311F989E /* ImageView.h */,
+				75C9FDCFE0C4D5CC153F87C2 /* ParallelCoordsAxis.h */,
+				AE17F7C97E9950DD4B4FA767 /* ParallelCoordsAxisGroup.h */,
+				908B96F9DDFEC954D983261B /* ParallelCoordsView.h */,
+			);
+			name = Views;
+			sourceTree = "<Group>";
+		};
+		721A19303339407EE857021C /* RIV */ = {
+			isa = PBXGroup;
+			children = (
+				3608CB1EC3F0570B679F98A9 /* Data */,
+				ED52FE23E4691EF0078B5BF7 /* Geometry */,
+				DE7EF17BB97C2D60A211BB04 /* Graphics */,
+				E06BA4A98101045CAA5D507C /* Octree */,
+				6E193108F14FCD907071A910 /* Views */,
+				E101129CFDAAF539EB4DCD50 /* AntTweakBar.h */,
+				09019677962D0845A1144345 /* helper.h */,
+				DAA031EDEE10F39B026747D2 /* reporter.h */,
+				B99085503DB1FCB74536522D /* sandbox.h */,
+				CED87B880CB0A94EF65C5351 /* trackball.h */,
+			);
+			name = RIV;
+			sourceTree = "<Group>";
+		};
+		7CABE3C80E79AD2B307756D2 /* Sources [qmake] */ = {
+			isa = PBXGroup;
+			children = (
+				612F4079E2123EEB5F3C6A7B /* qt_widgets.pro */,
+			);
+			name = "Sources [qmake]";
+			sourceTree = "<Group>";
+		};
+		883D7615C4D2DE3FA1218F12 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				243CD2344EA4ECEF6BAE1865 /* scenewidget.h */,
+				721A19303339407EE857021C /* RIV */,
+				112235092972FF833416EEFB /* imagewidget.h */,
+				938BCD59EEFC8EF37AB3CBC7 /* heatmapwidget.h */,
+				2B601351BBFD3F9918188CF7 /* window.h */,
+				EC5932E55D667827B5DB634A /* uiwidget.h */,
+				FFCCDC69F008F44FD4F00367 /* pcwidget.h */,
+			);
+			name = Headers;
+			sourceTree = "<Group>";
+		};
+		962286216E12D6DF80E1C849 /* Geometry */ = {
+			isa = PBXGroup;
+			children = (
+				C018AFB6EEB24021AD1DB9EA /* TriangleMesh.cpp */,
+			);
+			name = Geometry;
+			sourceTree = "<Group>";
+		};
+		DE7EF17BB97C2D60A211BB04 /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				82426FC425BEE6ED70EB43BC /* BMPImage.h */,
+				3594C7832E7DDF7E980175EA /* ColorMap.h */,
+				985D7A3DD129AB011592F484 /* ColorPalette.h */,
+				2028E461F57CCC93A072BA51 /* ColorProperty.h */,
+				163563C4E0DFFBA2A9CA877E /* Evaluator.h */,
+				8E3E2C1FA92A9AA984A3BF5A /* graphics_helper.h */,
+				9662D0EFF654C7597551F54B /* loadppm.h */,
+				0FC297EEDF5C4D78E4999505 /* Property.h */,
+				2643F95C41E5BE34BDF5C847 /* SizeProperty.h */,
+			);
+			name = Graphics;
+			sourceTree = "<Group>";
+		};
+		E06BA4A98101045CAA5D507C /* Octree */ = {
+			isa = PBXGroup;
+			children = (
+				FCB1F44E0D8070314B60959B /* Octree.h */,
+				AEC0A23DB3B16D278543711B /* OctreeConfig.h */,
+				A0188B957CE346C78CFADD3D /* OctreeNode.h */,
+			);
+			name = Octree;
+			sourceTree = "<Group>";
+		};
+		E106605F19CC623D00746441 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E106605E19CC623D00746441 /* qt_widgets.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		ED1E82605DD74B483AF3C982 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				0156CBB4C2D00D9DEFCBDF68 /* QtOpenGL.framework */,
+				AA9D9004ACE84CD1D55FED5F /* QtGui.framework */,
+				D98F638C7798CC1DDA980D9A /* QtCore.framework */,
+				DA18A6831232F53228631AD1 /* OpenGL.framework */,
+				C6766F86E49E9C8701C8E637 /* AGL.framework */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<Group>";
+		};
+		ED52FE23E4691EF0078B5BF7 /* Geometry */ = {
+			isa = PBXGroup;
+			children = (
+				5E04A563156F15C30D48D93A /* Geometry.h */,
+				463DF4912D56EDAECC6E0CEE /* matrix.h */,
+				56F0375F004126F877B7CB49 /* MeshModel.h */,
+				540AADC7D4CE7ED95A856BA6 /* Ray.h */,
+				37CB75D94B3B4A75ACF32698 /* RIVVector.h */,
+				7721818531EDE0881F0D9544 /* TriangleMesh.h */,
+				0C115A12B15FB3B39EDF67DF /* Vec3D.h */,
+			);
+			name = Geometry;
+			sourceTree = "<Group>";
+		};
+		F636ED5E5AB2056A60296831 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				6030D29B12E6C76CE84FCA39 /* Cluster.cpp */,
+				F2C3B5188037029C6D8C592E /* ClusterSet.cpp */,
+				55AA840C1F7EC9BDF3A26797 /* DataFileReader.cpp */,
+				73A9CE2B5FF76CCC93811A52 /* DataSet.cpp */,
+				C83E58088EF608FE170ECC32 /* Filter.cpp */,
+				A94148AA51BBB40DC0D5D120 /* Iterator.cpp */,
+				E599CE6DA7DD5DDA1E33CD54 /* Record.cpp */,
+				08D9BD270BB5ECDEE591A390 /* Reference.cpp */,
+				F1D794816E0BAEA23DB5CA6D /* Table.cpp */,
+			);
+			name = Data;
+			sourceTree = "<Group>";
+		};
+		FB61758D0F0FDA4BA867C3D5 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				118FCBAABA162BA17933C789 /* main.cpp */,
+				42363689D6C4F207A3150BFD /* scenewidget.cpp */,
+				0777741408C0A75CF9526273 /* RIV */,
+				5B1DD520B96ABF1DDBA23A37 /* imagewidget.cpp */,
+				16BBF131D4E394C43C86F444 /* heatmapwidget.cpp */,
+				22B8EB497DD4812281107EF2 /* window.cpp */,
+				52F8370F58817BFE515F1637 /* uiwidget.cpp */,
+				2363DAD9575E694084B4CE84 /* pcwidget.cpp */,
+			);
+			name = Sources;
+			sourceTree = "<Group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FCF2E5C0B7D676CA2376F5CD /* qt_widgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 17B3380A4D6A7D415E7F2E1E /* Build configuration list for PBXNativeTarget "qt_widgets" */;
+			buildPhases = (
+				A0A52A2ADF7A1E2A99738674 /* Qt Preprocessors */,
+				C29B8785722055ED95EF7B57 /* Build Sources */,
+				2A1043669E6E5A7426EA502A /* Frameworks & Libraries */,
+				3787F99312C85FF0073FD7BA /* Bundle Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = qt_widgets;
+			productName = qt_widgets;
+			productReference = E106605E19CC623D00746441 /* qt_widgets.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		91B15E841AA80083484172DE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+			};
+			buildConfigurationList = CC82A9286117DFED018F418F /* Build configuration list for PBXProject "qt_widgets" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 05596AB53D8D521C69802C27 /* qt_widgets */;
+			productRefGroup = E106605F19CC623D00746441 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FCF2E5C0B7D676CA2376F5CD /* qt_widgets */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3787F99312C85FF0073FD7BA /* Bundle Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "Bundle Resources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A0A52A2ADF7A1E2A99738674 /* Qt Preprocessors */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "Qt Preprocessors";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/gerardsimons/Documents/Development/qt_widgets -f 'qt_widgets.xcodeproj/qt_preprocess.mak'";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C29B8785722055ED95EF7B57 /* Build Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B093CA6F071B023A473CED0 /* main.cpp in Build Sources */,
+				2F09F35312A96D0644BCB8B4 /* scenewidget.cpp in Build Sources */,
+				12234891B03DDC1896053B0B /* Cluster.cpp in Build Sources */,
+				7EE09FA8EA73CC574C01E775 /* ClusterSet.cpp in Build Sources */,
+				CEB54AF6FCB4EF585A2082AD /* DataFileReader.cpp in Build Sources */,
+				2F5885ED9372BB94972100B1 /* DataSet.cpp in Build Sources */,
+				39F6CB36DC806179EF21FF53 /* Filter.cpp in Build Sources */,
+				EEE06E30959EE1F3A826EB44 /* Iterator.cpp in Build Sources */,
+				656E40636B0424FF12C0C8E0 /* Record.cpp in Build Sources */,
+				E119B781B80EE6022CE8BAD4 /* Reference.cpp in Build Sources */,
+				7B610BD05FA1B7407DC25931 /* Table.cpp in Build Sources */,
+				A5358B5386A59C67FCE5E395 /* TriangleMesh.cpp in Build Sources */,
+				3C1EC0632BA4FD95251CD1DB /* BMPImage.cpp in Build Sources */,
+				69F475D49A9F1FBDFE4951A9 /* ColorMap.cpp in Build Sources */,
+				EB977ABCE8B49CCA6B464D53 /* ColorPalette.cpp in Build Sources */,
+				F5A8F1B08B325F9C4541D452 /* loadppm.cpp in Build Sources */,
+				0AFAC8A78ECFA7A8E1AF4331 /* Octree.cpp in Build Sources */,
+				B963684C7FC9176E3B5F8CEB /* OctreeNode.cpp in Build Sources */,
+				6BC75287D2FDA4CBBDE5B800 /* 3DView.cpp in Build Sources */,
+				CACC3E8CB5148386F210E906 /* HeatMapView.cpp in Build Sources */,
+				06544525FC6F5EF8E8A632C0 /* ImageView.cpp in Build Sources */,
+				DB98B1720439FD434A5BE1B0 /* ParallelCoordsAxis.cpp in Build Sources */,
+				0E66674B773E0FB0E23F37A3 /* ParallelCoordsView.cpp in Build Sources */,
+				D90509ED7F296051CA8F03A2 /* helper.cpp in Build Sources */,
+				FA4632AC8E3D1A74C0E352F8 /* reporter.cpp in Build Sources */,
+				2627B1CC43FB0AE7C687AC69 /* imagewidget.cpp in Build Sources */,
+				3C368707103315D80BD1009A /* heatmapwidget.cpp in Build Sources */,
+				FC203E8953C53F09233D0CFC /* window.cpp in Build Sources */,
+				69FD1F4BE302BDAD888696D0 /* uiwidget.cpp in Build Sources */,
+				A0D4D822C714DF16C686CE6C /* pcwidget.cpp in Build Sources */,
+				14EB63610D49995C4CA3130B /* moc_scenewidget.cpp in Build Sources */,
+				FC7BDB4492DF21D7120123FD /* moc_imagewidget.cpp in Build Sources */,
+				10DDFC7092B7CABFAEE9479B /* moc_heatmapwidget.cpp in Build Sources */,
+				A8726DBAB1708155C13A0A2A /* moc_window.cpp in Build Sources */,
+				00680BD16790FF543030EE6E /* moc_uiwidget.cpp in Build Sources */,
+				4425F28C46B65733D1200B38 /* moc_pcwidget.cpp in Build Sources */,
+			);
+			name = "Build Sources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4B72B24813252891014BCF61 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					/usr/local/Cellar/qt/4.8.5/lib,
+					/usr/local/Cellar/qt/4.8.5/lib,
+					/usr/local/Cellar/qt/4.8.5/lib,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/Cellar/qt/4.8.5/lib/QtCore.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.5/lib/QtCore.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.5/lib/QtGui.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.5/lib/QtGui.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.5/lib/QtOpenGL.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.5/lib/QtOpenGL.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.5/include,
+					/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers,
+					/System/Library/Frameworks/AGL.framework/Headers,
+					.,
+					/usr/local/include,
+					/System/Library/Frameworks/CarbonCore.framework/Headers,
+					"/usr/local/Cellar/qt/4.8.5/mkspecs/macx-xcode",
+				);
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/Cellar/qt/4.8.5/lib,
+					/opt/X11/lib,
+					/usr/local/Cellar/qt/4.8.5/lib,
+					/System/Library/Frameworks/,
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-DQT_NO_DEBUG",
+					"-DQT_OPENGL_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_CORE_LIB",
+					"-DQT_SHARED",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-DQT_NO_DEBUG",
+					"-DQT_OPENGL_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_CORE_LIB",
+					"-DQT_SHARED",
+				);
+				OTHER_LDFLAGS = (
+					"-headerpad_max_install_names",
+					"-L/usr/local/Cellar/qt/4.8.5/lib",
+					"-F/usr/local/Cellar/qt/4.8.5/lib",
+					"-L/opt/X11/lib",
+					"-L/usr/local/Cellar/qt/4.8.5/lib",
+					"-F/usr/local/Cellar/qt/4.8.5/lib",
+				);
+				PRODUCT_NAME = qt_widgets;
+			};
+			name = Debug;
+		};
+		8C7174830A1E4DCBA0332EC1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = qt_widgets;
+			};
+			name = Release;
+		};
+		BEC09A62E69C3553534FF35E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = qt_widgets;
+			};
+			name = Debug;
+		};
+		D70590BEB531B51029F711BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					/usr/local/Cellar/qt/4.8.5/lib,
+					/usr/local/Cellar/qt/4.8.5/lib,
+					/usr/local/Cellar/qt/4.8.5/lib,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/Cellar/qt/4.8.5/lib/QtCore.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.5/lib/QtCore.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.5/lib/QtGui.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.5/lib/QtGui.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.5/lib/QtOpenGL.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.5/lib/QtOpenGL.framework/Versions/4/Headers,
+					/usr/local/Cellar/qt/4.8.5/include,
+					/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers,
+					/System/Library/Frameworks/AGL.framework/Headers,
+					.,
+					/usr/local/include,
+					/System/Library/Frameworks/CarbonCore.framework/Headers,
+					"/usr/local/Cellar/qt/4.8.5/mkspecs/macx-xcode",
+				);
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/Cellar/qt/4.8.5/lib,
+					/opt/X11/lib,
+					/usr/local/Cellar/qt/4.8.5/lib,
+					/System/Library/Frameworks/,
+				);
+				OTHER_CFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-DQT_NO_DEBUG",
+					"-DQT_OPENGL_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_CORE_LIB",
+					"-DQT_SHARED",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-DQT_NO_DEBUG",
+					"-DQT_OPENGL_LIB",
+					"-DQT_GUI_LIB",
+					"-DQT_CORE_LIB",
+					"-DQT_SHARED",
+				);
+				OTHER_LDFLAGS = (
+					"-headerpad_max_install_names",
+					"-L/usr/local/Cellar/qt/4.8.5/lib",
+					"-F/usr/local/Cellar/qt/4.8.5/lib",
+					"-L/opt/X11/lib",
+					"-L/usr/local/Cellar/qt/4.8.5/lib",
+					"-F/usr/local/Cellar/qt/4.8.5/lib",
+				);
+				PRODUCT_NAME = qt_widgets;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		17B3380A4D6A7D415E7F2E1E /* Build configuration list for PBXNativeTarget "qt_widgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BEC09A62E69C3553534FF35E /* Debug */,
+				8C7174830A1E4DCBA0332EC1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CC82A9286117DFED018F418F /* Build configuration list for PBXProject "qt_widgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B72B24813252891014BCF61 /* Debug */,
+				D70590BEB531B51029F711BB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 91B15E841AA80083484172DE /* Project object */;
+}

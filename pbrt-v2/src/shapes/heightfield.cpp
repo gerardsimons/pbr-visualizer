@@ -31,10 +31,10 @@
 
 
 // shapes/heightfield.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "shapes/heightfield.h"
 #include "shapes/trianglemesh.h"
-#include "paramset.h"
+#include "core/paramset.h"
 
 // Heightfield Method Definitions
 Heightfield::Heightfield(const Transform *o2w, const Transform *w2o,

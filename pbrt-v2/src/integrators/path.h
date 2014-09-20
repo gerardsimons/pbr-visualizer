@@ -37,8 +37,8 @@
 #define PBRT_INTEGRATORS_PATH_H
 
 // integrators/path.h*
-#include "pbrt.h"
-#include "integrator.h"
+#include "core/pbrt.h"
+#include "core/integrator.h"
 #include "datadumper.h"
 
 // PathIntegrator Declarations

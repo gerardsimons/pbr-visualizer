@@ -37,8 +37,8 @@
 #define PBRT_CORE_KDTREE_H
 
 // core/kdtree.h*
-#include "pbrt.h"
-#include "geometry.h"
+#include "core/pbrt.h"
+#include "core/geometry.h"
 
 // KdTree Declarations
 struct KdNode {

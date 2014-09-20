@@ -31,17 +31,17 @@
 
 
 // renderers/surfacepoints.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "renderers/surfacepoints.h"
-#include "paramset.h"
-#include "octree.h"
-#include "camera.h"
-#include "probes.h"
-#include "parallel.h"
-#include "progressreporter.h"
-#include "scene.h"
-#include "intersection.h"
-#include "montecarlo.h"
+#include "core/paramset.h"
+#include "core/octree.h"
+#include "core/camera.h"
+#include "core/probes.h"
+#include "core/parallel.h"
+#include "core/progressreporter.h"
+#include "core/scene.h"
+#include "core/intersection.h"
+#include "core/montecarlo.h"
 #include "shapes/sphere.h"
 #if defined(PBRT_IS_WINDOWS) || defined(PBRT_IS_LINUX)
 #include <errno.h>

@@ -37,7 +37,7 @@
 #define PBRT_CORE_INTERSECTION_H
 
 // core/intersection.h*
-#include "pbrt.h"
+#include "core/pbrt.h"
 #include "diffgeom.h"
 #include "transform.h"
 

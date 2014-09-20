@@ -37,7 +37,7 @@
 #define PBRT_SHAPES_PARABOLOID_H
 
 // shapes/paraboloid.h*
-#include "shape.h"
+#include "core/shape.h"
 
 // Paraboloid Declarations
 class Paraboloid : public Shape {

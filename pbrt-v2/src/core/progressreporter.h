@@ -37,7 +37,7 @@
 #define PBRT_CORE_PROGRESSREPORTER_H
 
 // core/progressreporter.h*
-#include "pbrt.h"
+#include "core/pbrt.h"
 
 // ProgressReporter Declarations
 class ProgressReporter {

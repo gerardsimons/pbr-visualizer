@@ -37,7 +37,7 @@
 #define PBRT_CORE_PARALLEL_H
 
 // core/parallel.h*
-#include "pbrt.h"
+#include "core/pbrt.h"
 #if defined(PBRT_IS_APPLE_PPC)
 #include <libkern/OSAtomic.h>
 #endif // PBRT_IS_APPLE_PPC

@@ -31,7 +31,7 @@
 
 
 // textures/windy.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "textures/windy.h"
 
 // WindyTexture Method Definitions

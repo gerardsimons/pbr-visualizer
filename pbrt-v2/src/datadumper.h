@@ -6,10 +6,10 @@
 #include <fstream>
 #include <iostream>
 
-#include "pbrt.h"
-#include "geometry.h"
-#include "spectrum.h"
-#include "reflection.h"
+#include "core/pbrt.h"
+#include "core/geometry.h"
+#include "core/spectrum.h"
+#include "core/reflection.h"
 
 //Struct wrapper for all intersection related data
 typedef struct IntersectData {

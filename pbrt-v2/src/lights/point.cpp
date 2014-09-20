@@ -31,12 +31,12 @@
 
 
 // lights/point.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "lights/point.h"
-#include "sh.h"
-#include "scene.h"
-#include "paramset.h"
-#include "montecarlo.h"
+#include "core/sh.h"
+#include "core/scene.h"
+#include "core/paramset.h"
+#include "core/montecarlo.h"
 
 // PointLight Method Definitions
 PointLight::PointLight(const Transform &light2world,

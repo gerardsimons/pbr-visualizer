@@ -37,8 +37,8 @@
 #define PBRT_CORE_TRANSFORM_H
 
 // core/transform.h*
-#include "pbrt.h"
-#include "geometry.h"
+#include "core/pbrt.h"
+#include "core/geometry.h"
 #include "quaternion.h"
 
 // Matrix4x4 Declarations

@@ -31,7 +31,7 @@
 
 
 // textures/checkerboard.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "textures/checkerboard.h"
 
 // CheckerboardTexture Method Definitions

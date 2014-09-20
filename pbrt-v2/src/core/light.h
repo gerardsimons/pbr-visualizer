@@ -37,12 +37,12 @@
 #define PBRT_CORE_LIGHT_H
 
 // core/light.h*
-#include "pbrt.h"
-#include "geometry.h"
+#include "core/pbrt.h"
+#include "core/geometry.h"
 #include "transform.h"
-#include "spectrum.h"
-#include "rng.h"
-#include "memory.h"
+#include "core/spectrum.h"
+#include "core/rng.h"
+#include "core/memory.h"
 
 // Light Declarations
 class Light {

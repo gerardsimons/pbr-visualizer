@@ -31,12 +31,12 @@
 
 
 // materials/uber.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "materials/uber.h"
-#include "spectrum.h"
-#include "reflection.h"
-#include "texture.h"
-#include "paramset.h"
+#include "core/spectrum.h"
+#include "core/reflection.h"
+#include "core/texture.h"
+#include "core/paramset.h"
 
 // UberMaterial Method Definitions
 BSDF *UberMaterial::GetBSDF(const DifferentialGeometry &dgGeom, const DifferentialGeometry &dgShading, MemoryArena &arena) const {

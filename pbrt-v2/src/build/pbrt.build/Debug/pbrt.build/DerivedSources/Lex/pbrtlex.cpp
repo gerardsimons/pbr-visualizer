@@ -1,6 +1,6 @@
-#line 2 "/Users/gerardsimons/Git/pbrt-v2/src/build/pbrt.build/Debug/pbrt.build/DerivedSources/Lex/pbrtlex.cpp"
+#line 2 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrt.build/DerivedSources/Lex/pbrtlex.cpp"
 
-#line 4 "/Users/gerardsimons/Git/pbrt-v2/src/build/pbrt.build/Debug/pbrt.build/DerivedSources/Lex/pbrtlex.cpp"
+#line 4 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrt.build/DerivedSources/Lex/pbrtlex.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -684,7 +684,7 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 1 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 /*
     pbrt source code Copyright(c) 1998-2012 Matt Pharr and Greg Humphreys.
 
@@ -715,14 +715,14 @@ char *yytext;
 
  */
 /* state used for include file stuff */
-#line 34 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 34 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 
 #define YY_MAIN 0
 #define YY_NEVER_INTERACTIVE 1
 
-#include "pbrt.h"
-#include "api.h"
-#include "fileutil.h"
+#include "core/pbrt.h"
+#include "core/api.h"
+#include "core/fileutil.h"
 
 struct ParamArray;
 
@@ -794,7 +794,7 @@ void include_pop() {
 
 
 
-#line 798 "/Users/gerardsimons/Git/pbrt-v2/src/build/pbrt.build/Debug/pbrt.build/DerivedSources/Lex/pbrtlex.cpp"
+#line 798 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrt.build/DerivedSources/Lex/pbrtlex.cpp"
 
 #define INITIAL 0
 #define STR 1
@@ -978,10 +978,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 117 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 117 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 
 
-#line 985 "/Users/gerardsimons/Git/pbrt-v2/src/build/pbrt.build/Debug/pbrt.build/DerivedSources/Lex/pbrtlex.cpp"
+#line 985 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrt.build/DerivedSources/Lex/pbrtlex.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -1066,239 +1066,239 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 119 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 119 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { BEGIN COMMENT; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 120 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 120 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 /* eat it up */
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 121 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 121 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { line_num++; BEGIN INITIAL; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 122 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 122 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return ACCELERATOR; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 123 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 123 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return ACTIVETRANSFORM; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 124 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 124 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return ALL; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 125 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 125 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return AREALIGHTSOURCE; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 126 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 126 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return ATTRIBUTEBEGIN; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 127 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 127 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return ATTRIBUTEEND; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 128 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 128 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return CAMERA; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 129 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 129 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return CONCATTRANSFORM; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 130 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 130 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return COORDINATESYSTEM; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 131 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 131 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return COORDSYSTRANSFORM; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 132 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 132 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return ENDTIME; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 133 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 133 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return FILM; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 134 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 134 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return IDENTITY; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 135 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 135 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return INCLUDE; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 136 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 136 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return LIGHTSOURCE; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 137 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 137 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return LOOKAT; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 138 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 138 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return MAKENAMEDMATERIAL; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 139 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 139 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return MATERIAL; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 140 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 140 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return NAMEDMATERIAL; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 141 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 141 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return OBJECTBEGIN; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 142 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 142 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return OBJECTEND; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 143 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 143 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return OBJECTINSTANCE; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 144 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 144 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return PIXELFILTER; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 145 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 145 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return RENDERER; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 146 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 146 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return REVERSEORIENTATION; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 147 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 147 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return ROTATE; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 148 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 148 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return SAMPLER; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 149 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 149 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return SCALE; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 150 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 150 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return SHAPE; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 151 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 151 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return STARTTIME; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 152 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 152 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return SURFACEINTEGRATOR; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 153 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 153 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return TEXTURE; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 154 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 154 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return TRANSFORMBEGIN; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 155 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 155 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return TRANSFORMEND; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 156 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 156 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return TRANSFORMTIMES; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 157 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 157 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return TRANSFORM; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 158 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 158 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return TRANSLATE; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 159 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 159 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return VOLUME; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 160 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 160 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return VOLUMEINTEGRATOR; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 161 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 161 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return WORLDBEGIN; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 162 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 162 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return WORLDEND; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 163 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 163 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 /* do nothing */
 	YY_BREAK
 case 46:
 /* rule 46 can match eol */
 YY_RULE_SETUP
-#line 164 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 164 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { line_num++; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 165 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 165 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 {
     yylval.num = (float) atof(yytext);
     return NUM;
@@ -1306,7 +1306,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 171 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 171 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 {
     strcpy(yylval.string, yytext);
     return ID;
@@ -1314,57 +1314,57 @@ YY_RULE_SETUP
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 177 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 177 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return LBRACK; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 178 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 178 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { return RBRACK; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 179 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 179 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { BEGIN STR; str_pos = 0; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 180 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 180 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 {add_string_char('\n');}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 181 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 181 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 {add_string_char('\t');}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 182 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 182 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 {add_string_char('\r');}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 183 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 183 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 {add_string_char('\b');}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 184 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 184 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 {add_string_char('\f');}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 185 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 185 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 {add_string_char('\"');}
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 186 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 186 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 {add_string_char('\\');}
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 187 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 187 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 {
   int val = atoi(yytext+1);
   while (val > 256)
@@ -1375,41 +1375,41 @@ YY_RULE_SETUP
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 195 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 195 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 {line_num++;}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 196 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 196 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { add_string_char(yytext[1]);}
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 197 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 197 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 {BEGIN INITIAL; return STRING;}
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 198 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 198 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 {add_string_char(yytext[0]);}
 	YY_BREAK
 case 64:
 /* rule 64 can match eol */
 YY_RULE_SETUP
-#line 199 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 199 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 {Error("Unterminated string!");}
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 201 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 201 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 { Error( "Illegal character: %c (0x%x)", yytext[0], int(yytext[0])); }
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 202 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 202 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 ECHO;
 	YY_BREAK
-#line 1413 "/Users/gerardsimons/Git/pbrt-v2/src/build/pbrt.build/Debug/pbrt.build/DerivedSources/Lex/pbrtlex.cpp"
+#line 1413 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/build/pbrt.build/Debug/pbrt.build/DerivedSources/Lex/pbrtlex.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(STR):
 case YY_STATE_EOF(COMMENT):
@@ -2373,7 +2373,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 202 "/Users/gerardsimons/Git/pbrt-v2/src/core/pbrtlex.l"
+#line 202 "/Users/gerardsimons/Git/afstuderen/pbrt-v2/src/core/pbrtlex.l"
 
 
 int yywrap() {

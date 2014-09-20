@@ -37,7 +37,7 @@
 #define PBRT_SHAPES_LOOPSUBDIV_H
 
 // shapes/loopsubdiv.h*
-#include "shape.h"
+#include "core/shape.h"
 struct SDVertex;
 struct SDFace;
 

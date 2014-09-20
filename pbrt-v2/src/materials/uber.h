@@ -37,8 +37,8 @@
 #define PBRT_MATERIALS_UBER_H
 
 // materials/uber.h*
-#include "pbrt.h"
-#include "material.h"
+#include "core/pbrt.h"
+#include "core/material.h"
 
 // UberMaterial Declarations
 class UberMaterial : public Material {

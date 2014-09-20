@@ -37,9 +37,9 @@
 #define PBRT_TEXTURES_MIX_H
 
 // textures/mix.h*
-#include "pbrt.h"
-#include "texture.h"
-#include "paramset.h"
+#include "core/pbrt.h"
+#include "core/texture.h"
+#include "core/paramset.h"
 
 // MixTexture Declarations
 template <typename T> class MixTexture : public Texture<T> {

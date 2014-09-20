@@ -37,9 +37,9 @@
 #define PBRT_RENDERERS_CREATEPROBES_H
 
 // renderers/createprobes.h*
-#include "pbrt.h"
-#include "renderer.h"
-#include "geometry.h"
+#include "core/pbrt.h"
+#include "core/renderer.h"
+#include "core/geometry.h"
 
 // CreateRadianceProbes Declarations
 class CreateRadianceProbes : public Renderer {

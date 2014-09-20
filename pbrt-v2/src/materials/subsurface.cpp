@@ -31,14 +31,14 @@
 
 
 // materials/subsurface.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "materials/subsurface.h"
 #include "textures/constant.h"
-#include "volume.h"
-#include "spectrum.h"
-#include "reflection.h"
-#include "texture.h"
-#include "paramset.h"
+#include "core/volume.h"
+#include "core/spectrum.h"
+#include "core/reflection.h"
+#include "core/texture.h"
+#include "core/paramset.h"
 
 // SubsurfaceMaterial Method Definitions
 BSDF *SubsurfaceMaterial::GetBSDF(const DifferentialGeometry &dgGeom,

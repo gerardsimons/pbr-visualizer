@@ -31,7 +31,7 @@
 
 
 // textures/constant.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "textures/constant.h"
 
 // ConstantTexture Method Definitions

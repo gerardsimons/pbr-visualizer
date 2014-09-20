@@ -31,13 +31,13 @@
 
 
 // materials/mixmat.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "materials/mixmat.h"
 #include "materials/matte.h"
-#include "spectrum.h"
-#include "reflection.h"
-#include "paramset.h"
-#include "texture.h"
+#include "core/spectrum.h"
+#include "core/reflection.h"
+#include "core/paramset.h"
+#include "core/texture.h"
 
 // MixMaterial Method Definitions
 BSDF *MixMaterial::GetBSDF(const DifferentialGeometry &dgGeom,

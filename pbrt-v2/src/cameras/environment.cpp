@@ -31,10 +31,10 @@
 
 
 // cameras/environment.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "cameras/environment.h"
-#include "paramset.h"
-#include "sampler.h"
+#include "core/paramset.h"
+#include "core/sampler.h"
 
 // EnvironmentCamera Method Definitions
 float EnvironmentCamera::GenerateRay(const CameraSample &sample,

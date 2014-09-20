@@ -37,9 +37,9 @@
 #define PBRT_CORE_MONTECARLO_H
 
 // core/montecarlo.h*
-#include "pbrt.h"
-#include "geometry.h"
-#include "rng.h"
+#include "core/pbrt.h"
+#include "core/geometry.h"
+#include "core/rng.h"
 
 // smallest floating point value less than one; all canonical random samples
 // should be <= this.

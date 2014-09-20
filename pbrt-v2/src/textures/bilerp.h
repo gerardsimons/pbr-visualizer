@@ -37,9 +37,9 @@
 #define PBRT_TEXTURES_BILERP_H
 
 // textures/bilerp.h*
-#include "pbrt.h"
-#include "texture.h"
-#include "paramset.h"
+#include "core/pbrt.h"
+#include "core/texture.h"
+#include "core/paramset.h"
 
 // BilerpTexture Declarations
 template <typename T> class BilerpTexture : public Texture<T> {

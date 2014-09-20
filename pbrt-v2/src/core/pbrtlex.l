@@ -35,9 +35,9 @@
 #define YY_MAIN 0
 #define YY_NEVER_INTERACTIVE 1
 
-#include "pbrt.h"
-#include "api.h"
-#include "fileutil.h"
+#include "core/pbrt.h"
+#include "core/api.h"
+#include "core/fileutil.h"
 
 struct ParamArray;
 

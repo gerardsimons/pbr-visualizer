@@ -37,8 +37,8 @@
 #define PBRT_SAMPLERS_HALTON_H
 
 // samplers/halton.h*
-#include "sampler.h"
-#include "film.h"
+#include "core/sampler.h"
+#include "core/film.h"
 
 // HaltonSampler Declarations
 class HaltonSampler : public Sampler {

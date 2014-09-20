@@ -37,8 +37,8 @@
 #define PBRT_MATERIALS_GLASS_H
 
 // materials/glass.h*
-#include "pbrt.h"
-#include "material.h"
+#include "core/pbrt.h"
+#include "core/material.h"
 
 // GlassMaterial Declarations
 class GlassMaterial : public Material {

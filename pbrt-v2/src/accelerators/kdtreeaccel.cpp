@@ -31,9 +31,9 @@
 
 
 // accelerators/kdtreeaccel.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "accelerators/kdtreeaccel.h"
-#include "paramset.h"
+#include "core/paramset.h"
 
 // KdTreeAccel Local Declarations
 struct KdAccelNode {

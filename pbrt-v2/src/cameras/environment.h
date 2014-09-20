@@ -37,8 +37,8 @@
 #define PBRT_CAMERAS_ENVIRONMENT_H
 
 // cameras/environment.h*
-#include "camera.h"
-#include "film.h"
+#include "core/camera.h"
+#include "core/film.h"
 
 // EnvironmentCamera Declarations
 class EnvironmentCamera : public Camera {

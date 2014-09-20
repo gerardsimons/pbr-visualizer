@@ -31,7 +31,7 @@
 
 
 // textures/marble.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "textures/marble.h"
 
 // MarbleTexture Method Definitions

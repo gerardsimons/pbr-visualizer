@@ -31,7 +31,7 @@
 
 
 // textures/fbm.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "textures/fbm.h"
 
 // FBmTexture Method Definitions

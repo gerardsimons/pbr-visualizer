@@ -31,9 +31,9 @@
 
 
 // volumes/volumegrid.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "volumes/volumegrid.h"
-#include "paramset.h"
+#include "core/paramset.h"
 
 // VolumeGridDensity Method Definitions
 float VolumeGridDensity::Density(const Point &Pobj) const {

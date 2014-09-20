@@ -31,8 +31,8 @@
 
 
 // core/volume.cpp*
-#include "stdafx.h"
-#include "volume.h"
+#include "core/stdafx.h"
+#include "core/volume.h"
 
 // Volume Scattering Local Definitions
 struct MeasuredSS {

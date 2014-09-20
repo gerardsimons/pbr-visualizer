@@ -37,9 +37,9 @@
 #define PBRT_INTEGRATORS_PHOTONMAP_H
 
 // integrators/photonmap.h*
-#include "pbrt.h"
-#include "integrator.h"
-#include "kdtree.h"
+#include "core/pbrt.h"
+#include "core/integrator.h"
+#include "core/kdtree.h"
 
 struct Photon;
 struct RadiancePhoton;

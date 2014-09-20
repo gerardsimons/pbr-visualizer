@@ -31,8 +31,8 @@
 
 
 // core/shape.cpp*
-#include "stdafx.h"
-#include "shape.h"
+#include "core/stdafx.h"
+#include "core/shape.h"
 
 // Shape Method Definitions
 Shape::~Shape() {

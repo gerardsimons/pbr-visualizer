@@ -31,7 +31,7 @@
 
 
 // textures/mix.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "textures/mix.h"
 
 // MixTexture Method Definitions

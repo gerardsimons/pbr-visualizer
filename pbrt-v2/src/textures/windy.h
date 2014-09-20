@@ -37,9 +37,9 @@
 #define PBRT_TEXTURES_WINDY_H
 
 // textures/windy.h*
-#include "pbrt.h"
-#include "texture.h"
-#include "paramset.h"
+#include "core/pbrt.h"
+#include "core/texture.h"
+#include "core/paramset.h"
 
 // WindyTexture Declarations
 template <typename T> class WindyTexture : public Texture<T> {

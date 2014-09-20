@@ -31,10 +31,10 @@
 
 
 // accelerators/grid.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "accelerators/grid.h"
-#include "probes.h"
-#include "paramset.h"
+#include "core/probes.h"
+#include "core/paramset.h"
 
 // GridAccel Method Definitions
 GridAccel::GridAccel(const vector<Reference<Primitive> > &p,

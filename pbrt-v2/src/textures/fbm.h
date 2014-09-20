@@ -37,9 +37,9 @@
 #define PBRT_TEXTURES_FBM_H
 
 // textures/fbm.h*
-#include "pbrt.h"
-#include "texture.h"
-#include "paramset.h"
+#include "core/pbrt.h"
+#include "core/texture.h"
+#include "core/paramset.h"
 
 // FBmTexture Declarations
 template <typename T> class FBmTexture : public Texture<T> {

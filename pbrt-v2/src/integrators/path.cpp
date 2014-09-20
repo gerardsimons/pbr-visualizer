@@ -31,11 +31,11 @@
 
 
 // integrators/path.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "integrators/path.h"
-#include "scene.h"
-#include "intersection.h"
-#include "paramset.h"
+#include "core/scene.h"
+#include "core/intersection.h"
+#include "core/paramset.h"
 
 //Custom includes by me
 #include <vector>

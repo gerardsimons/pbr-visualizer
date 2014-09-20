@@ -30,12 +30,12 @@
  */
 
 // shinymetal.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "materials/shinymetal.h"
-#include "spectrum.h"
-#include "reflection.h"
-#include "paramset.h"
-#include "texture.h"
+#include "core/spectrum.h"
+#include "core/reflection.h"
+#include "core/paramset.h"
+#include "core/texture.h"
 
 static inline Spectrum FresnelApproxEta(const Spectrum &Fr) {
     Spectrum reflectance = Fr.Clamp(0.f, .999f);

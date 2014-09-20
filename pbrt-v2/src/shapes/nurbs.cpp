@@ -31,11 +31,11 @@
 
 
 // shapes/nurbs.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "shapes/nurbs.h"
 #include "shapes/trianglemesh.h"
-#include "paramset.h"
-#include "texture.h"
+#include "core/paramset.h"
+#include "core/texture.h"
 
 // NURBS Evaluation Functions
 static int KnotOffset(const float *knot, int order, int np, float t) {

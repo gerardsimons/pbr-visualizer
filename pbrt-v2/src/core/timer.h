@@ -37,7 +37,7 @@
 #define PBRT_CORE_TIMER_H
 
 // core/timer.h*
-#include "pbrt.h"
+#include "core/pbrt.h"
 #if defined (PBRT_IS_WINDOWS)
 #include <windows.h>
 #if (_MSC_VER >= 1400)

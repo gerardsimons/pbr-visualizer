@@ -31,11 +31,11 @@
 
 
 // samplers/halton.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "samplers/halton.h"
-#include "paramset.h"
-#include "camera.h"
-#include "montecarlo.h"
+#include "core/paramset.h"
+#include "core/camera.h"
+#include "core/montecarlo.h"
 
 // HaltonSampler Method Definitions
 Sampler *HaltonSampler::GetSubSampler(int num, int count) {

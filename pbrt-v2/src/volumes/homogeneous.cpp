@@ -31,9 +31,9 @@
 
 
 // volumes/homogeneous.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "volumes/homogeneous.h"
-#include "paramset.h"
+#include "core/paramset.h"
 
 // HomogeneousVolumeDensity Method Definitions
 HomogeneousVolumeDensity *CreateHomogeneousVolumeDensityRegion(const Transform &volume2world,

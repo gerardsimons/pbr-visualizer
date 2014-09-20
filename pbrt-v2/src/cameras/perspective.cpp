@@ -31,11 +31,11 @@
 
 
 // cameras/perspective.cpp*
-#include "stdafx.h"
+#include "core/stdafx.h"
 #include "cameras/perspective.h"
-#include "paramset.h"
-#include "sampler.h"
-#include "montecarlo.h"
+#include "core/paramset.h"
+#include "core/sampler.h"
+#include "core/montecarlo.h"
 
 // PerspectiveCamera Method Definitions
 PerspectiveCamera:: PerspectiveCamera(const AnimatedTransform &cam2world,

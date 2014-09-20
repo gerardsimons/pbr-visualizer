@@ -31,8 +31,8 @@
 
 
 // core/renderer.cpp*
-#include "stdafx.h"
-#include "renderer.h"
+#include "core/stdafx.h"
+#include "core/renderer.h"
 
 // Renderer Method Definitions
 Renderer::~Renderer() {

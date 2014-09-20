@@ -37,9 +37,9 @@
 #define PBRT_LIGHTS_DIFFUSE_H
 
 // lights/diffuse.h*
-#include "pbrt.h"
-#include "light.h"
-#include "primitive.h"
+#include "core/pbrt.h"
+#include "core/light.h"
+#include "core/primitive.h"
 
 // DiffuseAreaLight Declarations
 class DiffuseAreaLight : public AreaLight {
