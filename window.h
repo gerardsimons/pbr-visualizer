@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+#include "RIV/PBRTConfig.h"
 #include "imagewidget.h"
 #include "heatmapwidget.h"
 #include "pcwidget.h"
@@ -14,8 +15,7 @@ class Window : public QMainWindow
     Q_OBJECT
 private:
 	RIVDataSet dataset;
-	BMPImage* image;
-	MeshModel model;
+	PBRTConfig pbrtConfiguration;
 	
 	void createWidgets();
 	
@@ -24,7 +24,7 @@ private:
 	ImageWidget* imageWidget = NULL;
 	HeatmapWidget* heatmapWidget = NULL;
 public:
-    explicit Window(const RIVDataSet& dataset, BMPImage* image, const MeshModel& model, QWidget *parent = 0);
+    explicit Window(const RIVDataSet& dataset, BMPImage* image, const PBRTConfig& config, QWidget *parent = 0);
 	
 	//QT event callback functionss
 	void keyPressEvent(QKeyEvent *event);

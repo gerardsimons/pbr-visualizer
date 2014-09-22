@@ -44,12 +44,15 @@ public:
 
 class DataDumper {
 private:
+	static ushort objectIdCounter;
     static std::vector<DataDumper> instances;
 	DataDumper(const std::string& imageName, int ID);
 	static std::string ascii_file_name;
 	static std::string binary_file_name;
-	static FILE* asciiFile; //The file to write in ASCII chars to
-	static FILE* binaryFile;
+	
+	static FILE* geometryFile;
+	static FILE* pathASCII; //The file to write in ASCII chars to
+	static FILE* pathBinary;
 	static unsigned long long FileSize(FILE*);
     
     static const size_t bufferSize;
@@ -61,7 +64,9 @@ public:
 	static void Init(const std::string&, int);
 	static void Finish();
 	static bool FileIsOpen();
-    
+	
+	static ushort objectIdForPrimitiveId(ushort primitiveId);
+	static void AddObjectPrimitiveMapping(const std::vector<ushort> primitveIDs);
     static void AddToBuffer(size_t dumperId, const PathData& pathData);
     void AddToBuffer(const PathData& pathData);
     

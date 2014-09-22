@@ -6,7 +6,7 @@
 //RIV3DView* RIV3DView::instance = NULL;
 //int RIV3DView::windowHandle = -1;
 
-SceneWidget::SceneWidget(RIVDataSet* dataset, RIVColorProperty* color, RIVSizeProperty* size, QWidget *parent) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent), RIV3DView(dataset,color,size)
+SceneWidget::SceneWidget(RIVDataSet* dataset, PBRTConfig* pbrtConfig, RIVColorProperty* color, RIVSizeProperty* size, QWidget *parent) : QGLWidget(QGLFormat(QGL::SampleBuffers), parent), RIV3DView(dataset,pbrtConfig,color,size)
 {
 	printf("SceneWidget initialized\n");
 
@@ -25,7 +25,7 @@ void SceneWidget::mousePressEvent(QMouseEvent *event)
 //! [11] //! [12]
 {
 //	printf("mousePressEvent type =%d\n",event->type());
-	HandleMouse(GLUT_LEFT_BUTTON, GLUT_DOWN, event->globalX(), event->globalY());
+	HandleMouse(GLUT_LEFT_BUTTON, GLUT_DOWN, event->pos().x(), event->pos().y());
 //    if (event->button() == Qt::LeftButton) {
 //        lastPoint = event->pos();
 //        scribbling = true;
@@ -36,7 +36,7 @@ void SceneWidget::mousePressEvent(QMouseEvent *event)
 void SceneWidget::mouseMoveEvent(QMouseEvent *event)
 {
 //	printf("mouseMoveEvent type =%d\n",event->type());
-	HandleMouseMotion(event->globalX(), event->globalY());
+	HandleMouseMotion(event->pos().x(), event->pos().y());
 //    if ((event->buttons() & Qt::LeftButton) && scribbling)
 //        drawLineTo(event->pos());
 	repaint();
@@ -45,7 +45,7 @@ void SceneWidget::mouseMoveEvent(QMouseEvent *event)
 void SceneWidget::mouseReleaseEvent(QMouseEvent *event)
 {
 //	printf("mouseReleaseEvent type =%d\n",event->type());
-	HandleMouse(GLUT_LEFT_BUTTON, GLUT_UP, event->globalX(), event->globalY());
+	HandleMouse(GLUT_LEFT_BUTTON, GLUT_UP, event->pos().x(), event->pos().y());
 //    if (event->button() == Qt::LeftButton && scribbling) {
 //        drawLineTo(event->pos());
 //        scribbling = false;

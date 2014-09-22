@@ -4,7 +4,7 @@
 
 PCWidget::PCWidget(RIVDataSet* dataset, RIVColorProperty* color, RIVSizeProperty* size, QWidget *parent) :
 	ParallelCoordsView(dataset,color,size), QGLWidget(parent) {
-//	setAutoFillBackground(false);
+	setAutoFillBackground(false);
 //	setAutoBufferSwap(false);
 }
 
@@ -17,7 +17,7 @@ void PCWidget::mousePressEvent(QMouseEvent *event)
 	//        lastPoint = event->pos();
 	//        scribbling = true;
 	//    }
-	repaint();
+	updateGL();
 }
 
 void PCWidget::mouseMoveEvent(QMouseEvent *event)
@@ -27,7 +27,7 @@ void PCWidget::mouseMoveEvent(QMouseEvent *event)
 	HandleMouseMotion(event->pos().x(),event->pos().y());
 	//    if ((event->buttons() & Qt::LeftButton) && scribbling)
 	//        drawLineTo(event->pos());
-	repaint();
+	updateGL();
 }
 
 void PCWidget::mouseReleaseEvent(QMouseEvent *event)
@@ -38,7 +38,7 @@ void PCWidget::mouseReleaseEvent(QMouseEvent *event)
 	//        drawLineTo(event->pos());
 	//        scribbling = false;
 	//    }
-	repaint();
+	updateGL();
 }
 
 void PCWidget::keyPressEvent(QKeyEvent *event) {
@@ -51,10 +51,8 @@ void PCWidget::keyPressEvent(QKeyEvent *event) {
 void PCWidget::initializeGL()
 {
 	// Set up the rendering context, define display lists etc.:
-
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-//	glEnable(GL_DEPTH_TEST);
-	
+	glEnable(GL_DEPTH_TEST);
 }
 
 void PCWidget::resizeGL(int width, int height)

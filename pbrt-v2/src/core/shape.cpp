@@ -44,7 +44,7 @@ Shape::Shape(const Transform *o2w, const Transform *w2o, bool ro)
       TransformSwapsHandedness(o2w->SwapsHandedness()),
       shapeId(nextshapeId++) {
     // Update shape creation statistics
-	  printf("Shape created [id = %d]\n",shapeId);
+//	  printf("Shape created [id = %d]\n",shapeId);
     PBRT_CREATED_SHAPE(this);
 }
 

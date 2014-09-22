@@ -5,6 +5,7 @@
 
 #include "DataView.h"
 #include "RIV/Views/3DView.h"
+#include "RIV/PBRTConfig.h"
 //#include "RIV/Geometry/MeshModel.h"
 //#include "RIV/Octree/Octree.h"
 //#include "RIV/Geometry/Ray.h"
@@ -17,8 +18,8 @@ private:
 	
 public:
 	//Constructors & Destructors
-    explicit SceneWidget(RIVDataSet* dataset, RIVColorProperty* color, RIVSizeProperty* size, QWidget *parent = NULL);
-	explicit SceneWidget(SceneWidget& newSceneWidget);
+    explicit SceneWidget(RIVDataSet* dataset, PBRTConfig* pbrtConfig, RIVColorProperty* color, RIVSizeProperty* size, QWidget *parent = NULL);
+//	explicit SceneWidget(SceneWidget& newSceneWidget);
     ~SceneWidget();
 	//Methods
 	void mousePressEvent(QMouseEvent *event);

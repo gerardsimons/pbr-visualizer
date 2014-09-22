@@ -373,30 +373,6 @@
 		E16AE39619CD79E800A0C40E /* grid.h in Sources */ = {isa = PBXBuildFile; fileRef = B1D8EB57117030DE00A8A49E /* grid.h */; };
 		E16AE39719CD79E800A0C40E /* kdtreeaccel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1D8EB58117030DE00A8A49E /* kdtreeaccel.cpp */; };
 		E16AE39819CD79E800A0C40E /* kdtreeaccel.h in Sources */ = {isa = PBXBuildFile; fileRef = B1D8EB59117030DE00A8A49E /* kdtreeaccel.h */; };
-		E1CE400F19C9C05E003D4764 /* Cluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FC719C9C05D003D4764 /* Cluster.cpp */; };
-		E1CE401019C9C05E003D4764 /* ClusterSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FC919C9C05D003D4764 /* ClusterSet.cpp */; };
-		E1CE401119C9C05E003D4764 /* DataFileReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FCB19C9C05D003D4764 /* DataFileReader.cpp */; };
-		E1CE401219C9C05E003D4764 /* DataSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FCD19C9C05D003D4764 /* DataSet.cpp */; };
-		E1CE401319C9C05E003D4764 /* Filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FD019C9C05D003D4764 /* Filter.cpp */; };
-		E1CE401419C9C05E003D4764 /* Iterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FD219C9C05D003D4764 /* Iterator.cpp */; };
-		E1CE401519C9C05E003D4764 /* Record.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FD419C9C05D003D4764 /* Record.cpp */; };
-		E1CE401619C9C05E003D4764 /* Reference.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FD619C9C05D003D4764 /* Reference.cpp */; };
-		E1CE401719C9C05E003D4764 /* Table.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FD819C9C05D003D4764 /* Table.cpp */; };
-		E1CE401819C9C05E003D4764 /* TriangleMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FE019C9C05E003D4764 /* TriangleMesh.cpp */; };
-		E1CE401919C9C05E003D4764 /* BMPImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FE419C9C05E003D4764 /* BMPImage.cpp */; };
-		E1CE401A19C9C05E003D4764 /* ColorMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FE619C9C05E003D4764 /* ColorMap.cpp */; };
-		E1CE401B19C9C05E003D4764 /* ColorPalette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FE819C9C05E003D4764 /* ColorPalette.cpp */; };
-		E1CE401C19C9C05E003D4764 /* loadppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FED19C9C05E003D4764 /* loadppm.cpp */; };
-		E1CE401D19C9C05E003D4764 /* helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FF119C9C05E003D4764 /* helper.cpp */; };
-		E1CE401E19C9C05E003D4764 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FF319C9C05E003D4764 /* main.cpp */; };
-		E1CE401F19C9C05E003D4764 /* Octree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FF519C9C05E003D4764 /* Octree.cpp */; };
-		E1CE402019C9C05E003D4764 /* OctreeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FF819C9C05E003D4764 /* OctreeNode.cpp */; };
-		E1CE402119C9C05E003D4764 /* reporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE3FFB19C9C05E003D4764 /* reporter.cpp */; };
-		E1CE402219C9C05E003D4764 /* 3DView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE400119C9C05E003D4764 /* 3DView.cpp */; };
-		E1CE402319C9C05E003D4764 /* HeatMapView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE400419C9C05E003D4764 /* HeatMapView.cpp */; };
-		E1CE402419C9C05E003D4764 /* ImageView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE400619C9C05E003D4764 /* ImageView.cpp */; };
-		E1CE402519C9C05E003D4764 /* ParallelCoordsAxis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE400819C9C05E003D4764 /* ParallelCoordsAxis.cpp */; };
-		E1CE402619C9C05E003D4764 /* ParallelCoordsView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1CE400B19C9C05E003D4764 /* ParallelCoordsView.cpp */; };
 		E1F8073519C840E70048BE7B /* bvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1D8EB54117030DE00A8A49E /* bvh.cpp */; };
 		E1F8073619C840E70048BE7B /* grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1D8EB56117030DE00A8A49E /* grid.cpp */; };
 		E1F8073719C840E70048BE7B /* kdtreeaccel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1D8EB58117030DE00A8A49E /* kdtreeaccel.cpp */; };
@@ -860,74 +836,6 @@
 		B1D8ECE2117032E500A8A49E /* pbrt */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pbrt; sourceTree = BUILT_PRODUCTS_DIR; };
 		E103D34919C9C19C003A4BCE /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtCore.framework; path = ../../../../../../usr/local/Cellar/qt/4.8.5/lib/QtCore.framework; sourceTree = "<group>"; };
 		E16AE29F19CD79CD00A0C40E /* libpbrtlib.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libpbrtlib.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		E1CE3FC519C9C05D003D4764 /* AntTweakBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AntTweakBar.h; path = ../../AntTweakBar.h; sourceTree = "<group>"; };
-		E1CE3FC719C9C05D003D4764 /* Cluster.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cluster.cpp; sourceTree = "<group>"; };
-		E1CE3FC819C9C05D003D4764 /* Cluster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cluster.h; sourceTree = "<group>"; };
-		E1CE3FC919C9C05D003D4764 /* ClusterSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClusterSet.cpp; sourceTree = "<group>"; };
-		E1CE3FCA19C9C05D003D4764 /* ClusterSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClusterSet.h; sourceTree = "<group>"; };
-		E1CE3FCB19C9C05D003D4764 /* DataFileReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataFileReader.cpp; sourceTree = "<group>"; };
-		E1CE3FCC19C9C05D003D4764 /* DataFileReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFileReader.h; sourceTree = "<group>"; };
-		E1CE3FCD19C9C05D003D4764 /* DataSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataSet.cpp; sourceTree = "<group>"; };
-		E1CE3FCE19C9C05D003D4764 /* DataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSet.h; sourceTree = "<group>"; };
-		E1CE3FCF19C9C05D003D4764 /* DataSetListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSetListener.h; sourceTree = "<group>"; };
-		E1CE3FD019C9C05D003D4764 /* Filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Filter.cpp; sourceTree = "<group>"; };
-		E1CE3FD119C9C05D003D4764 /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
-		E1CE3FD219C9C05D003D4764 /* Iterator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Iterator.cpp; sourceTree = "<group>"; };
-		E1CE3FD319C9C05D003D4764 /* Iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Iterator.h; sourceTree = "<group>"; };
-		E1CE3FD419C9C05D003D4764 /* Record.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Record.cpp; sourceTree = "<group>"; };
-		E1CE3FD519C9C05D003D4764 /* Record.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Record.h; sourceTree = "<group>"; };
-		E1CE3FD619C9C05D003D4764 /* Reference.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Reference.cpp; sourceTree = "<group>"; };
-		E1CE3FD719C9C05D003D4764 /* Reference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reference.h; sourceTree = "<group>"; };
-		E1CE3FD819C9C05D003D4764 /* Table.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Table.cpp; sourceTree = "<group>"; };
-		E1CE3FD919C9C05D003D4764 /* Table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Table.h; sourceTree = "<group>"; };
-		E1CE3FDB19C9C05E003D4764 /* Geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Geometry.h; sourceTree = "<group>"; };
-		E1CE3FDC19C9C05E003D4764 /* matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = matrix.h; sourceTree = "<group>"; };
-		E1CE3FDD19C9C05E003D4764 /* MeshModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshModel.h; sourceTree = "<group>"; };
-		E1CE3FDE19C9C05E003D4764 /* Ray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ray.h; sourceTree = "<group>"; };
-		E1CE3FDF19C9C05E003D4764 /* RIVVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RIVVector.h; sourceTree = "<group>"; };
-		E1CE3FE019C9C05E003D4764 /* TriangleMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TriangleMesh.cpp; sourceTree = "<group>"; };
-		E1CE3FE119C9C05E003D4764 /* TriangleMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriangleMesh.h; sourceTree = "<group>"; };
-		E1CE3FE219C9C05E003D4764 /* Vec3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vec3D.h; sourceTree = "<group>"; };
-		E1CE3FE419C9C05E003D4764 /* BMPImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BMPImage.cpp; sourceTree = "<group>"; };
-		E1CE3FE519C9C05E003D4764 /* BMPImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMPImage.h; sourceTree = "<group>"; };
-		E1CE3FE619C9C05E003D4764 /* ColorMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorMap.cpp; sourceTree = "<group>"; };
-		E1CE3FE719C9C05E003D4764 /* ColorMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorMap.h; sourceTree = "<group>"; };
-		E1CE3FE819C9C05E003D4764 /* ColorPalette.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorPalette.cpp; sourceTree = "<group>"; };
-		E1CE3FE919C9C05E003D4764 /* ColorPalette.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPalette.h; sourceTree = "<group>"; };
-		E1CE3FEA19C9C05E003D4764 /* ColorProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorProperty.h; sourceTree = "<group>"; };
-		E1CE3FEB19C9C05E003D4764 /* Evaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Evaluator.h; sourceTree = "<group>"; };
-		E1CE3FEC19C9C05E003D4764 /* graphics_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = graphics_helper.h; sourceTree = "<group>"; };
-		E1CE3FED19C9C05E003D4764 /* loadppm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = loadppm.cpp; sourceTree = "<group>"; };
-		E1CE3FEE19C9C05E003D4764 /* loadppm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loadppm.h; sourceTree = "<group>"; };
-		E1CE3FEF19C9C05E003D4764 /* Property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Property.h; sourceTree = "<group>"; };
-		E1CE3FF019C9C05E003D4764 /* SizeProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SizeProperty.h; sourceTree = "<group>"; };
-		E1CE3FF119C9C05E003D4764 /* helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = helper.cpp; path = ../../helper.cpp; sourceTree = "<group>"; };
-		E1CE3FF219C9C05E003D4764 /* helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = helper.h; path = ../../helper.h; sourceTree = "<group>"; };
-		E1CE3FF319C9C05E003D4764 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../main.cpp; sourceTree = "<group>"; };
-		E1CE3FF519C9C05E003D4764 /* Octree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Octree.cpp; sourceTree = "<group>"; };
-		E1CE3FF619C9C05E003D4764 /* Octree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Octree.h; sourceTree = "<group>"; };
-		E1CE3FF719C9C05E003D4764 /* OctreeConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OctreeConfig.h; sourceTree = "<group>"; };
-		E1CE3FF819C9C05E003D4764 /* OctreeNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OctreeNode.cpp; sourceTree = "<group>"; };
-		E1CE3FF919C9C05E003D4764 /* OctreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OctreeNode.h; sourceTree = "<group>"; };
-		E1CE3FFA19C9C05E003D4764 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
-		E1CE3FFB19C9C05E003D4764 /* reporter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = reporter.cpp; path = ../../reporter.cpp; sourceTree = "<group>"; };
-		E1CE3FFC19C9C05E003D4764 /* reporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reporter.h; path = ../../reporter.h; sourceTree = "<group>"; };
-		E1CE3FFE19C9C05E003D4764 /* sandbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sandbox.h; path = ../../sandbox.h; sourceTree = "<group>"; };
-		E1CE3FFF19C9C05E003D4764 /* trackball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = trackball.h; path = ../../trackball.h; sourceTree = "<group>"; };
-		E1CE400119C9C05E003D4764 /* 3DView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = 3DView.cpp; sourceTree = "<group>"; };
-		E1CE400219C9C05E003D4764 /* 3DView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3DView.h; sourceTree = "<group>"; };
-		E1CE400319C9C05E003D4764 /* DataView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataView.h; sourceTree = "<group>"; };
-		E1CE400419C9C05E003D4764 /* HeatMapView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HeatMapView.cpp; sourceTree = "<group>"; };
-		E1CE400519C9C05E003D4764 /* HeatMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeatMapView.h; sourceTree = "<group>"; };
-		E1CE400619C9C05E003D4764 /* ImageView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageView.cpp; sourceTree = "<group>"; };
-		E1CE400719C9C05E003D4764 /* ImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageView.h; sourceTree = "<group>"; };
-		E1CE400819C9C05E003D4764 /* ParallelCoordsAxis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParallelCoordsAxis.cpp; sourceTree = "<group>"; };
-		E1CE400919C9C05E003D4764 /* ParallelCoordsAxis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParallelCoordsAxis.h; sourceTree = "<group>"; };
-		E1CE400A19C9C05E003D4764 /* ParallelCoordsAxisGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParallelCoordsAxisGroup.h; sourceTree = "<group>"; };
-		E1CE400B19C9C05E003D4764 /* ParallelCoordsView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParallelCoordsView.cpp; sourceTree = "<group>"; };
-		E1CE400C19C9C05E003D4764 /* ParallelCoordsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParallelCoordsView.h; sourceTree = "<group>"; };
-		E1CE400D19C9C05E003D4764 /* UIView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIView.cpp; sourceTree = "<group>"; };
-		E1CE400E19C9C05E003D4764 /* UIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIView.h; sourceTree = "<group>"; };
 		E1F807B819C840E70048BE7B /* pbrt copy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "pbrt copy"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1F8082819C846F80048BE7B /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = error.h; sourceTree = "<group>"; };
 		E1F8082919C846F80048BE7B /* error.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = error.cpp; sourceTree = "<group>"; };
@@ -969,21 +877,7 @@
 			isa = PBXGroup;
 			children = (
 				E103D34919C9C19C003A4BCE /* QtCore.framework */,
-				E1CE3FC519C9C05D003D4764 /* AntTweakBar.h */,
-				E1CE3FC619C9C05D003D4764 /* Data */,
-				E1CE3FDA19C9C05D003D4764 /* Geometry */,
-				E1CE3FE319C9C05E003D4764 /* Graphics */,
-				E1CE3FF119C9C05E003D4764 /* helper.cpp */,
-				E1CE3FF219C9C05E003D4764 /* helper.h */,
-				E1CE3FF319C9C05E003D4764 /* main.cpp */,
-				E1CE3FF419C9C05E003D4764 /* Octree */,
-				E1CE3FFA19C9C05E003D4764 /* README.md */,
-				E1CE3FFB19C9C05E003D4764 /* reporter.cpp */,
-				E1CE3FFC19C9C05E003D4764 /* reporter.h */,
 				E1CE3FFD19C9C05E003D4764 /* Resources */,
-				E1CE3FFE19C9C05E003D4764 /* sandbox.h */,
-				E1CE3FFF19C9C05E003D4764 /* trackball.h */,
-				E1CE400019C9C05E003D4764 /* Views */,
 				E1F8082F19C854E30048BE7B /* OpenGL.framework */,
 				E1F8082D19C854DD0048BE7B /* GLUT.framework */,
 				E1F950791938FA23006A8734 /* datadumper.h */,
@@ -1376,111 +1270,12 @@
 			name = Documentation;
 			sourceTree = "<group>";
 		};
-		E1CE3FC619C9C05D003D4764 /* Data */ = {
-			isa = PBXGroup;
-			children = (
-				E1CE3FC719C9C05D003D4764 /* Cluster.cpp */,
-				E1CE3FC819C9C05D003D4764 /* Cluster.h */,
-				E1CE3FC919C9C05D003D4764 /* ClusterSet.cpp */,
-				E1CE3FCA19C9C05D003D4764 /* ClusterSet.h */,
-				E1CE3FCB19C9C05D003D4764 /* DataFileReader.cpp */,
-				E1CE3FCC19C9C05D003D4764 /* DataFileReader.h */,
-				E1CE3FCD19C9C05D003D4764 /* DataSet.cpp */,
-				E1CE3FCE19C9C05D003D4764 /* DataSet.h */,
-				E1CE3FCF19C9C05D003D4764 /* DataSetListener.h */,
-				E1CE3FD019C9C05D003D4764 /* Filter.cpp */,
-				E1CE3FD119C9C05D003D4764 /* Filter.h */,
-				E1CE3FD219C9C05D003D4764 /* Iterator.cpp */,
-				E1CE3FD319C9C05D003D4764 /* Iterator.h */,
-				E1CE3FD419C9C05D003D4764 /* Record.cpp */,
-				E1CE3FD519C9C05D003D4764 /* Record.h */,
-				E1CE3FD619C9C05D003D4764 /* Reference.cpp */,
-				E1CE3FD719C9C05D003D4764 /* Reference.h */,
-				E1CE3FD819C9C05D003D4764 /* Table.cpp */,
-				E1CE3FD919C9C05D003D4764 /* Table.h */,
-			);
-			name = Data;
-			path = ../../Data;
-			sourceTree = "<group>";
-		};
-		E1CE3FDA19C9C05D003D4764 /* Geometry */ = {
-			isa = PBXGroup;
-			children = (
-				E1CE3FDB19C9C05E003D4764 /* Geometry.h */,
-				E1CE3FDC19C9C05E003D4764 /* matrix.h */,
-				E1CE3FDD19C9C05E003D4764 /* MeshModel.h */,
-				E1CE3FDE19C9C05E003D4764 /* Ray.h */,
-				E1CE3FDF19C9C05E003D4764 /* RIVVector.h */,
-				E1CE3FE019C9C05E003D4764 /* TriangleMesh.cpp */,
-				E1CE3FE119C9C05E003D4764 /* TriangleMesh.h */,
-				E1CE3FE219C9C05E003D4764 /* Vec3D.h */,
-			);
-			name = Geometry;
-			path = ../../Geometry;
-			sourceTree = "<group>";
-		};
-		E1CE3FE319C9C05E003D4764 /* Graphics */ = {
-			isa = PBXGroup;
-			children = (
-				E1CE3FE419C9C05E003D4764 /* BMPImage.cpp */,
-				E1CE3FE519C9C05E003D4764 /* BMPImage.h */,
-				E1CE3FE619C9C05E003D4764 /* ColorMap.cpp */,
-				E1CE3FE719C9C05E003D4764 /* ColorMap.h */,
-				E1CE3FE819C9C05E003D4764 /* ColorPalette.cpp */,
-				E1CE3FE919C9C05E003D4764 /* ColorPalette.h */,
-				E1CE3FEA19C9C05E003D4764 /* ColorProperty.h */,
-				E1CE3FEB19C9C05E003D4764 /* Evaluator.h */,
-				E1CE3FEC19C9C05E003D4764 /* graphics_helper.h */,
-				E1CE3FED19C9C05E003D4764 /* loadppm.cpp */,
-				E1CE3FEE19C9C05E003D4764 /* loadppm.h */,
-				E1CE3FEF19C9C05E003D4764 /* Property.h */,
-				E1CE3FF019C9C05E003D4764 /* SizeProperty.h */,
-			);
-			name = Graphics;
-			path = ../../Graphics;
-			sourceTree = "<group>";
-		};
-		E1CE3FF419C9C05E003D4764 /* Octree */ = {
-			isa = PBXGroup;
-			children = (
-				E1CE3FF519C9C05E003D4764 /* Octree.cpp */,
-				E1CE3FF619C9C05E003D4764 /* Octree.h */,
-				E1CE3FF719C9C05E003D4764 /* OctreeConfig.h */,
-				E1CE3FF819C9C05E003D4764 /* OctreeNode.cpp */,
-				E1CE3FF919C9C05E003D4764 /* OctreeNode.h */,
-			);
-			name = Octree;
-			path = ../../Octree;
-			sourceTree = "<group>";
-		};
 		E1CE3FFD19C9C05E003D4764 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = Resources;
 			path = ../../Resources;
-			sourceTree = "<group>";
-		};
-		E1CE400019C9C05E003D4764 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				E1CE400119C9C05E003D4764 /* 3DView.cpp */,
-				E1CE400219C9C05E003D4764 /* 3DView.h */,
-				E1CE400319C9C05E003D4764 /* DataView.h */,
-				E1CE400419C9C05E003D4764 /* HeatMapView.cpp */,
-				E1CE400519C9C05E003D4764 /* HeatMapView.h */,
-				E1CE400619C9C05E003D4764 /* ImageView.cpp */,
-				E1CE400719C9C05E003D4764 /* ImageView.h */,
-				E1CE400819C9C05E003D4764 /* ParallelCoordsAxis.cpp */,
-				E1CE400919C9C05E003D4764 /* ParallelCoordsAxis.h */,
-				E1CE400A19C9C05E003D4764 /* ParallelCoordsAxisGroup.h */,
-				E1CE400B19C9C05E003D4764 /* ParallelCoordsView.cpp */,
-				E1CE400C19C9C05E003D4764 /* ParallelCoordsView.h */,
-				E1CE400D19C9C05E003D4764 /* UIView.cpp */,
-				E1CE400E19C9C05E003D4764 /* UIView.h */,
-			);
-			name = Views;
-			path = ../../Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1980,7 +1775,6 @@
 				E1F8073E19C840E70048BE7B /* dtrace.d in Sources */,
 				E1F8073F19C840E70048BE7B /* film.cpp in Sources */,
 				E1F8074019C840E70048BE7B /* filter.cpp in Sources */,
-				E1CE401619C9C05E003D4764 /* Reference.cpp in Sources */,
 				E1F8074119C840E70048BE7B /* floatfile.cpp in Sources */,
 				E1F8074219C840E70048BE7B /* geometry.cpp in Sources */,
 				E1F8074319C840E70048BE7B /* imageio.cpp in Sources */,
@@ -1997,7 +1791,6 @@
 				E1F8074E19C840E70048BE7B /* datadumper.cpp in Sources */,
 				E1F8074F19C840E70048BE7B /* primitive.cpp in Sources */,
 				E1F8075019C840E70048BE7B /* probes.cpp in Sources */,
-				E1CE401F19C9C05E003D4764 /* Octree.cpp in Sources */,
 				E1F8075119C840E70048BE7B /* progressreporter.cpp in Sources */,
 				E1F8075219C840E70048BE7B /* quaternion.cpp in Sources */,
 				E1F8075319C840E70048BE7B /* reflection.cpp in Sources */,
@@ -2007,19 +1800,15 @@
 				E1F8075719C840E70048BE7B /* scene.cpp in Sources */,
 				E1F8075819C840E70048BE7B /* sh.cpp in Sources */,
 				E1F8075919C840E70048BE7B /* shape.cpp in Sources */,
-				E1CE402519C9C05E003D4764 /* ParallelCoordsAxis.cpp in Sources */,
 				E1F8075A19C840E70048BE7B /* shrots.cpp in Sources */,
 				E1F8075B19C840E70048BE7B /* spectrum.cpp in Sources */,
 				E1F8075C19C840E70048BE7B /* texture.cpp in Sources */,
 				E1F8075D19C840E70048BE7B /* timer.cpp in Sources */,
-				E1CE402419C9C05E003D4764 /* ImageView.cpp in Sources */,
 				E1F8075E19C840E70048BE7B /* transform.cpp in Sources */,
 				E1F8075F19C840E70048BE7B /* volume.cpp in Sources */,
 				E1F8076019C840E70048BE7B /* image.cpp in Sources */,
 				E1F8076119C840E70048BE7B /* box.cpp in Sources */,
 				E1F8076219C840E70048BE7B /* gaussian.cpp in Sources */,
-				E1CE402619C9C05E003D4764 /* ParallelCoordsView.cpp in Sources */,
-				E1CE402219C9C05E003D4764 /* 3DView.cpp in Sources */,
 				E1F8076319C840E70048BE7B /* mitchell.cpp in Sources */,
 				E1F8076419C840E70048BE7B /* sinc.cpp in Sources */,
 				E1F8076519C840E70048BE7B /* triangle.cpp in Sources */,
@@ -2032,7 +1821,6 @@
 				E1F8076C19C840E70048BE7B /* igi.cpp in Sources */,
 				E1F8076D19C840E70048BE7B /* irradiancecache.cpp in Sources */,
 				E1F8076E19C840E70048BE7B /* path.cpp in Sources */,
-				E1CE402119C9C05E003D4764 /* reporter.cpp in Sources */,
 				E1F8076F19C840E70048BE7B /* photonmap.cpp in Sources */,
 				E1F8077019C840E70048BE7B /* single.cpp in Sources */,
 				E1F8077119C840E70048BE7B /* useprobes.cpp in Sources */,
@@ -2040,14 +1828,11 @@
 				E1F8077319C840E70048BE7B /* diffuse.cpp in Sources */,
 				E1F8077419C840E70048BE7B /* distant.cpp in Sources */,
 				E1F8077519C840E70048BE7B /* goniometric.cpp in Sources */,
-				E1CE401719C9C05E003D4764 /* Table.cpp in Sources */,
-				E1CE401819C9C05E003D4764 /* TriangleMesh.cpp in Sources */,
 				E1F8077619C840E70048BE7B /* infinite.cpp in Sources */,
 				E1F8077719C840E70048BE7B /* point.cpp in Sources */,
 				E1F8077819C840E70048BE7B /* projection.cpp in Sources */,
 				E1F8077919C840E70048BE7B /* spot.cpp in Sources */,
 				E1F8077B19C840E70048BE7B /* glass.cpp in Sources */,
-				E1CE401419C9C05E003D4764 /* Iterator.cpp in Sources */,
 				E1F8077C19C840E70048BE7B /* kdsubsurface.cpp in Sources */,
 				E1F8077D19C840E70048BE7B /* matte.cpp in Sources */,
 				E1F8077E19C840E70048BE7B /* measured.cpp in Sources */,
@@ -2055,12 +1840,9 @@
 				E1F8078019C840E70048BE7B /* mirror.cpp in Sources */,
 				E1F8078119C840E70048BE7B /* mixmat.cpp in Sources */,
 				E1F8078219C840E70048BE7B /* plastic.cpp in Sources */,
-				E1CE401319C9C05E003D4764 /* Filter.cpp in Sources */,
 				E1F8078319C840E70048BE7B /* substrate.cpp in Sources */,
 				E1F8078419C840E70048BE7B /* subsurface.cpp in Sources */,
 				E1F8078519C840E70048BE7B /* translucent.cpp in Sources */,
-				E1CE402019C9C05E003D4764 /* OctreeNode.cpp in Sources */,
-				E1CE401919C9C05E003D4764 /* BMPImage.cpp in Sources */,
 				E1F8078619C840E70048BE7B /* uber.cpp in Sources */,
 				E1F8078719C840E70048BE7B /* aggregatetest.cpp in Sources */,
 				E1F8078919C840E70048BE7B /* createprobes.cpp in Sources */,
@@ -2069,14 +1851,11 @@
 				E1F8078C19C840E70048BE7B /* surfacepoints.cpp in Sources */,
 				E1F8078D19C840E70048BE7B /* adaptive.cpp in Sources */,
 				E1F8078E19C840E70048BE7B /* bestcandidate.cpp in Sources */,
-				E1CE401519C9C05E003D4764 /* Record.cpp in Sources */,
 				E1F8078F19C840E70048BE7B /* halton.cpp in Sources */,
 				E1F8079019C840E70048BE7B /* lowdiscrepancy.cpp in Sources */,
 				E1F8079119C840E70048BE7B /* random.cpp in Sources */,
 				E1F8079219C840E70048BE7B /* stratified.cpp in Sources */,
-				E1CE401019C9C05E003D4764 /* ClusterSet.cpp in Sources */,
 				E1F8079319C840E70048BE7B /* cone.cpp in Sources */,
-				E1CE401A19C9C05E003D4764 /* ColorMap.cpp in Sources */,
 				E1F8079419C840E70048BE7B /* cylinder.cpp in Sources */,
 				E1F8079519C840E70048BE7B /* disk.cpp in Sources */,
 				E1F8079619C840E70048BE7B /* heightfield.cpp in Sources */,
@@ -2084,24 +1863,16 @@
 				E1F8079819C840E70048BE7B /* loopsubdiv.cpp in Sources */,
 				E1F8079919C840E70048BE7B /* nurbs.cpp in Sources */,
 				E1F8079A19C840E70048BE7B /* paraboloid.cpp in Sources */,
-				E1CE401D19C9C05E003D4764 /* helper.cpp in Sources */,
 				E1F8079B19C840E70048BE7B /* sphere.cpp in Sources */,
 				E1F8079C19C840E70048BE7B /* trianglemesh.cpp in Sources */,
 				E1F8079D19C840E70048BE7B /* bilerp.cpp in Sources */,
-				E1CE401C19C9C05E003D4764 /* loadppm.cpp in Sources */,
 				E1F8079E19C840E70048BE7B /* checkerboard.cpp in Sources */,
 				E1F8079F19C840E70048BE7B /* constant.cpp in Sources */,
-				E1CE402319C9C05E003D4764 /* HeatMapView.cpp in Sources */,
 				E1F807A019C840E70048BE7B /* dots.cpp in Sources */,
 				E1F807A119C840E70048BE7B /* fbm.cpp in Sources */,
-				E1CE400F19C9C05E003D4764 /* Cluster.cpp in Sources */,
-				E1CE401B19C9C05E003D4764 /* ColorPalette.cpp in Sources */,
-				E1CE401219C9C05E003D4764 /* DataSet.cpp in Sources */,
-				E1CE401E19C9C05E003D4764 /* main.cpp in Sources */,
 				E1F807A219C840E70048BE7B /* imagemap.cpp in Sources */,
 				E1F807A319C840E70048BE7B /* marble.cpp in Sources */,
 				E1F807A419C840E70048BE7B /* mix.cpp in Sources */,
-				E1CE401119C9C05E003D4764 /* DataFileReader.cpp in Sources */,
 				E1F807A519C840E70048BE7B /* scale.cpp in Sources */,
 				E1F807A619C840E70048BE7B /* uv.cpp in Sources */,
 				E1F807A719C840E70048BE7B /* windy.cpp in Sources */,
@@ -2432,6 +2203,7 @@
 				E16AE2A319CD79CD00A0C40E /* dtrace */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E1F807B419C840E70048BE7B /* Build configuration list for PBXNativeTarget "riv" */ = {
 			isa = XCConfigurationList;

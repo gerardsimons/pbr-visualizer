@@ -3,7 +3,7 @@
 #include "window.h"
 
 #include "RIV/Graphics/BMPImage.h"
-
+#include "RIV/PBRTConfig.h"
 #include "RIV/Data/DataSet.h"
 #include "RIV/Data/DataFileReader.h"
 
@@ -19,19 +19,14 @@ const int windowHeight = 900;
 SceneWidget* sceneWidget = NULL;
 PCWidget* pcWidget = NULL;
 
-//Generate all the path strings from the given arguments, error if not enough given.
-void generatePaths(int argc, char** argv) {
-
-}
-
 //Load data according to the generated paths
 void loadData(const std::string& dataPath,const std::string& pbrtPath,const std::string& bmpPath) {
     if(!dataPath.empty() && !pbrtPath.empty()) {
         BMPImage* image = new BMPImage(bmpPath.c_str(),false);
         RIVDataSet dataset = DataFileReader::ReadBinaryData(dataPath,image,0);
-        MeshModel model = DataFileReader::ReadModelData(pbrtPath);
+		PBRTConfig pbrtConfig = DataFileReader::ReadPBRTFile(pbrtPath);
 		
-		rootWindow = new Window(dataset,image,model);
+		rootWindow = new Window(dataset,image,pbrtConfig);
 		//Extra data processing
 		//		DataFileReader::AssignShapeIDsToPrimitives(dataset.GetTable("intersections"), model);
 		//		testPBRTParser(pbrtPath);

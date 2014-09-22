@@ -1,13 +1,18 @@
 #include "core/stdafx.h"
 #include "datadumper.h"
-#include <stdio.h>
 
+#include <stdio.h>
+#include <map>
 
 std::string DataDumper::ascii_file_name;
 std::string DataDumper::binary_file_name;
 
-FILE* DataDumper::asciiFile;
-FILE* DataDumper::binaryFile;
+ushort DataDumper::objectIdCounter = 1;
+
+FILE* DataDumper::pathASCII;
+FILE* DataDumper::pathBinary;
+//File to write data about geometry (object IDs, shape IDs, vertices)
+FILE* DataDumper::geometryFile;
 
 size_t DataDumper::pathsWritten = 0;
 size_t DataDumper::intersectionsWritten = 0;
@@ -16,7 +21,18 @@ const size_t DataDumper::bufferSize = 1000000;
 
 std::vector<DataDumper> DataDumper::instances;
 
+std::map<ushort,ushort> objectPrimitives;
+
 bool writeASCII = true;
+
+template<typename T,typename U>
+void printMap(std::map<T,U> map) {
+    for(typename std::map<T, U>::const_iterator it = map.begin();
+        it != map.end(); ++it)
+    {
+        std::cout << it->first << " : " << it->second << "\n";
+    }
+}
 
 DataDumper::DataDumper(const std::string& imagename, int ID) {
     //Each datadumper has its own
@@ -25,35 +41,39 @@ DataDumper::DataDumper(const std::string& imagename, int ID) {
 				
     ascii_file_name = (imagename + ".txt").c_str();
     binary_file_name = (imagename + ".bin").c_str();
+	geometryFile = fopen((imagename + "_geometry.txt").c_str(),"w");
     
     if(writeASCII)
-        asciiFile = fopen(ascii_file_name.c_str(),"w");
-    binaryFile = fopen(binary_file_name.c_str(),"wb");
+        pathASCII = fopen(ascii_file_name.c_str(),"w");
+    pathBinary = fopen(binary_file_name.c_str(),"wb");
     
-    if(asciiFile == NULL && writeASCII) {
+    if(pathASCII == NULL && writeASCII) {
         throw "unable to open file " + ascii_file_name;
     }																												
-    if(binaryFile == NULL) {
+    if(pathBinary == NULL) {
         throw "unable to open file " + binary_file_name;
     }
+	if(geometryFile == NULL) {
+		throw "unable to open geometry file";
+	}
     
     //printf("Opening file.\n");
     //Init header of file
     
-    //fprintf(asciiFile,"******************************************************************************************\n");
-    //fprintf(asciiFile,"BSDF_REFLECTION=%d\n",BSDF_REFLECTION);
-    //fprintf(asciiFile,"BSDF_TRANSMISSION=%d\n",BSDF_TRANSMISSION);
-    //fprintf(asciiFile,"BSDF_DIFFUSE=%d\n",BSDF_DIFFUSE);
-    //fprintf(asciiFile,"BSDF_GLOSSY=%d\n",BSDF_GLOSSY);
-    //fprintf(asciiFile,"BSDF_SPECULAR=%d\n",BSDF_SPECULAR);
-    //fprintf(asciiFile,"BSDF_ALL_TYPES=%d\n",BSDF_ALL_TYPES);
-    //fprintf(asciiFile,"BSDF_ALL_REFLECTION=%d\n",BSDF_ALL_REFLECTION);
-    //fprintf(asciiFile,"BSDF_ALL_TRANSMISSION=%d\n",BSDF_ALL_TRANSMISSION);
-    //fprintf(asciiFile,"BSDF_ALL=%d\n",BSDF_ALL);
-    //fprintf(asciiFile,"******************************************************************************************\n\n");
+    //fprintf(pathASCII,"******************************************************************************************\n");
+    //fprintf(pathASCII,"BSDF_REFLECTION=%d\n",BSDF_REFLECTION);
+    //fprintf(pathASCII,"BSDF_TRANSMISSION=%d\n",BSDF_TRANSMISSION);
+    //fprintf(pathASCII,"BSDF_DIFFUSE=%d\n",BSDF_DIFFUSE);
+    //fprintf(pathASCII,"BSDF_GLOSSY=%d\n",BSDF_GLOSSY);
+    //fprintf(pathASCII,"BSDF_SPECULAR=%d\n",BSDF_SPECULAR);
+    //fprintf(pathASCII,"BSDF_ALL_TYPES=%d\n",BSDF_ALL_TYPES);
+    //fprintf(pathASCII,"BSDF_ALL_REFLECTION=%d\n",BSDF_ALL_REFLECTION);
+    //fprintf(pathASCII,"BSDF_ALL_TRANSMISSION=%d\n",BSDF_ALL_TRANSMISSION);
+    //fprintf(pathASCII,"BSDF_ALL=%d\n",BSDF_ALL);
+    //fprintf(pathASCII,"******************************************************************************************\n\n");
     if(writeASCII)
-        fprintf(asciiFile,"%%imageX,imageY,lensU,lensV,timestamp,throughput,#isects,isect_positions,primitive_ids,shape_ids,spectra,interaction_types,light_ids\n");
-//		fprintf(asciiFile,"%%imageX,imageY,lensU,lensV,timestamp,throughput,#isects\n");
+        fprintf(pathASCII,"%%imageX,imageY,lensU,lensV,timestamp,throughput,#isects,isect_positions,primitive_ids,shape_ids,object_ids,spectra,interaction_types,light_ids\n");
+//		fprintf(pathASCII,"%%imageX,imageY,lensU,lensV,timestamp,throughput,#isects\n");
 }
     
 void DataDumper::Init(const std::string& imagename, int numDumpers) {
@@ -79,26 +99,26 @@ void DataDumper::Finish() {
         dumper.WriteBufferToFile();
     }
 
-//    unsigned long long asciiFileSize = ftell(asciiFile);
-    unsigned long long binaryFileSize = ftell(binaryFile);
+//    unsigned long long pathASCIISize = ftell(pathASCII);
+    unsigned long long pathBinarySize = ftell(pathBinary);
     
     //printf("Closing file.\n");
-//    fclose(asciiFile);
-//    fclose(binaryFile);
+//    fclose(pathASCII);
+//    fclose(pathBinary);
 //
 //    //Open ASCII file in binary
-//    asciiFile = fopen(ascii_file_name.c_str(),"rb");
-//    binaryFile = fopen(binary_file_name.c_str(),"rb");
+//    pathASCII = fopen(ascii_file_name.c_str(),"rb");
+//    pathBinary = fopen(binary_file_name.c_str(),"rb");
     
-    printf("binary file %s size = %llu\n",binary_file_name.c_str(),binaryFileSize);
-//    printf("ascii file %s size = %llu\n",ascii_file_name.c_str(),asciiFileSize);
+    printf("binary file %s size = %llu\n",binary_file_name.c_str(),pathBinarySize);
+//    printf("ascii file %s size = %llu\n",ascii_file_name.c_str(),pathASCIISize);
 
-//    float compression = (float)(asciiFileSize - binaryFileSize) / asciiFileSize;
+//    float compression = (float)(pathASCIISize - pathBinarySize) / pathASCIISize;
 //    printf("\ncompression = %f\n",compression);
 
-    fclose(binaryFile);
+    fclose(pathBinary);
     if(writeASCII)
-        fclose(asciiFile);
+        fclose(pathASCII);
     
     //Write the summary of the files to a new file
     //The name is the ASCII and binary files root name (e.g. without the extensions) appended with .summary
@@ -124,7 +144,7 @@ unsigned long long DataDumper::FileSize(FILE* file) {
 }
 
 bool DataDumper::FileIsOpen() {
-    return asciiFile != 0;
+    return pathASCII != 0;
 }
 
 bool writing = false;
@@ -158,11 +178,11 @@ int written = 0;
 void DataDumper::WriteBufferToFile() {
     writing = true;
     
-//    if(asciiFile == NULL || binaryFile == NULL) {
+//    if(pathASCII == NULL || pathBinary == NULL) {
 //        throw "1 or more files are not open for writing.";
 //    }
 	bool writeIntersections = true;
-    if(binaryFile == NULL) {
+    if(pathBinary == NULL) {
         throw "1 or more files are not open for writing.";
     }
     printf("Writing %zu data objects to file\n",bufferData.size());
@@ -179,26 +199,26 @@ void DataDumper::WriteBufferToFile() {
         data.throughput.ToRGB(throughputRGB);
         
         if(writeASCII) {
-            fprintf(asciiFile,"%f,%f,%f,%f,%f,[%f,%f,%f],%hu",data.imageX,data.imageY,data.lensU,data.lensV,data.timestamp, throughputRGB[0],throughputRGB[1],throughputRGB[2],nrIsects);
+            fprintf(pathASCII,"%f,%f,%f,%f,%f,[%f,%f,%f],%hu",data.imageX,data.imageY,data.lensU,data.lensV,data.timestamp, throughputRGB[0],throughputRGB[1],throughputRGB[2],nrIsects);
         }
         
-        fwrite(&data.imageX, sizeof(float), 1, binaryFile);
-        fwrite(&data.imageY, sizeof(float), 1, binaryFile);
-        fwrite(&data.lensU, sizeof(float), 1, binaryFile);
-        fwrite(&data.lensV, sizeof(float), 1, binaryFile);
-        fwrite(&data.timestamp, sizeof(float), 1, binaryFile);
-        fwrite(&throughputRGB, sizeof(float), 3, binaryFile);
-        fwrite(&nrIsects, sizeof(unsigned short), 1, binaryFile);
+        fwrite(&data.imageX, sizeof(float), 1, pathBinary);
+        fwrite(&data.imageY, sizeof(float), 1, pathBinary);
+        fwrite(&data.lensU, sizeof(float), 1, pathBinary);
+        fwrite(&data.lensV, sizeof(float), 1, pathBinary);
+        fwrite(&data.timestamp, sizeof(float), 1, pathBinary);
+        fwrite(&throughputRGB, sizeof(float), 3, pathBinary);
+        fwrite(&nrIsects, sizeof(unsigned short), 1, pathBinary);
         
         //Update the counters
         ++pathsWritten;
         if(writeIntersections) {
 			if(writeASCII) {
 				if(nrIsects == 0) {
-					fputs("\n", asciiFile);
+					fputs("\n", pathASCII);
 					continue;
 				}
-				else fputs(",{",asciiFile);
+				else fputs(",{",pathASCII);
 			}
 			
 			for(ushort i = 0 ; i < nrIsects ; ++i) {
@@ -206,28 +226,28 @@ void DataDumper::WriteBufferToFile() {
 				
 				float positionFloat[] = { isectData.position.x, isectData.position.y, isectData.position.z };
 				
-				fprintf(asciiFile,"[%f,%f,%f]",positionFloat[0],positionFloat[1],positionFloat[2]);
+				fprintf(pathASCII,"[%f,%f,%f]",positionFloat[0],positionFloat[1],positionFloat[2]);
 				if(i != nrIsects - 1) {
-					fputs(",",asciiFile);
+					fputs(",",pathASCII);
 				}
-				fwrite(&positionFloat,sizeof(float),3,binaryFile);
+				fwrite(&positionFloat,sizeof(float),3,pathBinary);
 			}
-			fputs("},",asciiFile);
+			fputs("},",pathASCII);
 			for(size_t i = 0 ; i < nrIsects ; i++) {
 				IntersectData isectData = data.intersectionData[i];
 	//            isectData->primitiveId = 4;
 
 	//            char buffer[100];
 	//            sprintf(buffer,"%hu,",isectData->primitiveId);
-	//            fprintf(asciiFile,buffer);
+	//            fprintf(pathASCII,buffer);
 				if(writeASCII)
-					fprintf(asciiFile, "%hu,",isectData.primitiveId);
-				fwrite(&isectData.primitiveId,sizeof(unsigned short),1,binaryFile); //2 bytes
+					fprintf(pathASCII, "%hu,",isectData.primitiveId);
+				fwrite(&isectData.primitiveId,sizeof(unsigned short),1,pathBinary); //2 bytes
 			}
-			//fprintf(asciiFile,"},");
+			//fprintf(pathASCII,"},");
 
 			//write shape ids, size * integers
-			//fprintf(asciiFile,"{");
+			//fprintf(pathASCII,"{");
 			for(size_t i = 0 ; i < nrIsects ; i++) {
 				IntersectData isectData = data.intersectionData[i];
 	//            isectData->shapeId = 5;
@@ -235,13 +255,22 @@ void DataDumper::WriteBufferToFile() {
 	//            char buffer[100];
 	//            sprintf(buffer,"%hu,",isectData->shapeId);
 				if(writeASCII)
-					fprintf(asciiFile, "%hu,",isectData.shapeId);
-				fwrite(&isectData.shapeId,sizeof(unsigned short),1,binaryFile); //2 bytes
+					fprintf(pathASCII, "%hu,",isectData.shapeId);
+				fwrite(&isectData.shapeId,sizeof(unsigned short),1,pathBinary); //2 bytes
 			}
-			//fprintf(asciiFile,"},");
+			
+			//Write the objectId created using ObjectInstance
+			for(size_t i = 0 ; i < nrIsects ; i++) {
+				IntersectData isectData = data.intersectionData[i];
+				//Find the object ID for this primitive ID
+				ushort objectID = objectIdForPrimitiveId(isectData.primitiveId);
+				if(writeASCII)
+					fprintf(pathASCII, "%hu,",objectID);
+				fwrite(&objectID,sizeof(unsigned short),1,pathBinary); //2 bytes
+			}
 
 			//write color spectra size * float[nSamples]
-			fprintf(asciiFile,"{");
+			fprintf(pathASCII,"{");
 			for(size_t i = 0 ; i < nrIsects ; i++) {
 				IntersectData isectData = data.intersectionData[i];
 				const RGBSpectrum &s = isectData.spectrum.ToRGBSpectrum();
@@ -255,44 +284,44 @@ void DataDumper::WriteBufferToFile() {
 	//            }
 	//            else
 	//                sprintf(buffer,"[%f,%f,%f]},",color[0],color[1],color[2]);
-	//            fprintf(asciiFile,buffer);
+	//            fprintf(pathASCII,buffer);
 				if(writeASCII) {
 					if(i != nrIsects - 1) {
-						fprintf(asciiFile,"[%f,%f,%f],",color[0],color[1],color[2]);
+						fprintf(pathASCII,"[%f,%f,%f],",color[0],color[1],color[2]);
 					}
 					else
-						fprintf(asciiFile,"[%f,%f,%f]},",color[0],color[1],color[2]);
+						fprintf(pathASCII,"[%f,%f,%f]},",color[0],color[1],color[2]);
 				}
 
-				fwrite(&color,sizeof(float),3,binaryFile); //12 bytes
+				fwrite(&color,sizeof(float),3,pathBinary); //12 bytes
 			}
-			//fprintf(asciiFile,"},");
+			//fprintf(pathASCII,"},");
 
 			//write interaction types, size * unsigned short
-			//fprintf(asciiFile,"{");
+			//fprintf(pathASCII,"{");
 			for(size_t i = 0 ; i < nrIsects ; i++) {
 				IntersectData isectData = data.intersectionData[i];
 				if(writeASCII)
-					fprintf(asciiFile,"%hu,",isectData.interactionType);
-				fwrite(&isectData.interactionType,sizeof(unsigned short),1,binaryFile); //2 bytes
+					fprintf(pathASCII,"%hu,",isectData.interactionType);
+				fwrite(&isectData.interactionType,sizeof(unsigned short),1,pathBinary); //2 bytes
 			}
-			//fprintf(asciiFile,"},");
+			//fprintf(pathASCII,"},");
 
 			//Write light ids size * unsigned short (2N)
-			//fprintf(asciiFile,"{");
+			//fprintf(pathASCII,"{");
 			for(size_t i = 0 ; i < nrIsects ; i++) {
 				IntersectData isectData = data.intersectionData[i];
 
 				if(writeASCII)
-					fprintf(asciiFile,"%hu",isectData.lightId);
-				fwrite(&isectData.lightId,sizeof(unsigned short),1,binaryFile); //2 bytes
+					fprintf(pathASCII,"%hu",isectData.lightId);
+				fwrite(&isectData.lightId,sizeof(unsigned short),1,pathBinary); //2 bytes
 			}
 		}
         if(writeASCII)
-            fprintf(asciiFile,"\n");
+            fprintf(pathASCII,"\n");
         //Flush the buffers
-        fflush(asciiFile);
-        fflush(binaryFile);
+        fflush(pathASCII);
+        fflush(pathBinary);
         
         intersectionsWritten += nrIsects;
     }
@@ -300,5 +329,23 @@ void DataDumper::WriteBufferToFile() {
     writing = false;
     bufferData.clear();
 //    printf("Buffer data size after clearing = %zu\n",bufferData.size());
-//    fprintf(asciiFile,"\n");
+//    fprintf(pathASCII,"\n");
+}
+
+ushort DataDumper::objectIdForPrimitiveId(ushort primitiveId) {
+	ushort objectId = objectPrimitives[primitiveId];
+//	printf("primitives - object map: ");
+//	printMap(objectPrimitives);
+	if(objectId == 0) {
+//		printf("*** WARNING : No object ID for primitive ID %hu ***\n",primitiveId);
+	}
+	return objectId;
+}
+
+void DataDumper::AddObjectPrimitiveMapping(const std::vector<ushort> primitiveIds) {
+	
+	for(ushort primitiveId : primitiveIds) {
+		objectPrimitives[primitiveId] = objectIdCounter;
+	}
+	++objectIdCounter;
 }

@@ -2,19 +2,14 @@
 
 #include <QMouseEvent>
 
-Window::Window(const RIVDataSet& dataset, BMPImage* image, const MeshModel& model, QWidget *parent) : QMainWindow(parent) {
-	this->dataset = dataset;
-	this->image = image;
-	this->model = model;
-	
-	createWidgets();
-}
+Window::Window(const RIVDataSet& dataset_, BMPImage* image, const PBRTConfig& config, QWidget *parent) :
+	QMainWindow(parent),
+	pbrtConfiguration(config) {
+		
+	dataset = dataset_;
 
-void Window::createWidgets() {
-
-//    RIVTable *imageTable = dataset.GetTable("image");
-//    RIVTable *pathTable = dataset.GetTable("path");
-    RIVTable *intersectionsTable = dataset.GetTable("intersections");
+	//Create widgets
+	RIVTable *intersectionsTable = dataset.GetTable("intersections");
     
     RIVRecord* bounceRecord = intersectionsTable->GetRecord("bounce#");
 	//    RIVRecord* xRecord = intersectionsTable->GetRecord("intersection X");
@@ -35,17 +30,19 @@ void Window::createWidgets() {
 	//    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,xRecord,jetColorMap);
 	//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,throughputOne,throughputTwo,throughputThree);
 	//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(intersectionsTable,spectrumR,spectrumG,spectrumB);
+
 	
-	
-	sceneWidget = new SceneWidget(&dataset,colorProperty,sizeProperty,this);
+	sceneWidget = new SceneWidget(&dataset,&pbrtConfiguration,colorProperty,sizeProperty,this);
 	pcWidget = new PCWidget(&dataset,colorProperty,sizeProperty,this);
 	imageWidget = new ImageWidget(&dataset,image,colorProperty,sizeProperty,this);
 	heatmapWidget = new HeatmapWidget(&dataset,this);
-	
-	dataset.AddFilterListener(sceneWidget);
-	dataset.AddFilterListener(pcWidget);
-	
-	sceneWidget->SetModelData(model);
+}
+
+void Window::createWidgets() {
+
+//    RIVTable *imageTable = dataset.GetTable("image");
+//    RIVTable *pathTable = dataset.GetTable("path");
+
 }
 
 void Window::resizeEvent ( QResizeEvent* event ) {

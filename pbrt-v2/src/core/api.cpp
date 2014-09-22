@@ -890,7 +890,6 @@ void pbrtAttributeEnd() {
     pushedActiveTransformBits.pop_back();
 }
 
-
 void pbrtTransformBegin() {
     VERIFY_WORLD("TransformBegin");
     pushedTransforms.push_back(curTransform);
@@ -1116,7 +1115,6 @@ void pbrtObjectEnd() {
     pbrtAttributeEnd();
 }
 
-
 void pbrtObjectInstance(const string &name) {
     VERIFY_WORLD("ObjectInstance");
     // Object instance error checking
@@ -1129,6 +1127,12 @@ void pbrtObjectInstance(const string &name) {
         return;
     }
     vector<Reference<Primitive> > &in = renderOptions->instances[name];
+	//Write them to file before other weird primitives are created
+	std::vector<ushort> primitiveIds(in.size());
+	for(size_t i = 0 ; i < in.size() ; ++i) {
+		primitiveIds[i] = in[i].GetPtr()->primitiveId;
+	}
+	DataDumper::AddObjectPrimitiveMapping(primitiveIds);
     if (in.size() == 0) return;
     if (in.size() > 1 || !in[0]->CanIntersect()) {
         // Refine instance _Primitive_s and create aggregate
