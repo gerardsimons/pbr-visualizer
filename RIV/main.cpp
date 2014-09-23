@@ -101,7 +101,6 @@ void mouse(int button, int state, int x, int y) {
 		if(views[i]->HandleMouse(button,state,x,y)) {
             printf("View %s caught the MOUSE interaction\n",views[i]->identifier.c_str());
             //            if(state == GLUT_UP)
-			glutPostRedisplay();
 			return;
 		}
 	}
@@ -117,7 +116,6 @@ void motion(int x, int y) {
                 printf("View %s caught the MOTION interaction\n",views[i]->identifier.c_str());
                 lastMotionCatch = views[i]->identifier;
             }
-			glutPostRedisplay();
 			return;
 		}
 	}
@@ -201,11 +199,8 @@ void keys(int keyCode, int x, int y) {
         }
         case 116: // 't' key, use as temp key for some to-test function
         {
-//            imageView->createTextureImage();
-//            postRedisplay = true;
-//            testFunctions();
-//			sceneView->InitializeGraphics();
-			sceneView->createPoints();
+			riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",1);
+			dataset.AddFilter(objectFilter);
             break;
         }
         case 119: // 'w' key, move camera in Y direction

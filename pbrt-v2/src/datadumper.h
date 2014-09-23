@@ -66,7 +66,7 @@ public:
 	static bool FileIsOpen();
 	
 	static ushort objectIdForPrimitiveId(ushort primitiveId);
-	static void AddObjectPrimitiveMapping(const std::vector<ushort> primitveIDs);
+	static void AddObjectPrimitiveMapping(ushort primitveID);
     static void AddToBuffer(size_t dumperId, const PathData& pathData);
     void AddToBuffer(const PathData& pathData);
     

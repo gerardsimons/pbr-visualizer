@@ -87,23 +87,12 @@ void RIVTable::filterRecords() {
         }
         reporter::stop("Filter " + std::to_string(rows)+ " rows.");
         reporter::startTask("Filter references.");
-        //Filter reference
-    //    size_t lastRow = 0;
-//        printf("Filter map = \n");
-//        printMap(filteredRows);
         for(RIVReference &reference : references) {
-            //        for(size_t filteredRow : filteredRows) {
-    //        for(size_t filteredRow : newlyFilteredRows) { //Iterate over all filtered rows
-    //            size_t filteredRow = it->first;
-                RIVTable* targetTable = reference.targetTable;
+			RIVTable* targetTable = reference.targetTable;
             std::map<size_t,std::vector<size_t> > indexMap = reference.targetTable->GetReferenceToTable(name)->indexReferences;
-    //        reference.targetTable->ClearFilters();
-    //            for(size_t targetIndex : *targetIndexRange) { //Iterate over all of the target indices in the reference table
+
             for(auto iterator = indexMap.begin(); iterator != indexMap.end(); iterator++) {
                 std::vector<size_t> backRows = iterator->second;
-    //                RIVReference *backReference = reference.targetTable->GetReferenceToTable(name);
-                
-    //                std::vector<size_t> backRows = backReference->indexReferences[targetIndex];
                 bool filterReference = true;
                 for(size_t backRow : backRows) { //Does the filtered map contain ALL of these rows? If so we should filter it in the reference table
                     if(!filteredRows[backRow]) {
@@ -127,12 +116,22 @@ void RIVTable::filterRecords() {
             RIVTable *targetTable = reference.targetTable;
             targetTable->FilterRowsUnlinkedTo(this);
         }
+//		printf("Table %s is now %f filtered.\n",name.c_str(),PercentageFiltered());
+//		for(RIVReference &reference : references) {
+//			RIVTable *targetTable = reference.targetTable;
+//			printf("TargetTable %s is now %f filtered.\n",targetTable->GetName().c_str(), targetTable->PercentageFiltered());
+//		}
+		
         reporter::stop("Filter unlinked rows.");
         reporter::stop("Complete filtering");
     }
     else {
         filtered = false;
     }
+}
+
+float RIVTable::PercentageFiltered() {
+	return filteredRows.size() / (float)rows * 100.F;
 }
 
 void RIVTable::FilterRowsUnlinkedTo(RIVTable *table) {
@@ -245,8 +244,6 @@ void RIVTable::ClearFilter(std::string name) {
 }
 
 void RIVTable::AddFilter(riv::Filter *filter) {
-    //    printf("Filtering on ");
-    //    filter->Print();
     filters.push_back(filter);
     filterRecords();
 }

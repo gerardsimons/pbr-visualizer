@@ -354,9 +354,7 @@ void ParallelCoordsView::Draw() {
 	if(linesAreDirty)
         drawLines();
         
-//	glutSwapBuffers();
-    
-//	printf("NO REDRAW NEEDED!\n");
+	glutSwapBuffers();
 }
 
 bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
@@ -372,7 +370,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
             for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
                 for(ParallelCoordsAxis &axis : axisGroup.axes) {
                     int distanceX = abs(axis.x - x);
-                    printf("distance=%d\n",distanceX);
+//                    printf("distance=%d\n",distanceX);
                     
                     if(distanceX < proximityMax) {
                         //Close enough..
@@ -390,9 +388,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                         axesAreDirty = true;
                         linesAreDirty = true;
                         
-                        printf("Selected axis %s\n",axis.name.c_str());
-                        
-//                        glutPostRedisplay();
+//                        printf("Selected axis %s\n",axis.name.c_str());
                         
                         return true;
                     }
@@ -404,9 +400,10 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
             if(isDragging && selectedAxis != 0) {
                 
                 Area &selection = selectedAxis->selection;
-                
                 int sizeBox = abs(selection.start.y - selection.end.y);
-				//                printf("size box = %d\n",sizeBox);
+				
+				//Create access
+				dataset->StartFiltering();
                 
                 if(sizeBox > 3) {
                     float lowerBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.start.y));
@@ -420,13 +417,10 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                 else {
                     dataset->ClearFilter(selectedAxis->name);
                     clearSelection();
-					//                    dataset->Print();
                 }
-//                glutPostRedisplay();
-                axesAreDirty = true;
-                linesAreDirty = true;
-                isDragging = false;
-                
+				
+				//Close access
+				dataset->StopFiltering();
             }
             return true;
         }
@@ -477,7 +471,7 @@ void ParallelCoordsView::OnDataSetChanged() {
 	
 	int currentWindow = glutGetWindow();
 	glutSetWindow(ParallelCoordsView::windowHandle);
-//	glutPostRedisplay();
+	glutPostRedisplay();
 	//Return window to given window
 	glutSetWindow(currentWindow);
 }

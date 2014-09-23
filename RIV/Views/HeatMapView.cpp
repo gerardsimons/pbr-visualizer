@@ -75,7 +75,7 @@
 		}
 		
 		//Done
-		glutPostRedisplay();
+//		glutPostRedisplay();
 	}
 
 	void RIVHeatMapView::DrawInstance() {

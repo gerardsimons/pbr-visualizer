@@ -133,7 +133,7 @@ PBRTConfig DataFileReader::ReadPBRTFile(const std::string& fileName) {
 	std::regex indicesRegEx("integer indices");
     
     size_t lineNumber = 0;
-	size_t objectID = 0;
+	size_t objectID = 1;
 	
 	PARSING_STATUS status = LOOK_FOR_OBJECT_START;
     
@@ -152,11 +152,6 @@ PBRTConfig DataFileReader::ReadPBRTFile(const std::string& fileName) {
 			std::vector<float> vertices;
 			std::vector<size_t> indices;
             size_t tokenCount = 0;
-			delimiter = ' ';
-			
-            bool shapeFound = false;
-			bool indicesFound = false;
-            bool pointFound = false;
 			
 //            printf("Reading line %zu : %s\n",lineNumber,line.c_str());
             //Tokenize the line
@@ -180,7 +175,7 @@ PBRTConfig DataFileReader::ReadPBRTFile(const std::string& fileName) {
 					case LOOK_FOR_INDICES:
 						if(std::regex_search(token.begin(), token.end(),indicesRegEx)) {
 							status = PARSE_INDICES;
-//							println("INDEX START FOUND");
+//							println("INDICES START FOUND");
 						}
 						break;
 					case PARSE_INDICES: //Use only numbers, ignore [ and ]
@@ -194,14 +189,14 @@ PBRTConfig DataFileReader::ReadPBRTFile(const std::string& fileName) {
 							else throw "Non number found in indices token";
 						}
 						status = LOOK_FOR_VERTICES;
-						println("INDICES PARSED");
+//						println("INDICES PARSED");
 						break;
 					}
 					case LOOK_FOR_VERTICES: {
 						if(std::regex_search(token.begin(), token.end(),pointsRegEx)) {
 							status = PARSE_VERTICES;
 						}
-						println("VERTICES START FOUND");
+//						println("VERTICES START FOUND");
 						break;
 					}
 					case PARSE_VERTICES: {
@@ -212,7 +207,7 @@ PBRTConfig DataFileReader::ReadPBRTFile(const std::string& fileName) {
 							}
 							else throw "Non number found in vertices token";
 						}
-						println("VERTICES PARSED");
+//						println("VERTICES PARSED");
 						status = SHAPE_PARSED;
 						shapes.push_back(riv::TriangleMesh(vertices,indices));
 						break;
@@ -221,14 +216,14 @@ PBRTConfig DataFileReader::ReadPBRTFile(const std::string& fileName) {
 					case SHAPE_PARSED: {
 						if(token == "Shape") {
 							status = LOOK_FOR_INDICES;
-							println("SHAPE FOUND");
+//							println("SHAPE FOUND");
 						}
 						else if(token == "ObjectEnd") {
 							//We are done with this object reset to first state; looking for a new object start
 							status = LOOK_FOR_OBJECT_START;
 							objectsRead.push_back(MeshModel(shapes,objectID));
 							++objectID;
-							println("OBJECT END FOUND");
+//							println("OBJECT END FOUND");
 						}
 						break;
 					}
@@ -240,9 +235,6 @@ PBRTConfig DataFileReader::ReadPBRTFile(const std::string& fileName) {
     else {
         throw "Unable to open PBRT file " + fileName;
     }
-	if(status != LOOK_FOR_OBJECT_START) {
-		throw "ObjectEnd not found.";
-	}
 //    printf("Found %zu vertices in PBRT file.\n",vertices.size());
     return PBRTConfig(MeshModelGroup(objectsRead));
 }
@@ -777,13 +769,9 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
 			float isectX;
 			float isectY;
 			float isectZ;
-			ushort primitiveId;
-			ushort shapeId;
 			float spectraR;
 			float spectraG;
 			float spectraB;
-			ushort interactionType;
-			ushort lightId;
 			
 			for(ushort i = 0 ; i < size ; ++i) {
 				isectIndices.push_back(isect_index+i);
@@ -814,17 +802,6 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
 			}
 			readDataIntoVector(size, interactionTypes, inputFile);
 			readDataIntoVector(size, lightIds, inputFile);
-	//        for(ushort i = 0 ; i < size ; ++i) {
-	//            fread(&interactionType,sizeof(unsigned short),1,inputFile);
-	//            
-	//            interactionTypes.push_back(interactionType);
-	//        }
-	//        
-	//        for(ushort i = 0 ; i < size ; ++i) {
-	//            fread(&lightId,sizeof(unsigned short),1,inputFile);
-	//            
-	//            lightIds.push_back(lightId);
-	//        }
 			
 			isect_index += size;
 			pathIsectReferences[path_index] = isectIndices;
@@ -857,6 +834,7 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     RIVFloatRecord *isectPosZ = new RIVFloatRecord("intersection Z",intersectionPosZ);
     RIVUnsignedShortRecord *primitiveIdRecord = new RIVUnsignedShortRecord("primitive ID",primitveIds);
     RIVUnsignedShortRecord *shapeIdRecord = new RIVUnsignedShortRecord("shape ID",shapeIds);
+	RIVUnsignedShortRecord *objectIdRecord = new RIVUnsignedShortRecord("object ID",objectIds);
     RIVFloatRecord *spectrumOneRecord = new RIVFloatRecord("spectrum 1",spectraOne);
     RIVFloatRecord *spectrumTwoRecord = new RIVFloatRecord("spectrum 2",spectraTwo);
     RIVFloatRecord *spectrumThreeRecord = new RIVFloatRecord("spectrum 3",spectraThree);
@@ -877,8 +855,9 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     intersectionsTable->AddRecord(isectPosX);
     intersectionsTable->AddRecord(isectPosY);
     intersectionsTable->AddRecord(isectPosZ);
-    intersectionsTable->AddRecord(primitiveIdRecord);
+//    intersectionsTable->AddRecord(primitiveIdRecord);
     intersectionsTable->AddRecord(shapeIdRecord);
+	intersectionsTable->AddRecord(objectIdRecord);
     intersectionsTable->AddRecord(spectrumOneRecord);
     intersectionsTable->AddRecord(spectrumTwoRecord);
     intersectionsTable->AddRecord(spectrumThreeRecord);

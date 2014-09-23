@@ -28,6 +28,8 @@ private:
     std::vector<RIVTable*> tables;
     std::vector<RIVDataSetListener*> onFilterListeners;
     void notifyListeners();
+	
+	bool isFiltering;
 public:
     void AddTable(RIVTable* table);
     void AddFilter(riv::Filter* filter);
@@ -43,6 +45,10 @@ public:
     void ClusterTable(const std::string& tableName, const std::string& columnNameX, const std::string& columnNameY, const std::string& columnNameZ, const size_t& K, const size_t& maxRepeat);
     RIVClusterSet* GetClusterSet();
     bool IsSet() const;
+	
+	//In order to coalesce several filter operations into one notification to its listeners, its necessary to indicate the start and stop of a filteirng operation
+	void StartFiltering();
+	void StopFiltering();
 //    void PrintUnfiltered();
 };
 

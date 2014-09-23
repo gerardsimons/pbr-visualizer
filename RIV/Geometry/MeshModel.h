@@ -43,17 +43,16 @@ public:
 			riv::TriangleMesh* mesh = &meshes[i];
 			if(mesh->Contains(p,triangleIndex)) {
 				result = mesh;
-				printf("Mesh #%zu contains p\n",i);
+//				printf("Mesh #%zu contains p\n",i);
 				return true;
 			}
 		}
 		std::cout << "WARNING: No mesh found to contain " << p << std::endl;
 		return false;
 	}
-	bool TriangleIntersect(const riv::Ray<float>& r, size_t& resultIndex, Vec3Df& Phit) {
+	bool TriangleIntersect(const riv::Ray<float>& r, size_t& resultIndex, Vec3Df& Phit, float& shortestDistance) {
 		bool intersects = false;
-//		float bestD = -std::numeric_limits<float>::max();
-		float shortestDistance = -std::numeric_limits<float>::max();
+		shortestDistance = -std::numeric_limits<float>::max();
 		Vec3Df bestPhit = Phit;
 		for(size_t i = 0 ; i < meshes.size() ; ++i) {
 //			float d;
@@ -68,17 +67,17 @@ public:
 					intersects = true;
 //					printf("is new BEST\n");
 				}
-				else {
-					printf(" is NOT good enough.\n");
-				}
+//				else {
+//					printf(" is NOT good enough.\n");
+//				}
 			}
 		}
 		if(!intersects)
-			printf("\n******* NO INTERSECTION *******\n");
+//			printf("\n******* NO INTERSECTION *******\n");
 		Phit = bestPhit;
 		return intersects;
 	}
-	size_t GetObjectID() {
+	ushort GetObjectID() {
 		return objectID;
 	}
     Vec3Df GetPosition() {

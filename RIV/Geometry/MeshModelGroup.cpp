@@ -35,15 +35,23 @@ void MeshModelGroup::ComputeCenter() {
 	}
 	*center /= models.size();
 }
-bool MeshModelGroup::TriangleIntersect(const riv::Ray<float>& r, size_t& objectIDResult, Vec3Df& Phit) {
+//Find the model that has the intersection closes to the ray origin
+bool MeshModelGroup::ModelIntersect(const riv::Ray<float>& r, ushort& objectIDResult, Vec3Df& Phit) {
+	float bestDistance = -std::numeric_limits<float>::max();
+	float distance;
+	objectIDResult = 0;
+	bool intersects = false;
 	for(MeshModel& model : models) {
 		size_t triangleIndex;
-		if(model.TriangleIntersect(r, triangleIndex, Phit)) {
-			objectIDResult = model.GetObjectID();
-			return true;
+		if(model.TriangleIntersect(r, triangleIndex, Phit, distance)) {
+			if(distance > bestDistance) {
+				bestDistance = distance;
+				objectIDResult = model.GetObjectID();
+				intersects = true;
+			}
 		}
 	}
-	return false;
+	return intersects;
 }
 std::vector<MeshModel>* MeshModelGroup::GetModels() {
 	return &models;
@@ -62,7 +70,7 @@ void MeshModelGroup::CenterAndScaleToUnit() {
 				float dY= (mesh.vertices[i+1]-position[1]);
 				float dZ= (mesh.vertices[i+2]-position[2]);
 				float distance = sqrt(dX*dX+dY*dY+dZ*dZ);
-				printf("distance=%f\n",distance);
+//				printf("distance=%f\n",distance);
 				if (distance > maxDistance)
 					maxDistance = distance ;
 			}

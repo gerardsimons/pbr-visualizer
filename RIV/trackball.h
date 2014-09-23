@@ -161,7 +161,7 @@ void tbMotionFunc( int x, int y )
         tb_ancienX = x;
         tb_ancienY = y;
         inverse( tb_matrix, tb_inverse );
-        glutPostRedisplay();
+//        glutPostRedisplay();
     }
 }
 
@@ -187,7 +187,7 @@ void tbRotate( double angle, double x, double y, double z )
     tb_matrix[14] = tz;
 
     inverse( tb_matrix, tb_inverse );
-    glutPostRedisplay();
+//    glutPostRedisplay();
 }
 
 /// Projection dans le repere du monde

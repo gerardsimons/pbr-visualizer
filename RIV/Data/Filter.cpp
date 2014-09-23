@@ -1,16 +1,6 @@
 #include "Filter.h"
 namespace riv {
-	Filter::~Filter() {
-		printf("Filter base class destructor called.");
-		delete &attributeName;
-	}
-
-	RangeFilter::~RangeFilter() {
-		delete &minValue;
-		delete &maxValue;
-	}
-
-	RangeFilter::RangeFilter(std::string attributeName, float minValue, float maxValue) : Filter(attributeName) {
+	RangeFilter::RangeFilter(const std::string& attributeName, float minValue, float maxValue) : Filter(attributeName) {
 		
 		//Normalize
 		if(minValue <= maxValue) {
@@ -22,7 +12,7 @@ namespace riv {
 		}
 	}
 
-	bool RangeFilter::PassesFilter(std::string attribute,float value) {
+	bool RangeFilter::PassesFilter(const std::string& attribute,float value) {
 		if(attribute == attributeName) {
 			bool passes = (value >= minValue && value <= maxValue);
 			return passes;
@@ -30,10 +20,22 @@ namespace riv {
 		return true;
 	}
 
-	bool RangeFilter::PassesFilter(std::string attribute,unsigned short value) {
+	bool RangeFilter::PassesFilter(const std::string& attribute,unsigned short value) {
 		if(attribute == attributeName) {
 			return (value >= minValue && value <= maxValue);
 		}
 		return true;
+	}
+	
+	//Discrete filter stuff
+	DiscreteFilter::DiscreteFilter(const std::string& name, float value) : Filter(name) {
+		this->value = value;
+	}
+	
+	bool DiscreteFilter::PassesFilter(const std::string& name, float value) {
+		throw "Not yet implemented.";
+	}
+	bool DiscreteFilter::PassesFilter(const std::string &name, unsigned short value) {
+		return attributeName == name && value == this->value;
 	}
 }

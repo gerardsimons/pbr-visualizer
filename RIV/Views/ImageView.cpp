@@ -264,7 +264,6 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 			}
 			isDragging = false;
 		}
-        glutPostRedisplay();
 		return true;
 	}
 	else {

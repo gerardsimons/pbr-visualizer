@@ -276,15 +276,6 @@ void DataDumper::WriteBufferToFile() {
 				const RGBSpectrum &s = isectData.spectrum.ToRGBSpectrum();
 				float color[3];
 				s.ToRGB(color);
-	//				const float* samples = color->GetSamples();
-
-	//            char buffer[100];
-	//            if(i != data->size() - 1) {
-	//                sprintf(buffer,"[%f,%f,%f],",color[0],color[1],color[2]);
-	//            }
-	//            else
-	//                sprintf(buffer,"[%f,%f,%f]},",color[0],color[1],color[2]);
-	//            fprintf(pathASCII,buffer);
 				if(writeASCII) {
 					if(i != nrIsects - 1) {
 						fprintf(pathASCII,"[%f,%f,%f],",color[0],color[1],color[2]);
@@ -334,18 +325,17 @@ void DataDumper::WriteBufferToFile() {
 
 ushort DataDumper::objectIdForPrimitiveId(ushort primitiveId) {
 	ushort objectId = objectPrimitives[primitiveId];
-//	printf("primitives - object map: ");
-//	printMap(objectPrimitives);
 	if(objectId == 0) {
 //		printf("*** WARNING : No object ID for primitive ID %hu ***\n",primitiveId);
 	}
 	return objectId;
 }
 
-void DataDumper::AddObjectPrimitiveMapping(const std::vector<ushort> primitiveIds) {
-	
-	for(ushort primitiveId : primitiveIds) {
-		objectPrimitives[primitiveId] = objectIdCounter;
-	}
+void DataDumper::AddObjectPrimitiveMapping(ushort primitiveId) {
+	printf("New object to primitve mapping: \n");
+	objectPrimitives[primitiveId] = objectIdCounter;
+
+	printf("primitives - object map: ");
+	printMap(objectPrimitives);
 	++objectIdCounter;
 }

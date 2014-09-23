@@ -20,7 +20,7 @@ private:
 public:
 	Vec3Df GetCenter();
 	Vec3Df GetScale();
-	bool TriangleIntersect(const riv::Ray<float>& r, size_t& objectIndex, Vec3Df& Phit);
+	bool ModelIntersect(const riv::Ray<float>& r, ushort& objectIndex, Vec3Df& Phit);
 	void CenterAndScaleToUnit();
 	std::vector<MeshModel>* GetModels();
 	MeshModelGroup(const std::vector<MeshModel>& models);

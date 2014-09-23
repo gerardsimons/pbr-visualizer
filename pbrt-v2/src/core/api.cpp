@@ -1126,13 +1126,7 @@ void pbrtObjectInstance(const string &name) {
         Error("Unable to find instance named \"%s\"", name.c_str());
         return;
     }
-    vector<Reference<Primitive> > &in = renderOptions->instances[name];
-	//Write them to file before other weird primitives are created
-	std::vector<ushort> primitiveIds(in.size());
-	for(size_t i = 0 ; i < in.size() ; ++i) {
-		primitiveIds[i] = in[i].GetPtr()->primitiveId;
-	}
-	DataDumper::AddObjectPrimitiveMapping(primitiveIds);
+	vector<Reference<Primitive> > &in = renderOptions->instances[name];
     if (in.size() == 0) return;
     if (in.size() > 1 || !in[0]->CanIntersect()) {
         // Refine instance _Primitive_s and create aggregate
@@ -1144,6 +1138,8 @@ void pbrtObjectInstance(const string &name) {
         in.erase(in.begin(), in.end());
         in.push_back(accel);
     }
+//	std::vector<ushort> primitiveIds(in.size());
+
     Assert(MAX_TRANSFORMS == 2);
     Transform *world2instance[2];
     transformCache.Lookup(curTransform[0], NULL, &world2instance[0]);
@@ -1151,9 +1147,9 @@ void pbrtObjectInstance(const string &name) {
     AnimatedTransform animatedWorldToInstance(world2instance[0],
         renderOptions->transformStartTime,
         world2instance[1], renderOptions->transformEndTime);
-    Reference<Primitive> prim =
-        new TransformedPrimitive(in[0], animatedWorldToInstance);
+    Reference<Primitive> prim = new TransformedPrimitive(in[0], animatedWorldToInstance);
     renderOptions->primitives.push_back(prim);
+	DataDumper::AddObjectPrimitiveMapping(prim.GetPtr()->primitiveId);
 }
 
 

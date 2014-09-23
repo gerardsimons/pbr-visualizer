@@ -46,7 +46,7 @@ protected:;
 	Vec3Df Phit; //Supposedly the point of intersection of the ray with the plane supporting the triangle
 	riv::Ray<float> pickRay;
 	bool meshSelected = false;
-	size_t selectedObjectID;
+	ushort selectedObjectID = 0;
     
     //Buffered graphics point data, generated from the data, stored here for speed, TODO: Only store indices and a pointer to these records?
 	bool sizesAllTheSame; //Because sizes are often set to the same, we take advantage of this to get a big performance boost

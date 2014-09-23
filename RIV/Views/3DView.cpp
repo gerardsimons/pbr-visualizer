@@ -682,60 +682,61 @@ Vec3Df RIV3DView::screenToWorldCoordinates(int screenX, int screenY, float zPlan
 }
 
 bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
-//    printf("RIV3DView HandleMouse\n");
-//	x = 10;
-//	y = 10;
+
     y = height - y;
-//    printf("isDragging = %d\n",isDragging);
-	Vec3Df selectNear = screenToWorldCoordinates(x, y, 0);
-	Vec3Df selectFar = screenToWorldCoordinates(x, y, 1);
-	
-//	std::cout << "selectNear = " << selectNear << std::endl;
-//	std::cout << "selectFar = " << selectFar << std::endl;
-	
-//	Vec3Df origin = Vec3Df(modelData.GetScale() * selectNear.x,modelData.GetScale() * selectNear.y,selectNear.z);
-//	Vec3Df dest = modelData.GetScale() * Vec3Df(selectFar.x,selectFar.y,selectFar.z);
-//	Vec3Df origin = Vec3Df(selectNear.x,selectNear.y,selectNear.z);
-//	Vec3Df dest = Vec3Df(selectFar.x,selectFar.y,selectFar.z);
-	
-	Vec3Df modelPosition = -pbrtConfig->GetMeshModelGroup()->GetCenter();
-	Vec3Df modelScale = pbrtConfig->GetMeshModelGroup()->GetScale();
-	modelScale[0] = 1 / modelScale[0];
-	modelScale[1] = 1 / modelScale[1];
-	modelScale[2] = 1 / modelScale[2];
-//	modelPosition = Vec3Df(0,0,0);
-//	float modelScale = 1/model();
-	Vec3Df dest = modelScale * selectNear;
-	dest -= modelPosition;
-	Vec3Df origin = modelScale * selectFar;
-	origin -= modelPosition;
-	
-//	std::cout << "Ray origin = " << origin << std::endl;
-//	std::cout << "Ray destination = " << dest << std::endl;
-//	origin = Vec3Df(.5F,.5F,2.F);
-//	dest = Vec3Df(.5F,.5F,-2.F);
-	
-	Vec3Df dir = dest - origin;
-//	dir.normalize();
-	
-	pickRay = riv::Ray<float>(origin,dir);
-	if(pbrtConfig->GetMeshModelGroup()->TriangleIntersect(pickRay, selectedObjectID, Phit)) {
-		printf("Result = %zu\n",selectedObjectID);
-		meshSelected = true;
-		
-	}
-	else {
-		meshSelected = false;
-		printf("Intersect failed.\n");
-	}
-	
+
+
 
 	if(state == GLUT_DOWN) {
+		
+		Vec3Df selectNear = screenToWorldCoordinates(x, y, 0);
+		Vec3Df selectFar = screenToWorldCoordinates(x, y, 1);
+		
+		Vec3Df modelPosition = -pbrtConfig->GetMeshModelGroup()->GetCenter();
+		Vec3Df modelScale = pbrtConfig->GetMeshModelGroup()->GetScale();
+		
+		modelScale[0] = 1 / modelScale[0];
+		modelScale[1] = 1 / modelScale[1];
+		modelScale[2] = 1 / modelScale[2];
+		
+		Vec3Df dest = modelScale * selectNear;
+		dest -= modelPosition;
+		Vec3Df origin = modelScale * selectFar;
+		origin -= modelPosition;
+		
+		Vec3Df dir = dest - origin;
+		
+		ushort oldSelectedObjecID = selectedObjectID;
+		
+		pickRay = riv::Ray<float>(origin,dir);
+		bool intersects = pbrtConfig->GetMeshModelGroup()->ModelIntersect(pickRay, selectedObjectID, Phit);
+		
+		printf("old Object ID = %hu\n",oldSelectedObjecID);
+		printf("new Object ID = %hu\n",selectedObjectID);
+		
+		if(intersects && oldSelectedObjecID != selectedObjectID) {
+			printf("selected object ID = %hu",selectedObjectID);
+			meshSelected = true;
+			
+			dataset->StartFiltering();
+			dataset->ClearFilter("object ID");
+			riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectID);
+			dataset->AddFilter(objectFilter);
+			dataset->StopFiltering();
+		}
+		else if(oldSelectedObjecID != selectedObjectID) {
+			
+			dataset->StartFiltering();
+			meshSelected = false;
+			printf("Clearing object ID filter\n");
+			dataset->ClearFilter("object ID");
+			dataset->StopFiltering();
+		}
+		
 		isDragging = true;
 		tbMouseFunc(button, state, x, y);
 		return true;
 	}
-
     isDragging = false;
     return false;
 }
@@ -747,6 +748,7 @@ bool RIV3DView::HandleMouseMotion(int x, int y) {
     y = height - y;
     if(isDragging) {
         tbMotionFunc(x, y);
+		glutPostRedisplay();
         return true;
     }
     return false;

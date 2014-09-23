@@ -17,6 +17,9 @@ void RIVDataSet::AddTable(RIVTable* table) {
 
 void RIVDataSet::AddFilter(riv::Filter *filter) {
     //Find the table containing the attribute
+	if(!isFiltering) {
+		throw "StartFiltering must be called before doing any filter operations";
+	}
     if(filter != 0) {
         for(RIVTable *table : tables) {
             if(table->ContainsColumn(filter->attributeName)) {
@@ -24,7 +27,6 @@ void RIVDataSet::AddFilter(riv::Filter *filter) {
                 table->AddFilter(filter);
             }
         }
-        notifyListeners();
     }
     else {
         throw std::string("Supplied filter is a NULL pointer.");
@@ -36,7 +38,6 @@ void RIVDataSet::ClearFilters() {
     for(RIVTable* table : tables) {
         table->ClearFilters();
     }
-	notifyListeners();
 }
 
 void RIVDataSet::ClearFilter(std::string filterName) {
@@ -44,7 +45,6 @@ void RIVDataSet::ClearFilter(std::string filterName) {
     for(RIVTable *table : tables) {
         table->ClearFilter(filterName);
     }
-	notifyListeners();
 }
 
 size_t RIVDataSet::TotalNumberOfRecords() const {
@@ -119,4 +119,21 @@ void RIVDataSet::ClusterTable(const std::string& tableName, const std::string& c
         clusterSet = table->Cluster(columnNameX, columnNameY, columnNameZ, K, maxRepeat);
         
     }
+}
+
+void RIVDataSet::StartFiltering() {
+	if(isFiltering) {
+		throw "Invalid state, StopFiltering was never called.";
+	}
+	isFiltering = true;
+}
+
+
+void RIVDataSet::StopFiltering() {
+	if(!isFiltering) {
+		throw "Invalid state, StartFiltering was never called.";
+	}
+	isFiltering = false;
+	//Notify the listeners now
+	notifyListeners();
 }

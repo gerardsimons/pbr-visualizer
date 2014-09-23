@@ -83,6 +83,7 @@
 		static RIVFloatRecord* CastToFloatRecord(RIVRecord* record);
 		static RIVUnsignedShortRecord* CastToUnsignedShortRecord(RIVRecord* record);
 		
+		float PercentageFiltered();
 		bool IsFiltered() { return filtered; }; //Any filters applied?
 		bool IsClustered() { return isClustered; };
 		bool HasRecord(RIVRecord* record);
