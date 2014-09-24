@@ -401,17 +401,13 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                 
                 Area &selection = selectedAxis->selection;
                 int sizeBox = abs(selection.start.y - selection.end.y);
-				
-				//Create access
 				dataset->StartFiltering();
-                
                 if(sizeBox > 3) {
                     float lowerBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.start.y));
                     float upperBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.end.y));
                     dataset->ClearFilter(selectedAxis->name);
                     riv::Filter* rangeFilter = new riv::RangeFilter(selectedAxis->name,lowerBound,upperBound);
                     dataset->AddFilter(rangeFilter);
-					//                    dataset->Print(false);
                     printf("Selection finalized on axis %s\n",selectedAxis->name.c_str());
                 }
                 else {

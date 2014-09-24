@@ -12,7 +12,7 @@ ushort DataDumper::objectIdCounter = 1;
 FILE* DataDumper::pathASCII;
 FILE* DataDumper::pathBinary;
 //File to write data about geometry (object IDs, shape IDs, vertices)
-FILE* DataDumper::geometryFile;
+//FILE* DataDumper::geometryFile;
 
 size_t DataDumper::pathsWritten = 0;
 size_t DataDumper::intersectionsWritten = 0;
@@ -41,7 +41,7 @@ DataDumper::DataDumper(const std::string& imagename, int ID) {
 				
     ascii_file_name = (imagename + ".txt").c_str();
     binary_file_name = (imagename + ".bin").c_str();
-	geometryFile = fopen((imagename + "_geometry.txt").c_str(),"w");
+//	geometryFile = fopen((imagename + "_geometry.txt").c_str(),"w");
     
     if(writeASCII)
         pathASCII = fopen(ascii_file_name.c_str(),"w");
@@ -53,9 +53,9 @@ DataDumper::DataDumper(const std::string& imagename, int ID) {
     if(pathBinary == NULL) {
         throw "unable to open file " + binary_file_name;
     }
-	if(geometryFile == NULL) {
-		throw "unable to open geometry file";
-	}
+//	if(geometryFile == NULL) {
+//		throw "unable to open geometry file";
+//	}
     
     //printf("Opening file.\n");
     //Init header of file

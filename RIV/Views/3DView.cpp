@@ -714,15 +714,34 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 		printf("old Object ID = %hu\n",oldSelectedObjecID);
 		printf("new Object ID = %hu\n",selectedObjectID);
 		
-		if(intersects && oldSelectedObjecID != selectedObjectID) {
-			printf("selected object ID = %hu",selectedObjectID);
+		if(intersects && oldSelectedObjecID != selectedObjectID && selectRound < maxBounce) {
+			printf("new selected object ID = %hu\n",selectedObjectID);
 			meshSelected = true;
 			
 			dataset->StartFiltering();
-			dataset->ClearFilter("object ID");
+//			dataset->ClearFilter("object ID");
 			riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectID);
-			dataset->AddFilter(objectFilter);
+			riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",selectRound);
+			std::vector<riv::Filter*> conjunction;
+			conjunction.push_back(objectFilter);
+			conjunction.push_back(bounceFilter);
+			riv::Filter* conjunctiveFilter = new riv::ConjunctiveFilter(conjunction);
+			
+//			objectFilter->Print();
+//			bounceFilter->Print();
+			conjunctiveFilter->Print();
+			dataset->AddFilter("path", conjunctiveFilter);
+			
 			dataset->StopFiltering();
+
+			
+//			pathTable->AddFilter(objectFilter);
+//			pathTable->AddFilter(bounceFilter);
+//			pathTable->AddFilter(conjunctiveFilter);
+			
+//			pathTable->filterRecordsByReference();
+			
+//			dataset->notifyListeners();
 		}
 		else if(oldSelectedObjecID != selectedObjectID) {
 			
@@ -730,6 +749,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 			meshSelected = false;
 			printf("Clearing object ID filter\n");
 			dataset->ClearFilter("object ID");
+			dataset->ClearFilter("bounce#");
 			dataset->StopFiltering();
 		}
 		

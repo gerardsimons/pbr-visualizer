@@ -50,7 +50,7 @@ private:
 	static std::string ascii_file_name;
 	static std::string binary_file_name;
 	
-	static FILE* geometryFile;
+//	static FILE* geometryFile;
 	static FILE* pathASCII; //The file to write in ASCII chars to
 	static FILE* pathBinary;
 	static unsigned long long FileSize(FILE*);

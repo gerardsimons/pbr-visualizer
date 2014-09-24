@@ -254,8 +254,8 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 //                Filter *xFilter = new RangeFilter("x",9,22);
 //                Filter *yFilter = new RangeFilter("y",5,6);
 		
-				dataset->AddFilter(xFilter);
-				dataset->AddFilter(yFilter);
+				dataset->AddFilter("path",xFilter);
+				dataset->AddFilter("path",yFilter);
                 
 //                dataset->Print();
 			}

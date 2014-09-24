@@ -92,7 +92,7 @@ bool BMPImage::loadTexture(const char* imagepath, int alpha)
     printf("bytes read = %zu\n",sizeof(data));
     printf("Succesfully read BMPImage\n");
 	
-	std::cout << *this;
+//	std::cout << *this;
     
     return true;
 }

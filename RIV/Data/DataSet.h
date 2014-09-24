@@ -27,12 +27,17 @@ private:
     RIVClusterSet* clusterSet = NULL;
     std::vector<RIVTable*> tables;
     std::vector<RIVDataSetListener*> onFilterListeners;
-    void notifyListeners();
+	
+	//I use a map just to ensure there are no double entries
+	std::map<RIVTable*,bool> staleTables;
 	
 	bool isFiltering;
 public:
+	void notifyListeners();
     void AddTable(RIVTable* table);
-    void AddFilter(riv::Filter* filter);
+    void AddFilter(const std::string& tableName, riv::Filter* filter);
+	//Automatically find the table this should be filtered on, the one containing all of the filters attributes
+	void AddFilter(riv::Filter* filter);
     void AddFilterListener(RIVDataSetListener* listener);
     void ClearFilters();
     void ClearFilter(std::string attributeName);

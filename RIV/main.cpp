@@ -186,10 +186,11 @@ void keys(int keyCode, int x, int y) {
 			break;
         case 114: // 'r' key, recluster {
         {
-            RIVTable *intersectTable = dataset.GetTable("intersections");
-            intersectTable->Cluster("intersection X","intersection Y","intersection Z",clusterK,1);
-            postRedisplay = true;
-            break;
+			printf("Don't press that button!");
+//            RIVTable *intersectTable = dataset.GetTable("intersections");
+//            intersectTable->Cluster("intersection X","intersection Y","intersection Z",clusterK,1);
+//            postRedisplay = true;
+//            break;
         }
         case 111: // 'o' key, optimize clusters (debug feature)
         {
@@ -199,8 +200,13 @@ void keys(int keyCode, int x, int y) {
         }
         case 116: // 't' key, use as temp key for some to-test function
         {
-			riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",1);
-			dataset.AddFilter(objectFilter);
+//			riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",1);
+//			dataset.AddFilter("path",objectFilter);
+			
+			riv::Filter* testFilter = new riv::RangeFilter("object ID",1.5F,2.5F);
+			dataset.StartFiltering();
+			dataset.AddFilter(testFilter);
+			dataset.StopFiltering();
             break;
         }
         case 119: // 'w' key, move camera in Y direction
@@ -394,7 +400,7 @@ void createViews() {
 }
 
 void initializeViewProperties() {
-    RIVTable *imageTable = dataset.GetTable("image");
+//    RIVTable *imageTable = dataset.GetTable("image");
     RIVTable *pathTable = dataset.GetTable("path");
     RIVTable *intersectionsTable = dataset.GetTable("intersections");
     

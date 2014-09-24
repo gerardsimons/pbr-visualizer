@@ -55,6 +55,11 @@
 		
 		return reverse;
 	}
+void RIVReference::FilterReferenceRow(size_t row) {
+	for(size_t refRow : indexReferences[row]) {
+		targetTable->FilterRow(refRow, true);
+	}
+}
 
 	RIVReferenceChain::RIVReferenceChain(RIVReference* singleReference) {
 		references.push_back(singleReference);

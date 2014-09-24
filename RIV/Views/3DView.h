@@ -38,6 +38,7 @@ protected:;
     
     //Path drawing variables
     int maxBounce = 5; //TODO: Deduce this value from the bounce record
+	int selectRound = 1;
     
     const float segmentWidth = .05F; // a tenth of the total path length
     float segmentStart = 0;
@@ -56,9 +57,6 @@ protected:;
     std::vector<float> pointsG;
     std::vector<float> pointsB;
 	std::vector<float> pointsSize;
-
-    //Possibly the selection box created by clicking and dragging (NOT IMPLEMENTED)
-    Box3D selectionBox;
 
 	//Generate a octree from the unfiltered intersection points
 	void generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize);

@@ -37,6 +37,7 @@
 		void SetReferences(const std::map<size_t,std::vector<size_t> >&);
 		std::vector<size_t>* GetIndexReferences(const size_t&);
 		RIVReference ReverseReference();
+		void FilterReferenceRow(size_t row);
 	};
 
 	//Multiple RIVreferences chained together, makes it easy for a table A connected to table C through intermediary table B to resolve the depenedencies

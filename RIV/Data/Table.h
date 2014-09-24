@@ -31,6 +31,10 @@
 	class RIVReferenceChain;
 	class RIVDataView;
 
+namespace riv {
+	class Filter;
+}
+
 	class RIVTable {
 	private:
 		std::vector<RIVRecord*> records;
@@ -49,11 +53,11 @@
 		std::vector<riv::Filter*> filters;
 		
 		std::string name;
+		std::vector<std::string> attributes;
 		
 		std::map<size_t,bool> filteredRows;
 		
-		void filterRecords(riv::Filter *);
-		void filterRecords(); //Filter on all filters present in the filters vector
+//		void filterRecords(); //Filter on all filters present in the filters vector
 	public:
 		RIVTable(std::string name);
 		RIVRecord* GetRecord(size_t index);
@@ -62,11 +66,13 @@
 		T* GetRecord(std::string name) {
 			return dynamic_cast<T*>(GetRecord(name));
 		}
-		
+		void filterRecords(riv::Filter *);
+		void filterRecords();
 		void AddRecord(RIVRecord* record);
 		void AddFilter(riv::Filter *filter);
 		void AddReference(const RIVReference& reference);
 		void AddOnChangeListeners(RIVDataView *dataview);
+		std::vector<std::string> GetAttributes() const;
 		
 		void FilterRow(size_t,bool filter,RIVReference* reference = 0);
 		//    void UnfilterRow(size_t,RIVReference* reference = 0);
@@ -74,8 +80,10 @@
 		
 		RIVCluster* ClusterForRow(const size_t& row) const;
 		
-		void ClearFilters();
-		void ClearFilter(std::string filterName);
+		//Clears all the filters that may be present, returns true if any filters were actually removed
+		bool ClearFilters();
+		//Clears all the filters with the given attribute name, returns true if any filter was actually removed
+		bool ClearFilter(const std::string& filterName);
 		RIVRecord* GetRecord(std::string name) const;
 		bool ContainsColumn(std::string);
 		
@@ -87,7 +95,7 @@
 		bool IsFiltered() { return filtered; }; //Any filters applied?
 		bool IsClustered() { return isClustered; };
 		bool HasRecord(RIVRecord* record);
-		
+		bool HasRecord(const std::string& name);
 		void FunctionOnRecords(void(*someFunction)(const RIVRecord*));
 		
 		const std::vector<RIVReference>* GetReferences();
