@@ -28,7 +28,7 @@ private:
     
     //Properties
     std::vector<ParallelCoordsAxisGroup> axisGroups;
-    ParallelCoordsAxis* selectedAxis;
+    ParallelCoordsAxis* selectedAxis = NULL;
     bool axesAreDirty = true;
     bool linesAreDirty = true;
     

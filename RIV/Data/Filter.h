@@ -11,11 +11,17 @@ class RIVTable;
 namespace riv {
 	class Filter
 	{
+	private:
+		bool byGroup = false;
+		size_t fidCounter = 1;
 	protected:
+		size_t fid; //The id of the filter, automatically created to be unique for every filter
 		std::vector<std::string> attributes;
-		Filter(const std::string& attributeName) { attributes.push_back(attributeName); };
-		Filter(const std::vector<std::string>& attributes) { this->attributes = attributes; };
+		Filter(const std::string& attributeName, bool byGroup = false);
+		Filter(const std::vector<std::string>& attributes, bool byGroup = false);
 	public:
+		size_t GetId();
+		bool FilterByGroup();
 		virtual bool PassesFilter(const std::string& name, float value) = 0;
 		virtual bool PassesFilter(const std::string& name, unsigned short value) = 0;
 		virtual bool PassesFilter(RIVTable* table, size_t row) = 0;
@@ -56,18 +62,40 @@ namespace riv {
 		}
 	};
 	
+	//Combines multiple filters in a logical AND setup
 	class ConjunctiveFilter : public Filter {
 	private:
 		std::vector<Filter*> filters;
 	public:
 		~ConjunctiveFilter();
 		ConjunctiveFilter(const std::vector<Filter*>& filters);
+		ConjunctiveFilter(const std::vector<Filter*>& filters, bool byGroup);
 		bool AppliesToTable(const RIVTable* table);
 		bool PassesFilter(RIVTable* table, size_t row);
 		bool PassesFilter(const std::string& name, float value);
 		bool PassesFilter(const std::string& name, unsigned short value);
 		void Print() {
 			printf("Conjunctive filter containing : \n");
+			for(Filter* f : filters) {
+				printf("\t");
+				f->Print();
+			}
+		}
+	};
+	
+	//Combines multiple filters in a logical OR setup
+	class DisjunctiveFilter : public Filter {
+	private:
+		std::vector<Filter*> filters;
+	public:
+		DisjunctiveFilter(const std::vector<Filter*>& filters);
+		DisjunctiveFilter(const std::vector<Filter*>& filters, bool byGroup);
+		bool AppliesToTable(const RIVTable* table);
+		bool PassesFilter(RIVTable* table, size_t row);
+		bool PassesFilter(const std::string& name, float value);
+		bool PassesFilter(const std::string& name, unsigned short value);
+		void Print() {
+			printf("Disjunctive filter containing : \n");
 			for(Filter* f : filters) {
 				printf("\t");
 				f->Print();

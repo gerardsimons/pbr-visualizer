@@ -46,8 +46,10 @@ protected:;
 	
 	Vec3Df Phit; //Supposedly the point of intersection of the ray with the plane supporting the triangle
 	riv::Ray<float> pickRay;
+	
 	bool meshSelected = false;
-	ushort selectedObjectID = 0;
+	std::vector<ushort> selectedObjectIDs;
+	size_t pathCreationFilterHandle = 0; //The filter used to create pat
     
     //Buffered graphics point data, generated from the data, stored here for speed, TODO: Only store indices and a pointer to these records?
 	bool sizesAllTheSame; //Because sizes are often set to the same, we take advantage of this to get a big performance boost
@@ -60,6 +62,8 @@ protected:;
 
 	//Generate a octree from the unfiltered intersection points
 	void generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize);
+	//Determines if the objectId is currently selected
+	bool isSelectedObject(ushort objectId);
 	//Draw the mesh model loaded from the PBRT file
 	void drawMeshModel();
     void drawPaths(float startSegment, float stopSegment); //Draw the paths between two consecutive bounces

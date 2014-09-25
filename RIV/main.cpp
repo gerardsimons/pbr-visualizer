@@ -203,9 +203,23 @@ void keys(int keyCode, int x, int y) {
 //			riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",1);
 //			dataset.AddFilter("path",objectFilter);
 			
-			riv::Filter* testFilter = new riv::RangeFilter("object ID",1.5F,2.5F);
+			std::vector<riv::Filter*> allFilters;
+			std::vector<ushort> selectedObjectIDs;
+			selectedObjectIDs.push_back(1);
+			selectedObjectIDs.push_back(2);
+			for(int i = 0 ; i < selectedObjectIDs.size() ; ++i) {
+				riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectIDs[i]);
+				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",i+1);
+				std::vector<riv::Filter*> fs;
+				fs.push_back(objectFilter);
+				fs.push_back(bounceFilter);
+				allFilters.push_back(new riv::ConjunctiveFilter(fs));
+			}
+			riv::Filter* pathCreationFilter = new riv::DisjunctiveFilter(allFilters,true);
+			pathCreationFilter->Print();
+			printf("\n");
 			dataset.StartFiltering();
-			dataset.AddFilter(testFilter);
+			dataset.AddFilter("path", pathCreationFilter);
 			dataset.StopFiltering();
             break;
         }

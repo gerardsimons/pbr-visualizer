@@ -1,6 +1,18 @@
 #include "Filter.h"
 namespace riv {
-	
+	size_t Filter::GetId() {
+		return fid;
+	}
+	Filter::Filter(const std::string& attributeName, bool byGroup) {
+		this->byGroup = byGroup;
+		attributes.push_back(attributeName);
+		fid = ++fidCounter;
+	}
+	Filter::Filter(const std::vector<std::string>& attributes, bool byGroup) {
+		this->byGroup = byGroup;
+		this->attributes = attributes;
+		fid = ++fidCounter;
+	};
 	bool Filter::AppliesToAttribute(const std::string &name) {
 		for(const std::string attribute : attributes) {
 			if(name == attribute) {
@@ -8,6 +20,9 @@ namespace riv {
 			}
 		}
 		return false;
+	}
+	bool Filter::FilterByGroup() {
+		return byGroup;
 	}
 	
 	bool Filter::AppliesToTable(const RIVTable* table) {
@@ -113,6 +128,10 @@ namespace riv {
 		this->filters = filters;
 	}
 	
+	ConjunctiveFilter::ConjunctiveFilter(const std::vector<Filter*>& filters,bool byGroup) : Filter("conjunctive",byGroup) {
+		this->filters = filters;
+	}
+	
 	bool ConjunctiveFilter::AppliesToTable(const RIVTable* table) {
 		for(Filter* filter : filters) {
 			if(filter->AppliesToTable(table)) {
@@ -148,5 +167,49 @@ namespace riv {
 		}
 		//It has passed all filters
 		return true;
+	}
+	
+	DisjunctiveFilter::DisjunctiveFilter(const std::vector<Filter*>& filters) : Filter("disjunctive") {
+		this->filters = filters;
+	}
+	
+	DisjunctiveFilter::DisjunctiveFilter(const std::vector<Filter*>& filters, bool byGroup) : Filter("disjunctive",byGroup) {
+		this->filters = filters;
+	}
+	
+	bool DisjunctiveFilter::AppliesToTable(const RIVTable* table) {
+		for(Filter* filter : filters) {
+			if(filter->AppliesToTable(table)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	bool DisjunctiveFilter::PassesFilter(const std::string &name, unsigned short value) {
+		for(Filter* filter : filters) {
+			if(filter->AppliesToAttribute(name) && filter->PassesFilter(name,value)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	bool DisjunctiveFilter::PassesFilter(const std::string &name, float value) {
+		for(Filter* filter : filters) {
+			if(filter->AppliesToAttribute(name) && filter->PassesFilter(name,value)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	//Check if the given row of the table passes this filter or not by checking all of its filter in AND (conjunctive) logic
+	bool DisjunctiveFilter::PassesFilter(RIVTable* table, size_t row) {
+		for(Filter* filter : filters) {
+			if(filter->PassesFilter(table,row)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

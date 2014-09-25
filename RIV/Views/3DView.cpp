@@ -259,6 +259,14 @@ void RIV3DView::Draw() {
 //	reporter::stop("3D Draw");
 }
 
+bool RIV3DView::isSelectedObject(ushort objectId) {
+	for(ushort oid : selectedObjectIDs) {
+		if(oid == objectId)
+			return true;
+	}
+	return false;
+}
+
 void RIV3DView::drawMeshModel() {
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     
@@ -269,7 +277,7 @@ void RIV3DView::drawMeshModel() {
 //	size_t meshNumber = 1;
 	for(size_t i = 0 ; i < objects->size() ; ++i) {
 		MeshModel model = objects->at(i);
-		if(meshSelected && model.GetObjectID() == selectedObjectID) {
+		if(meshSelected && isSelectedObject(model.GetObjectID())) {
 			//			printf("This is the selected mesh\n");
 			const float *color = colors::LIGHT_BLUE;
 			glColor3f(color[0], color[1], color[2]);
@@ -706,50 +714,81 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 		
 		Vec3Df dir = dest - origin;
 		
-		ushort oldSelectedObjecID = selectedObjectID;
+		ushort selectedObjectID;
 		
 		pickRay = riv::Ray<float>(origin,dir);
 		bool intersects = pbrtConfig->GetMeshModelGroup()->ModelIntersect(pickRay, selectedObjectID, Phit);
 		
-		printf("old Object ID = %hu\n",oldSelectedObjecID);
+		printf("selected Object IDs = ");
+		printVector(selectedObjectIDs);
 		printf("new Object ID = %hu\n",selectedObjectID);
 		
-		if(intersects && oldSelectedObjecID != selectedObjectID && selectRound < maxBounce) {
+
+		bool refilterNeeded = false;
+		int objIdIndex = -1;
+		bool newObjectID = true;
+		for(int i = 0 ; i < selectedObjectIDs.size() ; ++i) {
+			ushort oid = selectedObjectIDs[i];
+			if(oid == selectedObjectID) { //Already selected
+				newObjectID = false;
+				objIdIndex = i;
+				break;
+			}
+		}
+		if(intersects && newObjectID && selectRound < maxBounce) {
 			printf("new selected object ID = %hu\n",selectedObjectID);
 			meshSelected = true;
-			
-			dataset->StartFiltering();
-//			dataset->ClearFilter("object ID");
-			riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectID);
-			riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",selectRound);
-			std::vector<riv::Filter*> conjunction;
-			conjunction.push_back(objectFilter);
-			conjunction.push_back(bounceFilter);
-			riv::Filter* conjunctiveFilter = new riv::ConjunctiveFilter(conjunction);
-			
-//			objectFilter->Print();
-//			bounceFilter->Print();
-			conjunctiveFilter->Print();
-			dataset->AddFilter("path", conjunctiveFilter);
-			
-			dataset->StopFiltering();
+			selectedObjectIDs.push_back(selectedObjectID);
+			refilterNeeded = true;
 
+//			dataset->ClearFilter("object ID");
+//			riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectID);
+//			riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",selectRound);
+//			std::vector<riv::Filter*> conjunction;
+//			conjunction.push_back(objectFilter);
+//			conjunction.push_back(bounceFilter);
+//			riv::Filter* conjunctiveFilter = new riv::ConjunctiveFilter(conjunction);
 			
-//			pathTable->AddFilter(objectFilter);
-//			pathTable->AddFilter(bounceFilter);
-//			pathTable->AddFilter(conjunctiveFilter);
+//			conjunctiveFilter->Print();
+//			dataset->AddFilter("path", conjunctiveFilter);
 			
-//			pathTable->filterRecordsByReference();
-			
-//			dataset->notifyListeners();
+//			dataset->StopFiltering();
 		}
-		else if(oldSelectedObjecID != selectedObjectID) {
+		else if(!newObjectID) {
+		
+			refilterNeeded = true;
+			//Remove this from the selectedObjectIds
+			selectedObjectIDs.erase(selectedObjectIDs.begin() + objIdIndex);
 			
+			//Refilter if the selection has changed
+			
+//			dataset->StartFiltering();
+//			meshSelected = false;
+//			printf("Clearing object ID filter\n");
+//			dataset->ClearFilter("object ID");
+//			dataset->ClearFilter("bounce#");
+//			dataset->StopFiltering();
+		}
+		
+		if(refilterNeeded) { //Create path filter
+			printf("Path creation filter");
+			if(pathCreationFilterHandle) {
+				dataset->ClearFilter(pathCreationFilterHandle);
+			}
+			std::vector<riv::Filter*> allFilters;
+			for(int i = 0 ; i < selectedObjectIDs.size() ; ++i) {
+				riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectIDs[i]);
+				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",i+1);
+				std::vector<riv::Filter*> fs;
+				fs.push_back(objectFilter);
+				fs.push_back(bounceFilter);
+				allFilters.push_back(new riv::ConjunctiveFilter(fs));
+			}
+			riv::Filter* pathCreationFilter = new riv::DisjunctiveFilter(allFilters);
+			pathCreationFilter->Print();
+			printf("\n");
 			dataset->StartFiltering();
-			meshSelected = false;
-			printf("Clearing object ID filter\n");
-			dataset->ClearFilter("object ID");
-			dataset->ClearFilter("bounce#");
+			dataset->AddFilter("path", pathCreationFilter);
 			dataset->StopFiltering();
 		}
 		

@@ -84,6 +84,7 @@ namespace riv {
 		bool ClearFilters();
 		//Clears all the filters with the given attribute name, returns true if any filter was actually removed
 		bool ClearFilter(const std::string& filterName);
+		bool ClearFilter(size_t fid);
 		RIVRecord* GetRecord(std::string name) const;
 		bool ContainsColumn(std::string);
 		

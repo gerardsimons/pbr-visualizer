@@ -60,6 +60,15 @@ void RIVDataSet::ClearFilters() {
     }
 }
 
+void RIVDataSet::ClearFilter(size_t filterID) {
+	printf("Clearing filter %d on all tables\n",filterID);
+    for(RIVTable *table : tables) {
+        if(table->ClearFilter(filterID)) {
+			staleTables[table] = true;
+		}
+    }
+}
+
 void RIVDataSet::ClearFilter(std::string filterName) {
     printf("Clearing filter %s on all tables\n",filterName.c_str());
     for(RIVTable *table : tables) {

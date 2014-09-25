@@ -40,6 +40,7 @@ public:
 	void AddFilter(riv::Filter* filter);
     void AddFilterListener(RIVDataSetListener* listener);
     void ClearFilters();
+	void ClearFilter(size_t filterID);
     void ClearFilter(std::string attributeName);
     RIVRecord* FindRecord(std::string name) const;
     size_t TotalNumberOfRecords() const;
