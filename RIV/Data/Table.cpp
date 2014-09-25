@@ -127,7 +127,7 @@ RIVRecord* RIVTable::GetRecord(size_t index) {
 
 
 void RIVTable::filterRecords() {
-    if(filters.size() > 0) {
+    if(filters.size() > 0 || groupFilters.size() > 0) {
 		
 		printf("Filtering table %s with filter:\n",name.c_str());
 		for(riv::Filter* f : filters) {
@@ -144,42 +144,38 @@ void RIVTable::filterRecords() {
 				continue; //Already filtered
 			}
 			bool filterSourceRow = false;
-			for(riv::Filter* filter : filters) {
-				//If the filter applies to this table, filter according to
-				if(filter->AppliesToTable(this)) {
-					filterSourceRow = !filter->PassesFilter(this, row);
+			//Group filters
+			for(riv::GroupFilter* groupFilter : groupFilters) {
+//				printf("Group filtering : ");
+//				groupFilter->Print();
+				if(!groupFilter->PassesFilter(this, row)) {
+//					printf("row = %zu FILTERED\n",row);
+					filterSourceRow = true;
+					filteredSourceRows.push_back(row);
+					break;
 				}
 				else {
-					fixReferences = true;
-					bool filterIsPassed = false;
-					size_t filterPassesRequired = 1;
-					size_t filtersPassed = 0;
-					
-					if(filter->FilterByGroup()) {
-						for(RIVReference& ref : references) {
-							//Get the rows of the reference
-							RIVTable* targetTable = ref.targetTable;
-							if(filter->AppliesToTable(targetTable)) {
-								std::vector<size_t>* referenceRows = ref.GetIndexReferences(row);
-								if(referenceRows) {
-									filterPassesRequired = referenceRows->size();
-									for(size_t referenceRow : *referenceRows) {
-										if(filter->PassesFilter(targetTable, referenceRow)) {
-											printf("reference row %zu passes the filter\n",referenceRow);
-											filterIsPassed = true;
-											filtersPassed++;
-										}
-									}
-								}
-							}
-						}
+//					printf("row = %zu SELECTED\n",row);
+				}
+			}
+			
+			if(!filterSourceRow) {
+				for(riv::Filter* filter : filters) {
+					//If the filter applies to this table, filter according to
+					if(filter->AppliesToTable(this)) {
+						filterSourceRow = !filter->PassesFilter(this, row);
 					}
 					else {
-						for(RIVReference& ref : references) {
+						fixReferences = true;
+						bool filterIsPassed = false;
+						size_t filterPassesRequired = 1;
+						size_t filtersPassed = 0;
+						
+						for(RIVReference* ref : references) {
 							//Get the rows of the reference
-							RIVTable* targetTable = ref.targetTable;
+							RIVTable* targetTable = ref->targetTable;
 							if(filter->AppliesToTable(targetTable)) {
-								std::vector<size_t>* referenceRows = ref.GetIndexReferences(row);
+								std::vector<size_t>* referenceRows = ref->GetIndexReferences(row);
 								if(referenceRows) {
 									filterPassesRequired = referenceRows->size();
 									for(size_t referenceRow : *referenceRows) {
@@ -192,16 +188,16 @@ void RIVTable::filterRecords() {
 								}
 							}
 						}
-					}
-//					printf("Filter passes = %zu, required = %zu\n",filtersPassed,filterPassesRequired);
-					if(filterIsPassed == false) { //None of the rows in the target table pass this filter, this row should be filtered
-						filterSourceRow = true;
-						break;
+						if(filterIsPassed == false) { //None of the rows in the target table pass this filter, this row should be filtered
+							filterSourceRow = true;
+							break;
+						}
 					}
 				}
 			}
+			
 			if(filterSourceRow) {
-				printf("row = %zu FILTERED\n",row);
+//				printf("row = %zu FILTERED\n",row);
 				FilterRow(row, true);
 				
 				filteredSourceRows.push_back(row);
@@ -212,29 +208,26 @@ void RIVTable::filterRecords() {
         }
 		
 		//This checks its references to create a group that it is referring to and see if ALL of its rows are filtered, only then is the reference row filtered as well
-		//TODO: I have feeling this is really ugly... ?
-		if(fixReferences) {
-			for(RIVReference &reference : references) {
-				RIVTable* targetTable = reference.targetTable;
-				
-				//The index map back to this table
-				std::map<size_t,std::vector<size_t> > indexMap = reference.targetTable->GetReferenceToTable(name)->indexReferences;
-				
-				for(auto iterator = indexMap.begin(); iterator != indexMap.end(); iterator++) {
-					std::vector<size_t> backRows = iterator->second;
-					bool filterReference = true;
-					for(size_t backRow : backRows) { //Does the filtered map contain ALL of these rows? If so we should filter it in the reference table
-						if(!filteredRows[backRow]) {
-							filterReference = false;
-							break;
-						}
-					}
-					
-					if(filterReference) {
-						targetTable->FilterRow(iterator->first, true);
+		//TODO: I have feeling this is really ugly... and its really costly ?
+		for(RIVReference *reference : references) {
+			RIVTable* targetTable = reference->targetTable;
+			
+			//The index map back to this table
+			std::map<size_t,std::vector<size_t> > indexMap = reference->targetTable->GetReferenceToTable(name)->indexReferences;
+			
+			for(auto iterator = indexMap.begin(); iterator != indexMap.end(); iterator++) {
+				std::vector<size_t> backRows = iterator->second;
+				bool filterReference = true;
+				for(size_t backRow : backRows) { //Does the filtered map contain ALL of these rows? If so we should filter it in the reference table
+					if(!filteredRows[backRow]) {
+						filterReference = false;
+						break;
 					}
 				}
 				
+				if(filterReference) {
+					targetTable->FilterRow(iterator->first, true);
+				}
 			}
 		}
     }
@@ -248,8 +241,8 @@ float RIVTable::PercentageFiltered() {
 //This is only necessary if there are some orphaned rows in reference tables
 void RIVTable::FilterRowsUnlinkedTo(RIVTable *table) {
     for(size_t row = 0 ; row < rows ; ++row) {
-        for(RIVReference &reference : references) {
-            if(reference.targetTable->GetName() == table->GetName() && !reference.HasReference(row)) {
+        for(RIVReference *reference : references) {
+            if(reference->targetTable->GetName() == table->GetName() && !reference->HasReference(row)) {
                 FilterRow(row,true);
             }
         }
@@ -259,7 +252,7 @@ void RIVTable::FilterRowsUnlinkedTo(RIVTable *table) {
 //Warning: Only gets a reference to a table if an immediate reference exists, use GetReferenceChain if you want to find a complete chain of reference to a target table
 RIVReference* RIVTable::GetReferenceToTable(const std::string &tableName) {
     for(size_t row = 0 ; row < references.size() ; ++row) {
-        RIVReference *ref = &references[row];
+        RIVReference *ref = references[row];
         if(ref->targetTable->name == tableName) {
             return ref;
         }
@@ -363,9 +356,18 @@ void RIVTable::AddFilter(riv::Filter *filter) {
     filters.push_back(filter);
 }
 
-void RIVTable::AddReference(const RIVReference& reference) {
+void RIVTable::AddFilter(riv::GroupFilter *groupFilter) {
+	groupFilters.push_back(groupFilter);
+}
+
+//void RIVTable::AddReference(const RIVReference& reference) {
+//    references.push_back(reference);
+//}
+
+void RIVTable::AddReference(RIVReference* reference) {
     references.push_back(reference);
 }
+
 
 RIVFloatRecord* RIVTable::CastToFloatRecord(RIVRecord* record) {
     //    printf("record name = %s\n",record->name.c_str());
@@ -482,10 +484,10 @@ void RIVTable::Print(size_t maxPrint, bool printFiltered) {
     for(size_t j = 0 ; j < rows && (j < maxPrint) ; j++) {
         std::string rowText = RowToString(j);
         if(printFiltered || !filteredRows[j]) {
-            for(RIVReference &reference : references) {
-                std::vector<size_t> *referenceIndexRange = reference.GetIndexReferences(j);
+            for(RIVReference *reference : references) {
+                std::vector<size_t> *referenceIndexRange = reference->GetIndexReferences(j);
                 if(referenceIndexRange && !referenceIndexRange->empty()) {
-                    rowText += "---> " + reference.targetTable->name + "{";
+                    rowText += "---> " + reference->targetTable->name + "{";
                     
                     for(size_t i = 0 ; i < referenceIndexRange->size(); ++i) {
                         
@@ -606,17 +608,17 @@ bool RIVTable::GetReferenceChainToTable(std::string tableNameSearch, RIVReferenc
         return true;
     }
     visitedTables->push_back(name);
-    for(RIVReference& reference : references) {
+    for(RIVReference* reference : references) {
         bool visited = false;
         for(std::string visitedName : *visitedTables) {
-            if(visitedName == reference.targetTable->name) { //If we did not already visit this table
+            if(visitedName == reference->targetTable->name) { //If we did not already visit this table
                 visited = true;
                 break;
             }
         }
         if(!visited) {
-            chainToTarget.AddReference(&reference);
-            if(reference.targetTable->GetReferenceChainToTable(tableNameSearch, chainToTarget, visitedTables)) {
+            chainToTarget.AddReference(reference);
+            if(reference->targetTable->GetReferenceChainToTable(tableNameSearch, chainToTarget, visitedTables)) {
                 return true;
             }
             else {
@@ -646,8 +648,8 @@ const RIVTable* RIVTable::FindTable(std::string tableName, std::vector<std::stri
             visitedTables = new std::vector<std::string>();
         }
         visitedTables->push_back(this->name);
-        for(RIVReference &reference : references) {
-            const RIVTable* foundTable = reference.targetTable->FindTable(tableName, visitedTables);
+        for(RIVReference *reference : references) {
+            const RIVTable* foundTable = reference->targetTable->FindTable(tableName, visitedTables);
             if(foundTable) {
                 return foundTable;
             }
@@ -661,7 +663,7 @@ RIVCluster* RIVTable::ClusterForRow(const size_t& row) const {
     return clusterSet.ClusterForMemberIndex(row); //Will return NULL if row is not contained in any cluster, or there has been no clustering
 }
 
-const std::vector<RIVReference>* RIVTable::GetReferences() {
+const std::vector<RIVReference*>* RIVTable::GetReferences() {
     return &references;
 }
 

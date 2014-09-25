@@ -766,7 +766,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 //			meshSelected = false;
 //			printf("Clearing object ID filter\n");
 //			dataset->ClearFilter("object ID");
-//			dataset->ClearFilter("bounce#");
+//			dataset->ClearFilter("bounce#");m
 //			dataset->StopFiltering();
 		}
 		
@@ -784,7 +784,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 				fs.push_back(bounceFilter);
 				allFilters.push_back(new riv::ConjunctiveFilter(fs));
 			}
-			riv::Filter* pathCreationFilter = new riv::DisjunctiveFilter(allFilters);
+			riv::GroupFilter* pathCreationFilter = new riv::GroupFilter(allFilters,dataset->GetTable("path"));
 			pathCreationFilter->Print();
 			printf("\n");
 			dataset->StartFiltering();

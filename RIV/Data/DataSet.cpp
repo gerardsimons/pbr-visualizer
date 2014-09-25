@@ -32,11 +32,49 @@ void RIVDataSet::AddFilter(const std::string& tablename, riv::Filter *filter) {
     }
 }
 
+//Add a filter to the table with the given name
+void RIVDataSet::AddFilter(const std::string& tablename, riv::GroupFilter *filter) {
+	RIVTable* table = GetTable(tablename);
+    //Find the table containing the attribute
+	if(!isFiltering) {
+		throw "StartFiltering must be called before doing any filter operations";
+	}
+    if(filter != 0) {
+		table->AddFilter(filter);
+		staleTables[table] = true;
+		return;
+		
+    }
+    else {
+        throw std::string("Supplied filter is a NULL pointer.");
+    }
+}
+
+
 void RIVDataSet::AddFilter(riv::Filter *filter) {
 	//Find the table that contains all of the filter attributes
 	for(RIVTable* table : tables) {
 		bool tableFound = true;
-		for(const std::string& attribute : *filter->GetAttributes()) {
+		for(const std::string& attribute : filter->GetAttributes()) {
+			if(table->HasRecord(attribute) == false) {
+				tableFound = false;
+				break;
+			}
+		}
+		if(tableFound) {
+			table->AddFilter(filter);
+			staleTables[table] = true;
+			return;
+		}
+	}
+	throw "Could not find a table that contains all of the filter's attributes";
+}
+
+void RIVDataSet::AddFilter(riv::GroupFilter *filter) {
+	//Find the table that contains all of the filter attributes
+	for(RIVTable* table : tables) {
+		bool tableFound = true;
+		for(const std::string& attribute : filter->GetAttributes()) {
 			if(table->HasRecord(attribute) == false) {
 				tableFound = false;
 				break;

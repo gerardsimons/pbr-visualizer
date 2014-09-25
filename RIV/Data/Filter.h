@@ -4,32 +4,34 @@
 
 #include <string>
 #include <vector>
+#include "Reference.h"
 #include "Table.h"
 
 class RIVTable;
+class RIVReference;
 
 namespace riv {
 	class Filter
 	{
 	private:
-		bool byGroup = false;
 		size_t fidCounter = 1;
 	protected:
 		size_t fid; //The id of the filter, automatically created to be unique for every filter
 		std::vector<std::string> attributes;
-		Filter(const std::string& attributeName, bool byGroup = false);
-		Filter(const std::vector<std::string>& attributes, bool byGroup = false);
+		Filter(const std::string& attributeName);
+		Filter(const std::vector<std::string>& attributes);
+		
 	public:
 		size_t GetId();
-		bool FilterByGroup();
+		//Only used internally
 		virtual bool PassesFilter(const std::string& name, float value) = 0;
 		virtual bool PassesFilter(const std::string& name, unsigned short value) = 0;
 		virtual bool PassesFilter(RIVTable* table, size_t row) = 0;
 		//Determines whether this filter is targeted at the given table
 		virtual bool AppliesToAttribute(const std::string& name);
 		virtual bool AppliesToTable(const RIVTable* table);
-		std::vector<std::string> const* GetAttributes() const {
-			return &attributes;
+		std::vector<std::string> GetAttributes() const {
+			return attributes;
 		}
 		virtual void Print() = 0;
 	};
@@ -62,14 +64,12 @@ namespace riv {
 		}
 	};
 	
-	//Combines multiple filters in a logical AND setup
 	class ConjunctiveFilter : public Filter {
 	private:
 		std::vector<Filter*> filters;
 	public:
 		~ConjunctiveFilter();
 		ConjunctiveFilter(const std::vector<Filter*>& filters);
-		ConjunctiveFilter(const std::vector<Filter*>& filters, bool byGroup);
 		bool AppliesToTable(const RIVTable* table);
 		bool PassesFilter(RIVTable* table, size_t row);
 		bool PassesFilter(const std::string& name, float value);
@@ -83,19 +83,41 @@ namespace riv {
 		}
 	};
 	
-	//Combines multiple filters in a logical OR setup
 	class DisjunctiveFilter : public Filter {
 	private:
 		std::vector<Filter*> filters;
 	public:
 		DisjunctiveFilter(const std::vector<Filter*>& filters);
-		DisjunctiveFilter(const std::vector<Filter*>& filters, bool byGroup);
+		bool PassesFilter(const std::string &name, unsigned short value);
+		bool PassesFilter(const std::string &name, float value);
 		bool AppliesToTable(const RIVTable* table);
+		std::vector<std::string> AllAttributes();
 		bool PassesFilter(RIVTable* table, size_t row);
-		bool PassesFilter(const std::string& name, float value);
-		bool PassesFilter(const std::string& name, unsigned short value);
 		void Print() {
 			printf("Disjunctive filter containing : \n");
+			for(Filter* f : filters) {
+				printf("\t");
+				f->Print();
+			}
+		}
+	};
+	
+	//This composite filter takes a table, searches its reffering rows to which its filters apply and tests the group of row to see if ALL the filters are met by atleast one row in the group
+	//Of referring rows
+	class GroupFilter : public Filter {
+	private:
+		std::vector<Filter*> filters;
+		RIVReference* ref = NULL;
+		RIVTable* sourceTable = NULL;
+		void fetchReferenceRows();
+	public:
+		GroupFilter(const std::vector<Filter*>& filters, RIVTable* sourceTable);
+		bool AppliesToTable(const RIVTable* table);
+		bool PassesFilter(RIVTable* table, size_t row);
+		bool PassesFilter(const std::string &name, unsigned short value);
+		bool PassesFilter(const std::string &name, float value);
+		void Print() {
+			printf("Group filter containing : \n");
 			for(Filter* f : filters) {
 				printf("\t");
 				f->Print();

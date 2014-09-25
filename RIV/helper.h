@@ -68,6 +68,13 @@ inline void deletePointerVector(std::vector<T*> v)
 
 void printDelimiterLine(char c = '*',int width = 50);
 
+template <typename T>
+void AppendAll(std::vector<T>& result, const std::vector<T>& toAppend) {
+	for(T t : toAppend) {
+		result.push_back(t);
+	}
+}
+
 template<class T>
 void printVar(const char* name, T var) {
     std::cout << name << " = " << var << std::endl;

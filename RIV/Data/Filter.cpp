@@ -3,16 +3,15 @@ namespace riv {
 	size_t Filter::GetId() {
 		return fid;
 	}
-	Filter::Filter(const std::string& attributeName, bool byGroup) {
-		this->byGroup = byGroup;
+	Filter::Filter(const std::string& attributeName) {
 		attributes.push_back(attributeName);
 		fid = ++fidCounter;
 	}
-	Filter::Filter(const std::vector<std::string>& attributes, bool byGroup) {
-		this->byGroup = byGroup;
+	Filter::Filter(const std::vector<std::string>& attributes) {
 		this->attributes = attributes;
 		fid = ++fidCounter;
 	};
+	
 	bool Filter::AppliesToAttribute(const std::string &name) {
 		for(const std::string attribute : attributes) {
 			if(name == attribute) {
@@ -20,9 +19,6 @@ namespace riv {
 			}
 		}
 		return false;
-	}
-	bool Filter::FilterByGroup() {
-		return byGroup;
 	}
 	
 	bool Filter::AppliesToTable(const RIVTable* table) {
@@ -93,11 +89,13 @@ namespace riv {
 	}
 	
 	bool DiscreteFilter::PassesFilter(const std::string& name, float value) {
-		throw "Not yet implemented.";
+		return attributes[0] == name && value == this->value;
 	}
 	bool DiscreteFilter::PassesFilter(const std::string &name, unsigned short value) {
 		return attributes[0] == name && value == this->value;
 	}
+	
+	//TODO: The constant casting might be costly
 	bool DiscreteFilter::PassesFilter(RIVTable* table, size_t row) {
 		RIVRecord* record = table->GetRecord(attributes[0]);
 		RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(record);
@@ -128,10 +126,6 @@ namespace riv {
 		this->filters = filters;
 	}
 	
-	ConjunctiveFilter::ConjunctiveFilter(const std::vector<Filter*>& filters,bool byGroup) : Filter("conjunctive",byGroup) {
-		this->filters = filters;
-	}
-	
 	bool ConjunctiveFilter::AppliesToTable(const RIVTable* table) {
 		for(Filter* filter : filters) {
 			if(filter->AppliesToTable(table)) {
@@ -149,7 +143,6 @@ namespace riv {
 		}
 		return true;
 	}
-	
 	bool ConjunctiveFilter::PassesFilter(const std::string &name, float value) {
 		for(Filter* filter : filters) {
 			if(filter->AppliesToAttribute(name) && !filter->PassesFilter(name,value)) {
@@ -169,12 +162,17 @@ namespace riv {
 		return true;
 	}
 	
-	DisjunctiveFilter::DisjunctiveFilter(const std::vector<Filter*>& filters) : Filter("disjunctive") {
+	DisjunctiveFilter::DisjunctiveFilter(const std::vector<Filter*>& filters) : Filter(AllAttributes()) {
 		this->filters = filters;
 	}
 	
-	DisjunctiveFilter::DisjunctiveFilter(const std::vector<Filter*>& filters, bool byGroup) : Filter("disjunctive",byGroup) {
-		this->filters = filters;
+	std::vector<std::string> DisjunctiveFilter::AllAttributes() {
+		std::vector<std::string> allAttributes;
+		for(Filter* f : filters) {
+			std::vector<std::string> ats = f->GetAttributes();
+			AppendAll(allAttributes, ats);
+		}
+		return allAttributes;
 	}
 	
 	bool DisjunctiveFilter::AppliesToTable(const RIVTable* table) {
@@ -212,4 +210,65 @@ namespace riv {
 		}
 		return false;
 	}
+	
+	//Group filter
+	GroupFilter::GroupFilter(const std::vector<Filter*>& filters, RIVTable* sourceTable) : Filter("group") {
+		this->filters = filters;
+		this->sourceTable = sourceTable;
+		fetchReferenceRows();
+	}
+	bool GroupFilter::PassesFilter(const std::string &name, unsigned short value) {
+		for(Filter* filter : filters) {
+			if(filter->AppliesToAttribute(name) && filter->PassesFilter(name,value)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	bool GroupFilter::PassesFilter(const std::string &name, float value) {
+		for(Filter* filter : filters) {
+			if(filter->AppliesToAttribute(name) && filter->PassesFilter(name,value)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	bool GroupFilter::AppliesToTable(const RIVTable* table) {
+		for(Filter* filter : filters) {
+			if(filter->AppliesToTable(table)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	void GroupFilter::fetchReferenceRows() {
+		const std::vector<RIVReference*>* references = sourceTable->GetReferences();
+		for(RIVReference* ref : *references) {
+			//Get the rows of the reference
+			RIVTable* t = ref->targetTable;
+			if(AppliesToTable(t)) {
+				this->ref = ref;
+				return;
+			}
+		}
+	}
+	//Check if the given row of the table passes this filter or not by checking all of its filter in AND (conjunctive) logic
+	bool GroupFilter::PassesFilter(RIVTable* table, size_t row) {
+		for(riv::Filter* f : filters) {
+			bool thisFilterPassed = false;
+			std::vector<size_t>* refRows = ref->GetIndexReferences(row);
+			if(refRows) {
+				for(size_t i = 0 ; i < refRows->size() ; ++i) {
+					if(f->PassesFilter(ref->targetTable, refRows->at(i))) {
+						thisFilterPassed = true;
+						break;
+					}
+				}
+			}
+			//The filter was not passed by any reference row
+			if(!thisFilterPassed) return false;
+		}
+		return true;
+	}
+	
 }

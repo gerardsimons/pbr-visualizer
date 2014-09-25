@@ -155,7 +155,9 @@ void keys(int keyCode, int x, int y) {
         case 27: //ESC key
             printf("Clear filters\n");
             //            invalidateAllViews();
+			dataset.StartFiltering();
             dataset.ClearFilters();
+			dataset.StopFiltering();
             break;
         case 98: // 'b' key
             glutSwapBuffers();
@@ -206,7 +208,10 @@ void keys(int keyCode, int x, int y) {
 			std::vector<riv::Filter*> allFilters;
 			std::vector<ushort> selectedObjectIDs;
 			selectedObjectIDs.push_back(1);
-			selectedObjectIDs.push_back(2);
+			selectedObjectIDs.push_back(1);
+			selectedObjectIDs.push_back(1);
+			selectedObjectIDs.push_back(1);
+			selectedObjectIDs.push_back(1);
 			for(int i = 0 ; i < selectedObjectIDs.size() ; ++i) {
 				riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectIDs[i]);
 				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",i+1);
@@ -215,7 +220,7 @@ void keys(int keyCode, int x, int y) {
 				fs.push_back(bounceFilter);
 				allFilters.push_back(new riv::ConjunctiveFilter(fs));
 			}
-			riv::Filter* pathCreationFilter = new riv::DisjunctiveFilter(allFilters,true);
+			riv::GroupFilter* pathCreationFilter = new riv::GroupFilter(allFilters,dataset.GetTable("path"));
 			pathCreationFilter->Print();
 			printf("\n");
 			dataset.StartFiltering();

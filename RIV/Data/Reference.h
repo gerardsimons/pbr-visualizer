@@ -36,7 +36,7 @@
 	//    void AddReference(size_t sourceIndex, size_t targetIndex);
 		void SetReferences(const std::map<size_t,std::vector<size_t> >&);
 		std::vector<size_t>* GetIndexReferences(const size_t&);
-		RIVReference ReverseReference();
+		RIVReference* ReverseReference();
 		void FilterReferenceRow(size_t row);
 	};
 

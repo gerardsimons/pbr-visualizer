@@ -139,10 +139,10 @@ PBRTConfig DataFileReader::ReadPBRTFile(const std::string& fileName) {
     
     if (is.is_open())
     {
-        char delimiter = ' ';
+//        char delimiter = ' ';
         std::string token;
         std::string line;
-		bool objectBeginFound = false;
+//		bool objectBeginFound = false;
 		std::map<char, char> tokenBounds;
 		tokenBounds['"'] = '"';
 		tokenBounds['['] = ']';
@@ -151,7 +151,7 @@ PBRTConfig DataFileReader::ReadPBRTFile(const std::string& fileName) {
             ++lineNumber;
 			std::vector<float> vertices;
 			std::vector<size_t> indices;
-            size_t tokenCount = 0;
+//            size_t tokenCount = 0;
 			
 //            printf("Reading line %zu : %s\n",lineNumber,line.c_str());
             //Tokenize the line
@@ -525,16 +525,16 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, BMPImage* 
         intersectionsTable->AddRecord(interactionTypesRecord);
         intersectionsTable->AddRecord(lightIdsRecord);
         
-        RIVReference imagePathReference = RIVReference(imageTable,pathTable);
-        imagePathReference.SetReferences(imagePathReferences);
-        RIVReference pathImageReference = imagePathReference.ReverseReference();
+        RIVReference *imagePathReference = new RIVReference(imageTable,pathTable);
+        imagePathReference->SetReferences(imagePathReferences);
+        RIVReference *pathImageReference = imagePathReference->ReverseReference();
         
         imageTable->AddReference(imagePathReference);
         pathTable->AddReference(pathImageReference);
         
-        RIVReference referenceToIntersections = RIVReference(pathTable, intersectionsTable);
-        referenceToIntersections.SetReferences(pathIsectReferences);
-        RIVReference reverseReference = referenceToIntersections.ReverseReference();
+        RIVReference* referenceToIntersections = new RIVReference(pathTable, intersectionsTable);
+        referenceToIntersections->SetReferences(pathIsectReferences);
+        RIVReference* reverseReference = referenceToIntersections->ReverseReference();
         
         pathTable->AddReference(referenceToIntersections);
         intersectionsTable->AddReference(reverseReference);
@@ -865,9 +865,9 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     intersectionsTable->AddRecord(lightIdsRecord);
     
     // Create and apply references to tables
-    RIVReference referenceToIntersections = RIVReference(pathTable, intersectionsTable);
-    referenceToIntersections.SetReferences(pathIsectReferences);
-    RIVReference reverseReference = referenceToIntersections.ReverseReference();
+    RIVReference *referenceToIntersections = new RIVReference(pathTable, intersectionsTable);
+    referenceToIntersections->SetReferences(pathIsectReferences);
+    RIVReference *reverseReference = referenceToIntersections->ReverseReference();
     
     pathTable->AddReference(referenceToIntersections);
     intersectionsTable->AddReference(reverseReference);

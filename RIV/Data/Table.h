@@ -33,12 +33,13 @@
 
 namespace riv {
 	class Filter;
+	class GroupFilter;
 }
 
 	class RIVTable {
 	private:
 		std::vector<RIVRecord*> records;
-		std::vector<RIVReference> references;
+		std::vector<RIVReference*> references;
 		std::vector<RIVDataSetListener*> onChangeListeners;
 		std::vector<size_t> selectedRows;
 		RIVClusterSet clusterSet;
@@ -51,6 +52,7 @@ namespace riv {
 		size_t rows = 0; //Keeps a running count of the rows (that is the length of a record)
 		
 		std::vector<riv::Filter*> filters;
+		std::vector<riv::GroupFilter*> groupFilters;
 		
 		std::string name;
 		std::vector<std::string> attributes;
@@ -70,7 +72,9 @@ namespace riv {
 		void filterRecords();
 		void AddRecord(RIVRecord* record);
 		void AddFilter(riv::Filter *filter);
-		void AddReference(const RIVReference& reference);
+		void AddFilter(riv::GroupFilter *groupFilter);
+//		void AddReference(const RIVReference* reference);
+		void AddReference(RIVReference* reference);
 		void AddOnChangeListeners(RIVDataView *dataview);
 		std::vector<std::string> GetAttributes() const;
 		
@@ -99,7 +103,7 @@ namespace riv {
 		bool HasRecord(const std::string& name);
 		void FunctionOnRecords(void(*someFunction)(const RIVRecord*));
 		
-		const std::vector<RIVReference>* GetReferences();
+		const std::vector<RIVReference*>* GetReferences();
 		TableIterator* GetIterator();
 		std::string GetName() const { return name; };
 		size_t GetNumRows() const { return rows; };

@@ -33,8 +33,8 @@
 		return indexReferences.count(sourceIndex) != 0;
 	}
 
-	RIVReference RIVReference::ReverseReference() {
-		RIVReference reverse = RIVReference(targetTable,sourceTable);
+	RIVReference* RIVReference::ReverseReference() {
+		RIVReference *reverse = new RIVReference(targetTable,sourceTable);
 		
 		std::map<size_t,std::vector<size_t> > reverseIndexReferences = std::map<size_t,std::vector<size_t> >();
 		
@@ -51,7 +51,7 @@
 			}
 		}
 
-		reverse.SetReferences(reverseIndexReferences);
+		reverse->SetReferences(reverseIndexReferences);
 		
 		return reverse;
 	}

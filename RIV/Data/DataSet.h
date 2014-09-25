@@ -35,9 +35,11 @@ private:
 public:
 	void notifyListeners();
     void AddTable(RIVTable* table);
+	void AddFilter(const std::string& tableName, riv::GroupFilter *filter);
     void AddFilter(const std::string& tableName, riv::Filter* filter);
 	//Automatically find the table this should be filtered on, the one containing all of the filters attributes
 	void AddFilter(riv::Filter* filter);
+	void AddFilter(riv::GroupFilter *filter);
     void AddFilterListener(RIVDataSetListener* listener);
     void ClearFilters();
 	void ClearFilter(size_t filterID);
