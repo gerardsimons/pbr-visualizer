@@ -326,7 +326,8 @@ void DataDumper::WriteBufferToFile() {
 ushort DataDumper::objectIdForPrimitiveId(ushort primitiveId) {
 	ushort objectId = objectPrimitives[primitiveId];
 	if(objectId == 0) {
-//		printf("*** WARNING : No object ID for primitive ID %hu ***\n",primitiveId);
+		printf("*** WARNING : No object ID for primitive ID %hu ***\n",primitiveId);
+		throw "No object ID for primitive ID\n";
 	}
 	return objectId;
 }

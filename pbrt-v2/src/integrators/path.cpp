@@ -122,6 +122,24 @@ Spectrum PathIntegrator::Li(const Scene *scene, const Renderer *renderer,
 		}
 		if (bounces == maxDepth)
 			break;
+		
+		pathThroughput *= renderer->Transmittance(scene, ray, NULL, rng, arena);
+		
+		IntersectData data;
+		data.primitiveId = isectp->primitiveId;
+		data.shapeId = isectp->shapeId;
+		
+		//The object ID is wrong
+		if(p.x > 0 && p.x < 200 && p.y > 0 && p.y < 200 && p.z > 0 && p.z < 200) {
+			//			data.primitiveId = 34;
+		}
+		
+		data.position = p;
+		data.spectrum = L;
+		data.interactionType = (ushort)flags;
+		data.lightId = light->id;
+		
+		intersectData.push_back(data);
 
 		// Find next vertex of path
 		if (!scene->Intersect(ray, &localIsect)) {
@@ -130,18 +148,6 @@ Spectrum PathIntegrator::Li(const Scene *scene, const Renderer *renderer,
 				   L += pathThroughput * scene->lights[i]->Le(ray);
 			break;
 		}
-		pathThroughput *= renderer->Transmittance(scene, ray, NULL, rng, arena);
-
-		IntersectData data;
-		data.primitiveId = isectp->primitiveId;
-		data.shapeId = isectp->shapeId;
-		data.position = p;
-		data.spectrum = L;
-		data.interactionType = (ushort)flags;
-		data.lightId = light->id;
-
-
-		intersectData.push_back(data);
 
 		//Set to next intersection
 		isectp = &localIsect;

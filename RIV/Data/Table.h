@@ -78,7 +78,8 @@ namespace riv {
 		void AddOnChangeListeners(RIVDataView *dataview);
 		std::vector<std::string> GetAttributes() const;
 		
-		void FilterRow(size_t,bool filter,RIVReference* reference = 0);
+		void FilterRow(size_t row);
+		void SelectRow(size_t row);
 		//    void UnfilterRow(size_t,RIVReference* reference = 0);
 		void FilterRowsUnlinkedTo(RIVTable *table);
 		

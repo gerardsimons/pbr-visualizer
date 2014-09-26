@@ -350,7 +350,10 @@ void createViews() {
         glutSetWindow(imageViewWindow);
         float bottomHalfY = height / 2.f + 2.F * padding;
         float squareSize = height / 2.F - 2 * padding;
-        imageView = new RIVImageView(&dataset,image, padding, bottomHalfY, squareSize, squareSize, 0, 0, defaultColorProperty, defaultSizeProperty); //If this is not supplied on constructor, the texture becomes garbled
+
+//        imageView = new RIVImageView(&dataset,image, padding, bottomHalfY, squareSize, squareSize, 0, 0, defaultColorProperty, defaultSizeProperty); //If this is not supplied on constructor, the texture becomes garbled
+		imageView = new RIVImageView(&dataset,image,defaultColorProperty,defaultSizeProperty);
+		imageView->InitializeGraphics();
         glutDisplayFunc(RIVImageView::DrawInstance);
 //        glutDisplayFunc(idle);
         glutReshapeFunc(RIVImageView::ReshapeInstance);

@@ -29,183 +29,62 @@ RIVRecord* RIVTable::GetRecord(size_t index) {
     return records[index];
 }
 
-//void RIVTable::filterRecords() {
-//	//    filteredRows.clear();
-//	//    std::map<size_t,bool> filteredRows; //Buffer rows filtered below for easy reference updating
-//	printf("\n\n************* Filtering *************\n");
-//	for(riv::Filter* filter : filters) {
-//		filter->Print();
-//	}
-//	
-//    if(filters.size() > 0) {
-//        reporter::startTask("Complete filtering");
-//        reporter::startTask("Filter " + std::to_string(rows)+ " rows.");
-//        std::vector<size_t> newlyFilteredRows;
-//        for(size_t row = 0 ; row < rows ; row++) {
-//			
-//			//Take next group
-//			
-//			if(filteredRows[row]) continue; //Already filtered
-//            for(riv::Filter* filter : filters) {
-//                RIVRecord* record = GetRecord(filter->attributeName);
-//                RIVFloatRecord* floatRecord = CastToFloatRecord(record);
-//                if(floatRecord && floatRecord->name == filter->attributeName) {
-//                    float value = floatRecord->Value(row);
-//                    if(filter->PassesFilter(record->name, value) == false) {
-//                        filteredRows[row] = true;
-//                        newlyFilteredRows.push_back(row);
-//                        break;
-//                    }
-//                    
-//                    continue;
-//                }
-//                RIVUnsignedShortRecord* shortRecord = CastToUnsignedShortRecord(record);
-//                if(shortRecord && shortRecord->name == filter->attributeName) {
-//                    unsigned short value = shortRecord->Value(row);
-//                    if(filter->PassesFilter(record->name, value) == false) {
-//						//                    FilterRow(row,true);
-//                        filteredRows[row] = true;
-//                        newlyFilteredRows.push_back(row);
-//                        break;
-//						//                    rowIsFiltered = true;
-//                        //                    printf("filtered out %hu\n",(ushort)value);
-//                    }
-//                    //                else FilterRow(j,false);
-//                }
-//            }
-//        }
-//        for(auto iterator = filteredRows.begin(); iterator != filteredRows.end(); iterator++) {
-//            if(iterator->second) {
-//                filtered = true;
-//                break;
-//            }
-//        }
-//        reporter::stop("Filter " + std::to_string(rows)+ " rows.");
-//        reporter::startTask("Filter references.");
-//        for(RIVReference &reference : references) {
-//			RIVTable* targetTable = reference.targetTable;
-//            std::map<size_t,std::vector<size_t> > indexMap = reference.targetTable->GetReferenceToTable(name)->indexReferences;
-//			
-//            for(auto iterator = indexMap.begin(); iterator != indexMap.end(); iterator++) {
-//                std::vector<size_t> backRows = iterator->second;
-//                bool filterReference = true;
-//                for(size_t backRow : backRows) { //Does the filtered map contain ALL of these rows? If so we should filter it in the reference table
-//                    if(!filteredRows[backRow]) {
-//                        filterReference = false;
-//                        break;
-//                    }
-//                }
-//                
-//                if(filterReference) {
-//                    targetTable->FilterRow(iterator->first, true);
-//                }
-//            }
-//        }
-//
-//        reporter::stop("Filter references.");
-//        
-//        reporter::startTask("Filter unlinked rows.");
-//        //Filter unlinked records of linked tables
-//		
-//        for(RIVReference &reference : references) {
-//            RIVTable *targetTable = reference.targetTable;
-//            targetTable->FilterRowsUnlinkedTo(this);
-//        }
-//		//		printf("Table %s is now %f filtered.\n",name.c_str(),PercentageFiltered());
-//		//		for(RIVReference &reference : references) {
-//		//			RIVTable *targetTable = reference.targetTable;
-//		//			printf("TargetTable %s is now %f filtered.\n",targetTable->GetName().c_str(), targetTable->PercentageFiltered());
-//		//		}
-//		
-//        reporter::stop("Filter unlinked rows.");
-//        reporter::stop("Complete filtering");
-//    }
-//    else {
-//        filtered = false;
-//    }
-//}
-
-
 void RIVTable::filterRecords() {
-    if(filters.size() > 0 || groupFilters.size() > 0) {
-		
-		printf("Filtering table %s with filter:\n",name.c_str());
-		for(riv::Filter* f : filters) {
-			printf("\t");
-			f->Print();
-		}
-		printf("\n");
+
+	
 		filteredRows.clear();
 		std::vector<size_t> filteredSourceRows;
-		bool fixReferences = false;
-        for(size_t row = 0 ; row < rows ; row++) {
-			if(filteredRows[row]) {
-//				printf("row %zu was already filtered\n",row);
-				continue; //Already filtered
+		if(filters.size() > 0 || groupFilters.size() > 0) {
+			printf("Filtering table %s with filter:\n",name.c_str());
+			for(riv::Filter* f : filters) {
+				printf("\t");
+				f->Print();
 			}
-			bool filterSourceRow = false;
-			//Group filters
-			for(riv::GroupFilter* groupFilter : groupFilters) {
-//				printf("Group filtering : ");
-//				groupFilter->Print();
-				if(!groupFilter->PassesFilter(this, row)) {
-//					printf("row = %zu FILTERED\n",row);
-					filterSourceRow = true;
-					filteredSourceRows.push_back(row);
-					break;
+			printf("\n");
+			for(size_t row = 0 ; row < rows ; row++) {
+				if(filteredRows[row]) {
+	//				printf("row %zu was already filtered\n",row);
+					continue; //Already filtered
 				}
-				else {
-//					printf("row = %zu SELECTED\n",row);
-				}
-			}
-			
-			if(!filterSourceRow) {
-				for(riv::Filter* filter : filters) {
-					//If the filter applies to this table, filter according to
-					if(filter->AppliesToTable(this)) {
-						filterSourceRow = !filter->PassesFilter(this, row);
+				bool filterSourceRow = false;
+				//Group filters
+				for(riv::GroupFilter* groupFilter : groupFilters) {
+	//				printf("Group filtering : ");
+	//				groupFilter->Print();
+					if(!groupFilter->PassesFilter(this, row)) {
+	//					printf("row = %zu FILTERED\n",row);
+						filterSourceRow = true;
+						filteredSourceRows.push_back(row);
+						break;
 					}
 					else {
-						fixReferences = true;
-						bool filterIsPassed = false;
-						size_t filterPassesRequired = 1;
-						size_t filtersPassed = 0;
-						
-						for(RIVReference* ref : references) {
-							//Get the rows of the reference
-							RIVTable* targetTable = ref->targetTable;
-							if(filter->AppliesToTable(targetTable)) {
-								std::vector<size_t>* referenceRows = ref->GetIndexReferences(row);
-								if(referenceRows) {
-									filterPassesRequired = referenceRows->size();
-									for(size_t referenceRow : *referenceRows) {
-										if(filter->PassesFilter(targetTable, referenceRow)) {
-											printf("reference row %zu passes the filter\n",referenceRow);
-											filterIsPassed = true;
-											filtersPassed++;
-										}
-									}
-								}
+	//					printf("row = %zu SELECTED\n",row);
+					}
+				}
+				
+				if(!filterSourceRow) {
+					for(riv::Filter* filter : filters) {
+						//If the filter applies to this table, filter according to
+						if(filter->AppliesToTable(this)) {
+							filterSourceRow = !filter->PassesFilter(this, row);
+							if(filterSourceRow) {
+								break;
 							}
-						}
-						if(filterIsPassed == false) { //None of the rows in the target table pass this filter, this row should be filtered
-							filterSourceRow = true;
-							break;
 						}
 					}
 				}
-			}
-			
-			if(filterSourceRow) {
-//				printf("row = %zu FILTERED\n",row);
-				FilterRow(row, true);
 				
-				filteredSourceRows.push_back(row);
+				if(filterSourceRow) {
+	//				printf("row = %zu FILTERED\n",row);
+					FilterRow(row);
+					
+					filteredSourceRows.push_back(row);
+				}
+				else {
+	//				printf("row = %zu SELECTED\n",row);
+				}
 			}
-			else {
-				printf("row = %zu SELECTED\n",row);
-			}
-        }
+		}
 		
 		//This checks its references to create a group that it is referring to and see if ALL of its rows are filtered, only then is the reference row filtered as well
 		//TODO: I have feeling this is really ugly... and its really costly ?
@@ -226,12 +105,15 @@ void RIVTable::filterRecords() {
 				}
 				
 				if(filterReference) {
-					targetTable->FilterRow(iterator->first, true);
+					targetTable->FilterRow(iterator->first);
+				}
+				else {
+					targetTable->SelectRow(iterator->first);
 				}
 			}
 		}
-    }
-	else filtered = false;
+		
+//		Print(0,false);
 }
 
 float RIVTable::PercentageFiltered() {
@@ -243,7 +125,7 @@ void RIVTable::FilterRowsUnlinkedTo(RIVTable *table) {
     for(size_t row = 0 ; row < rows ; ++row) {
         for(RIVReference *reference : references) {
             if(reference->targetTable->GetName() == table->GetName() && !reference->HasReference(row)) {
-                FilterRow(row,true);
+                FilterRow(row);
             }
         }
     }
@@ -260,9 +142,14 @@ RIVReference* RIVTable::GetReferenceToTable(const std::string &tableName) {
     return NULL;
 }
 
-void RIVTable::FilterRow(size_t rowIndex, bool filterOrUnfilter, RIVReference* sourceReference) {
+void RIVTable::FilterRow(size_t rowIndex) {
     filteredRows[rowIndex] = true;
     filtered = true;
+}
+
+void RIVTable::SelectRow(size_t rowIndex) {
+//	printf("table %s selects row %zu\n",name.c_str(),rowIndex);
+    filteredRows[rowIndex] = false;
 }
 
 std::vector<RIVRecord*> RIVTable::GetRecords() {
@@ -477,11 +364,18 @@ void RIVTable::Print(size_t maxPrint, bool printFiltered) {
         headerOrnament += "-";
     }
     
+	if(maxPrint == 0) {
+		maxPrint = rows;
+	}
+	
     printf("%s\n",headerOrnament.c_str());
     printf("%s\n",headerText.c_str());
     printf("%s\n",headerOrnament.c_str());
     
     for(size_t j = 0 ; j < rows && (j < maxPrint) ; j++) {
+		if(!printFiltered && filteredRows[j]) {
+			continue;
+		}
         std::string rowText = RowToString(j);
         if(printFiltered || !filteredRows[j]) {
             for(RIVReference *reference : references) {
@@ -500,7 +394,7 @@ void RIVTable::Print(size_t maxPrint, bool printFiltered) {
                 }
             }
             if(filteredRows[j]) {
-                rowText += "***";
+                rowText += "** FILTERED **";
             }
         }
         

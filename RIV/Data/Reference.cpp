@@ -57,7 +57,7 @@
 	}
 void RIVReference::FilterReferenceRow(size_t row) {
 	for(size_t refRow : indexReferences[row]) {
-		targetTable->FilterRow(refRow, true);
+		targetTable->FilterRow(refRow);
 	}
 }
 

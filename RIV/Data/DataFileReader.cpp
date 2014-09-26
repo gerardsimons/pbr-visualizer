@@ -855,8 +855,8 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     intersectionsTable->AddRecord(isectPosX);
     intersectionsTable->AddRecord(isectPosY);
     intersectionsTable->AddRecord(isectPosZ);
-//    intersectionsTable->AddRecord(primitiveIdRecord);
     intersectionsTable->AddRecord(shapeIdRecord);
+	intersectionsTable->AddRecord(primitiveIdRecord);
 	intersectionsTable->AddRecord(objectIdRecord);
     intersectionsTable->AddRecord(spectrumOneRecord);
     intersectionsTable->AddRecord(spectrumTwoRecord);
@@ -880,7 +880,7 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     fclose(inputFile);
     
     printf("*******************   DATASET READ   *******************\n");
-    dataset.Print(1000);
+    dataset.Print(100);
     printf("****************    END DATASET READ    ****************\n");
     //
     printf("%zu path data records read.\n",pathTable->GetNumRows());

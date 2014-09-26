@@ -17,7 +17,7 @@ void PCWidget::mousePressEvent(QMouseEvent *event)
 	//        lastPoint = event->pos();
 	//        scribbling = true;
 	//    }
-	updateGL();
+//	updateGL();
 }
 
 void PCWidget::mouseMoveEvent(QMouseEvent *event)
@@ -27,7 +27,7 @@ void PCWidget::mouseMoveEvent(QMouseEvent *event)
 	HandleMouseMotion(event->pos().x(),event->pos().y());
 	//    if ((event->buttons() & Qt::LeftButton) && scribbling)
 	//        drawLineTo(event->pos());
-	updateGL();
+//	updateGL();
 }
 
 void PCWidget::mouseReleaseEvent(QMouseEvent *event)
@@ -38,7 +38,7 @@ void PCWidget::mouseReleaseEvent(QMouseEvent *event)
 	//        drawLineTo(event->pos());
 	//        scribbling = false;
 	//    }
-	updateGL();
+//	updateGL();
 }
 
 void PCWidget::keyPressEvent(QKeyEvent *event) {
