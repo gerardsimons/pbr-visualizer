@@ -22,8 +22,8 @@
 			return jetColorMap;
 		}
 		
-		std::vector<float const*> allColors() {
-			std::vector<float const*> allColors;
+		std::vector<Color> allColors() {
+			std::vector<Color> allColors;
 			
 			allColors.push_back(BLACK);
 			allColors.push_back(RED);

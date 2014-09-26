@@ -8,9 +8,7 @@
 
 #include "ColorMap.h"
 
-
-
-const float* ColorMap::Color(float value) {
+Color ColorMap::ComputeColor(float value) {
 //	for(size_t colorIndex = 0 ; colorIndex < colorTable.size() - 1; ++colorIndex) {
 //		
 //		float colorIndexRatioLeft  = colorIndex / (float)(colorTable.size() - 1);
@@ -33,7 +31,7 @@ const float* ColorMap::Color(float value) {
 		
 		float colorIndexRatioLeft  = colorIndex / (float)(colorTable.size() - 1);
 		float colorIndexRatioRight = (colorIndex + 1) / (float)(colorTable.size() - 1);
-		static float color[3];
+		Color color;
 		
 		if(colorIndexRatioLeft <= value && colorIndexRatioRight >= value) {
 			//Its in between these two indices, use these to interpolate
@@ -47,9 +45,9 @@ const float* ColorMap::Color(float value) {
 			//                    HSVtoRGB(&color[0],&color[1],&color[2],H,S,V);
 			
 			ratio = 1.F - ratio;
-			color[0] = colorTable[colorIndex][0] * ratio + (1.F - ratio) * colorTable[colorIndex + 1][0];
-			color[1] = colorTable[colorIndex][1] * ratio + (1.F - ratio) * colorTable[colorIndex + 1][1],
-			color[2] = colorTable[colorIndex][2] * ratio + (1.F - ratio) * colorTable[colorIndex + 1][2];
+			color.R = colorTable[colorIndex].R * ratio + (1.F - ratio) * colorTable[colorIndex + 1].R;
+			color.G = colorTable[colorIndex].G * ratio + (1.F - ratio) * colorTable[colorIndex + 1].G,
+			color.B = colorTable[colorIndex].B * ratio + (1.F - ratio) * colorTable[colorIndex + 1].B;
 			
 			return color;
 			
@@ -59,7 +57,7 @@ const float* ColorMap::Color(float value) {
 	return colorTable[colorTable.size() - 1];
 }
 
-void ColorMap::AddColor(float const* newColor) {
+void ColorMap::AddColor(const Color& newColor) {
 	colorTable.push_back(newColor);
 }
 

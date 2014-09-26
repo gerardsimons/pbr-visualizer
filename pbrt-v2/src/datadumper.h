@@ -23,23 +23,28 @@ typedef struct IntersectData {
 
 class PathData {
 public:
-    PathData(float imageX, float imageY, float lensU, float lensV, float timestamp, Spectrum& throughput, std::vector<IntersectData>& intersectionData) {
-        this->imageX = imageX;
-        this->imageY = imageY;
-        this->lensU = lensU;
-        this->lensV = lensV;
-        this->timestamp = timestamp;
-        this->throughput = throughput;
-        this->intersectionData = intersectionData;
-    }
-    //The camera sample data
+	//The camera sample data
     float imageX; // Continuously sampled image positions
     float imageY;
     float lensU; // Lens parameters
     float lensV;
     float timestamp;
     Spectrum throughput;
+	Spectrum radiance; //the computed radiance for the ray, this is set at (path)integerator so it DOES NOT take into account Le values from lights
+	
+	//Variable sized (=< MAX_BOUNCE) data about its intersections
     std::vector<IntersectData> intersectionData;
+	
+    PathData(float imageX, float imageY, float lensU, float lensV, float timestamp, const Spectrum& throughput, const Spectrum& radiance, const std::vector<IntersectData>& intersectionData) {
+        this->imageX = imageX;
+        this->imageY = imageY;
+        this->lensU = lensU;
+        this->lensV = lensV;
+        this->timestamp = timestamp;
+        this->throughput = throughput;
+		this->radiance = radiance;
+        this->intersectionData = intersectionData;
+    }
 };
 
 class DataDumper {

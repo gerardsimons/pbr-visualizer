@@ -289,6 +289,7 @@ std::string RIVTable::RowToString(size_t row) {
     std::string rowText = std::to_string(row) + "|";
     for(size_t i = 0 ; i < records.size() ; i++) {
         RIVRecord* record = records[i];
+		
         RIVFloatRecord *floatRecord = CastToFloatRecord(record);
         RIVUnsignedShortRecord *shortRecord = CastToUnsignedShortRecord(record);
         
@@ -304,7 +305,7 @@ std::string RIVTable::RowToString(size_t row) {
             textWidth = valueString.size();
         }
         else {
-            throw new std::string("Unrecognized record type.");
+            throw "Unrecognized record type.";
         }
         
         int padding = floor((columnWidth - textWidth - 1) / 2.F);

@@ -30,7 +30,10 @@ RIV3DView::RIV3DView(RIVDataSet* dataset,PBRTConfig *config) : RIVDataView(datas
         throw "Only 1 instance of RIV3DView allowed.";
     }
     sizeProperty = new RIVFixedSizeProperty(0.1F);
-    const float black[] = {0,0,0};
+	Color black;
+	black.R = 0;
+	black.G = 0;
+	black.B = 0;
     colorProperty = new RIVFixedColorProperty(black);
     instance = this;
     identifier = "3DView";
@@ -135,11 +138,11 @@ void RIV3DView::drawLeafNodes(OctreeNode* node) {
 //		float ratio = density / maxDensity;
 //		ratio = 1.F - ratio;
 //		float ratio = (pointsInNode) / ((float)heatmap->GetConfiguration()->MaxNodeCapacity());
-		const float* color = treeColorMap.Color(ratio);
+		Color cubeColor = treeColorMap.ComputeColor(ratio);
 //		glColor3fv(color);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glColor4f(color[0], color[1], color[2],.5F);
+		glColor4f(cubeColor.R,cubeColor.G,cubeColor.B,.5F);
 		
 //		if(almost_equal(ratio,0.05,.1) || almost_equal(ratio,0,.001)) {
 		if(pointsInNode > 14) {
@@ -181,11 +184,14 @@ void RIV3DView::Draw() {
 	Vec3Df modelPosition = objects->GetCenter();
 	
     glEnable(GL_DEPTH_TEST);
-    glClearColor (0.0, 0.0, 0.0, 0.0);
+//    glClearColor (0.0, 0.0, 0.0, 0.0);
+	glClearColor (1.0, 1.0, 1.0, 0.0);
     glClear( GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT);
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+	//Somehow it is mirrored so lets mirror it again to match the image
+	glScalef(-1,1,1);
 	glTranslatef(-eye.x,-eye.y,-eye.z);
 //    glScalef(modelData.GetScale(), modelData.GetScale(), modelData.GetScale());
     
@@ -279,8 +285,8 @@ void RIV3DView::drawMeshModel() {
 		MeshModel model = objects->at(i);
 		if(meshSelected && isSelectedObject(model.GetObjectID())) {
 			//			printf("This is the selected mesh\n");
-			const float *color = colors::LIGHT_BLUE;
-			glColor3f(color[0], color[1], color[2]);
+			Color lightBluecolor = colors::LIGHT_BLUE;
+			glColor3f(lightBluecolor.R,lightBluecolor.G,lightBluecolor.B);
 			//			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 		else {
@@ -406,7 +412,7 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 
 void RIV3DView::InitializeGraphics() {
 	createPoints();
-	generateOctree(7, 1, .00001F);
+//	generateOctree(7, 1, .00001F);
 }
 
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
@@ -433,7 +439,8 @@ void RIV3DView::createPoints() {
 //	RIVUnsignedShortRecord *bounceRecord = isectTable->GetRecord<RIVUnsignedShortRecord>("bounce#");
     
     while(iterator->GetNext(row)) {
-        float const* color = colorProperty->Color(isectTable, row); //Check if any color can be computed for the given row
+		Color pointColor;
+        bool hasColor = colorProperty->ComputeColor(isectTable, row, pointColor); //Check if any color can be computed for the given row
 		
 //		printf("row = %zu\n",row);
 //		printf("bounce# = %d\n",bounceRecord->Value(row));
@@ -443,7 +450,7 @@ void RIV3DView::createPoints() {
 		
 		pointsToDraw.push_back(row);
 		
-        if(color != NULL) {
+        if(hasColor) {
 			float size = sizeProperty->ComputeSize(isectTable, row);
 			if(uniqueSizes.empty()) {
 				uniqueSizes.push_back(size);
@@ -455,9 +462,9 @@ void RIV3DView::createPoints() {
 			else {
 				pointsSize.push_back(sizeProperty->ComputeSize(isectTable, row));
 			}
-            pointsR.push_back(color[0]);
-            pointsG.push_back(color[1]);
-            pointsB.push_back(color[2]);
+            pointsR.push_back(pointColor.R);
+            pointsG.push_back(pointColor.G);
+            pointsB.push_back(pointColor.B);
         }
     }
 	if(sizesAllTheSame) {
@@ -515,7 +522,7 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 	size_t row = 0;
 	size_t lastRow = 0;
 	ushort lastBounceNr = 0;
-	float lastColor[3] = {0};
+	Color lastColor;
 	
 	bool pathStartFound = false;
 	size_t linesDrawn = 0;
@@ -526,14 +533,15 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 			ushort bounceNr = bounceRecord->Value(row);
 			if(bounceNr == 1) {
 				//Arbitrary camera color
-				float const* color = colorProperty->Color(table, row); //Check if any color can be computed for the given row
-				if(color) {
+				Color pathColor;
+				bool hasColor = colorProperty->ComputeColor(table, row,pathColor); //Check if any color can be computed for the given row
+				if(hasColor) {
 					glColor3f(1, 1, 1); //White
 					float deltaX = xRecord->Value(row) - cameraPosition[0];
 					float deltaY = yRecord->Value(row) - cameraPosition[1];
 					float deltaZ = zRecord->Value(row) - cameraPosition[2];
 					glVertex3f(cameraPosition[0] + deltaX * startSegment * maxBounce,cameraPosition[1] + deltaY * startSegment * maxBounce,cameraPosition[2] + deltaZ * startSegment * maxBounce);
-					glColor3fv(color);
+					glColor3f(pathColor.R,pathColor.G,pathColor.B);
 					glVertex3f(cameraPosition[0] + deltaX * stopSegment * maxBounce,cameraPosition[1] + deltaY * stopSegment * maxBounce,cameraPosition[2] + deltaZ * stopSegment * maxBounce);
 				}
 			}
@@ -545,8 +553,9 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 	glBegin(GL_LINES);
 	while(iterator->GetNext(row)) {
 		int bounce = floor(startSegment * maxBounce);
-		float const* color = colorProperty->Color(table, row); //Check if any color can be computed for the given row
-		if(color != NULL) {
+		Color pathColor;
+		bool hasColor = colorProperty->ComputeColor(table, row,pathColor); //Check if any color can be computed for the given row
+		if(hasColor) {
 			ushort bounceNr = bounceRecord->Value(row);
 			if(!pathStartFound && bounceNr == bounce ) {
 				//                printf("Row %zu is valid start point for path\n",row);;
@@ -575,9 +584,9 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 //                    if(C_one < 0 || C_one > 1 || C_two < 0 || C_two > 1) {
 //                        
 //                    }
-				glColor3fv(lastColor);
+				glColor3f(lastColor.R,lastColor.G,lastColor.B);
 				glVertex3f(lastX + deltaX * C_one, lastY + deltaY * C_one, lastZ + deltaZ * C_one);
-				glColor3fv(color);
+				glColor3f(pathColor.R,pathColor.G,pathColor.B);
 				glVertex3f(lastX + deltaX * C_two, lastY + deltaY * C_two, lastZ + deltaZ * C_two);
 				
 
@@ -594,9 +603,7 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 			//            }
 			lastRow = row;
 			lastBounceNr = bounceNr;
-			lastColor[0] = color[0];
-			lastColor[1] = color[1];
-			lastColor[2] = color[2];
+			lastColor = pathColor;
 		}
 	}
 	glEnd();

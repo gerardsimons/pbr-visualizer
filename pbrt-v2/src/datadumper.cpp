@@ -197,9 +197,11 @@ void DataDumper::WriteBufferToFile() {
         //ASCII
         float throughputRGB[3];
         data.throughput.ToRGB(throughputRGB);
+		float radianceRGB[3];
+		data.radiance.ToRGB(radianceRGB);
         
         if(writeASCII) {
-            fprintf(pathASCII,"%f,%f,%f,%f,%f,[%f,%f,%f],%hu",data.imageX,data.imageY,data.lensU,data.lensV,data.timestamp, throughputRGB[0],throughputRGB[1],throughputRGB[2],nrIsects);
+            fprintf(pathASCII,"%f,%f,%f,%f,%f,[%f,%f,%f],[%f,%f,%f],%hu",data.imageX,data.imageY,data.lensU,data.lensV,data.timestamp, throughputRGB[0],throughputRGB[1],throughputRGB[2],radianceRGB[0],radianceRGB[1],radianceRGB[2],nrIsects);
         }
         
         fwrite(&data.imageX, sizeof(float), 1, pathBinary);
@@ -208,6 +210,7 @@ void DataDumper::WriteBufferToFile() {
         fwrite(&data.lensV, sizeof(float), 1, pathBinary);
         fwrite(&data.timestamp, sizeof(float), 1, pathBinary);
         fwrite(&throughputRGB, sizeof(float), 3, pathBinary);
+		fwrite(&radianceRGB, sizeof(float), 3, pathBinary);
         fwrite(&nrIsects, sizeof(unsigned short), 1, pathBinary);
         
         //Update the counters

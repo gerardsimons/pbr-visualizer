@@ -16,40 +16,39 @@
 #include "ColorPalette.h"
 #include "ColorMap.h"
 
-
-
 class RIVRecord;
 
 //Interface for a color property
 class RIVColorProperty {
 protected:
-    float alternateColor[3];
-    RIVColorProperty(float* alternateColor_) {
-        memcpy(alternateColor,alternateColor_,sizeof(alternateColor));
+    Color alternateColor;
+    RIVColorProperty(const Color& alternateColor_) {
+        alternateColor = alternateColor_;
     }
     RIVColorProperty() {
-        memcpy(alternateColor,colors::BLACK,sizeof(alternateColor));
+        alternateColor = colors::BLACK;
     }
 public:
     //DEFAULT COLORS
-    
-    virtual float const* Color(RIVTable*,const size_t&) = 0;
+    virtual bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) = 0;
 };
 
 class RIVFixedColorProperty : public RIVColorProperty{
 private:
-    const float* color = NULL;
+     ::Color fixedColor;
     
 public:
-    RIVFixedColorProperty(const float* color) {
-        this->color = color;
+    RIVFixedColorProperty(::Color color) {
+        fixedColor = color;
     }
     RIVFixedColorProperty( float r,  float g,  float b) {
-        const float c[] = {r,g,b};
-        color = c;
+		fixedColor.R = r;
+		fixedColor.G = g;
+		fixedColor.B = b;
     }
-    float const* Color(RIVTable*,const size_t&) {
-        return color;
+    bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) {
+		color = fixedColor;
+        return true; //Always possible
     }
 };
 
@@ -114,14 +113,15 @@ public:
 		this->colorMap = colorMap;
     }
     
-    float const* Color(RIVTable* sourceTable, const size_t& row) {
+    bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) {
         float value; //Assuming this value will be between 0 and 1
-        if(RIVEvaluatedProperty<T>::Value(sourceTable,row,value))  {
+        if(RIVEvaluatedProperty<T>::Value(table,row,value))  {
 //            printf("Color value = %f\n",value);
 			//
-			return colorMap.Color(value);
+			color = colorMap.ComputeColor(value);
+			return true;
         }
-        return NULL;
+        return false;
     }
 };
 //Returns color by cycling through a fixed pre-determined set of colors
@@ -135,7 +135,7 @@ public:
         colorsToUse = colorsToUse_;
         colors = colors_;
     }
-    float const* Color(const RIVTable* table, const size_t& row) {
+    bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) {
         size_t index = colorPointer % colorsToUse;
         colorPointer++;
         return colors[index];
@@ -157,27 +157,29 @@ public:
 		delete greenColorProperty;
 		delete blueColorProperty;
 	}
-    RIVColorRGBProperty(RIVTable* referenceTable, RIVRecord *redRecord, RIVRecord* greenRecord,RIVRecord *blueRecord) {
+//    RIVColorRGBProperty(RIVTable* referenceTable, RIVRecord *redRecord, RIVRecord* greenRecord,RIVRecord *blueRecord) {
+//		redColorProperty = new RIVEvaluatedProperty<T>(referenceTable,redRecord);
+//		greenColorProperty = new RIVEvaluatedProperty<T>(referenceTable,greenRecord);
+//		blueColorProperty = new RIVEvaluatedProperty<T>(referenceTable,blueRecord);
+//    }
+	RIVColorRGBProperty(RIVTable* referenceTable, const std::string& redRecord, const std::string& greenRecord,const std::string& blueRecord) {
 		redColorProperty = new RIVEvaluatedProperty<T>(referenceTable,redRecord);
 		greenColorProperty = new RIVEvaluatedProperty<T>(referenceTable,greenRecord);
 		blueColorProperty = new RIVEvaluatedProperty<T>(referenceTable,blueRecord);
     }
-    float const* Color(RIVTable* table, const size_t& row) {
-		float ratioRed = 0;
-		float ratioGreen = 0;
-		float ratioBlue = 0;
-		
+    bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) {
+		float ratioRed;
+		float ratioGreen;
+		float ratioBlue;
 		if(redColorProperty->Value(table,row,ratioRed) && blueColorProperty->Value(table,row,ratioBlue) && greenColorProperty->Value(table,row,ratioGreen)) {
 //			printf("Ratio (r,g,b) = (%f,%f,%f)\n",ratioRed,ratioGreen,ratioBlue);
-			static float const color[3] = {ratioRed,ratioGreen,ratioBlue};
-			if(ratioRed > 0.5) {
-				
-			}
-			return color;
+//			printf("color (r,g,b) = (%f,%f,%f)\n",color[0],color[1],color[2]);
+			color.R = ratioRed;
+			color.G = ratioGreen;
+			color.B = ratioBlue;
+			return true;
 		}
-		else return NULL;
-		
-
+		return false;
 	}
 };
 

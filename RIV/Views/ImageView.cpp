@@ -245,19 +245,16 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 					selection.start.y = selection.end.y;
 					selection.end.y = tempY;
 				}
-//
+
 				riv::Filter *xFilter = new riv::RangeFilter("x",selection.start.x,selection.end.x - 1);
 				//Be sure to invert the Y coordinates!
 				riv::Filter *yFilter = new riv::RangeFilter("y", renderedImage->sizeY - selection.start.y,renderedImage->sizeY - selection.end.y - 1);
-//				Filter *yFilter = new RangeFilter("y", selection.start.y,selection.end.y - 1);
-                
-//                Filter *xFilter = new RangeFilter("x",9,22);
-//                Filter *yFilter = new RangeFilter("y",5,6);
 		
+				dataset->StartFiltering();
 				dataset->AddFilter("path",xFilter);
 				dataset->AddFilter("path",yFilter);
-                
-//                dataset->Print();
+				dataset->StopFiltering();
+					
 			}
 			else {
 				clearSelection(); 

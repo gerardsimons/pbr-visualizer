@@ -684,16 +684,18 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     size_t total_nr_paths = std::atol(valuesString[0].c_str());
     size_t total_nr_isects = std::atol(valuesString[1].c_str());
     
-    
     //Path data
     std::vector<ushort> xPixelData;
     std::vector<ushort> yPixelData;
     std::vector<float> lensUs;
     std::vector<float> lensVs;
     std::vector<float> timestamps;
-    std::vector<float> throughPutOne;
-    std::vector<float> throughPutTwo;
-    std::vector<float> throughPutThree;
+    std::vector<float> throughputR;
+    std::vector<float> throughputG;
+    std::vector<float> throughputB;
+	std::vector<float> radianceR;
+    std::vector<float> radianceG;
+    std::vector<float> radianceB;
     std::vector<ushort> intersections;
     
     std::vector<ushort> bounceNumbers;
@@ -709,7 +711,7 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     std::vector<ushort> interactionTypes;
     std::vector<ushort> lightIds;
     
-//    fprintf(outputFile, "x,y,lensU,lensV,timestamp,throughput_1,throughput_2,throughput_3,size\n");
+//    fprintf(outputFile, "x,y,lensU,lensV,timestamp,throughput_1,throughput_2,throughput_3,radiance_R,radiance_G,radiance_B,size\n");
     
     std::map<size_t,std::vector<size_t> > pathIsectReferences = std::map<size_t,std::vector<size_t> >();
     
@@ -728,7 +730,8 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
         float lensU;
         float lensV;
         float timestamp;
-        float throughput[3] = {-1.F,-1.F,-1.F};
+        float throughput[3];
+		float radiance[3];
         ushort size;
         
         fread(&x,sizeof(float),1,inputFile);
@@ -747,6 +750,9 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
         
         // throughputs
         fread(throughput,sizeof(float),3,inputFile);
+		
+		// radiance
+		fread(radiance,sizeof(float),3,inputFile);
         
         //Read the number of intersections
         fread(&size,sizeof(ushort),1,inputFile);
@@ -757,9 +763,12 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
         lensVs.push_back(lensV);
         timestamps.push_back(timestamp);
 		//Clamp throughput RGB
-        throughPutOne.push_back(std::min(1.F,throughput[0]));
-        throughPutTwo.push_back(std::min(1.F,throughput[1]));
-		throughPutThree.push_back(std::min(1.F,throughput[2]));
+        throughputR.push_back(std::min(1.F,throughput[0]));
+        throughputG.push_back(std::min(1.F,throughput[1]));
+		throughputB.push_back(std::min(1.F,throughput[2]));
+        radianceR.push_back(std::min(1.F,radiance[0]));
+        radianceG.push_back(std::min(1.F,radiance[1]));
+		radianceB.push_back(std::min(1.F,radiance[2]));
         intersections.push_back(size);
         
         std::vector<size_t> isectIndices;
@@ -823,21 +832,24 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     RIVFloatRecord *lensURecord = new RIVFloatRecord("lens U",lensUs);
     RIVFloatRecord *lensVRecord = new RIVFloatRecord("lens V",lensVs);
     RIVFloatRecord *timestampRecord = new RIVFloatRecord("timestamp",timestamps);
-    RIVFloatRecord *tpOne = new RIVFloatRecord("throughput 1",throughPutOne);
-    RIVFloatRecord *tpTwo = new RIVFloatRecord("throughput 2",throughPutTwo);
-    RIVFloatRecord *tpThree = new RIVFloatRecord("throughput 3",throughPutThree);
+    RIVFloatRecord *tpOne = new RIVFloatRecord("throughput R",throughputR);
+    RIVFloatRecord *tpTwo = new RIVFloatRecord("throughput G",throughputG);
+    RIVFloatRecord *tpThree = new RIVFloatRecord("throughput B",throughputB);
+	RIVFloatRecord *radianceRed = new RIVFloatRecord("radiance R",radianceR);
+    RIVFloatRecord *radianceGreen = new RIVFloatRecord("radiance G",radianceG);
+    RIVFloatRecord *radianceBlue = new RIVFloatRecord("radiance B",radianceB);
     RIVUnsignedShortRecord *isects = new RIVUnsignedShortRecord("#intersections",intersections);
     
     RIVUnsignedShortRecord *bounceNumberRecord = new RIVUnsignedShortRecord("bounce#",bounceNumbers);
     RIVFloatRecord *isectPosX = new RIVFloatRecord("intersection X",intersectionPosX);
     RIVFloatRecord *isectPosY = new RIVFloatRecord("intersection Y",intersectionPosY);
     RIVFloatRecord *isectPosZ = new RIVFloatRecord("intersection Z",intersectionPosZ);
-    RIVUnsignedShortRecord *primitiveIdRecord = new RIVUnsignedShortRecord("primitive ID",primitveIds);
+//    RIVUnsignedShortRecord *primitiveIdRecord = new RIVUnsignedShortRecord("primitive ID",primitveIds);
     RIVUnsignedShortRecord *shapeIdRecord = new RIVUnsignedShortRecord("shape ID",shapeIds);
 	RIVUnsignedShortRecord *objectIdRecord = new RIVUnsignedShortRecord("object ID",objectIds);
-    RIVFloatRecord *spectrumOneRecord = new RIVFloatRecord("spectrum 1",spectraOne);
-    RIVFloatRecord *spectrumTwoRecord = new RIVFloatRecord("spectrum 2",spectraTwo);
-    RIVFloatRecord *spectrumThreeRecord = new RIVFloatRecord("spectrum 3",spectraThree);
+    RIVFloatRecord *spectrumOneRecord = new RIVFloatRecord("spectrum R",spectraOne);
+    RIVFloatRecord *spectrumTwoRecord = new RIVFloatRecord("spectrum G",spectraTwo);
+    RIVFloatRecord *spectrumThreeRecord = new RIVFloatRecord("spectrum B",spectraThree);
     RIVUnsignedShortRecord *interactionTypesRecord = new RIVUnsignedShortRecord("interaction types",interactionTypes);
     RIVUnsignedShortRecord *lightIdsRecord = new RIVUnsignedShortRecord("light ids",lightIds);
     
@@ -846,9 +858,12 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     pathTable->AddRecord(lensURecord);
     pathTable->AddRecord(lensVRecord);
     pathTable->AddRecord(timestampRecord);
-    pathTable->AddRecord(tpOne);
-    pathTable->AddRecord(tpTwo);
-    pathTable->AddRecord(tpThree);
+//    pathTable->AddRecord(tpOne);
+//    pathTable->AddRecord(tpTwo);
+//    pathTable->AddRecord(tpThree);
+	pathTable->AddRecord(radianceRed);
+	pathTable->AddRecord(radianceGreen);
+	pathTable->AddRecord(radianceBlue);
     pathTable->AddRecord(isects);
     
     intersectionsTable->AddRecord(bounceNumberRecord);
@@ -856,7 +871,7 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     intersectionsTable->AddRecord(isectPosY);
     intersectionsTable->AddRecord(isectPosZ);
     intersectionsTable->AddRecord(shapeIdRecord);
-	intersectionsTable->AddRecord(primitiveIdRecord);
+//	intersectionsTable->AddRecord(primitiveIdRecord);
 	intersectionsTable->AddRecord(objectIdRecord);
     intersectionsTable->AddRecord(spectrumOneRecord);
     intersectionsTable->AddRecord(spectrumTwoRecord);

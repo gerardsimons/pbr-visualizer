@@ -14,22 +14,28 @@
 
 
 
+typedef struct Color {
+	float R;
+	float G;
+	float B;
+} Color;
+
 //A linearly interpolated color map
 class ColorMap {
 private:
-	std::vector<const float*> colorTable;
+	std::vector<Color> colorTable;
 public:
 	ColorMap() {
 		
 	}
-	ColorMap(std::vector<const float*>& colors) {
+	ColorMap(std::vector<Color>& colors) {
 		colorTable = colors;
 	}
 	
 	//Methods
 	void SetRange(float minRange,float maxRange);
-	const float* Color(float ratio);
-	void AddColor(float const* newColor);
+	Color ComputeColor(float ratio);
+	void AddColor(const Color& newColor);
 };
 
 #endif /* defined(__afstuderen_DO_NOT_DELETE__ColorMap__) */

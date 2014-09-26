@@ -128,12 +128,6 @@ Spectrum PathIntegrator::Li(const Scene *scene, const Renderer *renderer,
 		IntersectData data;
 		data.primitiveId = isectp->primitiveId;
 		data.shapeId = isectp->shapeId;
-		
-		//The object ID is wrong
-		if(p.x > 0 && p.x < 200 && p.y > 0 && p.y < 200 && p.z > 0 && p.z < 200) {
-			//			data.primitiveId = 34;
-		}
-		
 		data.position = p;
 		data.spectrum = L;
 		data.interactionType = (ushort)flags;
@@ -152,7 +146,8 @@ Spectrum PathIntegrator::Li(const Scene *scene, const Renderer *renderer,
 		//Set to next intersection
 		isectp = &localIsect;
 	}
-    PathData pathData(sample->imageX,sample->imageY,sample->lensU, sample->lensV, sample->time,pathThroughput,intersectData);
+	
+    PathData pathData(sample->imageX,sample->imageY,sample->lensU, sample->lensV, sample->time,pathThroughput,L,intersectData);
     
     DataDumper::AddToBuffer(id,pathData);
 	return L;

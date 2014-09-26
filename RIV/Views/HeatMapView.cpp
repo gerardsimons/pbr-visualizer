@@ -122,9 +122,9 @@
 			
 				float heatmapValue = heatmap[x][y];
 	//            float color[3] = {1,0,0}; //Red
-				const float* color = colorMap.Color(heatmapValue);
+				Color squareColor = colorMap.ComputeColor(heatmapValue);
 				
-				glColor3f(color[0],color[1],color[2]);
+				glColor3f(squareColor.R,squareColor.G,squareColor.B);
 				
 				glBegin(GL_QUADS);
 				glVertex3f(x * xTileSize,y * yTileSize, 1);

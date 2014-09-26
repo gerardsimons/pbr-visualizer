@@ -422,30 +422,14 @@ void createViews() {
 }
 
 void initializeViewProperties() {
-//    RIVTable *imageTable = dataset.GetTable("image");
     RIVTable *pathTable = dataset.GetTable("path");
     RIVTable *intersectionsTable = dataset.GetTable("intersections");
-    
-    //    imageTable->FilterRowsUnlinkedTo(pathTable);
-    
-    RIVRecord* bounceRecord = intersectionsTable->GetRecord("bounce#");
-    RIVRecord* xRecord = intersectionsTable->GetRecord("intersection X");
-	
-	RIVRecord* throughputOne = pathTable->GetRecord("throughput 1");
-	RIVRecord* throughputTwo = pathTable->GetRecord("throughput 2");
-	RIVRecord* throughputThree = pathTable->GetRecord("throughput 3");
-	
-	RIVRecord* spectrumR = intersectionsTable->GetRecord("spectrum 1");
-	RIVRecord* spectrumG = intersectionsTable->GetRecord("spectrum 2");
-	RIVRecord* spectrumB = intersectionsTable->GetRecord("spectrum 3");
     
 //    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty(pathTable,colors::GREEN,colors::RED);
     
     ColorMap jetColorMap = colors::jetColorMap();
-    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,bounceRecord,jetColorMap);
-//    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,xRecord,jetColorMap);
-//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,throughputOne,throughputTwo,throughputThree);
-//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(intersectionsTable,spectrumR,spectrumG,spectrumB);
+//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(intersectionsTable,"spectrum R","spectrum G","spectrum B");
+	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,"radiance R","radiance G","radiance B");
     RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
     
     parallelCoordsView->SetColorProperty(colorProperty);
@@ -508,9 +492,7 @@ int main(int argc, char **argv)
 {
     generatePaths(argc, argv);
 	
-//	if(!Octree::Test()) {
-//		return 0;
-//	}
+	
 
     srand(time(NULL));
     /* initialize GLUT, let it extract command-line

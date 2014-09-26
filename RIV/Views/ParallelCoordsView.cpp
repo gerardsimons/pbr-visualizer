@@ -15,8 +15,10 @@ int ParallelCoordsView::windowHandle = -1;
 
 ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset) : RIVDataView(dataset) {
     instance = this;
-    
-    const float black[] = {0,0,0};
+	Color black;
+	black.R = 0;
+	black.G = 0;
+	black.B = 0;
     colorProperty = new RIVFixedColorProperty(black);
     sizeProperty = new RIVFixedSizeProperty(1);
 }
@@ -211,35 +213,21 @@ void ParallelCoordsView::drawLines() {
             else {
                 printf("Drawn table %s using normal table iterator.\n",table->GetName().c_str());
             }
-            
-            std::vector<float> axisXCache;
-            std::vector<float> axisYCache;
-            
+            Color lineColor;
             while(iterator->GetNext(row)) {
-                glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
-                
-                float const* color = colorProperty->Color(table, row);
-				if(color == NULL) {
+                if(colorProperty->ComputeColor(table, row, lineColor)) {
+					glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
 					
-				}
-				
-                float size = sizeProperty->ComputeSize(table,row);
-				
-				//                printf("PCV Size = %f\n",size);
-                
-                glLineWidth(size);
-                
-                if(color != NULL) {
-                    glColor3f(color[0], color[1], color[2]);
-					//    //                delete color;
+					float size = sizeProperty->ComputeSize(table,row);
+					
+//					printf("row = %zu glColor3f(%f,%f,%f)\n",row,lineColor.R,lineColor.G,lineColor.B);
+					
+					glLineWidth(size);
+                    glColor3f(lineColor.R, lineColor.G, lineColor.B);
                     for(ParallelCoordsAxis &axis : axisGroup.axes) {
                         RIVRecord *ptr = axis.RecordPointer;
                         RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(ptr);
-                        
-						//                        printf("Axis name = %s\n",axis.name.c_str());
-						//                        printf("Loop count = %zu\n",loop_count);
-						//                        ++loop_count;
-						//
+		
                         if(floatRecord) {
 							//                            //Code here
                             float value = floatRecord->Value(row);
