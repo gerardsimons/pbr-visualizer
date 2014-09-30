@@ -10,7 +10,8 @@ Window::Window(const RIVDataSet& dataset_, BMPImage* image, const PBRTConfig& co
 
 	//Create widgets
 	RIVTable *intersectionsTable = dataset.GetTable("intersections");
-    
+	RIVTable* pathTable = dataset.GetTable("path");
+		
     RIVRecord* bounceRecord = intersectionsTable->GetRecord("bounce#");
 	//    RIVRecord* xRecord = intersectionsTable->GetRecord("intersection X");
 	
@@ -25,24 +26,31 @@ Window::Window(const RIVDataSet& dataset_, BMPImage* image, const PBRTConfig& co
 	//    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty(pathTable,colors::GREEN,colors::RED);
     
     ColorMap jetColorMap = colors::jetColorMap();
-    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,bounceRecord,jetColorMap);
-	RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
+//    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,bounceRecord,jetColorMap);
+//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(intersectionsTable,"spectrum R","spectrum G","spectrum B");
+	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,"radiance R","radiance G","radiance B");
+	RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(.1F);
 	//    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,xRecord,jetColorMap);
-	//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,throughputOne,throughputTwo,throughputThree);
+
 	//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(intersectionsTable,spectrumR,spectrumG,spectrumB);
 
-	
+		
 	sceneWidget = new SceneWidget(&dataset,&pbrtConfiguration,colorProperty,sizeProperty,this);
 	pcWidget = new PCWidget(&dataset,colorProperty,sizeProperty,this);
 	imageWidget = new ImageWidget(&dataset,image,colorProperty,sizeProperty,this);
 	heatmapWidget = new HeatmapWidget(&dataset,this);
+		
+	dataset.AddFilterListener(sceneWidget);
+	dataset.AddFilterListener(pcWidget);
+		
+	update();
 }
 
-void Window::createWidgets() {
+void Window::focusInEvent( QFocusEvent* event )
+{}
 
-//    RIVTable *imageTable = dataset.GetTable("image");
-//    RIVTable *pathTable = dataset.GetTable("path");
-
+void Window::paintEvent(QPaintEvent* event) {
+	printf("Window paintEvent\n");
 }
 
 void Window::resizeEvent ( QResizeEvent* event ) {
@@ -72,13 +80,100 @@ void Window::resizeEvent ( QResizeEvent* event ) {
 
 void Window::keyPressEvent(QKeyEvent *event) {
 	printf("Window keyPressEvent key=%d : ",event->key());
+	bool redraw = true;
+	float camSpeed = 1;
 	switch (event->key()) {
 		case Qt::Key_C:
 			sceneWidget->ToggleDrawIntersectionPoints();
 			sceneWidget->repaint();
 			break;
+		case Qt::Key_Escape: //ESC key
+			printf("Clear filters\n");
+			//            invalidateAllViews();
+			dataset.StartFiltering();
+			dataset.ClearFilters();
+			dataset.StopFiltering();
+			break;
+		case Qt::Key_B: // 'b' key
+			glutSwapBuffers();
+			printf("Manual swap buffers\n");
+			//            copy_buffer();
+			break;
+		case Qt::Key_L : // 'l' key, toggle lines drawing
+			sceneWidget->CyclePathSegment();
+			sceneWidget->repaint();
+			break;
+		case Qt::Key_BracketLeft: // '[' key, increase path segment
+			sceneWidget->MovePathSegment(-.01F);
+			sceneWidget->repaint();
+			break;
+		case Qt::Key_BracketRight:
+			sceneWidget->MovePathSegment(.01F);
+			sceneWidget->repaint();
+			break;
+		case Qt::Key_H: // the 'h' from heatmap, toggle drawing the octree heatmap
+			sceneWidget->ToggleDrawHeatmap();
+			sceneWidget->repaint();
+			break;
+		case Qt::Key_P: //The 'p' key, toggle drawing paths in 3D view
+			sceneWidget->ToggleDrawPaths();
+			sceneWidget->repaint();
+			break;
+		case Qt::Key_T: // 't' key, use as temp key for some to-test function
+		{
+			std::vector<riv::Filter*> allFilters;
+			std::vector<ushort> selectedObjectIDs;
+			selectedObjectIDs.push_back(1);
+			selectedObjectIDs.push_back(1);
+			selectedObjectIDs.push_back(1);
+			selectedObjectIDs.push_back(1);
+			selectedObjectIDs.push_back(1);
+			for(size_t i = 0 ; i < selectedObjectIDs.size() ; ++i) {
+				riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectIDs[i]);
+				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",i+1);
+				std::vector<riv::Filter*> fs;
+				fs.push_back(objectFilter);
+				fs.push_back(bounceFilter);
+				allFilters.push_back(new riv::ConjunctiveFilter(fs));
+			}
+			riv::GroupFilter* pathCreationFilter = new riv::GroupFilter(allFilters,dataset.GetTable("path"));
+			pathCreationFilter->Print();
+			printf("\n");
+			dataset.StartFiltering();
+			dataset.AddFilter("path", pathCreationFilter);
+			dataset.StopFiltering();
+			redraw = false;
+			break;
+		}
+		case Qt::Key_W: // 'w' key, move camera in Y direction
+			sceneWidget->MoveCamera(0,camSpeed,0);
+			sceneWidget->repaint();
+			break;
+		case Qt::Key_S:
+			sceneWidget->MoveCamera(0, -camSpeed, 0);
+			sceneWidget->repaint();
+			break;
+		case Qt::Key_Up:
+			sceneWidget->MoveCamera(0,0,camSpeed);
+			sceneWidget->repaint();
+			//            uiView->MoveMenu(0,-10.F);
+			break;
+		case Qt::Key_Down:
+			sceneWidget->MoveCamera(0,0,-camSpeed);
+			sceneWidget->repaint();
+			//            uiView->MoveMenu(0,10);
+			break;
+		case Qt::Key_Left:
+			sceneWidget->MoveCamera(-camSpeed,0,0);
+			sceneWidget->repaint();
+			//            uiView->MoveMenu(-10.F,0);
+			break;
+		case Qt::Key_Right:
+			sceneWidget->MoveCamera(camSpeed,0,0);
+			sceneWidget->repaint();
+			//            uiView->MoveMenu(10.F,0);
+			break;
 		default:
 			printf(" ... does nothing.");
 	}
-	printf("\n");
 }

@@ -855,9 +855,9 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     
     pathTable->AddRecord(xRecord);
     pathTable->AddRecord(yRecord);
-    pathTable->AddRecord(lensURecord);
-    pathTable->AddRecord(lensVRecord);
-    pathTable->AddRecord(timestampRecord);
+//    pathTable->AddRecord(lensURecord);
+//    pathTable->AddRecord(lensVRecord);
+//    pathTable->AddRecord(timestampRecord);
 //    pathTable->AddRecord(tpOne);
 //    pathTable->AddRecord(tpTwo);
 //    pathTable->AddRecord(tpThree);

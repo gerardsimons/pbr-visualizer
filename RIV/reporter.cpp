@@ -54,7 +54,11 @@ namespace reporter {
     }
 }
 
-void reporter::startTask(std::string taskName,float maxRounds_) {
+void reporter::startTask(char* taskname,float maxRounds_) {
+	startTask(std::string(taskname),maxRounds_);
+}
+
+void reporter::startTask(const std::string& taskName,float maxRounds_) {
     if(!reporter::runningTasks[taskName]) {
         reporter::Task* newTask = new reporter::Task(taskName,maxRounds_);
         reporter::runningTasks[taskName] = newTask;

@@ -99,7 +99,7 @@ void RIVDataSet::ClearFilters() {
 }
 
 void RIVDataSet::ClearFilter(size_t filterID) {
-	printf("Clearing filter %d on all tables\n",filterID);
+	printf("Clearing filter %zu on all tables\n",filterID);
     for(RIVTable *table : tables) {
         if(table->ClearFilter(filterID)) {
 			staleTables[table] = true;

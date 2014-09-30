@@ -44,7 +44,7 @@
 		colorMap = colors::jetColorMap();
 		heatmap.resize( xMax , std::vector<float>( yMax , 0 ) );
 		
-		TableIterator *iterator = pathTable->GetIterator();
+		TableIterator* iterator = pathTable->GetIterator();
 		
 		float max = std::numeric_limits<float>::min();
 		
@@ -54,7 +54,7 @@
 			ushort y = yRecord->Value(row);
 			ushort nrIsects = intersections->Value(row);
 			//Update heatmap count
-			heatmap[x][yMax - y] += nrIsects;
+			heatmap[x][yMax - y - 1] += nrIsects;
 		}
 		
 		//Find maximum
@@ -110,7 +110,7 @@
 		//Colors in RGB
 		//Blue cyan green yellow red
 	//    float colors[nr_colors][3] = {{0,0,1},{0,1,1},{0,1,0},{1,1,0},{1,0,0}};
-		float colors[nr_colors][3] = {{0,0,.57},{0,0,1},{0,1,1},{1,1,0},{1,0,0},{.5,0,0}};
+//		float colors[nr_colors][3] = {{0,0,.57},{0,0,1},{0,1,1},{1,1,0},{1,0,0},{.5,0,0}};
 		
 		//Colors in HSV
 	//    float colors[nr_colors][3]    = {{240,1,1},{180,1,1},{120,1,1},{60,1,1},{0,1,1}};

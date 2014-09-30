@@ -23,7 +23,6 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset) : RIVDataView(datase
     sizeProperty = new RIVFixedSizeProperty(1);
 }
 
-
 ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, int x, int y, int width, int height, int paddingX, int paddingY, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY,colorProperty,sizeProperty) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
@@ -124,11 +123,35 @@ void ParallelCoordsView::createAxes() {
     }
 }
 
+void ParallelCoordsView::drawSelectionBoxes() {
+	for(ParallelCoordsAxisGroup& axisGroup : axisGroups) {
+		for(ParallelCoordsAxis& axis : axisGroup.axes) {
+			if(axis.HasSelectionBox) {
+				glColor3f(1, 0, 0);
+				glBegin(GL_LINE_STRIP);
+				
+				Area &selectionBox  = axis.selection;
+				
+				glVertex3f(selectionBox.start.x,selectionBox.start.y,0);
+				glVertex3f(selectionBox.end.x,selectionBox.start.y,0);
+				
+				glVertex3f(selectionBox.end.x,selectionBox.end.y,0);
+				glVertex3f(selectionBox.start.x,selectionBox.end.y,0);
+				
+				glVertex3f(selectionBox.start.x,selectionBox.start.y,0);
+				
+				glEnd();
+			}
+		}
+	}
+}
+
+
 void ParallelCoordsView::drawAxes() {
 	
     glColor3f(1,1,1);
     glLineWidth(1.F);
-    
+	
     glBegin(GL_LINES);
     for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
         for(ParallelCoordsAxis &axis : axisGroup.axes) {
@@ -141,8 +164,6 @@ void ParallelCoordsView::drawAxes() {
     
     glColor3f(1,0,0);
     glLineWidth(1.F);
-    
-    //Draw selection box
     
     float textColor[3] = {0,0,0};
     
@@ -167,23 +188,6 @@ void ParallelCoordsView::drawAxes() {
                 
                 drawText(buffer,4,axis.x - 6,height,textColor,.1F);
             }
-            
-            if(axis.HasSelectionBox) {
-                glColor3f(1, 0, 0);
-                glBegin(GL_LINE_STRIP);
-                
-                Area &selectionBox  = axis.selection;
-                
-                glVertex3f(selectionBox.start.x,selectionBox.start.y,0);
-                glVertex3f(selectionBox.end.x,selectionBox.start.y,0);
-                
-                glVertex3f(selectionBox.end.x,selectionBox.end.y,0);
-                glVertex3f(selectionBox.start.x,selectionBox.end.y,0);
-                
-                glVertex3f(selectionBox.start.x,selectionBox.start.y,0);
-                
-                glEnd();
-            }
         }
     }
     axesAreDirty = false;
@@ -192,13 +196,8 @@ void ParallelCoordsView::drawAxes() {
 void ParallelCoordsView::drawLines() {
 //	linesAreDirty = true;
 
-		//        double duration;
-        size_t lineIndex = 0;
-        
+		size_t lineIndex = 0;
         glColor3f(1.0, 0.0, 0.0);
-        
-		//        size_t loop_count = 0;
-        
         size_t linesDrawn = 0;
 		
         for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
@@ -206,21 +205,13 @@ void ParallelCoordsView::drawLines() {
             
             size_t row = 0;
 
-            TableIterator *iterator = table->GetIterator();
-            if(dynamic_cast<FilteredTableIterator*> (iterator)) {
-                printf("Drawn table %s using filtered table iterator.\n",table->GetName().c_str());
-            }
-            else {
-                printf("Drawn table %s using normal table iterator.\n",table->GetName().c_str());
-            }
+            TableIterator* iterator = table->GetIterator();
             Color lineColor;
             while(iterator->GetNext(row)) {
                 if(colorProperty->ComputeColor(table, row, lineColor)) {
 					glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
 					
 					float size = sizeProperty->ComputeSize(table,row);
-					
-//					printf("row = %zu glColor3f(%f,%f,%f)\n",row,lineColor.R,lineColor.G,lineColor.B);
 					
 					glLineWidth(size);
                     glColor3f(lineColor.R, lineColor.G, lineColor.B);
@@ -236,9 +227,9 @@ void ParallelCoordsView::drawLines() {
 
                             ++linesDrawn;
                             glVertex3f(x, y, 0);
-                            if(y > axis.y + axis.height || y < axis.y) {
-                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
-                            }
+//                            if(y > axis.y + axis.height || y < axis.y) {
+//                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
+//                            }
                             continue;
                         }
                         RIVUnsignedShortRecord* shortRecord = RIVTable::CastToUnsignedShortRecord(ptr);
@@ -251,9 +242,9 @@ void ParallelCoordsView::drawLines() {
                             float y = axis.PositionOnScaleForValue(value);
                             glVertex3f(x, y, 0);
 							
-                            if(y > axis.y + axis.height || y < axis.y) {
-                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
-                            }
+//                            if(y > axis.y + axis.height || y < axis.y) {
+//                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
+//                            }
                             ++linesDrawn;
                         }
                     }
@@ -324,23 +315,23 @@ size_t drawCount = 0;
 void ParallelCoordsView::Draw() {
 	//    printf("linesAreDirty = %d axesAreDirty = %d\n",linesAreDirty,axesAreDirty);
 	printf("ParallelCoordsView Draw #%zu : \n",++drawCount);
-
-	axesAreDirty = true;
-	linesAreDirty = true;
 	
-//		printf("REDRAW NEEDED!\n");
-	if(axesAreDirty && linesAreDirty) {
+	if(axesAreDirty && linesAreDirty && selectionIsDirty) {
+		printf("Clear PCV window\n");
         glClearColor(0.9, 0.9, 0.9, 0.0);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	}
 		
-        //Draw the axes
+	//Draw the axes
 	if(axesAreDirty)
         drawAxes();
         
         //Draw the lines from each axis
 	if(linesAreDirty)
         drawLines();
+	
+	if(selectionIsDirty)
+		drawSelectionBoxes();
         
 	glutSwapBuffers();
 }
@@ -430,18 +421,11 @@ void ParallelCoordsView::clearSelection() {
 
 bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
     y = height - y;
-	//    printf("PCV HandleMouseMotion\n");
-    //    printf("(x,y)=(%d,%d)\n",x,y);
-	//    ToViewSpaceCoordinates(&x, &y);
     if(isDragging && selectedAxis != 0) {
         Area *selection = &selectedAxis->selection;
         
-        selection->end.y = selectedAxis->PositionOnScaleForViewY(y);
-        
-        axesAreDirty = true;
-//        linesAreDirty = true;
-        
-//        glutPostRedisplay();
+		selection->end.y = selectedAxis->PositionOnScaleForViewY(y);
+		selectionIsDirty = true;
         
         return true;
     }

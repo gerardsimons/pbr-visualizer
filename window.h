@@ -17,8 +17,6 @@ private:
 	RIVDataSet dataset;
 	PBRTConfig pbrtConfiguration;
 	
-	void createWidgets();
-	
 	SceneWidget* sceneWidget = NULL;
 	PCWidget* pcWidget = NULL;
 	ImageWidget* imageWidget = NULL;
@@ -29,6 +27,8 @@ public:
 	//QT event callback functionss
 	void keyPressEvent(QKeyEvent *event);
 	void resizeEvent ( QResizeEvent* event );
+	void paintEvent(QPaintEvent*);
+	void focusInEvent(QFocusEvent*);
 signals:
 
 public slots:

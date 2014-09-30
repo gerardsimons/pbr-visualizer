@@ -23,7 +23,7 @@ std::vector<DataDumper> DataDumper::instances;
 
 std::map<ushort,ushort> objectPrimitives;
 
-bool writeASCII = true;
+bool writeASCII = false;
 
 template<typename T,typename U>
 void printMap(std::map<T,U> map) {
@@ -81,10 +81,10 @@ void DataDumper::Init(const std::string& imagename, int numDumpers) {
     if(numDumpers < 1) {
         throw "Number of dumpers must be a positive number";
     }
-    if(numDumpers != 1) {
-        throw "Multiple dumpers not yet supported.";
-    }
-    
+//    if(numDumpers != 1) {
+//        throw "Multiple dumpers not yet supported.";
+//    }
+	
     //Create instances, give each their own unique ID
     for(int i = 0 ; i < numDumpers ; ++i) {
         DataDumper newInstance = DataDumper(imagename, i);
@@ -229,13 +229,18 @@ void DataDumper::WriteBufferToFile() {
 				
 				float positionFloat[] = { isectData.position.x, isectData.position.y, isectData.position.z };
 				
-				fprintf(pathASCII,"[%f,%f,%f]",positionFloat[0],positionFloat[1],positionFloat[2]);
-				if(i != nrIsects - 1) {
-					fputs(",",pathASCII);
+				if(writeASCII) {
+					fprintf(pathASCII,"[%f,%f,%f]",positionFloat[0],positionFloat[1],positionFloat[2]);
+					if(i != nrIsects - 1) {
+						fputs(",",pathASCII);
+					}
 				}
 				fwrite(&positionFloat,sizeof(float),3,pathBinary);
 			}
-			fputs("},",pathASCII);
+			if(writeASCII) {
+				fputs("},",pathASCII);
+	
+			}
 			for(size_t i = 0 ; i < nrIsects ; i++) {
 				IntersectData isectData = data.intersectionData[i];
 	//            isectData->primitiveId = 4;
@@ -273,7 +278,8 @@ void DataDumper::WriteBufferToFile() {
 			}
 
 			//write color spectra size * float[nSamples]
-			fprintf(pathASCII,"{");
+			if(writeASCII)
+				fprintf(pathASCII,"{");
 			for(size_t i = 0 ; i < nrIsects ; i++) {
 				IntersectData isectData = data.intersectionData[i];
 				const RGBSpectrum &s = isectData.spectrum.ToRGBSpectrum();

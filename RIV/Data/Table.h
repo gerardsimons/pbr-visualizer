@@ -25,11 +25,10 @@
 #include "../helper.h"
 #include "../reporter.h"
 
-
-	
-	class RIVReference;
-	class RIVReferenceChain;
-	class RIVDataView;
+class RIVReference;
+class RIVReferenceChain;
+class RIVDataView;
+class TableIterator;
 
 namespace riv {
 	class Filter;
@@ -47,7 +46,7 @@ namespace riv {
 		bool filtered = false;
 		bool isClustered = false;
 		
-		TableIterator* iterator;
+		TableIterator* iterator = NULL;
 		
 		size_t rows = 0; //Keeps a running count of the rows (that is the length of a record)
 		
@@ -106,6 +105,7 @@ namespace riv {
 		
 		const std::vector<RIVReference*>* GetReferences();
 		TableIterator* GetIterator();
+//		TableIterator* GetPIterator();
 		std::string GetName() const { return name; };
 		size_t GetNumRows() const { return rows; };
 		
@@ -124,6 +124,7 @@ namespace riv {
 		RIVClusterSet* Cluster(const std::string& xRecord, const std::string& yRecord, const std::string& zRecord, const size_t& K, const size_t& maxRepeat);
 		
 		//Print functions
+		void PrintUnfiltered();
 		void Print(size_t maxPrint = 1000, bool printFiltered = true); //Print all the rows
 		//    void PrintUnfiltered(); //Print only those rows that are not filtered
 		void PrintFilteredRowMap(); //Print the underlying filter map

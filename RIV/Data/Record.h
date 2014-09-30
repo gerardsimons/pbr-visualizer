@@ -108,8 +108,8 @@ public:
     void Print() {
         std::cout << "RIVRecord " << name << " containing " << values.size() << " " << typeid(int).name() << " values.\n";
     }
-    std::vector<ushort>& GetValues() {
-        return values;
+    std::vector<ushort>* GetValues() {
+        return &values;
     }
     void SetValues(std::vector<ushort> _values) {
         values = _values;

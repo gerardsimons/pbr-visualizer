@@ -41,6 +41,11 @@ public:
     RIVFixedColorProperty(::Color color) {
         fixedColor = color;
     }
+	RIVFixedColorProperty() {
+		fixedColor.R = 0;
+		fixedColor.G = 0;
+		fixedColor.B = 0;
+	}
     RIVFixedColorProperty( float r,  float g,  float b) {
 		fixedColor.R = r;
 		fixedColor.G = g;
@@ -112,7 +117,14 @@ public:
         
 		this->colorMap = colorMap;
     }
-    
+	
+	RIVEvaluatedColorProperty(RIVTable *colorReference_, const std::string& recordName, const ColorMap& colorMap) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,recordName){
+		//        memcpy(colorOne, colorOne_, sizeof(colorOne));
+		//        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
+		
+		this->colorMap = colorMap;
+	}
+	
     bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) {
         float value; //Assuming this value will be between 0 and 1
         if(RIVEvaluatedProperty<T>::Value(table,row,value))  {

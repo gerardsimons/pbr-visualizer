@@ -11,16 +11,13 @@
 #include <math.h>
 #include <algorithm>
 
-float* linearInterpolateColor(float ratio, const float colorOne[3],const float colorTwo[3]) {
+inline float* linearInterpolateColor(float ratio, const float colorOne[3],const float colorTwo[3]) {
     float color[3];
-    printf("colorOne = ");
     printArray(colorOne, 3);
-    printf("colorTwo = ");
     printArray(colorTwo, 3);
     for(int i = 0 ; i < 3 ; i++) {
         color[i] = ratio * colorOne[i] + (1-ratio) * colorTwo[i];
     }
-    printf("interpolated Color = ");
     printArray(color, 3);
     return color;
 }
@@ -39,9 +36,7 @@ bool almost_equal(double x, double y, double epsilon)
     }
     return false;
 }
-float linearInterpolate(float value, float start, float end) {
-    return (value - start) / (end - start);
-}
+
 
 // r,g,b values are from 0 to 1
 // h = [0,360], s = [0,1], v = [0,1]

@@ -68,7 +68,7 @@
 		bool isDragging;
 		std::string identifier;
 		//functions
-		void SetData(RIVDataSet *newDataSet) { dataset = newDataSet; needsRedraw = true;}
+//		void SetData(RIVDataSet *newDataSet) { dataset = newDataSet; needsRedraw = true;}
 		void Invalidate() { needsRedraw = true; }
 		
 		void ToViewSpaceCoordinates(int* x, int* y) {

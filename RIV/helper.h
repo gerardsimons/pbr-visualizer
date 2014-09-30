@@ -261,8 +261,10 @@ T* randInRange(T lower, T upper, size_t N) {
 int** combinationsInRange(int lower, int upper, unsigned int N);
 int* drawNumbersFromPool(std::vector<int> pool, const int N);
 float* linearInterpolateColor(float,const float[3], const float[3]);
-float linearInterpolate(float,float,float);
-	
+inline float linearInterpolate(float value, float start, float end) {
+	return (value - start) / (end - start);
+}
+
 
 
 #endif /* defined(__Afstuderen__helper__) */

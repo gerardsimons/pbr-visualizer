@@ -31,7 +31,7 @@ private:
 	//I use a map just to ensure there are no double entries
 	std::map<RIVTable*,bool> staleTables;
 	
-	bool isFiltering;
+	bool isFiltering = false;
 public:
 	void notifyListeners();
     void AddTable(RIVTable* table);

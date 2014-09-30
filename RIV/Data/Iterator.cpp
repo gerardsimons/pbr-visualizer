@@ -9,7 +9,8 @@
 #include "Iterator.h"
 #include "../helper.h"
 
-TableIterator::TableIterator(size_t maxIndex_, RIVClusterSet* clusterSet_) {
+TableIterator::TableIterator(size_t maxIndex_, RIVClusterSet* clusterSet_,std::vector<RIVReference*>* references) {
+	this->references = references;
     maxIndex = maxIndex_;
     index = 0;
     clusterIndex = 0;
@@ -38,6 +39,22 @@ bool TableIterator::GetNext(size_t& row) {
         index++;
         return (index - 1) < maxIndex;
     }
+}
+bool TableIterator::GetNext(size_t& row, size_t*& refRow) {
+	if(index >= maxIndex) {
+		return false;
+	}
+	else {
+		row = index;
+		for(size_t j = 0 ; j < references->size() ; ++j) {
+			std::vector<size_t>* refRows = references->at(j)->GetIndexReferences(row);
+			if(refRows) {
+				refRow = &refRows->at(0);
+			}
+		}
+		index++;
+		return (index - 1) < maxIndex;
+	}
 }
 bool TableIterator::GetNext(size_t& row, RIVCluster*& cluster, RIVClusterSet*& parentSet,bool requestCluster) {
     if(index >= maxIndex) {
@@ -70,6 +87,26 @@ bool FilteredTableIterator::GetNext(size_t& row) {
         return !filtered && index <= maxIndex;
     }
     return false;
+}
+bool FilteredTableIterator::GetNext(size_t& row, size_t*& referenceRow) {
+	if(index < maxIndex) {
+		bool filtered = (*indexPointers)[index];
+		while(filtered && index < maxIndex) {
+			index++;
+			filtered = (*indexPointers)[index];
+			//                printf("index = %zu\n",index);
+		}
+		row = index;
+		for(size_t j = 0 ; j < references->size() ; ++j) {
+			std::vector<size_t>* refRows = references->at(j)->GetIndexReferences(row);
+			if(refRows) {
+				referenceRow = &refRows->at(0);
+			}
+		}
+		index++;
+		return !filtered && index <= maxIndex;
+	}
+	return false;
 }
 
 bool FilteredTableIterator::GetNext(size_t& row, RIVCluster*& cluster, RIVClusterSet*& parentSet,bool requestCluster) {

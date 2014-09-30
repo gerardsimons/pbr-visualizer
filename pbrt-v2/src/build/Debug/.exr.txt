@@ -1,1 +1,0 @@
-%imageX,imageY,throughput,#isects,isect_positions,primitive_ids,shape_ids,spectra,interaction_types,light_ids

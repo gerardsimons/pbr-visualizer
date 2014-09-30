@@ -29,7 +29,8 @@ namespace reporter {
     };
     
     extern std::map<std::string,Task*> runningTasks;
-    void startTask(std::string taskName,float maxRounds_ = 100);
+	void startTask(char* taskname,float maxRounds_);
+    void startTask(const std::string& taskName,float maxRounds_ = 100);
     void update(std::string taskName, float completed);
     void update(std::string taskName);
     void stop(std::string taskName);

@@ -143,10 +143,11 @@ void RIVImageView::createTextureImage(BMPImage* image) {
     printf("Texture created.\n");
 }
 
+size_t drawCounter = 0;
 void RIVImageView::Draw() {
     needsRedraw = true;
 	if(needsRedraw) {
-		printf("\nImageView Draw!\n");
+		printf("\nImageView Draw #%zu\n",++drawCounter);
 		glClearColor(1.0, 0, 0, 0.0);
 		glClear( GL_COLOR_BUFFER_BIT );
 		

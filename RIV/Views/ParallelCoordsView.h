@@ -22,6 +22,7 @@ private:
     //Draw helper functions
     void drawAxes();
     void drawLines();
+	void drawSelectionBoxes();
     void drawText(char*,int,int,int,float[3],float);
     void drawText(std::string,int,int,float[3],float);
 //    float* computeColor(size_t lineIndex, size_t totalNrOfLines);
@@ -29,8 +30,11 @@ private:
     //Properties
     std::vector<ParallelCoordsAxisGroup> axisGroups;
     ParallelCoordsAxis* selectedAxis = NULL;
+	
+	//Determines what graphical primitives should be redrawn
     bool axesAreDirty = true;
     bool linesAreDirty = true;
+	bool selectionIsDirty = true;
     
     void clearSelection();
 public:

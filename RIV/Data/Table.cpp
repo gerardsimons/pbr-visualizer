@@ -108,7 +108,7 @@ void RIVTable::filterRecords() {
 					targetTable->FilterRow(iterator->first);
 				}
 				else {
-					targetTable->SelectRow(iterator->first);
+//					targetTable->SelectRow(iterator->first);
 				}
 			}
 		}
@@ -338,6 +338,10 @@ bool RIVTable::HasRecord(RIVRecord* requested) {
         }
     }
     return false;
+}
+
+void RIVTable::PrintUnfiltered() {
+	Print(0,false);
 }
 
 void RIVTable::Print(size_t maxPrint, bool printFiltered) {
@@ -573,14 +577,25 @@ void RIVTable::PrintFilteredRowMap() {
 }
 
 TableIterator* RIVTable::GetIterator() {
-    if(IsFiltered()) {
-        iterator = new FilteredTableIterator(&filteredRows,rows,&clusterSet);
-    }
-    else {
-        iterator = new TableIterator(rows,&clusterSet);
-    }
-    return iterator;
+	if(iterator) {
+		delete iterator;
+	}
+	if(IsFiltered()) {
+		return new FilteredTableIterator(&filteredRows,rows,&clusterSet, &references);
+	}
+	else {
+		return new TableIterator(rows,&clusterSet, &references);
+	}
 }
+
+//TableIterator RIVTable::GetIterator() {
+//    if(IsFiltered()) {
+//        return FilteredTableIterator(&filteredRows,rows,&clusterSet, &references);
+//    }
+//    else {
+//        return TableIterator(rows,&clusterSet, &references);
+//    }
+//}
 
 bool RIVTable::HasRecord(const std::string& recordName) {
 	for(RIVRecord *record : records) {

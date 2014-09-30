@@ -12,6 +12,7 @@
 #include "DataView.h"
 
 #include "../PBRTConfig.h"
+#include "../Geometry/Path.h"
 #include "../Geometry/MeshModel.h"
 #include "../Octree/Octree.h"
 #include "../Geometry/Ray.h"
@@ -54,11 +55,10 @@ protected:;
     //Buffered graphics point data, generated from the data, stored here for speed, TODO: Only store indices and a pointer to these records?
 	bool sizesAllTheSame; //Because sizes are often set to the same, we take advantage of this to get a big performance boost
 	//Indices of the points to draw
-	std::vector<size_t> pointsToDraw;
-    std::vector<float> pointsR;
-    std::vector<float> pointsG;
-    std::vector<float> pointsB;
-	std::vector<float> pointsSize;
+//	std::vector<size_t> pointsToDraw;
+//	std::vector<Color> pointColors;
+//	std::vector<float> pointsSize;
+	std::vector<Path> paths;
 
 	//Generate a octree from the unfiltered intersection points
 	void generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize);
@@ -73,7 +73,8 @@ protected:;
 	void drawPoints();
 	//draw the leaf nodes starting from the given node
 	void drawLeafNodes(OctreeNode* node);
-    
+	//Create graphics buffer from unfiltered data rows
+	void createPaths();
     static RIV3DView* instance;
     Vec3Df screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
@@ -83,8 +84,7 @@ public:
 	
 	static int windowHandle;
 	
-	//Create graphics buffer from unfiltered data rows
-    void createPoints();
+
     
     void Reshape(int newWidth, int newHeight);
     void Draw();
@@ -92,7 +92,7 @@ public:
     bool HandleMouseMotion(int x, int y);
     void OnDataSetChanged();
 	
-	void InitializeGraphics();
+	void ResetGraphics();
 	
     static void DrawInstance(); //Override
     static void ReshapeInstance(int,int);

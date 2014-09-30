@@ -17,7 +17,6 @@ void PCWidget::mousePressEvent(QMouseEvent *event)
 	//        lastPoint = event->pos();
 	//        scribbling = true;
 	//    }
-//	updateGL();
 }
 
 void PCWidget::mouseMoveEvent(QMouseEvent *event)
@@ -27,6 +26,7 @@ void PCWidget::mouseMoveEvent(QMouseEvent *event)
 	HandleMouseMotion(event->pos().x(),event->pos().y());
 	//    if ((event->buttons() & Qt::LeftButton) && scribbling)
 	//        drawLineTo(event->pos());
+	
 //	updateGL();
 }
 
@@ -38,14 +38,8 @@ void PCWidget::mouseReleaseEvent(QMouseEvent *event)
 	//        drawLineTo(event->pos());
 	//        scribbling = false;
 	//    }
-//	updateGL();
-}
-
-void PCWidget::keyPressEvent(QKeyEvent *event) {
-	printf("keyPressEvent key=%d\n",event->key());
-	if(event->key() == Qt::Key_C) {
-
-	}
+	cached = false;
+	updateGL();
 }
 
 void PCWidget::initializeGL()
@@ -79,31 +73,24 @@ void PCWidget::resizeGL(int width, int height)
 	InitializeGraphics();
 }
 
-bool drawOnce = true;
-
-
 void PCWidget::paintGL()
 {
 	printf("PCWidget paintEvent()\n");
 	
 	makeCurrent();
 	
-//    QPainter painter;
-//    painter.begin(this);
-	
-//	printf("width = %d\n",QGLWidget::width());
-//	printf("height = %d\n",QGLWidget::height());
-	
-//	if(drawOnce) {
-		Draw();
-//		drawOnce = false;
-//	}
-//	glColor3f(1,0,0);
-//	glBegin(GL_LINES);
-//	glVertex2f(0, 0);
-//	glColor3f(0,0,1);
-//	glVertex2f(100, 1);
-//	glEnd();
+	if(!cached) {
+		cache = renderPixmap();
+		cached = true;
+	}
+	else {
+		QPainter painter;
+		painter.begin(this);
+		
+		printf("Draw cached\n");
+		painter.drawPixmap(0, 0, cache);
+	}
+	Draw();
 }
 
 //void PCWidget::resizeEvent ( QResizeEvent* event ) {
