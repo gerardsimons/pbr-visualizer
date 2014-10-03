@@ -256,10 +256,11 @@ namespace riv {
 	bool GroupFilter::PassesFilter(RIVTable* table, size_t row) {
 		for(riv::Filter* f : filters) {
 			bool thisFilterPassed = false;
-			std::vector<size_t>* refRows = ref->GetIndexReferences(row);
-			if(refRows) {
-				for(size_t i = 0 ; i < refRows->size() ; ++i) {
-					if(f->PassesFilter(ref->targetTable, refRows->at(i))) {
+			std::pair<size_t*,ushort> refRows = ref->GetIndexReferences(row);
+//			printArray(refRows.first, refRows.second);
+			if(refRows.first) {
+				for(size_t i = 0 ; i < refRows.second ; ++i) {
+					if(f->PassesFilter(ref->targetTable, refRows.first[i])) {
 						thisFilterPassed = true;
 						break;
 					}

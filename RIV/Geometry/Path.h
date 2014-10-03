@@ -12,26 +12,35 @@
 #include <vector>
 #include "ColorMap.h"
 
+typedef unsigned short ushort;
+
 class Path {
 private:
-	std::vector<size_t> vertexIndices;
-	std::vector<Color> colors;
+	ushort size = 0;
+	size_t* vertices = NULL;
+	Color* colors = NULL;
 public:
-	void AddPoint(const Color& c, size_t vIndex) {
-		colors.push_back(c);
-		vertexIndices.push_back(vIndex);
+	Path(size_t* vertices, Color* colors, size_t size) {
+		this->vertices = new size_t[size];
+		this->colors = new Color[size];
+		this->size = size;
+		for(size_t i = 0 ; i < size ; ++i) {
+			this->vertices[i] = vertices[i];
+			this->colors[i] = colors[i];
+		}
+//		printf("Created #%zu\n",creationCount++);
 	}
 	size_t Size() const {
-		return vertexIndices.size();
+		return size;
 	}
 	size_t GetPoint(size_t index) const {
-		return vertexIndices[index];
+		return vertices[index];
 	}
 	Color GetColor(size_t index) const {
 		return colors[index];
 	}
 	bool IsEmpty() {
-		return vertexIndices.size() == 0;
+		return size == 0;
 	}
 };
 

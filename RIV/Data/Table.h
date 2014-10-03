@@ -67,7 +67,7 @@ namespace riv {
 		T* GetRecord(std::string name) {
 			return dynamic_cast<T*>(GetRecord(name));
 		}
-		void filterRecords(riv::Filter *);
+//		void filterRecords(riv::Filter *);
 		void filterRecords();
 		void AddRecord(RIVRecord* record);
 		void AddFilter(riv::Filter *filter);

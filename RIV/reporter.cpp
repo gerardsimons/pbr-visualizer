@@ -88,6 +88,7 @@ void reporter::stop(std::string taskName) {
     if(runningTask) {
         runningTask->stop();
         reporter::runningTasks.erase(taskName);
+		delete runningTask;
     }
     else throw std::string("No such task is running.");
 }

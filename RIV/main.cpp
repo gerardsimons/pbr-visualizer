@@ -273,7 +273,6 @@ void generatePaths(int argc, char* argv[]) {
 void loadData() {
     if(!dataPath.empty() && !pbrtPath.empty()) {
         image = new BMPImage(bmpPath.c_str(),false);
-        //        dataset = DataFileReader::ReadAsciiData(dataPath + ".txt",image,0);
         dataset = DataFileReader::ReadBinaryData(dataPath,image,0);
         config = new PBRTConfig(DataFileReader::ReadPBRTFile(pbrtPath));
 		
@@ -288,6 +287,14 @@ void createViews() {
     if(dataset.IsSet() && bmpPath.size() > 0) {
         RIVSizeProperty *defaultSizeProperty = new RIVFixedSizeProperty(0.1);
         RIVColorProperty *defaultColorProperty = new RIVFixedColorProperty(1,1,1);
+		
+		RIVTable *intersectionsTable = dataset.GetTable("intersections");
+		
+		ColorMap jetColorMap = colors::jetColorMap();
+//		RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(intersectionsTable,"spectrum R","spectrum G","spectrum B");
+		RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,intersectionsTable->GetRecord("bounce#"),jetColorMap);
+		//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,"radiance R","radiance G","radiance B");
+		RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
 		
 		
         parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding);
@@ -331,8 +338,8 @@ void createViews() {
         glutMotionFunc(RIVHeatMapView::Motion);
 		
         //Create views
-        parallelCoordsView = new ParallelCoordsView(&dataset);
-        sceneView = new RIV3DView(&dataset,config);
+        parallelCoordsView = new ParallelCoordsView(&dataset,colorProperty,sizeProperty);
+        sceneView = new RIV3DView(&dataset,config,colorProperty,sizeProperty);
         heatMapView = new RIVHeatMapView(&dataset);
 		
         //Add some filter callbacks
@@ -350,29 +357,6 @@ void createViews() {
         throw "Data must be loaded first.";
     }
 }
-
-void initializeViewProperties() {
-//    RIVTable *pathTable = dataset.GetTable("path");
-    RIVTable *intersectionsTable = dataset.GetTable("intersections");
-    
-//    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty(pathTable,colors::GREEN,colors::RED);
-    
-    ColorMap jetColorMap = colors::jetColorMap();
-	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(intersectionsTable,"spectrum R","spectrum G","spectrum B");
-//    RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,intersectionsTable->GetRecord("bounce#"),jetColorMap);
-//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,"radiance R","radiance G","radiance B");
-    RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
-    
-    parallelCoordsView->SetColorProperty(colorProperty);
-    sceneView->SetSizeProperty(sizeProperty);
-    sceneView->SetColorProperty(colorProperty);
-	
-	//Create the graphics primitives from the data
-	sceneView->ResetGraphics();
-	imageView->InitializeGraphics();
-}
-
-
 
 void clusterAndColor() {
     dataset.ClusterTable("intersections","intersection X","intersection Y","intersection Z",clusterK,1);
@@ -458,8 +442,6 @@ int main(int argc, char **argv)
     loadData();
     
     createViews();
-    
-    initializeViewProperties();
     
     /* Transparency stuff */
     glEnable (GL_BLEND);

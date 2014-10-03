@@ -16,8 +16,6 @@
 
 typedef unsigned short ushort;
 
-
-
 class RIVRecord {
 public:
     std::string name;

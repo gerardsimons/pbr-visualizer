@@ -57,6 +57,17 @@ namespace riv {
 	};
 }
 
+template<typename T>
+size_t memorySize(const std::vector<T>& vs) {
+	return sizeof(vs) + vs.capacity() * sizeof(T);
+}
+
+template <typename T>
+void reportVectorStatistics(const std::string& name, const std::vector<T> vs) {
+	size_t byteSize = memorySize(vs);
+	printf("Vector %s has %zu elements and uses %zu bytes (%.3f MB) of memory.\n",name.c_str(),vs.size(),byteSize,byteSize / 1000000.F);
+}
+
 template<class T>
 inline void deletePointerVector(std::vector<T*> v)
 {

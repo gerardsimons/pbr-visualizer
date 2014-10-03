@@ -24,19 +24,6 @@
 RIV3DView* RIV3DView::instance = NULL;
 int RIV3DView::windowHandle = -1;
 
-RIV3DView::RIV3DView(RIVDataSet* dataset,PBRTConfig *config) : RIVDataView(dataset) {
-	this->pbrtConfig = config;
-    if(instance != NULL) {
-        throw "Only 1 instance of RIV3DView allowed.";
-    }
-    sizeProperty = new RIVFixedSizeProperty(0.1F);
-    colorProperty = new RIVFixedColorProperty();
-    instance = this;
-    identifier = "3DView";
-
-	createPaths();
-}
-
 RIV3DView::RIV3DView(RIVDataSet* dataset, PBRTConfig* config, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty)
 	: RIVDataView(dataset,x,y,width,height,paddingX,paddingY,colorProperty,sizeProperty) {
 	this->pbrtConfig = config;
@@ -45,7 +32,7 @@ RIV3DView::RIV3DView(RIVDataSet* dataset, PBRTConfig* config, int x, int y, int 
     }
     instance = this;
     identifier = "3DView";
-		
+	
 	createPaths();
 };
 
@@ -59,10 +46,6 @@ RIV3DView::RIV3DView(RIVDataSet* dataset,PBRTConfig* config, RIVColorProperty *c
 	
 	createPaths();
 };
-
-//void RIV3DView::initialize() {
-//	
-//}
 
 void RIV3DView::CyclePathSegment(bool direction) {
     float delta = 1.F / maxBounce;
@@ -174,7 +157,7 @@ void RIV3DView::drawLeafNodes(OctreeNode* node) {
 size_t drawCounter_ = 1;
 
 void RIV3DView::Draw() {
-    printf("3DView Draw #%zu\n",++drawCounter_);
+//    printf("3DView Draw #%zu\n",++drawCounter_);
 	
 //	reporter::startTask("3D Draw");
 //	MeshModelGroup = pbrtConfig->GetModels();
@@ -219,9 +202,6 @@ void RIV3DView::Draw() {
 	glColor3f(1, 0, 0);
 	glVertex3f(dest[0],dest[1],dest[2]);
 	glEnd();
-	
-    /* Draw the intersection positions */
-    GLUquadric* quadric = gluNewQuadric();
 	
 	//Draw Phit
 	if(meshSelected) {
@@ -323,7 +303,7 @@ void RIV3DView::drawPoints() {
 	
 	//Only use 1 size
 	float size = sizeProperty->ComputeSize(isectTable, 0);
-	printf("Point size = %f\n",size);
+//	printf("Point size = %f\n",size);
 	
 	if(sizesAllTheSame) {
 		glPointSize(size);
@@ -401,11 +381,10 @@ void RIV3DView::ResetGraphics() {
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
 void RIV3DView::createPaths() {
 	
-	paths.clear();
+	reporter::startTask("Creating paths");
 	
 	RIVTable* isectTable = dataset->GetTable("intersections");
-	
-	std::vector<float> uniqueSizes;
+	paths.clear();
     
     //Get the records we want;
     //Get the iterator, this iterator is aware of what rows are filtered and not
@@ -416,44 +395,25 @@ void RIV3DView::createPaths() {
 	size_t oldPathID = 0;
 	
 	sizesAllTheSame = true;
-//	RIVUnsignedShortRecord *bounceRecord = isectTable->GetRecord<RIVUnsignedShortRecord>("bounce#");
+	std::vector<size_t> vertices;
+	std::vector<Color> colors;
 	
-	Path currentPath;
-    
     while(iterator->GetNext(row,pathID)) {
-		if(*pathID != oldPathID && !currentPath.IsEmpty()) {
-			paths.push_back(currentPath);
-			currentPath = Path();
+		if(*pathID != oldPathID && colors.size() > 0) {
+			paths.push_back(Path(&vertices[0],&colors[0],colors.size()));
+			vertices.clear();
+			colors.clear();
 			oldPathID = *pathID;
 		}
 		Color pointColor;
         bool hasColor = colorProperty->ComputeColor(isectTable, row, pointColor); //Check if any color can be computed for the given row
 		
-		currentPath.AddPoint(pointColor,row);
-		
-//		pointsToDraw.push_back(row);
-		
-        if(hasColor) {
-			float size = sizeProperty->ComputeSize(isectTable, row);
-			if(uniqueSizes.empty()) {
-				uniqueSizes.push_back(size);
-			}
-			
-			if(sizesAllTheSame && !vectorContains(uniqueSizes, size)) {
-				sizesAllTheSame = false;
-			}
-			else {
-//				pointsSize.push_back(sizeProperty->ComputeSize(isectTable, row));
-			}
-//			pointColors.push_back(pointColor);
-		}
+		vertices.push_back(row);
+		colors.push_back(pointColor);
     }
-	if(sizesAllTheSame) {
-//		pointsSize.clear(); //Not necessary
-	}
-    
-//    printf("%zu points created.\n",pointsToDraw.size());
-	printf("%zu paths created.\n",paths.size());
+
+	reporter::stop("Creating paths");
+	reportVectorStatistics("paths", paths);
 	
 }
 
@@ -485,25 +445,19 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 		}
 	}
 	char taskname[100];
-	sprintf(taskname,"drawPaths %f - %f\n",startSegment,stopSegment);
+//	sprintf(taskname,"drawPaths %f - %f\n",startSegment,stopSegment);
 	reporter::startTask(taskname);
 	
 	//Start and end vertex index
 	int startBounce = floor(startSegment * maxBounce);
 	int endBounce = startBounce + 1;
 	
-	//The path lengths are given by #intersections by the path table
-	std::vector<ushort>* pathLengths = dataset->GetTable("path")->GetRecord<RIVUnsignedShortRecord>("#intersections")->GetValues();
-	
 	RIVTable* intersectionsTable = dataset->GetTable("intersections");
 	RIVFloatRecord* xRecord = intersectionsTable->GetRecord<RIVFloatRecord>("intersection X");
 	RIVFloatRecord* yRecord = intersectionsTable->GetRecord<RIVFloatRecord>("intersection Y");
 	RIVFloatRecord* zRecord = intersectionsTable->GetRecord<RIVFloatRecord>("intersection Z");
 	
-	size_t targetPoint = startBounce;
-	size_t pointIndex = 0;
-	
-	printf("start,end bounce = %d,%d\n",startBounce,endBounce);
+//	printf("start,end bounce = %d,%d\n",startBounce,endBounce);
 	
 	glBegin(GL_LINES);
 	if(startBounce == 0) {

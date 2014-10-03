@@ -499,9 +499,9 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, BMPImage* 
 //        xPixelRecord->SetValues(xPixels);
 //        yPixelRecord->SetValues(yPixels);
         
-        imageTable->AddRecord(imageRedRecord);
-        imageTable->AddRecord(imageGreenRecord);
-        imageTable->AddRecord(imageBlueRecord);
+//        imageTable->AddRecord(imageRedRecord);
+//        imageTable->AddRecord(imageGreenRecord);
+//        imageTable->AddRecord(imageBlueRecord);
 //        imageTable->AddRecord(xPixelRecord);
 //        imageTable->AddRecord(yPixelRecord);
         
@@ -525,24 +525,24 @@ RIVDataSet DataFileReader::ReadAsciiData(const std::string& fileName, BMPImage* 
         intersectionsTable->AddRecord(interactionTypesRecord);
         intersectionsTable->AddRecord(lightIdsRecord);
         
-        RIVReference *imagePathReference = new RIVReference(imageTable,pathTable);
-        imagePathReference->SetReferences(imagePathReferences);
-        RIVReference *pathImageReference = imagePathReference->ReverseReference();
-        
-        imageTable->AddReference(imagePathReference);
-        pathTable->AddReference(pathImageReference);
-        
-        RIVReference* referenceToIntersections = new RIVReference(pathTable, intersectionsTable);
-        referenceToIntersections->SetReferences(pathIsectReferences);
-        RIVReference* reverseReference = referenceToIntersections->ReverseReference();
-        
-        pathTable->AddReference(referenceToIntersections);
-        intersectionsTable->AddReference(reverseReference);
-        
-        dataset.AddTable(imageTable);
-        dataset.AddTable(pathTable);
-        dataset.AddTable(intersectionsTable);
-        
+//        RIVReference *imagePathReference = new RIVSingleReference(imageTable,pathTable);
+//        imagePathReference->SetReferences(imagePathReferences);
+//        RIVReference *pathImageReference = imagePathReference->ReverseReference();
+		
+//        imageTable->AddReference(imagePathReference);
+//        pathTable->AddReference(pathImageReference);
+		
+//        RIVReference* referenceToIntersections = new RIVReference(pathTable, intersectionsTable);
+//        referenceToIntersections->SetReferences(pathIsectReferences);
+//        RIVReference* reverseReference = referenceToIntersections->ReverseReference();
+		
+//        pathTable->AddReference(referenceToIntersections);
+//        intersectionsTable->AddReference(reverseReference);
+		
+//        dataset.AddTable(imageTable);
+//        dataset.AddTable(pathTable);
+//        dataset.AddTable(intersectionsTable);
+		
         //    Filter* filter = new RangeFilter("x",-2,-1); //Filter all
         //    dataset.AddFilter(filter);
         //
@@ -713,14 +713,14 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     
 //    fprintf(outputFile, "x,y,lensU,lensV,timestamp,throughput_1,throughput_2,throughput_3,radiance_R,radiance_G,radiance_B,size\n");
     
-    std::map<size_t,std::vector<size_t> > pathIsectReferences = std::map<size_t,std::vector<size_t> >();
-    
+	std::map<size_t,std::pair<size_t*,ushort>> pathIsectReferences;
+	
     size_t isect_index = 0;
     size_t path_index = 0;
     
     printf("Going to read %zu paths and %zu intersects\n",total_nr_paths,total_nr_isects);
     
-    while(!feof(inputFile) && path_index < total_nr_paths && (path_index < pathsLimit || pathsLimit == 0)) {
+    while(path_index < total_nr_paths && (path_index < pathsLimit || pathsLimit == 0)) {
         
 //        printf("reading line %d\n",lineNumber);
         
@@ -771,7 +771,7 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
 		radianceB.push_back(std::min(1.F,radiance[2]));
         intersections.push_back(size);
         
-        std::vector<size_t> isectIndices;
+		size_t* isectIndices = new size_t[size];
 
 		if(size > 0) {
 			//isect_x,isect_y,isect_z,primitive_ids,shape_ids,spectra,interaction_types,light_ids
@@ -783,7 +783,7 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
 			float spectraB;
 			
 			for(ushort i = 0 ; i < size ; ++i) {
-				isectIndices.push_back(isect_index+i);
+				isectIndices[i] = isect_index+i;
 				bounceNumbers.push_back(i+1);
 				
 				fread(&isectX,sizeof(float),1,inputFile);
@@ -813,14 +813,22 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
 			readDataIntoVector(size, lightIds, inputFile);
 			
 			isect_index += size;
-			pathIsectReferences[path_index] = isectIndices;
+			pathIsectReferences[path_index] = std::pair<size_t*, ushort>(isectIndices,size);
         }
         
         //printf("%d = %hu,%hu,[%f,%f,%f],%hu\n",lineNumber,x,y,throughput[0],throughput[1],throughput[2],size);
         ++path_index;
-        
     }
-    
+//	printf("Memory size of xPixelData = %zu MB\n",memorySize(xPixelData) / 1000000.F);
+	reportVectorStatistics("xPixel", xPixelData);
+	reportVectorStatistics("yPixel", yPixelData);
+	reportVectorStatistics("lensU", lensUs);
+	reportVectorStatistics("lensV", lensVs);
+
+
+	reportVectorStatistics("intersectX", intersectionPosX);
+	reportVectorStatistics("intersectY", intersectionPosY);
+	reportVectorStatistics("intersectZ", intersectionPosZ);
     //Declare dataset and table objects
     RIVDataSet dataset;
     
@@ -829,12 +837,12 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     
     RIVUnsignedShortRecord *xRecord = new RIVUnsignedShortRecord("x",xPixelData);
     RIVUnsignedShortRecord *yRecord = new RIVUnsignedShortRecord("y",yPixelData);
-    RIVFloatRecord *lensURecord = new RIVFloatRecord("lens U",lensUs);
-    RIVFloatRecord *lensVRecord = new RIVFloatRecord("lens V",lensVs);
-    RIVFloatRecord *timestampRecord = new RIVFloatRecord("timestamp",timestamps);
-    RIVFloatRecord *tpOne = new RIVFloatRecord("throughput R",throughputR);
-    RIVFloatRecord *tpTwo = new RIVFloatRecord("throughput G",throughputG);
-    RIVFloatRecord *tpThree = new RIVFloatRecord("throughput B",throughputB);
+//    RIVFloatRecord *lensURecord = new RIVFloatRecord("lens U",lensUs);
+//    RIVFloatRecord *lensVRecord = new RIVFloatRecord("lens V",lensVs);
+//    RIVFloatRecord *timestampRecord = new RIVFloatRecord("timestamp",timestamps);
+//    RIVFloatRecord *tpOne = new RIVFloatRecord("throughput R",throughputR);
+//    RIVFloatRecord *tpTwo = new RIVFloatRecord("throughput G",throughputG);
+//    RIVFloatRecord *tpThree = new RIVFloatRecord("throughput B",throughputB);
 	RIVFloatRecord *radianceRed = new RIVFloatRecord("radiance R",radianceR);
     RIVFloatRecord *radianceGreen = new RIVFloatRecord("radiance G",radianceG);
     RIVFloatRecord *radianceBlue = new RIVFloatRecord("radiance B",radianceB);
@@ -880,8 +888,7 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     intersectionsTable->AddRecord(lightIdsRecord);
     
     // Create and apply references to tables
-    RIVReference *referenceToIntersections = new RIVReference(pathTable, intersectionsTable);
-    referenceToIntersections->SetReferences(pathIsectReferences);
+    RIVMultiReference *referenceToIntersections = new RIVMultiReference(pathIsectReferences, pathTable, intersectionsTable);
     RIVReference *reverseReference = referenceToIntersections->ReverseReference();
     
     pathTable->AddReference(referenceToIntersections);

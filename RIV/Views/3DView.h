@@ -45,6 +45,7 @@ protected:;
     float segmentStart = 0;
     float segmentStop = segmentWidth;
 	
+	GLUquadric* quadric = gluNewQuadric();
 	Vec3Df Phit; //Supposedly the point of intersection of the ray with the plane supporting the triangle
 	riv::Ray<float> pickRay;
 	
@@ -55,9 +56,6 @@ protected:;
     //Buffered graphics point data, generated from the data, stored here for speed, TODO: Only store indices and a pointer to these records?
 	bool sizesAllTheSame; //Because sizes are often set to the same, we take advantage of this to get a big performance boost
 	//Indices of the points to draw
-//	std::vector<size_t> pointsToDraw;
-//	std::vector<Color> pointColors;
-//	std::vector<float> pointsSize;
 	std::vector<Path> paths;
 
 	//Generate a octree from the unfiltered intersection points
@@ -78,7 +76,6 @@ protected:;
     static RIV3DView* instance;
     Vec3Df screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
-    RIV3DView(RIVDataSet* dataset,PBRTConfig* config);
     RIV3DView(RIVDataSet* dataset,PBRTConfig* config,int,int,int,int,int,int,RIVColorProperty*,RIVSizeProperty*);
     RIV3DView(RIVDataSet* dataset,PBRTConfig* config,RIVColorProperty*,RIVSizeProperty*);
 	

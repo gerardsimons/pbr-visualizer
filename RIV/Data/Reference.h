@@ -11,48 +11,62 @@
 
 #include <stdio.h>
 #include <vector>
-
+#include "helper.h"
 #include "Table.h"
 
+typedef unsigned short ushort;
 
+class RIVTable;
 
-	class RIVTable;
+class RIVReference {
+protected:
+	RIVReference(RIVTable* sourceTable, RIVTable* targetTable) {
+		this->sourceTable = sourceTable;
+		this->targetTable = targetTable;
+	}
+public:
+	RIVTable* sourceTable;
+	RIVTable* targetTable;
+	virtual std::pair<size_t*,ushort> GetIndexReferences(size_t row) = 0;
+	virtual bool HasReference(size_t row) = 0;
+};
 
-	//Maps rows from a sourceTable to a targetTable
-	class RIVReference {
-	public:
-		//The source table is implicit as a reference is supplied to a table
-		RIVTable *targetTable;
-		RIVTable *sourceTable;
-		
-		~RIVReference() {
-	//        delete indexReferences; //Very important as index references is created as new in reverse function
-		}
-		
-		std::map<size_t,std::vector<size_t> > indexReferences;
-		
-		RIVReference(RIVTable *_sourceTable, RIVTable *_targetTable);
-		bool HasReference(size_t) const; //Does it have a reference from a given source index
-	//    void AddReference(size_t sourceIndex, size_t targetIndex);
-		void SetReferences(const std::map<size_t,std::vector<size_t> >&);
-		std::vector<size_t>* GetIndexReferences(const size_t&);
-		RIVReference* ReverseReference();
-		void FilterReferenceRow(size_t row);
-	};
+class RIVSingleReference : public RIVReference {
+private:
+public:
+	RIVSingleReference(const std::map<size_t,size_t>& indexMap, RIVTable* sourceTable, RIVTable* targetTable);
+	std::map<size_t,size_t> indexMap;;
+	std::pair<size_t*,ushort> GetIndexReferences(size_t row);
+	void Print();
+	void FilterReferenceRow(size_t row);
+	bool HasReference(size_t row);
+};
 
-	//Multiple RIVreferences chained together, makes it easy for a table A connected to table C through intermediary table B to resolve the depenedencies
-	class RIVReferenceChain {
-	private:
-		std::vector<RIVReference*> references;
-	public:
-		RIVReferenceChain() { }
-		RIVReferenceChain(RIVReference* singleReference);
-		RIVReferenceChain(const std::vector<RIVReference*>& references);
-		//Remove last added reference, useful for backtracking algorithm used in RIVTable::GetReferenceChainToTable(...)
-		void PopReference();
-		void AddReference(RIVReference* newReference);
-		std::vector<size_t> ResolveRow(const size_t& row);
-	};
+//Class that maps a row in one table to multiple other rows in another table. The char represents a very short unsigned short (max 256) number of rows it maps to
+class RIVMultiReference : public RIVReference {
+public:
+	std::map<size_t,std::pair<size_t*,ushort>> indexMap;
+	RIVMultiReference(std::map<size_t,std::pair<size_t*,ushort>>& indexMap, RIVTable* sourceTable, RIVTable* targetTable);
+	RIVSingleReference* ReverseReference();
+	bool HasReference(size_t row);
+	std::pair<size_t*,ushort> GetIndexReferences(size_t row);
+	void FilterReferenceRow(size_t row);
+	void Print();
+};
+
+//Multiple RIVreferences chained together, makes it easy for a table A connected to table C through intermediary table B to resolve the depenedencies
+class RIVReferenceChain {
+private:
+	std::vector<RIVReference*> references;
+public:
+	RIVReferenceChain() { }
+	RIVReferenceChain(RIVReference* singleReference);
+	RIVReferenceChain(const std::vector<RIVReference*>& references);
+	//Remove last added reference, useful for backtracking algorithm used in RIVTable::GetReferenceChainToTable(...)
+	void PopReference();
+	void AddReference(RIVReference* newReference);
+	std::vector<size_t> ResolveRow(const size_t& row);
+};
 
 
 #endif

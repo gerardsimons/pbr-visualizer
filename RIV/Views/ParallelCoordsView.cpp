@@ -13,16 +13,6 @@
 ParallelCoordsView* ParallelCoordsView::instance = NULL;
 int ParallelCoordsView::windowHandle = -1;
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset) : RIVDataView(dataset) {
-    instance = this;
-	Color black;
-	black.R = 0;
-	black.G = 0;
-	black.B = 0;
-    colorProperty = new RIVFixedColorProperty(black);
-    sizeProperty = new RIVFixedSizeProperty(1);
-}
-
 ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, int x, int y, int width, int height, int paddingX, int paddingY, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY,colorProperty,sizeProperty) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
@@ -206,6 +196,14 @@ void ParallelCoordsView::drawLines() {
             size_t row = 0;
 
             TableIterator* iterator = table->GetIterator();
+			
+			if(dynamic_cast<FilteredTableIterator*>(iterator)) {
+				printf("Draw table %s with filtered table iterator\n",table->GetName().c_str());
+			}
+			else {
+				printf("Draw table %s with normal table iterator\n",table->GetName().c_str());
+			}
+			
             Color lineColor;
             while(iterator->GetNext(row)) {
                 if(colorProperty->ComputeColor(table, row, lineColor)) {
