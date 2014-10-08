@@ -12,6 +12,7 @@
 #include "DataView.h"
 #include "../Geometry/Geometry.h"
 #include "../Graphics/BMPImage.h"
+#include "DataController.h"
 
 #if defined(__APPLE__)
 #include <GLUT/GLUT.h>
@@ -22,8 +23,10 @@
 
 class RIVImageView : public RIVDataView, public RIVDataSetListener {
 public:
-    RIVImageView(RIVDataSet* dataset,  BMPImage* image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* colorProperty,RIVSizeProperty* sizeProperty);
-    RIVImageView(RIVDataSet* dataset,  BMPImage* image, RIVColorProperty* color, RIVSizeProperty *size);
+//    RIVImageView(RIVDataSet* dataset,  BMPImage* image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* colorProperty,RIVSizeProperty* sizeProperty);
+//    RIVImageView(RIVDataSet* dataset,  BMPImage* image, RIVColorProperty* color, RIVSizeProperty *size);
+	
+	RIVImageView(DataController* dataController,  BMPImage* image, RIVColorProperty* color, RIVSizeProperty *size);
 //    RIVImageView(const BMPImage& image,RIVColorProperty* colorProperty,RIVSizeProperty* sizeProperty);
     ~RIVImageView();
     

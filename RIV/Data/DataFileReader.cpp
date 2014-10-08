@@ -13,6 +13,8 @@
 #include "../reporter.h"
 #include "PBRTConfig.h"
 
+#include "Database.h"
+
 
 DataFileReader::DataFileReader(void)
 {
@@ -819,16 +821,7 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
         //printf("%d = %hu,%hu,[%f,%f,%f],%hu\n",lineNumber,x,y,throughput[0],throughput[1],throughput[2],size);
         ++path_index;
     }
-//	printf("Memory size of xPixelData = %zu MB\n",memorySize(xPixelData) / 1000000.F);
-	reportVectorStatistics("xPixel", xPixelData);
-	reportVectorStatistics("yPixel", yPixelData);
-	reportVectorStatistics("lensU", lensUs);
-	reportVectorStatistics("lensV", lensVs);
-
-
-	reportVectorStatistics("intersectX", intersectionPosX);
-	reportVectorStatistics("intersectY", intersectionPosY);
-	reportVectorStatistics("intersectZ", intersectionPosZ);
+	
     //Declare dataset and table objects
     RIVDataSet dataset;
     
@@ -842,7 +835,7 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
 //    RIVFloatRecord *timestampRecord = new RIVFloatRecord("timestamp",timestamps);
 //    RIVFloatRecord *tpOne = new RIVFloatRecord("throughput R",throughputR);
 //    RIVFloatRecord *tpTwo = new RIVFloatRecord("throughput G",throughputG);
-//    RIVFloatRecord *tpThree = new RIVFloatRecord("throughput B",throughputB);
+//    RIVFloatRecord *tpThree = new RIVFloatRecord("throughput B",throughputB);`
 	RIVFloatRecord *radianceRed = new RIVFloatRecord("radiance R",radianceR);
     RIVFloatRecord *radianceGreen = new RIVFloatRecord("radiance G",radianceG);
     RIVFloatRecord *radianceBlue = new RIVFloatRecord("radiance B",radianceB);
@@ -912,3 +905,366 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     
     return dataset;
 };
+
+
+sqlite::Database DataFileReader::ReadBinaryDataToMemoryDB(const std::string& fileName, const size_t pathsLimit, bool inMemory) {
+	printf("Loading binary dataset from file %s\n",fileName.c_str());
+	
+	size_t insertsDone = 0;
+	size_t insertsDoneTotal = 0;
+	
+	std::string taskName = "Binary data reading";
+	//    reporter::startTask(taskName);
+	
+	FILE *inputFile = fopen((fileName + ".bin").c_str(),"rb");
+	std::ifstream summaryFile(fileName + ".summary");
+	
+	//write what was read as ASCII, strictly used only for debugging
+	//    FILE *outputFile = fopen("output.txt","w");
+	
+	if(inputFile == 0) {
+		throw "Error opening file.";
+	}
+	
+	//Open the database
+	char *zErrMsg = 0;
+	//result code
+	int rc = 0;
+	sqlite3* db = NULL;
+	
+//		rc = sqlite3_open(":memory:", &db);
+	if(inMemory) {
+		if(sqlite3_open(":memory:", &db)) {
+			throw "ERROR";
+		}
+	}
+	else {
+		if(sqlite3_open((fileName + ".db").c_str(), &db)) {
+			throw "ERROR";
+		}
+	}
+	printf("db memory address = %p\n",db);
+	sqlite::Database database(db);
+	char const* dropTableIfExists = "DROP TABLE IF EXISTS PATHS";
+	database.executeSQL(dropTableIfExists);
+	
+	char const* dropIsectTable = "DROP TABLE IF EXISTS INTERSECTIONS";
+	database.executeSQL(dropIsectTable);
+	
+	char const* createPathsTable = "CREATE TABLE PATHS("  \
+	"ID				UNSIGNED INTEGER PRIMARY KEY," \
+	"IMAGE_X           UNSIGNED INTEGER    NOT NULL," \
+	"IMAGE_Y           UNSIGNED INTEGER     NOT NULL," \
+	"LENS_U				REAL NOT NULL," \
+	"LENS_V				REAL NOT NULL," \
+	"TIMESTAMP        REAL NOT NULL," \
+	"THROUGHPUT_ONE        REAL NOT NULL," \
+	"THROUGHPUT_TWO        REAL NOT NULL," \
+	"THROUGHPUT_THREE        REAL NOT NULL," \
+	"RADIANCE_R        REAL NOT NULL," \
+	"RADIANCE_G        REAL NOT NULL," \
+	"RADIANCE_B        REAL NOT NULL);";
+	
+	char const* createIsectTable = "CREATE TABLE INTERSECTIONS("  \
+	"PID UNSIGNED BIG INT NOT NULL," \
+	"BOUNCE_NR		 TINYINT NOT NULL," \
+	"POS_X           REAL    NOT NULL," \
+	"POS_Y           REAL     NOT NULL," \
+	"POS_Z           REAL	NOT NULL," \
+	"PRIMITIVE_ID    TINYINT NOT NULL," \
+	"SHAPE_ID		 TINYINT NOT NULL," \
+	"OBJECT_ID		 TINYINT NOT NULL," \
+	"SPECTRUM_R        REAL NOT NULL," \
+	"SPECTRUM_G        REAL NOT NULL," \
+	"SPECTRUM_B        REAL NOT NULL," \
+	"INTERACTION_TYPE	TINYINT NOT NULL," \
+	"LIGHT_ID			TINYINT NOT NULL," \
+	"FOREIGN KEY(PID) REFERENCES PATHS(ID));";
+	
+	database.executeSQL(createPathsTable);
+	database.executeSQL(createIsectTable);
+	
+	//	char const* insertPathTemplate = "INSERT INTO PATHS (IMAGE_X,IMAGE_Y,LENS_U,LENS_V,TIMESTAMP,THROUGHPUT_ONE,THROUGHPUT_TWO,THROUGHPUT_THREE,RADIANCE_R,RADIANCE_G,RADIANCE_B) " \
+	//	"VALUES (%hu,%hu,%f,%f,%f,%f,%f,%f,%f,%f,%f);";
+	//
+	//	char const* insertIsectTemplate = "INSERT INTO INTERSECTIONS (PID,BOUNCE_NR,POS_X,POS_Y,POS_Z,PRIMITIVE_ID,SHAPE_ID,OBJECT_ID,SPECTRUM_R,SPECTRUM_G,SPECTRUM_B,INTERACTION_TYPE,LIGHT_ID) " \
+	//	"VALUES (%zu,%hu,%f,%f,%f,%hu,%hu,%hu,%f,%f,%f,%hu,%hu);";
+	
+	const char * insertPathTemplate = "INSERT INTO PATHS (ID,IMAGE_X,IMAGE_Y,LENS_U,LENS_V,TIMESTAMP,THROUGHPUT_ONE,THROUGHPUT_TWO,THROUGHPUT_THREE,RADIANCE_R,RADIANCE_G,RADIANCE_B) " \
+	"VALUES (?, ? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,?);";
+	sqlite3_stmt* insertPathStatement = NULL;
+	
+	const char* insertIsectTemplate = "INSERT INTO INTERSECTIONS (PID,BOUNCE_NR,POS_X,POS_Y,POS_Z,PRIMITIVE_ID,SHAPE_ID,OBJECT_ID,SPECTRUM_R,SPECTRUM_G,SPECTRUM_B,INTERACTION_TYPE,LIGHT_ID) " \
+	"VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);";
+	sqlite3_stmt* insertIsectStatement = NULL;
+	//
+	insertIsectStatement = database.PrepareStatement(insertIsectTemplate);
+//	rc = sqlite3_prepare_v2(db,  insertIsectTemplate, strlen (insertIsectTemplate) + 1, &insertIsectStatement, NULL);
+//	if(rc != SQLITE_OK) {
+//		printf("Preparing failed. %s\n",sqlite3_errmsg(db));
+//	}
+	insertPathStatement = database.PrepareStatement(insertPathTemplate);
+//	rc = sqlite3_prepare_v2(db,  insertPathTemplate, strlen (insertPathTemplate) + 1, &insertPathStatement, NULL);
+//	if(rc != SQLITE_OK) {
+//		printf("Preparing failed. %s\n",sqlite3_errmsg(db));
+//	}
+	
+	std::string line;
+	std::getline(summaryFile,line);
+	
+	std::vector<std::string> valuesString = explode(line, ',');
+	
+	size_t total_nr_paths = std::atol(valuesString[0].c_str());
+	//	size_t total_nr_isects = std::atol(valuesString[1].c_str());
+	
+	//Path data
+	std::vector<ushort> xPixelData;
+	std::vector<ushort> yPixelData;
+	std::vector<float> lensUs;
+	std::vector<float> lensVs;
+	std::vector<float> timestamps;
+	std::vector<float> throughPutOne;
+	std::vector<float> throughPutTwo;
+	std::vector<float> throughPutThree;
+	std::vector<float> radianceR;
+	std::vector<float> radianceG;
+	std::vector<float> radianceB;
+	std::vector<ushort> intersections;
+	
+	std::vector<ushort> bounceNumbers;
+	std::vector<float> intersectionPosX;
+	std::vector<float> intersectionPosY;
+	std::vector<float> intersectionPosZ;
+	std::vector<ushort> primitveIds;
+	std::vector<ushort> shapeIds;
+	std::vector<ushort> objectIds;
+	std::vector<float> spectraOne;
+	std::vector<float> spectraTwo;
+	std::vector<float> spectraThree;
+	std::vector<ushort> interactionTypes;
+	std::vector<ushort> lightIds;
+	
+	size_t isect_index = 0;
+	size_t path_index = 0;
+	
+	//	printf("Going to read %zu paths and %zu intersects\n",total_nr_paths,total_nr_isects);
+	
+	float percentageIncrement = 1;
+	float percentage = 0;
+	size_t roundCheck = round(total_nr_paths / (100.F * percentageIncrement));
+	
+	clock_t startRound = clock();
+	clock_t startTotal = clock();
+	
+	sqlite3_exec(db, "PRAGMA synchronous = OFF", NULL, NULL, &zErrMsg);
+	sqlite3_exec(db, "PRAGMA journal_mode = WAL", NULL, NULL, &zErrMsg);
+	sqlite3_exec(db, "BEGIN TRANSACTION", NULL, NULL, &zErrMsg);
+	
+	while(!feof(inputFile) && path_index < total_nr_paths &&  (path_index < pathsLimit || pathsLimit == 0)) {
+		
+//		printf("reading path %zu\n",path_index);
+		//Unrounded continuous x pixel data
+		float x;
+		float y;
+		float lensU;
+		float lensV;
+		float timestamp;
+		float throughput[3];
+		float radiance[3];
+		ushort size = 0;
+		
+		fread(&x,sizeof(float),1,inputFile);
+		
+		//Read y
+		fread(&y,sizeof(float),1,inputFile);
+		
+		//read lens U
+		fread(&lensU,sizeof(float),1,inputFile);
+		
+		//read lens V
+		fread(&lensV,sizeof(float),1,inputFile);
+		
+		//read timestamp
+		fread(&timestamp,sizeof(float),1,inputFile);
+		
+		// throughputs
+		fread(throughput,sizeof(float),3,inputFile);
+		
+		fread(radiance,sizeof(float),3,inputFile);
+		
+		//Read the number of intersections
+		fread(&size,sizeof(ushort),1,inputFile);
+		
+		//		intersections.push_back(size);
+		
+		std::vector<size_t> isectIndices;
+		
+		++insertsDone;
+		
+		//isect_x,isect_y,isect_z,primitive_ids,shape_ids,spectra,interaction_types,light_ids
+		float isectX;
+		float isectY;
+		float isectZ;
+		ushort primitiveId;
+		ushort shapeId;
+		ushort objectId;
+		float spectraR;
+		float spectraG;
+		float spectraB;
+		ushort interactionType;
+		ushort lightId;
+		
+		//		char buffer[200];
+		//		sprintf(buffer,insertPathTemplate,(ushort)x,(ushort)y,lensU,lensV,timestamp,throughput[0],throughput[1],throughput[2],radiance[0],radiance[1],radiance[2]);
+		
+		sqlite3_bind_int(insertPathStatement, 1, path_index);
+		sqlite3_bind_int(insertPathStatement, 2, x);
+		sqlite3_bind_int(insertPathStatement, 3, y);
+		sqlite3_bind_double(insertPathStatement, 4, lensU);
+		sqlite3_bind_double(insertPathStatement, 5, lensV);
+		sqlite3_bind_double(insertPathStatement, 6, timestamp);
+		sqlite3_bind_double(insertPathStatement, 7, throughput[0]);
+		sqlite3_bind_double(insertPathStatement, 8, throughput[1]);
+		sqlite3_bind_double(insertPathStatement, 9, throughput[2]);
+		sqlite3_bind_double(insertPathStatement, 10, radiance[0]);
+		sqlite3_bind_double(insertPathStatement, 11, radiance[1]);
+		sqlite3_bind_double(insertPathStatement, 12, radiance[2]);
+		
+		const char *sql = sqlite3_sql(insertPathStatement);
+		
+		if(sqlite3_step(insertPathStatement) != SQLITE_DONE) {
+			printf("insert intersection failed. %s SQL = %s\n",sqlite3_errmsg(db),sql);
+		}
+		//		else printf("SUCCESS : %s\n",sql);
+		
+		//		sqlite3_clear_bindings(insertPathStatement);
+		sqlite3_reset(insertPathStatement);
+		
+		//		executeSQL(buffer,db);
+		
+		//		printf("size = %hu\n",size);
+		
+		for(ushort i = 0 ; i < size ; ++i) {
+			isectIndices.push_back(isect_index+i);
+			bounceNumbers.push_back(i+1);
+			
+			fread(&isectX,sizeof(float),1,inputFile);
+			fread(&isectY,sizeof(float),1,inputFile);
+			fread(&isectZ,sizeof(float),1,inputFile);
+			
+			intersectionPosX.push_back(isectX);
+			intersectionPosY.push_back(isectY);
+			intersectionPosZ.push_back(isectZ);
+		}
+		
+		for(ushort i = 0 ; i < size ; ++i) {
+			fread(&primitiveId,sizeof(unsigned short),1,inputFile);
+			
+			primitveIds.push_back(primitiveId);
+		}
+		
+		for(ushort i = 0 ; i < size ; ++i) {
+			fread(&shapeId,sizeof(unsigned short),1,inputFile);
+			
+			shapeIds.push_back(shapeId);
+		}
+		
+		for(ushort i = 0 ; i < size ; ++i) {
+			fread(&objectId,sizeof(unsigned short),1,inputFile);
+			
+			objectIds.push_back(objectId);
+		}
+		
+		for(ushort i = 0 ; i < size ; ++i) {
+			fread(&spectraR,sizeof(float),1,inputFile);
+			fread(&spectraG,sizeof(float),1,inputFile);
+			fread(&spectraB,sizeof(float),1,inputFile);
+			
+			//Be sure to clamp the RGB values!
+			spectraOne.push_back(std::min(spectraR, 1.F));
+			spectraTwo.push_back(std::min(spectraG, 1.F));
+			spectraThree.push_back(std::min(spectraB, 1.F));
+		}
+		
+		for(ushort i = 0 ; i < size ; ++i) {
+			fread(&interactionType,sizeof(unsigned short),1,inputFile);
+			
+			interactionTypes.push_back(interactionType);
+		}
+		
+		for(ushort i = 0 ; i < size ; ++i) {
+			fread(&lightId,sizeof(unsigned short),1,inputFile);
+			
+			lightIds.push_back(lightId);
+		}
+		
+		for(ushort i = 0 ; i < size ; ++i) {
+			
+			sqlite3_clear_bindings(insertIsectStatement);
+			sqlite3_reset(insertIsectStatement);
+			
+			sqlite3_bind_int64(insertIsectStatement, 1, path_index);
+			sqlite3_bind_int(insertIsectStatement, 2, i+1);
+			sqlite3_bind_double(insertIsectStatement, 3, intersectionPosX[isect_index+i]);
+			sqlite3_bind_double(insertIsectStatement, 4, intersectionPosY[isect_index+i]);
+			sqlite3_bind_double(insertIsectStatement, 5, intersectionPosZ[isect_index+i]);
+			sqlite3_bind_int(insertIsectStatement, 6, primitveIds[isect_index+i]);
+			sqlite3_bind_int(insertIsectStatement, 7, shapeIds[isect_index+i]);
+			sqlite3_bind_int(insertIsectStatement, 8, objectIds[isect_index+i]);
+			sqlite3_bind_double(insertIsectStatement, 9, spectraOne[isect_index+i]);
+			sqlite3_bind_double(insertIsectStatement, 10, spectraTwo[isect_index+i]);
+			sqlite3_bind_double(insertIsectStatement, 11, spectraThree[isect_index+i]);
+			sqlite3_bind_int(insertIsectStatement, 12, interactionTypes[isect_index+i]);
+			sqlite3_bind_int(insertIsectStatement, 13, lightIds[isect_index+i]);
+			
+			if(sqlite3_step(insertIsectStatement) != SQLITE_DONE) {
+				const char *sql = sqlite3_sql(insertIsectStatement);
+				printf("insert intersection failed. %s SQL = %s\n",sqlite3_errmsg(db),sql);
+			}
+			
+			sqlite3_reset(insertIsectStatement);
+			
+			++insertsDone;
+		}
+		//        pathIsectReferences[path_index] = isectIndices;
+		
+		//printf("%d = %hu,%hu,[%f,%f,%f],%hu\n",lineNumber,x,y,throughput[0],throughput[1],throughput[2],size);
+		
+		
+		++path_index;
+		if(path_index % roundCheck == 0) {
+			percentage += percentageIncrement;
+			clock_t end = clock();
+			double deltaT = diffclock(end,startRound) / 1000.0; //In seconds
+			printf("%.1f%% %.3fs %.1f INSERTS/s\n",percentage,deltaT/1000,insertsDone / deltaT);
+			
+			startRound = clock();
+			insertsDoneTotal += insertsDone;
+			insertsDone = 0;
+		}
+		isect_index += size;
+	}
+	//Put it in the database
+	sqlite3_finalize(insertPathStatement);
+	sqlite3_finalize(insertIsectStatement);
+	
+	//
+	sqlite3_stmt* stmt = database.PrepareStatement("SELECT COUNT(*) FROM INTERSECTIONS");
+	sqlite3_step(stmt);
+	int nrIsects = sqlite3_column_int(stmt, 0);
+	
+	stmt = database.PrepareStatement("SELECT COUNT(*) FROM PATHS");
+	sqlite3_step(stmt);
+	int nrPaths = sqlite3_column_int(stmt, 0);
+	
+	printf("Database contains %d paths and %d intersections\n",nrPaths,nrIsects);
+	
+	sqlite3_exec(db, "END TRANSACTION", NULL, NULL, &zErrMsg);
+	
+	insertsDoneTotal += insertsDone;
+	clock_t endTotal = clock();
+	double deltaT = diffclock(endTotal,startTotal);
+	printf("Finished in %.3f s with an average of %.1f INSERTS/s\n",deltaT / 1000,insertsDoneTotal * (1000 / deltaT));
+	
+	return database;
+}

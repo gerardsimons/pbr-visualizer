@@ -76,8 +76,8 @@ protected:;
     static RIV3DView* instance;
     Vec3Df screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
-    RIV3DView(RIVDataSet* dataset,PBRTConfig* config,int,int,int,int,int,int,RIVColorProperty*,RIVSizeProperty*);
-    RIV3DView(RIVDataSet* dataset,PBRTConfig* config,RIVColorProperty*,RIVSizeProperty*);
+    RIV3DView(DataController* dataset,PBRTConfig* config,int,int,int,int,int,int,RIVColorProperty*,RIVSizeProperty*);
+    RIV3DView(DataController* dataset,PBRTConfig* config,RIVColorProperty*,RIVSizeProperty*);
 	
 	static int windowHandle;
 	

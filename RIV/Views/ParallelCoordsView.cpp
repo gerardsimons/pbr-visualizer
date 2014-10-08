@@ -3,8 +3,6 @@
 #include "DataView.h"
 #include "../Geometry/Geometry.h"
 #include "../helper.h"
-#include "../Data/DataSet.h"
-#include "../Data/Table.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -13,7 +11,7 @@
 ParallelCoordsView* ParallelCoordsView::instance = NULL;
 int ParallelCoordsView::windowHandle = -1;
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, int x, int y, int width, int height, int paddingX, int paddingY, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY,colorProperty,sizeProperty) {
+ParallelCoordsView::ParallelCoordsView(DataController* dataController, int x, int y, int width, int height, int paddingX, int paddingY, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataController,x,y,width,height, paddingX, paddingY,colorProperty,sizeProperty) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
@@ -23,9 +21,11 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, int x, int y, int wi
     identifier = "ParallelCoordsView";
     instance = this;
     //Nothing else to do
+	
+
 }
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,colorProperty,sizeProperty) {
+ParallelCoordsView::ParallelCoordsView(DataController* dataController, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataController,colorProperty,sizeProperty) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
@@ -34,6 +34,7 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, RIVColorProperty *co
     selectedAxis = 0;
     identifier = "ParallelCoordsView";
 	instance = this;
+	
 }
 
 ParallelCoordsView::~ParallelCoordsView(void) {
@@ -42,72 +43,65 @@ ParallelCoordsView::~ParallelCoordsView(void) {
 
 void ParallelCoordsView::createAxes() {
     axisGroups.clear();
-    if(dataset != NULL) {
-        size_t total_nr_of_records = dataset->TotalNumberOfRecords();
+	
+    if(dataController != NULL) {
+		
+		size_t total_nr_of_records = 0;
 		//    int y = startY + paddingY;
         int y = paddingY; //View port takes care of startY
         int axisHeight = height - 2 * paddingY;
-        
-        float delta = 1.F / (total_nr_of_records - 1) * (width - 2 * paddingX);
-        std::vector<RIVTable*>* tablePointers = dataset->GetTables();
-        
+		
+		std::vector<sqlite::DataView*> views = dataController->GetViews();
+		
+		for(sqlite::DataView* view : views) {
+			total_nr_of_records += view->NumberOfColumns() - 1;
+		}
+		float delta = 1.F / (total_nr_of_records - 1) * (width - 2 * paddingX);
         int axisIndex = 0;
         
-        ParallelCoordsAxisGroup *fromConnection = NULL;
-        ParallelCoordsAxis *lastAxis = NULL;
-        
-        for(size_t j = 0 ; j < tablePointers->size() ; j++) {
-            RIVTable *table = tablePointers->at(j);
+        for(size_t j = 0 ; j < views.size() ; j++) {
+			sqlite::DataView *view = views.at(j);
             ParallelCoordsAxisGroup axisGroup;
-            size_t numberOfRecords = table->NumberOfColumns();
-            for(size_t i = 0 ; i < numberOfRecords ; ++i) {
-                RIVRecord* record = table->GetRecord(i);
-                RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(record);
+			axisGroup.view = view;
+			std::vector<sqlite::Column> columns = view->GetColumns();
+			sqlite::ResultSet results = view->MinMaxAll();
+			sqlite::Row row;
+			results.GetNext(row);
+            for(size_t i = 1 ; i < columns.size() ; ++i) {
+				sqlite::Column& column = columns[i];
+//				sqlite::Type type = types[i];
+				std::string minName = "MIN(" + column.name + ")";
+				std::string maxName = "MAX(" + column.name + ")";
+				
                 int x = delta * (axisIndex) + paddingX;
-                if(floatRecord) {
-                    
-                    std::pair<float,float> minMax = floatRecord->MinMax();
-                    
-                    ParallelCoordsAxis axis(x,y,axisHeight,minMax.first,minMax.second,record->name);
-                    
-                    axis.ComputeScale(4);
-                    axis.RecordPointer = record;
-                    
-                    axisGroup.axes.push_back(axis);
-                    lastAxis = &axis;
-                    axisIndex++;
-                    continue;
-                }
-                RIVUnsignedShortRecord* shortRecord = RIVTable::CastToUnsignedShortRecord(record);
-                if(shortRecord) {
-                    
-                    const std::pair<ushort,ushort> &minMax = shortRecord->MinMax();
-                    ParallelCoordsAxis axis(x,y,axisHeight,minMax.first,minMax.second,record->name);
-                    
-                    axis.ComputeScale(4);
-                    axis.RecordPointer = record;
-                    axisIndex++;
-                    lastAxis = &axis;
-                    axisGroup.axes.push_back(axis);
-                }
-            }
-            axisGroup.table = table;
-            if(fromConnection) { //Any outstanding connections to be made?
-                axisGroup.connectorAxis = lastAxis;
-                axisGroup.connectedGroup = fromConnection;
-				//            printf("Axis groups connected\n");
-                //Erase connection pointer
-            }
-            if(j < tablePointers->size() - 1) { //Only connect if not last
-                //What is the next table group?
-                RIVTable* nextTable = (*tablePointers)[j + 1];
-                const RIVTable* result = table->FindTable(nextTable->GetName());
-                if(result) { //If a reference exists, connect the groups
-                    //But the next axisgroup is not yet made, so cache it until it is made
-                    fromConnection = &axisGroup;
-                    axisGroup.connectorAxis = lastAxis;
+				
+				if(column.type == sqlite::REAL) {
+					
+					float min = row.GetFloat(minName);
+					float max = row.GetFloat(maxName);
+					
+					ParallelCoordsAxis axis(x,y,axisHeight,min,max,column);
+					
+					axis.ComputeScale(4);
+					
+					axisGroup.axes.push_back(axis);
+					axisIndex++;
+					continue;
+				}
+				if(column.type == sqlite::INT) {
+
+					int min = row.GetInt(minName);
+					int max = row.GetInt(maxName);
+					
+					ParallelCoordsAxis axis(x,y,axisHeight,min,max,column);
+					
+					axis.ComputeScale(4);
+					
+					axisGroup.axes.push_back(axis);
+					axisIndex++;
                 }
             }
+//            axisGroup.table = table;
             axisGroups.push_back(axisGroup);
         }
     }
@@ -160,8 +154,8 @@ void ParallelCoordsView::drawAxes() {
     //Draw texts
     for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
         for(ParallelCoordsAxis &axis : axisGroup.axes) {
-            std::string text = axis.name;
-            
+            std::string text = axis.column.name;
+			
             drawText(text,axis.x,axis.y - 15,textColor,.1F);
             
             std::vector<float> &scale = axis.scale;
@@ -187,73 +181,71 @@ void ParallelCoordsView::drawLines() {
 //	linesAreDirty = true;
 
 		size_t lineIndex = 0;
-        glColor3f(1.0, 0.0, 0.0);
         size_t linesDrawn = 0;
+	
+	reporter::startTask("drawLines");
+	
+	for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
+		sqlite::DataView *view = axisGroup.view;
+//		sqlite3_stmt* stmt = view->SelectStmt();
 		
-        for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
-            RIVTable *table = axisGroup.table;
-            
-            size_t row = 0;
-
-            TableIterator* iterator = table->GetIterator();
-			
-			if(dynamic_cast<FilteredTableIterator*>(iterator)) {
-				printf("Draw table %s with filtered table iterator\n",table->GetName().c_str());
-			}
-			else {
-				printf("Draw table %s with normal table iterator\n",table->GetName().c_str());
-			}
-			
-            Color lineColor;
-            while(iterator->GetNext(row)) {
-                if(colorProperty->ComputeColor(table, row, lineColor)) {
-					glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
-					
-					float size = sizeProperty->ComputeSize(table,row);
-					
-					glLineWidth(size);
-                    glColor3f(lineColor.R, lineColor.G, lineColor.B);
-                    for(ParallelCoordsAxis &axis : axisGroup.axes) {
-                        RIVRecord *ptr = axis.RecordPointer;
-                        RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(ptr);
+		Color lineColor;
+		float size = 1;
+		size_t row = 1;
+//			glLineWidth(size);
+//		int rc = sqlite3_step(stmt);
+//		sqlite::ResultSet results = view->Select();
+//		sqlite::Row rowObj;
 		
-                        if(floatRecord) {
-							//                            //Code here
-                            float value = floatRecord->Value(row);
-                            float x = axis.x;
-                            float y = axis.PositionOnScaleForValue(value);
+		sqlite3_stmt* stmt = view->SelectStmt();
+//		std::string name = view->GetName();
+//		name.erase(name.begin(), name.begin() + 4);
+//		sqlite3_stmt* stmt = dataController->CustomSQLStmt("SELECT * FROM " + name);
 
-                            ++linesDrawn;
-                            glVertex3f(x, y, 0);
-//                            if(y > axis.y + axis.height || y < axis.y) {
-//                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
-//                            }
-                            continue;
-                        }
-                        RIVUnsignedShortRecord* shortRecord = RIVTable::CastToUnsignedShortRecord(ptr);
-                        if(shortRecord) {
-                            //Code here
-                            
-                            ushort value = shortRecord->Value(row);
-                            
-                            float x = axis.x;
-                            float y = axis.PositionOnScaleForValue(value);
-                            glVertex3f(x, y, 0);
-							
-//                            if(y > axis.y + axis.height || y < axis.y) {
-//                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
-//                            }
-                            ++linesDrawn;
-                        }
-                    }
-                }
-                glEnd();
-                lineIndex++;
-            }
-        
-        linesAreDirty = false;
-        printf("Drawn %zu lines.\n",linesDrawn);
-    }
+		while(sqlite3_step(stmt) == SQLITE_ROW) {
+			glBegin(GL_LINE_STRIP);
+			for(ParallelCoordsAxis &axis : axisGroup.axes) {
+				sqlite::Column column = axis.column;
+				if(column.type == sqlite::REAL) {
+					float value = sqlite3_column_double(stmt, column.index - 1);
+//					float value = rowObj.GetFloat(column.name);
+					float x = axis.x;
+					float y = axis.PositionOnScaleForValue(value);
+//						printf("glVertex3f(%f,%f,0)\n",x,y);
+					glVertex3f(x, y, 0);
+
+					if(y > axis.y + axis.height || y < axis.y) {
+						throw  "A line was being drawn outside ot the parallel coordinates view";
+					}
+					continue;
+				}
+				if(column.type == sqlite::INT || column.type == sqlite::BIGINT) {
+					//Code here
+					
+					int value = sqlite3_column_int(stmt, column.index - 1);
+//					int value = rowObj.GetInt(column.name);
+					
+					float x = axis.x;
+					float y = axis.PositionOnScaleForValue(value);
+//						printf("glVertex3f(%f,%f,0)\n",x,y);
+					glVertex3f(x, y, 0);
+					
+					if(y > axis.y + axis.height || y < axis.y) {
+						throw "A line was being drawn outside ot the parallel coordinates view";
+					}
+				}
+				else {
+					throw "INVALID TYPE";
+				}
+			}
+			glEnd();
+			lineIndex++;
+//			rc = sqlite3_step(stmt);
+		}
+	}
+	linesAreDirty = false;
+	printf("Drawn %zu lines.\n",lineIndex);
+	reporter::stop("drawLines");
 }
 
 void ParallelCoordsView::DrawInstance() {
@@ -378,22 +370,22 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                 
                 Area &selection = selectedAxis->selection;
                 int sizeBox = abs(selection.start.y - selection.end.y);
-				dataset->StartFiltering();
-                if(sizeBox > 3) {
-                    float lowerBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.start.y));
-                    float upperBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.end.y));
-                    dataset->ClearFilter(selectedAxis->name);
-                    riv::Filter* rangeFilter = new riv::RangeFilter(selectedAxis->name,lowerBound,upperBound);
-                    dataset->AddFilter(rangeFilter);
-                    printf("Selection finalized on axis %s\n",selectedAxis->name.c_str());
-                }
-                else {
-                    dataset->ClearFilter(selectedAxis->name);
-                    clearSelection();
-                }
-				
-				//Close access
-				dataset->StopFiltering();
+//				dataset->StartFiltering();
+//                if(sizeBox > 3) {
+//                    float lowerBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.start.y));
+//                    float upperBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.end.y));
+//                    dataset->ClearFilter(selectedAxis->name);
+//                    riv::Filter* rangeFilter = new riv::RangeFilter(selectedAxis->name,lowerBound,upperBound);
+//                    dataset->AddFilter(rangeFilter);
+//                    printf("Selection finalized on axis %s\n",selectedAxis->name.c_str());
+//                }
+//                else {
+//                    dataset->ClearFilter(selectedAxis->name);
+//                    clearSelection();
+//                }
+//				
+//				//Close access
+//				dataset->StopFiltering();
             }
             return true;
         }

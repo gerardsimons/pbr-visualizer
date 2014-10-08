@@ -38,8 +38,8 @@ private:
     
     void clearSelection();
 public:
-    ParallelCoordsView(RIVDataSet* dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
-    ParallelCoordsView(RIVDataSet* dataset, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
+    ParallelCoordsView(DataController* dataController, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
+    ParallelCoordsView(DataController* dataController, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
 	~ParallelCoordsView(void);
 	
 	static int windowHandle;

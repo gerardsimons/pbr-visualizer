@@ -15,6 +15,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <sqlite3.h>
 
 
 #if __APPLE__
@@ -26,10 +27,18 @@
 void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v );
 void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v );
 
-//template <typename T, size_t N>
-//class Vector {
-//    T values[N];
-//};
+
+double diffclock( clock_t clock1, clock_t clock2 );
+inline void executeSQL(char* sql, sqlite3* db) {
+	char *zErrMsg;
+	int rc = sqlite3_exec(db, sql, NULL, 0, &zErrMsg);
+	if( rc != SQLITE_OK ){
+		printf("SQL error: %s\n", zErrMsg);
+		printf("SQL = %s : ",sql);
+		sqlite3_free(zErrMsg);
+		throw "SQL Error";
+	}
+}
 
 void println(const std::string& text);
 

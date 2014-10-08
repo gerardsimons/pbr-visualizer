@@ -10,14 +10,14 @@
 #define _PARALLEL_COORDS_AXIS_H
 
 #include <string>
+#include "SQLDataView.h"
 #include "../Data/Record.h"
 #include "../Geometry/Geometry.h"
 
 
 	class ParallelCoordsAxis {
 	public:
-		ParallelCoordsAxis(int x,int y,int height,float min, float max, const std::string& name);
-		ParallelCoordsAxis();
+		ParallelCoordsAxis(int x,int y,int height,float min, float max, const sqlite::Column& name);
 		void ComputeScale(int n);
 		
 		//Returns the Y position of a value along the scale
@@ -33,8 +33,7 @@
 		float minValue, maxValue; //TODO: template
 		int height;
 		
-		std::string name; //Usually points to a record's name, acts as unique ID!
-		RIVRecord* RecordPointer;
+		sqlite::Column column;
 		
 		bool HasSelectionBox;
 		Area selection;

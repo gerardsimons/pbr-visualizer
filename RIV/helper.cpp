@@ -24,6 +24,13 @@ inline float* linearInterpolateColor(float ratio, const float colorOne[3],const 
 void println(const std::string& text) {
 	std::cout << text << std::endl;
 }
+double diffclock( clock_t clock1, clock_t clock2 ) {
+	
+	double diffticks = clock1 - clock2;
+	double diffms    = diffticks / ( CLOCKS_PER_SEC / 1000 );
+	
+	return diffms;
+}
 bool almost_equal(double x, double y, double epsilon)
 {
     double diff = x - y;

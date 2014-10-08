@@ -31,28 +31,36 @@
 		
 		heatmap.clear();
 		
-		RIVTable *pathTable = dataset->GetTable("path");
+		//Use a custom sql to see how many intersections each path has
+		std::string getMinMax = " select MIN(IMAGE_X), MAX(IMAGE_X), MIN(IMAGE_Y), MAX(IMAGE_Y) FROM PATHS";
+		std::string getAllData = "select IMAGE_X,IMAGE_Y,COUNT(PID) from paths,intersections where pid = id group by id";
+		
+//		RIVTable *pathTable = dataset->GetTable("path");
+		
+		
+		sqlite3_stmt* allStmt = dataController->CustomSQLStmt(getAllData);
 		
 		//Find x and y record
-		RIVUnsignedShortRecord* xRecord = pathTable->GetRecord<RIVUnsignedShortRecord>("x");
-		RIVUnsignedShortRecord* yRecord = pathTable->GetRecord<RIVUnsignedShortRecord>("y");
-		RIVUnsignedShortRecord* intersections = pathTable->GetRecord<RIVUnsignedShortRecord>("#intersections");
+//		RIVUnsignedShortRecord* xRecord = pathTable->GetRecord<RIVUnsignedShortRecord>("x");
+//		RIVUnsignedShortRecord* yRecord = pathTable->GetRecord<RIVUnsignedShortRecord>("y");
+//		RIVUnsignedShortRecord* intersections = pathTable->GetRecord<RIVUnsignedShortRecord>("#intersections");
 		
-		xMax = xRecord->Max() + 1;
-		yMax = yRecord->Max() + 1;
+		sqlite3_stmt* minMaxStmt = dataController->CustomSQLStmt(getMinMax);
+		sqlite3_step(minMaxStmt);
+		xMax = sqlite3_column_int(minMaxStmt, 3) + 1;
+		yMax = sqlite3_column_int(minMaxStmt, 5) + 1;
 		
 		colorMap = colors::jetColorMap();
 		heatmap.resize( xMax , std::vector<float>( yMax , 0 ) );
 		
-		TableIterator* iterator = pathTable->GetIterator();
+//		TableIterator* iterator = pathTable->GetIterator();
 		
 		float max = std::numeric_limits<float>::min();
 		
-		size_t row;
-		while(iterator->GetNext(row)) {
-			ushort x = xRecord->Value(row);
-			ushort y = yRecord->Value(row);
-			ushort nrIsects = intersections->Value(row);
+		while(sqlite3_step(allStmt) == SQLITE_ROW) {
+			ushort x = sqlite3_column_int(allStmt, 1);
+			ushort y = sqlite3_column_int(allStmt, 2);
+			ushort nrIsects = sqlite3_column_int(allStmt, 3);
 			//Update heatmap count
 			heatmap[x][yMax - y - 1] += nrIsects;
 		}

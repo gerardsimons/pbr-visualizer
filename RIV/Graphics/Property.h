@@ -10,7 +10,7 @@
 #define GRAPHICS_PROPERTY
 
 #include "Evaluator.h"
-#include "../Data/Table.h"
+#include <sqlite3.h>
 #include "../helper.h"
 	
 class RIVTable;
@@ -28,11 +28,9 @@ public:
 template <typename T>
 class RIVEvaluatedProperty {
 protected:
-	//The table whose index defines the value of the property
-	RIVTable* propertyReference;
-	
-	RIVFloatRecord* referenceFloatRecord = NULL;
-	RIVUnsignedShortRecord* referenceShortRecord = NULL;
+	sqlite3* database = NULL;
+	std::string columnReference;
+	std::string tableReference;
 	
 	const INTERPOLATION_SCHEME defaultInterpolationMode = CONTINUOUS;
 	
@@ -48,8 +46,7 @@ protected:
 	//Maps an index to a specific evaluator, if none is found, the default color interpolator is used
 	std::map<size_t,Evaluator<T,float>*> evaluatorRegister;
 	
-	void init(RIVTable* propertyReference_, const INTERPOLATION_SCHEME &scheme, const std::vector<T> &interpolationValues) {
-		propertyReference = propertyReference_;
+	void init(const INTERPOLATION_SCHEME &scheme, const std::vector<T> &interpolationValues) {
 		switch(scheme) {
 			case CONTINUOUS:
 			{
@@ -66,9 +63,6 @@ protected:
 	}
 	//SUPER HACK ALERT
 	void init(RIVTable* propertyReference_, const INTERPOLATION_SCHEME &scheme, const std::vector<ushort> &interpolationValues) {
-		//Now what? This is so hacky
-		propertyReference = propertyReference_;
-		//convert to floats
 		std::vector<float> interpolationValuesFloats;
 		for(ushort i : interpolationValues) {
 			interpolationValuesFloats.push_back(i);
@@ -86,17 +80,7 @@ protected:
 			}
 		}
 	}
-	void initRecord(RIVRecord* record) {
-		RIVFloatRecord *floatRecord =  RIVTable::CastToFloatRecord(record);
-		if(floatRecord) {
-			referenceFloatRecord = floatRecord;
-			return;
-		}
-		RIVUnsignedShortRecord *shortRecord = RIVTable::CastToUnsignedShortRecord(record);
-		if(shortRecord) {
-			referenceShortRecord = shortRecord;
-		}
-	}
+
 
 //    float const* colorForMultipleResolvedRows(const std::vector<size_t>& rows);
 public:
@@ -104,38 +88,23 @@ public:
 		deletePointerVector(specificEvaluators);
 		evaluatorRegister.clear();
 	}
-	bool Value(RIVTable* sourceTable, const size_t& row, float& computedValue) {
-		//Determine what interpolator we should use to compute the color
-		if(sourceTable->GetName() == propertyReference->GetName()) {
-			Evaluator<T,float>* evaluator = evaluatorRegister[row];
-			if(evaluator == NULL) {
-				evaluator = defaultEvaluator;
-			}
-			//If we want the value according to a certain record
-			if(referenceFloatRecord) {
-				computedValue = evaluator->Evaluate(referenceFloatRecord->Value(row));
-			}
-			else if(referenceShortRecord) {
-				computedValue = evaluator->Evaluate(referenceShortRecord->Value(row));
-			}
-			else computedValue = evaluator->Evaluate(row); //just use the row as input
-			return true;
+	bool Value(const std::string& columnName, const std::string& tableName, const size_t& row, float& computedValue) {
+		
+		//If the table used is the table reference we dont need to create a join
+		if(tableName == tableReference) {
+			
 		}
 		else {
-			//Find the table through its chain of references
-			RIVReferenceChain chainToColorTable;
-			//If found
-			if(sourceTable->GetReferenceChainToTable(propertyReference->GetName(),chainToColorTable)) {
-				//Find target index
-				std::vector<size_t> targetRange = chainToColorTable.ResolveRow(row);
-				if(targetRange.size() > 0){
-//						size_t propertyIndex = (targetRange)[0]; //Very arbitrary, pass all and average?
-					//Repeat using the new row and table
-					return Value(propertyReference,targetRange,computedValue);
-				}
-			}
+			
 		}
-		return false;
+
+		Evaluator<T,float>* evaluator = evaluatorRegister[row];
+		if(evaluator == NULL) {
+			evaluator = defaultEvaluator;
+		}
+		computedValue = evaluator->Evaluate(row); //just use the row as input
+		return true;
+
 	}
 	bool Value(RIVTable* sourceTable, const std::vector<size_t>& rows,float& computedValue) {
 		//    float const* overallColor = NULL;
@@ -151,14 +120,7 @@ public:
 				break;
 			}
 		}
-		//If we want the value according to a certain record
-		if(referenceFloatRecord) {
-			computedValue = evaluator->Evaluate(referenceFloatRecord->Value(rowFound));
-		}
-		else if(referenceShortRecord) {
-			computedValue = evaluator->Evaluate(referenceShortRecord->Value(rowFound));
-		}
-		else computedValue = evaluator->Evaluate(rowFound); //just use the row as input
+		computedValue = evaluator->Evaluate(rowFound); //just use the row as input
 		return true;
 	}
 	void AddEvaluationScheme(std::vector<T>& indices, Evaluator<T, float>* newEvaluator) {
@@ -174,64 +136,68 @@ public:
 		else throw "New evaluator cannot be NULL.";
 	}
 
-	RIVEvaluatedProperty(RIVTable *propertyReference_,float fixedValue) {
-		propertyReference = propertyReference_;
+	RIVEvaluatedProperty(sqlite3 *db,float fixedValue) {
+		database = db;
 		defaultEvaluator = new FixedEvaluator<T, float>(fixedValue);
 	}
-	RIVEvaluatedProperty(RIVTable *propertyReference_,std::vector<size_t>& interpolationValues) {
-		init(propertyReference_, defaultInterpolationMode, interpolationValues);
+//	RIVEvaluatedProperty(sqlite3 *db,std::vector<size_t>& interpolationValues) {
+//		init(propertyReference_, defaultInterpolationMode, interpolationValues);
+//	}
+//	RIVEvaluatedProperty(sqlite3 *db) {
+//		T lower = 0;
+//		T upper = propertyReference_->GetNumRows();
+//		std::vector<T> interpolationValues;
+//		interpolationValues.push_back(lower);
+//		interpolationValues.push_back(upper);
+//		init(propertyReference_, defaultInterpolationMode, interpolationValues);
+//	}
+//	RIVEvaluatedProperty(sqlite3 *db,std::vector<size_t>& interpolationValues, const INTERPOLATION_SCHEME& scheme) {
+//		init(propertyReference_, scheme, interpolationValues);
+//	}
+	RIVEvaluatedProperty(sqlite3 *db,const std::string tableName, const std::string& columnName) {
+		//Get the min and the max of the
+		
+//		char* sql = "SELECT MIN(%s), MAX(%s) FROM %s";
+//		sprintf(sql,columnName.c_str(),columnName.c_str(),tableName.c_str());
+//		executeSQL(sql, db);
+//		
+//		if(referenceFloatRecord) {
+//			std::vector<float> interpolationValues;
+//			interpolationValues.push_back(referenceFloatRecord->Min());
+//			interpolationValues.push_back(referenceFloatRecord->Max());
+//			init(propertyReference_,defaultInterpolationMode,interpolationValues);
+//		}
+//		else {
+//			std::vector<ushort> interpolationValues;
+//			interpolationValues.push_back(referenceShortRecord->Min());
+//			interpolationValues.push_back(referenceShortRecord->Max());
+//			
+//			init(propertyReference_,defaultInterpolationMode,interpolationValues);
+//		}
+//		if(!propertyReference->HasRecord(referenceRecord)) {
+//			throw "Reference table does not contain reference record.";
+//		}
 	}
-	RIVEvaluatedProperty(RIVTable *propertyReference_) {
-		T lower = 0;
-		T upper = propertyReference_->GetNumRows();
-		std::vector<T> interpolationValues;
-		interpolationValues.push_back(lower);
-		interpolationValues.push_back(upper);
-		init(propertyReference_, defaultInterpolationMode, interpolationValues);
-	}
-	RIVEvaluatedProperty(RIVTable *propertyReference_,std::vector<size_t>& interpolationValues, const INTERPOLATION_SCHEME& scheme) {
-		init(propertyReference_, scheme, interpolationValues);
-	}
-	RIVEvaluatedProperty(RIVTable *propertyReference_,RIVRecord* referenceRecord) {
-		propertyReference = propertyReference_;
-		initRecord(referenceRecord);
-		if(referenceFloatRecord) {
-			std::vector<float> interpolationValues;
-			interpolationValues.push_back(referenceFloatRecord->Min());
-			interpolationValues.push_back(referenceFloatRecord->Max());
-			init(propertyReference_,defaultInterpolationMode,interpolationValues);
-		}
-		else {
-			std::vector<ushort> interpolationValues;
-			interpolationValues.push_back(referenceShortRecord->Min());
-			interpolationValues.push_back(referenceShortRecord->Max());
-			
-			init(propertyReference_,defaultInterpolationMode,interpolationValues);
-		}
-		if(!propertyReference->HasRecord(referenceRecord)) {
-			throw "Reference table does not contain reference record.";
-		}
-	}
-	RIVEvaluatedProperty(RIVTable *propertyReference_,const std::string& referenceRecordName) {
-		propertyReference = propertyReference_;
-		RIVRecord* referenceRecord = propertyReference->GetRecord(referenceRecordName);
-		initRecord(referenceRecord);
-		if(referenceFloatRecord) {
-			std::vector<float> interpolationValues;
-			interpolationValues.push_back(referenceFloatRecord->Min());
-			interpolationValues.push_back(referenceFloatRecord->Max());
-			init(propertyReference_,defaultInterpolationMode,interpolationValues);
-		}
-		else {
-			std::vector<ushort> interpolationValues;
-			interpolationValues.push_back(referenceShortRecord->Min());
-			interpolationValues.push_back(referenceShortRecord->Max());
-			
-			init(propertyReference_,defaultInterpolationMode,interpolationValues);
-		}
-		if(!propertyReference->HasRecord(referenceRecord)) {
-			throw "Reference table does not contain reference record.";
-		}
+	RIVEvaluatedProperty(sqlite3 *db,const std::string& referenceColumnName) {
+//		propertyReference = propertyReference_;
+//		RIVRecord* referenceRecord = propertyReference->GetRecord(referenceRecordName);
+//		initRecord(referenceRecord);
+//		if(referenceFloatRecord) {
+//			std::vector<float> interpolationValues;
+//			interpolationValues.push_back(referenceFloatRecord->Min());
+//			interpolationValues.push_back(referenceFloatRecord->Max());
+//			init(propertyReference_,defaultInterpolationMode,interpolationValues);
+//		}
+//		else {
+//			std::vector<ushort> interpolationValues;
+//			interpolationValues.push_back(referenceShortRecord->Min());
+//			interpolationValues.push_back(referenceShortRecord->Max());
+//			
+//			init(propertyReference_,defaultInterpolationMode,interpolationValues);
+//		}
+//		if(!propertyReference->HasRecord(referenceRecord)) {
+//			throw "Reference table does not contain reference record.";
+//		}
 	}
 };
 

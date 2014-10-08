@@ -14,6 +14,7 @@
 #include "../Graphics/ColorPalette.h"
 #include "../Graphics/graphics_helper.h"
 
+
 #if __APPLE__
     #include <GLUT/GLUT.h>
 #else
@@ -24,8 +25,8 @@
 RIV3DView* RIV3DView::instance = NULL;
 int RIV3DView::windowHandle = -1;
 
-RIV3DView::RIV3DView(RIVDataSet* dataset, PBRTConfig* config, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty)
-	: RIVDataView(dataset,x,y,width,height,paddingX,paddingY,colorProperty,sizeProperty) {
+RIV3DView::RIV3DView(DataController* dataController, PBRTConfig* config, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty)
+	: RIVDataView(dataController,x,y,width,height,paddingX,paddingY,colorProperty,sizeProperty) {
 	this->pbrtConfig = config;
     if(instance != NULL) {
         throw "Only 1 instance of RIV3DView allowed.";
@@ -36,7 +37,7 @@ RIV3DView::RIV3DView(RIVDataSet* dataset, PBRTConfig* config, int x, int y, int 
 	createPaths();
 };
 
-RIV3DView::RIV3DView(RIVDataSet* dataset,PBRTConfig* config, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,colorProperty,sizeProperty) {
+RIV3DView::RIV3DView(DataController* dataController,PBRTConfig* config, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataController,colorProperty,sizeProperty) {
 	pbrtConfig = config;
     if(instance != NULL) {
         throw "Only 1 instance of RIV3DView allowed.";
@@ -295,18 +296,17 @@ void RIV3DView::drawPoints() {
 //	reporter::startTask("Draw points.");
 //	printf("Drawing intersections points.\n");
 	
-	RIVTable* isectTable = dataset->GetTable("intersections");
-	
-	RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("intersection X");
-	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
-	RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Z");
+//	RIVTable* isectTable = dataset->GetTable("intersections");
+	std::vector<std::string> coordinateColumns = {"INTERSECTION_X","INTERSECTION_X","INTERSECTION_Z"};
+//	sqlite3_stmt* stmt = isectsTable->SelectStmt(coordinateColumns);
+	sqlite3_stmt* stmt = dataController->GetIsectsView()->SelectStmt(coordinateColumns);
 	
 	//Only use 1 size
-	float size = sizeProperty->ComputeSize(isectTable, 0);
+//	float size = sizeProperty->ComputeSize(isectTable, 0);
 //	printf("Point size = %f\n",size);
 	
 	if(sizesAllTheSame) {
-		glPointSize(size);
+		glPointSize(1);
 	}
 	
 	glBegin(GL_POINTS);
@@ -316,9 +316,10 @@ void RIV3DView::drawPoints() {
 			size_t index = path.GetPoint(i);
 			Color pointColor = path.GetColor(i);
 			
-			float x = xRecord->Value(index);
-			float y = yRecord->Value(index);
-			float z = zRecord->Value(index);
+			sqlite3_step(stmt);
+			float x = sqlite3_column_double(stmt, 1);
+			float y = sqlite3_column_double(stmt, 2);
+			float z = sqlite3_column_double(stmt, 3);
 			
 			glPushMatrix();
 			glColor3f(pointColor.R,pointColor.G,pointColor.B);
@@ -333,44 +334,44 @@ void RIV3DView::drawPoints() {
 //Move this function somewhere else
 void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize) {
 	
-	std::string taskName = "Generating octree";
-	reporter::startTask(taskName);
-	
-	if(heatmap) {
-		delete heatmap;
-	}
-	
-	size_t row;
-	
-	RIVTable* isectTable = dataset->GetTable("intersections");
-	TableIterator *iterator = isectTable->GetIterator();
-	
-	//Generate the index subset
-	std::vector<size_t> indices;
-	
-	while(iterator->GetNext(row)) {
-		indices.push_back(row);
-	}
-	
-	RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("intersection X");
-	std::vector<float>* xValues = xRecord->GetValuesPointer();
-	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
-	std::vector<float>* yValues = yRecord->GetValuesPointer();
-	RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Z");
-	std::vector<float>* zValues = zRecord->GetValuesPointer();
-	
-	OctreeConfig config = OctreeConfig(maxDepth, maxCapacity, minNodeSize);
-	heatmap = new Octree(xValues, yValues, zValues, indices, config);
-	
-	printf("Tree generated with \n");
-	printf("\tDepth %zu\n",heatmap->Depth());
-	printf("\tNodes = %zu\n",heatmap->NumberOfNodes());
-//	printf("\tMemory size = %.3f KB\n",sizeof(heatmap) / 1000.F); //Not sure if that works like this, probably not
-	
-	//Generate the color map used by the tree
-	treeColorMap = colors::jetColorMap();
-	
-	reporter::stop(taskName);
+//	std::string taskName = "Generating octree";
+//	reporter::startTask(taskName);
+//	
+//	if(heatmap) {
+//		delete heatmap;
+//	}
+//	
+//	size_t row;
+//	
+//	RIVTable* isectTable = dataset->GetTable("intersections");
+//	TableIterator *iterator = isectTable->GetIterator();
+//	
+//	//Generate the index subset
+//	std::vector<size_t> indices;
+//	
+//	while(iterator->GetNext(row)) {
+//		indices.push_back(row);
+//	}
+//	
+//	RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("intersection X");
+//	std::vector<float>* xValues = xRecord->GetValuesPointer();
+//	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
+//	std::vector<float>* yValues = yRecord->GetValuesPointer();
+//	RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Z");
+//	std::vector<float>* zValues = zRecord->GetValuesPointer();
+//	
+//	OctreeConfig config = OctreeConfig(maxDepth, maxCapacity, minNodeSize);
+//	heatmap = new Octree(xValues, yValues, zValues, indices, config);
+//	
+//	printf("Tree generated with \n");
+//	printf("\tDepth %zu\n",heatmap->Depth());
+//	printf("\tNodes = %zu\n",heatmap->NumberOfNodes());
+////	printf("\tMemory size = %.3f KB\n",sizeof(heatmap) / 1000.F); //Not sure if that works like this, probably not
+//	
+//	//Generate the color map used by the tree
+//	treeColorMap = colors::jetColorMap();
+//	
+//	reporter::stop(taskName);
 }
 
 void RIV3DView::ResetGraphics() {
@@ -381,40 +382,42 @@ void RIV3DView::ResetGraphics() {
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
 void RIV3DView::createPaths() {
 	
-	reporter::startTask("Creating paths");
-	
-	RIVTable* isectTable = dataset->GetTable("intersections");
-	paths.clear();
-    
-    //Get the records we want;
-    //Get the iterator, this iterator is aware of what rows are filtered and not
-    TableIterator* iterator = isectTable->GetIterator();
-    
-    size_t row = 0;
-	size_t *pathID = 0;
-	size_t oldPathID = 0;
-	
-	sizesAllTheSame = true;
-	std::vector<size_t> vertices;
-	std::vector<Color> colors;
-	
-    while(iterator->GetNext(row,pathID)) {
-		if(*pathID != oldPathID && colors.size() > 0) {
-			paths.push_back(Path(&vertices[0],&colors[0],colors.size()));
-			vertices.clear();
-			colors.clear();
-			oldPathID = *pathID;
-		}
-		Color pointColor;
-        bool hasColor = colorProperty->ComputeColor(isectTable, row, pointColor); //Check if any color can be computed for the given row
-		
-		vertices.push_back(row);
-		colors.push_back(pointColor);
-    }
-
-	reporter::stop("Creating paths");
-	reportVectorStatistics("paths", paths);
-	
+//	reporter::startTask("Creating paths");
+//	
+////	RIVTable* isectTable = dataset->GetTable("intersections");
+//	
+//	sqlite3_stmt* isects = dataController->GetIntersectionsStmt();
+//	paths.clear();
+//    
+//    //Get the records we want;
+//    //Get the iterator, this iterator is aware of what rows are filtered and not
+////    TableIterator* iterator = isectTable->GetIterator();
+//	
+//    size_t row = 0;
+//	size_t *pathID = 0;
+//	size_t oldPathID = 0;
+//	
+//	sizesAllTheSame = true;
+//	std::vector<size_t> vertices;
+//	std::vector<Color> colors;
+//	
+//    while(sqlite3_step(isects) == SQLITE_ROW) {
+//		if(*pathID != oldPathID && colors.size() > 0) {
+//			paths.push_back(Path(&vertices[0],&colors[0],colors.size()));
+//			vertices.clear();
+//			colors.clear();
+//			oldPathID = *pathID;
+//		}
+//		Color pointColor;
+////        bool hasColor = colorProperty->ComputeColor(isectTable, row, pointColor); //Check if any color can be computed for the given row
+//		
+//		vertices.push_back(row);
+//		colors.push_back(pointColor);
+//    }
+//
+//	reporter::stop("Creating paths");
+//	reportVectorStatistics("paths", paths);
+//	
 }
 
 void RIV3DView::MovePathSegment(float ratioIncrement) {
@@ -452,56 +455,105 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 	int startBounce = floor(startSegment * maxBounce);
 	int endBounce = startBounce + 1;
 	
-	RIVTable* intersectionsTable = dataset->GetTable("intersections");
-	RIVFloatRecord* xRecord = intersectionsTable->GetRecord<RIVFloatRecord>("intersection X");
-	RIVFloatRecord* yRecord = intersectionsTable->GetRecord<RIVFloatRecord>("intersection Y");
-	RIVFloatRecord* zRecord = intersectionsTable->GetRecord<RIVFloatRecord>("intersection Z");
+
+	
+
 	
 //	printf("start,end bounce = %d,%d\n",startBounce,endBounce);
 	
 	glBegin(GL_LINES);
 	if(startBounce == 0) {
-		for(const Path& path : paths) {
-			size_t point = path.GetPoint(0);
-			Color c = path.GetColor(0);
+		std::vector<std::string> coordinateColumns = {"BOUNCE_NR","INTERSECTION_X","INTERSECTION_X","INTERSECTION_Z"};
+		sqlite3_stmt* stmt = dataController->GetIsectsView()->SelectStmt(coordinateColumns);
+		//Get the points with bounce = 1
+//		for(const Path& path : paths) {
+//			size_t point = path.GetPoint(0);
+//			Color c = path.GetColor(0);
+		
+		while(sqlite3_step(stmt)) {
+				int bounceNr = sqlite3_column_int(stmt, 1);
+				if(bounceNr == 1) {
+				float x = sqlite3_column_double(stmt, 2);
+				float y = sqlite3_column_double(stmt, 3);
+				float z = sqlite3_column_double(stmt, 4);
 
-			float deltaX = xRecord->Value(point) - cameraPosition[0];
-			float deltaY = yRecord->Value(point) - cameraPosition[1];
-			float deltaZ = zRecord->Value(point) - cameraPosition[2];
-			glVertex3f(cameraPosition[0] + deltaX * startSegment * maxBounce,cameraPosition[1] + deltaY * startSegment * maxBounce,cameraPosition[2] + deltaZ * startSegment * maxBounce);
-			glColor3f(c.R,c.G,c.B);
-			glVertex3f(cameraPosition[0] + deltaX * stopSegment * maxBounce,cameraPosition[1] + deltaY * stopSegment * maxBounce,cameraPosition[2] + deltaZ * stopSegment * maxBounce);
+				float deltaX = x - cameraPosition[0];
+				float deltaY = y - cameraPosition[1];
+				float deltaZ = z - cameraPosition[2];
+				
+				glVertex3f(cameraPosition[0] + deltaX * startSegment * maxBounce,cameraPosition[1] + deltaY * startSegment * maxBounce,cameraPosition[2] + deltaZ * startSegment * maxBounce);
+	//			glColor3f(c.R,c.G,c.B);
+				glVertex3f(cameraPosition[0] + deltaX * stopSegment * maxBounce,cameraPosition[1] + deltaY * stopSegment * maxBounce,cameraPosition[2] + deltaZ * stopSegment * maxBounce);
+			}
 		}
 	}
 	else {
-		for(const Path& path : paths) {
-			if(path.Size() >= endBounce) {
-				size_t startPoint = path.GetPoint(startBounce - 1);
-				Color startColor = path.GetColor(startBounce - 1);
+		//Get the points with bounce = 1 and bounce = 2 of the same path
+//		for(const Path& path : paths) {
+//			if(path.Size() >= endBounce) {
+//				size_t startPoint = path.GetPoint(startBounce - 1);
+//				Color startColor = path.GetColor(startBounce - 1);
+//				
+//				size_t endPoint = path.GetPoint(endBounce - 1);
+//				Color endColor = path.GetColor(endBounce - 1);
+//				
+//				float Cstart = startSegment * maxBounce - startBounce;
+//				float Cend = stopSegment * maxBounce - startBounce;
+//
+//				sqlite3_step(stmt);
+//				float x = sqlite3_column_double(stmt, 1);
+//				float y = sqlite3_column_double(stmt, 2);
+//				float z = sqlite3_column_double(stmt, 3);
+//
+//				float endX = xRecord->Value(endPoint);
+//				float endY = yRecord->Value(endPoint);
+//				float endZ = zRecord->Value(endPoint);
+//
+//				float deltaX = endX - startX;
+//				float deltaY = endY - startY;
+//				float deltaZ = endZ - startZ;
+//
+//				glColor3f(startColor.R,startColor.G,startColor.B);
+//				glVertex3f(startX + deltaX * Cstart, startY + deltaY * Cstart, startZ + deltaZ * Cstart);
+//				glColor3f(endColor.R,endColor.G,endColor.B);
+//				glVertex3f(startX + deltaX * Cend, startY + deltaY * Cend, startZ + deltaZ * Cend);
+//			}
+//		}
+		std::vector<std::string> coordinateColumns = {"PID","BOUNCE_NR","INTERSECTION_X","INTERSECTION_X","INTERSECTION_Z"};
+		int pid = -1;
+		int previousPid = -1;
+		sqlite3_stmt* stmt = dataController->GetIsectsView()->SelectStmt();
+		float startX,startY,startZ;
+		while(sqlite3_step(stmt)) {
+			int bounceNr = sqlite3_column_int(stmt, 1);
+			int pid = sqlite3_column_int(stmt, 2);
+			if(bounceNr == endBounce && pid == previousPid) {
+
 				
-				size_t endPoint = path.GetPoint(endBounce - 1);
-				Color endColor = path.GetColor(endBounce - 1);
+				float endX = sqlite3_column_double(stmt, 1);
+				float endY = sqlite3_column_double(stmt, 2);
+				float endZ = sqlite3_column_double(stmt, 3);
 				
 				float Cstart = startSegment * maxBounce - startBounce;
 				float Cend = stopSegment * maxBounce - startBounce;
-
-				float startX = xRecord->Value(startPoint);
-				float startY = yRecord->Value(startPoint);
-				float startZ = zRecord->Value(startPoint);
-
-				float endX = xRecord->Value(endPoint);
-				float endY = yRecord->Value(endPoint);
-				float endZ = zRecord->Value(endPoint);
 
 				float deltaX = endX - startX;
 				float deltaY = endY - startY;
 				float deltaZ = endZ - startZ;
 
-				glColor3f(startColor.R,startColor.G,startColor.B);
+//				glColor3f(startColor.R,startColor.G,startColor.B);
 				glVertex3f(startX + deltaX * Cstart, startY + deltaY * Cstart, startZ + deltaZ * Cstart);
-				glColor3f(endColor.R,endColor.G,endColor.B);
+//				glColor3f(endColor.R,endColor.G,endColor.B);
 				glVertex3f(startX + deltaX * Cend, startY + deltaY * Cend, startZ + deltaZ * Cend);
 			}
+			else if(bounceNr == startBounce) {
+				
+				float startX = sqlite3_column_double(stmt, 1);
+				float startY = sqlite3_column_double(stmt, 2);
+				float startZ = sqlite3_column_double(stmt, 3);
+
+			}
+			previousPid = pid;
 		}
 	}
 	glEnd();
@@ -645,7 +697,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 		if(refilterNeeded) { //Create path filter
 			printf("Path creation filter");
 			if(pathCreationFilterHandle) {
-				dataset->ClearFilter(pathCreationFilterHandle);
+//				dataset->ClearFilter(pathCreationFilterHandle);
 			}
 			std::vector<riv::Filter*> allFilters;
 			for(size_t i = 0 ; i < selectedObjectIDs.size() ; ++i) {
@@ -656,12 +708,12 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 				fs.push_back(bounceFilter);
 				allFilters.push_back(new riv::ConjunctiveFilter(fs));
 			}
-			riv::GroupFilter* pathCreationFilter = new riv::GroupFilter(allFilters,dataset->GetTable("path"));
-			pathCreationFilter->Print();
-			printf("\n");
-			dataset->StartFiltering();
-			dataset->AddFilter("path", pathCreationFilter);
-			dataset->StopFiltering();
+//			riv::GroupFilter* pathCreationFilter = new riv::GroupFilter(allFilters,dataset->GetTable("path"));
+//			pathCreationFilter->Print();
+//			printf("\n");
+//			dataset->StartFiltering();
+//			dataset->AddFilter("path", pathCreationFilter);
+//			dataset->StopFiltering();
 		}
 		
 		isDragging = true;

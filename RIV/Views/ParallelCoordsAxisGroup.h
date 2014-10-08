@@ -11,15 +11,13 @@
 
 #include "ParallelCoordsAxis.h"
 #include "../Data/Table.h"
+#include "SQLDataView.h"
 #include <vector>
 
 class ParallelCoordsAxisGroup {
 public:
     std::vector<ParallelCoordsAxis> axes;
-    RIVTable* table;
-    
-    ParallelCoordsAxisGroup* connectedGroup = 0;
-    ParallelCoordsAxis* connectorAxis;
+	sqlite::DataView* view;
     
     ParallelCoordsAxis* LastAxis() {
         if(axes.size() > 0) {

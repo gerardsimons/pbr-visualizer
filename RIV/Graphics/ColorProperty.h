@@ -16,6 +16,8 @@
 #include "ColorPalette.h"
 #include "ColorMap.h"
 
+#include "SQLDataView.h"
+
 class RIVRecord;
 
 //Interface for a color property
@@ -30,7 +32,8 @@ protected:
     }
 public:
     //DEFAULT COLORS
-    virtual bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) = 0;
+//    virtual bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) = 0;
+	virtual bool ComputeColor(sqlite::DataView* view, const size_t& row, ::Color& color) = 0;
 };
 
 class RIVFixedColorProperty : public RIVColorProperty{
@@ -55,6 +58,10 @@ public:
 		color = fixedColor;
         return true; //Always possible
     }
+	bool ComputeColor(sqlite::DataView* view, const size_t& row, ::Color& color) {
+		color = fixedColor;
+		return true;
+	}
 };
 
 //enum INTERPOLATION_SCHEME {
@@ -125,15 +132,15 @@ public:
 		this->colorMap = colorMap;
 	}
 	
-    bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) {
+    bool ComputeColor(sqlite::DataView* view, const size_t& row, ::Color& color) {
         float value; //Assuming this value will be between 0 and 1
-        if(RIVEvaluatedProperty<T>::Value(table,row,value))  {
+//        if(RIVEvaluatedProperty<T>::Value(table,row,value))  {
 //            printf("Color value = %f\n",value);
 			//
-			color = colorMap.ComputeColor(value);
+			color = colorMap.ComputeColor(0);
 			return true;
-        }
-        return false;
+//        }
+//        return false;
     }
 };
 //Returns color by cycling through a fixed pre-determined set of colors
@@ -147,7 +154,7 @@ public:
         colorsToUse = colorsToUse_;
         colors = colors_;
     }
-    bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) {
+    bool ComputeColor(sqlite::DataView* view, const size_t& row, ::Color& color) {
         size_t index = colorPointer % colorsToUse;
         colorPointer++;
         return colors[index];

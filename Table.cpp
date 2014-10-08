@@ -28,8 +28,9 @@ RIVRecord* RIVTable::GetRecord(size_t index) {
 }
 
 void RIVTable::filterRecords() {
+	printf("Filtering table %s \n",name.c_str());
 	filteredRows.clear();
-	std::vector<size_t> filteredSourceRows;
+	std::vector<size_t> newFilteredRows;
 	if(filters.size() > 0 || groupFilters.size() > 0) {
 		printf("Filtering table %s with filter:\n",name.c_str());
 		for(riv::Filter* f : filters) {
@@ -39,12 +40,14 @@ void RIVTable::filterRecords() {
 		printf("\n");
 		for(size_t row = 0 ; row < rows ; row++) {
 			if(filteredRows[row]) {
-				//				printf("row %zu was already filtered\n",row);
+//				printf("row %zu was already filtered\n",row);
 				continue; //Already filtered
 			}
 			bool filterSourceRow = false;
 			//Group filters
 			for(riv::GroupFilter* groupFilter : groupFilters) {
+//				printf("Group filtering : ");
+//				groupFilter->Print();
 				if(!groupFilter->PassesFilter(this, row)) {
 					filterSourceRow = true;
 					break;
@@ -64,24 +67,30 @@ void RIVTable::filterRecords() {
 			}
 			
 			if(filterSourceRow) {
-				//				printf("row = %zu FILTERED\n",row);
+//				printf("row = %zu FILTERED\n",row);
 				FilterRow(row);
-				
-				filteredSourceRows.push_back(row);
+				newFilteredRows.push_back(row);
 			}
 			else {
-				//				printf("row = %zu SELECTED\n",row);
+//				printf("row %zu PASSES.\n",row);
 			}
 		}
 	}
-	
+	if(newFilteredRows.size() > 0) {
+		filtered = true;
+	}
+	else filtered = false;
+	printf("%zu new filtered rows\n",newFilteredRows.size());
+//	printf("filteredRows = \n");
+//	printMap(filteredRows);
 	//This checks its references to create a group that it is referring to and see if ALL of its rows are filtered, only then is the reference row filtered as well
 	//TODO: I have feeling this is really ugly... and its really costly ?
 	for(RIVReference *reference : references) {
-		//		reference->targetTable->ClearFilters();
+//		reference->targetTable->ClearFilters();
 		RIVMultiReference* forwardRef = dynamic_cast<RIVMultiReference*>(reference);
 		if(forwardRef) {
-			for(size_t row : filteredSourceRows) {
+			for(size_t row : newFilteredRows) {
+//				printf("filter reference row of %zu\n",row);
 				forwardRef->FilterReferenceRow(row);
 			}
 			continue;
@@ -107,14 +116,14 @@ void RIVTable::filterRecords() {
 			}
 		}
 	}
-//	
-//	printf("After filtering : ");
-//	PrintUnfiltered();
-//	
-//	printf("References : ");
-//	for(RIVReference* ref : references) {
-//		ref->targetTable->PrintUnfiltered();
-//	}
+	
+	printf("After filtering : ");
+	PrintUnfiltered();
+	
+	printf("References : ");
+	for(RIVReference* ref : references) {
+		ref->targetTable->PrintUnfiltered();
+	}
 }
 
 float RIVTable::PercentageFiltered() {

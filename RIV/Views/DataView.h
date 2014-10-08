@@ -5,10 +5,9 @@
 #include "../Geometry/Geometry.h"
 #include "../Graphics/ColorProperty.h"
 #include "../Graphics/SizeProperty.h"
+#include "DataController.h"
 
 #include <string>
-
- 
 
 	class RIVDataSet;
 	class RIVColorProperty;
@@ -16,7 +15,7 @@
 	class RIVDataView
 	{
 	protected:
-		RIVDataSet *dataset = NULL;
+		DataController* dataController = NULL;
 		
 		RIVColorProperty* colorProperty = NULL;
 		RIVSizeProperty* sizeProperty = NULL;
@@ -24,7 +23,7 @@
 		bool needsRedraw;
 
 		//constructor
-		RIVDataView(RIVDataSet *dataset, int startX, int startY, int width, int height, int paddingX, int paddingY, RIVColorProperty* colorProperty, RIVSizeProperty* sizeProperty) {
+		RIVDataView(DataController* dataController, int startX, int startY, int width, int height, int paddingX, int paddingY, RIVColorProperty* colorProperty, RIVSizeProperty* sizeProperty) {
 			this->startX = startX;
 			this->startY = startY;
 			
@@ -37,9 +36,9 @@
 			this->colorProperty = colorProperty;
 			this->sizeProperty = sizeProperty;
 			
-			this->dataset = dataset;
+			this->dataController = dataController;
 		};
-		RIVDataView(RIVDataSet* dataset, int startX, int startY, int width, int height, int paddingX, int paddingY) {
+		RIVDataView(DataController* dataController, int startX, int startY, int width, int height, int paddingX, int paddingY) {
 			this->startX = startX;
 			this->startY = startY;
 			
@@ -49,15 +48,15 @@
 			this->paddingX = paddingX;
 			this->paddingY = paddingY;
 			
-			this->dataset = dataset;
+			this->dataController = dataController;
 		}
-		RIVDataView(RIVDataSet* dataset, RIVColorProperty* colorProperty_, RIVSizeProperty* sizeProperty_) {
-			this->dataset = dataset;
+		RIVDataView(DataController* dataController, RIVColorProperty* colorProperty_, RIVSizeProperty* sizeProperty_) {
+			this->dataController = dataController;
 			colorProperty = colorProperty_;
 			sizeProperty = sizeProperty_;
 		};
-		RIVDataView(RIVDataSet* dataset) {
-			this->dataset = dataset;
+		RIVDataView(DataController* dataController) {
+			this->dataController = dataController;
 		}
 		~RIVDataView(void) { /* Delete some stuff I guess */ };
 	public:

@@ -11,18 +11,13 @@
 
 
 
-ParallelCoordsAxis::ParallelCoordsAxis(int x,int y, int height, float minValue, float maxValue, const std::string& name) {
+ParallelCoordsAxis::ParallelCoordsAxis(int x,int y, int height, float minValue, float maxValue, const sqlite::Column& column_) : column(column_) {
     
     this->x = x;
     this->y = y;
     this->height = height;
-    this->name = name;
     this->minValue = minValue;
     this->maxValue = maxValue;
-}
-
-ParallelCoordsAxis::ParallelCoordsAxis() {
-    
 }
 
 //A ratio value indicating where an arbitrary Y position is according the axis (0 = bottom, 1 = top)
@@ -46,8 +41,8 @@ float ParallelCoordsAxis::PositionOnScaleForScalar(float scalar) {
 		return y + scalar * height;
 	}
 	else {
-        throw new std::string("scalar out of bounds : %f \n",scalar);
-        return std::numeric_limits<float>::quiet_NaN();
+		printf("Scalar out of bounds\n");
+		return 0;
     }
 }
 

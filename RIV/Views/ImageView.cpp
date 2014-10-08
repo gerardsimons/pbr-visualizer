@@ -14,27 +14,27 @@
 
 RIVImageView* RIVImageView::instance = NULL;
 
-RIVImageView::RIVImageView(RIVDataSet* dataset, BMPImage *image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty,RIVSizeProperty* sizeProperty) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY,colorProperty,sizeProperty){
-	renderedImage = image;
-    if(instance != NULL) {
-        throw "Only 1 instance of ImageView allowed.";
-    }
-    instance = this;
-    
-    identifier = "ImageView";
+//RIVImageView::RIVImageView(RIVDataSet* dataset, BMPImage *image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty,RIVSizeProperty* sizeProperty) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY,colorProperty,sizeProperty){
+//	renderedImage = image;
+//    if(instance != NULL) {
+//        throw "Only 1 instance of ImageView allowed.";
+//    }
+//    instance = this;
+//    
+//    identifier = "ImageView";
+//
+//	imageWidth = width;
+//	imageHeight = height;
+//
+//	isDragging = false;
+//    
+//	selection.start.x = -1;
+//    selection.start.y = -1;
+//    selection.end.x = -1;
+//    selection.end.y = -1;
+//}
 
-	imageWidth = width;
-	imageHeight = height;
-
-	isDragging = false;
-    
-	selection.start.x = -1;
-    selection.start.y = -1;
-    selection.end.x = -1;
-    selection.end.y = -1;
-}
-
-RIVImageView::RIVImageView(RIVDataSet* dataset, BMPImage* image, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size) {
+RIVImageView::RIVImageView(DataController* dataController, BMPImage* image, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataController,color,size) {
 	renderedImage = image;
     if(instance != NULL) {
         throw "Only 1 instance of ImageView allowed.";
@@ -232,8 +232,8 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 
 			if(selection.end.x != selection.start.x && selection.end.y != selection.start.y) {
 
-				dataset->ClearFilter("x");
-				dataset->ClearFilter("y");
+//				dataset->ClearFilter("x");
+//				dataset->ClearFilter("y");
 
 				//Normalize selection
 				if(selection.end.x < selection.start.x) {
@@ -251,11 +251,11 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 				//Be sure to invert the Y coordinates!
 				riv::Filter *yFilter = new riv::RangeFilter("y", renderedImage->sizeY - selection.start.y,renderedImage->sizeY - selection.end.y - 1);
 		
-				dataset->StartFiltering();
-				dataset->AddFilter("path",xFilter);
-				dataset->AddFilter("path",yFilter);
-				dataset->StopFiltering();
-					
+//				dataset->StartFiltering();
+//				dataset->AddFilter("path",xFilter);
+//				dataset->AddFilter("path",yFilter);
+//				dataset->StopFiltering();
+				
 			}
 			else {
 				clearSelection(); 
@@ -290,10 +290,10 @@ void RIVImageView::clearSelection() {
     selection.end.y = -1;
     
 	//Clear any filters that may have been applied to the dataset
-    if(dataset) {
-        dataset->ClearFilter("x");
-        dataset->ClearFilter("y");
-    }
+//    if(dataset) {
+//        dataset->ClearFilter("x");
+//        dataset->ClearFilter("y");
+//    }
 }
 
 Point RIVImageView::viewToPixelSpace(int x, int y) {
