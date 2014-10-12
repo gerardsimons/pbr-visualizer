@@ -67,7 +67,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt-modified128x128x100.tga&quot;"
+            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt-shiny32x32x100.tga&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

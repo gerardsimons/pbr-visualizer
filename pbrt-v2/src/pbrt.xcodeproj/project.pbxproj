@@ -373,6 +373,7 @@
 		E16AE39619CD79E800A0C40E /* grid.h in Sources */ = {isa = PBXBuildFile; fileRef = B1D8EB57117030DE00A8A49E /* grid.h */; };
 		E16AE39719CD79E800A0C40E /* kdtreeaccel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1D8EB58117030DE00A8A49E /* kdtreeaccel.cpp */; };
 		E16AE39819CD79E800A0C40E /* kdtreeaccel.h in Sources */ = {isa = PBXBuildFile; fileRef = B1D8EB59117030DE00A8A49E /* kdtreeaccel.h */; };
+		E1DC7C8519E1A1C0007A9EDE /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E1DC7C8419E1A1C0007A9EDE /* libsqlite3.dylib */; };
 		E1F8073519C840E70048BE7B /* bvh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1D8EB54117030DE00A8A49E /* bvh.cpp */; };
 		E1F8073619C840E70048BE7B /* grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1D8EB56117030DE00A8A49E /* grid.cpp */; };
 		E1F8073719C840E70048BE7B /* kdtreeaccel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B1D8EB58117030DE00A8A49E /* kdtreeaccel.cpp */; };
@@ -836,6 +837,7 @@
 		B1D8ECE2117032E500A8A49E /* pbrt */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pbrt; sourceTree = BUILT_PRODUCTS_DIR; };
 		E103D34919C9C19C003A4BCE /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtCore.framework; path = ../../../../../../usr/local/Cellar/qt/4.8.5/lib/QtCore.framework; sourceTree = "<group>"; };
 		E16AE29F19CD79CD00A0C40E /* libpbrtlib.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libpbrtlib.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1DC7C8419E1A1C0007A9EDE /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		E1F807B819C840E70048BE7B /* pbrt copy */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "pbrt copy"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1F8082819C846F80048BE7B /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = error.h; sourceTree = "<group>"; };
 		E1F8082919C846F80048BE7B /* error.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = error.cpp; sourceTree = "<group>"; };
@@ -850,6 +852,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1DC7C8519E1A1C0007A9EDE /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -876,6 +879,7 @@
 		08FB7794FE84155DC02AAC07 /* pbrt */ = {
 			isa = PBXGroup;
 			children = (
+				E1DC7C8419E1A1C0007A9EDE /* libsqlite3.dylib */,
 				E103D34919C9C19C003A4BCE /* QtCore.framework */,
 				E1CE3FFD19C9C05E003D4764 /* Resources */,
 				E1F8082F19C854E30048BE7B /* OpenGL.framework */,
@@ -1904,6 +1908,7 @@
 					.,
 				);
 				INSTALL_PATH = /usr/local/bin;
+				"OTHER_CFLAGS[arch=*]" = "-fstack-protector-all";
 				PRODUCT_NAME = pbrt;
 				SDKROOT = macosx;
 				USE_HEADERMAP = NO;

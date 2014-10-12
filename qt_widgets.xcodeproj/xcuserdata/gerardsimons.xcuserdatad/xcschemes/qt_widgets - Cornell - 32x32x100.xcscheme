@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8DD76F620486A84900D96B5E"
-               BuildableName = "pbrt"
-               BlueprintName = "pbrt"
-               ReferencedContainer = "container:pbrt.xcodeproj">
+               BlueprintIdentifier = "FCF2E5C0B7D676CA2376F5CD"
+               BuildableName = "qt_widgets.app"
+               BlueprintName = "qt_widgets"
+               ReferencedContainer = "container:qt_widgets.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8DD76F620486A84900D96B5E"
-            BuildableName = "pbrt"
-            BlueprintName = "pbrt"
-            ReferencedContainer = "container:pbrt.xcodeproj">
+            BlueprintIdentifier = "FCF2E5C0B7D676CA2376F5CD"
+            BuildableName = "qt_widgets.app"
+            BlueprintName = "qt_widgets"
+            ReferencedContainer = "container:qt_widgets.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -51,31 +51,23 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8DD76F620486A84900D96B5E"
-            BuildableName = "pbrt"
-            BlueprintName = "pbrt"
-            ReferencedContainer = "container:pbrt.xcodeproj">
+            BlueprintIdentifier = "FCF2E5C0B7D676CA2376F5CD"
+            BuildableName = "qt_widgets.app"
+            BlueprintName = "qt_widgets"
+            ReferencedContainer = "container:qt_widgets.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt-shiny.pbrt&quot;"
+            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt_32x32x100.tga&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "--outfile"
+            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt.pbrt&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt-modified128x128x100.tga&quot;"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "--ncores"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "1"
+            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt32x32x100.bmp&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
@@ -91,10 +83,10 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8DD76F620486A84900D96B5E"
-            BuildableName = "pbrt"
-            BlueprintName = "pbrt"
-            ReferencedContainer = "container:pbrt.xcodeproj">
+            BlueprintIdentifier = "FCF2E5C0B7D676CA2376F5CD"
+            BuildableName = "qt_widgets.app"
+            BlueprintName = "qt_widgets"
+            ReferencedContainer = "container:qt_widgets.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

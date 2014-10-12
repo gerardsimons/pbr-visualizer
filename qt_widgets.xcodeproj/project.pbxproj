@@ -43,6 +43,8 @@
 		DB98B1720439FD434A5BE1B0 /* ParallelCoordsAxis.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 7FDD7715C1CA484066E152CD /* ParallelCoordsAxis.cpp */; settings = {ATTRIBUTES = (); }; };
 		E106606119CC63F600746441 /* GLUT.framework in Frameworks & Libraries */ = {isa = PBXBuildFile; fileRef = E106606019CC63F600746441 /* GLUT.framework */; };
 		E119B781B80EE6022CE8BAD4 /* Reference.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 08D9BD270BB5ECDEE591A390 /* Reference.cpp */; settings = {ATTRIBUTES = (); }; };
+		E130247919D0153600570A48 /* PBRTConfig.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = E130247719D0153600570A48 /* PBRTConfig.cpp */; };
+		E130247D19D0192800570A48 /* MeshModelGroup.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = E130247B19D0192800570A48 /* MeshModelGroup.cpp */; };
 		EB977ABCE8B49CCA6B464D53 /* ColorPalette.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 455961CDEC0F996099F9731B /* ColorPalette.cpp */; settings = {ATTRIBUTES = (); }; };
 		EEE06E30959EE1F3A826EB44 /* Iterator.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = A94148AA51BBB40DC0D5D120 /* Iterator.cpp */; settings = {ATTRIBUTES = (); }; };
 		F5A8F1B08B325F9C4541D452 /* loadppm.cpp in Build Sources */ = {isa = PBXBuildFile; fileRef = 308BDD78607D368FC29519A3 /* loadppm.cpp */; settings = {ATTRIBUTES = (); }; };
@@ -58,7 +60,6 @@
 		09019677962D0845A1144345 /* helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = helper.h; path = RIV/helper.h; sourceTree = SOURCE_ROOT; };
 		0BE7E900C04F0A82CA17C896 /* moc_uiwidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moc_uiwidget.cpp; sourceTree = SOURCE_ROOT; };
 		0C115A12B15FB3B39EDF67DF /* Vec3D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Vec3D.h; path = RIV/Geometry/Vec3D.h; sourceTree = SOURCE_ROOT; };
-		0CA6E2A479A56C9508A5990F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = RIV/main.cpp; sourceTree = SOURCE_ROOT; };
 		0FC297EEDF5C4D78E4999505 /* Property.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Property.h; path = RIV/Graphics/Property.h; sourceTree = SOURCE_ROOT; };
 		112235092972FF833416EEFB /* imagewidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = imagewidget.h; sourceTree = SOURCE_ROOT; };
 		118FCBAABA162BA17933C789 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = SOURCE_ROOT; };
@@ -132,6 +133,10 @@
 		E101129CFDAAF539EB4DCD50 /* AntTweakBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AntTweakBar.h; path = RIV/AntTweakBar.h; sourceTree = SOURCE_ROOT; };
 		E106605E19CC623D00746441 /* qt_widgets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = qt_widgets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E106606019CC63F600746441 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		E130247719D0153600570A48 /* PBRTConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PBRTConfig.cpp; path = RIV/PBRTConfig.cpp; sourceTree = SOURCE_ROOT; };
+		E130247819D0153600570A48 /* PBRTConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PBRTConfig.h; path = RIV/PBRTConfig.h; sourceTree = SOURCE_ROOT; };
+		E130247B19D0192800570A48 /* MeshModelGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshModelGroup.cpp; path = RIV/Geometry/MeshModelGroup.cpp; sourceTree = SOURCE_ROOT; };
+		E130247C19D0192800570A48 /* MeshModelGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeshModelGroup.h; path = RIV/Geometry/MeshModelGroup.h; sourceTree = SOURCE_ROOT; };
 		E2DD99E575504A60156822BC /* moc_scenewidget.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moc_scenewidget.cpp; sourceTree = SOURCE_ROOT; };
 		E599CE6DA7DD5DDA1E33CD54 /* Record.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Record.cpp; path = RIV/Data/Record.cpp; sourceTree = SOURCE_ROOT; };
 		E600330B4329D7F4DABD3A43 /* BMPImage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BMPImage.cpp; path = RIV/Graphics/BMPImage.cpp; sourceTree = SOURCE_ROOT; };
@@ -167,6 +172,8 @@
 		05596AB53D8D521C69802C27 /* qt_widgets */ = {
 			isa = PBXGroup;
 			children = (
+				E130247B19D0192800570A48 /* MeshModelGroup.cpp */,
+				E130247C19D0192800570A48 /* MeshModelGroup.h */,
 				E106606019CC63F600746441 /* GLUT.framework */,
 				FB61758D0F0FDA4BA867C3D5 /* Sources */,
 				46E892BBB6BB6952967E0561 /* Temporary Sources */,
@@ -187,8 +194,9 @@
 				4D5CEAD114458AB562F84C4D /* Octree */,
 				425DB8B6C7096072A8DB1EB5 /* Views */,
 				3A4EB4FD1176796551B87EB2 /* helper.cpp */,
-				0CA6E2A479A56C9508A5990F /* main.cpp */,
 				F15280654F3FE5E86462F64B /* reporter.cpp */,
+				E130247719D0153600570A48 /* PBRTConfig.cpp */,
+				E130247819D0153600570A48 /* PBRTConfig.h */,
 			);
 			name = RIV;
 			sourceTree = "<Group>";
@@ -414,6 +422,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 17B3380A4D6A7D415E7F2E1E /* Build configuration list for PBXNativeTarget "qt_widgets" */;
 			buildPhases = (
+				E1302FCE19D0598300570A48 /* Qt QMake */,
 				A0A52A2ADF7A1E2A99738674 /* Qt Preprocessors */,
 				C29B8785722055ED95EF7B57 /* Build Sources */,
 				2A1043669E6E5A7426EA502A /* Frameworks & Libraries */,
@@ -473,7 +482,21 @@
 			name = "Qt Preprocessors";
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "make -C /Users/gerardsimons/Documents/Development/qt_widgets -f 'qt_widgets.xcodeproj/qt_preprocess.mak'";
+			shellScript = "make -C /Users/gerardsimons/Git/qt_widgets -f 'qt_widgets.xcodeproj/qt_preprocess.mak'";
+		};
+		E1302FCE19D0598300570A48 /* Qt QMake */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Qt QMake";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/gerardsimons/Git/qt_widgets -f 'qt_widgets.xcodeproj/qt_makeqmake.mak'";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -494,11 +517,13 @@
 				E119B781B80EE6022CE8BAD4 /* Reference.cpp in Build Sources */,
 				7B610BD05FA1B7407DC25931 /* Table.cpp in Build Sources */,
 				A5358B5386A59C67FCE5E395 /* TriangleMesh.cpp in Build Sources */,
+				E130247D19D0192800570A48 /* MeshModelGroup.cpp in Build Sources */,
 				3C1EC0632BA4FD95251CD1DB /* BMPImage.cpp in Build Sources */,
 				69F475D49A9F1FBDFE4951A9 /* ColorMap.cpp in Build Sources */,
 				EB977ABCE8B49CCA6B464D53 /* ColorPalette.cpp in Build Sources */,
 				F5A8F1B08B325F9C4541D452 /* loadppm.cpp in Build Sources */,
 				0AFAC8A78ECFA7A8E1AF4331 /* Octree.cpp in Build Sources */,
+				E130247919D0153600570A48 /* PBRTConfig.cpp in Build Sources */,
 				B963684C7FC9176E3B5F8CEB /* OctreeNode.cpp in Build Sources */,
 				6BC75287D2FDA4CBBDE5B800 /* 3DView.cpp in Build Sources */,
 				CACC3E8CB5148386F210E906 /* HeatMapView.cpp in Build Sources */,
