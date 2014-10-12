@@ -15,6 +15,8 @@
 #include <string>
 #include <sqlite3.h>
 
+#include "Statement.h"
+
 namespace sqlite {
 
 class Row {
@@ -48,13 +50,13 @@ public:
 	class Database;
 class ResultSet {
 private:
-	sqlite3_stmt* resultStatement;
+	Statement resultStatement;
 	Database* db;
 	std::map<std::string,int> colNamesToIndex;
 public:
 	ResultSet(sqlite3_stmt* statement, Database* db) {
 		this->db = db;
-		this->resultStatement = statement;
+		this->resultStatement = Statement(statement);
 		if(sqlite3_step(statement) == SQLITE_ROW) {
 			int cols = sqlite3_data_count(statement);
 			for(int i = 0 ; i < cols ; ++i) {
@@ -66,12 +68,26 @@ public:
 		}
 		sqlite3_reset(statement);
 	}
-	bool GetNext(Row& row) {
-		bool next = sqlite3_step(resultStatement) == SQLITE_ROW;
-		if(next) {
-			row = Row(resultStatement,&colNamesToIndex);
+	ResultSet(const Statement& statement, Database* db) {
+		this->db = db;
+		this->resultStatement = statement;
+		if(resultStatement.Step()) {
+			int cols = sqlite3_data_count(resultStatement.stmt);
+			for(int i = 0 ; i < cols ; ++i) {
+				colNamesToIndex[sqlite3_column_name(resultStatement.stmt, i)] = i;
+			}
 		}
-		return next;
+		else {
+			//			printf("ERROR = %s\n",db->ErrorMessage());
+		}
+		resultStatement.Reset();
+	}
+	bool GetNext(Row& row) {
+		if(resultStatement.Step()) {
+			row = Row(resultStatement.stmt,&colNamesToIndex);
+			return true;
+		}
+		return false;
 	}
 	
 };

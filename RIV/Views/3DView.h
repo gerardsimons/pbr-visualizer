@@ -19,7 +19,7 @@
 
 #include <limits>
 
-class RIV3DView : public RIVDataView, public RIVDataSetListener {
+class RIV3DView : public RIVDataView, public sqlite::OnDataChangedListener {
 protected:;
 //    float cameraPosition[3] = {278, 273, -200}; //The camera used by PBRT for the rendered scene, not used as camera for OpenGL rendering! TODO: Read from file
     float cameraPosition[3] = {278, 273, -500}; //The original
@@ -87,7 +87,8 @@ public:
     void Draw();
     bool HandleMouse(int button, int state, int x, int y);
     bool HandleMouseMotion(int x, int y);
-    void OnDataSetChanged();
+	
+	virtual void OnDataChanged();
 	
 	void ResetGraphics();
 	

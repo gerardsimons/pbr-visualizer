@@ -38,17 +38,17 @@
 //		RIVTable *pathTable = dataset->GetTable("path");
 		
 		
-		sqlite3_stmt* allStmt = dataController->CustomSQLStmt(getAllData);
+		sqlite::Statement allStmt = dataController->CustomSQLStmt(getAllData);
 		
 		//Find x and y record
 //		RIVUnsignedShortRecord* xRecord = pathTable->GetRecord<RIVUnsignedShortRecord>("x");
 //		RIVUnsignedShortRecord* yRecord = pathTable->GetRecord<RIVUnsignedShortRecord>("y");
 //		RIVUnsignedShortRecord* intersections = pathTable->GetRecord<RIVUnsignedShortRecord>("#intersections");
 		
-		sqlite3_stmt* minMaxStmt = dataController->CustomSQLStmt(getMinMax);
-		sqlite3_step(minMaxStmt);
-		xMax = sqlite3_column_int(minMaxStmt, 3) + 1;
-		yMax = sqlite3_column_int(minMaxStmt, 5) + 1;
+		sqlite::Statement minMaxStmt = dataController->CustomSQLStmt(getMinMax);
+		minMaxStmt.Step();
+		xMax = sqlite3_column_int(minMaxStmt.stmt, 3) + 1;
+		yMax = sqlite3_column_int(minMaxStmt.stmt, 5) + 1;
 		
 		colorMap = colors::jetColorMap();
 		heatmap.resize( xMax , std::vector<float>( yMax , 0 ) );
@@ -57,10 +57,10 @@
 		
 		float max = std::numeric_limits<float>::min();
 		
-		while(sqlite3_step(allStmt) == SQLITE_ROW) {
-			ushort x = sqlite3_column_int(allStmt, 1);
-			ushort y = sqlite3_column_int(allStmt, 2);
-			ushort nrIsects = sqlite3_column_int(allStmt, 3);
+		while(allStmt.Step()) {
+			ushort x = sqlite3_column_int(allStmt.stmt, 1);
+			ushort y = sqlite3_column_int(allStmt.stmt, 2);
+			ushort nrIsects = sqlite3_column_int(allStmt.stmt, 3);
 			//Update heatmap count
 			heatmap[x][yMax - y - 1] += nrIsects;
 		}

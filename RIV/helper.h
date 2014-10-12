@@ -40,6 +40,13 @@ inline void executeSQL(char* sql, sqlite3* db) {
 	}
 }
 
+template <typename T>
+void appendVector(std::vector<T>& result, std::vector<T>& toAppend) {
+	for(const T& t : toAppend) {
+		result.push_back(t);
+	}
+}
+
 void println(const std::string& text);
 
 namespace riv {
@@ -85,6 +92,8 @@ inline void deletePointerVector(std::vector<T*> v)
         delete *i;
     }
 }
+
+void right_pad(std::string& text, char padding, int toNumber);
 
 void printDelimiterLine(char c = '*',int width = 50);
 

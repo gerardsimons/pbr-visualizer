@@ -270,7 +270,7 @@ void generatePaths(int argc, char* argv[]) {
 
 void loadData() {
     if(!dataPath.empty() && !pbrtPath.empty()) {
-		sqlite::Database memoryDB = DataFileReader::ReadBinaryDataToMemoryDB(dataPath,0,false);
+		sqlite::Database memoryDB = DataFileReader::ReadBinaryDataToDB(dataPath,0,false);
 		dataController = new DataController(memoryDB);
         image = new BMPImage(bmpPath.c_str(),false);
         config = new PBRTConfig(DataFileReader::ReadPBRTFile(pbrtPath));
@@ -285,33 +285,32 @@ void loadData() {
 void createViews() {
     if(bmpPath.size() > 0) {
         RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(0.1);
-        RIVColorProperty *colorProperty = new RIVFixedColorProperty(1,1,1);
+//        RIVColorProperty *colorProperty = new RIVFixedColorProperty(1,1,1);
 		
 //		RIVTable *intersectionsTable = dataset.GetTable("intersections");
 //		RIVTable* pathTable = dataset.GetTable("path");
 		
 		ColorMap jetColorMap = colors::jetColorMap();
-//		RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(intersectionsTable,"spectrum R","spectrum G","spectrum B");
-//		RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,intersectionsTable->GetRecord("bounce#"),jetColorMap);
+		sqlite::DataView* isects = dataController->GetIsectsView();
+		RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(isects,isects->GetColumn("SPECTRUM_R"),isects->GetColumn("SPECTRUM_G"),isects->GetColumn("SPECTRUM_B"),dataController);
+//		RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(isects,isects->GetColumn("BOUNCE_NR"),dataController,jetColorMap);
 //		RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,"radiance R","radiance G","radiance B");
 //		RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
-		
 		
         parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding);
 		ParallelCoordsView::windowHandle = parallelViewWindow;
         glutSetWindow(parallelViewWindow);
         glutDisplayFunc(ParallelCoordsView::DrawInstance);
-//        glutDisplayFunc(idle);
         glutReshapeFunc(ParallelCoordsView::ReshapeInstance);
-//        glutMouseFunc(ParallelCoordsView::Mouse);
-//        glutMotionFunc(ParallelCoordsView::Motion);
-//        glutSpecialFunc(keys);
+        glutMouseFunc(ParallelCoordsView::Mouse);
+        glutMotionFunc(ParallelCoordsView::Motion);
+        glutSpecialFunc(keys);
 		
         //Load image
 //        image = new BMPImage(bmpPath.c_str(),false);
 //        glutSetWindow(imageViewWindow);
-//        float bottomHalfY = height / 2.f + padding;
-//        float squareSize = height / 2.F - 2 * padding;
+        float bottomHalfY = height / 2.f + padding;
+        float squareSize = height / 2.F - 2 * padding;
 //		imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,squareSize,squareSize);
 //		imageView = new RIVImageView(dataController,image,colorProperty,sizeProperty);
 //		imageView->InitializeGraphics();
@@ -321,14 +320,14 @@ void createViews() {
 //        glutMotionFunc(RIVImageView::Motion);
 //        glutSpecialFunc(keys);
 //
-//        sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + squareSize, bottomHalfY, squareSize, squareSize);
-//		RIV3DView::windowHandle = sceneViewWindow;
-//        glutSetWindow(sceneViewWindow);
-//        glutDisplayFunc(RIV3DView::DrawInstance);
-//        glutReshapeFunc(RIV3DView::ReshapeInstance);
-//        glutMouseFunc(RIV3DView::Mouse);
-//        glutMotionFunc(RIV3DView::Motion);
-//        glutSpecialFunc(keys);
+        sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + squareSize, bottomHalfY, squareSize, squareSize);
+		RIV3DView::windowHandle = sceneViewWindow;
+        glutSetWindow(sceneViewWindow);
+        glutDisplayFunc(RIV3DView::DrawInstance);
+        glutReshapeFunc(RIV3DView::ReshapeInstance);
+        glutMouseFunc(RIV3DView::Mouse);
+        glutMotionFunc(RIV3DView::Motion);
+        glutSpecialFunc(keys);
 ////
 //        heatMapViewWindow = glutCreateSubWindow(mainWindow, padding * 5 + squareSize * 2, bottomHalfY, squareSize, squareSize);
 //        glutSetWindow(heatMapViewWindow);
@@ -339,11 +338,13 @@ void createViews() {
 		
         //Create views
         parallelCoordsView = new ParallelCoordsView(dataController,colorProperty,sizeProperty);
-//        sceneView = new RIV3DView(dataController,config,colorProperty,sizeProperty);
+        sceneView = new RIV3DView(dataController,config,colorProperty,sizeProperty);
 //        heatMapView = new RIVHeatMapView(dataController);
 		
+		dataController->GetIsectsView()->AddListener(parallelCoordsView);
+		dataController->GetPathsView()->AddListener(parallelCoordsView);
         //Add some filter callbacks
-//        dataset.AddFilterListener(sceneView);
+		dataController->GetIsectsView()->AddListener(sceneView);
 //        dataset.AddFilterListener(parallelCoordsView);
 		
         //Add the views to the view vector

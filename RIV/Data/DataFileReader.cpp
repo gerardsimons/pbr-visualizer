@@ -907,13 +907,13 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
 };
 
 
-sqlite::Database DataFileReader::ReadBinaryDataToMemoryDB(const std::string& fileName, const size_t pathsLimit, bool inMemory) {
+sqlite::Database DataFileReader::ReadBinaryDataToDB(const std::string& fileName, const size_t pathsLimit, bool inMemory) {
 	printf("Loading binary dataset from file %s\n",fileName.c_str());
 	
 	size_t insertsDone = 0;
 	size_t insertsDoneTotal = 0;
 	
-	std::string taskName = "Binary data reading";
+	std::string taskName = "Binary to database";
 	//    reporter::startTask(taskName);
 	
 	FILE *inputFile = fopen((fileName + ".bin").c_str(),"rb");
@@ -929,7 +929,7 @@ sqlite::Database DataFileReader::ReadBinaryDataToMemoryDB(const std::string& fil
 	//Open the database
 	char *zErrMsg = 0;
 	//result code
-	int rc = 0;
+//	int rc = 0;
 	sqlite3* db = NULL;
 	
 //		rc = sqlite3_open(":memory:", &db);
@@ -939,11 +939,15 @@ sqlite::Database DataFileReader::ReadBinaryDataToMemoryDB(const std::string& fil
 		}
 	}
 	else {
-		if(sqlite3_open((fileName + ".db").c_str(), &db)) {
+		//Remove any old db file that may exist
+		std::string dbFileName = (fileName + ".db");
+		int rc =remove( dbFileName.c_str() );
+//		if( )
+//			throw "Could not delete db file";
+		if(sqlite3_open(dbFileName.c_str(), &db)) {
 			throw "ERROR";
 		}
 	}
-	printf("db memory address = %p\n",db);
 	sqlite::Database database(db);
 	char const* dropTableIfExists = "DROP TABLE IF EXISTS PATHS";
 	database.executeSQL(dropTableIfExists);
@@ -992,11 +996,11 @@ sqlite::Database DataFileReader::ReadBinaryDataToMemoryDB(const std::string& fil
 	
 	const char * insertPathTemplate = "INSERT INTO PATHS (ID,IMAGE_X,IMAGE_Y,LENS_U,LENS_V,TIMESTAMP,THROUGHPUT_ONE,THROUGHPUT_TWO,THROUGHPUT_THREE,RADIANCE_R,RADIANCE_G,RADIANCE_B) " \
 	"VALUES (?, ? ,? ,? ,? ,? ,? ,? ,? ,? ,? ,?);";
-	sqlite3_stmt* insertPathStatement = NULL;
+	sqlite::Statement insertPathStatement;
 	
 	const char* insertIsectTemplate = "INSERT INTO INTERSECTIONS (PID,BOUNCE_NR,POS_X,POS_Y,POS_Z,PRIMITIVE_ID,SHAPE_ID,OBJECT_ID,SPECTRUM_R,SPECTRUM_G,SPECTRUM_B,INTERACTION_TYPE,LIGHT_ID) " \
 	"VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);";
-	sqlite3_stmt* insertIsectStatement = NULL;
+	sqlite::Statement insertIsectStatement;
 	//
 	insertIsectStatement = database.PrepareStatement(insertIsectTemplate);
 //	rc = sqlite3_prepare_v2(db,  insertIsectTemplate, strlen (insertIsectTemplate) + 1, &insertIsectStatement, NULL);
@@ -1052,6 +1056,9 @@ sqlite::Database DataFileReader::ReadBinaryDataToMemoryDB(const std::string& fil
 	float percentageIncrement = 1;
 	float percentage = 0;
 	size_t roundCheck = round(total_nr_paths / (100.F * percentageIncrement));
+	if(roundCheck == 0) {
+		roundCheck = 1;
+	}
 	
 	clock_t startRound = clock();
 	clock_t startTotal = clock();
@@ -1117,28 +1124,28 @@ sqlite::Database DataFileReader::ReadBinaryDataToMemoryDB(const std::string& fil
 		//		char buffer[200];
 		//		sprintf(buffer,insertPathTemplate,(ushort)x,(ushort)y,lensU,lensV,timestamp,throughput[0],throughput[1],throughput[2],radiance[0],radiance[1],radiance[2]);
 		
-		sqlite3_bind_int(insertPathStatement, 1, path_index);
-		sqlite3_bind_int(insertPathStatement, 2, x);
-		sqlite3_bind_int(insertPathStatement, 3, y);
-		sqlite3_bind_double(insertPathStatement, 4, lensU);
-		sqlite3_bind_double(insertPathStatement, 5, lensV);
-		sqlite3_bind_double(insertPathStatement, 6, timestamp);
-		sqlite3_bind_double(insertPathStatement, 7, throughput[0]);
-		sqlite3_bind_double(insertPathStatement, 8, throughput[1]);
-		sqlite3_bind_double(insertPathStatement, 9, throughput[2]);
-		sqlite3_bind_double(insertPathStatement, 10, radiance[0]);
-		sqlite3_bind_double(insertPathStatement, 11, radiance[1]);
-		sqlite3_bind_double(insertPathStatement, 12, radiance[2]);
+		sqlite3_bind_int(insertPathStatement.stmt, 1, path_index);
+		sqlite3_bind_int(insertPathStatement.stmt, 2, x);
+		sqlite3_bind_int(insertPathStatement.stmt, 3, y);
+		sqlite3_bind_double(insertPathStatement.stmt, 4, lensU);
+		sqlite3_bind_double(insertPathStatement.stmt, 5, lensV);
+		sqlite3_bind_double(insertPathStatement.stmt, 6, timestamp);
+		sqlite3_bind_double(insertPathStatement.stmt, 7, throughput[0]);
+		sqlite3_bind_double(insertPathStatement.stmt, 8, throughput[1]);
+		sqlite3_bind_double(insertPathStatement.stmt, 9, throughput[2]);
+		sqlite3_bind_double(insertPathStatement.stmt, 10, radiance[0]);
+		sqlite3_bind_double(insertPathStatement.stmt, 11, radiance[1]);
+		sqlite3_bind_double(insertPathStatement.stmt, 12, radiance[2]);
 		
-		const char *sql = sqlite3_sql(insertPathStatement);
+		const char *sql = sqlite3_sql(insertPathStatement.stmt);
 		
-		if(sqlite3_step(insertPathStatement) != SQLITE_DONE) {
+		if(sqlite3_step(insertPathStatement.stmt) != SQLITE_DONE) {
 			printf("insert intersection failed. %s SQL = %s\n",sqlite3_errmsg(db),sql);
 		}
 		//		else printf("SUCCESS : %s\n",sql);
 		
-		//		sqlite3_clear_bindings(insertPathStatement);
-		sqlite3_reset(insertPathStatement);
+		//		sqlite3_clear_bindings(insertPathStatement.stmt);
+		sqlite3_reset(insertPathStatement.stmt);
 		
 		//		executeSQL(buffer,db);
 		
@@ -1200,29 +1207,29 @@ sqlite::Database DataFileReader::ReadBinaryDataToMemoryDB(const std::string& fil
 		
 		for(ushort i = 0 ; i < size ; ++i) {
 			
-			sqlite3_clear_bindings(insertIsectStatement);
-			sqlite3_reset(insertIsectStatement);
+			sqlite3_clear_bindings(insertIsectStatement.stmt);
+			sqlite3_reset(insertIsectStatement.stmt);
 			
-			sqlite3_bind_int64(insertIsectStatement, 1, path_index);
-			sqlite3_bind_int(insertIsectStatement, 2, i+1);
-			sqlite3_bind_double(insertIsectStatement, 3, intersectionPosX[isect_index+i]);
-			sqlite3_bind_double(insertIsectStatement, 4, intersectionPosY[isect_index+i]);
-			sqlite3_bind_double(insertIsectStatement, 5, intersectionPosZ[isect_index+i]);
-			sqlite3_bind_int(insertIsectStatement, 6, primitveIds[isect_index+i]);
-			sqlite3_bind_int(insertIsectStatement, 7, shapeIds[isect_index+i]);
-			sqlite3_bind_int(insertIsectStatement, 8, objectIds[isect_index+i]);
-			sqlite3_bind_double(insertIsectStatement, 9, spectraOne[isect_index+i]);
-			sqlite3_bind_double(insertIsectStatement, 10, spectraTwo[isect_index+i]);
-			sqlite3_bind_double(insertIsectStatement, 11, spectraThree[isect_index+i]);
-			sqlite3_bind_int(insertIsectStatement, 12, interactionTypes[isect_index+i]);
-			sqlite3_bind_int(insertIsectStatement, 13, lightIds[isect_index+i]);
+			sqlite3_bind_int64(insertIsectStatement.stmt, 1, path_index);
+			sqlite3_bind_int(insertIsectStatement.stmt, 2, i+1);
+			sqlite3_bind_double(insertIsectStatement.stmt, 3, intersectionPosX[isect_index+i]);
+			sqlite3_bind_double(insertIsectStatement.stmt, 4, intersectionPosY[isect_index+i]);
+			sqlite3_bind_double(insertIsectStatement.stmt, 5, intersectionPosZ[isect_index+i]);
+			sqlite3_bind_int(insertIsectStatement.stmt, 6, primitveIds[isect_index+i]);
+			sqlite3_bind_int(insertIsectStatement.stmt, 7, shapeIds[isect_index+i]);
+			sqlite3_bind_int(insertIsectStatement.stmt, 8, objectIds[isect_index+i]);
+			sqlite3_bind_double(insertIsectStatement.stmt, 9, spectraOne[isect_index+i]);
+			sqlite3_bind_double(insertIsectStatement.stmt, 10, spectraTwo[isect_index+i]);
+			sqlite3_bind_double(insertIsectStatement.stmt, 11, spectraThree[isect_index+i]);
+			sqlite3_bind_int(insertIsectStatement.stmt, 12, interactionTypes[isect_index+i]);
+			sqlite3_bind_int(insertIsectStatement.stmt, 13, lightIds[isect_index+i]);
 			
-			if(sqlite3_step(insertIsectStatement) != SQLITE_DONE) {
-				const char *sql = sqlite3_sql(insertIsectStatement);
+			if(sqlite3_step(insertIsectStatement.stmt) != SQLITE_DONE) {
+				const char *sql = sqlite3_sql(insertIsectStatement.stmt);
 				printf("insert intersection failed. %s SQL = %s\n",sqlite3_errmsg(db),sql);
 			}
 			
-			sqlite3_reset(insertIsectStatement);
+			sqlite3_reset(insertIsectStatement.stmt);
 			
 			++insertsDone;
 		}
@@ -1245,17 +1252,17 @@ sqlite::Database DataFileReader::ReadBinaryDataToMemoryDB(const std::string& fil
 		isect_index += size;
 	}
 	//Put it in the database
-	sqlite3_finalize(insertPathStatement);
-	sqlite3_finalize(insertIsectStatement);
+	sqlite3_finalize(insertPathStatement.stmt);
+	sqlite3_finalize(insertIsectStatement.stmt);
 	
 	//
-	sqlite3_stmt* stmt = database.PrepareStatement("SELECT COUNT(*) FROM INTERSECTIONS");
-	sqlite3_step(stmt);
-	int nrIsects = sqlite3_column_int(stmt, 0);
+	sqlite::Statement countStmt = database.PrepareStatement("SELECT COUNT(*) FROM INTERSECTIONS");
+	countStmt.Step();
+	int nrIsects = sqlite3_column_int(countStmt.stmt, 0);
 	
-	stmt = database.PrepareStatement("SELECT COUNT(*) FROM PATHS");
-	sqlite3_step(stmt);
-	int nrPaths = sqlite3_column_int(stmt, 0);
+	countStmt = database.PrepareStatement("SELECT COUNT(*) FROM PATHS");
+	sqlite3_step(countStmt.stmt);
+	int nrPaths = sqlite3_column_int(countStmt.stmt, 0);
 	
 	printf("Database contains %d paths and %d intersections\n",nrPaths,nrIsects);
 	

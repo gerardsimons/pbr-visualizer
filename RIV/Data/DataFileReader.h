@@ -20,7 +20,7 @@ public:
 	//Data reading functions
     static RIVDataSet ReadAsciiData(const std::string& fileName,BMPImage *image, const size_t pathsLimit = 0);
 	static RIVDataSet ReadBinaryData(const std::string& fileName, BMPImage *image, const size_t pathsLimit = 0);
-	static sqlite::Database ReadBinaryDataToMemoryDB(const std::string& fileName, const size_t pathsLimit = 0, bool inMemory = true);
+	static sqlite::Database ReadBinaryDataToDB(const std::string& fileName, const size_t pathsLimit = 0, bool inMemory = true);
     static RIVTable* ReadImageData(const BMPImage& image);
     static PBRTConfig ReadPBRTFile(const std::string& fileName);
 	

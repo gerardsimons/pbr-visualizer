@@ -13,7 +13,7 @@
 
 #include <typeinfo>
 
-class ParallelCoordsView : public RIVDataView, public RIVDataSetListener
+class ParallelCoordsView : public RIVDataView, public sqlite::OnDataChangedListener
 {
 private:
     std::vector<std::string> axesOrder;
@@ -29,6 +29,11 @@ private:
     
     //Properties
     std::vector<ParallelCoordsAxisGroup> axisGroups;
+	
+	ParallelCoordsAxisGroup pathsGroup;
+	ParallelCoordsAxisGroup intersectionsGroup;
+	
+	ParallelCoordsAxisGroup* selectedAxisGroup = NULL;
     ParallelCoordsAxis* selectedAxis = NULL;
 	
 	//Determines what graphical primitives should be redrawn
@@ -49,8 +54,8 @@ public:
     void Reshape(int width, int height);
 	bool HandleMouse(int,int,int,int);
 	bool HandleMouseMotion(int,int);
-    //implement virtual functions prescribed by DataSetListener
-    virtual void OnDataSetChanged();
+
+	virtual void OnDataChanged();
 	//Create graphical primitives based on data currently set
 	void InitializeGraphics();
 	

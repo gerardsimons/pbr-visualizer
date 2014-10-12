@@ -42,8 +42,8 @@ ParallelCoordsView::~ParallelCoordsView(void) {
 }
 
 void ParallelCoordsView::createAxes() {
-    axisGroups.clear();
-	
+
+		
     if(dataController != NULL) {
 		
 		size_t total_nr_of_records = 0;
@@ -179,50 +179,57 @@ void ParallelCoordsView::drawAxes() {
 
 void ParallelCoordsView::drawLines() {
 //	linesAreDirty = true;
-
-		size_t lineIndex = 0;
-        size_t linesDrawn = 0;
+	size_t row = 0;
+	size_t lineIndex = 0;
 	
 	reporter::startTask("drawLines");
 	
 	for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
 		sqlite::DataView *view = axisGroup.view;
 //		sqlite3_stmt* stmt = view->SelectStmt();
+		char taskName[50];
+		sprintf(taskName,"Drawing view %s\n",view->GetName().c_str());
+		reporter::startTask(taskName);
+		colorProperty->Start(view);
 		
-		Color lineColor;
-		float size = 1;
-		size_t row = 1;
+
 //			glLineWidth(size);
 //		int rc = sqlite3_step(stmt);
 //		sqlite::ResultSet results = view->Select();
 //		sqlite::Row rowObj;
 		
-		sqlite3_stmt* stmt = view->SelectStmt();
-//		std::string name = view->GetName();
+		sqlite::Statement stmt = view->SelectStmt();
+		
+//		printf("***** VIEW SELECT STATEMENT\n");
+//		stmt.Print();
+//		printf(" VIEW SELECT STATEMENT *****\n");
+		
+		std::string name = view->GetName();
 //		name.erase(name.begin(), name.begin() + 4);
 //		sqlite3_stmt* stmt = dataController->CustomSQLStmt("SELECT * FROM " + name);
-
-		while(sqlite3_step(stmt) == SQLITE_ROW) {
+		while(stmt.Step()) {
+			Color lineColor = colorProperty->ComputeColor();
 			glBegin(GL_LINE_STRIP);
 			for(ParallelCoordsAxis &axis : axisGroup.axes) {
 				sqlite::Column column = axis.column;
+				glColor3f(lineColor.R,lineColor.G,lineColor.B);
 				if(column.type == sqlite::REAL) {
-					float value = sqlite3_column_double(stmt, column.index - 1);
-//					float value = rowObj.GetFloat(column.name);
+					float value = sqlite3_column_double(stmt.stmt, column.index - 1);
+
 					float x = axis.x;
 					float y = axis.PositionOnScaleForValue(value);
 //						printf("glVertex3f(%f,%f,0)\n",x,y);
 					glVertex3f(x, y, 0);
 
-					if(y > axis.y + axis.height || y < axis.y) {
-						throw  "A line was being drawn outside ot the parallel coordinates view";
-					}
+//					if(y > axis.y + axis.height || y < axis.y) {
+//						throw  "A line was being drawn outside ot the parallel coordinates view";
+//					}
 					continue;
 				}
 				if(column.type == sqlite::INT || column.type == sqlite::BIGINT) {
 					//Code here
 					
-					int value = sqlite3_column_int(stmt, column.index - 1);
+					int value = sqlite3_column_int(stmt.stmt, column.index - 1);
 //					int value = rowObj.GetInt(column.name);
 					
 					float x = axis.x;
@@ -230,9 +237,9 @@ void ParallelCoordsView::drawLines() {
 //						printf("glVertex3f(%f,%f,0)\n",x,y);
 					glVertex3f(x, y, 0);
 					
-					if(y > axis.y + axis.height || y < axis.y) {
-						throw "A line was being drawn outside ot the parallel coordinates view";
-					}
+//					if(y > axis.y + axis.height || y < axis.y) {
+//						throw "A line was being drawn outside ot the parallel coordinates view";
+//					}
 				}
 				else {
 					throw "INVALID TYPE";
@@ -242,6 +249,7 @@ void ParallelCoordsView::drawLines() {
 			lineIndex++;
 //			rc = sqlite3_step(stmt);
 		}
+		reporter::stop(taskName);
 	}
 	linesAreDirty = false;
 	printf("Drawn %zu lines.\n",lineIndex);
@@ -352,6 +360,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                         axis.HasSelectionBox = true;
                         
                         selectedAxis = &axis;
+						selectedAxisGroup = &axisGroup;
                         
                         isDragging = true;
                         axesAreDirty = true;
@@ -369,23 +378,31 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
             if(isDragging && selectedAxis != 0) {
                 
                 Area &selection = selectedAxis->selection;
+				sqlite::DataView* view = selectedAxisGroup->view;
+				
                 int sizeBox = abs(selection.start.y - selection.end.y);
-//				dataset->StartFiltering();
-//                if(sizeBox > 3) {
-//                    float lowerBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.start.y));
-//                    float upperBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.end.y));
-//                    dataset->ClearFilter(selectedAxis->name);
-//                    riv::Filter* rangeFilter = new riv::RangeFilter(selectedAxis->name,lowerBound,upperBound);
-//                    dataset->AddFilter(rangeFilter);
-//                    printf("Selection finalized on axis %s\n",selectedAxis->name.c_str());
-//                }
-//                else {
-//                    dataset->ClearFilter(selectedAxis->name);
-//                    clearSelection();
-//                }
-//				
-//				//Close access
-//				dataset->StopFiltering();
+                if(sizeBox > 3) {
+                    float lowerBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.start.y));
+                    float upperBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.end.y));
+//					sqlite::RangeExpression<float>* rangeExpr = new sqlite::RangeExpression<float>(selectedAxis->column.name,lowerBound,upperBound);
+					std::string expressionSQL = selectedAxis->column.name + " > " + std::to_string(lowerBound) + " OR " + selectedAxis->column.name + " < " + std::to_string(upperBound);
+					sqlite::CustomSingularExpression* expr = new sqlite::CustomSingularExpression(selectedAxis->column.name,expressionSQL);
+					
+                    printf("Selection finalized on axis %s\n",selectedAxis->column.name.c_str());
+					
+					reporter::startTask("PCV Filtering");
+					view->StartModifying();
+					view->Filter(expr);
+					view->StopModifying();
+					reporter::stop("PCV Filtering");
+                }
+                else {
+					view->StartModifying();
+                    view->RemoveFilter(selectedAxis->column.name);
+					view->StopModifying();
+                    clearSelection();
+                }
+
             }
             return true;
         }
@@ -403,7 +420,8 @@ void ParallelCoordsView::clearSelection() {
         
         selectedAxis->HasSelectionBox = false;
         selectedAxis = NULL;
-        
+		
+		
         
         printf("Selection cleared.");
     }
@@ -422,7 +440,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
     return false;
 }
 
-void ParallelCoordsView::OnDataSetChanged() {
+void ParallelCoordsView::OnDataChanged() {
     printf("ParallelCoordsView received a on dataset changed callback.\n");
     linesAreDirty = true;
     axesAreDirty = true;

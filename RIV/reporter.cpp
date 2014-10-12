@@ -48,7 +48,8 @@ namespace reporter {
         if(isRunning) {
             double duration = ( clock() - startTime ) / (double) CLOCKS_PER_SEC;
             isRunning = false;
-            std::cout << "Task " << name << " took " << duration << " seconds.\n";
+			printf(" Finished in %.3f seconds.\n",duration);
+//            std::cout << "Finished in " << duration << " seconds.\n";
         }
         else throw("Task is not running!\n");
     }

@@ -10,7 +10,11 @@
 #define GRAPHICS_PROPERTY
 
 #include "Evaluator.h"
+
 #include <sqlite3.h>
+#include "SQLDataView.h"
+#include "DataController.h"
+#include "Reference.h"
 #include "../helper.h"
 	
 class RIVTable;
@@ -20,17 +24,23 @@ enum INTERPOLATION_SCHEME {
 	CONTINUOUS
 };
 
+template <typename T>
 class RIVProperty {
 public:
-	virtual bool Value(RIVTable*,const size_t&,float& value) = 0;
+	virtual void Start(sqlite::DataView* view) = 0; //Only necessary for dynamic properties
+	virtual T Value() = 0;
+	virtual void Stop() = 0; //Only necessary for dynamic properties
 };
 
 template <typename T>
-class RIVEvaluatedProperty {
+class RIVEvaluatedProperty : RIVProperty<T> {
 protected:
-	sqlite3* database = NULL;
-	std::string columnReference;
-	std::string tableReference;
+	
+	sqlite::DataView* referralView;
+	sqlite::Column* referralColumn;
+	
+	sqlite::Statement propertyStmt; //This statement will hold all the property values
+	DataController* dataController;
 	
 	const INTERPOLATION_SCHEME defaultInterpolationMode = CONTINUOUS;
 	
@@ -38,13 +48,13 @@ protected:
 	INTERPOLATION_SCHEME interpolationMode;
 	
 	//The default evaluator to be used to evaluate a given row and return a size
-	Evaluator<T,float>* defaultEvaluator;
+	Evaluator<T,float>* defaultEvaluator = NULL;
 	
 	//Any optional special non-default interpolators to be used
-	std::vector<Evaluator<T,float>*> specificEvaluators;
+//	std::vector<Evaluator<T,float>*> specificEvaluators;
 	
 	//Maps an index to a specific evaluator, if none is found, the default color interpolator is used
-	std::map<size_t,Evaluator<T,float>*> evaluatorRegister;
+//	std::map<size_t,Evaluator<T,float>*> evaluatorRegister;
 	
 	void init(const INTERPOLATION_SCHEME &scheme, const std::vector<T> &interpolationValues) {
 		switch(scheme) {
@@ -85,119 +95,74 @@ protected:
 //    float const* colorForMultipleResolvedRows(const std::vector<size_t>& rows);
 public:
 	~RIVEvaluatedProperty() {
-		deletePointerVector(specificEvaluators);
-		evaluatorRegister.clear();
+//		deletePointerVector(specificEvaluators);
+//		evaluatorRegister.clear();
 	}
-	bool Value(const std::string& columnName, const std::string& tableName, const size_t& row, float& computedValue) {
+	RIVEvaluatedProperty(sqlite::DataView* referralView, sqlite::Column* referralColumn,DataController* dataController) {
+		this->dataController = dataController;
+		this->referralView = referralView;
+		this->referralColumn = referralColumn;
 		
-		//If the table used is the table reference we dont need to create a join
-		if(tableName == tableReference) {
-			
+		//Create evaluator
+		sqlite::Statement minMax = referralView->MinMax(referralColumn);
+		minMax.Step();
+		std::vector<T> interpolationValues;
+		if(referralColumn->type == sqlite::INT) {
+			interpolationValues.push_back(sqlite3_column_int(minMax.stmt,0));
+			interpolationValues.push_back(sqlite3_column_int(minMax.stmt,1));
 		}
 		else {
-			
+			interpolationValues.push_back(sqlite3_column_double(minMax.stmt,0));
+			interpolationValues.push_back(sqlite3_column_double(minMax.stmt,1));
 		}
-
-		Evaluator<T,float>* evaluator = evaluatorRegister[row];
-		if(evaluator == NULL) {
-			evaluator = defaultEvaluator;
-		}
-		computedValue = evaluator->Evaluate(row); //just use the row as input
-		return true;
-
+		defaultEvaluator = new LinearInterpolator<float>(interpolationValues);
 	}
-	bool Value(RIVTable* sourceTable, const std::vector<size_t>& rows,float& computedValue) {
-		//    float const* overallColor = NULL;
-		Evaluator<T,float>* specificEvaluator = NULL;
-		Evaluator<T,float>* evaluator = defaultEvaluator;
-		size_t rowFound = 0;
-		for(size_t i = 0 ; i < rows.size() ; ++i) {
-			rowFound = rows[i];
-			//Give preference to special interpolators
-			specificEvaluator = evaluatorRegister[rowFound];
-			if(specificEvaluator != NULL) {
-				evaluator = specificEvaluator;
-				break;
+	//Get all the values required linked to the given view
+	void Start(sqlite::DataView* view) {
+		sqlite::Reference* reference = view->GetReference();
+		std::string sql;
+		if(reference != NULL && view->GetName() != referralView->GetName()) {
+			sql = "SELECT " + referralColumn->name + " FROM " + referralView->GetName() + "," + view->GetName() + " WHERE " + reference->fromColumnName + " = " + reference->toColumnName + " GROUP BY " + reference->fromColumnName;
+				printf("\n\t********* SQL = %s\n", sql.c_str());
+			 sql = "SELECT DISTINCT " + referralColumn->name + "," + reference->toColumnName + " FROM " + referralView->GetName() + "," + view->GetName() + " WHERE " + reference->toColumnName + " = " + reference->fromColumnName;
+			printf("\n\t********* SQL = %s\n", sql.c_str());
+		}
+		else
+		{
+			sql = "SELECT " + referralColumn->name + " FROM " + referralView->GetName();
+		}
+		propertyStmt = dataController->CustomSQLStmt(sql);
+		
+//		printf("***** PROPERTY SELECT STATEMENT\n");
+//		propertyStmt.Print();
+//		printf(" PROPERTY STATEMENT *****\n");
+	}
+	float Value() {
+		if(propertyStmt.Step()) {
+			if(referralColumn->type == sqlite::INT) {
+				int value = sqlite3_column_int(propertyStmt.stmt, 0);
+//				printf("Value = %d\n",value);
+//				float eval = defaultEvaluator->Evaluate(value);
+				return defaultEvaluator->Evaluate(value);
+			}
+			else if(referralColumn->type == sqlite::BIGINT) {
+				size_t value = sqlite3_column_int(propertyStmt.stmt, 0);
+				return defaultEvaluator->Evaluate(value);
+			}
+			else if(referralColumn->type == sqlite::REAL) {
+				float value = sqlite3_column_double(propertyStmt.stmt, 0);
+//				printf("value = %f\n",value);
+				return defaultEvaluator->Evaluate(value);
+			}
+			else {
+				printf("UNKNOWN TYPE\n");
 			}
 		}
-		computedValue = evaluator->Evaluate(rowFound); //just use the row as input
-		return true;
+//		printf("No more values!\n");
+		return 0;
 	}
-	void AddEvaluationScheme(std::vector<T>& indices, Evaluator<T, float>* newEvaluator) {
-		for(size_t i : indices) {
-			AddEvaluationScheme(i, newEvaluator);
-		}
-	}
-	void AddEvaluationScheme(const T& index, Evaluator<T, float>* newEvaluator) {
-		if(newEvaluator) {
-			specificEvaluators.push_back(newEvaluator);
-			evaluatorRegister[index] = newEvaluator;
-		}
-		else throw "New evaluator cannot be NULL.";
-	}
-
-	RIVEvaluatedProperty(sqlite3 *db,float fixedValue) {
-		database = db;
-		defaultEvaluator = new FixedEvaluator<T, float>(fixedValue);
-	}
-//	RIVEvaluatedProperty(sqlite3 *db,std::vector<size_t>& interpolationValues) {
-//		init(propertyReference_, defaultInterpolationMode, interpolationValues);
-//	}
-//	RIVEvaluatedProperty(sqlite3 *db) {
-//		T lower = 0;
-//		T upper = propertyReference_->GetNumRows();
-//		std::vector<T> interpolationValues;
-//		interpolationValues.push_back(lower);
-//		interpolationValues.push_back(upper);
-//		init(propertyReference_, defaultInterpolationMode, interpolationValues);
-//	}
-//	RIVEvaluatedProperty(sqlite3 *db,std::vector<size_t>& interpolationValues, const INTERPOLATION_SCHEME& scheme) {
-//		init(propertyReference_, scheme, interpolationValues);
-//	}
-	RIVEvaluatedProperty(sqlite3 *db,const std::string tableName, const std::string& columnName) {
-		//Get the min and the max of the
-		
-//		char* sql = "SELECT MIN(%s), MAX(%s) FROM %s";
-//		sprintf(sql,columnName.c_str(),columnName.c_str(),tableName.c_str());
-//		executeSQL(sql, db);
-//		
-//		if(referenceFloatRecord) {
-//			std::vector<float> interpolationValues;
-//			interpolationValues.push_back(referenceFloatRecord->Min());
-//			interpolationValues.push_back(referenceFloatRecord->Max());
-//			init(propertyReference_,defaultInterpolationMode,interpolationValues);
-//		}
-//		else {
-//			std::vector<ushort> interpolationValues;
-//			interpolationValues.push_back(referenceShortRecord->Min());
-//			interpolationValues.push_back(referenceShortRecord->Max());
-//			
-//			init(propertyReference_,defaultInterpolationMode,interpolationValues);
-//		}
-//		if(!propertyReference->HasRecord(referenceRecord)) {
-//			throw "Reference table does not contain reference record.";
-//		}
-	}
-	RIVEvaluatedProperty(sqlite3 *db,const std::string& referenceColumnName) {
-//		propertyReference = propertyReference_;
-//		RIVRecord* referenceRecord = propertyReference->GetRecord(referenceRecordName);
-//		initRecord(referenceRecord);
-//		if(referenceFloatRecord) {
-//			std::vector<float> interpolationValues;
-//			interpolationValues.push_back(referenceFloatRecord->Min());
-//			interpolationValues.push_back(referenceFloatRecord->Max());
-//			init(propertyReference_,defaultInterpolationMode,interpolationValues);
-//		}
-//		else {
-//			std::vector<ushort> interpolationValues;
-//			interpolationValues.push_back(referenceShortRecord->Min());
-//			interpolationValues.push_back(referenceShortRecord->Max());
-//			
-//			init(propertyReference_,defaultInterpolationMode,interpolationValues);
-//		}
-//		if(!propertyReference->HasRecord(referenceRecord)) {
-//			throw "Reference table does not contain reference record.";
-//		}
+	void Stop() {
+		propertyStmt.Reset();
 	}
 };
 

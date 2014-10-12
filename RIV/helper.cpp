@@ -21,6 +21,21 @@ inline float* linearInterpolateColor(float ratio, const float colorOne[3],const 
     printArray(color, 3);
     return color;
 }
+void right_pad(std::string& text, char padding, int toNumber) {
+	if(toNumber < 0) {
+		throw "Invalid";
+	}
+	int paddingWidth = (int)(toNumber - text.size());
+	if(paddingWidth < 0) {
+		//remove chars
+		text.erase(text.end() + paddingWidth,text.end());
+	}
+	else {
+		for(int i = 0 ; i < paddingWidth ; ++i) {
+			text += padding;
+		}
+	}
+}
 void println(const std::string& text) {
 	std::cout << text << std::endl;
 }

@@ -10,7 +10,6 @@
 #include <string>
 
 	class RIVDataSet;
-	class RIVColorProperty;
 
 	class RIVDataView
 	{

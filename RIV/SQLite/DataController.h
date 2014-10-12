@@ -11,7 +11,7 @@
 
 #include "Database.h"
 #include "SQLDataView.h"
-#include "Selector.h"
+#include "Reference.h"
 
 /**
  *	This class simulates a stateful in memory SQL database. Any selectors added are appended to the query and used to create the temporary view reflecting the state of the application
@@ -22,50 +22,17 @@ private:
 	
 	sqlite::DataView* pathsView = NULL;
 	sqlite::DataView* isectsView = NULL;
-	
+
 	std::vector<sqlite::DataView*> allViews;
 	
-	std::string mainTableName = "PATHS";
 	
-	std::vector<sqlite::Selector*> selectors; //The select operations applied upon the SQL database
-	
-	const std::string pathsViewName = "RIV_PATHS";
-	const std::string isectsViewName = "RIV_INTERSECTIONS";
+	//These are the main tables, they do not change and act as a source for any reinsertions that may be necessary upon the views
+	const std::string pathsTable = "PATHS";
+	const std::string intersectionsTable = "INTERSECTIONS";
 	
 	//Create temporary views for each table according to the selectors
 	//TODO : Generalize: get all tables in database create views for each one and link together in arbitrary fashion
-	void createViews() {
-		//Remove old views (if any)
-		if(pathsView) {
-			delete pathsView;
-		}
-		if(isectsView) {
-			delete isectsView;
-		}
-		allViews.clear();
-		
-		std::string selectSQL = "SELECT * FROM " + mainTableName;
-		
-		//Possibly add any selectors that may exist
-		if(selectors.size() > 0) {
-			for(size_t i = 0 ; i < selectors.size() - 1 ; ++i){
-				selectSQL += selectors[i]->generateSQL() + " AND ";
-			}
-			selectSQL += selectors[selectors.size() - 1]->generateSQL();
-		}
-		
-		pathsView = new sqlite::DataView(&db,pathsViewName,selectSQL);
-		isectsView = new sqlite::DataView(&db,isectsViewName,"SELECT intersections.* from intersections," + pathsViewName + " WHERE " + pathsViewName + ".id = intersections.pid");
-		
-		allViews = {pathsView,isectsView};
-		
-		printf("DATA VIEWS CREATED!\n");
-		
-		//<For each table>
-		//<Iterate over selectors and generate the SQL>
-		//<SQL operates on the original data or on the view if it already exists and if it is known the exisitng views will contain all of the data possibly requested
-		//<Execute the SQL
-	}
+	void createViews();
 	
 public:
 	//TODO: Do not create views immediately but only after some filtering happens
@@ -77,7 +44,7 @@ public:
 		return allViews;
 	}
 	//This supercedes the temporary views
-	sqlite3_stmt* CustomSQLStmt(const std::string& sql) {
+	sqlite::Statement CustomSQLStmt(const std::string& sql) {
 		return db.PrepareStatement(sql);
 	}
 	sqlite::DataView* GetPathsView() {
@@ -89,11 +56,9 @@ public:
 	std::vector<sqlite::DataView*> GetViews() {
 		return allViews;
 	}
-	void AddSelector(sqlite::Selector* selector) {
-		if(selector != NULL) {
-			selectors.push_back(selector);
-		}
-		printf("WARNING : supplied selector was NULL");
+	//Fetch the latest error
+	std::string GetError() {
+		return std::string(db.ErrorMessage());
 	}
 };
 
