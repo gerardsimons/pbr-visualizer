@@ -473,7 +473,7 @@
 			name = "Qt Preprocessors";
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "make -C /Users/gerardsimons/Documents/Development/qt_widgets -f 'qt_widgets.xcodeproj/qt_preprocess.mak'";
+			shellScript = "make -C /Users/gerardsimons/Documents/Development/afstuderen_riv -f 'qt_widgets.xcodeproj/qt_preprocess.mak'";
 		};
 /* End PBXShellScriptBuildPhase section */
 

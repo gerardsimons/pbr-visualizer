@@ -291,8 +291,8 @@ void createViews() {
 		RIVTable *intersectionsTable = dataset.GetTable("intersections");
 		
 		ColorMap jetColorMap = colors::jetColorMap();
-//		RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(intersectionsTable,"spectrum R","spectrum G","spectrum B");
-		RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,intersectionsTable->GetRecord("bounce#"),jetColorMap);
+		RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(intersectionsTable,"spectrum R","spectrum G","spectrum B");
+//		RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,intersectionsTable->GetRecord("bounce#"),jetColorMap);
 		//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,"radiance R","radiance G","radiance B");
 		RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
 		
@@ -407,8 +407,6 @@ int main(int argc, char **argv)
 {
     generatePaths(argc, argv);
 	
-	
-
     srand(time(NULL));
     /* initialize GLUT, let it extract command-line
      GLUT options that you may provide */

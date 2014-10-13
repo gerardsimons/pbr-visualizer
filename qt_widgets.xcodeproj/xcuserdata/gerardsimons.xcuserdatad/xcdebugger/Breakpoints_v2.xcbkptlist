@@ -139,7 +139,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "346"
             endingLineNumber = "346"
-            landmarkName = "ParallelCoordsView::Draw()"
+            landmarkName = "ParallelCoordsView::HandleMouse(int button, int state, int x, int y)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -155,7 +155,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "120"
             endingLineNumber = "120"
-            landmarkName = "ParallelCoordsView::createAxes()"
+            landmarkName = "ParallelCoordsView::drawSelectionBoxes()"
             landmarkType = "5">
             <Locations>
                <Location
@@ -423,7 +423,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "340"
             endingLineNumber = "340"
-            landmarkName = "ParallelCoordsView::Draw()"
+            landmarkName = "ParallelCoordsView::HandleMouse(int button, int state, int x, int y)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

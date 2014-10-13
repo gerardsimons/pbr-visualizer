@@ -80,49 +80,51 @@ void RIVTable::filterRecords() {
 				//				printf("row = %zu SELECTED\n",row);
 			}
 		}
-	}
-	
-	//This checks its references to create a group that it is referring to and see if ALL of its rows are filtered, only then is the reference row filtered as well
-	//TODO: I have feeling this is really ugly... and its really costly ?
-	for(RIVReference *reference : references) {
-		//		reference->targetTable->ClearFilters();
-		RIVMultiReference* forwardRef = dynamic_cast<RIVMultiReference*>(reference);
-		if(forwardRef) {
-			for(size_t row : filteredSourceRows) {
-				//				printf("filter reference row of %zu\n",row);
-				forwardRef->FilterReferenceRow(row);
+		//This checks its references to create a group that it is referring to and see if ALL of its rows are filtered, only then is the reference row filtered as well
+		//TODO: I have feeling this is really ugly... and its really costly ?
+		for(RIVReference *reference : references) {
+			//This happens to paths table
+			RIVMultiReference* forwardRef = dynamic_cast<RIVMultiReference*>(reference);
+			if(forwardRef) {
+				for(size_t row : filteredSourceRows) {
+					//				printf("filter reference row of %zu\n",row);
+					forwardRef->FilterReferenceRow(row);
+				}
+				continue;
 			}
-			continue;
-		}
-		else {
-			RIVReference* backReference = reference->targetTable->GetReferenceToTable(name);
-			RIVMultiReference* multiRef = dynamic_cast<RIVMultiReference*>(backReference);
-			if(multiRef) {
-				for(auto iterator = multiRef->indexMap.begin(); iterator != multiRef->indexMap.end(); iterator++) {
-					std::pair<size_t*,ushort> backRows = iterator->second;
-					bool filterReference = true;
-					for(ushort i = 0 ; i < backRows.second ; ++i) { //Does the filtered map contain ALL of these rows? If so we should filter it in the reference table
-						if(!filteredRows[backRows.first[i]]) {
-							filterReference = false;
-							break;
+			else { //This happens to intersections table
+				RIVReference* backReference = reference->targetTable->GetReferenceToTable(name);
+				RIVMultiReference* multiRef = dynamic_cast<RIVMultiReference*>(backReference);
+				if(multiRef) {
+					for(auto iterator = multiRef->indexMap.begin(); iterator != multiRef->indexMap.end(); iterator++) {
+						std::pair<size_t*,ushort> backRows = iterator->second;
+						bool filterReference = true;
+						//					printMap(filteredRows);
+						for(ushort i = 0 ; i < backRows.second ; ++i) { //Does the filtered map contain ALL of these rows? If so we should filter it in the reference table
+							//						printArray(backRows.first, backRows.second);
+							bool filteredBackRow = filteredRows[backRows.first[i]];
+							if(!filteredBackRow) {
+								filterReference = false;
+								break;
+							}
 						}
-					}
-					
-					if(filterReference) {
-						reference->targetTable->FilterRow(iterator->first);
+						
+						if(filterReference) {
+							//						printf("Filter reference row %zu at %s\n",iterator->first,reference->targetTable->name.c_str());
+							reference->targetTable->FilterRow(iterator->first);
+						}
 					}
 				}
 			}
 		}
 	}
+//	printf("After filtering : ");
+//	PrintUnfiltered();
 	
-	printf("After filtering : ");
-	PrintUnfiltered();
-	
-	printf("References : ");
-	for(RIVReference* ref : references) {
-		ref->targetTable->PrintUnfiltered();
-	}
+//	printf("References : ");
+//	for(RIVReference* ref : references) {
+//		ref->targetTable->PrintUnfiltered();
+//	}
 }
 
 float RIVTable::PercentageFiltered() {
@@ -152,6 +154,7 @@ RIVReference* RIVTable::GetReferenceToTable(const std::string &tableName) {
 }
 
 void RIVTable::FilterRow(size_t rowIndex) {
+	
     filteredRows[rowIndex] = true;
     filtered = true;
 }
@@ -209,6 +212,7 @@ bool RIVTable::ContainsColumn(std::string name) {
 bool RIVTable::ClearFilters() {
 	bool filtersCleared = filters.size() > 0;
     filters.clear();
+	groupFilters.clear();
     filteredRows.clear();
     filtered = false;
 	return filtersCleared;
@@ -228,7 +232,19 @@ bool RIVTable::ClearFilter(size_t fid) {
 			return true;
         }
     }
-	if(filters.size() == 0) {
+	for(size_t i = 0 ; i < groupFilters.size() ; i++) {
+		riv::Filter *filter = groupFilters[i];
+		if(filter->GetId() == fid) {
+			std::vector<riv::Filter*>::iterator it = filters.begin();
+			std::advance(it, i);
+			filters.erase(it);
+			delete filter;
+			std::cout << "Table " << name << " has cleared filter ";
+			filter->Print();
+			return true;
+		}
+	}
+	if(filters.size() == 0 && groupFilters.size() == 0) {
 		filtered = false;
 	}
 	return filterFound;

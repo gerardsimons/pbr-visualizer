@@ -186,31 +186,33 @@ void ParallelCoordsView::drawAxes() {
 void ParallelCoordsView::drawLines() {
 //	linesAreDirty = true;
 
-		size_t lineIndex = 0;
-        glColor3f(1.0, 0.0, 0.0);
-        size_t linesDrawn = 0;
-		
+	size_t lineIndex = 0;
+	glColor3f(1.0, 0.0, 0.0);
+	size_t linesDrawn = 0;
+	
+//	reporter::startTask("drawLines");
+	
         for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
             RIVTable *table = axisGroup.table;
             
             size_t row = 0;
 
             TableIterator* iterator = table->GetIterator();
-			
-			if(dynamic_cast<FilteredTableIterator*>(iterator)) {
-				printf("Draw table %s with filtered table iterator\n",table->GetName().c_str());
-			}
-			else {
-				printf("Draw table %s with normal table iterator\n",table->GetName().c_str());
-			}
-			
+//
+//			if(dynamic_cast<FilteredTableIterator*>(iterator)) {
+//				printf("Draw table %s with filtered table iterator\n",table->GetName().c_str());
+//			}
+//			else {
+//				printf("Draw table %s with normal table iterator\n",table->GetName().c_str());
+//			}
+//			
             Color lineColor;
             while(iterator->GetNext(row)) {
                 if(colorProperty->ComputeColor(table, row, lineColor)) {
 					glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
 					
-					float size = sizeProperty->ComputeSize(table,row);
-					
+//					float size = sizeProperty->ComputeSize(table,row);
+					float size = 1;
 					glLineWidth(size);
                     glColor3f(lineColor.R, lineColor.G, lineColor.B);
                     for(ParallelCoordsAxis &axis : axisGroup.axes) {
@@ -253,6 +255,7 @@ void ParallelCoordsView::drawLines() {
         
         linesAreDirty = false;
         printf("Drawn %zu lines.\n",linesDrawn);
+//		reporter::stop("drawLines");
     }
 }
 

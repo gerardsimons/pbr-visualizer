@@ -33,7 +33,7 @@ RIV3DView::RIV3DView(RIVDataSet* dataset, PBRTConfig* config, int x, int y, int 
     instance = this;
     identifier = "3DView";
 	
-	createPaths();
+	ResetGraphics();
 };
 
 RIV3DView::RIV3DView(RIVDataSet* dataset,PBRTConfig* config, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,colorProperty,sizeProperty) {
@@ -44,7 +44,7 @@ RIV3DView::RIV3DView(RIVDataSet* dataset,PBRTConfig* config, RIVColorProperty *c
     instance = this;
     identifier = "3DView";
 	
-	createPaths();
+	ResetGraphics();
 };
 
 void RIV3DView::CyclePathSegment(bool direction) {
@@ -375,7 +375,7 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 
 void RIV3DView::ResetGraphics() {
 	createPaths();
-//	generateOctree(7, 1, .00001F);
+	generateOctree(7, 1, .00001F);
 }
 
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
@@ -596,11 +596,7 @@ Vec3Df RIV3DView::screenToWorldCoordinates(int screenX, int screenY, float zPlan
 }
 
 bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
-
     y = height - y;
-
-
-
 	if(state == GLUT_DOWN) {
 		
 		Vec3Df selectNear = screenToWorldCoordinates(x, y, 0);
