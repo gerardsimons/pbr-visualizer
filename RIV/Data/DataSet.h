@@ -43,7 +43,7 @@ public:
     void AddFilterListener(RIVDataSetListener* listener);
     void ClearFilters();
 	void ClearFilter(size_t filterID);
-    void ClearFilter(std::string attributeName);
+    void ClearFilter(const std::string& attributeName);
     RIVRecord* FindRecord(std::string name) const;
     size_t TotalNumberOfRecords() const;
     size_t NumberOfTables() const;

@@ -36,9 +36,6 @@ int padding = 10;
 //int width = 1400;
 //int height = 800;
 
-RIVClusterSet* clusters; //HERE ONLY FOR DEBUG REASONS
-const size_t clusterK = 2;
-
 bool isDirty = true;
 
 /* window position */

@@ -94,6 +94,11 @@ void RIVDataSet::ClearFilters() {
     for(RIVTable* table : tables) {
         if(table->ClearFilters()) {
 			staleTables[table] = true;
+			const std::vector<RIVReference*>* refs = table->GetReferences();
+			for(size_t i = 0 ; i < refs->size() ; ++i) {
+				RIVReference* ref = refs->at(i);
+				staleTables[ref->targetTable] = true;
+			}
 		}
     }
 }
@@ -103,15 +108,25 @@ void RIVDataSet::ClearFilter(size_t filterID) {
     for(RIVTable *table : tables) {
         if(table->ClearFilter(filterID)) {
 			staleTables[table] = true;
+			const std::vector<RIVReference*>* refs = table->GetReferences();
+			for(size_t i = 0 ; i < refs->size() ; ++i) {
+				RIVReference* ref = refs->at(i);
+				staleTables[ref->targetTable] = true;
+			}
 		}
     }
 }
 
-void RIVDataSet::ClearFilter(std::string filterName) {
+void RIVDataSet::ClearFilter(const std::string& filterName) {
     printf("Clearing filter %s on all tables\n",filterName.c_str());
     for(RIVTable *table : tables) {
         if(table->ClearFilter(filterName)) {
 			staleTables[table] = true;
+			const std::vector<RIVReference*>* refs = table->GetReferences();
+			for(size_t i = 0 ; i < refs->size() ; ++i) {
+				RIVReference* ref = refs->at(i);
+				staleTables[ref->targetTable] = true;
+			}
 		}
     }
 }
@@ -204,7 +219,12 @@ void RIVDataSet::StopFiltering() {
 	}
 	//Finalize, do the actual filtering operations
 	for(auto iter : staleTables) {
-		iter.first->filterRecords();
+		iter.first->Filter();
+	}
+	
+	//Make sure linked tables are filtered accordingly
+	for(auto iter : staleTables) {
+		iter.first->FilterReferences();
 	}
 	
 	isFiltering = false;

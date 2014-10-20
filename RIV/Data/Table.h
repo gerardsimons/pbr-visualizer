@@ -57,6 +57,7 @@ namespace riv {
 		std::vector<std::string> attributes;
 		
 		std::map<size_t,bool> filteredRows;
+		std::vector<size_t> newlyFilteredRows;
 		
 //		void filterRecords(); //Filter on all filters present in the filters vector
 	public:
@@ -67,8 +68,9 @@ namespace riv {
 		T* GetRecord(std::string name) {
 			return dynamic_cast<T*>(GetRecord(name));
 		}
-//		void filterRecords(riv::Filter *);
-		void filterRecords();
+		//Filter this table according to the filters that are applied
+		void Filter();
+		void FilterReferences();
 		void AddRecord(RIVRecord* record);
 		void AddFilter(riv::Filter *filter);
 		void AddFilter(riv::GroupFilter *groupFilter);
@@ -89,6 +91,7 @@ namespace riv {
 		//Clears all the filters with the given attribute name, returns true if any filter was actually removed
 		bool ClearFilter(const std::string& filterName);
 		bool ClearFilter(size_t fid);
+		void ClearFilteredRows();
 		RIVRecord* GetRecord(std::string name) const;
 		bool ContainsColumn(std::string);
 		
