@@ -215,7 +215,7 @@ void printArray(T* array, size_t size) {
     for(size_t i = 0 ; i < size ; i++) {
         std::cout << array[i] << " ";
     }
-    std::cout << "]";
+    std::cout << "]\n";
 }
 
 template <typename T>

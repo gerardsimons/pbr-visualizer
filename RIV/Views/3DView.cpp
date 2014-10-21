@@ -76,12 +76,22 @@ void RIV3DView::Reshape(int newWidth, int newHeight) {
 
 void RIV3DView::ToggleDrawIntersectionPoints() {
     drawIntersectionPoints = !drawIntersectionPoints;
+	if(drawIntersectionPoints && !pathsCreated) {
+		createPaths();
+	}
+	else if(!drawIntersectionPoints && !drawLightPaths) {
+		pathsCreated = false;
+		paths.clear();
+	}
 	printf("drawIntersectionPoints is now ");
 	if(drawIntersectionPoints) printf("ON\n"); else printf("OFF\n");
     isDirty = true;
 }
 void RIV3DView::ToggleDrawHeatmap() {
 	drawHeatmapTree = !drawHeatmapTree;
+	if(drawHeatmapTree && !heatmap) {
+		
+	}
 	isDirty = true;
 }
 size_t nodesDrawn;
@@ -374,8 +384,13 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 }
 
 void RIV3DView::ResetGraphics() {
-	createPaths();
-	generateOctree(7, 1, .00001F);
+	paths.clear();
+	pathsCreated = false;
+	if(heatmap) {
+		delete heatmap;
+	}
+//	createPaths();
+//	generateOctree(7, 1, .00001F);
 }
 
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
@@ -411,7 +426,7 @@ void RIV3DView::createPaths() {
 		vertices.push_back(row);
 		colors.push_back(pointColor);
     }
-
+	pathsCreated = true;
 	reporter::stop("Creating paths");
 	reportVectorStatistics("paths", paths);
 	
@@ -511,7 +526,15 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 }
 
 void RIV3DView::ToggleDrawPaths() {
+	//Create the paths if necessary (allows for smoother animations)
 	drawLightPaths = !drawLightPaths;
+	if(drawLightPaths && !pathsCreated) {
+		createPaths();
+	}
+	else if(!drawLightPaths && !drawIntersectionPoints) {
+		paths.clear();
+		pathsCreated = false;
+	}
 	isDirty = true;
 }
 void RIV3DView::DrawInstance() {

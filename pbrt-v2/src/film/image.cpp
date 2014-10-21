@@ -176,9 +176,7 @@ void ImageFilm::GetPixelExtent(int *xstart, int *xend,
 
 
 void ImageFilm::WriteImage(float splatScale) {
-    // Convert image to RGB and compute final pixel values
-	printf("**** splatScale = %f\n",splatScale);
-	
+    // Convert image to RGB and compute final pixel values	
     int nPix = xPixelCount * yPixelCount;
     float *rgb = new float[3*nPix];
     int offset = 0;

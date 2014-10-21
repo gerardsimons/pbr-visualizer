@@ -148,11 +148,11 @@ void RIVImageView::Draw() {
     needsRedraw = true;
 	if(needsRedraw) {
 		printf("\nImageView Draw #%zu\n",++drawCounter);
-		glClearColor(1.0, 0, 0, 0.0);
-		glClear( GL_COLOR_BUFFER_BIT );
-		
 		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 		glDisable(GL_DEPTH_TEST);
+		
+		glClearColor(1.0, 0, 0, 0.0);
+		glClear( GL_COLOR_BUFFER_BIT );
 		
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();

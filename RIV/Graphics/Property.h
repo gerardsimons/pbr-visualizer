@@ -100,6 +100,7 @@ protected:
 
 //    float const* colorForMultipleResolvedRows(const std::vector<size_t>& rows);
 public:
+	
 	~RIVEvaluatedProperty() {
 		deletePointerVector(specificEvaluators);
 		evaluatorRegister.clear();

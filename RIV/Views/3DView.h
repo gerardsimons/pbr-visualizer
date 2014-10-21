@@ -57,6 +57,7 @@ protected:;
 	bool sizesAllTheSame; //Because sizes are often set to the same, we take advantage of this to get a big performance boost
 	//Indices of the points to draw
 	std::vector<Path> paths;
+	bool pathsCreated = false;
 
 	//Generate a octree from the unfiltered intersection points
 	void generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize);

@@ -18,17 +18,20 @@ private:
 	//Stores the computed image from all the rays that are not filtered
 	std::vector<std::vector<Color>> renderedImage;
 	
-	ImageFilm image;
+	float pixelWidth,pixelHeight = 0;
+	
+	ImageFilm* image = NULL;
 	//Draw the current state of the PBRT image film to the screen
 	void drawImageFilm();
-	//Create the PBRT image film from the selected rays
-	ImageFilm createImageFilm();
 public:
 	static RIVRenderView* instance;
+	static int windowHandle; //The glut sub window it draws to
 	
 	RIVRenderView(RIVDataSet* dataset);
 	
 	void OnDataSetChanged();
+	//Create the PBRT image film from the selected rays
+	void CreateImageFilm();
 	
 	void Draw();
 	void Reshape(int width, int height);

@@ -34,8 +34,8 @@
 		RIVTable *pathTable = dataset->GetTable("path");
 		
 		//Find x and y record
-		RIVUnsignedShortRecord* xRecord = pathTable->GetRecord<RIVUnsignedShortRecord>("x");
-		RIVUnsignedShortRecord* yRecord = pathTable->GetRecord<RIVUnsignedShortRecord>("y");
+		RIVFloatRecord* xRecord = pathTable->GetRecord<RIVFloatRecord>("x");
+		RIVFloatRecord* yRecord = pathTable->GetRecord<RIVFloatRecord>("y");
 		RIVUnsignedShortRecord* intersections = pathTable->GetRecord<RIVUnsignedShortRecord>("#intersections");
 		
 		xMax = xRecord->Max() + 1;

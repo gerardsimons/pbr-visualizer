@@ -41,11 +41,11 @@
 int main(int argc, char *argv[]) {
     Options options;
     vector<string> filenames;
-    printf("\n");
-    for(int i = 0 ; i < argc ;++i) {
-        printf("argv[%d] = %s\n",i,argv[i]);
-    }
-    printf("\n");
+//    printf("\n");
+//    for(int i = 0 ; i < argc ;++i) {
+//        printf("argv[%d] = %s\n",i,argv[i]);
+//    }
+//    printf("\n");
     // Process command-line arguments
     for (int i = 1; i < argc; ++i) {
         if (!strcmp(argv[i], "--ncores")) options.nCores = atoi(argv[++i]);

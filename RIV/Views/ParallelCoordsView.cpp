@@ -207,6 +207,7 @@ void ParallelCoordsView::drawLines() {
 //			}
 //			
             Color lineColor;
+//			colorProperty->Start(table);
             while(iterator->GetNext(row)) {
                 if(colorProperty->ComputeColor(table, row, lineColor)) {
 					glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
@@ -315,7 +316,10 @@ void ParallelCoordsView::InitializeGraphics() {
 size_t drawCount = 0;
 void ParallelCoordsView::Draw() {
 	//    printf("linesAreDirty = %d axesAreDirty = %d\n",linesAreDirty,axesAreDirty);
-	printf("ParallelCoordsView Draw #%zu : \n",++drawCount);
+	std::string taskName = "ParallelCoordsView Draw #" + std::to_string(++drawCount);
+	
+	reporter::startTask(taskName);
+	
 	
 	if(axesAreDirty && linesAreDirty && selectionIsDirty) {
 		printf("Clear PCV window\n");
@@ -335,6 +339,8 @@ void ParallelCoordsView::Draw() {
 		drawSelectionBoxes();
         
 	glutSwapBuffers();
+	
+	reporter::stop(taskName);
 }
 
 bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {

@@ -29,13 +29,13 @@
 //const float DEG2RAD = 3.14159/180;
 
 /* window width and height */
-//int width = 1600;
-//int height = 1000;
+int width = 1600;
+int height = 1000;
 
 int padding = 10;
 
-int width = 1400;
-int height = 800;
+//int width = 1400;
+//int height = 800;
 
 bool isDirty = true;
 
@@ -55,8 +55,7 @@ int renderViewWindow;
 /* For debugging purposes, keep track of mouse location */
 int lastMouseX,lastMouseY = 0;
 
-/* Contains pointers to all the views to be drawn */
-std::vector<RIVDataView*> views;
+
 
 RIVImageView *imageView = NULL;
 RIV3DView *sceneView = NULL;
@@ -95,12 +94,6 @@ void testFunctions() {
     riv::RangeFilter *intersectionsNr = new riv::RangeFilter("#intersections",0.5,1.5);
     RIVTable *intersectionstTable = dataset.GetTable("path");
     intersectionstTable->AddFilter(intersectionsNr);
-}
-
-void invalidateAllViews() {
-	for(size_t i = 0 ; i < views.size() ; i++) {
-        views[i]->Invalidate();
-    }
 }
 
 void keys(int keyCode, int x, int y) {
@@ -144,11 +137,8 @@ void keys(int keyCode, int x, int y) {
 			break;
         case 114: // 'r' key, recluster {
         {
-			printf("Don't press that button!\n");
-//            RIVTable *intersectTable = dataset.GetTable("intersections");
-//            intersectTable->Cluster("intersection X","intersection Y","intersection Z",clusterK,1);
-//            postRedisplay = true;
-//            break;
+			printf("Regenerate renderview");
+			renderView->CreateImageFilm();
         }
         case 111: // 'o' key, optimize clusters (debug feature)
         {
@@ -324,14 +314,15 @@ void createViews() {
         glutMotionFunc(RIV3DView::Motion);
         glutSpecialFunc(keys);
 //
-        heatMapViewWindow = glutCreateSubWindow(mainWindow, padding * 5 + squareSize * 2, bottomHalfY, squareSize, squareSize);
-        glutSetWindow(heatMapViewWindow);
-        glutReshapeFunc(RIVHeatMapView::ReshapeInstance);
-        glutDisplayFunc(RIVHeatMapView::DrawInstance);
-        glutMouseFunc(RIVHeatMapView::Mouse);
-        glutMotionFunc(RIVHeatMapView::Motion);
+//        heatMapViewWindow = glutCreateSubWindow(mainWindow, padding * 5 + squareSize * 2, bottomHalfY, squareSize, squareSize);
+//        glutSetWindow(heatMapViewWindow);
+//        glutReshapeFunc(RIVHeatMapView::ReshapeInstance);
+//        glutDisplayFunc(RIVHeatMapView::DrawInstance);
+//        glutMouseFunc(RIVHeatMapView::Mouse);
+//        glutMotionFunc(RIVHeatMapView::Motion);
 		
 		renderViewWindow = glutCreateSubWindow(mainWindow, padding * 5 + squareSize * 2, bottomHalfY, squareSize, squareSize);
+		RIVRenderView::windowHandle = renderViewWindow;
 		glutSetWindow(renderViewWindow);
 		glutReshapeFunc(RIVRenderView::ReshapeInstance);
 		glutDisplayFunc(RIVRenderView::DrawInstance);
@@ -347,13 +338,7 @@ void createViews() {
         //Add some filter callbacks
         dataset.AddFilterListener(sceneView);
         dataset.AddFilterListener(parallelCoordsView);
-        
-        //Add the views to the view vector
-        views.push_back(sceneView);
-        views.push_back(imageView);
-        views.push_back(parallelCoordsView);
-		views.push_back(renderView);
-        views.push_back(heatMapView);
+		dataset.AddFilterListener(renderView);
 
     }
     else {
