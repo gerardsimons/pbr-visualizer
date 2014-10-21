@@ -37,7 +37,7 @@
 #define PBRT_SHAPES_TRIANGLEMESH_H
 
 // shapes/trianglemesh.h*
-#include "core/shape.h"
+#include "../core/shape.h"
 #include <map>
 using std::map;
 

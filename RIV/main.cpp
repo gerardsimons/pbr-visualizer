@@ -10,6 +10,7 @@
 #include "Views/ImageView.h"
 #include "Data/DataFileReader.h"
 #include "Views/3DView.h"
+#include "Views/RenderView.h"
 #include "Graphics/ColorPalette.h"
 #include "Graphics/ColorProperty.h"
 #include "Graphics/SizeProperty.h"
@@ -28,13 +29,13 @@
 //const float DEG2RAD = 3.14159/180;
 
 /* window width and height */
-int width = 1600;
-int height = 1000;
+//int width = 1600;
+//int height = 1000;
 
 int padding = 10;
 
-//int width = 1400;
-//int height = 800;
+int width = 1400;
+int height = 800;
 
 bool isDirty = true;
 
@@ -48,8 +49,8 @@ int mainWindow;                   /* GLUT window handle */
 int imageViewWindow;
 int sceneViewWindow;
 int parallelViewWindow;
-int uiViewWindow;
 int heatMapViewWindow;
+int renderViewWindow;
 
 /* For debugging purposes, keep track of mouse location */
 int lastMouseX,lastMouseY = 0;
@@ -61,7 +62,7 @@ RIVImageView *imageView = NULL;
 RIV3DView *sceneView = NULL;
 ParallelCoordsView *parallelCoordsView = NULL;
 RIVHeatMapView *heatMapView = NULL;
-//UIView *uiView = NULL;
+RIVRenderView* renderView = NULL;
 
 /* The dataset, views have pointers to this in order to draw their views consistently */
 RIVDataSet dataset;
@@ -151,7 +152,7 @@ void keys(int keyCode, int x, int y) {
         }
         case 111: // 'o' key, optimize clusters (debug feature)
         {
-            clusters->OptimizeClusters();
+//            clusters->OptimizeClusters();
             postRedisplay = true;
             break;
         }
@@ -272,10 +273,6 @@ void loadData() {
         image = new BMPImage(bmpPath.c_str(),false);
         dataset = DataFileReader::ReadBinaryData(dataPath,image,0);
         config = new PBRTConfig(DataFileReader::ReadPBRTFile(pbrtPath));
-		
-		//Extra data processing
-//		DataFileReader::AssignShapeIDsToPrimitives(dataset.GetTable("intersections"), model);
-//		testPBRTParser(pbrtPath);
     }
     else throw "Data paths not generated.";
 }
@@ -334,10 +331,18 @@ void createViews() {
         glutMouseFunc(RIVHeatMapView::Mouse);
         glutMotionFunc(RIVHeatMapView::Motion);
 		
+		renderViewWindow = glutCreateSubWindow(mainWindow, padding * 5 + squareSize * 2, bottomHalfY, squareSize, squareSize);
+		glutSetWindow(renderViewWindow);
+		glutReshapeFunc(RIVRenderView::ReshapeInstance);
+		glutDisplayFunc(RIVRenderView::DrawInstance);
+		glutMouseFunc(RIVRenderView::Mouse);
+		glutMotionFunc(RIVRenderView::Motion);
+		
         //Create views
         parallelCoordsView = new ParallelCoordsView(&dataset,colorProperty,sizeProperty);
         sceneView = new RIV3DView(&dataset,config,colorProperty,sizeProperty);
         heatMapView = new RIVHeatMapView(&dataset);
+		renderView = new RIVRenderView(&dataset);
 		
         //Add some filter callbacks
         dataset.AddFilterListener(sceneView);
@@ -347,57 +352,13 @@ void createViews() {
         views.push_back(sceneView);
         views.push_back(imageView);
         views.push_back(parallelCoordsView);
+		views.push_back(renderView);
         views.push_back(heatMapView);
 
     }
     else {
         throw "Data must be loaded first.";
     }
-}
-
-void clusterAndColor() {
-    dataset.ClusterTable("intersections","intersection X","intersection Y","intersection Z",clusterK,1);
-    std::vector<size_t> medoidIndices = dataset.GetClusterSet()->GetMedoidIndices();
-    RIVTable *intersectionsTable = dataset.GetTable("intersections");
-//    RIVEvaluatedColorProperty<size_t>* colorByCluster = new RIVEvaluatedColorProperty<size_t>(intersectionsTable);
-    RIVClusterSet& clusterSet = intersectionsTable->GetClusterSet();
-    
-//    float nrOfClusters = (float)clusterSet.Size();
-	
-    std::map<size_t,float> indexToClusterSize;
-    std::map<size_t,float> indexToClusterMembership;
-    
-    for(size_t j = 0 ; j < clusterSet.Size() ; ++j) {
-//        float clusterRatio = j / (nrOfClusters  - 1.F);
-        //        printf("clusterRatio = %f\n",clusterRatio);
-//        Evaluator<size_t,float>* eval = new FixedEvaluator<size_t, float>(clusterRatio);
-        RIVCluster* cluster = clusterSet.GetCluster(j);
-        std::vector<size_t> members = cluster->GetMemberIndices();
-        members.push_back(cluster->GetMedoidIndex());
-        
-//        colorByCluster->AddEvaluationScheme(members, eval);
-    }
-    
-    //    DiscreteEvaluator<size_t, float> colorByClusterEvaluator = new DiscreteEvaluator<size_t, float>(indexToClusterMembership);
-    
-    RIVEvaluatedSizeProperty<size_t> *sizeByCluster = new RIVEvaluatedSizeProperty<size_t>(intersectionsTable,.05F);
-    std::vector<float> relativeSizes;
-    float minSize = .4F;
-    float maxSize = .8F;
-    for(RIVCluster* cluster : clusterSet.GetClusters()) {
-        float relativeSize = clusterSet.RelativeSizeOf(cluster);
-        printf("\nTotal size of cluster : %zu\n",cluster->Size());
-        printf("Relative size of cluster : %f\n",relativeSize);
-        //        relativeSizes.push_back(clusterSet.RelativeSizeOf(cluster));
-        Evaluator<size_t, float>* clusterSizeEval = new FixedEvaluator<size_t, float>((1 - relativeSize) * minSize + relativeSize * maxSize);
-        sizeByCluster->AddEvaluationScheme(cluster->GetMedoidIndex(), clusterSizeEval);
-    }
-    
-//    parallelCoordsView->SetColorProperty(colorByCluster);
-    parallelCoordsView->SetSizeProperty(sizeByCluster);
-    
-//    sceneView->SetColorProperty(colorByCluster);
-    sceneView->SetSizeProperty(sizeByCluster);
 }
 
 int main(int argc, char **argv)

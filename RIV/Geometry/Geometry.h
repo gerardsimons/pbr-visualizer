@@ -27,15 +27,15 @@ inline double euclideanDistance(double x1, double x2, double y1, double y2, doub
     return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 -y1) + (z2 - z1) * (z2 - z1));
 }
 
-typedef struct Point {
+typedef struct RIVPoint {
 	int x;
 	int y;
-} Point;
+} RIVPoint;
 
 //Rectangular area used for selections and highlights
 typedef struct Area {
-	Point start;
-	Point end;
+	RIVPoint start;
+	RIVPoint end;
 } Area;
 
 class Point3D {

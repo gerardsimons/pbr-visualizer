@@ -37,9 +37,9 @@
 #define PBRT_SAMPLERS_BESTCANDIDATE_H
 
 // samplers/bestcandidate.h*
-#include "core/sampler.h"
-#include "core/paramset.h"
-#include "core/film.h"
+#include "../core/sampler.h"
+#include "../core/paramset.h"
+#include "../core/film.h"
 
 // BestCandidate Sampling Constants
 #define SQRT_SAMPLE_TABLE_SIZE 64

@@ -31,10 +31,10 @@
 
 
 // lights/distant.cpp*
-#include "core/stdafx.h"
-#include "lights/distant.h"
-#include "core/paramset.h"
-#include "core/montecarlo.h"
+#include "../core/stdafx.h"
+#include "../lights/distant.h"
+#include "../core/paramset.h"
+#include "../core/montecarlo.h"
 
 // DistantLight Method Definitions
 DistantLight::DistantLight(const Transform &light2world,

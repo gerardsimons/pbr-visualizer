@@ -37,8 +37,8 @@
 #define PBRT_MATERIALS_MIRROR_H
 
 // materials/mirror.h*
-#include "core/pbrt.h"
-#include "core/material.h"
+#include "../core/pbrt.h"
+#include "../core/material.h"
 
 // MirrorMaterial Declarations
 class MirrorMaterial : public Material {

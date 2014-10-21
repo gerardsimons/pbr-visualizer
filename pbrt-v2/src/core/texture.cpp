@@ -31,9 +31,9 @@
 
 
 // core/texture.cpp*
-#include "core/stdafx.h"
-#include "core/texture.h"
-#include "core/shape.h"
+#include "../core/stdafx.h"
+#include "../core/texture.h"
+#include "../core/shape.h"
 
 // Texture Inline Functions
 inline float SmoothStep(float min, float max, float value) {

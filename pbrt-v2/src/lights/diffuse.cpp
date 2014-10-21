@@ -31,10 +31,10 @@
 
 
 // lights/diffuse.cpp*
-#include "core/stdafx.h"
-#include "lights/diffuse.h"
-#include "core/paramset.h"
-#include "core/montecarlo.h"
+#include "../core/stdafx.h"
+#include "../lights/diffuse.h"
+#include "../core/paramset.h"
+#include "../core/montecarlo.h"
 
 // DiffuseAreaLight Method Definitions
 DiffuseAreaLight::~DiffuseAreaLight() {

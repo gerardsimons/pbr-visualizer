@@ -37,10 +37,10 @@
 #define PBRT_CORE_SAMPLER_H
 
 // core/sampler.h*
-#include "core/pbrt.h"
-#include "core/geometry.h"
-#include "core/rng.h"
-#include "core/memory.h"
+#include "../core/pbrt.h"
+#include "../core/geometry.h"
+#include "../core/rng.h"
+#include "../core/memory.h"
 
 // Sampling Declarations
 class Sampler {

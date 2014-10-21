@@ -31,7 +31,7 @@
 
 
 // core/floatfile.cpp*
-#include "core/stdafx.h"
+#include "../core/stdafx.h"
 #include "floatfile.h"
 #include <ctype.h>
 #include <stdlib.h>

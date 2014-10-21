@@ -31,9 +31,9 @@
 
 
 // filters/triangle.cpp*
-#include "core/stdafx.h"
-#include "filters/triangle.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../filters/triangle.h"
+#include "../core/paramset.h"
 
 // Triangle Filter Method Definitions
 float TriangleFilter::Evaluate(float x, float y) const {

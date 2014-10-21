@@ -31,15 +31,15 @@
 
 
 // integrators/diffuseprt.cpp*
-#include "core/stdafx.h"
-#include "integrators/diffuseprt.h"
-#include "core/sh.h"
-#include "core/light.h"
-#include "core/scene.h"
-#include "core/camera.h"
-#include "core/intersection.h"
-#include "core/paramset.h"
-#include "core/montecarlo.h"
+#include "../core/stdafx.h"
+#include "../integrators/diffuseprt.h"
+#include "../core/sh.h"
+#include "../core/light.h"
+#include "../core/scene.h"
+#include "../core/camera.h"
+#include "../core/intersection.h"
+#include "../core/paramset.h"
+#include "../core/montecarlo.h"
 
 // DiffusePRTIntegrator Method Definitions
 DiffusePRTIntegrator::DiffusePRTIntegrator(int lm, int ns)

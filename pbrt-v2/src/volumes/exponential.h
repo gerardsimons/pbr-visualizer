@@ -37,7 +37,7 @@
 #define PBRT_VOLUMES_EXPONENTIAL_H
 
 // volumes/exponential.h*
-#include "core/volume.h"
+#include "../core/volume.h"
 
 // ExponentialDensity Declarations
 class ExponentialDensity : public DensityRegion {

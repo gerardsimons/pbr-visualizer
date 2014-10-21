@@ -37,7 +37,7 @@
 #define PBRT_SHAPES_CONE_H
 
 // shapes/cone.h*
-#include "core/shape.h"
+#include "../core/shape.h"
 
 // Cone Declarations
 class Cone : public Shape {

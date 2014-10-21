@@ -31,8 +31,8 @@
 
 
 // core/error.cpp*
-#include "core/stdafx.h"
-#include "core/progressreporter.h"
+#include "../core/stdafx.h"
+#include "../core/progressreporter.h"
 
 // Error Reporting Includes
 #include <stdarg.h>
@@ -97,7 +97,7 @@ static void processError(const char *format, va_list args,
 
         const char *wordEnd = findWordEnd(msgPos);
         if (column + wordEnd - msgPos > width) {
-            errorString += "\n    ";
+            errorString += "\n";
             column = 4;
         }
         while (msgPos != wordEnd) {

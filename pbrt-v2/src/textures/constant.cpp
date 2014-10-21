@@ -31,8 +31,8 @@
 
 
 // textures/constant.cpp*
-#include "core/stdafx.h"
-#include "textures/constant.h"
+#include "../core/stdafx.h"
+#include "../textures/constant.h"
 
 // ConstantTexture Method Definitions
 ConstantTexture<float> *CreateConstantFloatTexture(const Transform &tex2world,

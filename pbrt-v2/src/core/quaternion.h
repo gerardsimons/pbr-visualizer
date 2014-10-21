@@ -37,8 +37,8 @@
 #define PBRT_CORE_QUATERNION_H
 
 // core/quaternion.h*
-#include "core/pbrt.h"
-#include "core/geometry.h"
+#include "../core/pbrt.h"
+#include "../core/geometry.h"
 
 // Quaternion Declarations
 struct Quaternion {

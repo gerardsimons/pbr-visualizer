@@ -37,9 +37,9 @@
 #define PBRT_CORE_MIPMAP_H
 
 // core/mipmap.h*
-#include "core/pbrt.h"
-#include "core/spectrum.h"
-#include "core/texture.h"
+#include "../core/pbrt.h"
+#include "../core/spectrum.h"
+#include "../core/texture.h"
 
 // MIPMap Declarations
 typedef enum {

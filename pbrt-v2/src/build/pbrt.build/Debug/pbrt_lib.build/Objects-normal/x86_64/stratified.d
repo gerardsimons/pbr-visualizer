@@ -1,0 +1,21 @@
+dependencies: \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/stratified.cpp \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/stdafx.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../samplers/stratified.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/sampler.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/../core/pbrt.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/error.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/../core/geometry.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/../core/rng.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/../core/probes.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/../core/memory.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/../core/parallel.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/film.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/paramset.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/fileutil.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/../core/texture.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/../core/spectrum.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/transform.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/quaternion.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/camera.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/samplers/../core/montecarlo.h

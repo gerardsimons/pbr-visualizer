@@ -31,10 +31,10 @@
 
 
 // core/probes.cpp*
-#include "core/stdafx.h"
-#include "core/probes.h"
+#include "../core/stdafx.h"
+#include "../core/probes.h"
 #ifdef PBRT_PROBES_COUNTERS
-#include "core/parallel.h"
+#include "../core/parallel.h"
 #include <map>
 using std::map;
 
@@ -271,8 +271,8 @@ StatsPercentage::StatsPercentage(const string &category, const string &name) {
 
 
 // Statistics Counters Probe Declarations
-static StatsCounter shapesMade("Shapes", "Total Shapes Created");
-static StatsCounter trianglesMade("Shapes", "Total Triangles Created");
+static StatsCounter shapesMade("../shapes", "Total Shapes Created");
+static StatsCounter trianglesMade("../shapes", "Total Triangles Created");
 static StatsCounter cameraRays("Rays", "Camera Rays Traced");
 static StatsCounter specularReflectionRays("Rays", "Specular Reflection Rays Traced");
 static StatsCounter specularRefractionRays("Rays", "Specular Refraction Rays Traced");

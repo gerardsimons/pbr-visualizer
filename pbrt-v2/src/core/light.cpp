@@ -31,11 +31,11 @@
 
 
 // core/light.cpp*
-#include "core/stdafx.h"
+#include "../core/stdafx.h"
 #include "light.h"
-#include "core/scene.h"
-#include "core/montecarlo.h"
-#include "core/paramset.h"
+#include "../core/scene.h"
+#include "../core/montecarlo.h"
+#include "../core/paramset.h"
 #include "sh.h"
 
 unsigned short Light::IdCount = 0;

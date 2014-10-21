@@ -31,9 +31,9 @@
 
 
 // filters/gaussian.cpp*
-#include "core/stdafx.h"
-#include "filters/gaussian.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../filters/gaussian.h"
+#include "../core/paramset.h"
 
 // Gaussian Filter Method Definitions
 float GaussianFilter::Evaluate(float x, float y) const {

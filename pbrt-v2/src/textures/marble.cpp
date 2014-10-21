@@ -31,8 +31,8 @@
 
 
 // textures/marble.cpp*
-#include "core/stdafx.h"
-#include "textures/marble.h"
+#include "../core/stdafx.h"
+#include "../textures/marble.h"
 
 // MarbleTexture Method Definitions
 Texture<float> *CreateMarbleFloatTexture(const Transform &tex2world,

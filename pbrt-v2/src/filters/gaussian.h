@@ -37,7 +37,7 @@
 #define PBRT_FILTERS_GAUSSIAN_H
 
 // filters/gaussian.h*
-#include "core/filter.h"
+#include "../core/filter.h"
 
 // Gaussian Filter Declarations
 class GaussianFilter : public Filter {

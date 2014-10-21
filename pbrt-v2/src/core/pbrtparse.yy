@@ -46,6 +46,8 @@ extern void include_push(char *filename);
 int line_num = 0;
 string current_file;
 
+int yydebug = 1;
+
 #define YYMAXDEPTH 100000000
 
 void yyerror(const char *str) {

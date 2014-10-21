@@ -31,10 +31,10 @@
 
 
 // core/paramset.cpp*
-#include "core/stdafx.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../core/paramset.h"
 #include "floatfile.h"
-#include "textures/constant.h"
+#include "../textures/constant.h"
 
 // ParamSet Macros
 #define ADD_PARAM_TYPE(T, vec) \

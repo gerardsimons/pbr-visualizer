@@ -1,0 +1,20 @@
+dependencies: \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/bvh.cpp \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/stdafx.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../accelerators/bvh.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/pbrt.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/error.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/primitive.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/../core/shape.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/../core/geometry.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/transform.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/quaternion.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/diffgeom.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/../core/memory.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/../core/parallel.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/../core/probes.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/material.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/paramset.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/fileutil.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/../core/texture.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/accelerators/../core/../core/spectrum.h

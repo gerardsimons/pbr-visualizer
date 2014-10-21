@@ -37,7 +37,7 @@
 #define PBRT_FILTERS_MITCHELL_H
 
 // filters/mitchell.h*
-#include "core/filter.h"
+#include "../core/filter.h"
 
 // Mitchell Filter Declarations
 class MitchellFilter : public Filter {

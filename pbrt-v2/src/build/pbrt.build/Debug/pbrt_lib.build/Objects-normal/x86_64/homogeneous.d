@@ -1,0 +1,28 @@
+dependencies: \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/homogeneous.cpp \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/stdafx.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../volumes/homogeneous.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/volume.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/../core/pbrt.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/error.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/../core/spectrum.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/../core/parallel.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/../core/probes.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/../core/geometry.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/transform.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/quaternion.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/integrator.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/primitive.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/../core/shape.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/diffgeom.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/../core/memory.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/material.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/light.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/../core/rng.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/reflection.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/kdtree.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/../core/sampler.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/../core/renderer.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/paramset.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/fileutil.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/volumes/../core/../core/texture.h

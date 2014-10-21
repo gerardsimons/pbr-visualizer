@@ -37,8 +37,8 @@
 #define PBRT_CORE_CAMERA_H
 
 // core/camera.h*
-#include "core/pbrt.h"
-#include "core/geometry.h"
+#include "../core/pbrt.h"
+#include "../core/geometry.h"
 #include "transform.h"
 
 // Camera Declarations

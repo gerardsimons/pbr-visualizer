@@ -31,11 +31,11 @@
 
 
 // core/camera.cpp*
-#include "core/stdafx.h"
-#include "core/camera.h"
-#include "core/film.h"
-#include "core/montecarlo.h"
-#include "core/sampler.h"
+#include "../core/stdafx.h"
+#include "../core/camera.h"
+#include "../core/film.h"
+#include "../core/montecarlo.h"
+#include "../core/sampler.h"
 
 // Camera Method Definitions
 Camera::~Camera() {

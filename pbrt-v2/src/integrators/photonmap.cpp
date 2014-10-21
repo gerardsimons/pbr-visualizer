@@ -31,15 +31,15 @@
 
 
 // integrators/photonmap.cpp*
-#include "core/stdafx.h"
-#include "integrators/photonmap.h"
-#include "core/scene.h"
-#include "core/montecarlo.h"
-#include "core/sampler.h"
-#include "core/progressreporter.h"
-#include "core/intersection.h"
-#include "core/paramset.h"
-#include "core/camera.h"
+#include "../core/stdafx.h"
+#include "../integrators/photonmap.h"
+#include "../core/scene.h"
+#include "../core/montecarlo.h"
+#include "../core/sampler.h"
+#include "../core/progressreporter.h"
+#include "../core/intersection.h"
+#include "../core/paramset.h"
+#include "../core/camera.h"
 
 
 // PhotonIntegrator Local Declarations

@@ -31,12 +31,12 @@
 
 
 // shapes/trianglemesh.cpp*
-#include "core/stdafx.h"
-#include "shapes/trianglemesh.h"
-#include "core/texture.h"
-#include "textures/constant.h"
-#include "core/paramset.h"
-#include "core/montecarlo.h"
+#include "../core/stdafx.h"
+#include "../shapes/trianglemesh.h"
+#include "../core/texture.h"
+#include "../textures/constant.h"
+#include "../core/paramset.h"
+#include "../core/montecarlo.h"
 
 // TriangleMesh Method Definitions
 TriangleMesh::TriangleMesh(const Transform *o2w, const Transform *w2o,
@@ -372,7 +372,7 @@ TriangleMesh *CreateTriangleMeshShape(const Transform *o2w, const Transform *w2o
         bool reverseOrientation, const ParamSet &params,
         map<string, Reference<Texture<float> > > *floatTextures) {
     int nvi, npi, nuvi, nsi, nni;
-	printf("CreateTriangleMeshShape called.\n");
+//	printf("CreateTriangleMeshShape called.\n");
     const int *vi = params.FindInt("indices", &nvi);
     const Point *P = params.FindPoint("P", &npi);
     const float *uvs = params.FindFloat("uv", &nuvi);

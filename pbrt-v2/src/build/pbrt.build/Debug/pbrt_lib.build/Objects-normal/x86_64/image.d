@@ -1,0 +1,21 @@
+dependencies: \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/image.cpp \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/stdafx.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/image.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/pbrt.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/error.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/film.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/sampler.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/../core/geometry.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/../core/rng.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/../core/probes.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/../core/memory.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/../core/parallel.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/filter.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/paramset.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/fileutil.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/../core/texture.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/../core/spectrum.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/transform.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/quaternion.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/film/../core/imageio.h

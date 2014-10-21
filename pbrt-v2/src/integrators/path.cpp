@@ -31,11 +31,11 @@
 
 
 // integrators/path.cpp*
-#include "core/stdafx.h"
-#include "integrators/path.h"
-#include "core/scene.h"
-#include "core/intersection.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../integrators/path.h"
+#include "../core/scene.h"
+#include "../core/intersection.h"
+#include "../core/paramset.h"
 
 //Custom includes by me
 #include <vector>
@@ -132,6 +132,7 @@ Spectrum PathIntegrator::Li(const Scene *scene, const Renderer *renderer,
 		data.spectrum = L;
 		data.interactionType = (ushort)flags;
 		data.lightId = light->id;
+		data.throughput = pathThroughput;
 		
 		intersectData.push_back(data);
 
@@ -147,9 +148,9 @@ Spectrum PathIntegrator::Li(const Scene *scene, const Renderer *renderer,
 		isectp = &localIsect;
 	}
 	
-    PathData pathData(sample->imageX,sample->imageY,sample->lensU, sample->lensV, sample->time,pathThroughput,L,intersectData);
+    PathData pathData = PathData(sample->imageX,sample->imageY,sample->lensU, sample->lensV, sample->time,pathThroughput,L,intersectData);
     
-    DataDumper::AddToBuffer(id,pathData);
+    DataDumper::AddToBuffer(pathData);
 	return L;
 }
 

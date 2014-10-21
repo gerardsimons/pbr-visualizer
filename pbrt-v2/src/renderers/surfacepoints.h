@@ -37,9 +37,9 @@
 #define PBRT_RENDERERS_SURFACEPOINTS_H
 
 // renderers/surfacepoints.h*
-#include "core/pbrt.h"
-#include "core/geometry.h"
-#include "core/renderer.h"
+#include "../core/pbrt.h"
+#include "../core/geometry.h"
+#include "../core/renderer.h"
 
 // SurfacePointsRenderer Declarations
 struct SurfacePoint {

@@ -37,8 +37,8 @@
 #define PBRT_MATERIALS_KDSUBSURFACE_H
 
 // materials/kdsubsurface.h*
-#include "core/pbrt.h"
-#include "core/material.h"
+#include "../core/pbrt.h"
+#include "../core/material.h"
 
 // KdSubsurfaceMaterial Declarations
 class KdSubsurfaceMaterial : public Material {

@@ -37,10 +37,10 @@
 #define PBRT_LIGHTS_PROJECTION_H
 
 // lights/projection.h*
-#include "core/pbrt.h"
-#include "core/light.h"
-#include "core/shape.h"
-#include "core/mipmap.h"
+#include "../core/pbrt.h"
+#include "../core/light.h"
+#include "../core/shape.h"
+#include "../core/mipmap.h"
 
 // ProjectionLight Declarations
 class ProjectionLight : public Light {

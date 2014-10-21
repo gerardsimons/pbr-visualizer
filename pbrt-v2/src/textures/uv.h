@@ -37,9 +37,9 @@
 #define PBRT_TEXTURES_UV_H
 
 // textures/uv.h*
-#include "core/pbrt.h"
-#include "core/texture.h"
-#include "core/paramset.h"
+#include "../core/pbrt.h"
+#include "../core/texture.h"
+#include "../core/paramset.h"
 
 // UVTexture Declarations
 class UVTexture : public Texture<Spectrum> {

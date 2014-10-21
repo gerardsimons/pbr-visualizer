@@ -37,15 +37,15 @@
 #define PBRT_CORE_INTEGRATOR_H
 
 // core/integrator.h*
-#include "core/pbrt.h"
+#include "../core/pbrt.h"
 #include "primitive.h"
-#include "core/spectrum.h"
+#include "../core/spectrum.h"
 #include "light.h"
 #include "reflection.h"
-#include "core/sampler.h"
+#include "../core/sampler.h"
 #include "material.h"
-#include "core/probes.h"
-#include "core/renderer.h"
+#include "../core/probes.h"
+#include "../core/renderer.h"
 
 // Integrator Declarations
 class Integrator {

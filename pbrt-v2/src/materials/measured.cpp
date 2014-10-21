@@ -31,10 +31,10 @@
 
 
 // materials/measured.cpp*
-#include "core/stdafx.h"
-#include "materials/measured.h"
-#include "core/paramset.h"
-#include "core/floatfile.h"
+#include "../core/stdafx.h"
+#include "../materials/measured.h"
+#include "../core/paramset.h"
+#include "../core/floatfile.h"
 
 /*
   File format descriptions:

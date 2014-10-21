@@ -31,9 +31,9 @@
 
 
 // filters/sinc.cpp*
-#include "core/stdafx.h"
-#include "filters/sinc.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../filters/sinc.h"
+#include "../core/paramset.h"
 
 // Sinc Filter Method Definitions
 float LanczosSincFilter::Evaluate(float x, float y) const {

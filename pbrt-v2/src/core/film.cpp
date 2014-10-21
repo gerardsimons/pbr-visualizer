@@ -31,9 +31,9 @@
 
 
 // core/film.cpp*
-#include "core/stdafx.h"
-#include "core/film.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../core/film.h"
+#include "../core/paramset.h"
 
 // Film Method Definitions
 Film::~Film() {

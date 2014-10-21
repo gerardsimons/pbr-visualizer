@@ -31,8 +31,8 @@
 
 
 // textures/bilerp.cpp*
-#include "core/stdafx.h"
-#include "textures/bilerp.h"
+#include "../core/stdafx.h"
+#include "../textures/bilerp.h"
 
 // BilerpTexture Method Definitions
 BilerpTexture<float> *CreateBilerpFloatTexture(const Transform &tex2world,

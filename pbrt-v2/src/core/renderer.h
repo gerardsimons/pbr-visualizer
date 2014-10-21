@@ -37,7 +37,7 @@
 #define PBRT_CORE_RENDERER_H
 
 // core/renderer.h*
-#include "core/pbrt.h"
+#include "../core/pbrt.h"
 
 // Renderer Declarations
 class Renderer {

@@ -31,7 +31,7 @@
 
 
 // core/quaternion.cpp*
-#include "core/stdafx.h"
+#include "../core/stdafx.h"
 #include "quaternion.h"
 #include "transform.h"
 

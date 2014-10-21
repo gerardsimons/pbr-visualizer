@@ -31,18 +31,18 @@
 
 
 // integrators/dipolesubsurface.cpp*
-#include "core/stdafx.h"
-#include "integrators/dipolesubsurface.h"
-#include "core/scene.h"
-#include "core/montecarlo.h"
-#include "core/sampler.h"
-#include "core/progressreporter.h"
-#include "core/intersection.h"
-#include "core/paramset.h"
-#include "core/reflection.h"
-#include "core/octree.h"
-#include "core/camera.h"
-#include "core/floatfile.h"
+#include "../core/stdafx.h"
+#include "../integrators/dipolesubsurface.h"
+#include "../core/scene.h"
+#include "../core/montecarlo.h"
+#include "../core/sampler.h"
+#include "../core/progressreporter.h"
+#include "../core/intersection.h"
+#include "../core/paramset.h"
+#include "../core/reflection.h"
+#include "../core/octree.h"
+#include "../core/camera.h"
+#include "../core/floatfile.h"
 struct DiffusionReflectance;
 
 // DipoleSubsurfaceIntegrator Local Declarations

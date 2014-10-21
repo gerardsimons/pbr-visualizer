@@ -31,8 +31,8 @@
 
 
 // textures/fbm.cpp*
-#include "core/stdafx.h"
-#include "textures/fbm.h"
+#include "../core/stdafx.h"
+#include "../textures/fbm.h"
 
 // FBmTexture Method Definitions
 FBmTexture<float> *CreateFBmFloatTexture(const Transform &tex2world,

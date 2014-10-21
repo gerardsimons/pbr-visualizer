@@ -31,14 +31,14 @@
 
 
 // integrators/glossyprt.cpp*
-#include "core/stdafx.h"
-#include "integrators/glossyprt.h"
-#include "core/sh.h"
-#include "core/light.h"
-#include "core/scene.h"
-#include "core/camera.h"
-#include "core/intersection.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../integrators/glossyprt.h"
+#include "../core/sh.h"
+#include "../core/light.h"
+#include "../core/scene.h"
+#include "../core/camera.h"
+#include "../core/intersection.h"
+#include "../core/paramset.h"
 
 // GlossyPRTIntegrator Method Definitions
 GlossyPRTIntegrator::~GlossyPRTIntegrator() {

@@ -31,12 +31,12 @@
 
 
 // materials/substrate.cpp*
-#include "core/stdafx.h"
-#include "materials/substrate.h"
-#include "core/spectrum.h"
-#include "core/reflection.h"
-#include "core/paramset.h"
-#include "core/texture.h"
+#include "../core/stdafx.h"
+#include "../materials/substrate.h"
+#include "../core/spectrum.h"
+#include "../core/reflection.h"
+#include "../core/paramset.h"
+#include "../core/texture.h"
 
 // SubstrateMaterial Method Definitions
 BSDF *SubstrateMaterial::GetBSDF(const DifferentialGeometry &dgGeom, const DifferentialGeometry &dgShading, MemoryArena &arena) const {

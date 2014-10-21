@@ -31,11 +31,11 @@
 
 
 // integrators/single.cpp*
-#include "core/stdafx.h"
-#include "integrators/single.h"
-#include "core/scene.h"
-#include "core/paramset.h"
-#include "core/montecarlo.h"
+#include "../core/stdafx.h"
+#include "../integrators/single.h"
+#include "../core/scene.h"
+#include "../core/paramset.h"
+#include "../core/montecarlo.h"
 
 // SingleScatteringIntegrator Method Definitions
 void SingleScatteringIntegrator::RequestSamples(Sampler *sampler, Sample *sample,

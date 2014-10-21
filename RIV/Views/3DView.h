@@ -81,8 +81,6 @@ public:
 	
 	static int windowHandle;
 	
-
-    
     void Reshape(int newWidth, int newHeight);
     void Draw();
     bool HandleMouse(int button, int state, int x, int y);

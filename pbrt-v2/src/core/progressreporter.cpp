@@ -31,10 +31,10 @@
 
 
 // core/progressreporter.cpp*
-#include "core/stdafx.h"
-#include "core/progressreporter.h"
+#include "../core/stdafx.h"
+#include "../core/progressreporter.h"
 #include "timer.h"
-#include "core/parallel.h"
+#include "../core/parallel.h"
 #if defined(PBRT_IS_WINDOWS)
 #include <windows.h>
 #else

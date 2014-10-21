@@ -31,10 +31,10 @@
 
 
 // shapes/disk.cpp*
-#include "core/stdafx.h"
-#include "shapes/disk.h"
-#include "core/paramset.h"
-#include "core/montecarlo.h"
+#include "../core/stdafx.h"
+#include "../shapes/disk.h"
+#include "../core/paramset.h"
+#include "../core/montecarlo.h"
 
 // Disk Method Definitions
 Disk::Disk(const Transform *o2w, const Transform *w2o, bool ro,

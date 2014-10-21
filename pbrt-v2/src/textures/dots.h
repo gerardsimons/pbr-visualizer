@@ -37,9 +37,9 @@
 #define PBRT_TEXTURES_DOTS_H
 
 // textures/dots.h*
-#include "core/pbrt.h"
-#include "core/texture.h"
-#include "core/paramset.h"
+#include "../core/pbrt.h"
+#include "../core/texture.h"
+#include "../core/paramset.h"
 
 // DotsTexture Declarations
 template <typename T> class DotsTexture : public Texture<T> {

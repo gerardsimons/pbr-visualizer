@@ -37,7 +37,7 @@
 #define PBRT_SHAPES_SPHERE_H
 
 // shapes/sphere.h*
-#include "core/shape.h"
+#include "../core/shape.h"
 
 // Sphere Declarations
 class Sphere : public Shape {

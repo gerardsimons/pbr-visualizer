@@ -37,8 +37,8 @@
 #define PBRT_MATERIALS_MIXMAT_H
 
 // materials/mixmat.h*
-#include "core/pbrt.h"
-#include "core/material.h"
+#include "../core/pbrt.h"
+#include "../core/material.h"
 
 // MixMaterial Declarations
 class MixMaterial : public Material {

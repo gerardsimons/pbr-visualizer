@@ -37,8 +37,8 @@
 #define PBRT_SAMPLERS_ADAPTIVE_H
 
 // samplers/adaptive.h*
-#include "core/pbrt.h"
-#include "core/sampler.h"
+#include "../core/pbrt.h"
+#include "../core/sampler.h"
 
 // AdaptiveSampler Declarations
 class AdaptiveSampler : public Sampler {

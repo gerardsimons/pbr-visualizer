@@ -31,15 +31,15 @@
 
 
 // integrators/igi.cpp*
-#include "core/stdafx.h"
-#include "integrators/igi.h"
-#include "core/scene.h"
-#include "core/montecarlo.h"
-#include "core/progressreporter.h"
-#include "core/sampler.h"
-#include "core/intersection.h"
-#include "core/paramset.h"
-#include "core/camera.h"
+#include "../core/stdafx.h"
+#include "../integrators/igi.h"
+#include "../core/scene.h"
+#include "../core/montecarlo.h"
+#include "../core/progressreporter.h"
+#include "../core/sampler.h"
+#include "../core/intersection.h"
+#include "../core/paramset.h"
+#include "../core/camera.h"
 
 // IGIIntegrator Method Definitions
 IGIIntegrator::~IGIIntegrator() {

@@ -31,16 +31,16 @@
 
 
 // renderers/samplerrenderer.cpp*
-#include "core/stdafx.h"
-#include "renderers/samplerrenderer.h"
-#include "core/scene.h"
-#include "core/film.h"
-#include "core/volume.h"
-#include "core/sampler.h"
-#include "core/integrator.h"
-#include "core/progressreporter.h"
-#include "core/camera.h"
-#include "core/intersection.h"
+#include "../core/stdafx.h"
+#include "../renderers/samplerrenderer.h"
+#include "../core/scene.h"
+#include "../core/film.h"
+#include "../core/volume.h"
+#include "../core/sampler.h"
+#include "../core/integrator.h"
+#include "../core/progressreporter.h"
+#include "../core/camera.h"
+#include "../core/intersection.h"
 
 static uint32_t hash(char *key, uint32_t len)
 {

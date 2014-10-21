@@ -31,8 +31,8 @@
 
 
 // textures/windy.cpp*
-#include "core/stdafx.h"
-#include "textures/windy.h"
+#include "../core/stdafx.h"
+#include "../textures/windy.h"
 
 // WindyTexture Method Definitions
 WindyTexture<float> *CreateWindyFloatTexture(const Transform &tex2world,

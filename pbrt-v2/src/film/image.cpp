@@ -31,11 +31,11 @@
 
 
 // film/image.cpp*
-#include "core/stdafx.h"
-#include "film/image.h"
-#include "core/spectrum.h"
-#include "core/parallel.h"
-#include "core/imageio.h"
+#include "../core/stdafx.h"
+#include "image.h"
+#include "../core/spectrum.h"
+#include "../core/parallel.h"
+#include "../core/imageio.h"
 
 // ImageFilm Method Definitions
 ImageFilm::ImageFilm(int xres, int yres, Filter *filt, const float crop[4],
@@ -177,6 +177,8 @@ void ImageFilm::GetPixelExtent(int *xstart, int *xend,
 
 void ImageFilm::WriteImage(float splatScale) {
     // Convert image to RGB and compute final pixel values
+	printf("**** splatScale = %f\n",splatScale);
+	
     int nPix = xPixelCount * yPixelCount;
     float *rgb = new float[3*nPix];
     int offset = 0;
@@ -238,7 +240,7 @@ ImageFilm *CreateImageFilm(const ParamSet &params, Filter *filter) {
 #else
         filename = "pbrt.tga";
 #endif
-
+	
     int xres = params.FindOneInt("xresolution", 640);
     int yres = params.FindOneInt("yresolution", 480);
     if (PbrtOptions.quickRender) xres = max(1, xres / 4);

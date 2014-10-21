@@ -37,7 +37,7 @@
 #define PBRT_CORE_SCENE_H
 
 // core/scene.h*
-#include "core/pbrt.h"
+#include "../core/pbrt.h"
 #include "primitive.h"
 #include "integrator.h"
 

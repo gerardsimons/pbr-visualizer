@@ -274,7 +274,7 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 bool RIVImageView::HandleMouseMotion(int x, int y) {
     y = height - y;
 	if(isDragging) {
-		Point pixel = viewToPixelSpace(x,y);
+		RIVPoint pixel = viewToPixelSpace(x,y);
 		selection.end = pixel;
         glutPostRedisplay();
 		return true;
@@ -296,11 +296,11 @@ void RIVImageView::clearSelection() {
     }
 }
 
-Point RIVImageView::viewToPixelSpace(int x, int y) {
+RIVPoint RIVImageView::viewToPixelSpace(int x, int y) {
 	int pixelX = round((float)x / imageMagnificationX);
 	int pixelY = round((float)y / imageMagnificationY);
 
-	Point pixel;
+	RIVPoint pixel;
 
 	//How many pixels does the original image have?
 	int nrOfXPixels = round(imageWidth / imageMagnificationX);

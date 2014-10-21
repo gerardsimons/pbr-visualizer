@@ -37,10 +37,10 @@
 #define PBRT_SAMPLERS_LOWDISCREPANCY_H
 
 // samplers/lowdiscrepancy.h*
-#include "core/sampler.h"
-#include "core/paramset.h"
-#include "core/film.h"
-#include "core/parallel.h"
+#include "../core/sampler.h"
+#include "../core/paramset.h"
+#include "../core/film.h"
+#include "../core/parallel.h"
 
 // LDSampler Declarations
 class LDSampler : public Sampler {

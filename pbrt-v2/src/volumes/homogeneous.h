@@ -37,7 +37,7 @@
 #define PBRT_VOLUMES_HOMOGENEOUS_H
 
 // volumes/homogeneous.h*
-#include "core/volume.h"
+#include "../core/volume.h"
 
 // HomogeneousVolumeDensity Declarations
 class HomogeneousVolumeDensity : public VolumeRegion {

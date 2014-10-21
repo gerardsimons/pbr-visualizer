@@ -37,11 +37,11 @@
 #define PBRT_CORE_REFLECTION_H
 
 // core/reflection.h*
-#include "core/pbrt.h"
-#include "core/geometry.h"
-#include "core/shape.h"
+#include "../core/pbrt.h"
+#include "../core/geometry.h"
+#include "../core/shape.h"
 #	include "rng.h"
-#include "core/spectrum.h"
+#include "../core/spectrum.h"
 #include "kdtree.h"
 
 // Reflection Declarations

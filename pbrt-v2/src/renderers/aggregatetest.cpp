@@ -31,14 +31,14 @@
 
 
 // renderers/aggregatetest.cpp*
-#include "core/stdafx.h"
-#include "renderers/aggregatetest.h"
-#include "core/progressreporter.h"
-#include "core/scene.h"
-#include "core/paramset.h"
-#include "core/montecarlo.h"
-#include "core/primitive.h"
-#include "core/intersection.h"
+#include "../core/stdafx.h"
+#include "../renderers/aggregatetest.h"
+#include "../core/progressreporter.h"
+#include "../core/scene.h"
+#include "../core/paramset.h"
+#include "../core/montecarlo.h"
+#include "../core/primitive.h"
+#include "../core/intersection.h"
 
 // AggregateTest Method Definitions
 AggregateTest::AggregateTest(int niters,

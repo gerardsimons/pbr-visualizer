@@ -31,12 +31,12 @@
 
 
 // materials/plastic.cpp*
-#include "core/stdafx.h"
-#include "materials/plastic.h"
-#include "core/spectrum.h"
-#include "core/reflection.h"
-#include "core/paramset.h"
-#include "core/texture.h"
+#include "../core/stdafx.h"
+#include "../materials/plastic.h"
+#include "../core/spectrum.h"
+#include "../core/reflection.h"
+#include "../core/paramset.h"
+#include "../core/texture.h"
 
 // PlasticMaterial Method Definitions
 BSDF *PlasticMaterial::GetBSDF(const DifferentialGeometry &dgGeom,

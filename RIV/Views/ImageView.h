@@ -48,12 +48,12 @@ private:
 
 	void createTextureImage();
     void createTextureImage(BMPImage* image);
-    Point viewToPixelSpace(int x, int y);
+    RIVPoint viewToPixelSpace(int x, int y);
 	void clearSelection();
     BMPImage* renderedImage;
 	//In screenspace
-	Point imageStart;
-	Point imageEnd;
+	RIVPoint imageStart;
+	RIVPoint imageEnd;
 	//image size in pixels
 	int imageWidth, imageHeight;
     

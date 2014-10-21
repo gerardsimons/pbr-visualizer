@@ -31,9 +31,9 @@
 
 
 // integrators/emission.cpp*
-#include "core/stdafx.h"
-#include "integrators/emission.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../integrators/emission.h"
+#include "../core/paramset.h"
 
 // EmissionIntegrator Method Definitions
 void EmissionIntegrator::RequestSamples(Sampler *sampler, Sample *sample,

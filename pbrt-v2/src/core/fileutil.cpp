@@ -29,7 +29,7 @@
 
  */
 
-#include "core/stdafx.h"
+#include "../core/stdafx.h"
 #include "fileutil.h"
 #include <cstdlib>
 #include <climits>

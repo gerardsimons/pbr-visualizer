@@ -31,10 +31,10 @@
 
 
 // core/primitive.cpp*
-#include "core/stdafx.h"
+#include "../core/stdafx.h"
 #include "primitive.h"
 #include "light.h"
-#include "core/intersection.h"
+#include "../core/intersection.h"
 
 // Primitive Method Definitions
 uint32_t Primitive::nextprimitiveId = 1;

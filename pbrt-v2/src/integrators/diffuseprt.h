@@ -37,8 +37,8 @@
 #define PBRT_INTEGRATORS_DIFFUSEPRT_H
 
 // integrators/diffuseprt.h*
-#include "core/pbrt.h"
-#include "core/integrator.h"
+#include "../core/pbrt.h"
+#include "../core/integrator.h"
 
 // DiffusePRTIntegrator Declarations
 class DiffusePRTIntegrator : public SurfaceIntegrator {

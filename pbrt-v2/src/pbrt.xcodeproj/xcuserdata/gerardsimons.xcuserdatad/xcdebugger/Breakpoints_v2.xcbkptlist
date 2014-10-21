@@ -9,44 +9,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "datadumper.cpp"
-            timestampString = "432134613.455046"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "171"
-            endingLineNumber = "171"
-            landmarkName = "DataDumper::WriteBufferToFile()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "datadumper.cpp"
-            timestampString = "432134613.455046"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "170"
-            endingLineNumber = "170"
-            landmarkName = "DataDumper::WriteBufferToFile()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "integrators/path.cpp"
-            timestampString = "432465917.606873"
+            timestampString = "433424198.615286"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
+            startingLineNumber = "72"
+            endingLineNumber = "72"
             landmarkName = "PathIntegrator::Li(const Scene *scene, const Renderer *renderer, const RayDifferential &amp;r, const Intersection &amp;isect, const Sample *sample, RNG &amp;rng, MemoryArena &amp;arena)"
             landmarkType = "5">
          </BreakpointContent>
@@ -58,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "integrators/path.cpp"
-            timestampString = "430493620.99009"
+            timestampString = "434992441.600684"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
             landmarkName = "PathIntegrator::Li(const Scene *scene, const Renderer *renderer, const RayDifferential &amp;r, const Intersection &amp;isect, const Sample *sample, RNG &amp;rng, MemoryArena &amp;arena)"
             landmarkType = "5">
          </BreakpointContent>
@@ -74,12 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "renderers/samplerrenderer.cpp"
-            timestampString = "430491023.775178"
+            timestampString = "433431583.791074"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "189"
-            endingLineNumber = "189"
-            landmarkName = "SamplerRenderer::Render(const Scene *scene)"
+            startingLineNumber = "237"
+            endingLineNumber = "237"
+            landmarkName = "SamplerRenderer::Li(const Scene *scene, const RayDifferential &amp;ray, const Sample *sample, RNG &amp;rng, MemoryArena &amp;arena, Intersection *isect, Spectrum *T)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -89,13 +57,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "integrators/path.h"
-            timestampString = "430493157.353757"
+            filePath = "datadumper.cpp"
+            timestampString = "434899081.763643"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "58"
-            endingLineNumber = "58"
-            landmarkName = "PathIntegrator(int md)"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
+            landmarkName = "DataDumper::Init(const std::string&amp; imagename, int numDumpers, bool writeASCII_, bool writeBinary_, bool writeToDatabase_)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -105,13 +73,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "integrators/path.cpp"
-            timestampString = "432034970.127864"
+            filePath = "datadumper.cpp"
+            timestampString = "434902707.852201"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
-            landmarkName = "PathIntegrator::Li(const Scene *scene, const Renderer *renderer, const RayDifferential &amp;r, const Intersection &amp;isect, const Sample *sample, RNG &amp;rng, MemoryArena &amp;arena)"
+            startingLineNumber = "348"
+            endingLineNumber = "348"
+            landmarkName = "DataDumper::WriteBufferToDB()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -121,13 +89,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "integrators/path.cpp"
-            timestampString = "432465917.606873"
+            filePath = "datadumper.cpp"
+            timestampString = "434902707.852201"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
-            landmarkName = "PathIntegrator::Li(const Scene *scene, const Renderer *renderer, const RayDifferential &amp;r, const Intersection &amp;isect, const Sample *sample, RNG &amp;rng, MemoryArena &amp;arena)"
+            startingLineNumber = "343"
+            endingLineNumber = "343"
+            landmarkName = "DataDumper::WriteBufferToDB()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -137,13 +105,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "integrators/path.cpp"
-            timestampString = "432035257.742349"
+            filePath = "datadumper.cpp"
+            timestampString = "434902707.852201"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
-            landmarkName = "PathIntegrator::Li(const Scene *scene, const Renderer *renderer, const RayDifferential &amp;r, const Intersection &amp;isect, const Sample *sample, RNG &amp;rng, MemoryArena &amp;arena)"
+            startingLineNumber = "346"
+            endingLineNumber = "346"
+            landmarkName = "DataDumper::WriteBufferToDB()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -153,29 +121,93 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "core/api.cpp"
-            timestampString = "432465177.369983"
+            filePath = "datadumper.cpp"
+            timestampString = "434902707.852201"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "997"
-            endingLineNumber = "997"
-            landmarkName = "pbrtShape(const string &amp;name, const ParamSet &amp;params)"
+            startingLineNumber = "270"
+            endingLineNumber = "270"
+            landmarkName = "DataDumper::AddToBuffer(const PathData&amp; pathData)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "datadumper.cpp"
+            timestampString = "434902707.852201"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "255"
+            endingLineNumber = "255"
+            landmarkName = "DataDumper::AddToBuffer(const PathData&amp; pathData)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "datadumper.cpp"
+            timestampString = "434902707.852201"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "355"
+            endingLineNumber = "355"
+            landmarkName = "DataDumper::WriteBufferToFile()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "datadumper.cpp"
+            timestampString = "434902707.852201"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "256"
+            endingLineNumber = "256"
+            landmarkName = "DataDumper::AddToBuffer(const PathData&amp; pathData)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "core/imageio.cpp"
+            timestampString = "434975943.895805"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "ReadImage(const string &amp;name, int *width, int *height)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "integrators/path.cpp"
-            timestampString = "432465913.339585"
+            filePath = "core/api.cpp"
+            timestampString = "435502402.49273"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "137"
-            endingLineNumber = "137"
-            landmarkName = "PathIntegrator::Li(const Scene *scene, const Renderer *renderer, const RayDifferential &amp;r, const Intersection &amp;isect, const Sample *sample, RNG &amp;rng, MemoryArena &amp;arena)"
+            startingLineNumber = "1279"
+            endingLineNumber = "1279"
+            landmarkName = "RenderOptions::MakeCamera()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -185,78 +217,46 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "core/shape.cpp"
-            timestampString = "432468592.649479"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
-            landmarkName = "Shape::Shape(const Transform *o2w, const Transform *w2o, bool ro)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "core/shape.cpp"
-            timestampString = "432468594.359878"
+            filePath = "filters/box.cpp"
+            timestampString = "435503601.851473"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "47"
             endingLineNumber = "47"
-            landmarkName = "Shape::Shape(const Transform *o2w, const Transform *w2o, bool ro)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "core/shape.cpp"
-            timestampString = "432468595.353112"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
-            landmarkName = "Shape::Shape(const Transform *o2w, const Transform *w2o, bool ro)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "shapes/trianglemesh.cpp"
-            timestampString = "432474199.451763"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "375"
-            endingLineNumber = "375"
-            landmarkName = "CreateTriangleMeshShape(const Transform *o2w, const Transform *w2o, bool reverseOrientation, const ParamSet &amp;params, map&lt;string, Reference&lt;Texture&lt;float&gt; &gt; &gt; *floatTextures)"
+            landmarkName = "CreateBoxFilter(const ParamSet &amp;ps)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "integrators/path.cpp"
-            timestampString = "432476974.169349"
+            filePath = "main/pbrt.cpp"
+            timestampString = "435530871.776794"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "144"
-            endingLineNumber = "144"
-            landmarkName = "PathIntegrator::Li(const Scene *scene, const Renderer *renderer, const RayDifferential &amp;r, const Intersection &amp;isect, const Sample *sample, RNG &amp;rng, MemoryArena &amp;arena)"
-            landmarkType = "5">
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "main(int argc, char *argv[])"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "film/image.cpp"
+            timestampString = "435531027.398607"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "227"
+            endingLineNumber = "227"
+            landmarkName = "CreateImageFilm(const ParamSet &amp;params, Filter *filter)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -31,8 +31,8 @@
 
 
 // textures/dots.cpp*
-#include "core/stdafx.h"
-#include "textures/dots.h"
+#include "../core/stdafx.h"
+#include "../textures/dots.h"
 
 // DotsTexture Method Definitions
 DotsTexture<float> *CreateDotsFloatTexture(const Transform &tex2world,

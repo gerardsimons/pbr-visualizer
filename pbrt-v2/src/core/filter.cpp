@@ -31,8 +31,8 @@
 
 
 // core/filter.cpp*
-#include "core/stdafx.h"
-#include "core/filter.h"
+#include "../core/stdafx.h"
+#include "../core/filter.h"
 
 // Filter Method Definitions
 Filter::~Filter() {

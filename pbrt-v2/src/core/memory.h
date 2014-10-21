@@ -37,8 +37,8 @@
 #define PBRT_CORE_MEMORY_H
 
 // core/memory.h*
-#include "core/pbrt.h"
-#include "core/parallel.h"
+#include "../core/pbrt.h"
+#include "../core/parallel.h"
 
 // Memory Declarations
 class ReferenceCounted {

@@ -37,10 +37,10 @@
 #define PBRT_TEXTURES_IMAGEMAP_H
 
 // textures/imagemap.h*
-#include "core/pbrt.h"
-#include "core/texture.h"
-#include "core/mipmap.h"
-#include "core/paramset.h"
+#include "../core/pbrt.h"
+#include "../core/texture.h"
+#include "../core/mipmap.h"
+#include "../core/paramset.h"
 #include <map>
 
 // TexInfo Declarations

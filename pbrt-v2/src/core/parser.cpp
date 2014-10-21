@@ -31,7 +31,7 @@
 
 
 // core/parser.cpp*
-#include "core/stdafx.h"
+#include "../core/stdafx.h"
 #include "parser.h"
 #include "fileutil.h"
 

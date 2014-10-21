@@ -37,11 +37,11 @@
 #define PBRT_LIGHTS_GONIOMETRIC_H
 
 // lights/goniometric.h*
-#include "core/pbrt.h"
-#include "core/light.h"
-#include "core/shape.h"
-#include "core/scene.h"
-#include "core/mipmap.h"
+#include "../core/pbrt.h"
+#include "../core/light.h"
+#include "../core/shape.h"
+#include "../core/scene.h"
+#include "../core/mipmap.h"
 
 // GonioPhotometricLight Declarations
 class GonioPhotometricLight : public Light {

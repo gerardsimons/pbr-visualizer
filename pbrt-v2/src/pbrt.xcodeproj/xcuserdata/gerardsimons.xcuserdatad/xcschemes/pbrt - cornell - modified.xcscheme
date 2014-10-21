@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0600"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -59,7 +59,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt-modified.pbrt&quot;"
+            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt-shiny.pbrt&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
@@ -67,7 +67,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt-modified1x1x32.tga&quot;"
+            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt-modified128x128x100.tga&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

@@ -37,9 +37,9 @@
 #define PBRT_INTEGRATORS_DIRECTLIGHTING_H
 
 // integrators/directlighting.h*
-#include "core/pbrt.h"
-#include "core/integrator.h"
-#include "core/scene.h"
+#include "../core/pbrt.h"
+#include "../core/integrator.h"
+#include "../core/scene.h"
 
 // DirectLightingIntegrator Declarations
 enum LightStrategy { SAMPLE_ALL_UNIFORM, SAMPLE_ONE_UNIFORM };

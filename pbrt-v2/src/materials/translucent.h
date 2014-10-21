@@ -37,8 +37,8 @@
 #define PBRT_MATERIALS_TRANSLUCENT_H
 
 // materials/translucent.h*
-#include "core/pbrt.h"
-#include "core/material.h"
+#include "../core/pbrt.h"
+#include "../core/material.h"
 
 // TranslucentMaterial Declarations
 class TranslucentMaterial : public Material {

@@ -37,8 +37,8 @@
 #define PBRT_ACCELERATORS_GRID_H
 
 // accelerators/grid.h*
-#include "core/pbrt.h"
-#include "core/primitive.h"
+#include "../core/pbrt.h"
+#include "../core/primitive.h"
 
 // GridAccel Forward Declarations
 struct Voxel;

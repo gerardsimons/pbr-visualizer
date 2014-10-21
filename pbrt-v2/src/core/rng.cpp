@@ -31,8 +31,8 @@
 
 
 // core/rng.cpp*
-#include "core/stdafx.h"
-#include "core/rng.h"
+#include "../core/stdafx.h"
+#include "../core/rng.h"
 
 // Random Number Method Definitions
 #define M 397

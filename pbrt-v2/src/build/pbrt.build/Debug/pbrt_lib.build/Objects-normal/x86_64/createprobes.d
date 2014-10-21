@@ -1,0 +1,35 @@
+dependencies: \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/createprobes.cpp \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/stdafx.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../renderers/createprobes.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/pbrt.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/error.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/renderer.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/geometry.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../shapes/sphere.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../shapes/../core/shape.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/transform.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/quaternion.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/diffgeom.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/../core/memory.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/../core/parallel.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/../core/probes.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/sh.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/../core/spectrum.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/scene.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/primitive.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/material.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/integrator.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/light.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/../core/rng.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/reflection.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/kdtree.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/../core/sampler.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/progressreporter.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/camera.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/intersection.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/volume.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/paramset.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/fileutil.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/../core/texture.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/renderers/../core/montecarlo.h

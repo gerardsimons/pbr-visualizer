@@ -31,8 +31,8 @@
 
 
 // textures/mix.cpp*
-#include "core/stdafx.h"
-#include "textures/mix.h"
+#include "../core/stdafx.h"
+#include "../textures/mix.h"
 
 // MixTexture Method Definitions
 MixTexture<float> *CreateMixFloatTexture(const Transform &tex2world,

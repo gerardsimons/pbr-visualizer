@@ -31,12 +31,12 @@
 
 
 // materials/glass.cpp*
-#include "core/stdafx.h"
-#include "materials/glass.h"
-#include "core/spectrum.h"
-#include "core/reflection.h"
-#include "core/paramset.h"
-#include "core/texture.h"
+#include "../core/stdafx.h"
+#include "../materials/glass.h"
+#include "../core/spectrum.h"
+#include "../core/reflection.h"
+#include "../core/paramset.h"
+#include "../core/texture.h"
 
 // GlassMaterial Method Definitions
 BSDF *GlassMaterial::GetBSDF(const DifferentialGeometry &dgGeom, const DifferentialGeometry &dgShading, MemoryArena &arena) const {

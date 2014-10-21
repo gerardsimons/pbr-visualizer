@@ -31,12 +31,12 @@
 
 
 // lights/infinite.cpp*
-#include "core/stdafx.h"
-#include "lights/infinite.h"
-#include "core/sh.h"
-#include "core/montecarlo.h"
-#include "core/paramset.h"
-#include "core/imageio.h"
+#include "../core/stdafx.h"
+#include "../lights/infinite.h"
+#include "../core/sh.h"
+#include "../core/montecarlo.h"
+#include "../core/paramset.h"
+#include "../core/imageio.h"
 
 // InfiniteAreaLight Utility Classes
 struct InfiniteAreaCube {

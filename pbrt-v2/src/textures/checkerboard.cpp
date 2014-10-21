@@ -31,8 +31,8 @@
 
 
 // textures/checkerboard.cpp*
-#include "core/stdafx.h"
-#include "textures/checkerboard.h"
+#include "../core/stdafx.h"
+#include "../textures/checkerboard.h"
 
 // CheckerboardTexture Method Definitions
 Texture<float> *CreateCheckerboardFloatTexture(const Transform &tex2world,

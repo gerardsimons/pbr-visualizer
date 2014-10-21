@@ -35,9 +35,15 @@
 #define YY_MAIN 0
 #define YY_NEVER_INTERACTIVE 1
 
+#if defined(BUILD_LIBRARY)
 #include "core/pbrt.h"
 #include "core/api.h"
 #include "core/fileutil.h"
+#else
+#include "core/pbrt.h"
+#include "core/api.h"
+#include "core/fileutil.h"
+#endif
 
 struct ParamArray;
 

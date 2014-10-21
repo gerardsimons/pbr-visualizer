@@ -31,9 +31,9 @@
 
 
 // shapes/hyperboloid.cpp*
-#include "core/stdafx.h"
-#include "shapes/hyperboloid.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../shapes/hyperboloid.h"
+#include "../core/paramset.h"
 
 // Hyperboloid Method Definitions
 Hyperboloid::Hyperboloid(const Transform *o2w, const Transform *w2o, bool ro,

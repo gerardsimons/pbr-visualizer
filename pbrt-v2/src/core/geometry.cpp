@@ -31,8 +31,8 @@
 
 
 // core/geometry.cpp*
-#include "core/stdafx.h"
-#include "core/geometry.h"
+#include "../core/stdafx.h"
+#include "../core/geometry.h"
 
 // BBox Method Definitions
 BBox Union(const BBox &b, const Point &p) {

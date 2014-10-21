@@ -31,12 +31,12 @@
 
 
 // integrators/ambientocclusion.cpp*
-#include "core/stdafx.h"
-#include "integrators/ambientocclusion.h"
-#include "core/paramset.h"
-#include "core/montecarlo.h"
-#include "core/scene.h"
-#include "core/intersection.h"
+#include "../core/stdafx.h"
+#include "../integrators/ambientocclusion.h"
+#include "../core/paramset.h"
+#include "../core/montecarlo.h"
+#include "../core/scene.h"
+#include "../core/intersection.h"
 
 // AmbientOcclusionIntegrator Method Definitions
 Spectrum AmbientOcclusionIntegrator::Li(const Scene *scene, const Renderer *renderer,

@@ -31,8 +31,8 @@
 
 
 // textures/scale.cpp*
-#include "core/stdafx.h"
-#include "textures/scale.h"
+#include "../core/stdafx.h"
+#include "../textures/scale.h"
 
 // ScaleTexture Method Definitions
 ScaleTexture<float, float> *CreateScaleFloatTexture(const Transform &tex2world,

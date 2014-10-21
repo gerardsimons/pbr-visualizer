@@ -37,9 +37,9 @@
 #define PBRT_MATERIALS_METAL_H
 
 // materials/metal.h*
-#include "core/pbrt.h"
-#include "core/material.h"
-#include "core/spectrum.h"
+#include "../core/pbrt.h"
+#include "../core/material.h"
+#include "../core/spectrum.h"
 
 // MetalMaterial Declarations
 class MetalMaterial : public Material {

@@ -37,8 +37,8 @@
 #define PBRT_MATERIALS_MATTE_H
 
 // materials/matte.h*
-#include "core/pbrt.h"
-#include "core/material.h"
+#include "../core/pbrt.h"
+#include "../core/material.h"
 
 // MatteMaterial Declarations
 class MatteMaterial : public Material {

@@ -31,11 +31,11 @@
 
 
 // lights/goniometric.cpp*
-#include "core/stdafx.h"
-#include "lights/goniometric.h"
-#include "core/paramset.h"
-#include "core/montecarlo.h"
-#include "core/imageio.h"
+#include "../core/stdafx.h"
+#include "../lights/goniometric.h"
+#include "../core/paramset.h"
+#include "../core/montecarlo.h"
+#include "../core/imageio.h"
 
 // GonioPhotometricLight Method Definitions
 Spectrum GonioPhotometricLight::Sample_L(const Point &p, float pEpsilon,

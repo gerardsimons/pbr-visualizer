@@ -37,7 +37,7 @@
 #define PBRT_CORE_PARALLEL_H
 
 // core/parallel.h*
-#include "core/pbrt.h"
+#include "../core/pbrt.h"
 #if defined(PBRT_IS_APPLE_PPC)
 #include <libkern/OSAtomic.h>
 #endif // PBRT_IS_APPLE_PPC
@@ -48,7 +48,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 #endif
-#include "core/probes.h"
+#include "../core/probes.h"
 
 // Parallel Declarations
 #if defined(PBRT_IS_WINDOWS)

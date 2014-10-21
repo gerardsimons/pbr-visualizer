@@ -37,8 +37,8 @@
 #define PBRT_INTEGRATORS_IGI_H
 
 // integrators/igi.h*
-#include "core/pbrt.h"
-#include "core/integrator.h"
+#include "../core/pbrt.h"
+#include "../core/integrator.h"
 
 // IGIIntegrator Local Structures
 struct VirtualLight {

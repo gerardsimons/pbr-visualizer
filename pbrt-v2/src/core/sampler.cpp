@@ -31,10 +31,10 @@
 
 
 // core/sampler.cpp*
-#include "core/stdafx.h"
-#include "core/sampler.h"
+#include "../core/stdafx.h"
+#include "../core/sampler.h"
 #include "integrator.h"
-#include "core/volume.h"
+#include "../core/volume.h"
 
 // Sampler Method Definitions
 Sampler::~Sampler() {

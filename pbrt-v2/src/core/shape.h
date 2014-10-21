@@ -37,11 +37,11 @@
 #define PBRT_CORE_SHAPE_H
 
 // core/shape.h*
-#include "core/pbrt.h"
-#include "core/geometry.h"
+#include "../core/pbrt.h"
+#include "../core/geometry.h"
 #include "transform.h"
 #include "diffgeom.h"
-#include "core/memory.h"
+#include "../core/memory.h"
 
 // Shape Declarations
 class Shape : public ReferenceCounted {

@@ -37,8 +37,8 @@
 #define PBRT_CORE_OCTREE_H
 
 // core/octree.h*
-#include "core/pbrt.h"
-#include "core/geometry.h"
+#include "../core/pbrt.h"
+#include "../core/geometry.h"
 
 // Octree Declarations
 template <typename NodeData> struct OctNode {

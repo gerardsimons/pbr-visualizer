@@ -37,9 +37,9 @@
 #define PBRT_TEXTURES_MARBLE_H
 
 // textures/marble.h*
-#include "core/pbrt.h"
-#include "core/texture.h"
-#include "core/paramset.h"
+#include "../core/pbrt.h"
+#include "../core/texture.h"
+#include "../core/paramset.h"
 
 // MarbleTexture Declarations
 class MarbleTexture : public Texture<Spectrum> {

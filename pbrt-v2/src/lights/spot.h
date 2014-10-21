@@ -37,9 +37,9 @@
 #define PBRT_LIGHTS_SPOT_H
 
 // lights/spot.h*
-#include "core/pbrt.h"
-#include "core/light.h"
-#include "core/shape.h"
+#include "../core/pbrt.h"
+#include "../core/light.h"
+#include "../core/shape.h"
 
 // SpotLight Declarations
 class SpotLight : public Light {

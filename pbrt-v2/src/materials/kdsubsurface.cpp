@@ -31,14 +31,14 @@
 
 
 // materials/kdsubsurface.cpp*
-#include "core/stdafx.h"
-#include "materials/kdsubsurface.h"
-#include "textures/constant.h"
-#include "core/volume.h"
-#include "core/spectrum.h"
-#include "core/reflection.h"
-#include "core/texture.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../materials/kdsubsurface.h"
+#include "../textures/constant.h"
+#include "../core/volume.h"
+#include "../core/spectrum.h"
+#include "../core/reflection.h"
+#include "../core/texture.h"
+#include "../core/paramset.h"
 
 // KdSubsurfaceMaterial Method Definitions
 BSDF *KdSubsurfaceMaterial::GetBSDF(const DifferentialGeometry &dgGeom,

@@ -31,10 +31,10 @@
 
 
 // core/diffgeom.cpp*
-#include "core/stdafx.h"
+#include "../core/stdafx.h"
 #include "diffgeom.h"
 #include "transform.h"
-#include "core/shape.h"
+#include "../core/shape.h"
 
 // DifferentialGeometry Method Definitions
 DifferentialGeometry::DifferentialGeometry(const Point &P,

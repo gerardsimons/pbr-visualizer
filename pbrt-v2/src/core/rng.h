@@ -37,8 +37,8 @@
 #define PBRT_CORE_RNG_H
 
 // core/rng.h*
-#include "core/pbrt.h"
-#include "core/probes.h"
+#include "../core/pbrt.h"
+#include "../core/probes.h"
 
 // Random Number Declarations
 class RNG {

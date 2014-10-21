@@ -31,8 +31,8 @@
 
 
 // core/memory.cpp*
-#include "core/stdafx.h"
-#include "core/memory.h"
+#include "../core/stdafx.h"
+#include "../core/memory.h"
 
 // Memory Allocation Functions
 void *AllocAligned(size_t size) {

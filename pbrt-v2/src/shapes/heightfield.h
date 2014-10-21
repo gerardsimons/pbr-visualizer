@@ -37,7 +37,7 @@
 #define PBRT_SHAPES_HEIGHTFIELD_H
 
 // shapes/heightfield.h*
-#include "core/shape.h"
+#include "../core/shape.h"
 
 // Heightfield Declarations
 class Heightfield : public Shape {

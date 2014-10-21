@@ -31,9 +31,9 @@
 
 
 // shapes/cylinder.cpp*
-#include "core/stdafx.h"
-#include "shapes/cylinder.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../shapes/cylinder.h"
+#include "../core/paramset.h"
 
 // Cylinder Method Definitions
 Cylinder::Cylinder(const Transform *o2w, const Transform *w2o, bool ro,

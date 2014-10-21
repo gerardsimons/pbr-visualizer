@@ -37,8 +37,8 @@
 #define PBRT_INTEGRATORS_GLOSSYPRT_H
 
 // integrators/glossyprt.h*
-#include "core/pbrt.h"
-#include "core/integrator.h"
+#include "../core/pbrt.h"
+#include "../core/integrator.h"
 
 // GlossyPRTIntegrator Declarations
 class GlossyPRTIntegrator : public SurfaceIntegrator {

@@ -37,7 +37,7 @@
 #define PBRT_CORE_GEOMETRY_H
 
 // core/geometry.h*
-#include "core/pbrt.h"
+#include "../core/pbrt.h"
 
 // Geometry Declarations
 class Vector {

@@ -31,8 +31,8 @@
 
 
 // textures/wrinkled.cpp*
-#include "core/stdafx.h"
-#include "textures/wrinkled.h"
+#include "../core/stdafx.h"
+#include "../textures/wrinkled.h"
 
 // WrinkledTexture Method Definitions
 WrinkledTexture<float> *CreateWrinkledFloatTexture(const Transform &tex2world,

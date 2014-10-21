@@ -31,8 +31,8 @@
 
 
 // textures/uv.cpp*
-#include "core/stdafx.h"
-#include "textures/uv.h"
+#include "../core/stdafx.h"
+#include "../textures/uv.h"
 
 // UVTexture Method Definitions
 Texture<float> *CreateUVFloatTexture(const Transform &tex2world,

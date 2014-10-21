@@ -37,7 +37,7 @@
 #define PBRT_CORE_FILM_H
 
 // core/film.h*
-#include "core/pbrt.h"
+#include "../core/pbrt.h"
 
 // Film Declarations
 class Film {

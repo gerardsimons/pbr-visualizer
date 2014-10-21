@@ -37,7 +37,7 @@
 #define PBRT_CORE_PARSER_H
 
 // core/parser.h*
-#include "core/pbrt.h"
+#include "../core/pbrt.h"
 bool ParseFile(const string &filename);
 
 #endif // PBRT_CORE_PARSER_H

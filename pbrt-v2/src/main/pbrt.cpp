@@ -31,11 +31,11 @@
 
 
 // main/pbrt.cpp*
-#include "core/stdafx.h"
-#include "core/api.h"
-#include "core/probes.h"
-#include "core/parser.h"
-#include "core/parallel.h"
+#include "../core/stdafx.h"
+#include "../core/api.h"
+#include "../core/probes.h"
+#include "../core/parser.h"
+#include "../core/parallel.h"
 
 // main program
 int main(int argc, char *argv[]) {

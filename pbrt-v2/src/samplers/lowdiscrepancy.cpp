@@ -31,10 +31,10 @@
 
 
 // samplers/lowdiscrepancy.cpp*
-#include "core/stdafx.h"
-#include "samplers/lowdiscrepancy.h"
-#include "core/camera.h"
-#include "core/montecarlo.h"
+#include "../core/stdafx.h"
+#include "../samplers/lowdiscrepancy.h"
+#include "../core/camera.h"
+#include "../core/montecarlo.h"
 
 // LDSampler Method Definitions
 LDSampler::LDSampler(int xstart, int xend, int ystart, int yend, int ps,

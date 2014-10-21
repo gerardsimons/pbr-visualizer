@@ -31,9 +31,9 @@
 
 
 // shapes/cone.cpp*
-#include "core/stdafx.h"
-#include "shapes/cone.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../shapes/cone.h"
+#include "../core/paramset.h"
 
 // Cone Method Definitions
 Cone::Cone(const Transform *o2w, const Transform *w2o, bool ro,

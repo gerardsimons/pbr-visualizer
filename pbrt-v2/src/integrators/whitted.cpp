@@ -31,10 +31,10 @@
 
 
 // integrators/whitted.cpp*
-#include "core/stdafx.h"
-#include "integrators/whitted.h"
-#include "core/intersection.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../integrators/whitted.h"
+#include "../core/intersection.h"
+#include "../core/paramset.h"
 
 // WhittedIntegrator Method Definitions
 Spectrum WhittedIntegrator::Li(const Scene *scene,

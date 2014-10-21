@@ -37,9 +37,9 @@
 #define PBRT_SAMPLERS_RANDOM_H
 
 // samplers/random.h*
-#include "core/sampler.h"
-#include "core/paramset.h"
-#include "core/film.h"
+#include "../core/sampler.h"
+#include "../core/paramset.h"
+#include "../core/film.h"
 class RandomSampler : public Sampler {
 public:
     RandomSampler(int xstart, int xend, int ystart,

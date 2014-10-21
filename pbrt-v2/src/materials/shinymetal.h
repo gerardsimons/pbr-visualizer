@@ -36,8 +36,8 @@
 #ifndef PBRT_MATERIALS_SHINYMETAL_H
 #define PBRT_MATERIALS_SHINYMETAL_H
 
-#include "core/pbrt.h"
-#include "core/material.h"
+#include "../core/pbrt.h"
+#include "../core/material.h"
 
 // ShinyMetalMaterial Class Declarations
 class ShinyMetalMaterial : public Material {

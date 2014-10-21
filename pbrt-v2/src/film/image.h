@@ -37,14 +37,17 @@
 #define PBRT_FILM_IMAGE_H
 
 // film/image.h*
-#include "core/pbrt.h"
-#include "core/film.h"
-#include "core/sampler.h"
-#include "core/filter.h"
-#include "core/paramset.h"
+#include "../core/pbrt.h"
+#include "../core/film.h"
+#include "../core/sampler.h"
+#include "../core/filter.h"
+#include "../core/paramset.h"
+
+class RIVRenderView;
 
 // ImageFilm Declarations
 class ImageFilm : public Film {
+	friend class RIVRenderView;
 public:
     // ImageFilm Public Methods
     ImageFilm(int xres, int yres, Filter *filt, const float crop[4],

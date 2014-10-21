@@ -1,0 +1,19 @@
+dependencies: \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/loopsubdiv.cpp \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/stdafx.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../shapes/loopsubdiv.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/shape.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/../core/pbrt.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/error.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/../core/geometry.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/transform.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/quaternion.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/diffgeom.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/../core/memory.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/../core/parallel.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/../core/probes.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../shapes/trianglemesh.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/paramset.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/fileutil.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/../core/texture.h \
+  /Users/gerardsimons/Git/afstuderen_riv/pbrt-v2/src/shapes/../core/../core/spectrum.h

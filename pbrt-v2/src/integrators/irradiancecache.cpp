@@ -31,16 +31,16 @@
 
 
 // integrators/irradiancecache.cpp*
-#include "core/stdafx.h"
-#include "integrators/irradiancecache.h"
-#include "core/camera.h"
-#include "core/progressreporter.h"
-#include "core/scene.h"
-#include "core/montecarlo.h"
-#include "core/film.h"
-#include "samplers/halton.h"
-#include "core/intersection.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../integrators/irradiancecache.h"
+#include "../core/camera.h"
+#include "../core/progressreporter.h"
+#include "../core/scene.h"
+#include "../core/montecarlo.h"
+#include "../core/film.h"
+#include "../samplers/halton.h"
+#include "../core/intersection.h"
+#include "../core/paramset.h"
 
 // IrradianceCacheIntegrator Local Declarations
 struct IrradiancePrimeTask : public Task {

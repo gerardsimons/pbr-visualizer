@@ -31,11 +31,11 @@
 
 
 // samplers/stratified.cpp*
-#include "core/stdafx.h"
-#include "samplers/stratified.h"
-#include "core/paramset.h"
-#include "core/camera.h"
-#include "core/montecarlo.h"
+#include "../core/stdafx.h"
+#include "../samplers/stratified.h"
+#include "../core/paramset.h"
+#include "../core/camera.h"
+#include "../core/montecarlo.h"
 
 // StratifiedSampler Method Definitions
 StratifiedSampler::StratifiedSampler(int xstart, int xend,

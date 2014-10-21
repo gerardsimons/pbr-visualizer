@@ -37,9 +37,9 @@
 #define PBRT_CORE_VOLUME_H
 
 // core/volume.h*
-#include "core/pbrt.h"
-#include "core/spectrum.h"
-#include "core/geometry.h"
+#include "../core/pbrt.h"
+#include "../core/spectrum.h"
+#include "../core/geometry.h"
 #include "transform.h"
 #include "integrator.h"
 

@@ -37,11 +37,11 @@
 #define PBRT_CORE_PARAMSET_H
 
 // core/paramset.h*
-#include "core/pbrt.h"
+#include "../core/pbrt.h"
 #include "fileutil.h"
-#include "core/geometry.h"
-#include "core/texture.h"
-#include "core/spectrum.h"
+#include "../core/geometry.h"
+#include "../core/texture.h"
+#include "../core/spectrum.h"
  #if (_MSC_VER >= 1400)
  #include <stdio.h>
  #define snprintf _snprintf

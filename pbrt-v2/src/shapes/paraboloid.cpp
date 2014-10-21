@@ -31,9 +31,9 @@
 
 
 // shapes/paraboloid.cpp*
-#include "core/stdafx.h"
-#include "shapes/paraboloid.h"
-#include "core/paramset.h"
+#include "../core/stdafx.h"
+#include "../shapes/paraboloid.h"
+#include "../core/paramset.h"
 
 // Paraboloid Method Definitions
 Paraboloid::Paraboloid(const Transform *o2w, const Transform *w2o, bool ro,

@@ -29,11 +29,10 @@
 
  */
 
-
 // core/imageio.cpp*
-#include "core/stdafx.h"
-#include "core/imageio.h"
-#include "core/spectrum.h"
+#include "../core/stdafx.h"
+#include "../core/imageio.h"
+#include "../core/spectrum.h"
 #include "targa.h"
 
 // ImageIO Local Declarations

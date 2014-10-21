@@ -31,13 +31,13 @@
 
 
 // samplers/bestcandidate.cpp*
-#include "core/stdafx.h"
-#include "samplers/bestcandidate.h"
-#include "core/camera.h"
-#include "core/montecarlo.h"
+#include "../core/stdafx.h"
+#include "../samplers/bestcandidate.h"
+#include "../core/camera.h"
+#include "../core/montecarlo.h"
 
 // BestCandidateSampler Method Definitions
-#include "samplers/bestcandidate.out"
+#include "../samplers/bestcandidate.out"
 Sampler *BestCandidateSampler::GetSubSampler(int num, int count) {
     int x0, x1, y0, y1;
     ComputeSubWindow(num, count, &x0, &x1, &y0, &y1);

@@ -31,15 +31,15 @@
 
 
 // core/scene.cpp*
-#include "core/stdafx.h"
-#include "core/scene.h"
-#include "core/camera.h"
-#include "core/film.h"
-#include "core/sampler.h"
-#include "core/volume.h"
-#include "core/parallel.h"
-#include "core/progressreporter.h"
-#include "core/renderer.h"
+#include "../core/stdafx.h"
+#include "../core/scene.h"
+#include "../core/camera.h"
+#include "../core/film.h"
+#include "../core/sampler.h"
+#include "../core/volume.h"
+#include "../core/parallel.h"
+#include "../core/progressreporter.h"
+#include "../core/renderer.h"
 
 // Scene Method Definitions
 Scene::~Scene() {
