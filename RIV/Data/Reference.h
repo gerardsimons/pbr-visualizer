@@ -45,8 +45,8 @@ public:
 //Class that maps a row in one table to multiple other rows in another table. The char represents a very short unsigned short (max 256) number of rows it maps to
 class RIVMultiReference : public RIVReference {
 public:
-	std::map<size_t,std::pair<size_t*,ushort>> indexMap;
-	RIVMultiReference(std::map<size_t,std::pair<size_t*,ushort>>& indexMap, RIVTable* sourceTable, RIVTable* targetTable);
+	std::map<size_t,std::pair<size_t*,ushort> > indexMap;
+	RIVMultiReference(std::map<size_t,std::pair<size_t*,ushort> >& indexMap, RIVTable* sourceTable, RIVTable* targetTable);
 	RIVSingleReference* ReverseReference();
 	bool HasReference(size_t row);
 	std::pair<size_t*,ushort> GetIndexReferences(size_t row);

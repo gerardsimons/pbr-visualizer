@@ -69,7 +69,6 @@ void RIVDataSet::AddFilter(riv::Filter *filter) {
 	}
 	throw "Could not find a table that contains all of the filter's attributes";
 }
-
 void RIVDataSet::AddFilter(riv::GroupFilter *filter) {
 	//Find the table that contains all of the filter attributes
 	for(RIVTable* table : tables) {
@@ -129,6 +128,19 @@ void RIVDataSet::ClearFilter(const std::string& filterName) {
 			}
 		}
     }
+}
+
+void RIVDataSet::UpdateFilter(riv::Filter* updateFilter) {
+	for(RIVTable* table : tables) {
+		if(table->ContainsFilter(updateFilter)) {
+			staleTables[table] = true;
+			const std::vector<RIVReference*>* refs = table->GetReferences();
+			for(size_t i = 0 ; i < refs->size() ; ++i) {
+				RIVReference* ref = refs->at(i);
+				staleTables[ref->targetTable] = true;
+			}
+		}
+	}
 }
 
 size_t RIVDataSet::TotalNumberOfRecords() const {

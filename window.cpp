@@ -38,10 +38,12 @@ Window::Window(const RIVDataSet& dataset_, BMPImage* image, const PBRTConfig& co
 	sceneWidget = new SceneWidget(&dataset,&pbrtConfiguration,colorProperty,sizeProperty,this);
 	pcWidget = new PCWidget(&dataset,colorProperty,sizeProperty,this);
 	imageWidget = new ImageWidget(&dataset,image,colorProperty,sizeProperty,this);
-	heatmapWidget = new HeatmapWidget(&dataset,this);
+	renderWidget = new RenderWidget(&dataset, colorProperty, sizeProperty,this);
+//	heatmapWidget = new HeatmapWidget(&dataset,this);
 		
 	dataset.AddFilterListener(sceneWidget);
 	dataset.AddFilterListener(pcWidget);
+	dataset.AddFilterListener(renderWidget);
 		
 	update();
 }
@@ -70,12 +72,15 @@ void Window::resizeEvent ( QResizeEvent* event ) {
 	pcWidget->move(0, 0);
 	sceneWidget->move(0,squareSize);
 	imageWidget->move(squareSize,squareSize);
-	heatmapWidget->move(squareSize * 2, squareSize);
+	renderWidget->move(squareSize * 2, squareSize);
+//	heatmapWidget->move(squareSize * 2, squareSize);
 	
+	pcWidget->resize(windowWidth, windowHeight / 2);
 	sceneWidget->resize(squareSize,squareSize);
 	imageWidget->resize(squareSize,squareSize);
-	heatmapWidget->resize(squareSize,squareSize);
-	pcWidget->resize(windowWidth, windowHeight / 2);
+//	heatmapWidget->resize(squareSize,squareSize);
+	renderWidget->resize(squareSize,squareSize);
+
 }
 
 void Window::keyPressEvent(QKeyEvent *event) {

@@ -187,8 +187,10 @@ void ParallelCoordsView::drawLines() {
 //	linesAreDirty = true;
 
 	size_t lineIndex = 0;
-	glColor3f(1.0, 0.0, 0.0);
 	size_t linesDrawn = 0;
+	
+	glEnable(GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 //	reporter::startTask("drawLines");
 	
@@ -215,13 +217,12 @@ void ParallelCoordsView::drawLines() {
 //					float size = sizeProperty->ComputeSize(table,row);
 					float size = 1;
 					glLineWidth(size);
-                    glColor3f(lineColor.R, lineColor.G, lineColor.B);
+                    glColor4f(lineColor.R, lineColor.G, lineColor.B,0.1F);
                     for(ParallelCoordsAxis &axis : axisGroup.axes) {
                         RIVRecord *ptr = axis.RecordPointer;
                         RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(ptr);
 		
                         if(floatRecord) {
-							//                            //Code here
                             float value = floatRecord->Value(row);
                             float x = axis.x;
                             float y = axis.PositionOnScaleForValue(value);
@@ -249,8 +250,8 @@ void ParallelCoordsView::drawLines() {
                             ++linesDrawn;
                         }
                     }
+					glEnd();
                 }
-                glEnd();
                 lineIndex++;
             }
         
@@ -420,7 +421,6 @@ void ParallelCoordsView::clearSelection() {
         
         selectedAxis->HasSelectionBox = false;
         selectedAxis = NULL;
-        
         
         printf("Selection cleared.");
     }

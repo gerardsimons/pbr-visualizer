@@ -6,6 +6,7 @@
 #include "RIV/PBRTConfig.h"
 #include "imagewidget.h"
 #include "heatmapwidget.h"
+#include "renderwidget.h"
 #include "pcwidget.h"
 #include "scenewidget.h"
 #include "RIV/Graphics/BMPImage.h"
@@ -17,6 +18,7 @@ private:
 	RIVDataSet dataset;
 	PBRTConfig pbrtConfiguration;
 	
+	RenderWidget* renderWidget = NULL;
 	SceneWidget* sceneWidget = NULL;
 	PCWidget* pcWidget = NULL;
 	ImageWidget* imageWidget = NULL;

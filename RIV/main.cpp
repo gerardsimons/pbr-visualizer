@@ -29,13 +29,13 @@
 //const float DEG2RAD = 3.14159/180;
 
 /* window width and height */
-int width = 1600;
-int height = 1000;
+//int width = 1650;
+//int height = 1000;
 
 int padding = 10;
 
-//int width = 1400;
-//int height = 800;
+int width = 1450;
+int height = 850;
 
 bool isDirty = true;
 
@@ -54,8 +54,6 @@ int renderViewWindow;
 
 /* For debugging purposes, keep track of mouse location */
 int lastMouseX,lastMouseY = 0;
-
-
 
 RIVImageView *imageView = NULL;
 RIV3DView *sceneView = NULL;
@@ -146,6 +144,13 @@ void keys(int keyCode, int x, int y) {
             postRedisplay = true;
             break;
         }
+		case 122: // 'z' key, save the image
+		{
+			if(renderView) {
+				renderView->SaveImage();
+			}
+			break;
+		}
         case 116: // 't' key, use as temp key for some to-test function
         {
 //			riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",1);
@@ -153,11 +158,12 @@ void keys(int keyCode, int x, int y) {
 			
 			std::vector<riv::Filter*> allFilters;
 			std::vector<ushort> selectedObjectIDs;
-			selectedObjectIDs.push_back(1);
-			selectedObjectIDs.push_back(1);
-			selectedObjectIDs.push_back(1);
-			selectedObjectIDs.push_back(1);
-			selectedObjectIDs.push_back(1);
+			selectedObjectIDs.push_back(3);
+//			selectedObjectIDs.push_back(1);
+//			selectedObjectIDs.push_back(1);
+//			selectedObjectIDs.push_back(1);
+//			selectedObjectIDs.push_back(1);
+			
 			for(int i = 0 ; i < selectedObjectIDs.size() ; ++i) {
 				riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectIDs[i]);
 				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",i+1);
@@ -167,10 +173,14 @@ void keys(int keyCode, int x, int y) {
 				allFilters.push_back(new riv::ConjunctiveFilter(fs));
 			}
 			riv::GroupFilter* pathCreationFilter = new riv::GroupFilter(allFilters,dataset.GetTable("path"));
+			riv::DiscreteFilter* bounceOneFilter = new riv::DiscreteFilter("bounce#",1);
 			pathCreationFilter->Print();
 			printf("\n");
 			dataset.StartFiltering();
 			dataset.AddFilter("path", pathCreationFilter);
+			dataset.StopFiltering();
+			dataset.StartFiltering();
+			dataset.AddFilter("intersections", bounceOneFilter);
 			dataset.StopFiltering();
 			postRedisplay = false;
             break;
@@ -178,7 +188,7 @@ void keys(int keyCode, int x, int y) {
         case 119: // 'w' key, move camera in Y direction
             sceneView->MoveCamera(0,camSpeed,0);
             break;
-        case 115:
+        case 115: // 's' key
             sceneView->MoveCamera(0, -camSpeed, 0);
             break;
         case GLUT_KEY_UP:

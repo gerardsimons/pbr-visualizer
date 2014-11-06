@@ -41,6 +41,7 @@ public:
 	void AddFilter(riv::Filter* filter);
 	void AddFilter(riv::GroupFilter *filter);
     void AddFilterListener(RIVDataSetListener* listener);
+	void UpdateFilter(riv::Filter* filter);
     void ClearFilters();
 	void ClearFilter(size_t filterID);
     void ClearFilter(const std::string& attributeName);

@@ -82,6 +82,7 @@ void PCWidget::paintGL()
 	if(!cached) {
 		cache = renderPixmap();
 		cached = true;
+		Draw();
 	}
 	else {
 		QPainter painter;
@@ -90,7 +91,6 @@ void PCWidget::paintGL()
 		printf("Draw cached\n");
 		painter.drawPixmap(0, 0, cache);
 	}
-	Draw();
 }
 
 //void PCWidget::resizeEvent ( QResizeEvent* event ) {

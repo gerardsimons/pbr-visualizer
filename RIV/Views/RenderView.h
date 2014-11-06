@@ -32,6 +32,7 @@ public:
 	void OnDataSetChanged();
 	//Create the PBRT image film from the selected rays
 	void CreateImageFilm();
+	void SaveImage();
 	
 	void Draw();
 	void Reshape(int width, int height);

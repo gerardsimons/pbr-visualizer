@@ -708,12 +708,15 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     std::vector<float> spectraOne;
     std::vector<float> spectraTwo;
     std::vector<float> spectraThree;
+	std::vector<float> throughputsR;
+	std::vector<float> throughputsG;
+	std::vector<float> throughputsB;
     std::vector<ushort> interactionTypes;
     std::vector<ushort> lightIds;
     
 //    fprintf(outputFile, "x,y,lensU,lensV,timestamp,throughput_1,throughput_2,throughput_3,radiance_R,radiance_G,radiance_B,size\n");
     
-	std::map<size_t,std::pair<size_t*,ushort>> pathIsectReferences;
+	std::map<size_t,std::pair<size_t*,ushort> > pathIsectReferences;
 	
     size_t isect_index = 0;
     size_t path_index = 0;
@@ -779,7 +782,9 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
         intersections.push_back(size);
         
 		size_t* isectIndices = new size_t[size];
-
+		if(size > 5) {
+			printf("Invalid size\n");
+		}
 		if(size > 0) {
 			//isect_x,isect_y,isect_z,primitive_ids,shape_ids,spectra,interaction_types,light_ids
 			float isectX;
@@ -788,6 +793,9 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
 			float spectraR;
 			float spectraG;
 			float spectraB;
+			float throughputR;
+			float throughputG;
+			float throughputB;
 			
 			for(ushort i = 0 ; i < size ; ++i) {
 				isectIndices[i] = isect_index+i;
@@ -819,6 +827,20 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
 //				spectraOne.push_back(spectraR);
 //				spectraTwo.push_back(spectraG);
 //				spectraThree.push_back(spectraB);
+			}
+			for(ushort i = 0 ; i < size ; ++i) {
+				fread(&throughputR,sizeof(float),1,inputFile);
+				fread(&throughputG,sizeof(float),1,inputFile);
+				fread(&throughputB,sizeof(float),1,inputFile);
+				
+				//Be sure to clamp the RGB values!
+				throughputsR.push_back(std::min(throughputR, 1.F));
+				throughputsG.push_back(std::min(throughputG, 1.F));
+				throughputsB.push_back(std::min(throughputB, 1.F));
+				//Unclamped version
+				//				spectraOne.push_back(spectraR);
+				//				spectraTwo.push_back(spectraG);
+				//				spectraThree.push_back(spectraB);
 			}
 			readDataIntoVector(size, interactionTypes, inputFile);
 			readDataIntoVector(size, lightIds, inputFile);
@@ -869,15 +891,18 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     RIVFloatRecord *spectrumOneRecord = new RIVFloatRecord("spectrum R",spectraOne);
     RIVFloatRecord *spectrumTwoRecord = new RIVFloatRecord("spectrum G",spectraTwo);
     RIVFloatRecord *spectrumThreeRecord = new RIVFloatRecord("spectrum B",spectraThree);
+	RIVFloatRecord *throughputRRecord = new RIVFloatRecord("throughput R",throughputsR);
+	RIVFloatRecord *throughputGRecord = new RIVFloatRecord("throughput G",throughputsG);
+	RIVFloatRecord *throughputBRecord = new RIVFloatRecord("throughput B",throughputsB);
     RIVUnsignedShortRecord *interactionTypesRecord = new RIVUnsignedShortRecord("interaction types",interactionTypes);
     RIVUnsignedShortRecord *lightIdsRecord = new RIVUnsignedShortRecord("light ids",lightIds);
     
     pathTable->AddRecord(xRecord);
     pathTable->AddRecord(yRecord);
-    pathTable->AddRecord(lensURecord);
-    pathTable->AddRecord(lensVRecord);
-    pathTable->AddRecord(timestampRecord);
-    pathTable->AddRecord(tpOne);
+//    pathTable->AddRecord(lensURecord);
+//    pathTable->AddRecord(lensVRecord);
+//    pathTable->AddRecord(timestampRecord);
+    pathTable->AddRecord(tpOne);	
     pathTable->AddRecord(tpTwo);
     pathTable->AddRecord(tpThree);
 	pathTable->AddRecord(radianceRed);
@@ -895,6 +920,9 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
     intersectionsTable->AddRecord(spectrumOneRecord);
     intersectionsTable->AddRecord(spectrumTwoRecord);
     intersectionsTable->AddRecord(spectrumThreeRecord);
+	intersectionsTable->AddRecord(throughputRRecord);
+	intersectionsTable->AddRecord(throughputGRecord);
+	intersectionsTable->AddRecord(throughputBRecord);
     intersectionsTable->AddRecord(interactionTypesRecord);
     intersectionsTable->AddRecord(lightIdsRecord);
     

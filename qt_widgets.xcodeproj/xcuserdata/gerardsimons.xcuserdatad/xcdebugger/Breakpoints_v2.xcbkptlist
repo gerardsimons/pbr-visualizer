@@ -77,7 +77,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "726"
             endingLineNumber = "726"
-            landmarkName = "RIV3DView::HandleMouse(int button, int state, int x, int y)"
+            landmarkName = "RIV3DView::createPaths()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -93,7 +93,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "302"
             endingLineNumber = "302"
-            landmarkName = "RIV3DView::drawPoints()"
+            landmarkName = "RIV3DView::drawMeshModel()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -123,7 +123,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "55"
             endingLineNumber = "55"
-            landmarkName = "PCWidget::initializeGL()"
+            landmarkName = "PCWidget::resizeGL(int width, int height)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -138,9 +138,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "346"
-            endingLineNumber = "346"
-            landmarkName = "ParallelCoordsView::HandleMouse(int button, int state, int x, int y)"
-            landmarkType = "5">
+            endingLineNumber = "346">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -226,12 +224,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "window.cpp"
-            timestampString = "432908370.644984"
+            timestampString = "435854912.724633"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77"
-            landmarkName = "Window::keyPressEvent(QKeyEvent *event)"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
+            landmarkName = "Window::resizeEvent ( QResizeEvent* event )"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -247,7 +245,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "306"
             endingLineNumber = "306"
-            landmarkName = "RIV3DView::drawPoints()"
+            landmarkName = "RIV3DView::drawMeshModel()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -263,7 +261,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "425"
             endingLineNumber = "425"
-            landmarkName = "RIV3DView::createPoints()"
+            landmarkName = "RIV3DView::createPaths()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -279,7 +277,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "419"
             endingLineNumber = "419"
-            landmarkName = "RIV3DView::createPoints()"
+            landmarkName = "RIV3DView::createPaths()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -295,7 +293,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "13"
             endingLineNumber = "13"
-            landmarkName = "SceneWidget::SceneWidget(RIVDataSet* dataset, RIVColorProperty* color, RIVSizeProperty* size, QWidget *parent)"
+            landmarkName = "SceneWidget::SceneWidget(RIVDataSet* dataset, PBRTConfig* pbrtConfig, RIVColorProperty* color, RIVSizeProperty* size, QWidget *parent)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -306,12 +304,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "window.cpp"
-            timestampString = "432907140.605439"
+            timestampString = "435854774.082238"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "Window::createWidgets()"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "Window::Window(const RIVDataSet&amp; dataset_, BMPImage* image, const PBRTConfig&amp; config, QWidget *parent)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -386,11 +384,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "window.cpp"
-            timestampString = "432908370.644984"
+            timestampString = "435854868.982926"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
             landmarkName = "Window::resizeEvent ( QResizeEvent* event )"
             landmarkType = "5">
          </BreakpointContent>
@@ -423,7 +421,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "340"
             endingLineNumber = "340"
-            landmarkName = "ParallelCoordsView::HandleMouse(int button, int state, int x, int y)"
+            landmarkName = "ParallelCoordsView::Draw()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

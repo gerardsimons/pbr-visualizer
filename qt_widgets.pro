@@ -42,7 +42,8 @@ SOURCES += main.cpp\
     heatmapwidget.cpp \
     window.cpp \
     uiwidget.cpp \
-    pcwidget.cpp
+    pcwidget.cpp \
+    renderwidget.cpp
 
 
 HEADERS  += scenewidget.h\
@@ -91,4 +92,5 @@ HEADERS  += scenewidget.h\
     heatmapwidget.h \
     window.h \
     uiwidget.h \
-    pcwidget.h
+    pcwidget.h \
+    renderwidget.h

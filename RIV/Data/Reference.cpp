@@ -28,7 +28,7 @@ bool RIVSingleReference::HasReference(size_t row) {
 		return true;
 	}
 }
-RIVMultiReference::RIVMultiReference(std::map<size_t,std::pair<size_t*,ushort>>& indexMap, RIVTable* sourceTable, RIVTable* targetTable) : RIVReference(sourceTable,targetTable) {
+RIVMultiReference::RIVMultiReference(std::map<size_t,std::pair<size_t*,ushort> >& indexMap, RIVTable* sourceTable, RIVTable* targetTable) : RIVReference(sourceTable,targetTable) {
 	this->indexMap = indexMap;
 }
 RIVSingleReference* RIVMultiReference::ReverseReference() {

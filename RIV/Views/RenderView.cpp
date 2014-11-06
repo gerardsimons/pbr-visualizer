@@ -11,6 +11,7 @@
 #include "../Data/DataSet.h"
 #include "../../pbrt-v2/src/core/filter.h"
 #include "../../pbrt-v2/src/filters/box.h"
+#include "../../pbrt-v2/src/core/imageio.h"
 
 RIVRenderView* RIVRenderView::instance = NULL;
 int RIVRenderView::windowHandle = -1;
@@ -115,6 +116,44 @@ void RIVRenderView::OnDataSetChanged() {
 	glutSetWindow(currentWindow);
 }
 
+void RIVRenderView::SaveImage() {
+	float splatScale = 1; //No idea what value to set this to
+	// Convert image to RGB and compute final pixel values
+	int nPix = image->xPixelCount * image->yPixelCount;
+	float *rgb = new float[3*nPix];
+	int offset = 0;
+
+	for (int y = 0; y < image->yPixelCount; ++y) {
+		for (int x = 0; x < image->xPixelCount; ++x) {
+			// Convert pixel XYZ color to RGB
+			XYZToRGB((*image->pixels)(x, y).Lxyz, &rgb[3*offset]);
+			//			printf("RGB pre-splat = ");
+			//			printArray(rgb, 3);
+			
+			// Normalize pixel with weight sum
+			float weightSum = (*image->pixels)(x, y).weightSum;
+			if (weightSum != 0.f) {
+				float invWt = 1.f / weightSum;
+				rgb[3*offset  ] = max(0.f, rgb[3*offset  ] * invWt);
+				rgb[3*offset+1] = max(0.f, rgb[3*offset+1] * invWt);
+				rgb[3*offset+2] = max(0.f, rgb[3*offset+2] * invWt);
+			}
+			
+			// Add splat value at pixel
+			float splatRGB[3];
+			XYZToRGB((*image->pixels)(x, y).splatXYZ, splatRGB);
+			rgb[3*offset  ] += splatScale * splatRGB[0];
+			rgb[3*offset+1] += splatScale * splatRGB[1];
+			rgb[3*offset+2] += splatScale * splatRGB[2];
+
+			++offset;
+		}
+	}
+	::WriteImage("outfile.tga", rgb, NULL, image->xPixelCount, image->yPixelCount, image->xResolution, image->yResolution, image->xPixelStart, image->yPixelStart);
+	
+	delete[] rgb;
+}
+
 void RIVRenderView::CreateImageFilm() {
 	//If any previous film present, delete it
 	if(image) {
@@ -149,9 +188,9 @@ void RIVRenderView::CreateImageFilm() {
 	RIVFloatRecord* radianceR = pathTable->GetRecord<RIVFloatRecord>("radiance R");
 	RIVFloatRecord* radianceG = pathTable->GetRecord<RIVFloatRecord>("radiance G");
 	RIVFloatRecord* radianceB = pathTable->GetRecord<RIVFloatRecord>("radiance B");
-	RIVFloatRecord* lensU = pathTable->GetRecord<RIVFloatRecord>("lens U");
-	RIVFloatRecord* lensV = pathTable->GetRecord<RIVFloatRecord>("lens V");
-	RIVFloatRecord* timestamp = pathTable->GetRecord<RIVFloatRecord>("timestamp");
+//	RIVFloatRecord* lensU = pathTable->GetRecord<RIVFloatRecord>("lens U");
+//	RIVFloatRecord* lensV = pathTable->GetRecord<RIVFloatRecord>("lens V");
+//	RIVFloatRecord* timestamp = pathTable->GetRecord<RIVFloatRecord>("timestamp");
 	
 	size_t row = 0;
 	TableIterator* iter = pathTable->GetIterator();
@@ -165,9 +204,12 @@ void RIVRenderView::CreateImageFilm() {
 		
 		//Recreate the camera sample
 		CameraSample cameraSample;
-		cameraSample.lensU = lensU->Value(row);
-		cameraSample.lensV = lensV->Value(row);
-		cameraSample.time = timestamp->Value(row);
+		
+		//These values don't seem to matter for the end result
+		cameraSample.lensU = 0;
+		cameraSample.lensV = 0;
+		cameraSample.time = 0;
+		
 		cameraSample.imageX = xRecord->Value(row);
 		cameraSample.imageY = yRecord->Value(row);
 		
@@ -230,6 +272,8 @@ void RIVRenderView::CreateImageFilm() {
 //	}
 	reporter::stop(taskName);
 	printf("%zu samples added to image film\n",samplesAdded);
+	
+	delete[] rgb;
 }
 
 void RIVRenderView::drawImageFilm() {

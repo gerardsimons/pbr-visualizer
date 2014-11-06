@@ -70,7 +70,7 @@ void SceneWidget::resizeGL(int width, int height) {
 
 void SceneWidget::OnDataSetChanged() {
 	//    printf("3D View received on filter change.");
-    createPoints();
+	createPaths();
 	
 	updateGL();
 	

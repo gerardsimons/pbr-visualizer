@@ -173,7 +173,7 @@ void RIVTable::SelectRow(size_t rowIndex) {
     filteredRows[rowIndex] = false;
 }
 
-std::vector<RIVRecord*> RIVTable::GetRecords() {
+std::vector<RIVRecord*> RIVTable::GetRecords() const {
     return records;
 }
 
@@ -220,11 +220,29 @@ bool RIVTable::ContainsColumn(std::string name) {
 
 bool RIVTable::ClearFilters() {
 	bool filtersCleared = filters.size() > 0;
+	deletePointerVector(filters);
     filters.clear();
+	deletePointerVector(groupFilters);
 	groupFilters.clear();
     filteredRows.clear();
     filtered = false;
 	return filtersCleared;
+}
+
+bool RIVTable::ContainsFilter(riv::Filter *toMatch) {
+	for(size_t i = 0 ; i < filters.size() ; i++) {
+		riv::Filter *filter = filters[i];
+		if(filter->GetId() == toMatch->GetId()) {
+			return true;
+		}
+	}
+	for(size_t i = 0 ; i < groupFilters.size() ; i++) {
+		riv::GroupFilter *filter = groupFilters[i];
+		if(filter->GetId() == toMatch->GetId()) {
+			return true;
+		}
+	}
+	return false;
 }
 
 bool RIVTable::ClearFilter(size_t fid) {
@@ -235,21 +253,22 @@ bool RIVTable::ClearFilter(size_t fid) {
             std::vector<riv::Filter*>::iterator it = filters.begin();
             std::advance(it, i);
             filters.erase(it);
-			delete filter;
 			std::cout << "Table " << name << " has cleared filter ";
-			filter->Print();
+			filter->Print();	
+			delete filter;
 			filterFound = true;
         }
     }
 	for(size_t i = 0 ; i < groupFilters.size() ; i++) {
-		riv::Filter *filter = groupFilters[i];
+		riv::GroupFilter *filter = groupFilters[i];
 		if(filter->GetId() == fid) {
-			std::vector<riv::Filter*>::iterator it = filters.begin();
+			std::vector<riv::GroupFilter*>::iterator it = groupFilters.begin();
 			std::advance(it, i);
-			filters.erase(it);
-			delete filter;
+			groupFilters.erase(it);
 			std::cout << "Table " << name << " has cleared filter ";
 			filter->Print();
+			delete filter;
+
 			filterFound = true;
 		}
 	}

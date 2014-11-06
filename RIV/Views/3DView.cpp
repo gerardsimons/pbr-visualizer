@@ -64,7 +64,8 @@ void RIV3DView::Reshape(int newWidth, int newHeight) {
     
     tbInitTransform();
     tbHelp();
-    
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -80,8 +81,8 @@ void RIV3DView::ToggleDrawIntersectionPoints() {
 		createPaths();
 	}
 	else if(!drawIntersectionPoints && !drawLightPaths) {
-		pathsCreated = false;
-		paths.clear();
+//		pathsCreated = false;
+//		paths.clear();
 	}
 	printf("drawIntersectionPoints is now ");
 	if(drawIntersectionPoints) printf("ON\n"); else printf("OFF\n");
@@ -90,7 +91,7 @@ void RIV3DView::ToggleDrawIntersectionPoints() {
 void RIV3DView::ToggleDrawHeatmap() {
 	drawHeatmapTree = !drawHeatmapTree;
 	if(drawHeatmapTree && !heatmap) {
-		
+		generateOctree(7, 1, .00001F);
 	}
 	isDirty = true;
 }
@@ -178,7 +179,7 @@ void RIV3DView::Draw() {
 //    glClearColor (0.0, 0.0, 0.0, 0.0);
 	glClearColor (1.0, 1.0, 1.0, 0.0);
     glClear( GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT);
-    
+	glEnable(GL_BLEND);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 	//Somehow it is mirrored so lets mirror it again to match the image
@@ -250,14 +251,27 @@ void RIV3DView::Draw() {
 	//Swap back and front buffer
     glutSwapBuffers();
 	
+	glDisable(GL_BLEND);
+	
 //	reporter::stop("3D Draw");
 }
 
 bool RIV3DView::isSelectedObject(ushort objectId) {
-	for(ushort oid : selectedObjectIDs) {
-		if(oid == objectId)
-			return true;
+	if(pathFilter) {
+		std::vector<riv::Filter*> filters = pathFilter->GetFilters();
+		for(riv::Filter* f : filters) { //One conjunctive filter at a time
+			riv::ConjunctiveFilter* conjunctiveF = dynamic_cast<riv::ConjunctiveFilter*>(f);
+			if(conjunctiveF) {
+				for(riv::Filter* f2 : conjunctiveF->GetFilters()) {
+					riv::DiscreteFilter* singleF = dynamic_cast<riv::DiscreteFilter*>(f2);
+					if(singleF && singleF->GetAttribute() == "object ID" && almost_equal(singleF->GetValue(), (float)objectId, 0.001)) {
+						return true;
+					}
+				}
+			}
+		}
 	}
+
 	return false;
 }
 
@@ -311,6 +325,10 @@ void RIV3DView::drawPoints() {
 	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Y");
 	RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("intersection Z");
 	
+//	RIVFloatRecord* throughputR = isectTable->GetRecord<RIVFloatRecord>("throughput R");
+//	RIVFloatRecord* throughputG = isectTable->GetRecord<RIVFloatRecord>("throughput G");
+//	RIVFloatRecord* throughputB = isectTable->GetRecord<RIVFloatRecord>("throughput B");
+	
 	//Only use 1 size
 	float size = sizeProperty->ComputeSize(isectTable, 0);
 //	printf("Point size = %f\n",size);
@@ -318,17 +336,23 @@ void RIV3DView::drawPoints() {
 	if(sizesAllTheSame) {
 		glPointSize(size);
 	}
+	size_t row = 0;
+	TableIterator* it = isectTable->GetIterator();
 	
 	glBegin(GL_POINTS);
 	for(Path& path : paths) {
 		for(size_t i = 0 ; i < path.Size() ; ++i) {
 			
-			size_t index = path.GetPoint(i);
-			Color pointColor = path.GetColor(i);
+			it->GetNext(row);
 			
-			float x = xRecord->Value(index);
-			float y = yRecord->Value(index);
-			float z = zRecord->Value(index);
+			PathPoint* point = path.GetPoint(i);
+			Color pointColor = point->color;
+			
+			float x = xRecord->Value(point->rowIndex);
+			float y = yRecord->Value(point->rowIndex);
+			float z = zRecord->Value(point->rowIndex);
+			
+//			float throughput = (throughputR->Value(row) + throughputG->Value(row) + throughputB->Value(row)) / 3;
 			
 			glPushMatrix();
 			glColor3f(pointColor.R,pointColor.G,pointColor.B);
@@ -375,7 +399,6 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 	printf("Tree generated with \n");
 	printf("\tDepth %zu\n",heatmap->Depth());
 	printf("\tNodes = %zu\n",heatmap->NumberOfNodes());
-//	printf("\tMemory size = %.3f KB\n",sizeof(heatmap) / 1000.F); //Not sure if that works like this, probably not
 	
 	//Generate the color map used by the tree
 	treeColorMap = colors::jetColorMap();
@@ -385,12 +408,14 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 
 void RIV3DView::ResetGraphics() {
 	paths.clear();
-	pathsCreated = false;
+
 	if(heatmap) {
 		delete heatmap;
+		generateOctree(7, 1, .00001F);
 	}
-//	createPaths();
-//	generateOctree(7, 1, .00001F);
+	if(drawLightPaths || drawIntersectionPoints) {
+		createPaths();
+	}
 }
 
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
@@ -399,6 +424,8 @@ void RIV3DView::createPaths() {
 	reporter::startTask("Creating paths");
 	
 	RIVTable* isectTable = dataset->GetTable("intersections");
+	RIVUnsignedShortRecord* bounceRecord = isectTable->GetRecord<RIVUnsignedShortRecord>("bounce#");
+	
 	paths.clear();
     
     //Get the records we want;
@@ -408,28 +435,30 @@ void RIV3DView::createPaths() {
     size_t row = 0;
 	size_t *pathID = 0;
 	size_t oldPathID = 0;
+	ushort bounceNr;
 	
 	sizesAllTheSame = true;
-	std::vector<size_t> vertices;
-	std::vector<Color> colors;
+	std::vector<PathPoint> points;
 	
     while(iterator->GetNext(row,pathID)) {
-		if(*pathID != oldPathID && colors.size() > 0) {
-			paths.push_back(Path(&vertices[0],&colors[0],colors.size()));
-			vertices.clear();
-			colors.clear();
+		if(*pathID != oldPathID && points.size() > 0) {
+			paths.push_back(Path(points));
+			points.clear();
 			oldPathID = *pathID;
 		}
+		bounceNr = bounceRecord->Value(row);
 		Color pointColor;
-        bool hasColor = colorProperty->ComputeColor(isectTable, row, pointColor); //Check if any color can be computed for the given row
-		
-		vertices.push_back(row);
-		colors.push_back(pointColor);
+        colorProperty->ComputeColor(isectTable, row, pointColor); //Check if any color can be computed for the given row
+		PathPoint p;
+		p.rowIndex = row;
+		p.bounceNr = bounceNr;
+		p.color = pointColor;
+		points.push_back(p);
+		oldPathID = *pathID;
     }
 	pathsCreated = true;
 	reporter::stop("Creating paths");
 	reportVectorStatistics("paths", paths);
-	
 }
 
 void RIV3DView::MovePathSegment(float ratioIncrement) {
@@ -476,46 +505,59 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 	
 	glBegin(GL_LINES);
 	if(startBounce == 0) {
-		for(const Path& path : paths) {
-			size_t point = path.GetPoint(0);
-			Color c = path.GetColor(0);
-
-			float deltaX = xRecord->Value(point) - cameraPosition[0];
-			float deltaY = yRecord->Value(point) - cameraPosition[1];
-			float deltaZ = zRecord->Value(point) - cameraPosition[2];
-			glVertex3f(cameraPosition[0] + deltaX * startSegment * maxBounce,cameraPosition[1] + deltaY * startSegment * maxBounce,cameraPosition[2] + deltaZ * startSegment * maxBounce);
-			glColor3f(c.R,c.G,c.B);
-			glVertex3f(cameraPosition[0] + deltaX * stopSegment * maxBounce,cameraPosition[1] + deltaY * stopSegment * maxBounce,cameraPosition[2] + deltaZ * stopSegment * maxBounce);
+		for(Path& path : paths) {
+			PathPoint *p = path.GetPointWithBounce(1);
+			if(p != NULL) {
+				
+				float deltaX = xRecord->Value(p->rowIndex) - cameraPosition[0];
+				float deltaY = yRecord->Value(p->rowIndex) - cameraPosition[1];
+				float deltaZ = zRecord->Value(p->rowIndex) - cameraPosition[2];
+				glColor3f(1,1,1);
+				glVertex3f(cameraPosition[0] + deltaX * startSegment * maxBounce,cameraPosition[1] + deltaY * startSegment * maxBounce,cameraPosition[2] + deltaZ * startSegment * maxBounce);
+				Color& c = p->color;
+				glColor3f(c.R,c.G,c.B);
+				glVertex3f(cameraPosition[0] + deltaX * stopSegment * maxBounce,cameraPosition[1] + deltaY * stopSegment * maxBounce,cameraPosition[2] + deltaZ * stopSegment * maxBounce);
+			}
+			
+//			size_t point = path.GetPoint(0);
+//			Color c = path.GetColor(0);
+//
+//
+//			glVertex3f(cameraPosition[0] + deltaX * startSegment * maxBounce,cameraPosition[1] + deltaY * startSegment * maxBounce,cameraPosition[2] + deltaZ * startSegment * maxBounce);
+//			glColor3f(c.R,c.G,c.B);
+//			glVertex3f(cameraPosition[0] + deltaX * stopSegment * maxBounce,cameraPosition[1] + deltaY * stopSegment * maxBounce,cameraPosition[2] + deltaZ * stopSegment * maxBounce);
 		}
 	}
 	else {
-		for(const Path& path : paths) {
-			if(path.Size() >= endBounce) {
-				size_t startPoint = path.GetPoint(startBounce - 1);
-				Color startColor = path.GetColor(startBounce - 1);
-				
-				size_t endPoint = path.GetPoint(endBounce - 1);
-				Color endColor = path.GetColor(endBounce - 1);
-				
-				float Cstart = startSegment * maxBounce - startBounce;
-				float Cend = stopSegment * maxBounce - startBounce;
+		for(Path& path : paths) {
+			if(path.Size() >= 2) {
+				PathPoint* startPoint = path.GetPointWithBounce(startBounce);
+				PathPoint* endPoint = path.GetPointWithBounce(endBounce);
+					
+				if(startPoint != NULL && endPoint != NULL) {
+					Color startColor = startPoint->color;
+					Color endColor = endPoint->color;
+					
+					float Cstart = startSegment * maxBounce - startBounce;
+					float Cend = stopSegment * maxBounce - startBounce;
 
-				float startX = xRecord->Value(startPoint);
-				float startY = yRecord->Value(startPoint);
-				float startZ = zRecord->Value(startPoint);
+					float startX = xRecord->Value(startPoint->rowIndex);
+					float startY = yRecord->Value(startPoint->rowIndex);
+					float startZ = zRecord->Value(startPoint->rowIndex);
 
-				float endX = xRecord->Value(endPoint);
-				float endY = yRecord->Value(endPoint);
-				float endZ = zRecord->Value(endPoint);
+					float endX = xRecord->Value(endPoint->rowIndex);
+					float endY = yRecord->Value(endPoint->rowIndex);
+					float endZ = zRecord->Value(endPoint->rowIndex);
 
-				float deltaX = endX - startX;
-				float deltaY = endY - startY;
-				float deltaZ = endZ - startZ;
+					float deltaX = endX - startX;
+					float deltaY = endY - startY;
+					float deltaZ = endZ - startZ;
 
-				glColor3f(startColor.R,startColor.G,startColor.B);
-				glVertex3f(startX + deltaX * Cstart, startY + deltaY * Cstart, startZ + deltaZ * Cstart);
-				glColor3f(endColor.R,endColor.G,endColor.B);
-				glVertex3f(startX + deltaX * Cend, startY + deltaY * Cend, startZ + deltaZ * Cend);
+					glColor3f(startColor.R,startColor.G,startColor.B);
+					glVertex3f(startX + deltaX * Cstart, startY + deltaY * Cstart, startZ + deltaZ * Cstart);
+					glColor3f(endColor.R,endColor.G,endColor.B);
+					glVertex3f(startX + deltaX * Cend, startY + deltaY * Cend, startZ + deltaZ * Cend);
+				}
 			}
 		}
 	}
@@ -532,8 +574,8 @@ void RIV3DView::ToggleDrawPaths() {
 		createPaths();
 	}
 	else if(!drawLightPaths && !drawIntersectionPoints) {
-		paths.clear();
-		pathsCreated = false;
+//		paths.clear();
+//		pathsCreated = false;
 	}
 	isDirty = true;
 }
@@ -644,16 +686,11 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 		pickRay = riv::Ray<float>(origin,dir);
 		bool intersects = pbrtConfig->GetMeshModelGroup()->ModelIntersect(pickRay, selectedObjectID, Phit);
 		
-		printf("selected Object IDs = ");
-		printVector(selectedObjectIDs);
-		printf("new Object ID = %hu\n",selectedObjectID);
-		
 		bool refilterNeeded = false;
 
 		if(intersects && selectRound < maxBounce) {
 			printf("new selected object ID = %hu\n",selectedObjectID);
 			meshSelected = true;
-			selectedObjectIDs.push_back(selectedObjectID);
 			refilterNeeded = true;
 		}
 //		else if(!newObjectID) {
@@ -663,23 +700,45 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 		
 		if(refilterNeeded) { //Create path filter
 			printf("Path creation filter");
-			if(pathCreationFilterHandle) {
-				dataset->ClearFilter(pathCreationFilterHandle);
-			}
-			std::vector<riv::Filter*> allFilters;
-			for(size_t i = 0 ; i < selectedObjectIDs.size() ; ++i) {
-				riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectIDs[i]);
-				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",i+1);
+			dataset->StartFiltering();
+			if(pathFilter == NULL) { //Add to the previous filter
+				riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectID);
+				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",1);
 				std::vector<riv::Filter*> fs;
 				fs.push_back(objectFilter);
 				fs.push_back(bounceFilter);
-				allFilters.push_back(new riv::ConjunctiveFilter(fs));
+				pathFilter = new riv::GroupFilter(new riv::ConjunctiveFilter(fs),dataset->GetTable("path"));
+				dataset->AddFilter("path", pathFilter);
 			}
-			riv::GroupFilter* pathCreationFilter = new riv::GroupFilter(allFilters,dataset->GetTable("path"));
-			pathCreationFilter->Print();
+			else { //There already is a path creation filter, simply add to it
+				//Find the latest bounce nr filter
+				size_t bounce_nr = pathFilter->Size() + 1;
+				
+				riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectID);
+				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",bounce_nr);
+				std::vector<riv::Filter*> fs;
+				fs.push_back(objectFilter);
+				fs.push_back(bounceFilter);
+				pathFilter->AddFilter(new riv::ConjunctiveFilter(fs));
+				
+				dataset->UpdateFilter(pathFilter);
+			}
+			
+//			std::vector<riv::Filter*> allFilters;
+//			for(size_t i = 0 ; i < selectedObjectIDs.size() ; ++i) {
+//				
+//				//If no filter exists yet, create it
+//				
+//				riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectIDs[i]);
+//				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",i+1);
+//				std::vector<riv::Filter*> fs;
+//				fs.push_back(objectFilter);
+//				fs.push_back(bounceFilter);
+//				allFilters.push_back(new riv::ConjunctiveFilter(fs));
+//			}
+//			riv::GroupFilter* pathCreationFilter = new riv::GroupFilter(allFilters,dataset->GetTable("path"));
+			pathFilter->Print();
 			printf("\n");
-			dataset->StartFiltering();
-			dataset->AddFilter("path", pathCreationFilter);
 			dataset->StopFiltering();
 		}
 		

@@ -59,7 +59,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt64x64x100.tga&quot;"
+            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt_64x64x100.tga&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
@@ -67,7 +67,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt64x64x100.bmp&quot;"
+            argument = "&quot;/Users/gerardsimons/Dropbox/TU Delft/Master/Afstuderen/Data/Cornell/cornell-mlt_64x64x100.bmp&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

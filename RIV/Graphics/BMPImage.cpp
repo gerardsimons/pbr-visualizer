@@ -28,8 +28,6 @@ BMPImage::~BMPImage() {
     }
 }
 
-
-
 bool BMPImage::loadTexture(const char* imagepath, int alpha)
 {   
 	// Data read from the header of the BMP file

@@ -433,7 +433,7 @@ void DataDumper::WriteBufferToFile() {
 			//write shape ids, size * integers
 			//fprintf(pathASCII,"{");
 			for(size_t i = 0 ; i < nrIsects ; i++) {
-				IntersectData isectData = data.intersectionData[i];
+				IntersectData& isectData = data.intersectionData[i];
 	//            isectData->shapeId = 5;
 
 	//            char buffer[100];
@@ -445,7 +445,7 @@ void DataDumper::WriteBufferToFile() {
 			
 			//Write the objectId created using ObjectInstance
 			for(size_t i = 0 ; i < nrIsects ; i++) {
-				IntersectData isectData = data.intersectionData[i];
+				IntersectData& isectData = data.intersectionData[i];
 				//Find the object ID for this primitive ID
 				ushort objectID = objectIdForPrimitiveId(isectData.primitiveId);
 				if(writeASCII)
@@ -457,7 +457,7 @@ void DataDumper::WriteBufferToFile() {
 			if(writeASCII)
 				fprintf(pathASCII,"{");
 			for(size_t i = 0 ; i < nrIsects ; i++) {
-				IntersectData isectData = data.intersectionData[i];
+				IntersectData& isectData = data.intersectionData[i];
 				const RGBSpectrum &s = isectData.spectrum.ToRGBSpectrum();
 				float color[3];
 				s.ToRGB(color);
@@ -469,6 +469,22 @@ void DataDumper::WriteBufferToFile() {
 						fprintf(pathASCII,"[%f,%f,%f]},",color[0],color[1],color[2]);
 				}
 
+				fwrite(&color,sizeof(float),3,pathBinary); //12 bytes
+			}
+			if(writeASCII)
+				fprintf(pathASCII,"{");
+			for(size_t i = 0 ; i < nrIsects ; i++) {
+				IntersectData& isectData = data.intersectionData[i];
+				const RGBSpectrum &s = isectData.throughput.ToRGBSpectrum();
+				float color[3];
+				s.ToRGB(color);
+				if(writeASCII) {
+					if(i != nrIsects - 1) {
+						fprintf(pathASCII,"[%f,%f,%f],",color[0],color[1],color[2]);
+					}
+					else
+						fprintf(pathASCII,"[%f,%f,%f]},",color[0],color[1],color[2]);
+				}
 				fwrite(&color,sizeof(float),3,pathBinary); //12 bytes
 			}
 			//fprintf(pathASCII,"},");

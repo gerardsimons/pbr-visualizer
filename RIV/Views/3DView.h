@@ -50,8 +50,7 @@ protected:;
 	riv::Ray<float> pickRay;
 	
 	bool meshSelected = false;
-	std::vector<ushort> selectedObjectIDs;
-	size_t pathCreationFilterHandle = 0; //The filter used to create pat
+	riv::GroupFilter* pathFilter = NULL;
     
     //Buffered graphics point data, generated from the data, stored here for speed, TODO: Only store indices and a pointer to these records?
 	bool sizesAllTheSame; //Because sizes are often set to the same, we take advantage of this to get a big performance boost

@@ -72,6 +72,7 @@ namespace riv {
 		void Filter();
 		void FilterReferences();
 		void AddRecord(RIVRecord* record);
+		bool ContainsFilter(riv::Filter* filter);
 		void AddFilter(riv::Filter *filter);
 		void AddFilter(riv::GroupFilter *groupFilter);
 //		void AddReference(const RIVReference* reference);
@@ -120,7 +121,7 @@ namespace riv {
 		
 		size_t NumberOfColumns(); //Columns
 		size_t NumberOfRows();
-		std::vector<RIVRecord*> GetRecords();
+		std::vector<RIVRecord*> GetRecords() const;
 		
 		RIVClusterSet& GetClusterSet() { return clusterSet; };
 		void ClusterWithSize(const std::string& xRecordName, const std::string& yRecordName, const std::string& zRecordName, const size_t& clusterSize, const size_t& maxRepeat);
