@@ -1,0 +1,3402 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		33684D9DCA064BDF89AE4E5C /* ZERO_CHECK */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 5286F321466240178FF4F7DD /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildPhases = (
+				D76A51942E514CB6BD77367E /* CMake Rules */,
+			);
+			dependencies = (
+			);
+			name = ZERO_CHECK;
+			productName = ZERO_CHECK;
+		};
+		595A6D9A38114A9695B67D6C /* ALL_BUILD */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = A32C6D65E991494E85490ABC /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildPhases = (
+				ED28BF80D71544B7931C6918 /* CMake Rules */,
+			);
+			dependencies = (
+				2793C562B10144828C4ACFE6 /* PBXTargetDependency */,
+				5FE4715B95DD48CE8F0F5D7F /* PBXTargetDependency */,
+				911470F19E324694946D05AB /* PBXTargetDependency */,
+				F7081F9985E34AAEAF942598 /* PBXTargetDependency */,
+				059680542AFA41618F66D2F4 /* PBXTargetDependency */,
+				846A3C4B817A40A4B68804C6 /* PBXTargetDependency */,
+				4E916194ADAB41CF98F9AE27 /* PBXTargetDependency */,
+				E58FCEED46F94E1FB43703C0 /* PBXTargetDependency */,
+				CA39FA856EF845C0B0AE140E /* PBXTargetDependency */,
+				19135FC235CD47C584B94125 /* PBXTargetDependency */,
+			);
+			name = ALL_BUILD;
+			productName = ALL_BUILD;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		104228B2BEAF48C7B89BED18 /* stringstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 662886171C2046A3900BF76C /* stringstream.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		10A1444F5BD940E09878AAE7 /* taskscheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7DBA2555E12643B3BF6DE3E7 /* taskscheduler.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		1754037BA2E34A4B8487E446 /* sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C4C910AEB84E400FBFC2161B /* sampler.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		19E4C1267E054D9E8BDBB068 /* handle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11536EEECD754BACA25EF372 /* handle.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		1B2745F41840447F8BC14047 /* xml_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A3A4967F863B4794925AD1E7 /* xml_parser.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		1B44441D409C46C2BC421C67 /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6DE031F477A94072A3F7E2AD /* string.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		1D7017FE73094A99B4B1634B /* obj_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 643F703D30F2451BAFC91307 /* obj_loader.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		26E25573BF0C440E8C5A8CD7 /* xml2obj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F4BD4D458124E999179C920 /* xml2obj.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		294BF9D06AA440A9B6B4EA5A /* condition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0001F22A1C524FAD8E738484 /* condition.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		350096F6E73B4364AD0B2E22 /* taskscheduler_mic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A098CAB8217B416D87D4077F /* taskscheduler_mic.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		352615DF89354F11B0625410 /* exr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61ACD35C56914C72BB37E57A /* exr.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		37D8387148084EDD97E69065 /* platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3CEFE9D418574A8BA16B1E89 /* platform.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		3EC31EEDA9394EDEA59059AC /* debugrenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D6B138B726184D35ABD95311 /* debugrenderer.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		40DB64E3F1B1491B8E9617F6 /* tokenstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C335C61B9584AFD93F907DE /* tokenstream.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		41063CC4171B47A98B5F0293 /* sysinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 64C72E7B17054CC0AD7046A4 /* sysinfo.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		51112BD9662949C6ABAB114B /* regression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAA42D2A639F4DA6B5E1C2CF /* regression.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		5419D89344DE42F3B8DB003D /* pfm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 385396C4E27B4023A7EB4162 /* pfm.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		6AEE4B4C1F7B4D7FB1493A3C /* filename.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 925839444DF549B5BDEE43F6 /* filename.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		6C517E498AB94E2C9D76B6F8 /* tga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79BC6DCD18FA4826B943828A /* tga.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		72E9FAB49AFE4E1A97A0D97E /* mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01E9442053404271BEF01C14 /* mutex.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		7C360CDE553F40DD9176396F /* trianglemesh_full.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 715A68776EAF4FFFBDC4BCAC /* trianglemesh_full.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		7DD6E05039E54D77B02F7E46 /* integratorrenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D72E86D5409E453AA019BAF7 /* integratorrenderer.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		80807694431B42CFA47F9050 /* distribution1d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 19AF61361D6B47C8AF624D0A /* distribution1d.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		8524C6E60B234058B49BD7CF /* ppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5EEB7C7CAC641418970E2AD /* ppm.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		90A7BFC9DED6419899F150C7 /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 98F064B5C6134061A0403795 /* thread.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		96E3DFFFC0F24BA7AFE7B387 /* filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 948328AE252F446289156FBF /* filter.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		97E392B61A574F149D5EE1B4 /* singleray_device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13D2CDA263424F4A8ED7F017 /* singleray_device.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		9AC95138595D4CBFBC2985FF /* xml_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9EC332930BC4F5EB303DF96 /* xml_loader.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		9F3849CC10CA4132AF435067 /* renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C445E1F2D4454FE3AF69B38E /* renderer.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		A6FDBF89AE964B39958E8839 /* hdrilight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D971794B3EE4F2588077A3D /* hdrilight.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		A899D3B69C1F4CE7A9F45D57 /* loaders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DFE219066F1D4403BCAFA754 /* loaders.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		ADBF8887920D4C49A4B95332 /* network.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6835EABE98AA4AA392E87902 /* network.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		B565A8C9DBB0452FABCB9076 /* glutdisplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C3FF16AD7CCC42808B580DC9 /* glutdisplay.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		BF6F0A1D49654D0997322552 /* progress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14E2F2D9E95F4268AD7EA2CC /* progress.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		C03486B146C145DEA474AB18 /* pathtraceintegrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75AD79F33029430FB1683F18 /* pathtraceintegrator.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		C504E02C16FB4165854F0A2D /* xmlWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A0017B0564C4DFEA79D9BFB /* xmlWriter.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		D2D31F0886E349B6AB13FE44 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82979A777D45480CA7515AC0 /* image.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		D39B9D7A8B8C4BD893CC9940 /* magick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA23F6E973AB421E99CA8223 /* magick.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		DCF79974584F460CB079F7CA /* objLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BDAC984CB955405688A0F2AB /* objLoader.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		E7D8FC38C7EF409F978F4E9B /* obj2xml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5322DDFF74544C58876F642C /* obj2xml.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		ECA273DC343C492D8645A5CB /* device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1B139BDF3E94BC19C7987FE /* device.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		EF4FBB41468A47C5809D3180 /* distribution2d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C8ED3C2713343EC8587A8E5 /* distribution2d.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		F413DF3207AD404BA75E4430 /* taskscheduler_sys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 25F19BD3587E446FAB9F8483 /* taskscheduler_sys.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		FC16A63FAEA64175ADDF63B7 /* library.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6AA8DF1DF9E04499BD66859C /* library.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		FDB12631BB4246E9BBC66AB8 /* trianglemesh_normals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A98AE7045AD4714BFFA1F92 /* trianglemesh_normals.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		078C161ACF694999BEE8C8B4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F13451A43E0493DB8A6AB03;
+			remoteInfo = lexers;
+		};
+		16FBF07B63734BABB6614829 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6958A0AAEC5C4848A0231515;
+			remoteInfo = sys;
+		};
+		17D3785880764CABACA82E7E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9315ECB611E7497AAD021037;
+			remoteInfo = image;
+		};
+		1FCAD00A2DA541F29E32B10E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6958A0AAEC5C4848A0231515;
+			remoteInfo = sys;
+		};
+		22CC9A6D7A854FC28E0A05D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9315ECB611E7497AAD021037;
+			remoteInfo = image;
+		};
+		29569253D22C427DB6D6F155 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9315ECB611E7497AAD021037;
+			remoteInfo = image;
+		};
+		295B0993364A40EC924AFB89 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33684D9DCA064BDF89AE4E5C;
+			remoteInfo = ZERO_CHECK;
+		};
+		2A47AA49DC284ADA9128302D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6958A0AAEC5C4848A0231515;
+			remoteInfo = sys;
+		};
+		2DFDB3E21A9044C0A87FDEE4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 95938E2DD0B444D6B687142B;
+			remoteInfo = loaders;
+		};
+		3023B1A48C83464C8C94D52A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7FC1C8F07459491CB8D728B0;
+			remoteInfo = device_singleray;
+		};
+		4A149CFDA5E145AAB0D5ED8F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9315ECB611E7497AAD021037;
+			remoteInfo = image;
+		};
+		4A62D8059C5D47A59CA97B8F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2D1E6B4F49A242209F2C96BF;
+			remoteInfo = device;
+		};
+		552F725BF9E64BCF917A0AF9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33684D9DCA064BDF89AE4E5C;
+			remoteInfo = ZERO_CHECK;
+		};
+		5B195C9E1EFF4657A6ACC7F0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9315ECB611E7497AAD021037;
+			remoteInfo = image;
+		};
+		61B3466A1046418A9C1079E5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33684D9DCA064BDF89AE4E5C;
+			remoteInfo = ZERO_CHECK;
+		};
+		6D17C4B5912549EEBA64AEEF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9315ECB611E7497AAD021037;
+			remoteInfo = image;
+		};
+		6F9E0DE160114841BF04416D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6958A0AAEC5C4848A0231515;
+			remoteInfo = sys;
+		};
+		731D20840321457AB2D9A8A3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33684D9DCA064BDF89AE4E5C;
+			remoteInfo = ZERO_CHECK;
+		};
+		78EC1ABB765849128791BDAE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F13451A43E0493DB8A6AB03;
+			remoteInfo = lexers;
+		};
+		837838BF9A6A4AD9B2ACFA8F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33684D9DCA064BDF89AE4E5C;
+			remoteInfo = ZERO_CHECK;
+		};
+		8A2FF1EB517D44299A26A0D6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 95938E2DD0B444D6B687142B;
+			remoteInfo = loaders;
+		};
+		8B06B0CE751A4A6396535AE0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6958A0AAEC5C4848A0231515;
+			remoteInfo = sys;
+		};
+		8B2AF903A7864C8FA0D6CB40 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6958A0AAEC5C4848A0231515;
+			remoteInfo = sys;
+		};
+		96705A11DF6C46CE81D5C827 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33684D9DCA064BDF89AE4E5C;
+			remoteInfo = ZERO_CHECK;
+		};
+		A4AFD3F8A1624DD0B07D8036 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33684D9DCA064BDF89AE4E5C;
+			remoteInfo = ZERO_CHECK;
+		};
+		A4FD24F025A0446FB8630431 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 95938E2DD0B444D6B687142B;
+			remoteInfo = loaders;
+		};
+		A54EAB350D464EF9856E2D1E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 45BFC816D9CB445DAD31FC36;
+			remoteInfo = obj2xml;
+		};
+		AADB3A9FA1FA4142B93FB798 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F13451A43E0493DB8A6AB03;
+			remoteInfo = lexers;
+		};
+		AC59B9B3FC4549E1A95D9C0E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33684D9DCA064BDF89AE4E5C;
+			remoteInfo = ZERO_CHECK;
+		};
+		B181354570B34C6796C63EFC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33684D9DCA064BDF89AE4E5C;
+			remoteInfo = ZERO_CHECK;
+		};
+		BB039D7E02E14EBDA075F8CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F13451A43E0493DB8A6AB03;
+			remoteInfo = lexers;
+		};
+		C773B0F7E2DE4C85B38CF633 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6958A0AAEC5C4848A0231515;
+			remoteInfo = sys;
+		};
+		C7F2F2190A734829AFB87154 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6958A0AAEC5C4848A0231515;
+			remoteInfo = sys;
+		};
+		E77E36D620C2428683B8A260 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2D1E6B4F49A242209F2C96BF;
+			remoteInfo = device;
+		};
+		E9F6F38ACCF94B61AC9A0C8E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2B59A6611B944450A42D29A9;
+			remoteInfo = renderer;
+		};
+		EB736C037B5147A895C4E5DE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 33684D9DCA064BDF89AE4E5C;
+			remoteInfo = ZERO_CHECK;
+		};
+		F6A939A240C848F0896CD63F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8E505B3613FC47AF8770AEB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2DA81784B7E94341A201271E;
+			remoteInfo = xml2obj;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0001F22A1C524FAD8E738484 /* condition.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = condition.cpp; path = common/sys/sync/condition.cpp; sourceTree = SOURCE_ROOT; };
+		01E9442053404271BEF01C14 /* mutex.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = mutex.cpp; path = common/sys/sync/mutex.cpp; sourceTree = SOURCE_ROOT; };
+		0C8ED3C2713343EC8587A8E5 /* distribution2d.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = distribution2d.cpp; path = devices/device_singleray/samplers/distribution2d.cpp; sourceTree = SOURCE_ROOT; };
+		11536EEECD754BACA25EF372 /* handle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = handle.cpp; path = devices/device/handle.cpp; sourceTree = SOURCE_ROOT; };
+		12D0DD4DC51C45A58E843CC7 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = common/sys/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		13D2CDA263424F4A8ED7F017 /* singleray_device.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = singleray_device.cpp; path = devices/device_singleray/api/singleray_device.cpp; sourceTree = SOURCE_ROOT; };
+		14E2F2D9E95F4268AD7EA2CC /* progress.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = progress.cpp; path = devices/device_singleray/renderers/progress.cpp; sourceTree = SOURCE_ROOT; };
+		19AF61361D6B47C8AF624D0A /* distribution1d.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = distribution1d.cpp; path = devices/device_singleray/samplers/distribution1d.cpp; sourceTree = SOURCE_ROOT; };
+		1A27C5A93C614D31AD3D13F5 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = common/image/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		1D971794B3EE4F2588077A3D /* hdrilight.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = hdrilight.cpp; path = devices/device_singleray/lights/hdrilight.cpp; sourceTree = SOURCE_ROOT; };
+		24689115BD9C4C5397F66C10 /* liblexers.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = liblexers.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		25F19BD3587E446FAB9F8483 /* taskscheduler_sys.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = taskscheduler_sys.cpp; path = common/sys/taskscheduler_sys.cpp; sourceTree = SOURCE_ROOT; };
+		27663409362048E1B6B1160B /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		2A98AE7045AD4714BFFA1F92 /* trianglemesh_normals.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = trianglemesh_normals.cpp; path = devices/device_singleray/shapes/trianglemesh_normals.cpp; sourceTree = SOURCE_ROOT; };
+		381D1507F5E0467C9DA73D82 /* libsys.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libsys.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		385396C4E27B4023A7EB4162 /* pfm.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = pfm.cpp; path = common/image/pfm.cpp; sourceTree = SOURCE_ROOT; };
+		3CEFE9D418574A8BA16B1E89 /* platform.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = platform.cpp; path = common/sys/platform.cpp; sourceTree = SOURCE_ROOT; };
+		482ACA57F28D44B1BD26FFCA /* xml2obj */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = xml2obj; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A0017B0564C4DFEA79D9BFB /* xmlWriter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = xmlWriter.cpp; path = tools/obj2xml/xmlWriter.cpp; sourceTree = SOURCE_ROOT; };
+		4F4BD4D458124E999179C920 /* xml2obj.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = xml2obj.cpp; path = tools/xml2obj/xml2obj.cpp; sourceTree = SOURCE_ROOT; };
+		50189AB4B71B4100B3068D3F /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = common/lexers/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		5322DDFF74544C58876F642C /* obj2xml.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = obj2xml.cpp; path = tools/obj2xml/obj2xml.cpp; sourceTree = SOURCE_ROOT; };
+		61ACD35C56914C72BB37E57A /* exr.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = exr.cpp; path = common/image/exr.cpp; sourceTree = SOURCE_ROOT; };
+		643F703D30F2451BAFC91307 /* obj_loader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = obj_loader.cpp; path = devices/device/loaders/obj_loader.cpp; sourceTree = SOURCE_ROOT; };
+		64C72E7B17054CC0AD7046A4 /* sysinfo.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = sysinfo.cpp; path = common/sys/sysinfo.cpp; sourceTree = SOURCE_ROOT; };
+		662886171C2046A3900BF76C /* stringstream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = stringstream.cpp; path = common/lexers/stringstream.cpp; sourceTree = SOURCE_ROOT; };
+		67E48AA655684E51A14131A6 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = devices/device/loaders/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		6835EABE98AA4AA392E87902 /* network.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = network.cpp; path = common/sys/network.cpp; sourceTree = SOURCE_ROOT; };
+		69FF9FE063E940D580B4CD53 /* libimage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libimage.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6AA8DF1DF9E04499BD66859C /* library.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = library.cpp; path = common/sys/library.cpp; sourceTree = SOURCE_ROOT; };
+		6DE031F477A94072A3F7E2AD /* string.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = string.cpp; path = common/sys/stl/string.cpp; sourceTree = SOURCE_ROOT; };
+		6FC8AAB02B9244E496C1A168 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = devices/device/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		715A68776EAF4FFFBDC4BCAC /* trianglemesh_full.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = trianglemesh_full.cpp; path = devices/device_singleray/shapes/trianglemesh_full.cpp; sourceTree = SOURCE_ROOT; };
+		75AD79F33029430FB1683F18 /* pathtraceintegrator.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = pathtraceintegrator.cpp; path = devices/device_singleray/integrators/pathtraceintegrator.cpp; sourceTree = SOURCE_ROOT; };
+		796527F037E648EC937E0919 /* libdevice_singleray.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; path = libdevice_singleray.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		79BC6DCD18FA4826B943828A /* tga.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = tga.cpp; path = common/image/tga.cpp; sourceTree = SOURCE_ROOT; };
+		7C335C61B9584AFD93F907DE /* tokenstream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = tokenstream.cpp; path = common/lexers/tokenstream.cpp; sourceTree = SOURCE_ROOT; };
+		7DBA2555E12643B3BF6DE3E7 /* taskscheduler.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = taskscheduler.cpp; path = common/sys/taskscheduler.cpp; sourceTree = SOURCE_ROOT; };
+		816AA37548E649058B2B9B36 /* renderer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = renderer; sourceTree = BUILT_PRODUCTS_DIR; };
+		82979A777D45480CA7515AC0 /* image.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = image.cpp; path = common/image/image.cpp; sourceTree = SOURCE_ROOT; };
+		925839444DF549B5BDEE43F6 /* filename.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = filename.cpp; path = common/sys/filename.cpp; sourceTree = SOURCE_ROOT; };
+		948328AE252F446289156FBF /* filter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = filter.cpp; path = devices/device_singleray/filters/filter.cpp; sourceTree = SOURCE_ROOT; };
+		95597F5FAED047F38E2EAE06 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = tools/xml2obj/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		9607D67A38674171A8B343BA /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = devices/device_singleray/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		98F064B5C6134061A0403795 /* thread.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = thread.cpp; path = common/sys/thread.cpp; sourceTree = SOURCE_ROOT; };
+		A098CAB8217B416D87D4077F /* taskscheduler_mic.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = taskscheduler_mic.cpp; path = common/sys/taskscheduler_mic.cpp; sourceTree = SOURCE_ROOT; };
+		A3912EE2B66D4666ACFC52A3 /* obj2xml */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = obj2xml; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3A4967F863B4794925AD1E7 /* xml_parser.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = xml_parser.cpp; path = devices/device/loaders/xml_parser.cpp; sourceTree = SOURCE_ROOT; };
+		A9EC332930BC4F5EB303DF96 /* xml_loader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = xml_loader.cpp; path = devices/device/loaders/xml_loader.cpp; sourceTree = SOURCE_ROOT; };
+		BDAC984CB955405688A0F2AB /* objLoader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = objLoader.cpp; path = tools/obj2xml/objLoader.cpp; sourceTree = SOURCE_ROOT; };
+		C3FF16AD7CCC42808B580DC9 /* glutdisplay.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = glutdisplay.cpp; path = devices/renderer/glutdisplay.cpp; sourceTree = SOURCE_ROOT; };
+		C445E1F2D4454FE3AF69B38E /* renderer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = renderer.cpp; path = devices/renderer/renderer.cpp; sourceTree = SOURCE_ROOT; };
+		C4C910AEB84E400FBFC2161B /* sampler.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = sampler.cpp; path = devices/device_singleray/samplers/sampler.cpp; sourceTree = SOURCE_ROOT; };
+		C5EEB7C7CAC641418970E2AD /* ppm.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ppm.cpp; path = common/image/ppm.cpp; sourceTree = SOURCE_ROOT; };
+		C8FD3860F2FB4E48B8AED3D0 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = tools/obj2xml/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		D391C9924017483AA7483789 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = devices/renderer/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		D6B138B726184D35ABD95311 /* debugrenderer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = debugrenderer.cpp; path = devices/device_singleray/renderers/debugrenderer.cpp; sourceTree = SOURCE_ROOT; };
+		D72E86D5409E453AA019BAF7 /* integratorrenderer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = integratorrenderer.cpp; path = devices/device_singleray/renderers/integratorrenderer.cpp; sourceTree = SOURCE_ROOT; };
+		DFE219066F1D4403BCAFA754 /* loaders.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = loaders.cpp; path = devices/device/loaders/loaders.cpp; sourceTree = SOURCE_ROOT; };
+		E5C3594532D94416906DB74E /* libdevice.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libdevice.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1B139BDF3E94BC19C7987FE /* device.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = device.cpp; path = devices/device/device.cpp; sourceTree = SOURCE_ROOT; };
+		F74D6B112F1141D88428AFED /* libloaders.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libloaders.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA23F6E973AB421E99CA8223 /* magick.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = magick.cpp; path = common/image/magick.cpp; sourceTree = SOURCE_ROOT; };
+		FAA42D2A639F4DA6B5E1C2CF /* regression.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = regression.cpp; path = devices/renderer/regression.cpp; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		04AEC3C831B641F2875C4B1C /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				925839444DF549B5BDEE43F6 /* filename.cpp */,
+				6AA8DF1DF9E04499BD66859C /* library.cpp */,
+				6835EABE98AA4AA392E87902 /* network.cpp */,
+				3CEFE9D418574A8BA16B1E89 /* platform.cpp */,
+				6DE031F477A94072A3F7E2AD /* string.cpp */,
+				0001F22A1C524FAD8E738484 /* condition.cpp */,
+				01E9442053404271BEF01C14 /* mutex.cpp */,
+				64C72E7B17054CC0AD7046A4 /* sysinfo.cpp */,
+				7DBA2555E12643B3BF6DE3E7 /* taskscheduler.cpp */,
+				A098CAB8217B416D87D4077F /* taskscheduler_mic.cpp */,
+				25F19BD3587E446FAB9F8483 /* taskscheduler_sys.cpp */,
+				98F064B5C6134061A0403795 /* thread.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		140F764BA8D64960A29619DD /* image */ = {
+			isa = PBXGroup;
+			children = (
+				641209E28CD141C4A4B01C82 /* Source Files */,
+				1A27C5A93C614D31AD3D13F5 /* CMakeLists.txt */,
+			);
+			name = image;
+			sourceTree = "<group>";
+		};
+		322295B2E6AC4485AB212B46 /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				68745D2EEA2A49398C629595 /* CMake Rules */,
+			);
+			name = ALL_BUILD;
+			sourceTree = "<group>";
+		};
+		3A6DFBF514B042819E0DA234 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				662886171C2046A3900BF76C /* stringstream.cpp */,
+				7C335C61B9584AFD93F907DE /* tokenstream.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		3BB1FF109ACD4ACBAC39EBF9 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		442158D773464A7FB00B10DF /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				F1B139BDF3E94BC19C7987FE /* device.cpp */,
+				11536EEECD754BACA25EF372 /* handle.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		641209E28CD141C4A4B01C82 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				61ACD35C56914C72BB37E57A /* exr.cpp */,
+				82979A777D45480CA7515AC0 /* image.cpp */,
+				FA23F6E973AB421E99CA8223 /* magick.cpp */,
+				385396C4E27B4023A7EB4162 /* pfm.cpp */,
+				C5EEB7C7CAC641418970E2AD /* ppm.cpp */,
+				79BC6DCD18FA4826B943828A /* tga.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		66B5D3C3365C46F2A1581215 /* ZERO_CHECK */ = {
+			isa = PBXGroup;
+			children = (
+				744DDB08798B47EF93AB76E3 /* CMake Rules */,
+				27663409362048E1B6B1160B /* CMakeLists.txt */,
+			);
+			name = ZERO_CHECK;
+			sourceTree = "<group>";
+		};
+		68745D2EEA2A49398C629595 /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		744DDB08798B47EF93AB76E3 /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		767830CDAA664EFA8638F903 /* xml2obj */ = {
+			isa = PBXGroup;
+			children = (
+				EAA88AA5F3E444B7B9CEC095 /* Source Files */,
+				95597F5FAED047F38E2EAE06 /* CMakeLists.txt */,
+			);
+			name = xml2obj;
+			sourceTree = "<group>";
+		};
+		8CC2694493E04E8FB3EA64F7 /* device_singleray */ = {
+			isa = PBXGroup;
+			children = (
+				DF10F7A9CC04427686376EA8 /* Source Files */,
+				9607D67A38674171A8B343BA /* CMakeLists.txt */,
+			);
+			name = device_singleray;
+			sourceTree = "<group>";
+		};
+		A37A02B9AD4947BABA3831A1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				381D1507F5E0467C9DA73D82 /* libsys.a */,
+				69FF9FE063E940D580B4CD53 /* libimage.a */,
+				24689115BD9C4C5397F66C10 /* liblexers.a */,
+				816AA37548E649058B2B9B36 /* renderer */,
+				E5C3594532D94416906DB74E /* libdevice.a */,
+				F74D6B112F1141D88428AFED /* libloaders.a */,
+				796527F037E648EC937E0919 /* libdevice_singleray.dylib */,
+				A3912EE2B66D4666ACFC52A3 /* obj2xml */,
+				482ACA57F28D44B1BD26FFCA /* xml2obj */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AFD9F9302DB2415080DD5E04 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				5322DDFF74544C58876F642C /* obj2xml.cpp */,
+				BDAC984CB955405688A0F2AB /* objLoader.cpp */,
+				4A0017B0564C4DFEA79D9BFB /* xmlWriter.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		B21EC20002A3442E8E40FB5B /* sys */ = {
+			isa = PBXGroup;
+			children = (
+				04AEC3C831B641F2875C4B1C /* Source Files */,
+				12D0DD4DC51C45A58E843CC7 /* CMakeLists.txt */,
+			);
+			name = sys;
+			sourceTree = "<group>";
+		};
+		B434248601004A73954C95FD /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				DFE219066F1D4403BCAFA754 /* loaders.cpp */,
+				643F703D30F2451BAFC91307 /* obj_loader.cpp */,
+				A9EC332930BC4F5EB303DF96 /* xml_loader.cpp */,
+				A3A4967F863B4794925AD1E7 /* xml_parser.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		BBDF0E9A7BC34C97900BDC39 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				322295B2E6AC4485AB212B46 /* ALL_BUILD */,
+				66B5D3C3365C46F2A1581215 /* ZERO_CHECK */,
+				B21EC20002A3442E8E40FB5B /* sys */,
+				140F764BA8D64960A29619DD /* image */,
+				D67D7EA56B9C47F084057BB0 /* lexers */,
+				FBC91FBAF3194308A9950D3F /* renderer */,
+				D9615A131D204EDBBD872A43 /* device */,
+				C6D948D01387475C907C893A /* loaders */,
+				8CC2694493E04E8FB3EA64F7 /* device_singleray */,
+				DB88BC0117C7424CB3D1DC51 /* obj2xml */,
+				767830CDAA664EFA8638F903 /* xml2obj */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		C1F0EDD6BFAA46A2AE85899C = {
+			isa = PBXGroup;
+			children = (
+				BBDF0E9A7BC34C97900BDC39 /* Sources */,
+				3BB1FF109ACD4ACBAC39EBF9 /* Resources */,
+				A37A02B9AD4947BABA3831A1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C2F970B4BE09463AB97225EC /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				C3FF16AD7CCC42808B580DC9 /* glutdisplay.cpp */,
+				FAA42D2A639F4DA6B5E1C2CF /* regression.cpp */,
+				C445E1F2D4454FE3AF69B38E /* renderer.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		C6D948D01387475C907C893A /* loaders */ = {
+			isa = PBXGroup;
+			children = (
+				B434248601004A73954C95FD /* Source Files */,
+				67E48AA655684E51A14131A6 /* CMakeLists.txt */,
+			);
+			name = loaders;
+			sourceTree = "<group>";
+		};
+		D67D7EA56B9C47F084057BB0 /* lexers */ = {
+			isa = PBXGroup;
+			children = (
+				3A6DFBF514B042819E0DA234 /* Source Files */,
+				50189AB4B71B4100B3068D3F /* CMakeLists.txt */,
+			);
+			name = lexers;
+			sourceTree = "<group>";
+		};
+		D9615A131D204EDBBD872A43 /* device */ = {
+			isa = PBXGroup;
+			children = (
+				442158D773464A7FB00B10DF /* Source Files */,
+				6FC8AAB02B9244E496C1A168 /* CMakeLists.txt */,
+			);
+			name = device;
+			sourceTree = "<group>";
+		};
+		DB88BC0117C7424CB3D1DC51 /* obj2xml */ = {
+			isa = PBXGroup;
+			children = (
+				AFD9F9302DB2415080DD5E04 /* Source Files */,
+				C8FD3860F2FB4E48B8AED3D0 /* CMakeLists.txt */,
+			);
+			name = obj2xml;
+			sourceTree = "<group>";
+		};
+		DF10F7A9CC04427686376EA8 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				13D2CDA263424F4A8ED7F017 /* singleray_device.cpp */,
+				948328AE252F446289156FBF /* filter.cpp */,
+				75AD79F33029430FB1683F18 /* pathtraceintegrator.cpp */,
+				1D971794B3EE4F2588077A3D /* hdrilight.cpp */,
+				D6B138B726184D35ABD95311 /* debugrenderer.cpp */,
+				D72E86D5409E453AA019BAF7 /* integratorrenderer.cpp */,
+				14E2F2D9E95F4268AD7EA2CC /* progress.cpp */,
+				19AF61361D6B47C8AF624D0A /* distribution1d.cpp */,
+				0C8ED3C2713343EC8587A8E5 /* distribution2d.cpp */,
+				C4C910AEB84E400FBFC2161B /* sampler.cpp */,
+				715A68776EAF4FFFBDC4BCAC /* trianglemesh_full.cpp */,
+				2A98AE7045AD4714BFFA1F92 /* trianglemesh_normals.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		EAA88AA5F3E444B7B9CEC095 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				4F4BD4D458124E999179C920 /* xml2obj.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		FBC91FBAF3194308A9950D3F /* renderer */ = {
+			isa = PBXGroup;
+			children = (
+				C2F970B4BE09463AB97225EC /* Source Files */,
+				D391C9924017483AA7483789 /* CMakeLists.txt */,
+			);
+			name = renderer;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2B59A6611B944450A42D29A9 /* renderer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 98EF466FB7C14F48ADC32D51 /* Build configuration list for PBXNativeTarget "renderer" */;
+			buildPhases = (
+				6F0EDDDC1B3D40828642EA60 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6D5D586143234E8F86D5929D /* PBXTargetDependency */,
+				9B009FD0D6904CAE987279EE /* PBXTargetDependency */,
+				0B62B6914E724F9CA59C51EA /* PBXTargetDependency */,
+				068496098C634EBC99004BFE /* PBXTargetDependency */,
+				8FDE49FA8AA846028B9BC2FA /* PBXTargetDependency */,
+				B4B08F8FC63D4943BBE1F1F2 /* PBXTargetDependency */,
+			);
+			name = renderer;
+			productName = renderer;
+			productReference = 816AA37548E649058B2B9B36 /* renderer */;
+			productType = "com.apple.product-type.tool";
+		};
+		2D1E6B4F49A242209F2C96BF /* device */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E7FB583C49F4C29AE9F2B54 /* Build configuration list for PBXNativeTarget "device" */;
+			buildPhases = (
+				C57543007B914882B0479976 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8C816C3EBBDB4DEBBC61732E /* PBXTargetDependency */,
+			);
+			name = device;
+			productName = device;
+			productReference = E5C3594532D94416906DB74E /* libdevice.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		2DA81784B7E94341A201271E /* xml2obj */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F731CBB8CFA2444A9FAC3D50 /* Build configuration list for PBXNativeTarget "xml2obj" */;
+			buildPhases = (
+				C860457287C0473087358A27 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B86C4D62C5C8443CB066ED10 /* PBXTargetDependency */,
+				E05EF3C2A21843408B6BEE31 /* PBXTargetDependency */,
+				C638ECA8115F476888959537 /* PBXTargetDependency */,
+				53A5E8FE1BCF4BA68D1F9494 /* PBXTargetDependency */,
+				88987645808A42AFA9686DA8 /* PBXTargetDependency */,
+			);
+			name = xml2obj;
+			productName = xml2obj;
+			productReference = 482ACA57F28D44B1BD26FFCA /* xml2obj */;
+			productType = "com.apple.product-type.tool";
+		};
+		3F13451A43E0493DB8A6AB03 /* lexers */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2A2466E258FB403B857A1259 /* Build configuration list for PBXNativeTarget "lexers" */;
+			buildPhases = (
+				EF01A16FF75D429CAF92A6AC /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FBD5D41EB6C94586A682BBE8 /* PBXTargetDependency */,
+				88506933163247D4874B7068 /* PBXTargetDependency */,
+			);
+			name = lexers;
+			productName = lexers;
+			productReference = 24689115BD9C4C5397F66C10 /* liblexers.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		45BFC816D9CB445DAD31FC36 /* obj2xml */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A60C17D8FF9453AA5EEFA3F /* Build configuration list for PBXNativeTarget "obj2xml" */;
+			buildPhases = (
+				4A35303D023B48919600EF85 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BA5C0A09B22D4BC799468737 /* PBXTargetDependency */,
+				D6A6FE4CE5BB4646937ACE21 /* PBXTargetDependency */,
+				EED9274ED3F8419AAAFA0DA4 /* PBXTargetDependency */,
+			);
+			name = obj2xml;
+			productName = obj2xml;
+			productReference = A3912EE2B66D4666ACFC52A3 /* obj2xml */;
+			productType = "com.apple.product-type.tool";
+		};
+		6958A0AAEC5C4848A0231515 /* sys */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07554F529FE945CD9C69E4A4 /* Build configuration list for PBXNativeTarget "sys" */;
+			buildPhases = (
+				DF2B1F8C5D6443FC9EDC82A2 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1C5953F724FD4EEA9D586444 /* PBXTargetDependency */,
+			);
+			name = sys;
+			productName = sys;
+			productReference = 381D1507F5E0467C9DA73D82 /* libsys.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		7FC1C8F07459491CB8D728B0 /* device_singleray */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27E1F9ED27EB4A068FFD7A06 /* Build configuration list for PBXNativeTarget "device_singleray" */;
+			buildPhases = (
+				E04B7CE5E9634DAD90AB4D8B /* Sources */,
+				E0101F8F330142D396FCC6D6 /* CMake PostBuild Rules */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A4DB042ABDE1483FB169DDAE /* PBXTargetDependency */,
+				A49C63D4170843B3809C8EE3 /* PBXTargetDependency */,
+				BA73C06C82A64657B0934B40 /* PBXTargetDependency */,
+			);
+			name = device_singleray;
+			productName = device_singleray;
+			productReference = 796527F037E648EC937E0919 /* libdevice_singleray.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		9315ECB611E7497AAD021037 /* image */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 04EABDAB4DF346538A0237E3 /* Build configuration list for PBXNativeTarget "image" */;
+			buildPhases = (
+				A073BD53C5B0430AAEEEF702 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5D5638CA54C84214AFAE95B3 /* PBXTargetDependency */,
+				4BCFC62CC2E84BB39B8EF655 /* PBXTargetDependency */,
+			);
+			name = image;
+			productName = image;
+			productReference = 69FF9FE063E940D580B4CD53 /* libimage.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		95938E2DD0B444D6B687142B /* loaders */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 872794CFF5CE4FC1A7673277 /* Build configuration list for PBXNativeTarget "loaders" */;
+			buildPhases = (
+				824A1E607E204DC4B6ECBF20 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				271A68A8F1AD4543BB46A4BA /* PBXTargetDependency */,
+				5A957EA02D4648D1A317BD9E /* PBXTargetDependency */,
+				8092F6930FA149FD8E5DD7C1 /* PBXTargetDependency */,
+				261B5A2AAC064A60AEE60B2F /* PBXTargetDependency */,
+			);
+			name = loaders;
+			productName = loaders;
+			productReference = F74D6B112F1141D88428AFED /* libloaders.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8E505B3613FC47AF8770AEB6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+			};
+			buildConfigurationList = 81118B35CF8840C2B626B6E5 /* Build configuration list for PBXProject "embree" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C1F0EDD6BFAA46A2AE85899C;
+			projectDirPath = ..;
+			projectRoot = "";
+			targets = (
+				595A6D9A38114A9695B67D6C /* ALL_BUILD */,
+				33684D9DCA064BDF89AE4E5C /* ZERO_CHECK */,
+				6958A0AAEC5C4848A0231515 /* sys */,
+				9315ECB611E7497AAD021037 /* image */,
+				3F13451A43E0493DB8A6AB03 /* lexers */,
+				2B59A6611B944450A42D29A9 /* renderer */,
+				2D1E6B4F49A242209F2C96BF /* device */,
+				95938E2DD0B444D6B687142B /* loaders */,
+				7FC1C8F07459491CB8D728B0 /* device_singleray */,
+				45BFC816D9CB445DAD31FC36 /* obj2xml */,
+				2DA81784B7E94341A201271E /* xml2obj */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D76A51942E514CB6BD77367E /* CMake Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode -f /Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/CMakeScripts/ZERO_CHECK_cmakeRulesBuildPhase.make$CONFIGURATION all";
+			showEnvVarsInLog = 0;
+		};
+		E0101F8F330142D396FCC6D6 /* CMake PostBuild Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake PostBuild Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device_singleray -f /Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device_singleray/CMakeScripts/device_singleray_postBuildPhase.make$CONFIGURATION all";
+			showEnvVarsInLog = 0;
+		};
+		ED28BF80D71544B7931C6918 /* CMake Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode -f /Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/CMakeScripts/ALL_BUILD_cmakeRulesBuildPhase.make$CONFIGURATION all";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4A35303D023B48919600EF85 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7D8FC38C7EF409F978F4E9B /* obj2xml.cpp in Sources */,
+				DCF79974584F460CB079F7CA /* objLoader.cpp in Sources */,
+				C504E02C16FB4165854F0A2D /* xmlWriter.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6F0EDDDC1B3D40828642EA60 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B565A8C9DBB0452FABCB9076 /* glutdisplay.cpp in Sources */,
+				51112BD9662949C6ABAB114B /* regression.cpp in Sources */,
+				9F3849CC10CA4132AF435067 /* renderer.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		824A1E607E204DC4B6ECBF20 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A899D3B69C1F4CE7A9F45D57 /* loaders.cpp in Sources */,
+				1D7017FE73094A99B4B1634B /* obj_loader.cpp in Sources */,
+				9AC95138595D4CBFBC2985FF /* xml_loader.cpp in Sources */,
+				1B2745F41840447F8BC14047 /* xml_parser.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A073BD53C5B0430AAEEEF702 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				352615DF89354F11B0625410 /* exr.cpp in Sources */,
+				D2D31F0886E349B6AB13FE44 /* image.cpp in Sources */,
+				D39B9D7A8B8C4BD893CC9940 /* magick.cpp in Sources */,
+				5419D89344DE42F3B8DB003D /* pfm.cpp in Sources */,
+				8524C6E60B234058B49BD7CF /* ppm.cpp in Sources */,
+				6C517E498AB94E2C9D76B6F8 /* tga.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C57543007B914882B0479976 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ECA273DC343C492D8645A5CB /* device.cpp in Sources */,
+				19E4C1267E054D9E8BDBB068 /* handle.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C860457287C0473087358A27 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26E25573BF0C440E8C5A8CD7 /* xml2obj.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DF2B1F8C5D6443FC9EDC82A2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6AEE4B4C1F7B4D7FB1493A3C /* filename.cpp in Sources */,
+				FC16A63FAEA64175ADDF63B7 /* library.cpp in Sources */,
+				ADBF8887920D4C49A4B95332 /* network.cpp in Sources */,
+				37D8387148084EDD97E69065 /* platform.cpp in Sources */,
+				1B44441D409C46C2BC421C67 /* string.cpp in Sources */,
+				294BF9D06AA440A9B6B4EA5A /* condition.cpp in Sources */,
+				72E9FAB49AFE4E1A97A0D97E /* mutex.cpp in Sources */,
+				41063CC4171B47A98B5F0293 /* sysinfo.cpp in Sources */,
+				10A1444F5BD940E09878AAE7 /* taskscheduler.cpp in Sources */,
+				350096F6E73B4364AD0B2E22 /* taskscheduler_mic.cpp in Sources */,
+				F413DF3207AD404BA75E4430 /* taskscheduler_sys.cpp in Sources */,
+				90A7BFC9DED6419899F150C7 /* thread.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E04B7CE5E9634DAD90AB4D8B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				97E392B61A574F149D5EE1B4 /* singleray_device.cpp in Sources */,
+				96E3DFFFC0F24BA7AFE7B387 /* filter.cpp in Sources */,
+				C03486B146C145DEA474AB18 /* pathtraceintegrator.cpp in Sources */,
+				A6FDBF89AE964B39958E8839 /* hdrilight.cpp in Sources */,
+				3EC31EEDA9394EDEA59059AC /* debugrenderer.cpp in Sources */,
+				7DD6E05039E54D77B02F7E46 /* integratorrenderer.cpp in Sources */,
+				BF6F0A1D49654D0997322552 /* progress.cpp in Sources */,
+				80807694431B42CFA47F9050 /* distribution1d.cpp in Sources */,
+				EF4FBB41468A47C5809D3180 /* distribution2d.cpp in Sources */,
+				1754037BA2E34A4B8487E446 /* sampler.cpp in Sources */,
+				7C360CDE553F40DD9176396F /* trianglemesh_full.cpp in Sources */,
+				FDB12631BB4246E9BBC66AB8 /* trianglemesh_normals.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EF01A16FF75D429CAF92A6AC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				104228B2BEAF48C7B89BED18 /* stringstream.cpp in Sources */,
+				40DB64E3F1B1491B8E9617F6 /* tokenstream.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		059680542AFA41618F66D2F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33684D9DCA064BDF89AE4E5C /* ZERO_CHECK */;
+			targetProxy = EB736C037B5147A895C4E5DE /* PBXContainerItemProxy */;
+		};
+		068496098C634EBC99004BFE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6958A0AAEC5C4848A0231515 /* sys */;
+			targetProxy = 8B06B0CE751A4A6396535AE0 /* PBXContainerItemProxy */;
+		};
+		0B62B6914E724F9CA59C51EA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9315ECB611E7497AAD021037 /* image */;
+			targetProxy = 17D3785880764CABACA82E7E /* PBXContainerItemProxy */;
+		};
+		19135FC235CD47C584B94125 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2D1E6B4F49A242209F2C96BF /* device */;
+			targetProxy = E77E36D620C2428683B8A260 /* PBXContainerItemProxy */;
+		};
+		1C5953F724FD4EEA9D586444 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33684D9DCA064BDF89AE4E5C /* ZERO_CHECK */;
+			targetProxy = 837838BF9A6A4AD9B2ACFA8F /* PBXContainerItemProxy */;
+		};
+		261B5A2AAC064A60AEE60B2F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6958A0AAEC5C4848A0231515 /* sys */;
+			targetProxy = C7F2F2190A734829AFB87154 /* PBXContainerItemProxy */;
+		};
+		271A68A8F1AD4543BB46A4BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33684D9DCA064BDF89AE4E5C /* ZERO_CHECK */;
+			targetProxy = 295B0993364A40EC924AFB89 /* PBXContainerItemProxy */;
+		};
+		2793C562B10144828C4ACFE6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7FC1C8F07459491CB8D728B0 /* device_singleray */;
+			targetProxy = 3023B1A48C83464C8C94D52A /* PBXContainerItemProxy */;
+		};
+		4BCFC62CC2E84BB39B8EF655 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6958A0AAEC5C4848A0231515 /* sys */;
+			targetProxy = 1FCAD00A2DA541F29E32B10E /* PBXContainerItemProxy */;
+		};
+		4E916194ADAB41CF98F9AE27 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9315ECB611E7497AAD021037 /* image */;
+			targetProxy = 6D17C4B5912549EEBA64AEEF /* PBXContainerItemProxy */;
+		};
+		53A5E8FE1BCF4BA68D1F9494 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6958A0AAEC5C4848A0231515 /* sys */;
+			targetProxy = C773B0F7E2DE4C85B38CF633 /* PBXContainerItemProxy */;
+		};
+		5A957EA02D4648D1A317BD9E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3F13451A43E0493DB8A6AB03 /* lexers */;
+			targetProxy = 78EC1ABB765849128791BDAE /* PBXContainerItemProxy */;
+		};
+		5D5638CA54C84214AFAE95B3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33684D9DCA064BDF89AE4E5C /* ZERO_CHECK */;
+			targetProxy = 552F725BF9E64BCF917A0AF9 /* PBXContainerItemProxy */;
+		};
+		5FE4715B95DD48CE8F0F5D7F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2B59A6611B944450A42D29A9 /* renderer */;
+			targetProxy = E9F6F38ACCF94B61AC9A0C8E /* PBXContainerItemProxy */;
+		};
+		6D5D586143234E8F86D5929D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33684D9DCA064BDF89AE4E5C /* ZERO_CHECK */;
+			targetProxy = 731D20840321457AB2D9A8A3 /* PBXContainerItemProxy */;
+		};
+		8092F6930FA149FD8E5DD7C1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9315ECB611E7497AAD021037 /* image */;
+			targetProxy = 22CC9A6D7A854FC28E0A05D3 /* PBXContainerItemProxy */;
+		};
+		846A3C4B817A40A4B68804C6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3F13451A43E0493DB8A6AB03 /* lexers */;
+			targetProxy = AADB3A9FA1FA4142B93FB798 /* PBXContainerItemProxy */;
+		};
+		88506933163247D4874B7068 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6958A0AAEC5C4848A0231515 /* sys */;
+			targetProxy = 2A47AA49DC284ADA9128302D /* PBXContainerItemProxy */;
+		};
+		88987645808A42AFA9686DA8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 95938E2DD0B444D6B687142B /* loaders */;
+			targetProxy = 8A2FF1EB517D44299A26A0D6 /* PBXContainerItemProxy */;
+		};
+		8C816C3EBBDB4DEBBC61732E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33684D9DCA064BDF89AE4E5C /* ZERO_CHECK */;
+			targetProxy = AC59B9B3FC4549E1A95D9C0E /* PBXContainerItemProxy */;
+		};
+		8FDE49FA8AA846028B9BC2FA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 95938E2DD0B444D6B687142B /* loaders */;
+			targetProxy = 2DFDB3E21A9044C0A87FDEE4 /* PBXContainerItemProxy */;
+		};
+		911470F19E324694946D05AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 45BFC816D9CB445DAD31FC36 /* obj2xml */;
+			targetProxy = A54EAB350D464EF9856E2D1E /* PBXContainerItemProxy */;
+		};
+		9B009FD0D6904CAE987279EE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3F13451A43E0493DB8A6AB03 /* lexers */;
+			targetProxy = BB039D7E02E14EBDA075F8CD /* PBXContainerItemProxy */;
+		};
+		A49C63D4170843B3809C8EE3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9315ECB611E7497AAD021037 /* image */;
+			targetProxy = 4A149CFDA5E145AAB0D5ED8F /* PBXContainerItemProxy */;
+		};
+		A4DB042ABDE1483FB169DDAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33684D9DCA064BDF89AE4E5C /* ZERO_CHECK */;
+			targetProxy = A4AFD3F8A1624DD0B07D8036 /* PBXContainerItemProxy */;
+		};
+		B4B08F8FC63D4943BBE1F1F2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2D1E6B4F49A242209F2C96BF /* device */;
+			targetProxy = 4A62D8059C5D47A59CA97B8F /* PBXContainerItemProxy */;
+		};
+		B86C4D62C5C8443CB066ED10 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33684D9DCA064BDF89AE4E5C /* ZERO_CHECK */;
+			targetProxy = B181354570B34C6796C63EFC /* PBXContainerItemProxy */;
+		};
+		BA5C0A09B22D4BC799468737 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33684D9DCA064BDF89AE4E5C /* ZERO_CHECK */;
+			targetProxy = 61B3466A1046418A9C1079E5 /* PBXContainerItemProxy */;
+		};
+		BA73C06C82A64657B0934B40 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6958A0AAEC5C4848A0231515 /* sys */;
+			targetProxy = 16FBF07B63734BABB6614829 /* PBXContainerItemProxy */;
+		};
+		C638ECA8115F476888959537 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9315ECB611E7497AAD021037 /* image */;
+			targetProxy = 29569253D22C427DB6D6F155 /* PBXContainerItemProxy */;
+		};
+		CA39FA856EF845C0B0AE140E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 95938E2DD0B444D6B687142B /* loaders */;
+			targetProxy = A4FD24F025A0446FB8630431 /* PBXContainerItemProxy */;
+		};
+		D6A6FE4CE5BB4646937ACE21 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9315ECB611E7497AAD021037 /* image */;
+			targetProxy = 5B195C9E1EFF4657A6ACC7F0 /* PBXContainerItemProxy */;
+		};
+		E05EF3C2A21843408B6BEE31 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3F13451A43E0493DB8A6AB03 /* lexers */;
+			targetProxy = 078C161ACF694999BEE8C8B4 /* PBXContainerItemProxy */;
+		};
+		E58FCEED46F94E1FB43703C0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6958A0AAEC5C4848A0231515 /* sys */;
+			targetProxy = 6F9E0DE160114841BF04416D /* PBXContainerItemProxy */;
+		};
+		EED9274ED3F8419AAAFA0DA4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6958A0AAEC5C4848A0231515 /* sys */;
+			targetProxy = 8B2AF903A7864C8FA0D6CB40 /* PBXContainerItemProxy */;
+		};
+		F7081F9985E34AAEAF942598 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2DA81784B7E94341A201271E /* xml2obj */;
+			targetProxy = F6A939A240C848F0896CD63F /* PBXContainerItemProxy */;
+		};
+		FBD5D41EB6C94586A682BBE8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 33684D9DCA064BDF89AE4E5C /* ZERO_CHECK */;
+			targetProxy = 96705A11DF6C46CE81D5C827 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		003D2E38B5FC448B852D24C0 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = sys;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/sys";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		05B0CEBBDEED48B6A96569FF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = image;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/image";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		09ABC8F43337487AB8B8B64B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk;
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/build";
+			};
+			name = Debug;
+		};
+		0CB7244E76674E8CA766E1E6 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = image;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/image";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		1358376C5B304E999E2492AB /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices/renderer",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libsys.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/liblexers.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libloaders.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libdevice.a",
+					"-framework",
+					AGL,
+					"-framework",
+					OpenGL,
+					"-framework",
+					GLUT,
+					"-framework",
+					Cocoa,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/liblexers.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = renderer;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/renderer";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		197C089FF2BC4A2288E8B2F3 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libsys.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = obj2xml;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/tools/obj2xml";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		1DAC3EEA69BB41ACA16068DB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices/renderer",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libsys.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/liblexers.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libloaders.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libdevice.a",
+					"-framework",
+					AGL,
+					"-framework",
+					OpenGL,
+					"-framework",
+					GLUT,
+					"-framework",
+					Cocoa,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/liblexers.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = renderer;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/renderer";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		236113DBAA414B75A3E02E21 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk;
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/build";
+			};
+			name = Release;
+		};
+		28A1627BC4A447E08101831C /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = sys;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/sys";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		2BE55FEBA2744BF397E7EFDD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lexers;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/lexers";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		387E2EB1571E4AA29DD764C2 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		434A3601834A4B1FACA50D12 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = image;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/image";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		47763CFF6EDC4FCBA923582C /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		4ABC024B856249C5907753E7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices/renderer",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libsys.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/liblexers.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libloaders.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libdevice.a",
+					"-framework",
+					AGL,
+					"-framework",
+					OpenGL,
+					"-framework",
+					GLUT,
+					"-framework",
+					Cocoa,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/liblexers.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = renderer;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/renderer";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		5140144DF02B4BD38B0E5DB0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libsys.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = obj2xml;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/tools/obj2xml";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		58B96715EF0641A2A4E06708 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		5CF2A0270E8C448EA74B8013 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = loaders;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device/loaders";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		5EC841D47DEC47EE895FDAF0 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo";
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .dylib;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					device_singleray_EXPORTS,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices/device_singleray",
+				);
+				INSTALL_PATH = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo";
+				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_STYLE = DYNAMIC;
+				OTHER_CFLAGS = (
+					"-DNDEBUG",
+					"-fPIC",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-fPIC",
+				);
+				OTHER_LDFLAGS = (
+					"-dynamiclib",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libsys.a",
+					/usr/local/lib/libembree.dylib,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device_singleray;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device_singleray";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		5F7754FAB1144C7993FE660B /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = loaders;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device/loaders";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		61BDD43356594E499ECD2917 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		655BC7647AF7451FA96E70CA /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		6E1F3AF373084FBC86483061 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libsys.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libloaders.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/liblexers.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = xml2obj;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/tools/xml2obj";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		6F7F8CBFE17343F7BC7E8EDF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release";
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .dylib;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					device_singleray_EXPORTS,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices/device_singleray",
+				);
+				INSTALL_PATH = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release";
+				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_STYLE = DYNAMIC;
+				OTHER_CFLAGS = (
+					"-DNDEBUG",
+					"-fPIC",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-fPIC",
+					"-g",
+				);
+				OTHER_LDFLAGS = (
+					"-dynamiclib",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libsys.a",
+					/usr/local/lib/libembree.dylib,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device_singleray;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device_singleray";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		6FCE9466410B467FB80D4B14 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libsys.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libloaders.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/liblexers.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = xml2obj;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/tools/xml2obj";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		702657B09D64419D84A0B4EE /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lexers;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/lexers";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		7B2406F40FAA41F088605C2A /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lexers;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/lexers";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		849CE4BA0EAF4292A8393B08 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk;
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/build";
+			};
+			name = RelWithDebInfo;
+		};
+		865A8EB1772F4DD5A4006E88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		8769F24E802845BABAAA9432 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lexers;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/lexers";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		9777D4AC25744B1494DC29F7 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel";
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .dylib;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					device_singleray_EXPORTS,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices/device_singleray",
+				);
+				INSTALL_PATH = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel";
+				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_STYLE = DYNAMIC;
+				OTHER_CFLAGS = (
+					"-DNDEBUG",
+					"-fPIC",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-fPIC",
+				);
+				OTHER_LDFLAGS = (
+					"-dynamiclib",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libsys.a",
+					/usr/local/lib/libembree.dylib,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device_singleray;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device_singleray";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		9968A9194DBE456D80C943BA /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk;
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/build";
+			};
+			name = MinSizeRel;
+		};
+		99A11A2476324CD9AADF40AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		A755CB246C504FCEB19953EC /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		AAAA0AD617844C58A96735C5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libsys.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = obj2xml;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/tools/obj2xml";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		BA9619CA66E74FF287DA556B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = sys;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/sys";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		C1725DE2506840238354E2DD /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = loaders;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device/loaders";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		C44B92B58BBF45DF8F4DABF2 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		CD7B813CE8B442E290535A2A /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libsys.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libloaders.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/liblexers.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = xml2obj;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/tools/xml2obj";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		D4A4C671BED347C28E5E8444 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		D86DB41B50B94250ABEAAB14 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libsys.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = obj2xml;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/tools/obj2xml";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		E03AAA0A423F4C45B3B4EDA7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		E5D50527263B4EA7A357B5AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		E714134521A54A0D928A5659 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug";
+				DYLIB_COMPATIBILITY_VERSION = "";
+				DYLIB_CURRENT_VERSION = "";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .dylib;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					device_singleray_EXPORTS,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices/device_singleray",
+				);
+				INSTALL_PATH = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug";
+				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_STYLE = DYNAMIC;
+				OTHER_CFLAGS = "   -fPIC  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+					"-fPIC",
+				);
+				OTHER_LDFLAGS = (
+					"-dynamiclib",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libsys.a",
+					/usr/local/lib/libembree.dylib,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Debug/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device_singleray;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device_singleray";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		EC0AB37DC3E54A57BE152784 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libsys.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libloaders.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/liblexers.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = xml2obj;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/tools/xml2obj";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		F0DB83D655FC41C980606900 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/RelWithDebInfo";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = image;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/image";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		F22733AA1431493CBE2D356F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = sys;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/sys";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		F4B19B895F3A4E0D8EC2CADE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/Release";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = loaders;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device/loaders";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		FD31050B8F3C4C67AEC14718 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/common",
+					/usr/local/include,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/devices/renderer",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libsys.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/liblexers.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libloaders.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libimage.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libdevice.a",
+					"-framework",
+					AGL,
+					"-framework",
+					OpenGL,
+					"-framework",
+					GLUT,
+					"-framework",
+					Cocoa,
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/liblexers.a",
+					"/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/MinSizeRel/libsys.a",
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = renderer;
+				SECTORDER_FLAGS = "";
+				SYMROOT = "/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/renderer";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		04EABDAB4DF346538A0237E3 /* Build configuration list for PBXNativeTarget "image" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05B0CEBBDEED48B6A96569FF /* Debug */,
+				434A3601834A4B1FACA50D12 /* Release */,
+				0CB7244E76674E8CA766E1E6 /* MinSizeRel */,
+				F0DB83D655FC41C980606900 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		07554F529FE945CD9C69E4A4 /* Build configuration list for PBXNativeTarget "sys" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA9619CA66E74FF287DA556B /* Debug */,
+				F22733AA1431493CBE2D356F /* Release */,
+				28A1627BC4A447E08101831C /* MinSizeRel */,
+				003D2E38B5FC448B852D24C0 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		27E1F9ED27EB4A068FFD7A06 /* Build configuration list for PBXNativeTarget "device_singleray" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E714134521A54A0D928A5659 /* Debug */,
+				6F7F8CBFE17343F7BC7E8EDF /* Release */,
+				9777D4AC25744B1494DC29F7 /* MinSizeRel */,
+				5EC841D47DEC47EE895FDAF0 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2A2466E258FB403B857A1259 /* Build configuration list for PBXNativeTarget "lexers" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8769F24E802845BABAAA9432 /* Debug */,
+				2BE55FEBA2744BF397E7EFDD /* Release */,
+				7B2406F40FAA41F088605C2A /* MinSizeRel */,
+				702657B09D64419D84A0B4EE /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5286F321466240178FF4F7DD /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				58B96715EF0641A2A4E06708 /* Debug */,
+				E5D50527263B4EA7A357B5AE /* Release */,
+				61BDD43356594E499ECD2917 /* MinSizeRel */,
+				47763CFF6EDC4FCBA923582C /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6E7FB583C49F4C29AE9F2B54 /* Build configuration list for PBXNativeTarget "device" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4A4C671BED347C28E5E8444 /* Debug */,
+				865A8EB1772F4DD5A4006E88 /* Release */,
+				C44B92B58BBF45DF8F4DABF2 /* MinSizeRel */,
+				387E2EB1571E4AA29DD764C2 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		81118B35CF8840C2B626B6E5 /* Build configuration list for PBXProject "embree" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				09ABC8F43337487AB8B8B64B /* Debug */,
+				236113DBAA414B75A3E02E21 /* Release */,
+				9968A9194DBE456D80C943BA /* MinSizeRel */,
+				849CE4BA0EAF4292A8393B08 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		872794CFF5CE4FC1A7673277 /* Build configuration list for PBXNativeTarget "loaders" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5CF2A0270E8C448EA74B8013 /* Debug */,
+				F4B19B895F3A4E0D8EC2CADE /* Release */,
+				5F7754FAB1144C7993FE660B /* MinSizeRel */,
+				C1725DE2506840238354E2DD /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8A60C17D8FF9453AA5EEFA3F /* Build configuration list for PBXNativeTarget "obj2xml" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5140144DF02B4BD38B0E5DB0 /* Debug */,
+				AAAA0AD617844C58A96735C5 /* Release */,
+				197C089FF2BC4A2288E8B2F3 /* MinSizeRel */,
+				D86DB41B50B94250ABEAAB14 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		98EF466FB7C14F48ADC32D51 /* Build configuration list for PBXNativeTarget "renderer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4ABC024B856249C5907753E7 /* Debug */,
+				1DAC3EEA69BB41ACA16068DB /* Release */,
+				FD31050B8F3C4C67AEC14718 /* MinSizeRel */,
+				1358376C5B304E999E2492AB /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A32C6D65E991494E85490ABC /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E03AAA0A423F4C45B3B4EDA7 /* Debug */,
+				99A11A2476324CD9AADF40AD /* Release */,
+				655BC7647AF7451FA96E70CA /* MinSizeRel */,
+				A755CB246C504FCEB19953EC /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		F731CBB8CFA2444A9FAC3D50 /* Build configuration list for PBXNativeTarget "xml2obj" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6FCE9466410B467FB80D4B14 /* Debug */,
+				6E1F3AF373084FBC86483061 /* Release */,
+				EC0AB37DC3E54A57BE152784 /* MinSizeRel */,
+				CD7B813CE8B442E290535A2A /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8E505B3613FC47AF8770AEB6 /* Project object */;
+}

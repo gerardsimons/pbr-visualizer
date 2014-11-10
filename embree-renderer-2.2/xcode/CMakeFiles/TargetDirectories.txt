@@ -1,0 +1,11 @@
+/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/CMakeFiles/ALL_BUILD.dir
+/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/CMakeFiles/ZERO_CHECK.dir
+/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device/CMakeFiles/device.dir
+/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device_singleray/CMakeFiles/device_singleray.dir
+/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/image/CMakeFiles/image.dir
+/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/lexers/CMakeFiles/lexers.dir
+/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/device/loaders/CMakeFiles/loaders.dir
+/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/tools/obj2xml/CMakeFiles/obj2xml.dir
+/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/devices/renderer/CMakeFiles/renderer.dir
+/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/common/sys/CMakeFiles/sys.dir
+/Users/gerardsimons/Git/afstuderen_riv/embree-renderer-2.2/xcode/tools/xml2obj/CMakeFiles/xml2obj.dir

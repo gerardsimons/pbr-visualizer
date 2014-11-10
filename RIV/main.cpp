@@ -10,7 +10,6 @@
 #include "Views/ImageView.h"
 #include "Data/DataFileReader.h"
 #include "Views/3DView.h"
-#include "Views/RenderView.h"
 #include "Graphics/ColorPalette.h"
 #include "Graphics/ColorProperty.h"
 #include "Graphics/SizeProperty.h"
@@ -59,7 +58,6 @@ RIVImageView *imageView = NULL;
 RIV3DView *sceneView = NULL;
 ParallelCoordsView *parallelCoordsView = NULL;
 RIVHeatMapView *heatMapView = NULL;
-RIVRenderView* renderView = NULL;
 
 /* The dataset, views have pointers to this in order to draw their views consistently */
 RIVDataSet dataset;
@@ -135,8 +133,7 @@ void keys(int keyCode, int x, int y) {
 			break;
         case 114: // 'r' key, recluster {
         {
-			printf("Regenerate renderview");
-			renderView->CreateImageFilm();
+			printf("Key not set.\n");
         }
         case 111: // 'o' key, optimize clusters (debug feature)
         {
@@ -146,9 +143,7 @@ void keys(int keyCode, int x, int y) {
         }
 		case 122: // 'z' key, save the image
 		{
-			if(renderView) {
-				renderView->SaveImage();
-			}
+			printf("Key not set.\n");
 			break;
 		}
         case 116: // 't' key, use as temp key for some to-test function
@@ -277,6 +272,12 @@ void loadData() {
     else throw "Data paths not generated.";
 }
 
+void setupRenderer() {
+	//Create the EMBREE renderer
+	
+	
+}
+
 void createViews() {
     if(dataset.IsSet() && bmpPath.size() > 0) {
         RIVSizeProperty *defaultSizeProperty = new RIVFixedSizeProperty(0.1);
@@ -331,24 +332,14 @@ void createViews() {
 //        glutMouseFunc(RIVHeatMapView::Mouse);
 //        glutMotionFunc(RIVHeatMapView::Motion);
 		
-		renderViewWindow = glutCreateSubWindow(mainWindow, padding * 5 + squareSize * 2, bottomHalfY, squareSize, squareSize);
-		RIVRenderView::windowHandle = renderViewWindow;
-		glutSetWindow(renderViewWindow);
-		glutReshapeFunc(RIVRenderView::ReshapeInstance);
-		glutDisplayFunc(RIVRenderView::DrawInstance);
-		glutMouseFunc(RIVRenderView::Mouse);
-		glutMotionFunc(RIVRenderView::Motion);
-		
         //Create views
         parallelCoordsView = new ParallelCoordsView(&dataset,colorProperty,sizeProperty);
         sceneView = new RIV3DView(&dataset,config,colorProperty,sizeProperty);
         heatMapView = new RIVHeatMapView(&dataset);
-		renderView = new RIVRenderView(&dataset);
 		
         //Add some filter callbacks
         dataset.AddFilterListener(sceneView);
         dataset.AddFilterListener(parallelCoordsView);
-		dataset.AddFilterListener(renderView);
 
     }
     else {
@@ -390,8 +381,8 @@ int main(int argc, char **argv)
 	
     glutSpecialFunc(keys);
 	
-    loadData();
-    
+//    loadData();
+	
     createViews();
     
     /* Transparency stuff */

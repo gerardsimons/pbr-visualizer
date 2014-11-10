@@ -427,7 +427,7 @@ void RIV3DView::createPaths() {
 	RIVUnsignedShortRecord* bounceRecord = isectTable->GetRecord<RIVUnsignedShortRecord>("bounce#");
 	
 	paths.clear();
-    
+	
     //Get the records we want;
     //Get the iterator, this iterator is aware of what rows are filtered and not
     TableIterator* iterator = isectTable->GetIterator();
