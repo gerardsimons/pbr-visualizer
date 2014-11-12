@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
+#include <exception>
 
 #include "Data/Filter.h"
 #include "Views/DataView.h"
@@ -17,6 +18,10 @@
 #include "Views/HeatMapView.h"
 
 #include "Octree/Octree.h"
+
+//EMBREE STUFF
+#include "devices/device_singleray/embree_renderer.h"
+#include "devices/device_singleray/dataconnector.h"
 //#include "sandbox.h"
 
 #if defined(__APPLE__)
@@ -49,7 +54,6 @@ int imageViewWindow;
 int sceneViewWindow;
 int parallelViewWindow;
 int heatMapViewWindow;
-int renderViewWindow;
 
 /* For debugging purposes, keep track of mouse location */
 int lastMouseX,lastMouseY = 0;
@@ -254,7 +258,7 @@ void reshape(int w, int h)
 
 void generatePaths(int argc, char* argv[]) {
     if(argc < 4) {
-        throw "Too few arguments given, 3 are expected.";
+		throw std::runtime_error("Too few arguments to generate paths from.");
     }
     if(argc == 4) {
         dataPath = argv[1];
@@ -275,7 +279,7 @@ void loadData() {
 void setupRenderer() {
 	//Create the EMBREE renderer
 	
-	
+	EMBREERenderer(DataConnector());
 }
 
 void createViews() {
@@ -349,6 +353,8 @@ void createViews() {
 
 int main(int argc, char **argv)
 {
+    printf("Initialising Rendering InfoVis...\n");
+
     generatePaths(argc, argv);
 	
     srand(time(NULL));
@@ -381,7 +387,7 @@ int main(int argc, char **argv)
 	
     glutSpecialFunc(keys);
 	
-//    loadData();
+    loadData();
 	
     createViews();
     

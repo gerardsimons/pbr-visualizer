@@ -17,6 +17,8 @@
 #include "Vec3D.h"
 #include "Ray.h"
 
+typedef unsigned short ushort;
+
 
 class MeshModel {
 private:

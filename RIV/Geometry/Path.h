@@ -10,7 +10,7 @@
 #define __afstuderen_test__Path__
 
 #include <vector>
-#include "ColorMap.h"
+#include "Graphics/ColorMap.h"
 
 typedef unsigned short ushort;
 
