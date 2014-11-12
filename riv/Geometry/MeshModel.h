@@ -54,7 +54,7 @@ public:
 	}
 	bool TriangleIntersect(const riv::Ray<float>& r, size_t& resultIndex, Vec3Df& Phit, float& shortestDistance) {
 		bool intersects = false;
-		shortestDistance = -std::numeric_limits<float>::max();
+		shortestDistance = -10000;
 		Vec3Df bestPhit = Phit;
 		for(size_t i = 0 ; i < meshes.size() ; ++i) {
 //			float d;

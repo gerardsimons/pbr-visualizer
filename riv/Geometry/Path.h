@@ -9,6 +9,7 @@
 #ifndef __afstuderen_test__Path__
 #define __afstuderen_test__Path__
 
+#include <cstdlib>
 #include <vector>
 #include "Graphics/ColorMap.h"
 

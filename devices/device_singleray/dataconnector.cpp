@@ -8,6 +8,10 @@
 
 #include "dataconnector.h"
 
+#include <cstddef>
+#include <stdio.h>
+
+
 int DataConnector::ID_COUNTER = 0;
 
 void DataConnector::ProcessPath() {

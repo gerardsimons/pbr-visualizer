@@ -7,6 +7,7 @@
 //
 
 #include "ColorMap.h"
+#include <cstdlib>
 
 Color ColorMap::ComputeColor(float value) {
 //	for(size_t colorIndex = 0 ; colorIndex < colorTable.size() - 1; ++colorIndex) {

@@ -6,6 +6,7 @@
 #include <map>
 #include <fstream>
 #include <regex>
+#include <exception>
 #include <algorithm>
 #include <stack>
 
@@ -670,10 +671,10 @@ RIVDataSet DataFileReader::ReadBinaryData(const std::string& fileName, BMPImage*
 //    FILE *outputFile = fopen("output.txt","w");
     
     if(inputFile == 0) {
-        throw "Error opening file.";
+        throw std::runtime_error("Could not open file.");
     }
     if(!summaryFile.is_open()) {
-        throw "Error opening file.";
+        throw std::runtime_error("Could not open summary file.");
     }
 
     std::string line;

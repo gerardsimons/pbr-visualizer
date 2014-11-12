@@ -9,6 +9,7 @@
 #ifndef __afstuderen__Ray__
 #define __afstuderen__Ray__
 
+#include <limits>
 #include "../Geometry/Geometry.h"
 #include "Vec3D.h"
 
