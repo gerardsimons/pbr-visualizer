@@ -50,7 +50,7 @@ int posY = 0;
 int mainWindow;                   /* GLUT window handle */
 
 /* All the sub window handles of the custom views */
-int imageViewWindow;
+//int imageViewWindow;
 int sceneViewWindow;
 int parallelViewWindow;
 int heatMapViewWindow;
@@ -58,7 +58,7 @@ int heatMapViewWindow;
 /* For debugging purposes, keep track of mouse location */
 int lastMouseX,lastMouseY = 0;
 
-RIVImageView *imageView = NULL;
+//RIVImageView *imageView = NULL;
 RIV3DView *sceneView = NULL;
 ParallelCoordsView *parallelCoordsView = NULL;
 RIVHeatMapView *heatMapView = NULL;
@@ -75,6 +75,9 @@ PBRTConfig* config;
 std::string bmpPath = "";
 std::string dataPath = "";
 std::string pbrtPath = "";
+
+EMBREERenderer* rendererOne = NULL;
+EMBREERenderer* rendererTwo = NULL;
 
 /* Draw the window - this is where all the GL actions are */
 void display(void)
@@ -214,11 +217,6 @@ void keys(int keyCode, int x, int y) {
     }
 }
 
-void idle() {
-    //Do animations?
-    
-}
-
 /* Called when window is resized,
  also when window is first created,
  before the first call to display(). */
@@ -256,34 +254,54 @@ void reshape(int w, int h)
 //    glutReshapeWindow(height / 2 - 2 * padding, height /2 - 2 *padding);
 }
 
-void generatePaths(int argc, char* argv[]) {
-    if(argc < 4) {
-		throw std::runtime_error("Too few arguments to generate paths from.");
-    }
-    if(argc == 4) {
-        dataPath = argv[1];
-        pbrtPath = argv[2];
-        bmpPath = argv[3];
-    }
+//void generatePaths(int argc, char* argv[]) {
+//    if(argc < 4) {
+//		throw std::runtime_error("Too few arguments to generate paths from.");
+//    }
+//    if(argc == 4) {
+//        dataPath = argv[1];
+//        pbrtPath = argv[2];
+//        bmpPath = argv[3];
+//    }
+//}
+
+//void loadData() {
+//    if(!dataPath.empty() && !pbrtPath.empty()) {
+//        image = new BMPImage(bmpPath.c_str(),false);
+//        dataset = DataFileReader::ReadBinaryData(dataPath,image,0);
+//        config = new PBRTConfig(DataFileReader::ReadPBRTFile(pbrtPath));
+//    }
+//    else throw "Data paths not generated.";
+//}
+
+void idle() {
+	rendererOne->RenderNextFrame();
 }
 
-void loadData() {
-    if(!dataPath.empty() && !pbrtPath.empty()) {
-        image = new BMPImage(bmpPath.c_str(),false);
-        dataset = DataFileReader::ReadBinaryData(dataPath,image,0);
-        config = new PBRTConfig(DataFileReader::ReadPBRTFile(pbrtPath));
-    }
-    else throw "Data paths not generated.";
+void processRendererOne(PathData* newPath) {
+	printf("New path from renderer #1 received!\n");
 }
 
-void setupRenderer() {
-	//Create the EMBREE renderer
+void processRendererTwo(PathData* newPath) {
 	
-	EMBREERenderer(DataConnector());
+}
+
+void setupRenderer(const int argc, char** argv) {
+	//Create the EMBREE renderer
+	if(argc == 2) { //Just one renderer
+		rendererOne = new EMBREERenderer(new DataConnector(processRendererOne), std::string(argv[1]));
+	}
+	else if(argc == 3) {
+		rendererOne = new EMBREERenderer(new DataConnector(processRendererOne), std::string(argv[1]));
+		rendererTwo = new EMBREERenderer(new DataConnector(processRendererTwo), std::string(argv[2]));
+	}
+	else {
+		throw std::runtime_error("Unsupported number of arguments (1 or 2 expected)");
+	}
 }
 
 void createViews() {
-    if(dataset.IsSet() && bmpPath.size() > 0) {
+
         RIVSizeProperty *defaultSizeProperty = new RIVFixedSizeProperty(0.1);
         RIVColorProperty *defaultColorProperty = new RIVFixedColorProperty(1,1,1);
 		
@@ -307,18 +325,18 @@ void createViews() {
         glutSpecialFunc(keys);
         
         //Load image
-        image = new BMPImage(bmpPath.c_str(),false);
-        glutSetWindow(imageViewWindow);
         float bottomHalfY = height / 2.f + padding;
         float squareSize = height / 2.F - 2 * padding;
-		imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,squareSize,squareSize);
-		imageView = new RIVImageView(&dataset,image,defaultColorProperty,defaultSizeProperty);
-		imageView->InitializeGraphics();
-        glutDisplayFunc(RIVImageView::DrawInstance);
-        glutReshapeFunc(RIVImageView::ReshapeInstance);
-        glutMouseFunc(RIVImageView::Mouse);
-        glutMotionFunc(RIVImageView::Motion);
-        glutSpecialFunc(keys);
+//		image = new BMPImage(bmpPath.c_str(),false);
+//		glutSetWindow(imageViewWindow);
+//		imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,squareSize,squareSize);
+//		imageView = new RIVImageView(&dataset,image,defaultColorProperty,defaultSizeProperty);
+//		imageView->InitializeGraphics();
+//        glutDisplayFunc(RIVImageView::DrawInstance);
+//        glutReshapeFunc(RIVImageView::ReshapeInstance);
+//        glutMouseFunc(RIVImageView::Mouse);
+//        glutMotionFunc(RIVImageView::Motion);
+//        glutSpecialFunc(keys);
 
         sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + squareSize, bottomHalfY, squareSize, squareSize);
 		RIV3DView::windowHandle = sceneViewWindow;
@@ -345,17 +363,14 @@ void createViews() {
         dataset.AddFilterListener(sceneView);
         dataset.AddFilterListener(parallelCoordsView);
 
-    }
-    else {
-        throw "Data must be loaded first.";
-    }
+    
 }
 
 int main(int argc, char **argv)
 {
     printf("Initialising Rendering InfoVis...\n");
 
-    generatePaths(argc, argv);
+//    generatePaths(argc, argv);
 	
     srand(time(NULL));
     /* initialize GLUT, let it extract command-line
@@ -373,6 +388,8 @@ int main(int argc, char **argv)
     
     /* create the window and store the handle to it */
     mainWindow = glutCreateWindow("Rendering InfoVis" /* title */ );
+	
+	glutIdleFunc(idle);
     
     /* register function to handle window resizes */
     glutReshapeFunc(reshape);
@@ -387,10 +404,12 @@ int main(int argc, char **argv)
 	
     glutSpecialFunc(keys);
 	
-    loadData();
+	setupRenderer(argc, argv);
 	
-    createViews();
-    
+//    loadData();
+	
+//    createViews();
+	
     /* Transparency stuff */
     glEnable (GL_BLEND);
     

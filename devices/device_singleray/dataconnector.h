@@ -13,32 +13,32 @@
 #include <vector>
 
 
-	//Struct wrapper for all intersection related data
-	typedef struct IntersectData {
-		float position[3]; //world position
-		float color[3];
+//Struct wrapper for all intersection related data
+typedef struct IntersectData {
+	float position[3]; //world position
+	float color[3];
 //		Spectrum throughput; //What was the throughput up until this point?
-		unsigned short primitiveId;
-		unsigned short shapeId;
-		unsigned short lightId;
-		unsigned short interactionType;
-	} IntersectData;
+	unsigned short primitiveId;
+	unsigned short shapeId;
+	unsigned short lightId;
+	unsigned short interactionType;
+} IntersectData;
+
+class PathData {
+public:
+	//The camera sample data
+	float imageX; // Continuously sampled image positions
+	float imageY;
+	float lensU; // Lens parameters
+	float lensV;
+	float timestamp;
 	
-	class PathData {
-	public:
-		//The camera sample data
-		float imageX; // Continuously sampled image positions
-		float imageY;
-		float lensU; // Lens parameters
-		float lensV;
-		float timestamp;
-		
-		float throughput[3];
-		float radiance[3];
-		
-		//Variable sized (=< MAX_BOUNCE) data about its intersections
-		std::vector<IntersectData> intersectionData;
-	};
+	float throughput[3];
+	float radiance[3];
+	
+	//Variable sized (=< MAX_BOUNCE) data about its intersections
+	std::vector<IntersectData> intersectionData;
+};
 
 class DataConnector {
 private:
@@ -46,10 +46,17 @@ private:
 	
 	int dc_id;
 	PathData* currentPath;
-//	(void) (*callback)(PathData* a) = NULL;
+	
+	typedef void (*callback_function)(PathData* newPath); // type for conciseness
+	
+	callback_function callback;
 public:
-	static void ProcessPath();
-	void StartPath();
+	//Constructor
+	DataConnector(callback_function callback);
+	
+	
+	void ProcessPath();
+	void StartPath(float x, float y, float lensU, float lensV, float time);
 //	void set_callback((void) (*newCallBack)(PathData*));
 	void AddIntersectionData(float x, float y, float z, float r, float g, float b, int primitive_id);
 };

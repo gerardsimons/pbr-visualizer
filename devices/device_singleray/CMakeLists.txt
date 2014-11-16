@@ -34,7 +34,7 @@ SET (SOURCES
     )
 
 IF (__XEON__)
-  ADD_LIBRARY(device_singleray SHARED ${SOURCES})
+  ADD_LIBRARY(device_singleray STATIC ${SOURCES})
   TARGET_LINK_LIBRARIES(device_singleray sys lexers loaders image device ${EMBREE_LIBRARY} image)
 ELSE ()
   INCLUDE(icc_mic)

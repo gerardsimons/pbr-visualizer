@@ -193,11 +193,12 @@ namespace embree
 						const float fx = (float(x) + sample.pixel.x)*rcpWidth;
 						const float fy = (float(y) + sample.pixel.y)*rcpHeight;
 						
-						Ray primary; camera->ray(Vec2f(fx,fy), sample.getLens(), primary);
+						Vec2f lensSample = sample.getLens();
+						Ray primary; camera->ray(Vec2f(fx,fy), lensSample, primary);
 						primary.time = sample.getTime();
 						
 						if(dataConnector != NULL) {
-							dataConnector->StartPath();
+							dataConnector->StartPath(fx,fy,primary.time);
 						}
 						
 						state.sample = &sample;

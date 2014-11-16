@@ -296,41 +296,36 @@ finish:
 }
 
 /* Constructor */
-EMBREERenderer::EMBREERenderer(DataConnector* dataConnector)
+EMBREERenderer::EMBREERenderer(DataConnector* dataConnector, const std::string& commandsFile)
 {
 	this->dataConnector = dataConnector;
-	/*! create stream for parsing */
-//		Ref<ParseStream> stream = new ParseStream(new CommandLineStream(argc, argv));
 	
-	/*! parse device to use */
-//		parseNumThreads(stream);
-//		parseDevice(stream);
-	
-	//Create device
 	clearGlobalObjects();
 	
 	g_device = Device::rtCreateDevice("singleray",g_numThreads,g_rtcore_cfg.c_str());
 	g_device->SetDataConnector(dataConnector);
 	
+	g_render_scene = createScene();
+	
 	/*! create embree device */
 	if (g_device == NULL)
 		g_device = Device::rtCreateDevice("default",g_numThreads,g_rtcore_cfg.c_str());
 	
+	/*! create stream for parsing */
+	FileName file = FileName() + commandsFile;
+	parseCommandLine(new ParseStream(new LineCommentFilter(file, "#")), file.path());
+	
 	createGlobalObjects();
+}
+
+void EMBREERenderer::RenderNextFrame() {
+	AffineSpace3f g_camSpace = AffineSpace3f::lookAtPoint(g_camPos, g_camLookAt, g_camUp);
 	
-	/*! parse command line */
-//		parseCommandLine(stream, FileName());
+	Handle<Device::RTCamera> camera = createCamera(AffineSpace3f(g_camSpace.l,g_camSpace.p));
 	
-	/*! if we did no render yet but have loaded a scene, switch to display mode */
-//		if (!g_rendered && g_prims.size()) { //displayMode();
-//			if (g_outFileName != "")
-//				outputMode(g_outFileName);
-//			else
-//				displayMode();
-//		}
-	
-	/*! cleanup */
-//		clearGlobalObjects();
+
+	g_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,0);
+	g_device->rtSwapBuffers(g_frameBuffer);
 }
 
 void EMBREERenderer::parseCommandLine(Ref<ParseStream> cin, const FileName& path)
@@ -734,32 +729,41 @@ void EMBREERenderer::parseCommandLine(Ref<ParseStream> cin, const FileName& path
 	}
 }
 
+void someVeryFunnyAndStrangeFunctionThatDoesNothingAtAll() {
+	printf("This is funny.\n");
+}
 
 /******************************************************************************/
 /*                               Main Function                                */
 /******************************************************************************/
 
-int main(int argc, char** argv)
-{
-	EMBREERenderer renderer(new DataConnector());
-	EMBREERenderer renderer_two(new DataConnector());
-	
-	Ref<ParseStream> stream = new ParseStream(new CommandLineStream(argc, argv));
-	
-	/*! create stream for parsing */
-    renderer.parseCommandLine(stream, FileName());
-	renderer.outputMode(FileName("embree_test.tga"));
-	
-	try {
-//		return embree::main(argc, argv);
-	}
-	catch (const std::exception& e) {
-//		embree::clearGlobalObjects();
-		std::cout << "Error: " << e.what() << std::endl;
-		return 1;
-	}
-	catch (...) {
-//		embree::clearGlobalObjects();
-		return 1;
-	}
-}
+//void callback(PathData* newPath) {
+//	
+//}
+//
+//int main(int argc, char** argv)
+//{
+//
+//	
+//	EMBREERenderer renderer(new DataConnector(callback), std::string(argv[1]));
+//	EMBREERenderer rendererTwo(new DataConnector(callback), std::string(argv[2]));
+//	
+//	Ref<ParseStream> stream = new ParseStream(new CommandLineStream(argc, argv));
+//	
+//	/*! create stream for parsing */
+//    renderer.parseCommandLine(stream, FileName());
+//	renderer.outputMode(FileName("embree_test.tga"));
+//	
+//	try {
+////		return embree::main(argc, argv);
+//	}
+//	catch (const std::exception& e) {
+////		embree::clearGlobalObjects();
+//		std::cout << "Error: " << e.what() << std::endl;
+//		return 1;
+//	}
+//	catch (...) {
+////		embree::clearGlobalObjects();
+//		return 1;
+//	}
+//}

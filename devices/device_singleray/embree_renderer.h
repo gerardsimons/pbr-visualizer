@@ -72,6 +72,7 @@ private:
 	/* regression testing mode */
 	bool g_regression = false;
 	
+	
 	/* logging settings */
 	bool log_display = false;
 	bool g_profiling = false;
@@ -87,7 +88,12 @@ private:
 	void clearGlobalObjects();
 public:
 	/* Constructor */
-	EMBREERenderer(DataConnector* dataConnector);
+//	EMBREERenderer() {
+//		
+//	};
+//	EMBREERenderer(DataConnector* dataConnector);
+//	EMBREERenderer(DataConnector* dataConnector, int argc, char **argv);
+	EMBREERenderer(DataConnector* dataConnector, const std::string& commandsFile);
 	
 	std::string makeFileName(const std::string path, const std::string fileName);
 	void outputMode(const FileName& fileName);
@@ -96,7 +102,10 @@ public:
 	void parseDebugRenderer(Ref<ParseStream> cin, const FileName& path);
 	void parsePathTracer(Ref<ParseStream> cin, const FileName& path);
 	void parseCommandLine(Ref<ParseStream> cin, const FileName& path);
+	
+	void RenderNextFrame();
 };
 
+	void someVeryFunnyAndStrangeFunctionThatDoesNothingAtAll();
 
 #endif
