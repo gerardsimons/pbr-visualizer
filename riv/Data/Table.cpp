@@ -346,7 +346,7 @@ std::string generateString(char c, size_t number) {
 }
 
 std::string RIVTable::RowToString(size_t row) {
-    std::string rowText = std::to_string(row) + "|";
+    std::string rowText = "";
     for(size_t i = 0 ; i < records.size() ; i++) {
         RIVRecord* record = records[i];
 		
@@ -357,11 +357,11 @@ std::string RIVTable::RowToString(size_t row) {
         std::string valueString;
         size_t textWidth;
         if(floatRecord) {
-            valueString = std::to_string(floatRecord->Value(row));
+            // valueString = sprintf("%zu",floatRecord->Value(row));
             textWidth = valueString.size();
         }
         else if(shortRecord) {
-            valueString = std::to_string(shortRecord->Value(row));
+            // valueString = sprintf("%zu",shortRecord->Value(row));
             textWidth = valueString.size();
         }
         else {
@@ -378,8 +378,6 @@ std::string RIVTable::RowToString(size_t row) {
         
         rowText += generateString(' ', remainder);
         rowText += "|";
-        
-        
     }
     return rowText;
 }
@@ -445,7 +443,7 @@ void RIVTable::Print(size_t maxPrint, bool printFiltered) {
                     rowText += "---> " + reference->targetTable->name + "{";
                     for(size_t i = 0 ; i < referenceIndexRange.second ; ++i) {
                         
-                        rowText += std::to_string(referenceIndexRange.first[i]);
+                        // rowText += std::to_string(referenceIndexRange.first[i]);
                         if(i < referenceIndexRange.second - 1) {
                             rowText +=  ",";
                         }
@@ -604,7 +602,7 @@ RIVClusterSet* RIVTable::Cluster(const std::string& xRecordName, const std::stri
     RIVFloatRecord *yRecord = RIVTable::CastToFloatRecord(GetRecord(yRecordName));
     RIVFloatRecord *zRecord = RIVTable::CastToFloatRecord(GetRecord(zRecordName));
     if(K < 1) {
-        throw std::string("Invalid cluster size " + std::to_string(K));
+        // throw std::string("Invalid cluster size " + std::to_string(K));
     }
     if(xRecord->Size() == 0) {
         throw "Cannot cluster 0 values.";

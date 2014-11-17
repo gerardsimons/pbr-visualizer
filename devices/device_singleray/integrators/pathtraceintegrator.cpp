@@ -45,8 +45,9 @@ namespace embree
 	Color PathTraceIntegrator::Li(LightPath& lightPath, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector)
 	{
 		/*! Terminate path if too long or contribution too low. */
-		if (lightPath.depth >= maxDepth || reduce_max(lightPath.throughput) < minContribution)
+		if (lightPath.depth >= maxDepth || reduce_max(lightPath.throughput) < minContribution) {
 			return zero;
+		}
 		
 		/*! Traverse ray. */
 		DifferentialGeometry dg;
@@ -100,7 +101,7 @@ namespace embree
 		{
 			/*! sample brdf */
 			Sample3f wi;
-	  BRDFType type;
+			BRDFType type;
 			Vec2f s  = state.sample->getVec2f(firstScatterSampleID     + lightPath.depth);
 			float ss = state.sample->getFloat(firstScatterTypeSampleID + lightPath.depth);
 			Color c = brdfs.sample(wo, dg, wi, type, s, ss, giBRDFTypes);
@@ -117,12 +118,12 @@ namespace embree
 				if (type & TRANSMISSION) nextMedium = dg.material->nextMedium(lightPath.lastMedium);
 				
 				/*! Continue the path. */
-		  Ray newRay(dg.P, wi, dg.error*epsilon, inf, lightPath.lastRay.time);
+				Ray newRay(dg.P, wi, dg.error*epsilon, inf, lightPath.lastRay.time);
 				LightPath scatteredPath = lightPath.extended(newRay,
 															 nextMedium, c, (type & directLightingBRDFTypes) != NONE);
 		  
 				if(dataConnector)
-					dataConnector->AddIntersectionData(dg.P.x,dg.P.y,dg.P.z,c.r,c.g,c.b,newRay.id0);
+					dataConnector->AddIntersectionData(dg.P.x,dg.P.y,dg.P.z,c.r,c.g,c.b,lightPath.lastRay.id0,type);
 		  
 				L += c * Li(scatteredPath, scene, state,dataConnector) * rcp(wi.pdf);
 			}
@@ -167,6 +168,14 @@ namespace embree
 		}
 		return L;
 	}
+	Color PathTraceIntegrator::Li(Ray& ray, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector) {
+		//Start path from camera ray
+		LightPath lightPath(ray);
+		Color L = Li(lightPath,scene,state,dataConnector);
+		//We now have the complete path
+		dataConnector->FinishPath(lightPath.depth,L.r,L.g,L.b,lightPath.throughput.r,lightPath.throughput.g,lightPath.throughput.b);
+		return L;
+	}
 	
 	Color PathTraceIntegrator::Li(LightPath& lightPath, const Ref<BackendScene>& scene, IntegratorState& state)
 	{
@@ -174,11 +183,10 @@ namespace embree
 	}
 	
 	Color PathTraceIntegrator::Li(Ray& ray, const Ref<BackendScene>& scene, IntegratorState& state) {
-		LightPath path(ray); return Li(path,scene,state,NULL);
+		LightPath path(ray);
+		return Li(path,scene,state,NULL);
 	}
 	
-	Color PathTraceIntegrator::Li(Ray& ray, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector) {
-		LightPath path(ray); return Li(path,scene,state,dataConnector);
-	}
+
 }
 

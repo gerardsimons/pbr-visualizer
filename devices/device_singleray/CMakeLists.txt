@@ -17,8 +17,8 @@
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 SET (SOURCES 
-    dataconnector.cpp
     embree_renderer.cpp
+    dataconnector.cpp
     api/singleray_device.cpp
     lights/hdrilight.cpp   
     shapes/trianglemesh_normals.cpp   
@@ -35,7 +35,10 @@ SET (SOURCES
 
 IF (__XEON__)
   ADD_LIBRARY(device_singleray STATIC ${SOURCES})
+  #ADD_EXECUTABLE(device_singleray_exec ${SOURCES})
+
   TARGET_LINK_LIBRARIES(device_singleray sys lexers loaders image device ${EMBREE_LIBRARY} image)
+  #TARGET_LINK_LIBRARIES(device_singleray_exec sys lexers loaders image device ${EMBREE_LIBRARY} image)
 ELSE ()
   INCLUDE(icc_mic)
   ADD_EXECUTABLE(device_singleray_knc ${SOURCES})

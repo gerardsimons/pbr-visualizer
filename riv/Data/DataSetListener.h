@@ -13,7 +13,10 @@
 
 class RIVDataSetListener {
 public:
-    virtual void OnDataSetChanged() = 0;
+	//Did some filter get added, removed or altered?
+    virtual void OnFiltersChanged() = 0;
+	//Did new data get added or old data removed?
+	virtual void OnDataChanged() = 0;
 };
 
 #endif

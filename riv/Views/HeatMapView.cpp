@@ -109,7 +109,7 @@
 		
 		//Colors in RGB
 		//Blue cyan green yellow red
-	//    float colors[nr_colors][3] = {{0,0,1},{0,1,1},{0,1,0},{1,1,0},{1,0,0}};
+	//   float colors[nr_colors][3] = {{0,0,1},{0,1,1},{0,1,0},{1,1,0},{1,0,0}};
 //		float colors[nr_colors][3] = {{0,0,.57},{0,0,1},{0,1,1},{1,1,0},{1,0,0},{.5,0,0}};
 		
 		//Colors in HSV

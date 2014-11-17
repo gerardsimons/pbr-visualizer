@@ -49,8 +49,11 @@ public:
     void Reshape(int width, int height);
 	bool HandleMouse(int,int,int,int);
 	bool HandleMouseMotion(int,int);
+	
     //implement virtual functions prescribed by DataSetListener
-    virtual void OnDataSetChanged();
+    virtual void OnDataChanged();
+	virtual void OnFiltersChanged();
+	
 	//Create graphical primitives based on data currently set
 	void InitializeGraphics();
 	

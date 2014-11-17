@@ -12,20 +12,44 @@
 
 #include <vector>
 
+typedef unsigned short ushort;
 
 //Struct wrapper for all intersection related data
 typedef struct IntersectData {
 	float position[3]; //world position
 	float color[3];
 //		Spectrum throughput; //What was the throughput up until this point?
-	unsigned short primitiveId;
-	unsigned short shapeId;
-	unsigned short lightId;
-	unsigned short interactionType;
+	ushort primitiveId;
+	ushort shapeId; //TODO: Is this still being used
+	ushort lightId;
+	ushort interactionType;
+	
+	IntersectData(float* position, float* color, ushort primitiveId, ushort shapeId, ushort lightId, ushort interactionType) :
+		primitiveId(primitiveId), shapeId(shapeId), lightId(lightId), interactionType(interactionType) {
+		
+		memcpy(this->position, position, 3);
+		memcpy(this->color, color, 3);
+	}
+	
+	IntersectData(float x, float y, float z, float r, float g, float b, ushort primitiveId, ushort shapeId, ushort lightId, ushort interactionType) :
+	primitiveId(primitiveId), shapeId(shapeId), lightId(lightId), interactionType(interactionType) {
+		
+		position[0] = x;
+		position[1] = y;
+		position[2] = z;
+		
+		color[0] = r;
+		color[1] = g;
+		color[2] = b;
+	}
 } IntersectData;
 
 class PathData {
 public:
+	
+	~PathData() {
+		
+	}
 	//The camera sample data
 	float imageX; // Continuously sampled image positions
 	float imageY;
@@ -44,8 +68,8 @@ class DataConnector {
 private:
 	static int ID_COUNTER;
 	
-	int dc_id;
-	PathData* currentPath;
+//	int dc_id;
+	std::unique_ptr<PathData> currentPath = NULL;
 	
 	typedef void (*callback_function)(PathData* newPath); // type for conciseness
 	
@@ -53,12 +77,11 @@ private:
 public:
 	//Constructor
 	DataConnector(callback_function callback);
-	
-	
-	void ProcessPath();
+//	void ProcessPath();
+	void FinishPath(unsigned short depth, float r, float g, float b, float throughput_r, float throughput_g, float throughput_b);
 	void StartPath(float x, float y, float lensU, float lensV, float time);
 //	void set_callback((void) (*newCallBack)(PathData*));
-	void AddIntersectionData(float x, float y, float z, float r, float g, float b, int primitive_id);
+	void AddIntersectionData(float x, float y, float z, float r, float g, float b, int primitive_id, ushort type);
 };
 
 #endif

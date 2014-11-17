@@ -197,13 +197,14 @@ namespace embree
 						Ray primary; camera->ray(Vec2f(fx,fy), lensSample, primary);
 						primary.time = sample.getTime();
 						
-						if(dataConnector != NULL) {
-							dataConnector->StartPath(fx,fy,primary.time);
-						}
-						
 						state.sample = &sample;
 						state.pixel = Vec2f(fx,fy);
-						L += renderer->integrator->Li(primary, scene, state);
+						if(dataConnector != NULL) {
+							dataConnector->StartPath(fx,fy,lensSample.x,lensSample.y,primary.time);
+						}
+						L += renderer->integrator->Li(primary, scene, state,dataConnector);
+						
+
 					}
 					const Color L0 = swapchain->update(x, _y, L, spp, accumulate);
 					const Color L1 = toneMapper->eval(L0,x,y,swapchain);

@@ -20,7 +20,7 @@
 #include "Octree/Octree.h"
 
 //EMBREE STUFF
-#include "devices/device_singleray/embree_renderer.h"
+#include "devices/renderer/embree_renderer.h"
 #include "devices/device_singleray/dataconnector.h"
 //#include "sandbox.h"
 
@@ -274,8 +274,14 @@ void reshape(int w, int h)
 //    else throw "Data paths not generated.";
 //}
 
+const int maxFrames = 2;
+int currentFrame = 0;
+
 void idle() {
-	rendererOne->RenderNextFrame();
+	if(++currentFrame < maxFrames) {
+		printf("Rendering next frame.\n");
+		rendererOne->RenderNextFrame();
+	}
 }
 
 void processRendererOne(PathData* newPath) {
@@ -283,17 +289,19 @@ void processRendererOne(PathData* newPath) {
 }
 
 void processRendererTwo(PathData* newPath) {
-	
+	printf("New path from renderer #2 received!\n");
 }
 
 void setupRenderer(const int argc, char** argv) {
 	//Create the EMBREE renderer
 	if(argc == 2) { //Just one renderer
 		rendererOne = new EMBREERenderer(new DataConnector(processRendererOne), std::string(argv[1]));
+		printf("1 renderer set up.\n");
 	}
 	else if(argc == 3) {
 		rendererOne = new EMBREERenderer(new DataConnector(processRendererOne), std::string(argv[1]));
 		rendererTwo = new EMBREERenderer(new DataConnector(processRendererTwo), std::string(argv[2]));
+		printf("2 renderers set up.\n");
 	}
 	else {
 		throw std::runtime_error("Unsupported number of arguments (1 or 2 expected)");
@@ -356,9 +364,9 @@ void createViews() {
 		
         //Create views
         parallelCoordsView = new ParallelCoordsView(&dataset,colorProperty,sizeProperty);
-        sceneView = new RIV3DView(&dataset,config,colorProperty,sizeProperty);
-        heatMapView = new RIVHeatMapView(&dataset);
-		
+//        sceneView = new RIV3DView(&dataset,config,colorProperty,sizeProperty);
+//        heatMapView = new RIVHeatMapView(&dataset);
+	
         //Add some filter callbacks
         dataset.AddFilterListener(sceneView);
         dataset.AddFilterListener(parallelCoordsView);

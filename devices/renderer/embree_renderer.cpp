@@ -732,31 +732,31 @@ void someVeryFunnyAndStrangeFunctionThatDoesNothingAtAll() {
 /*                               Main Function                                */
 /******************************************************************************/
 
-// void callback(PathData* newPath) {
-//	 printf("PATH DATA RECEIVED.....");
-// }
-// //
-// int main(int argc, char** argv)
-// {
-// 	EMBREERenderer renderer(new DataConnector(callback), std::string(argv[1]));
-//// 	EMBREERenderer rendererTwo(new DataConnector(callback), std::string(argv[2]));
-//	
-// 	Ref<ParseStream> stream = new ParseStream(new CommandLineStream(argc, argv));
-//	
-// 	/*! create stream for parsing */
-//     renderer.parseCommandLine(stream, FileName());
-// 	renderer.outputMode(FileName("embree_test.tga"));
-//	
-// 	try {
-// //		return embree::main(argc, argv);
-// 	}
-// 	catch (const std::exception& e) {
-// //		embree::clearGlobalObjects();
-// 		std::cout << "Error: " << e.what() << std::endl;
-// 		return 1;
-// 	}
-// 	catch (...) {
-// //		embree::clearGlobalObjects();
-// 		return 1;
-// 	}
-// }
+ void callback(PathData* newPath) {
+	 printf("PATH DATA RECEIVED.....");
+ }
+ //
+ int main(int argc, char** argv)
+ {
+ 	EMBREERenderer renderer(new DataConnector(callback), std::string(argv[1]));
+// 	EMBREERenderer rendererTwo(new DataConnector(callback), std::string(argv[2]));
+	
+ 	Ref<ParseStream> stream = new ParseStream(new CommandLineStream(argc, argv));
+	
+ 	/*! create stream for parsing */
+     renderer.parseCommandLine(stream, FileName());
+ 	renderer.outputMode(FileName("embree_test.tga"));
+	
+ 	try {
+ //		return embree::main(argc, argv);
+ 	}
+ 	catch (const std::exception& e) {
+ //		embree::clearGlobalObjects();
+ 		std::cout << "Error: " << e.what() << std::endl;
+ 		return 1;
+ 	}
+ 	catch (...) {
+ //		embree::clearGlobalObjects();
+ 		return 1;
+ 	}
+ }

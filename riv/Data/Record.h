@@ -34,7 +34,7 @@ private:
     std::vector<float> values;
     std::pair<float,float> minMax;
 public:
-    RIVFloatRecord(const std::string& name) { this->name = name; };
+	RIVFloatRecord(const std::string& name) { this->name = name; minMaxComputed = false; };
     RIVFloatRecord(const std::string& name, const std::vector<float>& values) { this->name = name; this->values = values; minMaxComputed = false; };
     float Value(const size_t& i) const { return values[i]; };
     void SetValues(std::vector<float> _values) {

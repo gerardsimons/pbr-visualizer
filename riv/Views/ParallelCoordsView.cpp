@@ -36,10 +36,6 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, RIVColorProperty *co
 	instance = this;
 }
 
-ParallelCoordsView::~ParallelCoordsView(void) {
-	
-}
-
 void ParallelCoordsView::createAxes() {
     axisGroups.clear();
     if(dataset != NULL) {
@@ -170,8 +166,6 @@ void ParallelCoordsView::drawAxes() {
             for(size_t j = 0 ; j < scale.size() ; j++) {
                 float value = axis.ValueOnScale(scale[j]);
                 int height = axis.PositionOnScaleForScalar(scale[j]);
-                
-                std::string text = std::to_string(value);
                 
                 char buffer[4];
                 sprintf(buffer,"%.2f",value);
@@ -317,7 +311,7 @@ void ParallelCoordsView::InitializeGraphics() {
 size_t drawCount = 0;
 void ParallelCoordsView::Draw() {
 	//    printf("linesAreDirty = %d axesAreDirty = %d\n",linesAreDirty,axesAreDirty);
-	std::string taskName = "ParallelCoordsView Draw #" + std::to_string(++drawCount);
+	std::string taskName = "ParallelCoordsView Draw";
 	
 	reporter::startTask(taskName);
 	
@@ -439,7 +433,12 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
     return false;
 }
 
-void ParallelCoordsView::OnDataSetChanged() {
+void ParallelCoordsView::OnDataChanged() {
+	//Recreate the axes
+	createAxes();
+}
+
+void ParallelCoordsView::OnFiltersChanged() {
     printf("ParallelCoordsView received a on dataset changed callback.\n");
     linesAreDirty = true;
     axesAreDirty = true;

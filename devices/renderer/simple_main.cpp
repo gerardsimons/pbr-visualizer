@@ -6,7 +6,7 @@
 int main() {
 	printf("Hello EMBREE\n");
 	
-	EMBREERenderer renderer;
+	// EMBREERenderer renderer;
 	
-	renderer.makeFileName("", "");
+	// renderer.makeFileName("", "");
 }

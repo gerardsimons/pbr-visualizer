@@ -26,14 +26,17 @@ class RIVDataSet {
 private:
     RIVClusterSet* clusterSet = NULL;
     std::vector<RIVTable*> tables;
-    std::vector<RIVDataSetListener*> onFilterListeners;
+    std::vector<RIVDataSetListener*> dataListeners;
 	
-	//I use a map just to ensure there are no double entries
+	//What tables are changed
 	std::map<RIVTable*,bool> staleTables;
+	
+	
+	void notifyFilterListeners();
+	void notifyDataListeners();
 	
 	bool isFiltering = false;
 public:
-	void notifyListeners();
     void AddTable(RIVTable* table);
 	void AddFilter(const std::string& tableName, riv::GroupFilter *filter);
     void AddFilter(const std::string& tableName, riv::Filter* filter);

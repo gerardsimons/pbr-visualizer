@@ -44,7 +44,7 @@ public:
             std::cout << "";
             for(int x = 0 ; x < c.sizeX ; x++) {
                 unsigned short *rgb = c.RGB(x,y);
-                // std::cout << "(" << std::to_string(rgb[0]) << "," << std::to_string(rgb[1]) << "," << std::to_string(rgb[2]) << ")" << " ";
+                 // std::cout << "(" << std::to_string(rgb[0]) << "," << std::to_string(rgb[1]) << "," << std::to_string(rgb[2]) << ")" << " ";
             }
             std::cout << "\n";
         }

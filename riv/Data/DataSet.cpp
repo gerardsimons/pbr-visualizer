@@ -159,15 +159,21 @@ size_t RIVDataSet::NumberOfTables() const {
     return tables.size();
 }
 
-void RIVDataSet::notifyListeners() {
-    for(RIVDataSetListener *listener : onFilterListeners) {
-        listener->OnDataSetChanged();
+void RIVDataSet::notifyFilterListeners() {
+    for(RIVDataSetListener *listener : dataListeners) {
+        listener->OnFiltersChanged();
     }
+}
+
+void RIVDataSet::notifyDataListeners() {
+	for(RIVDataSetListener* listener : dataListeners) {
+		listener->OnDataChanged();
+	}
 }
 
 void RIVDataSet::AddFilterListener(RIVDataSetListener* listener) {
     if(listener) {
-        onFilterListeners.push_back(listener);
+        dataListeners.push_back(listener);
     }
 }
 
@@ -241,5 +247,5 @@ void RIVDataSet::StopFiltering() {
 	
 	isFiltering = false;
 	//Notify the listeners now
-	notifyListeners();
+	notifyFilterListeners();
 }
