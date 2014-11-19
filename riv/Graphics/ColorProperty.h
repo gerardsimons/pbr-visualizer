@@ -21,8 +21,8 @@ class RIVRecord;
 //Interface for a color property
 class RIVColorProperty {
 protected:
-    Color alternateColor;
-    RIVColorProperty(const Color& alternateColor_) {
+    riv::Color alternateColor;
+    RIVColorProperty(const riv::Color& alternateColor_) {
         alternateColor = alternateColor_;
     }
     RIVColorProperty() {
@@ -30,15 +30,15 @@ protected:
     }
 public:
     //DEFAULT COLORS
-    virtual bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) = 0;
+    virtual bool ComputeColor(RIVTable* table, size_t row, riv::Color& color) = 0;
 };
 
 class RIVFixedColorProperty : public RIVColorProperty{
 private:
-     ::Color fixedColor;
+     riv::Color fixedColor;
     
 public:
-    RIVFixedColorProperty(::Color color) {
+    RIVFixedColorProperty(riv::Color color) {
         fixedColor = color;
     }
 	RIVFixedColorProperty() {
@@ -51,7 +51,7 @@ public:
 		fixedColor.G = g;
 		fixedColor.B = b;
     }
-    bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) {
+    bool ComputeColor(RIVTable* table, size_t row, riv::Color& color) {
 		color = fixedColor;
         return true; //Always possible
     }
@@ -74,7 +74,7 @@ private:
 //    float colorOne[3];
 //    float colorTwo[3];
     
-	ColorMap colorMap;
+	riv::ColorMap colorMap;
 
     //What to do when multiple rows (returned by reference chain) have different membmerships to different color interpolators? This function deals with this
     float const* colorForMultipleResolvedRows(const std::vector<size_t>& rows);
@@ -111,21 +111,21 @@ public:
 //			colorMap.AddColor(color);
 //		}
 //    }
-	RIVEvaluatedColorProperty(RIVTable *colorReference_, RIVRecord* record, const ColorMap& colorMap) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
+	RIVEvaluatedColorProperty(RIVTable *colorReference_, RIVRecord* record, const riv::ColorMap& colorMap) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
         //        memcpy(colorOne, colorOne_, sizeof(colorOne));
         //        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
         
 		this->colorMap = colorMap;
     }
 	
-	RIVEvaluatedColorProperty(RIVTable *colorReference_, const std::string& recordName, const ColorMap& colorMap) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,recordName){
+	RIVEvaluatedColorProperty(RIVTable *colorReference_, const std::string& recordName, const riv::ColorMap& colorMap) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,recordName){
 		//        memcpy(colorOne, colorOne_, sizeof(colorOne));
 		//        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
 		
 		this->colorMap = colorMap;
 	}
 	
-    bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) {
+    bool ComputeColor(RIVTable* table, size_t row, riv::Color& color) {
         float value; //Assuming this value will be between 0 and 1
         if(RIVEvaluatedProperty<T>::Value(table,row,value))  {
 //            printf("Color value = %f\n",value);
@@ -147,7 +147,7 @@ public:
         colorsToUse = colorsToUse_;
         colors = colors_;
     }
-    bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) {
+    bool ComputeColor(RIVTable* table, size_t row, riv::Color& color) {
         size_t index = colorPointer % colorsToUse;
         colorPointer++;
         return colors[index];
@@ -179,7 +179,7 @@ public:
 		greenColorProperty = new RIVEvaluatedProperty<T>(referenceTable,greenRecord);
 		blueColorProperty = new RIVEvaluatedProperty<T>(referenceTable,blueRecord);
     }
-    bool ComputeColor(RIVTable* table, const size_t& row, ::Color& color) {
+    bool ComputeColor(RIVTable* table, size_t row, riv::Color& color) {
 		float ratioRed;
 		float ratioGreen;
 		float ratioBlue;

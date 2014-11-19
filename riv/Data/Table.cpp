@@ -15,6 +15,7 @@ RIVTable::RIVTable(std::string name) {
 }
 
 void RIVTable::AddRecord(RIVRecord* record) {
+	size_t rows = NumberOfRows();
     if(rows == 0 || record->Size() == rows) {
         rows = record->Size();
 		attributes.push_back(record->name);
@@ -39,6 +40,7 @@ void RIVTable::Filter() {
 			f->Print();
 		}
 		printf("\n");
+		size_t rows = NumberOfRows();
 		for(size_t row = 0 ; row < rows ; row++) {
 			if(filteredRows[row]) {
 				//				printf("row %zu was already filtered\n",row);
@@ -137,12 +139,12 @@ void RIVTable::FilterReferences() {
 }
 
 float RIVTable::PercentageFiltered() {
-	return filteredRows.size() / (float)rows * 100.F;
+	return filteredRows.size() / (float)NumberOfRows() * 100.F;
 }
 
 //This is only necessary if there are some orphaned rows in reference tables
 void RIVTable::FilterRowsUnlinkedTo(RIVTable *table) {
-    for(size_t row = 0 ; row < rows ; ++row) {
+    for(size_t row = 0 ; row < NumberOfRows() ; ++row) {
         for(RIVReference *reference : references) {
             if(reference->targetTable->GetName() == table->GetName() && !reference->HasReference(row)) {
                 FilterRow(row);
@@ -332,7 +334,10 @@ size_t RIVTable::NumberOfColumns() {
 }
 
 size_t RIVTable::NumberOfRows() {
-    return rows;
+	if(records.size()) {
+		return records[0]->Size();
+	}
+	else return 0;
 }
 
 //Helper function for row to string
@@ -358,10 +363,12 @@ std::string RIVTable::RowToString(size_t row) {
         size_t textWidth;
         if(floatRecord) {
             // valueString = sprintf("%zu",floatRecord->Value(row));
+			valueString = std::to_string(floatRecord->Value(row));
             textWidth = valueString.size();
         }
         else if(shortRecord) {
             // valueString = sprintf("%zu",shortRecord->Value(row));
+			valueString = std::to_string(shortRecord->Value(row));
             textWidth = valueString.size();
         }
         else {
@@ -398,6 +405,10 @@ void RIVTable::PrintUnfiltered() {
 }
 
 void RIVTable::Print(size_t maxPrint, bool printFiltered) {
+	size_t rows = NumberOfRows();
+	if(maxPrint == 0) {
+		maxPrint = rows;
+	}
     printf("Table called %s has %zu records %zu rows and %zu references.\n First %zu rows:\n",name.c_str(),records.size(),rows,references.size(),maxPrint);
     std::string headerText = "|";
     std::string headerOrnament;
@@ -422,9 +433,7 @@ void RIVTable::Print(size_t maxPrint, bool printFiltered) {
         headerOrnament += "-";
     }
     
-	if(maxPrint == 0) {
-		maxPrint = rows;
-	}
+
 	
     printf("%s\n",headerOrnament.c_str());
     printf("%s\n",headerText.c_str());
@@ -443,7 +452,7 @@ void RIVTable::Print(size_t maxPrint, bool printFiltered) {
                     rowText += "---> " + reference->targetTable->name + "{";
                     for(size_t i = 0 ; i < referenceIndexRange.second ; ++i) {
                         
-                        // rowText += std::to_string(referenceIndexRange.first[i]);
+                         rowText += std::to_string(referenceIndexRange.first[i]);
                         if(i < referenceIndexRange.second - 1) {
                             rowText +=  ",";
                         }
@@ -548,10 +557,10 @@ TableIterator* RIVTable::GetIterator() {
 		delete iterator;
 	}
 	if(IsFiltered()) {
-		iterator = new FilteredTableIterator(&filteredRows,rows,&clusterSet, &references);
+		iterator = new FilteredTableIterator(&filteredRows,NumberOfRows(),&clusterSet, &references);
 	}
 	else {
-		iterator = new TableIterator(rows,&clusterSet, &references);
+		iterator = new TableIterator(NumberOfRows(),&clusterSet, &references);
 	}
 	return iterator;
 }

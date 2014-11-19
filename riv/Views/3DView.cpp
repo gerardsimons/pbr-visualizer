@@ -128,7 +128,7 @@ void RIV3DView::drawLeafNodes(OctreeNode* node) {
 //		float ratio = density / maxDensity;
 //		ratio = 1.F - ratio;
 //		float ratio = (pointsInNode) / ((float)heatmap->GetConfiguration()->MaxNodeCapacity());
-		Color cubeColor = treeColorMap.ComputeColor(ratio);
+		riv::Color cubeColor = treeColorMap.ComputeColor(ratio);
 //		glColor3fv(color);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -287,7 +287,7 @@ void RIV3DView::drawMeshModel() {
 		MeshModel model = objects->at(i);
 		if(meshSelected && isSelectedObject(model.GetObjectID())) {
 			//			printf("This is the selected mesh\n");
-			Color lightBluecolor = colors::LIGHT_BLUE;
+			riv::Color lightBluecolor = colors::LIGHT_BLUE;
 			glColor3f(lightBluecolor.R,lightBluecolor.G,lightBluecolor.B);
 			//			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
@@ -346,7 +346,7 @@ void RIV3DView::drawPoints() {
 			it->GetNext(row);
 			
 			PathPoint* point = path.GetPoint(i);
-			Color pointColor = point->color;
+			riv::Color pointColor = point->color;
 			
 			float x = xRecord->Value(point->rowIndex);
 			float y = yRecord->Value(point->rowIndex);
@@ -447,7 +447,7 @@ void RIV3DView::createPaths() {
 			oldPathID = *pathID;
 		}
 		bounceNr = bounceRecord->Value(row);
-		Color pointColor;
+		riv::Color pointColor;
         colorProperty->ComputeColor(isectTable, row, pointColor); //Check if any color can be computed for the given row
 		PathPoint p;
 		p.rowIndex = row;
@@ -514,7 +514,7 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 				float deltaZ = zRecord->Value(p->rowIndex) - cameraPosition[2];
 				glColor3f(1,1,1);
 				glVertex3f(cameraPosition[0] + deltaX * startSegment * maxBounce,cameraPosition[1] + deltaY * startSegment * maxBounce,cameraPosition[2] + deltaZ * startSegment * maxBounce);
-				Color& c = p->color;
+				riv::Color& c = p->color;
 				glColor3f(c.R,c.G,c.B);
 				glVertex3f(cameraPosition[0] + deltaX * stopSegment * maxBounce,cameraPosition[1] + deltaY * stopSegment * maxBounce,cameraPosition[2] + deltaZ * stopSegment * maxBounce);
 			}
@@ -535,8 +535,8 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 				PathPoint* endPoint = path.GetPointWithBounce(endBounce);
 					
 				if(startPoint != NULL && endPoint != NULL) {
-					Color startColor = startPoint->color;
-					Color endColor = endPoint->color;
+					riv::Color startColor = startPoint->color;
+					riv::Color endColor = endPoint->color;
 					
 					float Cstart = startSegment * maxBounce - startBounce;
 					float Cend = stopSegment * maxBounce - startBounce;

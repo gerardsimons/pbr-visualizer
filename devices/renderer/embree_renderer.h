@@ -43,6 +43,8 @@ private:
 	Handle<Device::RTScene> g_render_scene = NULL;
 	std::vector<Handle<Device::RTPrimitive> > g_prims;
 	
+	Handle<Device::RTScene> scene = NULL;
+	
 	/* Data connector */
 	DataConnector* dataConnector = NULL;
 	

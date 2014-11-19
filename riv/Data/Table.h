@@ -48,8 +48,6 @@ namespace riv {
 		
 		TableIterator* iterator = NULL;
 		
-		size_t rows = 0; //Keeps a running count of the rows (that is the length of a record)
-		
 		std::vector<riv::Filter*> filters;
 		std::vector<riv::GroupFilter*> groupFilters;
 		
@@ -111,7 +109,8 @@ namespace riv {
 		TableIterator* GetIterator();
 //		TableIterator* GetPIterator();
 		std::string GetName() const { return name; };
-		size_t GetNumRows() const { return rows; };
+		
+		size_t GetNumRows() const;
 		
 		//    RIVReference* GetReferenceToTable(std::string tableName,std::vector<std::string> *visitedTables = 0); //DEPRECATED
 		bool GetReferenceChainToTable(std::string tableName, RIVReferenceChain& chainToTarget, std::vector<std::string> *visitedTables = 0);

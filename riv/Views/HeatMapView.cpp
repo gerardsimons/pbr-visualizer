@@ -16,7 +16,7 @@
 	RIVHeatMapView* RIVHeatMapView::instance = NULL;
 
 	std::vector<std::vector<float> > heatmap;
-	ColorMap colorMap;
+	riv::ColorMap colorMap;
 
 	//RIVHeatMapView::RIVHeatMapView(RIVColorProperty *controlledColorProp, RIVSizeProperty* controlledSizeProp) {
 	//    if(instance != NULL) {
@@ -122,7 +122,7 @@
 			
 				float heatmapValue = heatmap[x][y];
 	//            float color[3] = {1,0,0}; //Red
-				Color squareColor = colorMap.ComputeColor(heatmapValue);
+				riv::Color squareColor = colorMap.ComputeColor(heatmapValue);
 				
 				glColor3f(squareColor.R,squareColor.G,squareColor.B);
 				

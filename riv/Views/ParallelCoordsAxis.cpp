@@ -12,9 +12,6 @@
 
 
 ParallelCoordsAxis::ParallelCoordsAxis(int x,int y, int height, float minValue, float maxValue, const std::string& name) {
-	if(almost_equal(minValue, maxValue, 0.001) && name != "interaction types" && name != "light ids") {
-		printf("Gotcha!\n");
-	}
     this->x = x;
     this->y = y;
     this->height = height;

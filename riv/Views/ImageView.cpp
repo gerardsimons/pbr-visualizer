@@ -14,34 +14,12 @@
 
 RIVImageView* RIVImageView::instance = NULL;
 
-RIVImageView::RIVImageView(RIVDataSet* dataset, BMPImage *image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty,RIVSizeProperty* sizeProperty) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY,colorProperty,sizeProperty){
-	renderedImage = image;
-    if(instance != NULL) {
-        throw "Only 1 instance of ImageView allowed.";
-    }
-    instance = this;
-    
-    identifier = "ImageView";
-
-	imageWidth = width;
-	imageHeight = height;
-
-	isDragging = false;
-    
-	selection.start.x = -1;
-    selection.start.y = -1;
-    selection.end.x = -1;
-    selection.end.y = -1;
-}
-
-RIVImageView::RIVImageView(RIVDataSet* dataset, BMPImage* image, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size) {
-	renderedImage = image;
+RIVImageView::RIVImageView(RIVDataSet* dataset, EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size), renderer(renderer) {
     if(instance != NULL) {
         throw "Only 1 instance of ImageView allowed.";
     }
     instance = this;
     identifier = "ImageView";
-
     
 	selection.start.x = -1;
     selection.start.y = -1;
@@ -50,16 +28,7 @@ RIVImageView::RIVImageView(RIVDataSet* dataset, BMPImage* image, RIVColorPropert
 }
 
 void RIVImageView::InitializeGraphics() {
-	createTextureImage();
-}
-
-RIVImageView::~RIVImageView() {
 	
-}
-
-////This shit aint working, the data gets garbled up?!
-void RIVImageView::createTextureImage() {
-    createTextureImage(renderedImage);
 }
 
 void RIVImageView::DrawInstance() {
@@ -109,9 +78,9 @@ void RIVImageView::Reshape(int width, int height) {
 	imageEnd.x = startX + width - paddingX;
 	imageEnd.y = startY + height - paddingY;
     
-    imageMagnificationX = (width - 2 * paddingX) / (float)renderedImage->sizeX;
-	imageMagnificationY = (height - 2 * paddingY) / (float)renderedImage->sizeY;
-    
+//    imageMagnificationX = (width - 2 * paddingX) / (float)renderedImage->sizeX;
+//	imageMagnificationY = (height - 2 * paddingY) / (float)renderedImage->sizeY;
+	
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -119,28 +88,14 @@ void RIVImageView::Reshape(int width, int height) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 	
-//	createTextureImage(this->renderedImage);
 }
-void RIVImageView::createTextureImage(BMPImage* image) {
-    glGenTextures(1, &imageTexture);
-    glBindTexture(GL_TEXTURE_2D, imageTexture);
-    
-//    printf("image ID = %d\n",image->ID);
-//    std::cout << *image;
-    
-    if(image->hasAlpha) {
-//        gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.sizeX, image.sizeY,GL_BGRA_EXT, GL_UNSIGNED_BYTE, image.data); //For BMP images use this
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->sizeX, image->sizeY, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, image->data);
-//		unsigned int error = glGetError();
-//		printf("ERROR = %d\n",error);
-    }
-    else {
-//        gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, image.sizeX, image.sizeY,GL_BGR_EXT, GL_UNSIGNED_BYTE, image.data); //For BMP images use this
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->sizeX, image->sizeY, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, image->data);
-    }
-	//gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, image.sizeX, image.sizeY,GL_RGB, GL_UNSIGNED_BYTE, image.data); //for P6 formatted PPM use this
-    
-    printf("Texture created.\n");
+
+void RIVImageView::OnDataChanged() {
+	
+}
+
+void RIVImageView::OnFiltersChanged() {
+	
 }
 
 size_t drawCounter = 0;
@@ -247,13 +202,14 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 					selection.end.y = tempY;
 				}
 
-				riv::Filter *xFilter = new riv::RangeFilter("x",selection.start.x,selection.end.x - 1);
+				throw std::runtime_error("Not yet implemented.");
+//				riv::Filter *xFilter = new riv::RangeFilter("x",selection.start.x,selection.end.x - 1);
 				//Be sure to invert the Y coordinates!
-				riv::Filter *yFilter = new riv::RangeFilter("y", renderedImage->sizeY - selection.start.y,renderedImage->sizeY - selection.end.y - 1);
+//				riv::Filter *yFilter = new riv::RangeFilter("y", renderedImage->sizeY - selection.start.y,renderedImage->sizeY - selection.end.y - 1);
 		
 				dataset->StartFiltering();
-				dataset->AddFilter("path",xFilter);
-				dataset->AddFilter("path",yFilter);
+//				dataset->AddFilter("path",xFilter);
+//				dataset->AddFilter("path",yFilter);
 				dataset->StopFiltering();
 					
 			}

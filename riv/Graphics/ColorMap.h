@@ -12,7 +12,7 @@
 //#include <stdio.h>
 #include <vector>
 
-
+namespace riv {
 
 typedef struct Color {
 	float R;
@@ -37,5 +37,6 @@ public:
 	Color ComputeColor(float ratio);
 	void AddColor(const Color& newColor);
 };
+}
 
 #endif /* defined(__afstuderen_DO_NOT_DELETE__ColorMap__) */

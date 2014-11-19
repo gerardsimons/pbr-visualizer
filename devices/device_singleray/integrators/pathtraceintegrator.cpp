@@ -41,9 +41,10 @@ namespace embree
 		firstScatterSampleID = samplerFactory->request2D((int)maxDepth);
 		firstScatterTypeSampleID = samplerFactory->request1D((int)maxDepth);
 	}
-	
+	size_t i = 0;
 	Color PathTraceIntegrator::Li(LightPath& lightPath, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector)
 	{
+		++i;
 		/*! Terminate path if too long or contribution too low. */
 		if (lightPath.depth >= maxDepth || reduce_max(lightPath.throughput) < minContribution) {
 			return zero;
@@ -69,6 +70,7 @@ namespace embree
 		/*! Environment shading when nothing hit. */
 		if (!lightPath.lastRay)
 		{
+//			printf("Nothing hit.\n");
 			if (backplate && lightPath.unbend) {
 				const int x = clamp(int(state.pixel.x * backplate->width ), 0, int(backplate->width )-1);
 				const int y = clamp(int(state.pixel.y * backplate->height), 0, int(backplate->height)-1);
@@ -81,6 +83,8 @@ namespace embree
 			}
 			return L;
 		}
+//		printf("Something was hit.\n");
+		
 		
 		/*! face forward normals */
 		bool backfacing = false;
@@ -126,6 +130,9 @@ namespace embree
 					dataConnector->AddIntersectionData(dg.P.x,dg.P.y,dg.P.z,c.r,c.g,c.b,lightPath.lastRay.id0,type);
 		  
 				L += c * Li(scatteredPath, scene, state,dataConnector) * rcp(wi.pdf);
+			}
+			else {
+//				printf("We hit something invalid\n");
 			}
 		}
 		

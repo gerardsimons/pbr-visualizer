@@ -9,8 +9,6 @@
 #include "DataSet.h"
 #include "Table.h"
 
-
-
 void RIVDataSet::AddTable(RIVTable* table) {
     tables.push_back(table);
 }
@@ -21,7 +19,7 @@ void RIVDataSet::AddFilter(const std::string& tablename, riv::Filter *filter) {
 	if(!isFiltering) {
 		throw "StartFiltering must be called before doing any filter operations";
 	}
-    if(filter != 0) {
+    if(filter != NULL) {
 		table->AddFilter(filter);
 		staleTables[table] = true;
 		return;
@@ -39,7 +37,7 @@ void RIVDataSet::AddFilter(const std::string& tablename, riv::GroupFilter *filte
 	if(!isFiltering) {
 		throw "StartFiltering must be called before doing any filter operations";
 	}
-    if(filter != 0) {
+    if(filter != NULL) {
 		table->AddFilter(filter);
 		staleTables[table] = true;
 		return;
@@ -165,7 +163,7 @@ void RIVDataSet::notifyFilterListeners() {
     }
 }
 
-void RIVDataSet::notifyDataListeners() {
+void RIVDataSet::NotifyDataListeners() {
 	for(RIVDataSetListener* listener : dataListeners) {
 		listener->OnDataChanged();
 	}

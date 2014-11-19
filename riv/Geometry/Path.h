@@ -18,7 +18,7 @@ typedef unsigned short ushort;
 typedef struct PathPoint {
 	size_t rowIndex;
 	ushort bounceNr;
-	Color color; //3x float
+	riv::Color color; //3x float
 } PathPoint;
 
 class Path {

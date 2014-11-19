@@ -36,7 +36,7 @@ private:
 public:
 	RIVFloatRecord(const std::string& name) { this->name = name; minMaxComputed = false; };
     RIVFloatRecord(const std::string& name, const std::vector<float>& values) { this->name = name; this->values = values; minMaxComputed = false; };
-    float Value(const size_t& i) const { return values[i]; };
+    float Value(size_t i) const { return values[i]; };
     void SetValues(std::vector<float> _values) {
         values = _values;
         minMaxComputed = false;
@@ -49,6 +49,10 @@ public:
         const float& value = Value(row);
         return (value - minMax.first) / (minMax.second - minMax.first);
     }
+	void AddValue(float newValue) {
+		values.emplace_back(newValue);
+		minMaxComputed = false;
+	}
     float Min() {
         return MinMax().first;
     }
@@ -109,6 +113,10 @@ public:
     std::vector<ushort>* GetValues() {
         return &values;
     }
+	void AddValue(ushort newValue) {
+		values.emplace_back(newValue);
+		minMaxComputed = false;
+	}
     void SetValues(std::vector<ushort> _values) {
         values = _values;
     }

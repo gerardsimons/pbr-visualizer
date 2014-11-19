@@ -18,7 +18,7 @@ typedef unsigned short ushort;
 typedef struct IntersectData {
 	float position[3]; //world position
 	float color[3];
-//		Spectrum throughput; //What was the throughput up until this point?
+
 	ushort primitiveId;
 	ushort shapeId; //TODO: Is this still being used
 	ushort lightId;
@@ -66,10 +66,8 @@ public:
 
 class DataConnector {
 private:
-	static int ID_COUNTER;
-	
-//	int dc_id;
-	std::unique_ptr<PathData> currentPath = NULL;
+	bool pathSet = false;
+	PathData currentPath;
 	
 	typedef void (*callback_function)(PathData* newPath); // type for conciseness
 	
@@ -82,6 +80,7 @@ public:
 	void StartPath(float x, float y, float lensU, float lensV, float time);
 //	void set_callback((void) (*newCallBack)(PathData*));
 	void AddIntersectionData(float x, float y, float z, float r, float g, float b, int primitive_id, ushort type);
+//	void IJustAddedThisStrangeFunction();
 };
 
 #endif

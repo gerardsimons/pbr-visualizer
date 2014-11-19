@@ -95,8 +95,9 @@ public:
 //	EMBREERenderer(DataConnector* dataConnector);
 //	EMBREERenderer(DataConnector* dataConnector, int argc, char **argv);
 	EMBREERenderer(DataConnector* dataConnector, const std::string& commandsFile);
-	
+
 	std::string makeFileName(const std::string path, const std::string fileName);
+	void outputMode(const std::string& fileName);
 	void outputMode(const FileName& fileName);
 
 	//Parser methods

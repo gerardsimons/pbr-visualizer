@@ -35,7 +35,7 @@ protected:;
 	
 	//Octree generated from 3D points (generated in createPoints)
 	Octree* heatmap = NULL;
-	ColorMap treeColorMap;
+	riv::ColorMap treeColorMap;
     
     //Path drawing variables
     int maxBounce = 5; //TODO: Deduce this value from the bounce record

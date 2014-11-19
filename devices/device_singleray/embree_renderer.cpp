@@ -226,13 +226,14 @@ void EMBREERenderer::outputMode(const FileName& fileName)
 {
 	if (!g_renderer) throw std::runtime_error("no renderer set");
 	
-	/* render image */
+//	/* render image */
 	Handle<Device::RTCamera> camera = createCamera(AffineSpace3f::lookAtPoint(g_camPos, g_camLookAt, g_camUp));
-	Handle<Device::RTScene> scene = createScene();
-	g_device->rtSetInt1(g_renderer, "showprogress", 1);
+//	Handle<Device::RTScene> scene = createScene();
+	
+//	g_device->rtSetInt1(g_renderer, "showprogress", 1);
 	g_device->rtCommit(g_renderer);
 	for (size_t i=0; i<g_num_frames; i++)
-		g_device->rtRenderFrame(g_renderer, camera, scene, g_tonemapper, g_frameBuffer, 0);
+		g_device->rtRenderFrame(g_renderer, camera, g_render_scene, g_tonemapper, g_frameBuffer, 0);
 	for (int i=0; i<g_numBuffers; i++)
 		g_device->rtSwapBuffers(g_frameBuffer);
 	
@@ -248,7 +249,10 @@ void EMBREERenderer::outputMode(const FileName& fileName)
 	g_device->rtUnmapFrameBuffer(g_frameBuffer);
 	g_rendered = true;
 }
-
+void EMBREERenderer::outputMode(const std::string& fileName)
+{
+	outputMode(FileName(fileName));
+}
 void EMBREERenderer::parseDebugRenderer(Ref<ParseStream> cin, const FileName& path)
 {
 	g_renderer = g_device->rtNewRenderer("debug");
@@ -302,16 +306,17 @@ EMBREERenderer::EMBREERenderer(DataConnector* dataConnector, const std::string& 
 	
 	clearGlobalObjects();
 	
-	g_device = new SingleRayDevice(g_numThreads,g_rtcore_cfg.c_str());
+	//We do not use Device::createDevice because it depends on the dynamic library, which makes things harder
+	g_device = new SingleRayDevice(1,g_rtcore_cfg.c_str());
 	g_device->SetDataConnector(dataConnector);
-	
-	g_render_scene = createScene();
 	
 	/*! create stream for parsing */
 	FileName file = FileName() + commandsFile;
 	parseCommandLine(new ParseStream(new LineCommentFilter(file, "#")), file.path());
 	
 	createGlobalObjects();
+	
+	g_render_scene = createScene();
 }
 
 void EMBREERenderer::RenderNextFrame() {

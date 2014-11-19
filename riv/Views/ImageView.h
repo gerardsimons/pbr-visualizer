@@ -12,6 +12,7 @@
 #include "DataView.h"
 #include "../Geometry/Geometry.h"
 #include "../Graphics/BMPImage.h"
+#include "devices/renderer/embree_renderer.h"
 
 #if defined(__APPLE__)
 #include <GLUT/GLUT.h>
@@ -19,13 +20,10 @@
 #include <GL/glut.h>
 #endif
 
-
 class RIVImageView : public RIVDataView, public RIVDataSetListener {
 public:
-    RIVImageView(RIVDataSet* dataset,  BMPImage* image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* colorProperty,RIVSizeProperty* sizeProperty);
-    RIVImageView(RIVDataSet* dataset,  BMPImage* image, RIVColorProperty* color, RIVSizeProperty *size);
-//    RIVImageView(const BMPImage& image,RIVColorProperty* colorProperty,RIVSizeProperty* sizeProperty);
-    ~RIVImageView();
+//    RIVImageView(RIVDataSet* dataset,  BMPImage* image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* colorProperty,RIVSizeProperty* sizeProperty);
+    RIVImageView(RIVDataSet* dataset,  EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty *size);
     
     static void DrawInstance();
     static void ReshapeInstance(int,int);
@@ -39,18 +37,19 @@ public:
     virtual void OnDataSetChanged();
 	
 	void InitializeGraphics();
-
+	
+	void OnFiltersChanged();
+	void OnDataChanged();
 private:
     static RIVImageView* instance;
-    
+	
+	EMBREERenderer* renderer;
+	
     GLuint imageTexture;
 	float imageMagnificationX,imageMagnificationY;
 
-	void createTextureImage();
-    void createTextureImage(BMPImage* image);
     RIVPoint viewToPixelSpace(int x, int y);
 	void clearSelection();
-    BMPImage* renderedImage;
 	//In screenspace
 	RIVPoint imageStart;
 	RIVPoint imageEnd;

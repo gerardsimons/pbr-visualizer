@@ -35,9 +35,11 @@ class RIVSingleReference : public RIVReference {
 private:
 public:
 	RIVSingleReference(const std::map<size_t,size_t>& indexMap, RIVTable* sourceTable, RIVTable* targetTable);
+	RIVSingleReference(RIVTable* sourceTable, RIVTable* targetTable);
 	std::map<size_t,size_t> indexMap;;
 	std::pair<size_t*,ushort> GetIndexReferences(size_t row);
 	void Print();
+	void AddReference(size_t fromRow, size_t toRow);
 	void FilterReferenceRow(size_t row);
 	bool HasReference(size_t row);
 };
@@ -47,8 +49,10 @@ class RIVMultiReference : public RIVReference {
 public:
 	std::map<size_t,std::pair<size_t*,ushort> > indexMap;
 	RIVMultiReference(std::map<size_t,std::pair<size_t*,ushort> >& indexMap, RIVTable* sourceTable, RIVTable* targetTable);
+	RIVMultiReference(RIVTable* sourceTable, RIVTable* targetTable);
 	RIVSingleReference* ReverseReference();
 	bool HasReference(size_t row);
+	void AddReferences(size_t fromRow, const std::pair<size_t*,ushort>& toRows);
 	std::pair<size_t*,ushort> GetIndexReferences(size_t row);
 	void FilterReferenceRow(size_t row);
 	void Print();

@@ -9,8 +9,8 @@
 #include "ColorPalette.h"
 
 	namespace colors {
-		ColorMap jetColorMap() {
-			ColorMap jetColorMap;
+		riv::ColorMap jetColorMap() {
+			riv::ColorMap jetColorMap;
 			
 			jetColorMap.AddColor(DARK_BLUE);
 			jetColorMap.AddColor(BLUE);
@@ -22,8 +22,8 @@
 			return jetColorMap;
 		}
 		
-		std::vector<Color> allColors() {
-			std::vector<Color> allColors;
+		std::vector<riv::Color> allColors() {
+			std::vector<riv::Color> allColors;
 			
 			allColors.push_back(BLACK);
 			allColors.push_back(RED);

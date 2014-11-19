@@ -163,15 +163,17 @@ void ParallelCoordsView::drawAxes() {
             std::vector<float> &scale = axis.scale;
             
             //Draw the scales indicators
-            for(size_t j = 0 ; j < scale.size() ; j++) {
-                float value = axis.ValueOnScale(scale[j]);
-                int height = axis.PositionOnScaleForScalar(scale[j]);
-                
-                char buffer[4];
-                sprintf(buffer,"%.2f",value);
-                
-                drawText(buffer,4,axis.x - 6,height,textColor,.1F);
-            }
+			if(scale.size() > 0) {
+				for(size_t j = 0 ; j < scale.size() ; j++) {
+					float value = axis.ValueOnScale(scale[j]);
+					int height = axis.PositionOnScaleForScalar(scale[j]);
+					
+					char buffer[4];
+					sprintf(buffer,"%.2f",value);
+					
+					drawText(buffer,4,axis.x - 6,height,textColor,.1F);
+				}
+			}
         }
     }
     axesAreDirty = false;
@@ -202,7 +204,7 @@ void ParallelCoordsView::drawLines() {
 //				printf("Draw table %s with normal table iterator\n",table->GetName().c_str());
 //			}
 //			
-            Color lineColor;
+            riv::Color lineColor;
 //			colorProperty->Start(table);
             while(iterator->GetNext(row)) {
                 if(colorProperty->ComputeColor(table, row, lineColor)) {
@@ -306,8 +308,9 @@ void ParallelCoordsView::Reshape(int width, int height) {
 
 void ParallelCoordsView::InitializeGraphics() {
 	//Recreate the axes according to the new layout
-	createAxes();
+//	createAxes();
 }
+
 size_t drawCount = 0;
 void ParallelCoordsView::Draw() {
 	//    printf("linesAreDirty = %d axesAreDirty = %d\n",linesAreDirty,axesAreDirty);
@@ -328,7 +331,7 @@ void ParallelCoordsView::Draw() {
         
         //Draw the lines from each axis
 	if(linesAreDirty)
-        drawLines();
+//        drawLines();
 	
 	if(selectionIsDirty)
 		drawSelectionBoxes();
@@ -408,6 +411,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 
 void ParallelCoordsView::clearSelection() {
     if(selectedAxis != NULL) {
+		
         selectedAxis->selection.start.y = -1;
         selectedAxis->selection.start.x = -1;
         selectedAxis->selection.end.x = -1;
@@ -435,6 +439,17 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
 
 void ParallelCoordsView::OnDataChanged() {
 	//Recreate the axes
+	printf("ParallelCoordsView onDataChanged notified.\n");
+	
+	axesAreDirty = true;
+	linesAreDirty = true;
+	
+	int currentWindow = glutGetWindow();
+	glutSetWindow(ParallelCoordsView::windowHandle);
+	glutPostRedisplay();
+	//Return window to given window
+	glutSetWindow(currentWindow);
+	
 	createAxes();
 }
 

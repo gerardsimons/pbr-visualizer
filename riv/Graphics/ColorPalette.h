@@ -14,19 +14,19 @@
 
 	namespace colors {
 
-		const Color BLACK = {0,0,0};
-		const Color RED = {1.F,0.F,0.F};
-		const Color GREEN = {0.F,1.F,0.F};
-		const Color BLUE =  {0.F,0.F,1.F};
-		const Color YELLOW =  {1.F,1.F,0.F};
-		const Color CYAN = {0.F,1.F,1.F};
-		const Color PURPLE = {1.F,0.F,1.F};
-		const Color LIGHT_BLUE = {0.317F,.553F, .741F};
-		const Color DARK_RED = {0.5F,0,0};
-		const Color DARK_BLUE = {0,0,0.5F};
+		const riv::Color BLACK = {0,0,0};
+		const riv::Color RED = {1.F,0.F,0.F};
+		const riv::Color GREEN = {0.F,1.F,0.F};
+		const riv::Color BLUE =  {0.F,0.F,1.F};
+		const riv::Color YELLOW =  {1.F,1.F,0.F};
+		const riv::Color CYAN = {0.F,1.F,1.F};
+		const riv::Color PURPLE = {1.F,0.F,1.F};
+		const riv::Color LIGHT_BLUE = {0.317F,.553F, .741F};
+		const riv::Color DARK_RED = {0.5F,0,0};
+		const riv::Color DARK_BLUE = {0,0,0.5F};
 		
-		std::vector<Color> allColors();
-		ColorMap jetColorMap();
+		std::vector<riv::Color> allColors();
+		riv::ColorMap jetColorMap();
 	}
 
 #endif

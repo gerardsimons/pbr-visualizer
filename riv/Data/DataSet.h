@@ -26,17 +26,18 @@ class RIVDataSet {
 private:
     RIVClusterSet* clusterSet = NULL;
     std::vector<RIVTable*> tables;
-    std::vector<RIVDataSetListener*> dataListeners;
 	
+    std::vector<RIVDataSetListener*> dataListeners;
+	void notifyFilterListeners();
+
 	//What tables are changed
 	std::map<RIVTable*,bool> staleTables;
 	
-	
-	void notifyFilterListeners();
-	void notifyDataListeners();
+
 	
 	bool isFiltering = false;
 public:
+	void NotifyDataListeners();
     void AddTable(RIVTable* table);
 	void AddFilter(const std::string& tableName, riv::GroupFilter *filter);
     void AddFilter(const std::string& tableName, riv::Filter* filter);
