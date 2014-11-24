@@ -16,6 +16,7 @@
 class ParallelCoordsAxisGroup {
 public:
     std::vector<ParallelCoordsAxis> axes;
+	
     RIVTable* table;
     
     ParallelCoordsAxisGroup* connectedGroup = 0;

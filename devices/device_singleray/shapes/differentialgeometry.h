@@ -17,7 +17,7 @@
 #ifndef __EMBREE_DIFFERENTIAL_GEOMETRY_H__
 #define __EMBREE_DIFFERENTIAL_GEOMETRY_H__
 
-#include "default.h" 
+#include "device_singleray/default.h" 
 
 namespace embree
 {

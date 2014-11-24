@@ -29,8 +29,10 @@ protected:
         alternateColor = colors::BLACK;
     }
 public:
-    //DEFAULT COLORS
+	//Determine the color for the row of a given table assuming there is a connection between the given table and the reference table
     virtual bool ComputeColor(RIVTable* table, size_t row, riv::Color& color) = 0;
+	//Recompute the evaulators, this should happen when the reference table changed, leave unimplemented when not needed
+	virtual void Reset() { };
 };
 
 class RIVFixedColorProperty : public RIVColorProperty{
@@ -135,6 +137,10 @@ public:
         }
         return false;
     }
+	
+	void Reset() {
+		RIVEvaluatedProperty<T>::Reset();
+	}
 };
 //Returns color by cycling through a fixed pre-determined set of colors
 class RIVColorDiscreteProperty : public RIVColorProperty {
@@ -192,6 +198,11 @@ public:
 			return true;
 		}
 		return false;
+	}
+	void Reset() {
+		redColorProperty->Reset();
+		greenColorProperty->Reset();
+		blueColorProperty->Reset();
 	}
 };
 

@@ -598,7 +598,7 @@ namespace embree
     transforms.push(AffineSpace3f(one));
 
     Ref<XML> xml = parseXML(fileName);
-    if (xml->name != "scene") throw std::runtime_error(xml->loc.str()+": invalid scene tag");
+    if (xml->name != "scene") throw std::runtime_error(xml->loc.str() + ": invalid scene tag");
     for (size_t i=0; i<xml->children.size(); i++) {
       std::vector<Handle<Device::RTPrimitive> > prims = loadScene(xml->children[i]);
       model.insert(model.end(), prims.begin(), prims.end());

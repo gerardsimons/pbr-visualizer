@@ -15,6 +15,10 @@
 // ======================================================================== //
 
 #include "embree_renderer.h"
+#include "devices/device_singleray/shapes/trianglemesh_normals.h"
+
+//#include "api/instance.h"
+//#include "api/handle.h"
 
 using namespace embree;
 
@@ -47,15 +51,20 @@ Handle<Device::RTCamera> EMBREERenderer::createCamera(const AffineSpace3f& space
 	}
 }
 
-Handle<Device::RTScene> EMBREERenderer::createScene()
+void EMBREERenderer::createScene()
 {
-	Handle<Device::RTScene> scene = g_device->rtNewScene(g_scene.c_str());
-	g_device->rtSetString(scene,"accel",g_accel.c_str());
-	g_device->rtSetString(scene,"builder",g_builder.c_str());
-	g_device->rtSetString(scene,"traverser",g_traverser.c_str());
-	for (size_t i=0; i<g_prims.size(); i++) g_device->rtSetPrimitive(scene,i,g_prims[i]);
-	g_device->rtCommit(scene);
-	return scene;
+	g_render_scene = g_device->rtNewScene(g_scene.c_str());
+	g_device->rtSetString(g_render_scene,"accel",g_accel.c_str());
+	g_device->rtSetString(g_render_scene,"builder",g_builder.c_str());
+	g_device->rtSetString(g_render_scene,"traverser",g_traverser.c_str());
+	for (size_t i=0; i<g_prims.size(); i++) {
+		g_device->rtSetPrimitive(g_render_scene,i,g_prims[i]);
+	}
+	g_device->rtCommit(g_render_scene);
+}
+
+Handle<Device::RTScene> EMBREERenderer::GetScene() {
+	return g_render_scene;
 }
 
 void EMBREERenderer::setLight(Handle<Device::RTPrimitive> light)
@@ -92,6 +101,10 @@ void EMBREERenderer::clearGlobalObjects() {
 	rtClearImageCache();
 	delete g_device;
 	g_device = NULL;
+}
+
+std::vector<Shape*>* EMBREERenderer::GetShapes() {
+	return &rawShapes;
 }
 
 /******************************************************************************/
@@ -231,14 +244,14 @@ void EMBREERenderer::outputMode(const FileName& fileName)
 //	Handle<Device::RTScene> scene = createScene();
 	
 //	g_device->rtSetInt1(g_renderer, "showprogress", 1);
-	g_device->rtCommit(g_renderer);
-	for (size_t i=0; i<g_num_frames; i++)
-		g_device->rtRenderFrame(g_renderer, camera, g_render_scene, g_tonemapper, g_frameBuffer, 0);
-	for (int i=0; i<g_numBuffers; i++)
-		g_device->rtSwapBuffers(g_frameBuffer);
+//	g_device->rtCommit(g_renderer);
+//	for (size_t i=0; i<g_num_frames; i++)
+//		g_device->rtRenderFrame(g_renderer, camera, g_render_scene, g_tonemapper, g_frameBuffer, 0);
+//	for (int i=0; i<g_numBuffers; i++)
+//		g_device->rtSwapBuffers(g_frameBuffer);
 	
 	/* store to disk */
-	void* ptr = g_device->rtMapFrameBuffer(g_frameBuffer);
+	void* ptr = g_device->rtMapFrameBuffer(g_frameBuffer,0);
 	Ref<Image> image = null;
 	if      (g_format == "RGB8"        )  image = new Image3c(g_width, g_height, (Col3c*)ptr);
 	else if (g_format == "RGBA8"       )  image = new Image4c(g_width, g_height, (Col4c*)ptr);
@@ -246,11 +259,10 @@ void EMBREERenderer::outputMode(const FileName& fileName)
 	else if (g_format == "RGBA_FLOAT32")  image = new Image4f(g_width, g_height, (Col4f*)ptr);
 	else throw std::runtime_error("unsupported framebuffer format: "+g_format);
 	storeImage(image, fileName);
-	g_device->rtUnmapFrameBuffer(g_frameBuffer);
+	g_device->rtUnmapFrameBuffer(g_frameBuffer,0);
 	g_rendered = true;
 }
-void EMBREERenderer::outputMode(const std::string& fileName)
-{
+void EMBREERenderer::outputMode(const std::string& fileName) {
 	outputMode(FileName(fileName));
 }
 void EMBREERenderer::parseDebugRenderer(Ref<ParseStream> cin, const FileName& path)
@@ -310,13 +322,22 @@ EMBREERenderer::EMBREERenderer(DataConnector* dataConnector, const std::string& 
 	g_device = new SingleRayDevice(1,g_rtcore_cfg.c_str());
 	g_device->SetDataConnector(dataConnector);
 	
+	g_single_device = dynamic_cast<SingleRayDevice*>(g_device);
+	
 	/*! create stream for parsing */
 	FileName file = FileName() + commandsFile;
 	parseCommandLine(new ParseStream(new LineCommentFilter(file, "#")), file.path());
 	
 	createGlobalObjects();
 	
-	g_render_scene = createScene();
+	createScene();
+	
+	for(Handle<Device::RTPrimitive> prim : g_prims) {
+		Shape* shape = g_single_device->rtGetShape(prim);
+		if(shape) {
+			rawShapes.push_back(shape);
+		}
+	}
 }
 
 void EMBREERenderer::RenderNextFrame() {
@@ -326,6 +347,10 @@ void EMBREERenderer::RenderNextFrame() {
 	
 	g_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,0);
 	g_device->rtSwapBuffers(g_frameBuffer);
+}
+
+bool EMBREERenderer::RayPick(Ray& ray, float& x, float& y, float& z) {
+	return g_single_device->rtPick(g_render_scene, ray, x, y, z);
 }
 
 void EMBREERenderer::parseCommandLine(Ref<ParseStream> cin, const FileName& path)
@@ -342,18 +367,11 @@ void EMBREERenderer::parseCommandLine(Ref<ParseStream> cin, const FileName& path
 			parseCommandLine(new ParseStream(new LineCommentFilter(file, "#")), file.path());
 		}
 		
-		/* turn off logging */
-		else if (tag == "--no-logging") {
-//				log_display = false;
-		}
-		
-		else if (tag == "-profiling") {
-//				g_profiling = true;
-		}
 		
 		/* read model from file */
 		else if (tag == "-i") {
 			std::vector<Handle<Device::RTPrimitive> > prims = rtLoadScene(makeFileName(path,cin->getFileName()));
+			
 			g_prims.insert(g_prims.end(), prims.begin(), prims.end());
 		}
 		
@@ -515,13 +533,13 @@ void EMBREERenderer::parseCommandLine(Ref<ParseStream> cin, const FileName& path
 		else if (tag == "-size") {
 			g_width = cin->getInt();
 			g_height = cin->getInt();
-			g_frameBuffer = g_device->rtNewFrameBuffer(g_format.c_str(), g_width, g_height, g_numBuffers);
+//			g_frameBuffer = g_device->rtNewFrameBuffer(g_format.c_str(), g_width, g_height, g_numBuffers);
 		}
 		
 		/* set framebuffer format */
 		else if (tag == "-framebuffer" || tag == "-fb") {
 			g_format = cin->getString();
-			g_frameBuffer = g_device->rtNewFrameBuffer(g_format.c_str(), g_width, g_height, g_numBuffers);
+//			g_frameBuffer = g_device->rtNewFrameBuffer(g_format.c_str(), g_width, g_height, g_numBuffers);
 		}
 		
 		/* full screen mode */
@@ -729,8 +747,12 @@ void EMBREERenderer::parseCommandLine(Ref<ParseStream> cin, const FileName& path
 	}
 }
 
-void someVeryFunnyAndStrangeFunctionThatDoesNothingAtAll() {
-	printf("This is funny.\n");
+void* EMBREERenderer::MapFrameBuffer() {
+	return g_device->rtMapFrameBuffer(g_frameBuffer);
+}
+
+void EMBREERenderer::UnmapFrameBuffer() {
+	g_device->rtUnmapFrameBuffer(g_frameBuffer);
 }
 
 /******************************************************************************/

@@ -100,7 +100,6 @@ void tbMouseFunc( int button, int state, int x, int y )
     }
 }
 
-
 /** Traite le changement de position de la souris */
 void tbMotionFunc( int x, int y )
 {
@@ -121,7 +120,7 @@ void tbMotionFunc( int x, int y )
             tz = tb_matrix[14];
             tb_matrix[14]=0;
 
-            nrm = sqrt( dx*dx+dy*dy+dx*dx+dy*dy )*speedfact;
+			nrm = ::sqrt( dx*dx+dy*dy+dx*dx+dy*dy )*speedfact;
             glLoadIdentity();
             glRotatef( nrm, -dy, dx, 0 );/*axe perpendiculaire au deplacement*/
             glMultMatrixd( tb_matrix );

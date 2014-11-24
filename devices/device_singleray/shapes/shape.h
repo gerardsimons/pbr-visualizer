@@ -21,7 +21,7 @@
 #include "../api/parms.h"
 #include "../api/data.h"
 #include <embree2/rtcore.h>
-#include "renderers/ray.h"
+#include "device_singleray/renderers/ray.h"
 #include "differentialgeometry.h"
 
 namespace embree

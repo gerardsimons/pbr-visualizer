@@ -22,6 +22,12 @@
 #include "../api/swapchain.h"
 #include "common/sys/sync/mutex.h"
 
+/* include all shapes */
+#include "device_singleray/shapes/triangle.h"
+#include "device_singleray/shapes/trianglemesh.h"
+#include "device_singleray/shapes/sphere.h"
+#include "device_singleray/shapes/disk.h"
+
 namespace embree
 {
   class SingleRayDevice : public Device
@@ -91,6 +97,12 @@ namespace embree
     
     void rtRenderFrame(RTRenderer renderer, RTCamera camera, RTScene scene, RTToneMapper toneMapper, RTFrameBuffer frameBuffer, int accumulate);
     bool rtPick(RTCamera camera, float x, float y, RTScene scene, float& px, float& py, float& pz);
+	bool rtPick(RTScene scene_i, const Ray& ray, float& px, float& py, float& pz);
+	  
+	/*******************************************************************
+							custom functons
+	 ******************************************************************/
+	  Shape* rtGetShape(Device::RTPrimitive prim);
 
   private:
     MutexSys mutex;

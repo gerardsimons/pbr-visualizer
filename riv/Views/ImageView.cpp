@@ -13,6 +13,7 @@
 #include <math.h>
 
 RIVImageView* RIVImageView::instance = NULL;
+int RIVImageView::windowHandle = -1;
 
 RIVImageView::RIVImageView(RIVDataSet* dataset, EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size), renderer(renderer) {
     if(instance != NULL) {
@@ -20,6 +21,7 @@ RIVImageView::RIVImageView(RIVDataSet* dataset, EMBREERenderer* renderer, RIVCol
     }
     instance = this;
     identifier = "ImageView";
+	this->renderer = renderer;
     
 	selection.start.x = -1;
     selection.start.y = -1;
@@ -91,11 +93,15 @@ void RIVImageView::Reshape(int width, int height) {
 }
 
 void RIVImageView::OnDataChanged() {
-	
+	int currentWindow = glutGetWindow();
+	glutSetWindow(RIVImageView::windowHandle);
+	glutPostRedisplay();
+	//Return window to given window
+	glutSetWindow(currentWindow);
 }
 
 void RIVImageView::OnFiltersChanged() {
-	
+	//Nothing to do for imageview
 }
 
 size_t drawCounter = 0;
@@ -103,60 +109,49 @@ void RIVImageView::Draw() {
     needsRedraw = true;
 	if(needsRedraw) {
 		printf("\nImageView Draw #%zu\n",++drawCounter);
-		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 		glDisable(GL_DEPTH_TEST);
 		
-		glClearColor(1.0, 0, 0, 0.0);
+		glClearColor(1,1,1,0);
 		glClear( GL_COLOR_BUFFER_BIT );
 		
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glBindTexture(GL_TEXTURE_2D, imageTexture);
-    
+//		glMatrixMode(GL_MODELVIEW);
+//		glLoadIdentity();
+		
 		//remember all states of the GPU
-		glPushAttrib(GL_ALL_ATTRIB_BITS);
-		glColor3f(1,1,1);
-//		glNormal3d(0, 0, -1);
-		glEnable(GL_TEXTURE_2D);
-    
-		// texture addition
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,  GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,  GL_NEAREST);
-        
-//		glColor3f(1, 0, 0);
-        glBegin(GL_QUADS);
-        glTexCoord2f(0.0f,1.0f);
-        glVertex3f(imageStart.x,imageEnd.y,1);
-        glTexCoord2f(0.0f,0.0f);
-        glVertex3f(imageStart.x,imageStart.y,1);
-        glTexCoord2f(1.0f,0.0f);
-        glVertex3f(imageEnd.x,imageStart.y,1);
-        glTexCoord2f(1.0f,1.0f);
-        glVertex3f(imageEnd.x,imageEnd.y,1);
-		glEnd();
+//		glPushAttrib(GL_ALL_ATTRIB_BITS);
+//		glColor3f(1,1,1);
+		
+		void* ptr = renderer->MapFrameBuffer();
+
+		for(int x = 0 ; x < width ; x++) {
+			for(int y = 0 ; y < height ; y++) {
+//				char byte = (char)ptr[++i];
+			}
+		}
+		
+		glRasterPos2i(-1, 1);
+		glPixelZoom(1.0f, -1.0f);
+		
+		glDrawPixels((GLsizei)width,(GLsizei)height,GL_RGBA,GL_UNSIGNED_BYTE,ptr);
+		
+		renderer->UnmapFrameBuffer();
 
 		//reset to previous state
-		glPopAttrib();
-    
-		glDisable(GL_TEXTURE_2D);
+//		glPopAttrib();
+		
 		//if selection, draw
-		if(selection.start.x != -1) {
-			glColor4f(0.317F,.553F, .741F,.5F); //Nice light blue color for selection
-			glBegin(GL_QUADS);
-				glVertex3f(selection.start.x * imageMagnificationX,selection.start.y  * imageMagnificationY,1);			
-				glVertex3f(selection.end.x  * imageMagnificationX,selection.start.y  * imageMagnificationY,1);
-				glVertex3f(selection.end.x  * imageMagnificationX,selection.end.y  * imageMagnificationY,1);
-				glVertex3f(selection.start.x  * imageMagnificationX,selection.end.y  * imageMagnificationY,1);
-			glEnd();
-		}
-		//needsRedraw = false; //TODO: This does not work when losing and regaining focus!
+//		if(selection.start.x != -1) {
+//			glColor4f(0.317F,.553F, .741F,.5F); //Nice light blue color for selection
+//			glBegin(GL_QUADS);
+//				glVertex3f(selection.start.x * imageMagnificationX,selection.start.y  * imageMagnificationY,1);			
+//				glVertex3f(selection.end.x  * imageMagnificationX,selection.start.y  * imageMagnificationY,1);
+//				glVertex3f(selection.end.x  * imageMagnificationX,selection.end.y  * imageMagnificationY,1);
+//				glVertex3f(selection.start.x  * imageMagnificationX,selection.end.y  * imageMagnificationY,1);
+//			glEnd();
+//		}
+		glFlush();
 		glutSwapBuffers();
 	}
-}
-
-void RIVImageView::OnDataSetChanged() {
-    //Do nothing for imageview
-    
 }
 
 #ifdef __APPLE__
@@ -202,7 +197,7 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 					selection.end.y = tempY;
 				}
 
-				throw std::runtime_error("Not yet implemented.");
+
 //				riv::Filter *xFilter = new riv::RangeFilter("x",selection.start.x,selection.end.x - 1);
 				//Be sure to invert the Y coordinates!
 //				riv::Filter *yFilter = new riv::RangeFilter("y", renderedImage->sizeY - selection.start.y,renderedImage->sizeY - selection.end.y - 1);

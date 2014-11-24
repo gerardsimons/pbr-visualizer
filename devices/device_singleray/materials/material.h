@@ -17,7 +17,7 @@
 #ifndef __EMBREE_MATERIAL_H__
 #define __EMBREE_MATERIAL_H__
 
-#include "renderers/ray.h"
+#include "device_singleray/renderers/ray.h"
 #include "../shapes/differentialgeometry.h"
 #include "../materials/medium.h"
 #include "../brdfs/compositedbrdf.h"

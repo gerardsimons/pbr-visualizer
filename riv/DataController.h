@@ -38,6 +38,7 @@ private:
 	RIVFloatRecord* throughputBs;
 	RIVUnsignedShortRecord *depths;
 	
+	RIVUnsignedShortRecord* bounceNrs;
 	RIVFloatRecord* xs;
 	RIVFloatRecord* ys;
 	RIVFloatRecord* zs;
@@ -56,11 +57,12 @@ private:
 	
 	bool paused = false;
 	size_t maxPaths = 1000;
-	size_t updateThrottle = 10000;
+	size_t updateThrottle = 0;
 	
 	//Generate the dataset; create tables records etc.
 	void createDataSet();
 public:
+	bool IsPaused();
 	DataController();
 	RIVDataSet* GetDataSet();
 	void ProcessNewPath(ushort renderer, PathData* newPath);

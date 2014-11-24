@@ -12,7 +12,7 @@
 #include "DataView.h"
 #include "../Geometry/Geometry.h"
 #include "../Graphics/BMPImage.h"
-#include "devices/renderer/embree_renderer.h"
+#include "devices/device_singleray/embree_renderer.h"
 
 #if defined(__APPLE__)
 #include <GLUT/GLUT.h>
@@ -34,16 +34,17 @@ public:
     void Reshape(int newWidth, int newHeight);
 	virtual bool HandleMouse(int,int,int,int);
 	virtual bool HandleMouseMotion(int x, int y);
-    virtual void OnDataSetChanged();
 	
 	void InitializeGraphics();
 	
 	void OnFiltersChanged();
 	void OnDataChanged();
+	
+	static int windowHandle;
 private:
     static RIVImageView* instance;
 	
-	EMBREERenderer* renderer;
+	EMBREERenderer* renderer = NULL;
 	
     GLuint imageTexture;
 	float imageMagnificationX,imageMagnificationY;

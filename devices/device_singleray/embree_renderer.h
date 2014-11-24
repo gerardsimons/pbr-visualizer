@@ -28,6 +28,8 @@ private:
 	/*                                  State                                     */
 	/******************************************************************************/
 	
+	SingleRayDevice* g_single_device = NULL;
+	
 	/* camera settings */
 	Vector3f g_camPos    = Vector3f(0.0f,0.0f,0.0f);
 	Vector3f g_camLookAt = Vector3f(1.0f,0.0f,0.0f);
@@ -42,6 +44,9 @@ private:
 	Handle<Device::RTImage> g_backplate = NULL;
 	Handle<Device::RTScene> g_render_scene = NULL;
 	std::vector<Handle<Device::RTPrimitive> > g_prims;
+	
+	/* raw shapes data derived from g_prims */
+	std::vector<Shape*> rawShapes;
 	
 	/* Data connector */
 	DataConnector* dataConnector = NULL;
@@ -67,7 +72,7 @@ private:
 	std::string g_rtcore_cfg = "";
 	std::string g_outFileName = "";
 	size_t g_num_frames = 1; // number of frames to render in output mode
-	size_t g_numThreads = 0;
+	size_t g_numThreads = 1;
 //	size_t g_verbose_output = 0;
 	
 	/* regression testing mode */
@@ -82,7 +87,7 @@ private:
 	/*                            Object Creation                                 */
 	/******************************************************************************/
 	Handle<Device::RTCamera> createCamera(const AffineSpace3f& space);
-	Handle<Device::RTScene> createScene();
+	void createScene();
 	
 	void setLight(Handle<Device::RTPrimitive> light);
 	void createGlobalObjects();
@@ -99,6 +104,10 @@ public:
 	std::string makeFileName(const std::string path, const std::string fileName);
 	void outputMode(const std::string& fileName);
 	void outputMode(const FileName& fileName);
+	
+	Handle<Device::RTScene> GetScene();
+	std::vector<Handle<Device::RTPrimitive>>* GetPrimitives() { return &g_prims; };
+	std::vector<Shape*>* GetShapes();
 
 	//Parser methods
 	void parseDebugRenderer(Ref<ParseStream> cin, const FileName& path);
@@ -106,8 +115,12 @@ public:
 	void parseCommandLine(Ref<ParseStream> cin, const FileName& path);
 	
 	void RenderNextFrame();
+	
+	//Frame buffer mapping and umapping
+	void* MapFrameBuffer();
+	void UnmapFrameBuffer();
+	
+	bool RayPick(Ray& ray, float& x, float& y, float& z);
 };
-
-	void someVeryFunnyAndStrangeFunctionThatDoesNothingAtAll();
 
 #endif

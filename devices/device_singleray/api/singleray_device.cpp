@@ -16,13 +16,13 @@
 
 #include "singleray_device.h"
 #include "image/image.h"
-#include "../../common/sys/taskscheduler.h"
+#include "common/sys/taskscheduler.h"
 
 /* include general stuff */
 #include "api/handle.h"
 #include "api/data.h"
 #include "api/parms.h"
-#include "../../common/sys/sync/mutex.h"
+#include "common/sys/sync/mutex.h"
 
 /* include all scenes */
 #include "api/instance.h"
@@ -135,7 +135,6 @@ namespace embree
 
   /* framebuffer handle */
   struct _RTFrameBuffer : public _RTHandle { };
-
 
   /*******************************************************************
                   construction
@@ -285,11 +284,12 @@ namespace embree
     Ref<InstanceHandle<Shape> > shape = castHandle<InstanceHandle<Shape>    >(shape_i   ,"shape"   );
     Ref<InstanceHandle<Material> > material = castHandle<InstanceHandle<Material> >(material_i,"material");
     AffineSpace3f space = transform ? copyFromArray(transform) : AffineSpace3f(one);
-    return (Device::RTPrimitive) new PrimitiveHandle(shape,material,space);
+	PrimitiveHandle* primHandle = new PrimitiveHandle(shape,material,space);
+	return (Device::RTPrimitive) primHandle;
   }
 
   Device::RTPrimitive SingleRayDevice::rtNewLightPrimitive(Device::RTLight light_i, 
-                                                        Device::RTMaterial material_i, 
+                                                        Device::RTMaterial material_i,
                                                         const float* transform)
   {
     RT_COMMAND_HEADER;
@@ -585,4 +585,24 @@ namespace embree
     px = p.x; py = p.y; pz = p.z; 
     return (bool)ray;
   }
+	
+	bool SingleRayDevice::rtPick(Device::RTScene scene_i, const Ray& ray, float& px, float& py, float& pz)
+	{
+		RT_COMMAND_HEADER;
+		
+		/* extract objects from handles */
+		Ref<BackendScene::Handle >   scene  = castHandle<BackendScene::Handle>   (scene_i ,"scene" );
+
+		//scene->getInstance()->intersector->intersect(ray);
+		rtcIntersect(scene->getInstance()->scene,(RTCRay&)ray);
+		Vector3f p = ray.org + ray.tfar * ray.dir;
+		px = p.x; py = p.y; pz = p.z;
+		return (bool)ray;
+	}
+	
+	//Custom added functions
+	Shape* SingleRayDevice::rtGetShape(Device::RTPrimitive primitive) {
+		Ref<PrimitiveHandle>      primHandle    = castHandle<PrimitiveHandle>(primitive   ,"primitive");
+		return primHandle->getShapeInstance().ptr;
+	}
 }

@@ -19,9 +19,9 @@
 
 #include "handle.h"
 
-#include "../shapes/shape.h"
-#include "../materials/material.h"
-#include "../lights/light.h"
+#include "device_singleray/shapes/shape.h"
+#include "device_singleray/materials/material.h"
+#include "device_singleray/lights/light.h"
 
 namespace embree
 {

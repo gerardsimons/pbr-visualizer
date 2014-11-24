@@ -24,7 +24,7 @@ namespace embree
 	{
 		maxDepth        = parms.getInt  ("maxDepth"       ,10    );
 		minContribution = parms.getFloat("minContribution",0.01f );
-		epsilon         = parms.getFloat("epsilon"        ,32.0f)*float(ulp);
+		epsilon         = parms.getFloat("epsilon"        ,32.0f) * float(ulp);
 		backplate       = parms.getImage("backplate");
 	}
 	
@@ -41,10 +41,9 @@ namespace embree
 		firstScatterSampleID = samplerFactory->request2D((int)maxDepth);
 		firstScatterTypeSampleID = samplerFactory->request1D((int)maxDepth);
 	}
-	size_t i = 0;
+
 	Color PathTraceIntegrator::Li(LightPath& lightPath, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector)
 	{
-		++i;
 		/*! Terminate path if too long or contribution too low. */
 		if (lightPath.depth >= maxDepth || reduce_max(lightPath.throughput) < minContribution) {
 			return zero;
@@ -85,7 +84,6 @@ namespace embree
 		}
 //		printf("Something was hit.\n");
 		
-		
 		/*! face forward normals */
 		bool backfacing = false;
 		if (dot(dg.Ng, lightPath.lastRay.dir) > 0) {
@@ -100,12 +98,12 @@ namespace embree
 		if (!lightPath.ignoreVisibleLights && dg.light && !backfacing)
 			L += dg.light->Le(dg,wo);
 		
+		Sample3f wi;
+		BRDFType type;
 		/*! Global illumination. Pick one BRDF component and sample it. */
 		if (lightPath.depth < maxDepth)
 		{
 			/*! sample brdf */
-			Sample3f wi;
-			BRDFType type;
 			Vec2f s  = state.sample->getVec2f(firstScatterSampleID     + lightPath.depth);
 			float ss = state.sample->getFloat(firstScatterTypeSampleID + lightPath.depth);
 			Color c = brdfs.sample(wo, dg, wi, type, s, ss, giBRDFTypes);
@@ -123,16 +121,10 @@ namespace embree
 				
 				/*! Continue the path. */
 				Ray newRay(dg.P, wi, dg.error*epsilon, inf, lightPath.lastRay.time);
-				LightPath scatteredPath = lightPath.extended(newRay,
-															 nextMedium, c, (type & directLightingBRDFTypes) != NONE);
+				LightPath scatteredPath = lightPath.extended(newRay,nextMedium, c, (type & directLightingBRDFTypes) != NONE);
 		  
-				if(dataConnector)
-					dataConnector->AddIntersectionData(dg.P.x,dg.P.y,dg.P.z,c.r,c.g,c.b,lightPath.lastRay.id0,type);
-		  
-				L += c * Li(scatteredPath, scene, state,dataConnector) * rcp(wi.pdf);
-			}
-			else {
-//				printf("We hit something invalid\n");
+				Color isectColor = c * Li(scatteredPath, scene, state,dataConnector) * rcp(wi.pdf);
+				L += isectColor;
 			}
 		}
 		
@@ -173,6 +165,8 @@ namespace embree
 				L += ls.L * brdf * rcp(ls.wi.pdf);
 			}
 		}
+		if(dataConnector)
+			dataConnector->AddIntersectionData(dg.P.x,dg.P.y,dg.P.z,L.r,L.g,L.b,lightPath.lastRay.id0,type);
 		return L;
 	}
 	Color PathTraceIntegrator::Li(Ray& ray, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector) {

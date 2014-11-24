@@ -7,8 +7,12 @@
 //
 
 #include "DataController.h"
+#include <algorithm>
 
 DataController::DataController() {
+	if(updateThrottle == 0) {
+		updateThrottle = maxPaths;
+	}
 	createDataSet();
 }
 
@@ -17,7 +21,7 @@ void DataController::createDataSet() {
 	dataset = new RIVDataSet();
 	
 	//Path table
-	pathTable = new RIVTable("path");
+	pathTable = new RIVTable("paths");
 	
 	rendererId = new RIVUnsignedShortRecord("renderer");
 	xPixels = new RIVFloatRecord("x");
@@ -50,6 +54,7 @@ void DataController::createDataSet() {
 	
 	isectsTable = new RIVTable("intersections");
 
+	bounceNrs = new RIVUnsignedShortRecord("bounce_nr");
 	xs = new RIVFloatRecord("x");
 	ys = new RIVFloatRecord("y");
 	zs = new RIVFloatRecord("z");
@@ -61,6 +66,7 @@ void DataController::createDataSet() {
 	interactionTypes = new RIVUnsignedShortRecord("interaction type");
 	lightIds = new RIVUnsignedShortRecord("light ID");
 	
+	isectsTable->AddRecord(bounceNrs);
 	isectsTable->AddRecord(xs);
 	isectsTable->AddRecord(ys);
 	isectsTable->AddRecord(zs);
@@ -99,9 +105,9 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 				lensUs->AddValue(newPath->lensU);
 				lensVs->AddValue(newPath->lensV);
 				times->AddValue(newPath->timestamp);
-				colorRs->AddValue(newPath->radiance[0]);
-				colorGs->AddValue(newPath->radiance[1]);
-				colorBs->AddValue(newPath->radiance[2]);
+				colorRs->AddValue(std::min(newPath->radiance[0],1.F));
+				colorGs->AddValue(std::min(newPath->radiance[1],1.F));
+				colorBs->AddValue(std::min(newPath->radiance[2],1.F));
 				throughputRs->AddValue(newPath->throughput[0]);
 				throughputGs->AddValue(newPath->throughput[1]);
 				throughputBs->AddValue(newPath->throughput[2]);
@@ -112,34 +118,39 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 				for(int i = 0 ; i < nrIntersections ; ++i) {
 					IntersectData& isect = newPath->intersectionData[i];
 					
+					bounceNrs->AddValue(i+1);
 					xs->AddValue(isect.position[0]);
 					ys->AddValue(isect.position[1]);
 					zs->AddValue(isect.position[2]);
-					isectColorRs->AddValue(isect.color[0]);
-					isectColorGs->AddValue(isect.color[1]);
-					isectColorBs->AddValue(isect.color[2]);
+					isectColorRs->AddValue(std::min(isect.color[0],1.F));
+					isectColorGs->AddValue(std::min(isect.color[1],1.F));
+					isectColorBs->AddValue(std::min(isect.color[2],1.F));
 					primitiveIds->AddValue(isect.primitiveId);
 					shapeIds->AddValue(isect.shapeId);
 					interactionTypes->AddValue(isect.interactionType);
 					lightIds->AddValue(isect.lightId);
 					
 					isectToPathsRef->AddReference(xs->Size() - 1, rendererId->Size() - 1);
-					indices[i] = rendererId->Size();
+					indices[i] = xs->Size() - 1;
 				}
 
 				pathsToIsectRef->AddReferences(rendererId->Size() - 1, std::pair<size_t*,ushort>(indices,nrIntersections));
 				
 //				//Should I notify the dataset listeners?
-//				if(rendererId->Size() % updateThrottle == 0) {
-//					dataset->NotifyDataListeners();
-//				}
+				if(rendererId->Size() % updateThrottle == 0) {
+					dataset->NotifyDataListeners();
+				}
 			}
 		}
 		else { //I AM SO FULL, I CANNOT EAT ONE MORE BYTE OF DATA
 			paused = true;
 			//How to resolve the pause, what do we throw out to create more space?
-			dataset->Print(100);
+			dataset->Print(250);
 			dataset->NotifyDataListeners();
 		}
 	}
+}
+
+bool DataController::IsPaused() {
+	return paused;
 }

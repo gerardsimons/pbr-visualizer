@@ -15,23 +15,30 @@
 #include "../Geometry/Path.h"
 #include "../Geometry/MeshModel.h"
 #include "../Octree/Octree.h"
-#include "../Geometry/Ray.h"
+#include "../Geometry/TriangleMeshGroup.h"
+
+#include "devices/device_singleray/embree_renderer.h"
 
 #include <limits>
 
 class RIV3DView : public RIVDataView, public RIVDataSetListener {
 protected:;
-//    float cameraPosition[3] = {278, 273, -200}; //The camera used by PBRT for the rendered scene, not used as camera for OpenGL rendering! TODO: Read from file
+
     float cameraPosition[3] = {278, 273, -500}; //The original
     Point3D eye;
     bool isDirty = true;
+	
     //Whether to draw the members of clusters, or only the cluster medoid
     bool drawIntersectionPoints = false;
+	
 	//Whether the generated octree should be drawn (if any is generated)
 	bool drawHeatmapTree = false;
 	bool drawLightPaths = false;
 	
-	PBRTConfig* pbrtConfig;
+	//Mesh model data
+	TriangleMeshGroup meshes;
+	
+	EMBREERenderer* rendererOne = NULL;
 	
 	//Octree generated from 3D points (generated in createPoints)
 	Octree* heatmap = NULL;
@@ -46,8 +53,8 @@ protected:;
     float segmentStop = segmentWidth;
 	
 	GLUquadric* quadric = gluNewQuadric();
-	Vec3Df Phit; //Supposedly the point of intersection of the ray with the plane supporting the triangle
-	riv::Ray<float> pickRay;
+	Vec3fa Phit; //Supposedly the point of intersection of the ray with the plane supporting the triangle
+	Ray pickRay;
 	
 	bool meshSelected = false;
 	riv::GroupFilter* pathFilter = NULL;
@@ -74,10 +81,13 @@ protected:;
 	//Create graphics buffer from unfiltered data rows
 	void createPaths();
     static RIV3DView* instance;
-    Vec3Df screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
+    Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
-    RIV3DView(RIVDataSet* dataset,PBRTConfig* config,int,int,int,int,int,int,RIVColorProperty*,RIVSizeProperty*);
-    RIV3DView(RIVDataSet* dataset,PBRTConfig* config,RIVColorProperty*,RIVSizeProperty*);
+    RIV3DView(RIVDataSet* dataset,EMBREERenderer* rendererOne,int,int,int,int,int,int,RIVColorProperty*,RIVSizeProperty*);
+    RIV3DView(RIVDataSet* dataset,EMBREERenderer* rendererOne,RIVColorProperty*,RIVSizeProperty*);
+	
+	//Extract data about the scene from the embree renderer object
+	void GetSceneData();
 	
 	static int windowHandle;
 	
@@ -85,7 +95,9 @@ public:
     void Draw();
     bool HandleMouse(int button, int state, int x, int y);
     bool HandleMouseMotion(int x, int y);
-    void OnDataSetChanged();
+	
+    void OnDataChanged();
+	void OnFiltersChanged();
 	
 	void ResetGraphics();
 	

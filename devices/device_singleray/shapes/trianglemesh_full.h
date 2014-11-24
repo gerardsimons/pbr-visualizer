@@ -38,7 +38,6 @@ namespace embree
     };
 
   public:
-
     /*! Construction from acceleration structure type. */
     TriangleMeshFull (const AccelType& ty)
       : Shape(ty) {}

@@ -1,4 +1,4 @@
-#include <stdio.h>
+	#include <stdio.h>
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
@@ -14,14 +14,12 @@
 #include "Graphics/ColorPalette.h"
 #include "Graphics/ColorProperty.h"
 #include "Graphics/SizeProperty.h"
-//#include "UIView.h" //
 #include "DataController.h"
 #include "Views/HeatMapView.h"
-
 #include "Octree/Octree.h"
 
 //EMBREE STUFF
-#include "devices/renderer/embree_renderer.h"
+#include "devices/device_singleray/embree_renderer.h"
 #include "devices/device_singleray/dataconnector.h"
 //#include "sandbox.h"
 
@@ -68,16 +66,6 @@ RIVDataSet* dataset;
 
 /* The dataset, views have pointers to this in order to draw their views consistently */
 DataController* dataController;
-
-/* Image loaded as texture for the image view */
-BMPImage *image;
-
-/* The 3D model */
-PBRTConfig* config;
-
-std::string bmpPath = "";
-std::string dataPath = "";
-std::string pbrtPath = "";
 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
@@ -243,19 +231,17 @@ void reshape(int w, int h)
     //Reshape and reposition all windows according to new dimensions
     
     //Parallel view window
-//    glutSetWindow(parallelViewWindow);
-//    glutPositionWindow(padding,padding);
-//	int newWidthPC = width-2*padding;
-//	int newHeightPC = height/2-2*padding;
-//	printf("New width = %d\n",newWidthPC);
-//	printf("New height = %d\n",newHeightPC);
-//    glutReshapeWindow(newWidthPC,newHeightPC); //Upper half and full width of the main window
+    glutSetWindow(parallelViewWindow);
+    glutPositionWindow(padding,padding);
+	int newWidthPC = width-2*padding;
+	int newHeightPC = height/2-2*padding;
+    glutReshapeWindow(newWidthPC,newHeightPC); //Upper half and full width of the main window
     //
     //    //image view window
-//    glutSetWindow(imageViewWindow);
-//    glutPositionWindow(padding, height/2+padding);
-//    glutReshapeWindow(height / 2 - 2 * padding, height /2 - 2 *padding); //Square bottom left corner
-//    //
+    glutSetWindow(imageViewWindow);
+    glutPositionWindow(padding, height/2+padding);
+    glutReshapeWindow(height / 2 - 2 * padding, height /2 - 2 *padding); //Square bottom left corner
+    //
 //    //    //3D scene view inspector window
 //    glutSetWindow(sceneViewWindow);
 //    glutPositionWindow(padding + height/2, height/2+padding);
@@ -267,42 +253,25 @@ void reshape(int w, int h)
 //    glutReshapeWindow(height / 2 - 2 * padding, height /2 - 2 *padding);
 }
 
-//void generatePaths(int argc, char* argv[]) {
-//    if(argc < 4) {
-//		throw std::runtime_error("Too few arguments to generate paths from.");
-//    }
-//    if(argc == 4) {
-//        dataPath = argv[1];
-//        pbrtPath = argv[2];
-//        bmpPath = argv[3];
-//    }
-//}
-
-//void loadData() {
-//    if(!dataPath.empty() && !pbrtPath.empty()) {
-//        image = new BMPImage(bmpPath.c_str(),false);
-//        dataset = DataFileReader::ReadBinaryData(dataPath,image,0);
-//        config = new PBRTConfig(DataFileReader::ReadPBRTFile(pbrtPath));
-//    }
-//    else throw "Data paths not generated.";
-//}
-
-const int maxFrames = 2;
+const int maxFrames = 100;
 int currentFrame = 0;
 
 bool finished = false;
 
 void idle() {
-	if(currentFrame++ < maxFrames) {
+	rendererOne->RenderNextFrame();
+	glutPostRedisplay();
 		printf("Rendering frame %d.\n",currentFrame);
-		rendererOne->RenderNextFrame();
+	if(currentFrame < maxFrames && !dataController->IsPaused()) {
+		++currentFrame;
+
+//		rendererOne->RenderNextFrame();
 		glutPostRedisplay();
 	}
 	else if(!finished) {
 		printf("Done......\n");
-//		dataset->Print(100);
 		finished = true;
-//		rendererOne->outputMode("a_test_image.tga");
+		rendererOne->outputMode((std::string)"a_test_image.tga");
 	}
 }
 
@@ -322,7 +291,6 @@ void setupDataController(const int argc, char** argv) {
 	dataset = dataController->GetDataSet();
 	if(argc == 2) { //Just one renderer
 		DataConnector* connector = new DataConnector(processRendererOne);
-//		connector->IJustAddedThisStrangeFunction();
 		rendererOne = new EMBREERenderer(connector, std::string(argv[1]));
 		printf("1 renderer set up.\n");
 	}
@@ -336,68 +304,77 @@ void setupDataController(const int argc, char** argv) {
 	}
 }
 
+//Useful to temporarily disable some drawing
+void doNothing() {
+	//Lalalala
+}
+
 void createViews() {
 
-        RIVSizeProperty *defaultSizeProperty = new RIVFixedSizeProperty(0.1);
-        RIVColorProperty *defaultColorProperty = new RIVFixedColorProperty(1,1,1);
-		
-		RIVTable *intersectionsTable = dataset->GetTable("intersections");
-		
-		riv::ColorMap jetColorMap = colors::jetColorMap();
-		RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(intersectionsTable,"R","G","B");
-//		RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,intersectionsTable->GetRecord("bounce#"),jetColorMap);
-		//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,"radiance R","radiance G","radiance B");
-		RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
-		
-		
-        parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding);
-		ParallelCoordsView::windowHandle = parallelViewWindow;
-        glutSetWindow(parallelViewWindow);
-        glutDisplayFunc(ParallelCoordsView::DrawInstance);
-//        glutDisplayFunc(idle);
-        glutReshapeFunc(ParallelCoordsView::ReshapeInstance);
-        glutMouseFunc(ParallelCoordsView::Mouse);
-        glutMotionFunc(ParallelCoordsView::Motion);
-        glutSpecialFunc(keys);
-        
-        //Load image
-        float bottomHalfY = height / 2.f + padding;
-        float squareSize = height / 2.F - 2 * padding;
-//		image = new BMPImage(bmpPath.c_str(),false);
-		glutSetWindow(imageViewWindow);
-		imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,squareSize,squareSize);
-		imageView = new RIVImageView(dataset,rendererOne,defaultColorProperty,defaultSizeProperty);
-		imageView->InitializeGraphics();
-        glutDisplayFunc(RIVImageView::DrawInstance);
-        glutReshapeFunc(RIVImageView::ReshapeInstance);
-        glutMouseFunc(RIVImageView::Mouse);
-        glutMotionFunc(RIVImageView::Motion);
-        glutSpecialFunc(keys);
-
-        sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + squareSize, bottomHalfY, squareSize, squareSize);
-		RIV3DView::windowHandle = sceneViewWindow;
-        glutSetWindow(sceneViewWindow);
-        glutDisplayFunc(RIV3DView::DrawInstance);
-        glutReshapeFunc(RIV3DView::ReshapeInstance);
-        glutMouseFunc(RIV3DView::Mouse);
-        glutMotionFunc(RIV3DView::Motion);
-        glutSpecialFunc(keys);
-//
-//        heatMapViewWindow = glutCreateSubWindow(mainWindow, padding * 5 + squareSize * 2, bottomHalfY, squareSize, squareSize);
-//        glutSetWindow(heatMapViewWindow);
-//        glutReshapeFunc(RIVHeatMapView::ReshapeInstance);
-//        glutDisplayFunc(RIVHeatMapView::DrawInstance);
-//        glutMouseFunc(RIVHeatMapView::Mouse);
-//        glutMotionFunc(RIVHeatMapView::Motion);
-		
-        //Create views
-        parallelCoordsView = new ParallelCoordsView(dataset,colorProperty,sizeProperty);
-//        sceneView = new RIV3DView(&dataset,config,colorProperty,sizeProperty);
-//        heatMapView = new RIVHeatMapView(&dataset);
+	RIVSizeProperty *defaultSizeProperty = new RIVFixedSizeProperty(0.1);
+	RIVColorProperty *defaultColorProperty = new RIVFixedColorProperty(1,1,1);
 	
-        //Add some filter callbacks
-        dataset->AddFilterListener(sceneView);
-        dataset->AddFilterListener(parallelCoordsView);
+	RIVTable *intersectionsTable = dataset->GetTable("intersections");
+	RIVTable *pathsTable = dataset->GetTable("paths");
+	
+	riv::ColorMap jetColorMap = colors::jetColorMap();
+	RIVColorProperty *intersectionColor = new RIVColorRGBProperty<float>(intersectionsTable,"R","G","B");
+	RIVColorProperty *pathColor = new RIVColorRGBProperty<float>(pathsTable,"R","G","B");
+	//		RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,intersectionsTable->GetRecord("bounce#"),jetColorMap);
+	//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,"radiance R","radiance G","radiance B");
+	RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
+	
+	
+	parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding);
+	ParallelCoordsView::windowHandle = parallelViewWindow;
+	glutSetWindow(parallelViewWindow);
+//	glutDisplayFunc(ParallelCoordsView::DrawInstance);
+	glutDisplayFunc(doNothing);
+	glutReshapeFunc(ParallelCoordsView::ReshapeInstance);
+	glutMouseFunc(ParallelCoordsView::Mouse);
+	glutMotionFunc(ParallelCoordsView::Motion);
+	glutSpecialFunc(keys);
+	
+	//Load image
+	float bottomHalfY = height / 2.f + padding;
+	float squareSize = height / 2.F - 2 * padding;
+	//		image = new BMPImage(bmpPath.c_str(),false);
+	glutSetWindow(imageViewWindow);
+	imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,squareSize,squareSize);
+	imageView = new RIVImageView(dataset,rendererOne,defaultColorProperty,defaultSizeProperty);
+	imageView->InitializeGraphics();
+	RIVImageView::windowHandle = imageViewWindow;
+	glutDisplayFunc(RIVImageView::DrawInstance);
+	glutReshapeFunc(RIVImageView::ReshapeInstance);
+	glutMouseFunc(RIVImageView::Mouse);
+	glutMotionFunc(RIVImageView::Motion);
+	glutSpecialFunc(keys);
+	
+	sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + squareSize, bottomHalfY, squareSize, squareSize);
+	RIV3DView::windowHandle = sceneViewWindow;
+	glutSetWindow(sceneViewWindow);
+//	glutDisplayFunc(RIV3DView::DrawInstance);
+	glutDisplayFunc(doNothing);
+	glutReshapeFunc(RIV3DView::ReshapeInstance);
+	glutMouseFunc(RIV3DView::Mouse);
+	glutMotionFunc(RIV3DView::Motion);
+	glutSpecialFunc(keys);
+	//
+	//        heatMapViewWindow = glutCreateSubWindow(mainWindow, padding * 5 + squareSize * 2, bottomHalfY, squareSize, squareSize);
+	//        glutSetWindow(heatMapViewWindow);
+	//        glutReshapeFunc(RIVHeatMapView::ReshapeInstance);
+	//        glutDisplayFunc(RIVHeatMapView::DrawInstance);
+	//        glutMouseFunc(RIVHeatMapView::Mouse);
+	//        glutMotionFunc(RIVHeatMapView::Motion);
+	
+	//Create views
+	parallelCoordsView = new ParallelCoordsView(dataset,pathColor,intersectionColor,sizeProperty);
+	sceneView = new RIV3DView(dataset,rendererOne,intersectionColor,sizeProperty);
+	//        heatMapView = new RIVHeatMapView(&dataset);
+	
+	//Add some filter callbacks
+	dataset->AddFilterListener(sceneView);
+	dataset->AddFilterListener(parallelCoordsView);
 }
 
 int main(int argc, char **argv)

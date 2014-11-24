@@ -26,6 +26,10 @@ private:
     void drawText(char*,int,int,int,float[3],float);
     void drawText(std::string,int,int,float[3],float);
 //    float* computeColor(size_t lineIndex, size_t totalNrOfLines);
+	
+	//Two separate color properties, one for the entire path and one for a single ray-intersection
+	RIVColorProperty* pathColor;
+	RIVColorProperty* rayColor;
     
     //Properties
     std::vector<ParallelCoordsAxisGroup> axisGroups;
@@ -38,8 +42,8 @@ private:
     
     void clearSelection();
 public:
-    ParallelCoordsView(RIVDataSet* dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
-    ParallelCoordsView(RIVDataSet* dataset, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
+    ParallelCoordsView(RIVDataSet* dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty);
+    ParallelCoordsView(RIVDataSet* dataset, RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty);
 	~ParallelCoordsView(void);
 	
 	static int windowHandle;

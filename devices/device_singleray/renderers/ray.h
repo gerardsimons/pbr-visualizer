@@ -17,7 +17,7 @@
 #ifndef __EMBREE_RAY_H__
 #define __EMBREE_RAY_H__
 
-#include "default.h"
+#include "device_singleray/default.h"
 
 namespace embree
 {
@@ -32,6 +32,9 @@ namespace embree
      *  has to be smaller than far. */
     __forceinline Ray(const Vector3f& org, const Vector3f& dir, float tnear = zero, float tfar = inf, float time = zero, int mask = -1)
       : org(org), dir(dir), tnear(tnear), tfar(tfar), id0(-1), id1(-1), mask(mask), time(time) {}
+	  
+	  __forceinline Ray(const Vec3fa& org, const Vec3fa& dir, float tnear = zero, float tfar = inf, float time = zero, int mask = -1)
+	  : org(org), dir(dir), tnear(tnear), tfar(tfar), id0(-1), id1(-1), mask(mask), time(time) {}
 
     /*! Tests if we hit something. */
     __forceinline operator bool() const { return id0 != -1; }
