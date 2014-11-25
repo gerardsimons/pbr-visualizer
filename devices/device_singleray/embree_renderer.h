@@ -45,6 +45,8 @@ private:
 	Handle<Device::RTScene> g_render_scene = NULL;
 	std::vector<Handle<Device::RTPrimitive> > g_prims;
 	
+	Handle<Device::RTCamera> camera = NULL;
+	
 	/* raw shapes data derived from g_prims */
 	std::vector<Shape*> rawShapes;
 	
@@ -86,19 +88,17 @@ private:
 	/******************************************************************************/
 	/*                            Object Creation                                 */
 	/******************************************************************************/
-	Handle<Device::RTCamera> createCamera(const AffineSpace3f& space);
-	void createScene();
+
 	
 	void setLight(Handle<Device::RTPrimitive> light);
 	void createGlobalObjects();
 	void clearGlobalObjects();
+	
+	void displayFunc();
 public:
-	/* Constructor */
-//	EMBREERenderer() {
-//		
-//	};
-//	EMBREERenderer(DataConnector* dataConnector);
-//	EMBREERenderer(DataConnector* dataConnector, int argc, char **argv);
+	Handle<Device::RTCamera> createCamera(const AffineSpace3f& space);
+	void createScene();
+	
 	EMBREERenderer(DataConnector* dataConnector, const std::string& commandsFile);
 
 	std::string makeFileName(const std::string path, const std::string fileName);
@@ -115,6 +115,11 @@ public:
 	void parseCommandLine(Ref<ParseStream> cin, const FileName& path);
 	
 	void RenderNextFrame();
+	std::string GetFormat() { return g_format; };
+	Vec2<size_t> GetDimensions();
+	
+	static EMBREERenderer* instance;
+	static void displayFuncAccess(void);
 	
 	//Frame buffer mapping and umapping
 	void* MapFrameBuffer();

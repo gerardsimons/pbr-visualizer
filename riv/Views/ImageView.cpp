@@ -107,6 +107,9 @@ void RIVImageView::OnFiltersChanged() {
 size_t drawCounter = 0;
 void RIVImageView::Draw() {
     needsRedraw = true;
+	
+
+	
 	if(needsRedraw) {
 		printf("\nImageView Draw #%zu\n",++drawCounter);
 		glDisable(GL_DEPTH_TEST);
@@ -114,25 +117,67 @@ void RIVImageView::Draw() {
 		glClearColor(1,1,1,0);
 		glClear( GL_COLOR_BUFFER_BIT );
 		
-//		glMatrixMode(GL_MODELVIEW);
-//		glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 		
 		//remember all states of the GPU
 //		glPushAttrib(GL_ALL_ATTRIB_BITS);
 //		glColor3f(1,1,1);
 		
 		void* ptr = renderer->MapFrameBuffer();
+		std::string format = renderer->GetFormat();
+		Vec2<size_t> dimensions = renderer->GetDimensions();
+		int g_width = dimensions[0];
+		int g_height = dimensions[1];
 
-		for(int x = 0 ; x < width ; x++) {
-			for(int y = 0 ; y < height ; y++) {
-//				char byte = (char)ptr[++i];
-			}
-		}
+		//Make sure it is scaled according to the available space as well flipped vertically
+		glPixelZoom((float)width / g_width, -((float)height / g_height));
+		//Because we flip it we have to translate it back to the top
+		glRasterPos2i(1, height);
 		
-		glRasterPos2i(-1, 1);
-		glPixelZoom(1.0f, -1.0f);
+		if (format == "RGB_FLOAT32")
+			glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_FLOAT,ptr);
+		else if (format == "RGBA8")
+			glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGBA,GL_UNSIGNED_BYTE,ptr);
+		else if (format == "RGB8")
+			glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_UNSIGNED_BYTE,ptr);
+		else
+			throw std::runtime_error("unknown framebuffer format: "+format);
 		
-		glDrawPixels((GLsizei)width,(GLsizei)height,GL_RGBA,GL_UNSIGNED_BYTE,ptr);
+		glFlush();
+		glutSwapBuffers();
+		
+		renderer->UnmapFrameBuffer();
+		
+		renderer->outputMode("imageview_out_" + std::to_string(drawCounter) + ".tga");
+		
+//		void* ptr = renderer->MapFrameBuffer();
+//		char* bytes = (char*)ptr;
+
+//		int size = width*height;
+//		float* pixels = new float[size*3];
+//		for(int i=0;i<size;i++) {
+//			pixels[i] = i / (float)size;
+//		}
+//		for(int x = 0 ; x < width ; x++) {
+//			for(int y = 0 ; y < height ; y++) {
+//				pixels[x*width+y] = x / (float)height;
+//				printf("bytes[%d]=%d\n",x*width+y,(int)bytes[x*width+y]);
+//				bytes[x*width+y] = 128;
+//			}
+//			printf("\n");
+//		}
+		
+//		glRasterPos2i(1, 100);
+//		glPixelZoom(1.0f, -1.0f);
+//		glDrawPixels((GLsizei)512,(GLsizei)512,GL_RGBA,GL_UNSIGNED_BYTE,ptr);
+//		std::string g_format = "RGB8";
+//		if (g_format == "RGB_FLOAT32")
+//			glDrawPixels((GLsizei)width,(GLsizei)height,GL_RGB,GL_FLOAT,ptr);
+//		else if (g_format == "RGBA8")
+//			glDrawPixels((GLsizei)width,(GLsizei)height,GL_RGBA,GL_UNSIGNED_BYTE,ptr);
+//		else if (g_format == "RGB8")
+//			glDrawPixels((GLsizei)width,(GLsizei)height,GL_RGB,GL_FLOAT,ptr);
 		
 		renderer->UnmapFrameBuffer();
 
@@ -184,7 +229,7 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 
 				dataset->ClearFilter("x");
 				dataset->ClearFilter("y");
-
+				
 				//Normalize selection
 				if(selection.end.x < selection.start.x) {
 					int tempX = selection.start.x;
@@ -196,7 +241,6 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 					selection.start.y = selection.end.y;
 					selection.end.y = tempY;
 				}
-
 
 //				riv::Filter *xFilter = new riv::RangeFilter("x",selection.start.x,selection.end.x - 1);
 				//Be sure to invert the Y coordinates!

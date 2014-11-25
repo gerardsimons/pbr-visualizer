@@ -22,7 +22,7 @@ namespace embree
 	PathTraceIntegrator::PathTraceIntegrator(const Parms& parms)
 	: lightSampleID(-1), firstScatterSampleID(-1), firstScatterTypeSampleID(-1)
 	{
-		maxDepth        = parms.getInt  ("maxDepth"       ,10    );
+		maxDepth        = parms.getInt  ("maxDepth"       ,5    );
 		minContribution = parms.getFloat("minContribution",0.01f );
 		epsilon         = parms.getFloat("epsilon"        ,32.0f) * float(ulp);
 		backplate       = parms.getImage("backplate");
@@ -42,10 +42,12 @@ namespace embree
 		firstScatterTypeSampleID = samplerFactory->request1D((int)maxDepth);
 	}
 
+	Color throughputCache;
 	Color PathTraceIntegrator::Li(LightPath& lightPath, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector)
 	{
 		/*! Terminate path if too long or contribution too low. */
 		if (lightPath.depth >= maxDepth || reduce_max(lightPath.throughput) < minContribution) {
+			throughputCache = lightPath.throughput;
 			return zero;
 		}
 		
@@ -80,6 +82,7 @@ namespace embree
 					for (size_t i=0; i<scene->envLights.size(); i++)
 						L += scene->envLights[i]->Le(wo);
 			}
+			throughputCache = lightPath.throughput;
 			return L;
 		}
 //		printf("Something was hit.\n");
@@ -123,8 +126,8 @@ namespace embree
 				Ray newRay(dg.P, wi, dg.error*epsilon, inf, lightPath.lastRay.time);
 				LightPath scatteredPath = lightPath.extended(newRay,nextMedium, c, (type & directLightingBRDFTypes) != NONE);
 		  
-				Color isectColor = c * Li(scatteredPath, scene, state,dataConnector) * rcp(wi.pdf);
-				L += isectColor;
+//				Color isectColor =
+				L += c * Li(scatteredPath, scene, state,dataConnector) * rcp(wi.pdf);;
 			}
 		}
 		
@@ -174,7 +177,7 @@ namespace embree
 		LightPath lightPath(ray);
 		Color L = Li(lightPath,scene,state,dataConnector);
 		//We now have the complete path
-		dataConnector->FinishPath(lightPath.depth,L.r,L.g,L.b,lightPath.throughput.r,lightPath.throughput.g,lightPath.throughput.b);
+		dataConnector->FinishPath(lightPath.depth,L.r,L.g,L.b,throughputCache.r,throughputCache.g,throughputCache.b);
 		return L;
 	}
 	

@@ -259,19 +259,16 @@ int currentFrame = 0;
 bool finished = false;
 
 void idle() {
-	rendererOne->RenderNextFrame();
-	glutPostRedisplay();
-		printf("Rendering frame %d.\n",currentFrame);
+
 	if(currentFrame < maxFrames && !dataController->IsPaused()) {
 		++currentFrame;
-
-//		rendererOne->RenderNextFrame();
+		printf("Rendering frame %d.\n",currentFrame);
+		rendererOne->RenderNextFrame();
 		glutPostRedisplay();
 	}
 	else if(!finished) {
 		printf("Done......\n");
 		finished = true;
-		rendererOne->outputMode((std::string)"a_test_image.tga");
 	}
 }
 
@@ -328,8 +325,8 @@ void createViews() {
 	parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding);
 	ParallelCoordsView::windowHandle = parallelViewWindow;
 	glutSetWindow(parallelViewWindow);
-//	glutDisplayFunc(ParallelCoordsView::DrawInstance);
-	glutDisplayFunc(doNothing);
+	glutDisplayFunc(ParallelCoordsView::DrawInstance);
+//	glutDisplayFunc(doNothing);
 	glutReshapeFunc(ParallelCoordsView::ReshapeInstance);
 	glutMouseFunc(ParallelCoordsView::Mouse);
 	glutMotionFunc(ParallelCoordsView::Motion);
@@ -342,7 +339,6 @@ void createViews() {
 	glutSetWindow(imageViewWindow);
 	imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,squareSize,squareSize);
 	imageView = new RIVImageView(dataset,rendererOne,defaultColorProperty,defaultSizeProperty);
-	imageView->InitializeGraphics();
 	RIVImageView::windowHandle = imageViewWindow;
 	glutDisplayFunc(RIVImageView::DrawInstance);
 	glutReshapeFunc(RIVImageView::ReshapeInstance);
@@ -353,8 +349,8 @@ void createViews() {
 	sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + squareSize, bottomHalfY, squareSize, squareSize);
 	RIV3DView::windowHandle = sceneViewWindow;
 	glutSetWindow(sceneViewWindow);
-//	glutDisplayFunc(RIV3DView::DrawInstance);
-	glutDisplayFunc(doNothing);
+	glutDisplayFunc(RIV3DView::DrawInstance);
+//	glutDisplayFunc(doNothing);
 	glutReshapeFunc(RIV3DView::ReshapeInstance);
 	glutMouseFunc(RIV3DView::Mouse);
 	glutMotionFunc(RIV3DView::Motion);

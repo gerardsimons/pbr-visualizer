@@ -17,10 +17,14 @@
 #include "embree_renderer.h"
 #include "devices/device_singleray/shapes/trianglemesh_normals.h"
 
+#include <GLUT/GLUT.h>
+
 //#include "api/instance.h"
 //#include "api/handle.h"
 
 using namespace embree;
+
+EMBREERenderer* EMBREERenderer::instance = NULL;
 
 /******************************************************************************/
 /*                            Object Creation                                 */
@@ -76,16 +80,18 @@ void EMBREERenderer::setLight(Handle<Device::RTPrimitive> light)
 
 void EMBREERenderer::createGlobalObjects()
 {
-	g_renderer = g_device->rtNewRenderer("pathtracer");
-	if (g_depth >= 0) g_device->rtSetInt1(g_renderer, "maxDepth", g_depth);
-	g_device->rtSetInt1(g_renderer, "sampler.spp", g_spp);
-	g_device->rtCommit(g_renderer);
-	
+//	if(!g_renderer) {
+//		g_renderer = g_device->rtNewRenderer("pathtracer");
+//		if (g_depth >= 0) g_device->rtSetInt1(g_renderer, "maxDepth", g_depth);
+//		g_device->rtSetInt1(g_renderer, "sampler.spp", g_spp);
+//		g_device->rtCommit(g_renderer);
+//	}
+//	
 	g_tonemapper = g_device->rtNewToneMapper("default");
 	g_device->rtSetFloat1(g_tonemapper, "gamma", g_gamma);
 	g_device->rtSetBool1(g_tonemapper, "vignetting", g_vignetting);
 	g_device->rtCommit(g_tonemapper);
-	
+//
 	g_frameBuffer = g_device->rtNewFrameBuffer(g_format.c_str(), g_width, g_height, g_numBuffers);
 	g_backplate = NULL;
 }
@@ -229,6 +235,77 @@ std::vector<Shape*>* EMBREERenderer::GetShapes() {
 //		}
 //	}
 
+void EMBREERenderer::displayFuncAccess() {
+	instance->displayFunc();
+}
+
+void EMBREERenderer::displayFunc(void)
+{
+	
+	/* create random geometry for regression test */
+//	if (g_regression)
+//		g_render_scene = createRandomScene(g_device,1,random<int>()%100,random<int>()%1000);
+	
+	/* set accumulation mode */
+//	int accumulate = g_resetAccumulation ? 0 : g_refine;
+//	g_resetAccumulation = false;
+	
+	/* render image */
+//	Handle<Device::RTCamera> camera = createCamera(AffineSpace3f::lookAtPoint(g_camPos, g_camLookAt, g_camUp));
+	
+	/* render into framebuffer */
+//	g_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,0);
+//	g_device->rtSwapBuffers(g_frameBuffer);
+	
+	/* draw image in OpenGL */
+	void* ptr = MapFrameBuffer();
+	
+	glRasterPos2i(1, 100);
+	glPixelZoom(1.0f, -1.0f);
+	
+	if (g_format == "RGB_FLOAT32")
+		glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_FLOAT,ptr);
+	else if (g_format == "RGBA8")
+		glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGBA,GL_UNSIGNED_BYTE,ptr);
+	else if (g_format == "RGB8")
+		glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_UNSIGNED_BYTE,ptr);
+	else
+		throw std::runtime_error("unknown framebuffer format: "+g_format);
+	
+	glFlush();
+	glutSwapBuffers();
+	
+	UnmapFrameBuffer();
+//	g_device->rtUnmapFrameBuffer(g_frameBuffer,0);
+	
+//	/* calculate rendering time */
+//	double t1 = getSeconds();
+//	g_dt[frameID % avgFrames] = t1-g_t0; g_t0 = t1;
+//	frameID++;
+//	
+//	/* print average render time of previous frames */
+//	size_t num = 0;
+//	double dt = 0.0f;
+//	for (size_t i=0; i<avgFrames; i++) {
+//		if (g_dt[i] != 0.0f) {
+//			dt += g_dt[i]; num++;
+//		}
+//	}
+//	dt /= num;
+//	
+//	std::ostringstream stream;
+//	stream.setf(std::ios::fixed, std::ios::floatfield);
+//	stream.precision(2);
+//	stream << 1.0f/dt << " fps, ";
+//	stream.precision(2);
+//	stream << dt*1000.0f << " ms";
+//	stream << ", " << g_width << "x" << g_height;
+//	if (log_display)
+//		std::cout << "display " << stream.str() << std::endl;
+//	glutSetWindowTitle((std::string("Embree: ") + stream.str()).c_str());
+	
+}
+
 std::string EMBREERenderer::makeFileName(const std::string path, const std::string fileName)
 {
 	if (fileName[0] == '/') return fileName;
@@ -240,7 +317,7 @@ void EMBREERenderer::outputMode(const FileName& fileName)
 	if (!g_renderer) throw std::runtime_error("no renderer set");
 	
 //	/* render image */
-	Handle<Device::RTCamera> camera = createCamera(AffineSpace3f::lookAtPoint(g_camPos, g_camLookAt, g_camUp));
+//	Handle<Device::RTCamera> camera = createCamera(AffineSpace3f::lookAtPoint(g_camPos, g_camLookAt, g_camUp));
 //	Handle<Device::RTScene> scene = createScene();
 	
 //	g_device->rtSetInt1(g_renderer, "showprogress", 1);
@@ -264,6 +341,9 @@ void EMBREERenderer::outputMode(const FileName& fileName)
 }
 void EMBREERenderer::outputMode(const std::string& fileName) {
 	outputMode(FileName(fileName));
+}
+Vec2<size_t> EMBREERenderer::GetDimensions() {
+	return Vec2<size_t>(g_width,g_height);
 }
 void EMBREERenderer::parseDebugRenderer(Ref<ParseStream> cin, const FileName& path)
 {
@@ -332,20 +412,22 @@ EMBREERenderer::EMBREERenderer(DataConnector* dataConnector, const std::string& 
 	
 	createScene();
 	
+	//Create camera
+	AffineSpace3f g_camSpace = AffineSpace3f::lookAtPoint(g_camPos, g_camLookAt, g_camUp);
+	camera = createCamera(AffineSpace3f(g_camSpace.l,g_camSpace.p));
+	
 	for(Handle<Device::RTPrimitive> prim : g_prims) {
 		Shape* shape = g_single_device->rtGetShape(prim);
 		if(shape) {
 			rawShapes.push_back(shape);
 		}
 	}
+	
+	instance = this;
 }
 
 void EMBREERenderer::RenderNextFrame() {
-	AffineSpace3f g_camSpace = AffineSpace3f::lookAtPoint(g_camPos, g_camLookAt, g_camUp);
-	
-	Handle<Device::RTCamera> camera = createCamera(AffineSpace3f(g_camSpace.l,g_camSpace.p));
-	
-	g_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,0);
+	g_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1);
 	g_device->rtSwapBuffers(g_frameBuffer);
 }
 
@@ -366,7 +448,6 @@ void EMBREERenderer::parseCommandLine(Ref<ParseStream> cin, const FileName& path
 			FileName file = path + cin->getFileName();
 			parseCommandLine(new ParseStream(new LineCommentFilter(file, "#")), file.path());
 		}
-		
 		
 		/* read model from file */
 		else if (tag == "-i") {

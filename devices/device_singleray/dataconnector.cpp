@@ -24,6 +24,10 @@ void DataConnector::FinishPath(unsigned short depth, float r, float g, float b, 
 		currentPath.radiance[1] = g;
 		currentPath.radiance[2] = b;
 		
+		if(throughput_r < 1) {
+			
+		}
+		
 		currentPath.throughput[0] = throughput_r;
 		currentPath.throughput[1] = throughput_g;
 		currentPath.throughput[2] = throughput_b;

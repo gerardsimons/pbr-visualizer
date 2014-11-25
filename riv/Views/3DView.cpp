@@ -483,9 +483,9 @@ void RIV3DView::MovePathSegment(float ratioIncrement) {
 }
 
 void RIV3DView::drawPaths(float startSegment, float stopSegment) {
-	char taskname[100];
-	sprintf(taskname,"drawPaths %f - %f\n",startSegment,stopSegment);
-	reporter::startTask(taskname);
+//	char taskname[100];
+//	sprintf(taskname,"drawPaths %f - %f\n",startSegment,stopSegment);
+//	reporter::startTask(taskname);
 	//See if it should consist of two partial segments
 	for(float i = 1 ; i < maxBounce ; i++) {
 		if(startSegment < i / maxBounce && stopSegment > i / maxBounce) {
@@ -495,7 +495,6 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 			return;
 		}
 	}
-
 	
 	//Start and end vertex index
 	int startBounce = floor(startSegment * maxBounce);
