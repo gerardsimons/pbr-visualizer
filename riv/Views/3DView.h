@@ -26,7 +26,6 @@ protected:;
 
     float cameraPosition[3] = {278, 273, -500}; //The original
     Point3D eye;
-    bool isDirty = true;
 	
     //Whether to draw the members of clusters, or only the cluster medoid
     bool drawIntersectionPoints = false;
@@ -64,6 +63,8 @@ protected:;
 	//Indices of the points to draw
 	std::vector<Path> paths;
 	bool pathsCreated = false;
+	
+	static std::vector<RIV3DView*> instances;
 
 	//Generate a octree from the unfiltered intersection points
 	void generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize);
@@ -80,7 +81,6 @@ protected:;
 	void drawLeafNodes(OctreeNode* node);
 	//Create graphics buffer from unfiltered data rows
 	void createPaths();
-    static RIV3DView* instance;
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
     RIV3DView(RIVDataSet* dataset,EMBREERenderer* rendererOne,int,int,int,int,int,int,RIVColorProperty*,RIVSizeProperty*);
@@ -101,8 +101,8 @@ public:
 	
 	void ResetGraphics();
 	
-    static void DrawInstance(); //Override
-    static void ReshapeInstance(int,int);
+    static void DrawInstances(); //Override
+    static void ReshapeInstances(int newWidth,int newHeight);
     static void Mouse(int button, int state, int x, int y);
     static void Motion(int x, int y);
     

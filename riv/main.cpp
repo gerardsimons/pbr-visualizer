@@ -253,7 +253,7 @@ void reshape(int w, int h)
 //    glutReshapeWindow(height / 2 - 2 * padding, height /2 - 2 *padding);
 }
 
-const int maxFrames = 100;
+const int maxFrames = 2;
 int currentFrame = 0;
 
 bool finished = false;
@@ -325,9 +325,9 @@ void createViews() {
 	parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding);
 	ParallelCoordsView::windowHandle = parallelViewWindow;
 	glutSetWindow(parallelViewWindow);
-	glutDisplayFunc(ParallelCoordsView::DrawInstance);
+	glutDisplayFunc(ParallelCoordsView::DrawInstances);
 //	glutDisplayFunc(doNothing);
-	glutReshapeFunc(ParallelCoordsView::ReshapeInstance);
+	glutReshapeFunc(ParallelCoordsView::ReshapeInstances);
 	glutMouseFunc(ParallelCoordsView::Mouse);
 	glutMotionFunc(ParallelCoordsView::Motion);
 	glutSpecialFunc(keys);
@@ -340,21 +340,22 @@ void createViews() {
 	imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,squareSize,squareSize);
 	imageView = new RIVImageView(dataset,rendererOne,defaultColorProperty,defaultSizeProperty);
 	RIVImageView::windowHandle = imageViewWindow;
-	glutDisplayFunc(RIVImageView::DrawInstance);
-	glutReshapeFunc(RIVImageView::ReshapeInstance);
+	glutDisplayFunc(RIVImageView::DrawInstances);
+	glutReshapeFunc(RIVImageView::ReshapeInstances);
 	glutMouseFunc(RIVImageView::Mouse);
 	glutMotionFunc(RIVImageView::Motion);
 	glutSpecialFunc(keys);
 	
-	sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + squareSize, bottomHalfY, squareSize, squareSize);
+	sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + squareSize, bottomHalfY, squareSize * 2, squareSize);
 	RIV3DView::windowHandle = sceneViewWindow;
 	glutSetWindow(sceneViewWindow);
-	glutDisplayFunc(RIV3DView::DrawInstance);
+	glutDisplayFunc(RIV3DView::DrawInstances);
 //	glutDisplayFunc(doNothing);
-	glutReshapeFunc(RIV3DView::ReshapeInstance);
+	glutReshapeFunc(RIV3DView::ReshapeInstances);
 	glutMouseFunc(RIV3DView::Mouse);
 	glutMotionFunc(RIV3DView::Motion);
 	glutSpecialFunc(keys);
+	
 	//
 	//        heatMapViewWindow = glutCreateSubWindow(mainWindow, padding * 5 + squareSize * 2, bottomHalfY, squareSize, squareSize);
 	//        glutSetWindow(heatMapViewWindow);
@@ -366,10 +367,12 @@ void createViews() {
 	//Create views
 	parallelCoordsView = new ParallelCoordsView(dataset,pathColor,intersectionColor,sizeProperty);
 	sceneView = new RIV3DView(dataset,rendererOne,intersectionColor,sizeProperty);
+	RIV3DView* sceneViewTwo = new RIV3DView(dataset,rendererOne,intersectionColor,sizeProperty);
 	//        heatMapView = new RIVHeatMapView(&dataset);
 	
 	//Add some filter callbacks
 	dataset->AddFilterListener(sceneView);
+	dataset->AddFilterListener(sceneViewTwo);
 	dataset->AddFilterListener(parallelCoordsView);
 }
 

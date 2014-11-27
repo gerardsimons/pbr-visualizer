@@ -25,8 +25,8 @@ public:
 //    RIVImageView(RIVDataSet* dataset,  BMPImage* image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* colorProperty,RIVSizeProperty* sizeProperty);
     RIVImageView(RIVDataSet* dataset,  EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty *size);
     
-    static void DrawInstance();
-    static void ReshapeInstance(int,int);
+    static void DrawInstances();
+    static void ReshapeInstances(int newWidth,int newHeight);
     static void Mouse(int state,int button,int x,int y);
     static void Motion(int x, int y);
     
@@ -42,11 +42,10 @@ public:
 	
 	static int windowHandle;
 private:
-    static RIVImageView* instance;
+	static std::vector<RIVImageView*> instances;
 	
 	EMBREERenderer* renderer = NULL;
 	
-    GLuint imageTexture;
 	float imageMagnificationX,imageMagnificationY;
 
     RIVPoint viewToPixelSpace(int x, int y);

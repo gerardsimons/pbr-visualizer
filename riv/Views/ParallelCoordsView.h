@@ -61,10 +61,10 @@ public:
 	//Create graphical primitives based on data currently set
 	void InitializeGraphics();
 	
-    static void ReshapeInstance(int width, int height);
-    static void DrawInstance();
+    static void ReshapeInstances(int width, int height);
+    static void DrawInstances();
     static void Mouse(int button, int state, int x, int y);
     static void Motion(int x, int y);
-    static ParallelCoordsView *instance;
+	static std::vector<ParallelCoordsView*> instances;
 };
 

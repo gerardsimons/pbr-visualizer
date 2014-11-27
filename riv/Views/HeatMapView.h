@@ -29,7 +29,7 @@
 		
 	//    //implement virtual functions prescribed by DataSetListener
 	//    virtual void OnDataSetChanged();
-		void SetData(RIVDataSet *newDataSet) { dataset = newDataSet; needsRedraw = true; computeHeatMap(); }
+		void SetData(RIVDataSet *newDataSet) { dataset = newDataSet; dirty = true; computeHeatMap(); }
 		static void ReshapeInstance(int width, int height);
 		static void DrawInstance();
 		static void Mouse(int button, int state, int x, int y);

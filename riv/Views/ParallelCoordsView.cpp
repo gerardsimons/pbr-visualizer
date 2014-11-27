@@ -10,42 +10,37 @@
 #include <stdio.h>
 
 //Static declarations
-ParallelCoordsView* ParallelCoordsView::instance = NULL;
+
+std::vector<ParallelCoordsView*> ParallelCoordsView::instances;
 int ParallelCoordsView::windowHandle = -1;
 
 ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY,NULL,sizeProperty) {
-    if(instance != NULL) {
-        throw "Only 1 instance allowed.";
-    }
 	this->pathColor = pathColor;
 	this->rayColor = rayColor;
     linesAreDirty = true;
     axesAreDirty = true;
     selectedAxis = 0;
     identifier = "ParallelCoordsView";
-    instance = this;
+	instances.push_back(this);
     //Nothing else to do
 }
 
 ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, RIVColorProperty *pathColor, RIVColorProperty* rayColor, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,NULL,sizeProperty) {
-    if(instance != NULL) {
-        throw "Only 1 instance allowed.";
-    }
 	this->pathColor = pathColor;
 	this->rayColor = rayColor;
     linesAreDirty = true;
     axesAreDirty = true;
     selectedAxis = 0;
     identifier = "ParallelCoordsView";
-	instance = this;
+	instances.push_back(this);
 }
 
 void ParallelCoordsView::createAxes() {
     axisGroups.clear();
     if(dataset != NULL) {
         size_t total_nr_of_records = dataset->TotalNumberOfRecords();
-		//    int y = startY + paddingY;
-        int y = paddingY; //View port takes care of startY
+		//    int y = y + paddingY;
+        int y = paddingY; //View port takes care of y
         int axisHeight = height - 2 * paddingY;
         
         float delta = 1.F / (total_nr_of_records - 1) * (width - 2 * paddingX);
@@ -268,28 +263,35 @@ void ParallelCoordsView::drawLines() {
     }
 }
 
-void ParallelCoordsView::DrawInstance() {
-    if(instance != NULL) {
-        instance->Draw();
-    }
+void ParallelCoordsView::DrawInstances() {
+	for(ParallelCoordsView* instance : instances) {
+		if(instance->IsDirty()) {
+			instance->Draw();
+		}
+	}
 }
 
-void ParallelCoordsView::ReshapeInstance(int width, int height) {
-    if(instance != NULL) {
-        instance->Reshape(width,height);
-    }
+void ParallelCoordsView::ReshapeInstances(int width, int height) {
+	int newWidth = width / (float)instances.size();
+	for(ParallelCoordsView* instance : instances) {
+		instance->Reshape(newWidth,height);
+	}
 }
 
 void ParallelCoordsView::Mouse(int button, int state, int x, int y) {
-    if(instance != NULL) {
-        instance->HandleMouse(button,state,x,y);
-    }
+	for(ParallelCoordsView* instance : instances) {
+		if(instance->HandleMouse(button, state, x, y)) {
+			return;
+		}
+	}
 }
 
 void ParallelCoordsView::Motion(int x, int y) {
-    if(instance != NULL) {
-        instance->HandleMouseMotion(x, y);
-    }
+	for(ParallelCoordsView* instance : instances) {
+		if(instance->HandleMouseMotion(x, y)) {
+			return;
+		}
+	}
 }
 
 void ParallelCoordsView::Reshape(int width, int height) {
@@ -452,6 +454,7 @@ void ParallelCoordsView::OnDataChanged() {
 	//Recreate the axes
 	printf("ParallelCoordsView onDataChanged notified.\n");
 	
+	dirty = true;
 	axesAreDirty = true;
 	linesAreDirty = true;
 	

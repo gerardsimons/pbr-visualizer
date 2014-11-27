@@ -12,14 +12,11 @@
 
 #include <math.h>
 
-RIVImageView* RIVImageView::instance = NULL;
+std::vector<RIVImageView*> RIVImageView::instances;
 int RIVImageView::windowHandle = -1;
 
 RIVImageView::RIVImageView(RIVDataSet* dataset, EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size), renderer(renderer) {
-    if(instance != NULL) {
-        throw "Only 1 instance of ImageView allowed.";
-    }
-    instance = this;
+	instances.push_back(this);
     identifier = "ImageView";
 	this->renderer = renderer;
     
@@ -33,32 +30,36 @@ void RIVImageView::InitializeGraphics() {
 	
 }
 
-void RIVImageView::DrawInstance() {
-    if(instance != NULL) {
-        instance->Draw();
-    }
-    else {
-        printf("No instance to draw.\n");
-    }
+void RIVImageView::DrawInstances() {
+	for(RIVImageView* instance : instances) {
+		if(instance->IsDirty()) {
+			instance->Draw();
+		}
+	}
 }
 
-void RIVImageView::ReshapeInstance(int width, int height) {
-    if(instance != NULL) {
-        instance->Reshape(width,height);
-    }
-    else printf("No instance to reshape");
+void RIVImageView::ReshapeInstances(int width, int height) {
+	float newWidth = width / 2.F;
+	for(RIVImageView* instance : instances) {
+		instance->Reshape(newWidth, height);
+	}
 }
+
 
 void RIVImageView::Mouse(int button, int state, int x, int y) {
-    if(instance != NULL) {
-        instance->HandleMouse(button,state,x,y);
-    }
+	for(RIVImageView* instance : instances) {
+		if(instance->HandleMouse(button, state, x, y)) {
+			return;
+		}
+	}
 }
 
 void RIVImageView::Motion(int x, int y) {
-    if(instance != NULL) {
-        instance->HandleMouseMotion(x, y);
-    }
+	for(RIVImageView* instance : instances) {
+		if(instance->HandleMouseMotion(x, y)) {
+			return;
+		}
+	}
 }
 
 void RIVImageView::Reshape(int width, int height) {
@@ -70,20 +71,20 @@ void RIVImageView::Reshape(int width, int height) {
     
     paddingX = 0;
     paddingY = 0;
+	
+	x = 0;
+	y = 0;
     
-    startX = 0;
-    startY = 0;
+    imageStart.x = x + paddingX;
+	imageStart.y = y + paddingY;
     
-    imageStart.x = startX + paddingX;
-	imageStart.y = startY + paddingY;
-    
-	imageEnd.x = startX + width - paddingX;
-	imageEnd.y = startY + height - paddingY;
+	imageEnd.x = x + width - paddingX;
+	imageEnd.y = y + height - paddingY;
     
 //    imageMagnificationX = (width - 2 * paddingX) / (float)renderedImage->sizeX;
 //	imageMagnificationY = (height - 2 * paddingY) / (float)renderedImage->sizeY;
 	
-    glViewport(0, 0, width, height);
+    glViewport(x, y, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0.0, width, 0.0, height);
@@ -106,11 +107,11 @@ void RIVImageView::OnFiltersChanged() {
 
 size_t drawCounter = 0;
 void RIVImageView::Draw() {
-    needsRedraw = true;
+    dirty = true;
 	
 
 	
-	if(needsRedraw) {
+	if(dirty) {
 		printf("\nImageView Draw #%zu\n",++drawCounter);
 		glDisable(GL_DEPTH_TEST);
 		
@@ -215,15 +216,15 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 			//init selection
 			if(!isDragging) {
 				selection.start = viewToPixelSpace(x,y);
-                printf("selection (startX,endX) = (%d,%d)\n",selection.start.x,selection.end.x);
+                printf("selection (x,endX) = (%d,%d)\n",selection.start.x,selection.end.x);
 				isDragging = true;
 			}
 		}
 		else if(state == GLUT_UP) {
 			//Finish selection
 
-			printf("selection (startX,endX) = (%d,%d)\n",selection.start.x,selection.end.x);
-            printf("selection (startY,endY) = (%d,%d)\n",selection.start.y,selection.end.y);
+			printf("selection (x,endX) = (%d,%d)\n",selection.start.x,selection.end.x);
+            printf("selection (y,endY) = (%d,%d)\n",selection.start.y,selection.end.y);
 
 			if(selection.end.x != selection.start.x && selection.end.y != selection.start.y) {
 

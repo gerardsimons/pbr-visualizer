@@ -25,29 +25,24 @@
 #endif
 
 //Init instance to draw
-RIV3DView* RIV3DView::instance = NULL;
+std::vector<RIV3DView*> RIV3DView::instances;
 int RIV3DView::windowHandle = -1;
 
 RIV3DView::RIV3DView(RIVDataSet* dataset, EMBREERenderer* rendererOne, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty)
 	: RIVDataView(dataset,x,y,width,height,paddingX,paddingY,colorProperty,sizeProperty) {
 	this->rendererOne = rendererOne;
-    if(instance != NULL) {
-        throw "Only 1 instance of RIV3DView allowed.";
-    }
-    instance = this;
     identifier = "3DView";
 		
 	GetSceneData();
 		
 	ResetGraphics();
+		
+	instances.push_back(this);
 };
 
 RIV3DView::RIV3DView(RIVDataSet* dataset,EMBREERenderer* rendererOne, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,colorProperty,sizeProperty) {
 	this->rendererOne = rendererOne;
-    if(instance != NULL) {
-        throw "Only 1 instance of RIV3DView allowed.";
-    }
-    instance = this;
+	instances.push_back(this);
     identifier = "3DView";
 	
 	GetSceneData();
@@ -106,14 +101,14 @@ void RIV3DView::ToggleDrawIntersectionPoints() {
 	}
 	printf("drawIntersectionPoints is now ");
 	if(drawIntersectionPoints) printf("ON\n"); else printf("OFF\n");
-    isDirty = true;
+    dirty = true;
 }
 void RIV3DView::ToggleDrawHeatmap() {
 	drawHeatmapTree = !drawHeatmapTree;
 	if(drawHeatmapTree && !heatmap) {
 		generateOctree(7, 1, .00001F);
 	}
-	isDirty = true;
+	dirty = true;
 }
 size_t nodesDrawn;
 //Test function to draw a simple octree
@@ -193,7 +188,7 @@ void RIV3DView::Draw() {
 	reporter::startTask("3D Draw");
 	
     glEnable(GL_DEPTH_TEST);
-	glClearColor (1.0, 1.0, 1.0, 0.0);
+	glClearColor (1.0, 0.0, 0.0, 0.0);
     glClear( GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_BLEND);
     glMatrixMode(GL_MODELVIEW);
@@ -246,8 +241,7 @@ void RIV3DView::Draw() {
     
     //Draw
     glColor3f(1, 1, 1);
-    
-//    Translate -278.000000 -273.000000 500.000000
+	
     //Draw camera position
     glPushMatrix();
     glTranslatef(278, 273, -500);
@@ -545,22 +539,22 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 					float Cstart = startSegment * maxBounce - startBounce;
 					float Cend = stopSegment * maxBounce - startBounce;
 
-					float startX = xRecord->Value(startPoint->rowIndex);
-					float startY = yRecord->Value(startPoint->rowIndex);
+					float x = xRecord->Value(startPoint->rowIndex);
+					float y = yRecord->Value(startPoint->rowIndex);
 					float startZ = zRecord->Value(startPoint->rowIndex);
 
 					float endX = xRecord->Value(endPoint->rowIndex);
 					float endY = yRecord->Value(endPoint->rowIndex);
 					float endZ = zRecord->Value(endPoint->rowIndex);
 
-					float deltaX = endX - startX;
-					float deltaY = endY - startY;
+					float deltaX = endX - x;
+					float deltaY = endY - y;
 					float deltaZ = endZ - startZ;
 
 					glColor3f(startColor.R,startColor.G,startColor.B);
-					glVertex3f(startX + deltaX * Cstart, startY + deltaY * Cstart, startZ + deltaZ * Cstart);
+					glVertex3f(x + deltaX * Cstart, y + deltaY * Cstart, startZ + deltaZ * Cstart);
 					glColor3f(endColor.R,endColor.G,endColor.B);
-					glVertex3f(startX + deltaX * Cend, startY + deltaY * Cend, startZ + deltaZ * Cend);
+					glVertex3f(x + deltaX * Cend, y + deltaY * Cend, startZ + deltaZ * Cend);
 				}
 			}
 		}
@@ -579,38 +573,49 @@ void RIV3DView::ToggleDrawPaths() {
 //		paths.clear();
 //		pathsCreated = false;
 	}
-	isDirty = true;
+	dirty = true;
 }
-void RIV3DView::DrawInstance() {
-    if(instance != NULL) {
-        instance->Draw();
-    }
-    else {
-        printf("No instance to draw.\n");
-    }
+
+void RIV3DView::DrawInstances() {
+	for(RIV3DView* instance : instances) {
+		if(instance->IsDirty()) {
+			instance->Draw();
+		}
+	}
 }
 
 void RIV3DView::Mouse(int button, int state, int x, int y) {
-    if(instance != NULL) {
-        instance->HandleMouse(button,state,x,y);
-    }
+	for(RIV3DView* instance : instances) {
+		if(instance->HandleMouse(button, state, x, y)) {
+			return;
+		}
+	}
 }
 
 void RIV3DView::Motion(int x, int y) {
-    if(instance != NULL) {
-        instance->HandleMouseMotion(x, y);
-    }
+	for(RIV3DView* instance : instances) {
+		if(instance->HandleMouseMotion(x, y)) {
+			return;
+		}
+	}
 }
 
-void RIV3DView::ReshapeInstance(int width, int height) {
-    if(instance != NULL) {
-        instance->Reshape(width,height);
-    }
-    else printf("No instance to reshape");
+void RIV3DView::ReshapeInstances(int width, int height) {
+	//Divide in width
+	int newWidth = width/(float)instances.size();
+	int newX = 0;
+	int newY = 0;
+	for(RIV3DView* instance : instances) {
+		instance->x = newX;
+		instance->y = newY;
+		instance->Reshape(newWidth,height);
+		newX+=newWidth;
+	}
 }
 
 void RIV3DView::OnDataChanged() {
 	//Nothing
+	dirty = true;
 }
 
 void RIV3DView::OnFiltersChanged() {
@@ -624,7 +629,7 @@ void RIV3DView::OnFiltersChanged() {
 	//Return window to given window
 	glutSetWindow(currentWindow);
 	
-    isDirty = true;
+    dirty = true;
 }
 
 void RIV3DView::MoveCamera(float x, float y, float z) {
@@ -633,7 +638,7 @@ void RIV3DView::MoveCamera(float x, float y, float z) {
     eye.z += z;
     
     printf("new eye (x,y,z) = (%f,%f,%f)\n",eye.x,eye.y,eye.z);
-    isDirty = true;
+    dirty = true;
 }
 
 Vec3fa RIV3DView::screenToWorldCoordinates(int screenX, int screenY, float zPlane) {

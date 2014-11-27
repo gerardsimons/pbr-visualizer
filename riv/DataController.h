@@ -56,7 +56,7 @@ private:
 	RIVSingleReference* isectToPathsRef;
 	
 	bool paused = false;
-	size_t maxPaths = 1000000;
+	size_t maxPaths = 10000;
 	size_t updateThrottle = 0;
 	
 	//Generate the dataset; create tables records etc.

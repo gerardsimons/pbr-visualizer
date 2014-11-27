@@ -147,8 +147,8 @@
 		paddingX = 0;
 		paddingY = 0;
 		
-		startX = 0;
-		startY = 0;
+		x = 0;
+		y = 0;
 		
 		glViewport(0, 0, width, height);
 		glMatrixMode(GL_PROJECTION);
