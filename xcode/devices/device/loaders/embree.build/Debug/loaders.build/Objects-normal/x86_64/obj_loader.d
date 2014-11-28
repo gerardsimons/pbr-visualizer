@@ -1,0 +1,23 @@
+dependencies: \
+  /Users/gerardsimons/Git/afstuderen/devices/device/loaders/obj_loader.cpp \
+  /Users/gerardsimons/Git/afstuderen/common/sys/platform.h \
+  /Users/gerardsimons/Git/afstuderen/common/sys/constants.h \
+  /Users/gerardsimons/Git/afstuderen/common/math/vec2.h \
+  /Users/gerardsimons/Git/afstuderen/common/math/math.h \
+  /Users/gerardsimons/Git/afstuderen/common/sys/intrinsics.h \
+  /Users/gerardsimons/Git/afstuderen/common/math/vec3.h \
+  /Users/gerardsimons/Git/afstuderen/common/math/vector3b_sse.h \
+  /Users/gerardsimons/Git/afstuderen/common/simd/sse.h \
+  /Users/gerardsimons/Git/afstuderen/common/simd/smmintrin_emu.h \
+  /Users/gerardsimons/Git/afstuderen/common/simd/sseb.h \
+  /Users/gerardsimons/Git/afstuderen/common/simd/ssei.h \
+  /Users/gerardsimons/Git/afstuderen/common/simd/ssef.h \
+  /Users/gerardsimons/Git/afstuderen/common/math/vector3i_sse.h \
+  /Users/gerardsimons/Git/afstuderen/common/math/vector3f_sse.h \
+  /Users/gerardsimons/Git/afstuderen/devices/device/loaders/loaders.h \
+  /Users/gerardsimons/Git/afstuderen/devices/device/loaders/obj_loader.h \
+  /Users/gerardsimons/Git/afstuderen/common/sys/filename.h \
+  /Users/gerardsimons/Git/afstuderen/devices/device/device.h \
+  /Users/gerardsimons/Git/afstuderen/devices/device_singleray/dataconnector.h \
+  /Users/gerardsimons/Git/afstuderen/devices/device/handle.h \
+  /Users/gerardsimons/Git/afstuderen/devices/device/loaders/xml_loader.h

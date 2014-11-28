@@ -24,43 +24,16 @@ protected:
 	//Whether the view should be redrawn
 	bool dirty;
 	
-	//constructor
-	RIVDataView(RIVDataSet *dataset, int x, int y, int width, int height, int paddingX, int paddingY, RIVColorProperty* colorProperty, RIVSizeProperty* sizeProperty) {
-		this->x = x;
-		this->y = y;
-		
-		this->width = width;
-		this->height = height;
-		
-		this->paddingX = paddingX;
-		this->paddingY = paddingY;
-		
-		this->colorProperty = colorProperty;
-		this->sizeProperty = sizeProperty;
-		
-		this->dataset = dataset;
+	RIVDataView(RIVDataSet* dataset, RIVColorProperty* colorProperty, RIVSizeProperty* sizeProperty, int x, int y, int width, int height)
+	:	x(x), y(y), width(width), height(height), colorProperty(colorProperty), sizeProperty(sizeProperty) {
+
 	};
-	RIVDataView(RIVDataSet* dataset, int x, int y, int width, int height, int paddingX, int paddingY) {
-		this->x = x;
-		this->y = y;
+	
+	RIVDataView(RIVDataSet* dataset, int x, int y, int width, int height)
+	:	x(x), y(y), width(width), height(height) {
 		
-		this->width = width;
-		this->height = height;
-		
-		this->paddingX = paddingX;
-		this->paddingY = paddingY;
-		
-		this->dataset = dataset;
-	}
-	RIVDataView(RIVDataSet* dataset, RIVColorProperty* colorProperty_, RIVSizeProperty* sizeProperty_) {
-		this->dataset = dataset;
-		colorProperty = colorProperty_;
-		sizeProperty = sizeProperty_;
 	};
-	RIVDataView(RIVDataSet* dataset) {
-		this->dataset = dataset;
-	}
-	~RIVDataView(void) { /* Delete some stuff I guess */ };
+
 public:
 	//properties
 	int x,y;
@@ -95,7 +68,7 @@ public:
 	}
 	static void DrawInstances() { throw std::runtime_error("Draw instances not implemented."); };
 	static void ReshapeInstances(int newWidth, int newHeight) { throw std::runtime_error("Reshape instances not implemented."); };
-	static bool HandleKeyInstances(int keycode,int x,int y) { return false; }; //Not required
+	static void HandleKeyInstances(int keycode,int x,int y) { return false; }; //Not required
 	
 	//must implement
 	virtual void Reshape(int newWidth, int newHeight) = 0;

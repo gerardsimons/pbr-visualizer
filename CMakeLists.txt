@@ -16,7 +16,11 @@
 
 PROJECT(embree)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+
+# Qt library
+find_package(Qt5Widgets)
+find_package(Qt5OpenGL)
 
 IF(COMMAND cmake_policy)
   CMAKE_POLICY(SET CMP0003 NEW)

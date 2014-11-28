@@ -22,7 +22,7 @@
 		
 		static RIVHeatMapView* instance;
 		
-		RIVHeatMapView(RIVDataSet* dataset) : RIVDataView(dataset) {
+		RIVHeatMapView(RIVDataSet* dataset, int x, int y, int width, int height) : RIVDataView(dataset, x, y, width, height) {
 			instance = this;
 			computeHeatMap();
 		};

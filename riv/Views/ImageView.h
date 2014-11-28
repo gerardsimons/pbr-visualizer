@@ -23,7 +23,7 @@
 class RIVImageView : public RIVDataView, public RIVDataSetListener {
 public:
 //    RIVImageView(RIVDataSet* dataset,  BMPImage* image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* colorProperty,RIVSizeProperty* sizeProperty);
-    RIVImageView(RIVDataSet* dataset,  EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty *size);
+    RIVImageView(int parentWindow, RIVDataSet* dataset, EMBREERenderer* renderer, int x, int y, int width, int height);
     
     static void DrawInstances();
     static void ReshapeInstances(int newWidth,int newHeight);
@@ -31,7 +31,7 @@ public:
     static void Motion(int x, int y);
     
     virtual void Draw(); //Override
-    void Reshape(int newWidth, int newHeight);
+    virtual void Reshape(int newWidth, int newHeight);
 	virtual bool HandleMouse(int,int,int,int);
 	virtual bool HandleMouseMotion(int x, int y);
 	
@@ -40,7 +40,7 @@ public:
 	void OnFiltersChanged();
 	void OnDataChanged();
 	
-	static int windowHandle;
+	int windowHandle;
 private:
 	static std::vector<RIVImageView*> instances;
 	

@@ -10,7 +10,6 @@
 #include "../helper.h"
 #include "../Geometry/Geometry.h"
 #include "../reporter.h"
-#include "../trackball.h"
 #include "../Graphics/ColorPalette.h"
 #include "../Graphics/graphics_helper.h"
 
@@ -26,28 +25,27 @@
 
 //Init instance to draw
 std::vector<RIV3DView*> RIV3DView::instances;
-int RIV3DView::windowHandle = -1;
 
-RIV3DView::RIV3DView(RIVDataSet* dataset, EMBREERenderer* rendererOne, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty)
-	: RIVDataView(dataset,x,y,width,height,paddingX,paddingY,colorProperty,sizeProperty) {
+RIV3DView::RIV3DView(int parentWindow, RIVDataSet* dataset, EMBREERenderer* rendererOne, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty,int x, int y, int width, int height)
+	: RIVDataView(dataset,colorProperty,sizeProperty,x,y,width,height) {
+		
 	this->rendererOne = rendererOne;
     identifier = "3DView";
+		
+	windowHandle = glutCreateSubWindow(parentWindow, x, y, width, height);
+	glutSetWindow(windowHandle);
+	glutDisplayFunc(RIV3DView::DrawInstances);
+	//	glutDisplayFunc(doNothing);
+//	glutReshapeFunc(RIV3DView::ReshapeInstances);
+	glutMouseFunc(RIV3DView::Mouse);
+	glutMotionFunc(RIV3DView::Motion);
+	glutSpecialFunc(RIV3DView::HandleKeyInstances);
 		
 	GetSceneData();
 		
 	ResetGraphics();
 		
 	instances.push_back(this);
-};
-
-RIV3DView::RIV3DView(RIVDataSet* dataset,EMBREERenderer* rendererOne, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,colorProperty,sizeProperty) {
-	this->rendererOne = rendererOne;
-	instances.push_back(this);
-    identifier = "3DView";
-	
-	GetSceneData();
-	
-	ResetGraphics();
 };
 
 void RIV3DView::GetSceneData() {
@@ -77,8 +75,8 @@ void RIV3DView::Reshape(int newWidth, int newHeight) {
     
 //    selectionBox = Box3D(0,0,0,1.F,1.F,1.F);
     
-    tbInitTransform();
-    tbHelp();
+    trackball.tbInitTransform();
+//    tbHelp();
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glViewport(0, 0, width, height);
@@ -200,7 +198,7 @@ void RIV3DView::Draw() {
     
 //    printf("eye (x,y,z) * modelScale = (%f,%f,%f)\n",-eye.x * modelData.GetScale(),-eye.y * modelData.GetScale(),-eye.z * modelData.GetScale());
     
-    tbVisuTransform();
+    trackball.tbVisuTransform();
     
     drawCoordSystem();
 	
@@ -624,7 +622,7 @@ void RIV3DView::OnFiltersChanged() {
 	ResetGraphics();
 	
 	int currentWindow = glutGetWindow();
-	glutSetWindow(RIV3DView::windowHandle);
+	glutSetWindow(windowHandle);
 	glutPostRedisplay();
 	//Return window to given window
 	glutSetWindow(currentWindow);
@@ -737,7 +735,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 		}
 		
 		isDragging = true;
-		tbMouseFunc(button, state, width-x, y);
+		trackball.tbMouseFunc(button, state, width-x, y);
 		return true;
 	}
 	else {
@@ -752,7 +750,7 @@ bool RIV3DView::HandleMouseMotion(int x, int y) {
 //	return true;
     y = height - y;
     if(isDragging) {
-        tbMotionFunc(width-x, y);
+        trackball.tbMotionFunc(width-x, y);
 		glutPostRedisplay();
         return true;
     }

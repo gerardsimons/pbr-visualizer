@@ -16,7 +16,7 @@
 #include "../Geometry/MeshModel.h"
 #include "../Octree/Octree.h"
 #include "../Geometry/TriangleMeshGroup.h"
-
+#include "../trackball.h"
 #include "devices/device_singleray/embree_renderer.h"
 
 #include <limits>
@@ -65,6 +65,10 @@ protected:;
 	bool pathsCreated = false;
 	
 	static std::vector<RIV3DView*> instances;
+	
+	Trackball trackball;
+	
+	int windowHandle;
 
 	//Generate a octree from the unfiltered intersection points
 	void generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize);
@@ -83,13 +87,10 @@ protected:;
 	void createPaths();
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
-    RIV3DView(RIVDataSet* dataset,EMBREERenderer* rendererOne,int,int,int,int,int,int,RIVColorProperty*,RIVSizeProperty*);
-    RIV3DView(RIVDataSet* dataset,EMBREERenderer* rendererOne,RIVColorProperty*,RIVSizeProperty*);
+    RIV3DView(int parentWindow, RIVDataSet* dataset,EMBREERenderer* rendererOne,RIVColorProperty*,RIVSizeProperty*,int x,int y,int width,int height);
 	
 	//Extract data about the scene from the embree renderer object
 	void GetSceneData();
-	
-	static int windowHandle;
 	
     void Reshape(int newWidth, int newHeight);
     void Draw();

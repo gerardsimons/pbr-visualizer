@@ -1,0 +1,3935 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		37F0F2F3C1164578BE4EDBEA /* ZERO_CHECK */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 935787BDF9B446339DD5B110 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildPhases = (
+				C3FEDE2847314BC6AF221B2C /* CMake Rules */,
+			);
+			dependencies = (
+			);
+			name = ZERO_CHECK;
+			productName = ZERO_CHECK;
+		};
+		4FB14CB4D68A41DEAE574AC6 /* riv_main_automoc */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 39A81C6BFD1E44C1ABDF0FC4 /* Build configuration list for PBXAggregateTarget "riv_main_automoc" */;
+			buildPhases = (
+				34A411E2318448CFA8C802B4 /* CMake Rules */,
+			);
+			dependencies = (
+			);
+			name = riv_main_automoc;
+			productName = riv_main_automoc;
+		};
+		A2B0D79D85A4427293CCEE9A /* ALL_BUILD */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 9455D5BE88A5454698DB909B /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildPhases = (
+				956C0331B4CD426D86968B46 /* CMake Rules */,
+			);
+			dependencies = (
+				1A58B24C4DF5492297C3D945 /* PBXTargetDependency */,
+				2AC2B73F0D244223B9977057 /* PBXTargetDependency */,
+				66BDD9AEB9BE45649C104FC6 /* PBXTargetDependency */,
+				7D9DFFA3F5294C3083C6169B /* PBXTargetDependency */,
+				5E4D4D76856E4962BD00876A /* PBXTargetDependency */,
+				CDA2BDD203D6462FA3F69383 /* PBXTargetDependency */,
+				5774AC0E3C634911863D5821 /* PBXTargetDependency */,
+				D4FFB7337338464C8D62128A /* PBXTargetDependency */,
+				F0BE38887A4546DB9DE0EAC2 /* PBXTargetDependency */,
+				0D456F91D5AA4B39AE3087E7 /* PBXTargetDependency */,
+			);
+			name = ALL_BUILD;
+			productName = ALL_BUILD;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		006A74CC5F2144D68015811A /* integratorrenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38F60323124E4FE08F513D16 /* integratorrenderer.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		06D40C9BDEAC402CA06F3945 /* handle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A54101386214AE4A7E8EAAE /* handle.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		08173E166DE149D1877ABA40 /* loadppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 299BBA6B5A404F2D81E31A57 /* loadppm.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		08E909296FFF48E8A37F250D /* DataSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5807F3AD07BD4079AC203506 /* DataSet.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		0A059E052BBF4C7DB20B8244 /* MeshModelGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 762853968181473BBCA974D5 /* MeshModelGroup.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		0ACE1E236FC643E8B73C62AF /* embree_renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8795955FDDA46D7A7E1339E /* embree_renderer.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		0BABB29235F6428D8946D330 /* loaders.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A5077C1367B041ACBB77AD92 /* loaders.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		0BCE850F1FF54A2E95635796 /* ClusterSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8882675ACC41B1A57B4B92 /* ClusterSet.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		0D7B99AD8F78409D8E1B3947 /* ParallelCoordsView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 392D5F03FB2D45659E47D951 /* ParallelCoordsView.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		0F2D47A861C14B92962008D0 /* TriangleMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECCDCC4C5B354F27BFA017AB /* TriangleMesh.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		10883A8C26B54A4AA33CE9A2 /* mutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65D6280CEE7F44B4901363EF /* mutex.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		14A6972119B74465A71DC0FA /* singleray_device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 327C782C0F794C34A7CE5D49 /* singleray_device.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		161359D9ED6840ECBD3FD258 /* xml2obj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B7BB79474354331BCA18E14 /* xml2obj.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		173673197C1F41CC968F5C9C /* platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28EFB5BECF244D33908C5EF4 /* platform.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		19D98C3739444F97AEBDC0F7 /* library.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 901087C76D504A7AAFA37884 /* library.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		1E1BBC07F2B344AD8F754DAC /* network.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1297736B1B21492E93B5E751 /* network.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		23D50825FEA449C88E05A4D3 /* DataController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7294FF39B144B60BA550B95 /* DataController.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		284C4280FEF349B5B131EF27 /* hdrilight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0482C88A97D44364A3668B89 /* hdrilight.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		2F34A748BA694890915C46E0 /* ColorMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65A58B7AA5224044A8036CE7 /* ColorMap.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		303EE515F7B54AAB8FD89DF7 /* device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 752A90D17F9D4D0C9AB71418 /* device.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		3434975717834038857EBA9B /* obj2xml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FD3A93112FA74EDCB61CD979 /* obj2xml.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		399EBC3450E34676A852D880 /* pfm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1006ACC3184A4EDBA8837414 /* pfm.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		3CCA692CBBB1483EB15B515E /* riv_main_automoc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F40CD512B0FC46AAB23C9A1F /* riv_main_automoc.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		4258119248CA4991924C8BEF /* 3DView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E2FEC1B88548492EB6211FEF /* 3DView.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		4425E64613994D4AB7E38F22 /* xmlWriter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A22F3492A3504F2AA72029B2 /* xmlWriter.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		4693F2ED8D4047E2B368BF24 /* taskscheduler_sys.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7523403B9E914BC391E54B3B /* taskscheduler_sys.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		4989B6AD23294AACAE81A6EF /* stringstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E3BDF1C81984D3A8B7A2DFF /* stringstream.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		4A2C72F5A4F5456492CBDAFF /* magick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88066C9CC97642DD824C9B21 /* magick.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		4C1FD31EB7284A0FBDF0DD92 /* xml_parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BAE459B159D844538136A00B /* xml_parser.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		55FA337EB066438D81275685 /* tga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2E89ADBFEC28402E949F8BFB /* tga.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		571B282944F14D668CD3F18E /* Table.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EF80A260A71043E086678DED /* Table.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		5873CA9BEA20432FAE3F2ABE /* Octree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B807D9BB96484CEDBF28A77F /* Octree.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		640B84361E604E4D9C910C97 /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 52425C9796664376AB9329B7 /* thread.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		64BDFEA2F0C9406FBB52F262 /* dataconnector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CC6CE5442D34C79B4812368 /* dataconnector.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		6A673B0F211E4FA4BBB8E1E3 /* sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7A64C6AE5099426790A0BDE7 /* sampler.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		6D50F1D5081D4689A7EC895C /* filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43284AB51322449FA5EB13D6 /* filter.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		6EB0608037B1442FBA05DE52 /* reporter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B224B92295F4AF4BFDDA151 /* reporter.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		7147743BAD3A420186AAA3E5 /* ppm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B906E05D9A98430383E33987 /* ppm.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		72688A651343497EA2BAC695 /* progress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF68A8AF55A540D696AB0336 /* progress.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		7539B92BE5EA439993945E0D /* sysinfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04EEFAEBD40744388504FA9A /* sysinfo.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		7BF220B6D1594F0891D9D3BF /* taskscheduler_mic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 582278B51DAD49409199B772 /* taskscheduler_mic.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		7CE4B65FBC09441F88EFD8A2 /* filename.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 72A57D7FA1144EBFBF103CA1 /* filename.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		836BE1B02FE0482594CA24BE /* Filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89388217CE1F456EA5B99221 /* Filter.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		8512C1BA7FD5423C9F5DC790 /* distribution2d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FABEB3A597C4E009725DEAC /* distribution2d.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		86D49534ADF6466E9808FFBE /* Iterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A88F1DEF62B4601B2BFC0B6 /* Iterator.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		875C75AE1F4C4518A4F00500 /* trianglemesh_normals.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41A7316BBD3B409289C66E80 /* trianglemesh_normals.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		87FAFFCF48A74E8C81152F72 /* Record.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 082E6A29898B43209849F059 /* Record.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		881567BF887B41889EEA163B /* TriangleMeshGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A800A6528D943CC8209A04E /* TriangleMeshGroup.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		8C73849F1FA84D69826F60CE /* objLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4637D26B6B5A4A4991437BF9 /* objLoader.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		8F21A7493B16402CB838AB15 /* Path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 10BA0E7CC1EA49FDBD62F3DB /* Path.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		9EF4B4098A7D4B1393AAB84C /* debugrenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC44EEDDF654382B0669E4D /* debugrenderer.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		A4098647E011402EA4C1E1A1 /* trackball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6D190D3AC1644055B43026B6 /* trackball.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		A48B13142C11425AA7AE4EDB /* exr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C59C90CCD8CD42B9862EC54D /* exr.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		B0CE68D8DA82476AB4C838E3 /* PBRTConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9EE93D0439A04489ADFE2237 /* PBRTConfig.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		B241275D610A47218BBC53D4 /* ImageView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6AD29AE55C03409097A75F83 /* ImageView.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		B27D56D4BE064DCBA29C1257 /* taskscheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59B5B7176252428C92DB07B6 /* taskscheduler.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		B564D7FDC0BF4E1A840A8F40 /* ColorPalette.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9A0479DADE2C453B8F57C733 /* ColorPalette.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		B5AFFDF3E61C4C21850CE443 /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A17C41667FEC40DB8584EF7F /* image.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		BB744F8B88494D03AF557EE5 /* condition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A3AFEA7E59A41BEB93DFD3B /* condition.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		BDFD1D3170A24A448CFE8E8F /* obj_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1A6FF3AE45544ED84AE6291 /* obj_loader.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		C1D657349EE1497B9EAF0067 /* xml_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E0463EB5D4B4DC7BA864F0D /* xml_loader.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		C4904FD2CC264DB28C3F916B /* trianglemesh_full.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 93E82E52069F47D1B034B39C /* trianglemesh_full.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		C5138F9EC4F84882ACDAE53D /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65AA26F6E6E4463DA33EB873 /* main.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		CA3D365C022248349D78A99B /* string.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D41A3AD8B3E04B59899535A5 /* string.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		D201FC98C82C4FF8A8BC5161 /* tokenstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18654CB633CD43EDB8F3AC83 /* tokenstream.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		D59084A5970C49F38FD365EB /* pathtraceintegrator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C414D333913438F9B673456 /* pathtraceintegrator.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		DAD68F4208774023B86ACCF5 /* BMPImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D388EF6751824C9A845E65F4 /* BMPImage.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		DF1AC4DAE4D5426D8A8D330B /* ParallelCoordsAxis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B93C4A3EA4C244F0A39174B9 /* ParallelCoordsAxis.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		E1E943771A287DC7004BB629 /* RIVWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E1E943751A287DC7004BB629 /* RIVWindow.cpp */; };
+		F46AEBB101D64525ACAF1125 /* helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 73389DE4C77A40C5AD6A2445 /* helper.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		F48499017C3549ED81684505 /* distribution1d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7B51D21BF244BD8B15DB56D /* distribution1d.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		F4F41ECFCCC54E6E80818E5F /* HeatMapView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8D81EC3AD1AB4F1D90444E39 /* HeatMapView.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		F691525F4E424C66989F42A0 /* Cluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91D21AEF2C15426C94C1310F /* Cluster.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		F697F316106B438598A0923D /* OctreeNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A96CD38328B54E1DA0733EFB /* OctreeNode.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+		FC96939DF9B74C6AA71F995A /* Reference.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6AD91961E1E7467594F11067 /* Reference.cpp */; settings = {COMPILER_FLAGS = ""; }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		03B9ECC1066F4DD9B590FF1D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D13198E96AE745C29CAEC922;
+			remoteInfo = sys;
+		};
+		04A0C2EE29354E3CAC205BA9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4D4E60E0C9434567AD73D53A;
+			remoteInfo = image;
+		};
+		0925B5FB002241048BDF1392 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DE51E4EFB2B64DAC89E8E3AB;
+			remoteInfo = device;
+		};
+		11C742434C6D403985747197 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4D4E60E0C9434567AD73D53A;
+			remoteInfo = image;
+		};
+		12FABA8244694F5282CCC8A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D13198E96AE745C29CAEC922;
+			remoteInfo = sys;
+		};
+		192CDA65A30249DD9F9377EE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 601A77148E414CC98CC98CEF;
+			remoteInfo = lexers;
+		};
+		1DB4504DAE3843AD9BFFA0D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4D4E60E0C9434567AD73D53A;
+			remoteInfo = image;
+		};
+		2655D65410034513A6BE92F9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 601A77148E414CC98CC98CEF;
+			remoteInfo = lexers;
+		};
+		26F90D3F74D444E6B9EDEC97 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BC4EFF004A464140811F1BAF;
+			remoteInfo = loaders;
+		};
+		33532E1E96E94F929C7F75BC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 37F0F2F3C1164578BE4EDBEA;
+			remoteInfo = ZERO_CHECK;
+		};
+		372108BAD8B0494782917830 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 37F0F2F3C1164578BE4EDBEA;
+			remoteInfo = ZERO_CHECK;
+		};
+		3B38D679831C44EC88433DE8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 37F0F2F3C1164578BE4EDBEA;
+			remoteInfo = ZERO_CHECK;
+		};
+		3C5BE85C4CE04746BC724065 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F6E11400B17F4A699AFCD035;
+			remoteInfo = xml2obj;
+		};
+		4113A6FF8C85461CA545026E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 601A77148E414CC98CC98CEF;
+			remoteInfo = lexers;
+		};
+		4353190B3B414E78B473C6FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4D4E60E0C9434567AD73D53A;
+			remoteInfo = image;
+		};
+		48F39E74890D4E4A9AC4CFC0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 37F0F2F3C1164578BE4EDBEA;
+			remoteInfo = ZERO_CHECK;
+		};
+		50496ABA293F4AFE9C7716C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 57B0A0C0B1554CC4B69579EE;
+			remoteInfo = obj2xml;
+		};
+		576457D93E1D4B83A901D260 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B2894F9055E14D1DAA55E5FC;
+			remoteInfo = device_singleray;
+		};
+		5916E2675FB64E0EB508F78E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4D4E60E0C9434567AD73D53A;
+			remoteInfo = image;
+		};
+		5CFED931C4984B2D9AFB7C09 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D13198E96AE745C29CAEC922;
+			remoteInfo = sys;
+		};
+		6E10979053E24368B7150015 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 37F0F2F3C1164578BE4EDBEA;
+			remoteInfo = ZERO_CHECK;
+		};
+		754D1ED4BE8542CCAABEBB4E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E8D17A7CC4C84190A88F55AC;
+			remoteInfo = riv_main;
+		};
+		76C80A3BA28B469BB7127640 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 601A77148E414CC98CC98CEF;
+			remoteInfo = lexers;
+		};
+		8358602FB1EB419B85792CBE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D13198E96AE745C29CAEC922;
+			remoteInfo = sys;
+		};
+		83D28BD5244C49E5934DDE4E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BC4EFF004A464140811F1BAF;
+			remoteInfo = loaders;
+		};
+		8F2ACF15C1444304979C89F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D13198E96AE745C29CAEC922;
+			remoteInfo = sys;
+		};
+		90A3A358E6CD4184A0938FD2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D13198E96AE745C29CAEC922;
+			remoteInfo = sys;
+		};
+		90CAA4024B104397B3668091 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 37F0F2F3C1164578BE4EDBEA;
+			remoteInfo = ZERO_CHECK;
+		};
+		970F607B5A3C4774B309FEEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B2894F9055E14D1DAA55E5FC;
+			remoteInfo = device_singleray;
+		};
+		A962A739825B46B09DF64737 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D13198E96AE745C29CAEC922;
+			remoteInfo = sys;
+		};
+		ACD7C29CED1644A68D0D4DE5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BC4EFF004A464140811F1BAF;
+			remoteInfo = loaders;
+		};
+		B3CC5AF4D4C8451E8AEE5386 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4FB14CB4D68A41DEAE574AC6;
+			remoteInfo = riv_main_automoc;
+		};
+		B92844B0DB7C400B9B7E0DC2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DE51E4EFB2B64DAC89E8E3AB;
+			remoteInfo = device;
+		};
+		B9699F6715B64768891627D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4D4E60E0C9434567AD73D53A;
+			remoteInfo = image;
+		};
+		C4B983535A1D4C17B3334343 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 37F0F2F3C1164578BE4EDBEA;
+			remoteInfo = ZERO_CHECK;
+		};
+		C91492FB53B54107B7A58F8C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 37F0F2F3C1164578BE4EDBEA;
+			remoteInfo = ZERO_CHECK;
+		};
+		D1DB5E0C046F449793B67F25 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 37F0F2F3C1164578BE4EDBEA;
+			remoteInfo = ZERO_CHECK;
+		};
+		DD7D96B1AAC748A7958DCB93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DE51E4EFB2B64DAC89E8E3AB;
+			remoteInfo = device;
+		};
+		E4D51D17788D4F7CBEB21992 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 601A77148E414CC98CC98CEF;
+			remoteInfo = lexers;
+		};
+		E519DBE599434C129AB6BC78 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 37F0F2F3C1164578BE4EDBEA;
+			remoteInfo = ZERO_CHECK;
+		};
+		EC5DA61E4CD04D59A3B02B6E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D13198E96AE745C29CAEC922;
+			remoteInfo = sys;
+		};
+		F3A4B1F5EBC04F0C881F8C13 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDC26432EC64E0480B18756 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BC4EFF004A464140811F1BAF;
+			remoteInfo = loaders;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		00650519C41A458B948038E9 /* Table.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Table.h; path = riv/Data/Table.h; sourceTree = SOURCE_ROOT; };
+		0482C88A97D44364A3668B89 /* hdrilight.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = hdrilight.cpp; path = devices/device_singleray/lights/hdrilight.cpp; sourceTree = SOURCE_ROOT; };
+		04EEFAEBD40744388504FA9A /* sysinfo.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = sysinfo.cpp; path = common/sys/sysinfo.cpp; sourceTree = SOURCE_ROOT; };
+		069B1EA5EA7D40AE8017B307 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = devices/device_singleray/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		082E6A29898B43209849F059 /* Record.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Record.cpp; path = riv/Data/Record.cpp; sourceTree = SOURCE_ROOT; };
+		0877725974264D95BA8AC89D /* Property.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Property.h; path = riv/Graphics/Property.h; sourceTree = SOURCE_ROOT; };
+		09437A4FE01D4B0E92D982BE /* ImageView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ImageView.h; path = riv/Views/ImageView.h; sourceTree = SOURCE_ROOT; };
+		0A7579012DD1418C981E9F04 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = riv/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		0AFDAB26A32A4D6FB6395406 /* ClusterSet.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ClusterSet.h; path = riv/Data/ClusterSet.h; sourceTree = SOURCE_ROOT; };
+		0B224B92295F4AF4BFDDA151 /* reporter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = reporter.cpp; path = riv/reporter.cpp; sourceTree = SOURCE_ROOT; };
+		0BC21C4ACF494249BFF05297 /* libsys.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libsys.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1006ACC3184A4EDBA8837414 /* pfm.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = pfm.cpp; path = common/image/pfm.cpp; sourceTree = SOURCE_ROOT; };
+		10BA0E7CC1EA49FDBD62F3DB /* Path.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Path.cpp; path = riv/Geometry/Path.cpp; sourceTree = SOURCE_ROOT; };
+		1131FC1BA13A4B578B9404B7 /* Filter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Filter.h; path = riv/Data/Filter.h; sourceTree = SOURCE_ROOT; };
+		1297736B1B21492E93B5E751 /* network.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = network.cpp; path = common/sys/network.cpp; sourceTree = SOURCE_ROOT; };
+		12A374E3829941CA9E4BAA87 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = devices/device/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		184EE641F1FF46DEA65060CE /* TriangleMeshGroup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = TriangleMeshGroup.h; path = riv/Geometry/TriangleMeshGroup.h; sourceTree = SOURCE_ROOT; };
+		18654CB633CD43EDB8F3AC83 /* tokenstream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = tokenstream.cpp; path = common/lexers/tokenstream.cpp; sourceTree = SOURCE_ROOT; };
+		195FCD6D1F334B59886E31C3 /* DataView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DataView.h; path = riv/Views/DataView.h; sourceTree = SOURCE_ROOT; };
+		1D515C17BA86488FA85BA143 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = common/sys/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		1E3BDF1C81984D3A8B7A2DFF /* stringstream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = stringstream.cpp; path = common/lexers/stringstream.cpp; sourceTree = SOURCE_ROOT; };
+		20F157DC2D4A41049623A9EA /* libdevice_singleray.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libdevice_singleray.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		211F4C82DB6A46048B63286E /* RIVVector.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = RIVVector.h; path = riv/Geometry/RIVVector.h; sourceTree = SOURCE_ROOT; };
+		246983EB03094C1CAD0B113D /* SizeProperty.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = SizeProperty.h; path = riv/Graphics/SizeProperty.h; sourceTree = SOURCE_ROOT; };
+		25A53C51BF1843FB8FB3C15C /* DataSetListener.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DataSetListener.h; path = riv/Data/DataSetListener.h; sourceTree = SOURCE_ROOT; };
+		264E13C9CD864DC39E29280A /* OctreeNode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = OctreeNode.h; path = riv/Octree/OctreeNode.h; sourceTree = SOURCE_ROOT; };
+		28EFB5BECF244D33908C5EF4 /* platform.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = platform.cpp; path = common/sys/platform.cpp; sourceTree = SOURCE_ROOT; };
+		299BBA6B5A404F2D81E31A57 /* loadppm.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = loadppm.cpp; path = riv/Graphics/loadppm.cpp; sourceTree = SOURCE_ROOT; };
+		2A3AFEA7E59A41BEB93DFD3B /* condition.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = condition.cpp; path = common/sys/sync/condition.cpp; sourceTree = SOURCE_ROOT; };
+		2A54101386214AE4A7E8EAAE /* handle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = handle.cpp; path = devices/device/handle.cpp; sourceTree = SOURCE_ROOT; };
+		2C414D333913438F9B673456 /* pathtraceintegrator.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = pathtraceintegrator.cpp; path = devices/device_singleray/integrators/pathtraceintegrator.cpp; sourceTree = SOURCE_ROOT; };
+		2C956A1C57AE4EF9BD0B3E68 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = devices/device/loaders/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		2E89ADBFEC28402E949F8BFB /* tga.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = tga.cpp; path = common/image/tga.cpp; sourceTree = SOURCE_ROOT; };
+		327C782C0F794C34A7CE5D49 /* singleray_device.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = singleray_device.cpp; path = devices/device_singleray/api/singleray_device.cpp; sourceTree = SOURCE_ROOT; };
+		34464F7BC0E64201BB8833EF /* ColorProperty.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ColorProperty.h; path = riv/Graphics/ColorProperty.h; sourceTree = SOURCE_ROOT; };
+		3752423D591940648B28DD74 /* ParallelCoordsView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ParallelCoordsView.h; path = riv/Views/ParallelCoordsView.h; sourceTree = SOURCE_ROOT; };
+		378BF784444E457FB3F032EF /* Ray.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Ray.h; path = riv/Geometry/Ray.h; sourceTree = SOURCE_ROOT; };
+		38F60323124E4FE08F513D16 /* integratorrenderer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = integratorrenderer.cpp; path = devices/device_singleray/renderers/integratorrenderer.cpp; sourceTree = SOURCE_ROOT; };
+		392D5F03FB2D45659E47D951 /* ParallelCoordsView.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ParallelCoordsView.cpp; path = riv/Views/ParallelCoordsView.cpp; sourceTree = SOURCE_ROOT; };
+		393203A5822A4780B37D5308 /* matrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = matrix.h; path = riv/Geometry/matrix.h; sourceTree = SOURCE_ROOT; };
+		3A6BBA0C28EB426E848EBF27 /* TriangleMesh.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = TriangleMesh.h; path = riv/Geometry/TriangleMesh.h; sourceTree = SOURCE_ROOT; };
+		41A7316BBD3B409289C66E80 /* trianglemesh_normals.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = trianglemesh_normals.cpp; path = devices/device_singleray/shapes/trianglemesh_normals.cpp; sourceTree = SOURCE_ROOT; };
+		43284AB51322449FA5EB13D6 /* filter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = filter.cpp; path = devices/device_singleray/filters/filter.cpp; sourceTree = SOURCE_ROOT; };
+		43B336FCC0C34B09A615FECE /* MeshModelGroup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = MeshModelGroup.h; path = riv/Geometry/MeshModelGroup.h; sourceTree = SOURCE_ROOT; };
+		4637D26B6B5A4A4991437BF9 /* objLoader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = objLoader.cpp; path = tools/obj2xml/objLoader.cpp; sourceTree = SOURCE_ROOT; };
+		4B7BB79474354331BCA18E14 /* xml2obj.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = xml2obj.cpp; path = tools/xml2obj/xml2obj.cpp; sourceTree = SOURCE_ROOT; };
+		50CB71FA74634F5396FE2727 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		513D2AC767EA40D6AC458F9A /* ParallelCoordsAxis.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ParallelCoordsAxis.h; path = riv/Views/ParallelCoordsAxis.h; sourceTree = SOURCE_ROOT; };
+		52425C9796664376AB9329B7 /* thread.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = thread.cpp; path = common/sys/thread.cpp; sourceTree = SOURCE_ROOT; };
+		53323264041044A69676191D /* OctreeConfig.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = OctreeConfig.h; path = riv/Octree/OctreeConfig.h; sourceTree = SOURCE_ROOT; };
+		5807F3AD07BD4079AC203506 /* DataSet.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = DataSet.cpp; path = riv/Data/DataSet.cpp; sourceTree = SOURCE_ROOT; };
+		582278B51DAD49409199B772 /* taskscheduler_mic.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = taskscheduler_mic.cpp; path = common/sys/taskscheduler_mic.cpp; sourceTree = SOURCE_ROOT; };
+		59B5B7176252428C92DB07B6 /* taskscheduler.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = taskscheduler.cpp; path = common/sys/taskscheduler.cpp; sourceTree = SOURCE_ROOT; };
+		5A88F1DEF62B4601B2BFC0B6 /* Iterator.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Iterator.cpp; path = riv/Data/Iterator.cpp; sourceTree = SOURCE_ROOT; };
+		5CFE82DB774442CC8DBB3733 /* ParallelCoordsAxisGroup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ParallelCoordsAxisGroup.h; path = riv/Views/ParallelCoordsAxisGroup.h; sourceTree = SOURCE_ROOT; };
+		608B80938089498D852B92A6 /* graphics_helper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = graphics_helper.h; path = riv/Graphics/graphics_helper.h; sourceTree = SOURCE_ROOT; };
+		65A58B7AA5224044A8036CE7 /* ColorMap.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ColorMap.cpp; path = riv/Graphics/ColorMap.cpp; sourceTree = SOURCE_ROOT; };
+		65AA26F6E6E4463DA33EB873 /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = main.cpp; path = riv/main.cpp; sourceTree = SOURCE_ROOT; };
+		65D6280CEE7F44B4901363EF /* mutex.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = mutex.cpp; path = common/sys/sync/mutex.cpp; sourceTree = SOURCE_ROOT; };
+		674088B030A4424785C55A03 /* Octree.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Octree.h; path = riv/Octree/Octree.h; sourceTree = SOURCE_ROOT; };
+		6AD29AE55C03409097A75F83 /* ImageView.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ImageView.cpp; path = riv/Views/ImageView.cpp; sourceTree = SOURCE_ROOT; };
+		6AD91961E1E7467594F11067 /* Reference.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Reference.cpp; path = riv/Data/Reference.cpp; sourceTree = SOURCE_ROOT; };
+		6CB2D10C4013479DB99573B0 /* riv_main */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = riv_main; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D190D3AC1644055B43026B6 /* trackball.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = trackball.cpp; path = riv/trackball.cpp; sourceTree = SOURCE_ROOT; };
+		72A57D7FA1144EBFBF103CA1 /* filename.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = filename.cpp; path = common/sys/filename.cpp; sourceTree = SOURCE_ROOT; };
+		72FDB117818445B0956CB6BD /* libloaders.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libloaders.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		73389DE4C77A40C5AD6A2445 /* helper.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = helper.cpp; path = riv/helper.cpp; sourceTree = SOURCE_ROOT; };
+		7523403B9E914BC391E54B3B /* taskscheduler_sys.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = taskscheduler_sys.cpp; path = common/sys/taskscheduler_sys.cpp; sourceTree = SOURCE_ROOT; };
+		752A90D17F9D4D0C9AB71418 /* device.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = device.cpp; path = devices/device/device.cpp; sourceTree = SOURCE_ROOT; };
+		762853968181473BBCA974D5 /* MeshModelGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = MeshModelGroup.cpp; path = riv/Geometry/MeshModelGroup.cpp; sourceTree = SOURCE_ROOT; };
+		7A64C6AE5099426790A0BDE7 /* sampler.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = sampler.cpp; path = devices/device_singleray/samplers/sampler.cpp; sourceTree = SOURCE_ROOT; };
+		7FABEB3A597C4E009725DEAC /* distribution2d.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = distribution2d.cpp; path = devices/device_singleray/samplers/distribution2d.cpp; sourceTree = SOURCE_ROOT; };
+		8041FC04DF7041BD8D3DF3B9 /* ColorMap.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ColorMap.h; path = riv/Graphics/ColorMap.h; sourceTree = SOURCE_ROOT; };
+		88066C9CC97642DD824C9B21 /* magick.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = magick.cpp; path = common/image/magick.cpp; sourceTree = SOURCE_ROOT; };
+		89388217CE1F456EA5B99221 /* Filter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Filter.cpp; path = riv/Data/Filter.cpp; sourceTree = SOURCE_ROOT; };
+		8A7A93CCA4A549ADBBD8A8F5 /* Iterator.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Iterator.h; path = riv/Data/Iterator.h; sourceTree = SOURCE_ROOT; };
+		8C22573E49514AFFAA8E8004 /* libimage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libimage.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8CC6CE5442D34C79B4812368 /* dataconnector.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = dataconnector.cpp; path = devices/device_singleray/dataconnector.cpp; sourceTree = SOURCE_ROOT; };
+		8D81EC3AD1AB4F1D90444E39 /* HeatMapView.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = HeatMapView.cpp; path = riv/Views/HeatMapView.cpp; sourceTree = SOURCE_ROOT; };
+		8E4ED34BB80A4A16A9357F2E /* HeatMapView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = HeatMapView.h; path = riv/Views/HeatMapView.h; sourceTree = SOURCE_ROOT; };
+		8E5D9B4C2BFC4D839CC61DF8 /* Vec3D.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Vec3D.h; path = riv/Geometry/Vec3D.h; sourceTree = SOURCE_ROOT; };
+		901087C76D504A7AAFA37884 /* library.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = library.cpp; path = common/sys/library.cpp; sourceTree = SOURCE_ROOT; };
+		91D21AEF2C15426C94C1310F /* Cluster.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Cluster.cpp; path = riv/Data/Cluster.cpp; sourceTree = SOURCE_ROOT; };
+		93E82E52069F47D1B034B39C /* trianglemesh_full.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = trianglemesh_full.cpp; path = devices/device_singleray/shapes/trianglemesh_full.cpp; sourceTree = SOURCE_ROOT; };
+		9562A44840D440AFA2811BFE /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = common/lexers/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		97C612AF92684113ACA41936 /* Evaluator.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Evaluator.h; path = riv/Graphics/Evaluator.h; sourceTree = SOURCE_ROOT; };
+		99075C889BD14A619AD73A6F /* PBRTConfig.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = PBRTConfig.h; path = riv/PBRTConfig.h; sourceTree = SOURCE_ROOT; };
+		9A0479DADE2C453B8F57C733 /* ColorPalette.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ColorPalette.cpp; path = riv/Graphics/ColorPalette.cpp; sourceTree = SOURCE_ROOT; };
+		9A800A6528D943CC8209A04E /* TriangleMeshGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = TriangleMeshGroup.cpp; path = riv/Geometry/TriangleMeshGroup.cpp; sourceTree = SOURCE_ROOT; };
+		9CC44EEDDF654382B0669E4D /* debugrenderer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = debugrenderer.cpp; path = devices/device_singleray/renderers/debugrenderer.cpp; sourceTree = SOURCE_ROOT; };
+		9E0463EB5D4B4DC7BA864F0D /* xml_loader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = xml_loader.cpp; path = devices/device/loaders/xml_loader.cpp; sourceTree = SOURCE_ROOT; };
+		9EE93D0439A04489ADFE2237 /* PBRTConfig.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = PBRTConfig.cpp; path = riv/PBRTConfig.cpp; sourceTree = SOURCE_ROOT; };
+		A110B0764BD34D85B4801E0D /* DataSet.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DataSet.h; path = riv/Data/DataSet.h; sourceTree = SOURCE_ROOT; };
+		A17C41667FEC40DB8584EF7F /* image.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = image.cpp; path = common/image/image.cpp; sourceTree = SOURCE_ROOT; };
+		A1A6FF3AE45544ED84AE6291 /* obj_loader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = obj_loader.cpp; path = devices/device/loaders/obj_loader.cpp; sourceTree = SOURCE_ROOT; };
+		A22F3492A3504F2AA72029B2 /* xmlWriter.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = xmlWriter.cpp; path = tools/obj2xml/xmlWriter.cpp; sourceTree = SOURCE_ROOT; };
+		A4A65396FC0B4E1FB1EAE7BA /* Cluster.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Cluster.h; path = riv/Data/Cluster.h; sourceTree = SOURCE_ROOT; };
+		A5077C1367B041ACBB77AD92 /* loaders.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = loaders.cpp; path = devices/device/loaders/loaders.cpp; sourceTree = SOURCE_ROOT; };
+		A96CD38328B54E1DA0733EFB /* OctreeNode.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = OctreeNode.cpp; path = riv/Octree/OctreeNode.cpp; sourceTree = SOURCE_ROOT; };
+		AC0A39508E374C2CB5FA038E /* Reference.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Reference.h; path = riv/Data/Reference.h; sourceTree = SOURCE_ROOT; };
+		B50456D873334BDAA19E1E62 /* liblexers.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = liblexers.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B807D9BB96484CEDBF28A77F /* Octree.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Octree.cpp; path = riv/Octree/Octree.cpp; sourceTree = SOURCE_ROOT; };
+		B8795955FDDA46D7A7E1339E /* embree_renderer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = embree_renderer.cpp; path = devices/device_singleray/embree_renderer.cpp; sourceTree = SOURCE_ROOT; };
+		B906E05D9A98430383E33987 /* ppm.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ppm.cpp; path = common/image/ppm.cpp; sourceTree = SOURCE_ROOT; };
+		B93C4A3EA4C244F0A39174B9 /* ParallelCoordsAxis.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ParallelCoordsAxis.cpp; path = riv/Views/ParallelCoordsAxis.cpp; sourceTree = SOURCE_ROOT; };
+		BAE459B159D844538136A00B /* xml_parser.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = xml_parser.cpp; path = devices/device/loaders/xml_parser.cpp; sourceTree = SOURCE_ROOT; };
+		BF96408792BA489AB25119AB /* 3DView.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = 3DView.h; path = riv/Views/3DView.h; sourceTree = SOURCE_ROOT; };
+		C33892104BF44F169FC16A2C /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = tools/xml2obj/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		C50055BCC12742D290279C22 /* reporter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = reporter.h; path = riv/reporter.h; sourceTree = SOURCE_ROOT; };
+		C59C90CCD8CD42B9862EC54D /* exr.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = exr.cpp; path = common/image/exr.cpp; sourceTree = SOURCE_ROOT; };
+		C5A8888CA3BF41A38138EDDA /* Path.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Path.h; path = riv/Geometry/Path.h; sourceTree = SOURCE_ROOT; };
+		C7294FF39B144B60BA550B95 /* DataController.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = DataController.cpp; path = riv/DataController.cpp; sourceTree = SOURCE_ROOT; };
+		CA8113EB428145218E3C9C4B /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = tools/obj2xml/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		CC7842A660694333B33560AC /* helper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = helper.h; path = riv/helper.h; sourceTree = SOURCE_ROOT; };
+		CF8882675ACC41B1A57B4B92 /* ClusterSet.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ClusterSet.cpp; path = riv/Data/ClusterSet.cpp; sourceTree = SOURCE_ROOT; };
+		D21C78FE232F4286A235D022 /* Record.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Record.h; path = riv/Data/Record.h; sourceTree = SOURCE_ROOT; };
+		D388EF6751824C9A845E65F4 /* BMPImage.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = BMPImage.cpp; path = riv/Graphics/BMPImage.cpp; sourceTree = SOURCE_ROOT; };
+		D41A3AD8B3E04B59899535A5 /* string.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = string.cpp; path = common/sys/stl/string.cpp; sourceTree = SOURCE_ROOT; };
+		D7D19E49ECF74FBDB5E89128 /* sandbox.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sandbox.h; path = riv/sandbox.h; sourceTree = SOURCE_ROOT; };
+		DE7E280735DB4B50B827CEAD /* trackball.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = trackball.h; path = riv/trackball.h; sourceTree = SOURCE_ROOT; };
+		DF68A8AF55A540D696AB0336 /* progress.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = progress.cpp; path = devices/device_singleray/renderers/progress.cpp; sourceTree = SOURCE_ROOT; };
+		DF83AC7D64524E7C95FA4442 /* DataController.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DataController.h; path = riv/DataController.h; sourceTree = SOURCE_ROOT; };
+		E1E943751A287DC7004BB629 /* RIVWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RIVWindow.cpp; path = riv/Views/RIVWindow.cpp; sourceTree = "<group>"; };
+		E1E943761A287DC7004BB629 /* RIVWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RIVWindow.h; path = riv/Views/RIVWindow.h; sourceTree = "<group>"; };
+		E2FEC1B88548492EB6211FEF /* 3DView.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = 3DView.cpp; path = riv/Views/3DView.cpp; sourceTree = SOURCE_ROOT; };
+		E5D07A4D51DD4CDD8B8C96F0 /* MeshModel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = MeshModel.h; path = riv/Geometry/MeshModel.h; sourceTree = SOURCE_ROOT; };
+		E91C14BFA775425487017301 /* xml2obj */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = xml2obj; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB7FD263300F46AEBEA539CA /* obj2xml */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = obj2xml; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC2FF8BE557040EB801B1196 /* DataFileReader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = DataFileReader.h; path = riv/Data/DataFileReader.h; sourceTree = SOURCE_ROOT; };
+		EC7332C84E614DC48396134F /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; name = CMakeLists.txt; path = common/image/CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		ECCDCC4C5B354F27BFA017AB /* TriangleMesh.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = TriangleMesh.cpp; path = riv/Geometry/TriangleMesh.cpp; sourceTree = SOURCE_ROOT; };
+		EF80A260A71043E086678DED /* Table.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Table.cpp; path = riv/Data/Table.cpp; sourceTree = SOURCE_ROOT; };
+		F1EE1D6AF87445EE8B3DF504 /* loadppm.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = loadppm.h; path = riv/Graphics/loadppm.h; sourceTree = SOURCE_ROOT; };
+		F393493D30B546FA9E127C41 /* libdevice.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libdevice.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F40CD512B0FC46AAB23C9A1F /* riv_main_automoc.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = riv_main_automoc.cpp; path = xcode/riv/riv_main_automoc.cpp; sourceTree = SOURCE_ROOT; };
+		F7B51D21BF244BD8B15DB56D /* distribution1d.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = distribution1d.cpp; path = devices/device_singleray/samplers/distribution1d.cpp; sourceTree = SOURCE_ROOT; };
+		F8AEEB5D98BB4C5BBCE64458 /* ColorPalette.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ColorPalette.h; path = riv/Graphics/ColorPalette.h; sourceTree = SOURCE_ROOT; };
+		FB04B3A03B724BB88AA8116C /* BMPImage.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = BMPImage.h; path = riv/Graphics/BMPImage.h; sourceTree = SOURCE_ROOT; };
+		FC31152CD8F5498182C6F52E /* Geometry.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = Geometry.h; path = riv/Geometry/Geometry.h; sourceTree = SOURCE_ROOT; };
+		FD3A93112FA74EDCB61CD979 /* obj2xml.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = obj2xml.cpp; path = tools/obj2xml/obj2xml.cpp; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		17EFD87A940E4A77B4D709AA /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		2A7A64FB7E7449F8AD3CB641 /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		2E1AA797AF11431B812726A1 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				752A90D17F9D4D0C9AB71418 /* device.cpp */,
+				2A54101386214AE4A7E8EAAE /* handle.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		2F923AE7825841E3A6A9FBB5 /* obj2xml */ = {
+			isa = PBXGroup;
+			children = (
+				46A68DF5987749BE8F6EA423 /* Source Files */,
+				CA8113EB428145218E3C9C4B /* CMakeLists.txt */,
+			);
+			name = obj2xml;
+			sourceTree = "<group>";
+		};
+		3CE2B96EF1AA4D42AA5CDAD8 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				A5077C1367B041ACBB77AD92 /* loaders.cpp */,
+				A1A6FF3AE45544ED84AE6291 /* obj_loader.cpp */,
+				9E0463EB5D4B4DC7BA864F0D /* xml_loader.cpp */,
+				BAE459B159D844538136A00B /* xml_parser.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		3D4ACE86C9E9423EA5DEEC4A /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				4B7BB79474354331BCA18E14 /* xml2obj.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		450BEA0AE3B2417C89739CAE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		46A68DF5987749BE8F6EA423 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				FD3A93112FA74EDCB61CD979 /* obj2xml.cpp */,
+				4637D26B6B5A4A4991437BF9 /* objLoader.cpp */,
+				A22F3492A3504F2AA72029B2 /* xmlWriter.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		46C759009E3C47738CFA3DD1 /* device_singleray */ = {
+			isa = PBXGroup;
+			children = (
+				BAFE2288BD594B70AD6D8FAA /* Source Files */,
+				069B1EA5EA7D40AE8017B307 /* CMakeLists.txt */,
+			);
+			name = device_singleray;
+			sourceTree = "<group>";
+		};
+		4F5FEE8A1ED64DE580D2F381 /* ZERO_CHECK */ = {
+			isa = PBXGroup;
+			children = (
+				2A7A64FB7E7449F8AD3CB641 /* CMake Rules */,
+				50CB71FA74634F5396FE2727 /* CMakeLists.txt */,
+			);
+			name = ZERO_CHECK;
+			sourceTree = "<group>";
+		};
+		588DF5D6B13F42F7A996C97D /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				1E3BDF1C81984D3A8B7A2DFF /* stringstream.cpp */,
+				18654CB633CD43EDB8F3AC83 /* tokenstream.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		631C66DC9CEF4A8D8ABFC265 /* loaders */ = {
+			isa = PBXGroup;
+			children = (
+				3CE2B96EF1AA4D42AA5CDAD8 /* Source Files */,
+				2C956A1C57AE4EF9BD0B3E68 /* CMakeLists.txt */,
+			);
+			name = loaders;
+			sourceTree = "<group>";
+		};
+		81DEA2792F8247599071D3D6 /* device */ = {
+			isa = PBXGroup;
+			children = (
+				2E1AA797AF11431B812726A1 /* Source Files */,
+				12A374E3829941CA9E4BAA87 /* CMakeLists.txt */,
+			);
+			name = device;
+			sourceTree = "<group>";
+		};
+		82ED73E8A11243198D5D156E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0BC21C4ACF494249BFF05297 /* libsys.a */,
+				8C22573E49514AFFAA8E8004 /* libimage.a */,
+				B50456D873334BDAA19E1E62 /* liblexers.a */,
+				F393493D30B546FA9E127C41 /* libdevice.a */,
+				72FDB117818445B0956CB6BD /* libloaders.a */,
+				20F157DC2D4A41049623A9EA /* libdevice_singleray.a */,
+				EB7FD263300F46AEBEA539CA /* obj2xml */,
+				E91C14BFA775425487017301 /* xml2obj */,
+				6CB2D10C4013479DB99573B0 /* riv_main */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8D390A24D43647DB82B44A0B /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				C59C90CCD8CD42B9862EC54D /* exr.cpp */,
+				A17C41667FEC40DB8584EF7F /* image.cpp */,
+				88066C9CC97642DD824C9B21 /* magick.cpp */,
+				1006ACC3184A4EDBA8837414 /* pfm.cpp */,
+				B906E05D9A98430383E33987 /* ppm.cpp */,
+				2E89ADBFEC28402E949F8BFB /* tga.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		8FE93397C45948C5A535477C /* riv_main_automoc */ = {
+			isa = PBXGroup;
+			children = (
+				17EFD87A940E4A77B4D709AA /* CMake Rules */,
+			);
+			name = riv_main_automoc;
+			sourceTree = "<group>";
+		};
+		90E97A42204D40F4834606B1 /* lexers */ = {
+			isa = PBXGroup;
+			children = (
+				588DF5D6B13F42F7A996C97D /* Source Files */,
+				9562A44840D440AFA2811BFE /* CMakeLists.txt */,
+			);
+			name = lexers;
+			sourceTree = "<group>";
+		};
+		97D48BD4FCA54722AE40EF12 /* image */ = {
+			isa = PBXGroup;
+			children = (
+				8D390A24D43647DB82B44A0B /* Source Files */,
+				EC7332C84E614DC48396134F /* CMakeLists.txt */,
+			);
+			name = image;
+			sourceTree = "<group>";
+		};
+		BAFE2288BD594B70AD6D8FAA /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				327C782C0F794C34A7CE5D49 /* singleray_device.cpp */,
+				8CC6CE5442D34C79B4812368 /* dataconnector.cpp */,
+				B8795955FDDA46D7A7E1339E /* embree_renderer.cpp */,
+				43284AB51322449FA5EB13D6 /* filter.cpp */,
+				2C414D333913438F9B673456 /* pathtraceintegrator.cpp */,
+				0482C88A97D44364A3668B89 /* hdrilight.cpp */,
+				9CC44EEDDF654382B0669E4D /* debugrenderer.cpp */,
+				38F60323124E4FE08F513D16 /* integratorrenderer.cpp */,
+				DF68A8AF55A540D696AB0336 /* progress.cpp */,
+				F7B51D21BF244BD8B15DB56D /* distribution1d.cpp */,
+				7FABEB3A597C4E009725DEAC /* distribution2d.cpp */,
+				7A64C6AE5099426790A0BDE7 /* sampler.cpp */,
+				93E82E52069F47D1B034B39C /* trianglemesh_full.cpp */,
+				41A7316BBD3B409289C66E80 /* trianglemesh_normals.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		BFD4F65D620142BD8C5D79F8 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				72A57D7FA1144EBFBF103CA1 /* filename.cpp */,
+				901087C76D504A7AAFA37884 /* library.cpp */,
+				1297736B1B21492E93B5E751 /* network.cpp */,
+				28EFB5BECF244D33908C5EF4 /* platform.cpp */,
+				D41A3AD8B3E04B59899535A5 /* string.cpp */,
+				2A3AFEA7E59A41BEB93DFD3B /* condition.cpp */,
+				65D6280CEE7F44B4901363EF /* mutex.cpp */,
+				04EEFAEBD40744388504FA9A /* sysinfo.cpp */,
+				59B5B7176252428C92DB07B6 /* taskscheduler.cpp */,
+				582278B51DAD49409199B772 /* taskscheduler_mic.cpp */,
+				7523403B9E914BC391E54B3B /* taskscheduler_sys.cpp */,
+				52425C9796664376AB9329B7 /* thread.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		C92EB6DE8FF6440F8D222FA3 /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		CFA1AC41DC754C1682ECC10C /* riv_main */ = {
+			isa = PBXGroup;
+			children = (
+				D796C7A5B74E49D3BBB8A86C /* Source Files */,
+				D7EF2A25D2994903AC9A29AA /* Header Files */,
+				0A7579012DD1418C981E9F04 /* CMakeLists.txt */,
+			);
+			name = riv_main;
+			sourceTree = "<group>";
+		};
+		D796C7A5B74E49D3BBB8A86C /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				E1E943751A287DC7004BB629 /* RIVWindow.cpp */,
+				E1E943761A287DC7004BB629 /* RIVWindow.h */,
+				91D21AEF2C15426C94C1310F /* Cluster.cpp */,
+				CF8882675ACC41B1A57B4B92 /* ClusterSet.cpp */,
+				5807F3AD07BD4079AC203506 /* DataSet.cpp */,
+				89388217CE1F456EA5B99221 /* Filter.cpp */,
+				5A88F1DEF62B4601B2BFC0B6 /* Iterator.cpp */,
+				082E6A29898B43209849F059 /* Record.cpp */,
+				6AD91961E1E7467594F11067 /* Reference.cpp */,
+				EF80A260A71043E086678DED /* Table.cpp */,
+				C7294FF39B144B60BA550B95 /* DataController.cpp */,
+				762853968181473BBCA974D5 /* MeshModelGroup.cpp */,
+				10BA0E7CC1EA49FDBD62F3DB /* Path.cpp */,
+				ECCDCC4C5B354F27BFA017AB /* TriangleMesh.cpp */,
+				9A800A6528D943CC8209A04E /* TriangleMeshGroup.cpp */,
+				D388EF6751824C9A845E65F4 /* BMPImage.cpp */,
+				65A58B7AA5224044A8036CE7 /* ColorMap.cpp */,
+				9A0479DADE2C453B8F57C733 /* ColorPalette.cpp */,
+				299BBA6B5A404F2D81E31A57 /* loadppm.cpp */,
+				B807D9BB96484CEDBF28A77F /* Octree.cpp */,
+				A96CD38328B54E1DA0733EFB /* OctreeNode.cpp */,
+				9EE93D0439A04489ADFE2237 /* PBRTConfig.cpp */,
+				E2FEC1B88548492EB6211FEF /* 3DView.cpp */,
+				8D81EC3AD1AB4F1D90444E39 /* HeatMapView.cpp */,
+				6AD29AE55C03409097A75F83 /* ImageView.cpp */,
+				B93C4A3EA4C244F0A39174B9 /* ParallelCoordsAxis.cpp */,
+				392D5F03FB2D45659E47D951 /* ParallelCoordsView.cpp */,
+				73389DE4C77A40C5AD6A2445 /* helper.cpp */,
+				65AA26F6E6E4463DA33EB873 /* main.cpp */,
+				0B224B92295F4AF4BFDDA151 /* reporter.cpp */,
+				6D190D3AC1644055B43026B6 /* trackball.cpp */,
+				F40CD512B0FC46AAB23C9A1F /* riv_main_automoc.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		D7EF2A25D2994903AC9A29AA /* Header Files */ = {
+			isa = PBXGroup;
+			children = (
+				A4A65396FC0B4E1FB1EAE7BA /* Cluster.h */,
+				0AFDAB26A32A4D6FB6395406 /* ClusterSet.h */,
+				EC2FF8BE557040EB801B1196 /* DataFileReader.h */,
+				A110B0764BD34D85B4801E0D /* DataSet.h */,
+				25A53C51BF1843FB8FB3C15C /* DataSetListener.h */,
+				1131FC1BA13A4B578B9404B7 /* Filter.h */,
+				8A7A93CCA4A549ADBBD8A8F5 /* Iterator.h */,
+				D21C78FE232F4286A235D022 /* Record.h */,
+				AC0A39508E374C2CB5FA038E /* Reference.h */,
+				00650519C41A458B948038E9 /* Table.h */,
+				DF83AC7D64524E7C95FA4442 /* DataController.h */,
+				FC31152CD8F5498182C6F52E /* Geometry.h */,
+				E5D07A4D51DD4CDD8B8C96F0 /* MeshModel.h */,
+				43B336FCC0C34B09A615FECE /* MeshModelGroup.h */,
+				C5A8888CA3BF41A38138EDDA /* Path.h */,
+				211F4C82DB6A46048B63286E /* RIVVector.h */,
+				378BF784444E457FB3F032EF /* Ray.h */,
+				3A6BBA0C28EB426E848EBF27 /* TriangleMesh.h */,
+				184EE641F1FF46DEA65060CE /* TriangleMeshGroup.h */,
+				8E5D9B4C2BFC4D839CC61DF8 /* Vec3D.h */,
+				393203A5822A4780B37D5308 /* matrix.h */,
+				FB04B3A03B724BB88AA8116C /* BMPImage.h */,
+				8041FC04DF7041BD8D3DF3B9 /* ColorMap.h */,
+				F8AEEB5D98BB4C5BBCE64458 /* ColorPalette.h */,
+				34464F7BC0E64201BB8833EF /* ColorProperty.h */,
+				97C612AF92684113ACA41936 /* Evaluator.h */,
+				0877725974264D95BA8AC89D /* Property.h */,
+				246983EB03094C1CAD0B113D /* SizeProperty.h */,
+				608B80938089498D852B92A6 /* graphics_helper.h */,
+				F1EE1D6AF87445EE8B3DF504 /* loadppm.h */,
+				674088B030A4424785C55A03 /* Octree.h */,
+				53323264041044A69676191D /* OctreeConfig.h */,
+				264E13C9CD864DC39E29280A /* OctreeNode.h */,
+				99075C889BD14A619AD73A6F /* PBRTConfig.h */,
+				BF96408792BA489AB25119AB /* 3DView.h */,
+				195FCD6D1F334B59886E31C3 /* DataView.h */,
+				8E4ED34BB80A4A16A9357F2E /* HeatMapView.h */,
+				09437A4FE01D4B0E92D982BE /* ImageView.h */,
+				513D2AC767EA40D6AC458F9A /* ParallelCoordsAxis.h */,
+				5CFE82DB774442CC8DBB3733 /* ParallelCoordsAxisGroup.h */,
+				3752423D591940648B28DD74 /* ParallelCoordsView.h */,
+				CC7842A660694333B33560AC /* helper.h */,
+				C50055BCC12742D290279C22 /* reporter.h */,
+				D7D19E49ECF74FBDB5E89128 /* sandbox.h */,
+				DE7E280735DB4B50B827CEAD /* trackball.h */,
+			);
+			name = "Header Files";
+			sourceTree = "<group>";
+		};
+		DC3F2BDC44A646F4936EDAEE = {
+			isa = PBXGroup;
+			children = (
+				F9B88FE380484C53B05DAD5B /* Sources */,
+				450BEA0AE3B2417C89739CAE /* Resources */,
+				82ED73E8A11243198D5D156E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E167390A8EFB45359F989413 /* xml2obj */ = {
+			isa = PBXGroup;
+			children = (
+				3D4ACE86C9E9423EA5DEEC4A /* Source Files */,
+				C33892104BF44F169FC16A2C /* CMakeLists.txt */,
+			);
+			name = xml2obj;
+			sourceTree = "<group>";
+		};
+		E32B643650EF4A1B9FEAC168 /* sys */ = {
+			isa = PBXGroup;
+			children = (
+				BFD4F65D620142BD8C5D79F8 /* Source Files */,
+				1D515C17BA86488FA85BA143 /* CMakeLists.txt */,
+			);
+			name = sys;
+			sourceTree = "<group>";
+		};
+		E9678519D7714E37803DB6E4 /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				C92EB6DE8FF6440F8D222FA3 /* CMake Rules */,
+			);
+			name = ALL_BUILD;
+			sourceTree = "<group>";
+		};
+		F9B88FE380484C53B05DAD5B /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				E9678519D7714E37803DB6E4 /* ALL_BUILD */,
+				4F5FEE8A1ED64DE580D2F381 /* ZERO_CHECK */,
+				E32B643650EF4A1B9FEAC168 /* sys */,
+				97D48BD4FCA54722AE40EF12 /* image */,
+				90E97A42204D40F4834606B1 /* lexers */,
+				81DEA2792F8247599071D3D6 /* device */,
+				631C66DC9CEF4A8D8ABFC265 /* loaders */,
+				46C759009E3C47738CFA3DD1 /* device_singleray */,
+				2F923AE7825841E3A6A9FBB5 /* obj2xml */,
+				E167390A8EFB45359F989413 /* xml2obj */,
+				CFA1AC41DC754C1682ECC10C /* riv_main */,
+				8FE93397C45948C5A535477C /* riv_main_automoc */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4D4E60E0C9434567AD73D53A /* image */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A2752F163489486A8F542B6A /* Build configuration list for PBXNativeTarget "image" */;
+			buildPhases = (
+				A6C340334CBA4A769C15EE31 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				67FEFFD6379A437A9828234F /* PBXTargetDependency */,
+				D56EF0F1712A44B1951324C2 /* PBXTargetDependency */,
+			);
+			name = image;
+			productName = image;
+			productReference = 8C22573E49514AFFAA8E8004 /* libimage.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		57B0A0C0B1554CC4B69579EE /* obj2xml */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 72EDD8C353234B40AF7D2917 /* Build configuration list for PBXNativeTarget "obj2xml" */;
+			buildPhases = (
+				3F22EDC93A014D82A1BB169D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4384CFC7817C4716A5332BB1 /* PBXTargetDependency */,
+				7E54F11099834B2DBEF85DC3 /* PBXTargetDependency */,
+				01362DE442E34B7FA4BECD37 /* PBXTargetDependency */,
+			);
+			name = obj2xml;
+			productName = obj2xml;
+			productReference = EB7FD263300F46AEBEA539CA /* obj2xml */;
+			productType = "com.apple.product-type.tool";
+		};
+		601A77148E414CC98CC98CEF /* lexers */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27D42C7A8FF54E1F9A7F34F7 /* Build configuration list for PBXNativeTarget "lexers" */;
+			buildPhases = (
+				CF34ACEF64CD47F1B70196CF /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				37322BFAC30949F09230DBE0 /* PBXTargetDependency */,
+				DE5EB6A4AE6D486E9B545750 /* PBXTargetDependency */,
+			);
+			name = lexers;
+			productName = lexers;
+			productReference = B50456D873334BDAA19E1E62 /* liblexers.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		B2894F9055E14D1DAA55E5FC /* device_singleray */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4763947ECA2D45BB95DB4687 /* Build configuration list for PBXNativeTarget "device_singleray" */;
+			buildPhases = (
+				74815C1A4CFA44C78E6A4378 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				96C066E24C9149A4BAE8DC38 /* PBXTargetDependency */,
+				48B6516DB162464F836B2EE2 /* PBXTargetDependency */,
+				3FB16849C75343DCBDA11B2D /* PBXTargetDependency */,
+				4FE079A1F0514A6B8971E3A7 /* PBXTargetDependency */,
+				15376EC90AC642D58E5CF15F /* PBXTargetDependency */,
+				8974A7714F5048369A19282D /* PBXTargetDependency */,
+			);
+			name = device_singleray;
+			productName = device_singleray;
+			productReference = 20F157DC2D4A41049623A9EA /* libdevice_singleray.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		BC4EFF004A464140811F1BAF /* loaders */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2B1F158B1F634F4AB5B7985E /* Build configuration list for PBXNativeTarget "loaders" */;
+			buildPhases = (
+				E2494962F7D64A89BB73342D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2EF0A44F1733435FAAE19C14 /* PBXTargetDependency */,
+				6D247A61B7BA44A3B8A3819D /* PBXTargetDependency */,
+				F89B52D994304AA69CB89142 /* PBXTargetDependency */,
+				ECAD01C782EC4B84BE4EC1C3 /* PBXTargetDependency */,
+			);
+			name = loaders;
+			productName = loaders;
+			productReference = 72FDB117818445B0956CB6BD /* libloaders.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		D13198E96AE745C29CAEC922 /* sys */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DADC60C75C0146349EA6568B /* Build configuration list for PBXNativeTarget "sys" */;
+			buildPhases = (
+				C2BB1EDD9B72444ABDA6F688 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EF0326D7CBA34986B399B365 /* PBXTargetDependency */,
+			);
+			name = sys;
+			productName = sys;
+			productReference = 0BC21C4ACF494249BFF05297 /* libsys.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		DE51E4EFB2B64DAC89E8E3AB /* device */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B349A15271374579A5F79644 /* Build configuration list for PBXNativeTarget "device" */;
+			buildPhases = (
+				DAC58B350D03495C803756CD /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6F2DFA5387134774ABA15013 /* PBXTargetDependency */,
+			);
+			name = device;
+			productName = device;
+			productReference = F393493D30B546FA9E127C41 /* libdevice.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		E8D17A7CC4C84190A88F55AC /* riv_main */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 41FE55E4F28D43018B1CE648 /* Build configuration list for PBXNativeTarget "riv_main" */;
+			buildPhases = (
+				0B7F1C19295E4112800F728A /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7638C85DDEB241D2BB908F91 /* PBXTargetDependency */,
+				86A11ABDA9D346D0B76E9E10 /* PBXTargetDependency */,
+				8B846691887A4C3DBA36B8BC /* PBXTargetDependency */,
+				F32534E9FCE94443943A9179 /* PBXTargetDependency */,
+				C3F1B0FD753F442985924451 /* PBXTargetDependency */,
+				25CB4577563147FFAC42CEE4 /* PBXTargetDependency */,
+				6FC4FB7A7CE8410BB6430C18 /* PBXTargetDependency */,
+				029C8380FE564F71BBA82E0E /* PBXTargetDependency */,
+			);
+			name = riv_main;
+			productName = riv_main;
+			productReference = 6CB2D10C4013479DB99573B0 /* riv_main */;
+			productType = "com.apple.product-type.tool";
+		};
+		F6E11400B17F4A699AFCD035 /* xml2obj */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 48931858C45245E8838BF6AB /* Build configuration list for PBXNativeTarget "xml2obj" */;
+			buildPhases = (
+				C9E42A4D3DAA469791ECA10E /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BADC7F1388EF47EBBDEA2B63 /* PBXTargetDependency */,
+				059EE7A4F7B44E969C019FD2 /* PBXTargetDependency */,
+				6AF82F407557404C90275228 /* PBXTargetDependency */,
+				F4BEB1C478BF4A3FB6AC6CA7 /* PBXTargetDependency */,
+				FC6A0C091C824D2FAD12A3E4 /* PBXTargetDependency */,
+			);
+			name = xml2obj;
+			productName = xml2obj;
+			productReference = E91C14BFA775425487017301 /* xml2obj */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EBDC26432EC64E0480B18756 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+			};
+			buildConfigurationList = 18A2542B1D85482F858651A8 /* Build configuration list for PBXProject "embree" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DC3F2BDC44A646F4936EDAEE;
+			projectDirPath = ..;
+			projectRoot = "";
+			targets = (
+				A2B0D79D85A4427293CCEE9A /* ALL_BUILD */,
+				37F0F2F3C1164578BE4EDBEA /* ZERO_CHECK */,
+				D13198E96AE745C29CAEC922 /* sys */,
+				4D4E60E0C9434567AD73D53A /* image */,
+				601A77148E414CC98CC98CEF /* lexers */,
+				DE51E4EFB2B64DAC89E8E3AB /* device */,
+				BC4EFF004A464140811F1BAF /* loaders */,
+				B2894F9055E14D1DAA55E5FC /* device_singleray */,
+				57B0A0C0B1554CC4B69579EE /* obj2xml */,
+				F6E11400B17F4A699AFCD035 /* xml2obj */,
+				E8D17A7CC4C84190A88F55AC /* riv_main */,
+				4FB14CB4D68A41DEAE574AC6 /* riv_main_automoc */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		34A411E2318448CFA8C802B4 /* CMake Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/gerardsimons/Git/afstuderen/xcode/riv -f /Users/gerardsimons/Git/afstuderen/xcode/riv/CMakeScripts/riv_main_automoc_cmakeRulesBuildPhase.make$CONFIGURATION all";
+			showEnvVarsInLog = 0;
+		};
+		956C0331B4CD426D86968B46 /* CMake Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/gerardsimons/Git/afstuderen/xcode -f /Users/gerardsimons/Git/afstuderen/xcode/CMakeScripts/ALL_BUILD_cmakeRulesBuildPhase.make$CONFIGURATION all";
+			showEnvVarsInLog = 0;
+		};
+		C3FEDE2847314BC6AF221B2C /* CMake Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/gerardsimons/Git/afstuderen/xcode -f /Users/gerardsimons/Git/afstuderen/xcode/CMakeScripts/ZERO_CHECK_cmakeRulesBuildPhase.make$CONFIGURATION all";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0B7F1C19295E4112800F728A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F691525F4E424C66989F42A0 /* Cluster.cpp in Sources */,
+				0BCE850F1FF54A2E95635796 /* ClusterSet.cpp in Sources */,
+				08E909296FFF48E8A37F250D /* DataSet.cpp in Sources */,
+				836BE1B02FE0482594CA24BE /* Filter.cpp in Sources */,
+				86D49534ADF6466E9808FFBE /* Iterator.cpp in Sources */,
+				87FAFFCF48A74E8C81152F72 /* Record.cpp in Sources */,
+				FC96939DF9B74C6AA71F995A /* Reference.cpp in Sources */,
+				571B282944F14D668CD3F18E /* Table.cpp in Sources */,
+				23D50825FEA449C88E05A4D3 /* DataController.cpp in Sources */,
+				0A059E052BBF4C7DB20B8244 /* MeshModelGroup.cpp in Sources */,
+				8F21A7493B16402CB838AB15 /* Path.cpp in Sources */,
+				0F2D47A861C14B92962008D0 /* TriangleMesh.cpp in Sources */,
+				881567BF887B41889EEA163B /* TriangleMeshGroup.cpp in Sources */,
+				DAD68F4208774023B86ACCF5 /* BMPImage.cpp in Sources */,
+				2F34A748BA694890915C46E0 /* ColorMap.cpp in Sources */,
+				B564D7FDC0BF4E1A840A8F40 /* ColorPalette.cpp in Sources */,
+				08173E166DE149D1877ABA40 /* loadppm.cpp in Sources */,
+				5873CA9BEA20432FAE3F2ABE /* Octree.cpp in Sources */,
+				F697F316106B438598A0923D /* OctreeNode.cpp in Sources */,
+				B0CE68D8DA82476AB4C838E3 /* PBRTConfig.cpp in Sources */,
+				4258119248CA4991924C8BEF /* 3DView.cpp in Sources */,
+				F4F41ECFCCC54E6E80818E5F /* HeatMapView.cpp in Sources */,
+				B241275D610A47218BBC53D4 /* ImageView.cpp in Sources */,
+				DF1AC4DAE4D5426D8A8D330B /* ParallelCoordsAxis.cpp in Sources */,
+				0D7B99AD8F78409D8E1B3947 /* ParallelCoordsView.cpp in Sources */,
+				F46AEBB101D64525ACAF1125 /* helper.cpp in Sources */,
+				E1E943771A287DC7004BB629 /* RIVWindow.cpp in Sources */,
+				C5138F9EC4F84882ACDAE53D /* main.cpp in Sources */,
+				6EB0608037B1442FBA05DE52 /* reporter.cpp in Sources */,
+				A4098647E011402EA4C1E1A1 /* trackball.cpp in Sources */,
+				3CCA692CBBB1483EB15B515E /* riv_main_automoc.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F22EDC93A014D82A1BB169D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3434975717834038857EBA9B /* obj2xml.cpp in Sources */,
+				8C73849F1FA84D69826F60CE /* objLoader.cpp in Sources */,
+				4425E64613994D4AB7E38F22 /* xmlWriter.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		74815C1A4CFA44C78E6A4378 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				14A6972119B74465A71DC0FA /* singleray_device.cpp in Sources */,
+				64BDFEA2F0C9406FBB52F262 /* dataconnector.cpp in Sources */,
+				0ACE1E236FC643E8B73C62AF /* embree_renderer.cpp in Sources */,
+				6D50F1D5081D4689A7EC895C /* filter.cpp in Sources */,
+				D59084A5970C49F38FD365EB /* pathtraceintegrator.cpp in Sources */,
+				284C4280FEF349B5B131EF27 /* hdrilight.cpp in Sources */,
+				9EF4B4098A7D4B1393AAB84C /* debugrenderer.cpp in Sources */,
+				006A74CC5F2144D68015811A /* integratorrenderer.cpp in Sources */,
+				72688A651343497EA2BAC695 /* progress.cpp in Sources */,
+				F48499017C3549ED81684505 /* distribution1d.cpp in Sources */,
+				8512C1BA7FD5423C9F5DC790 /* distribution2d.cpp in Sources */,
+				6A673B0F211E4FA4BBB8E1E3 /* sampler.cpp in Sources */,
+				C4904FD2CC264DB28C3F916B /* trianglemesh_full.cpp in Sources */,
+				875C75AE1F4C4518A4F00500 /* trianglemesh_normals.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A6C340334CBA4A769C15EE31 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A48B13142C11425AA7AE4EDB /* exr.cpp in Sources */,
+				B5AFFDF3E61C4C21850CE443 /* image.cpp in Sources */,
+				4A2C72F5A4F5456492CBDAFF /* magick.cpp in Sources */,
+				399EBC3450E34676A852D880 /* pfm.cpp in Sources */,
+				7147743BAD3A420186AAA3E5 /* ppm.cpp in Sources */,
+				55FA337EB066438D81275685 /* tga.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C2BB1EDD9B72444ABDA6F688 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7CE4B65FBC09441F88EFD8A2 /* filename.cpp in Sources */,
+				19D98C3739444F97AEBDC0F7 /* library.cpp in Sources */,
+				1E1BBC07F2B344AD8F754DAC /* network.cpp in Sources */,
+				173673197C1F41CC968F5C9C /* platform.cpp in Sources */,
+				CA3D365C022248349D78A99B /* string.cpp in Sources */,
+				BB744F8B88494D03AF557EE5 /* condition.cpp in Sources */,
+				10883A8C26B54A4AA33CE9A2 /* mutex.cpp in Sources */,
+				7539B92BE5EA439993945E0D /* sysinfo.cpp in Sources */,
+				B27D56D4BE064DCBA29C1257 /* taskscheduler.cpp in Sources */,
+				7BF220B6D1594F0891D9D3BF /* taskscheduler_mic.cpp in Sources */,
+				4693F2ED8D4047E2B368BF24 /* taskscheduler_sys.cpp in Sources */,
+				640B84361E604E4D9C910C97 /* thread.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C9E42A4D3DAA469791ECA10E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				161359D9ED6840ECBD3FD258 /* xml2obj.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CF34ACEF64CD47F1B70196CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4989B6AD23294AACAE81A6EF /* stringstream.cpp in Sources */,
+				D201FC98C82C4FF8A8BC5161 /* tokenstream.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAC58B350D03495C803756CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				303EE515F7B54AAB8FD89DF7 /* device.cpp in Sources */,
+				06D40C9BDEAC402CA06F3945 /* handle.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E2494962F7D64A89BB73342D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0BABB29235F6428D8946D330 /* loaders.cpp in Sources */,
+				BDFD1D3170A24A448CFE8E8F /* obj_loader.cpp in Sources */,
+				C1D657349EE1497B9EAF0067 /* xml_loader.cpp in Sources */,
+				4C1FD31EB7284A0FBDF0DD92 /* xml_parser.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		01362DE442E34B7FA4BECD37 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 37F0F2F3C1164578BE4EDBEA /* ZERO_CHECK */;
+			targetProxy = 90CAA4024B104397B3668091 /* PBXContainerItemProxy */;
+		};
+		029C8380FE564F71BBA82E0E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4FB14CB4D68A41DEAE574AC6 /* riv_main_automoc */;
+			targetProxy = B3CC5AF4D4C8451E8AEE5386 /* PBXContainerItemProxy */;
+		};
+		059EE7A4F7B44E969C019FD2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4D4E60E0C9434567AD73D53A /* image */;
+			targetProxy = 5916E2675FB64E0EB508F78E /* PBXContainerItemProxy */;
+		};
+		0D456F91D5AA4B39AE3087E7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F6E11400B17F4A699AFCD035 /* xml2obj */;
+			targetProxy = 3C5BE85C4CE04746BC724065 /* PBXContainerItemProxy */;
+		};
+		15376EC90AC642D58E5CF15F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 601A77148E414CC98CC98CEF /* lexers */;
+			targetProxy = 192CDA65A30249DD9F9377EE /* PBXContainerItemProxy */;
+		};
+		1A58B24C4DF5492297C3D945 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D13198E96AE745C29CAEC922 /* sys */;
+			targetProxy = 8F2ACF15C1444304979C89F2 /* PBXContainerItemProxy */;
+		};
+		25CB4577563147FFAC42CEE4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 601A77148E414CC98CC98CEF /* lexers */;
+			targetProxy = 4113A6FF8C85461CA545026E /* PBXContainerItemProxy */;
+		};
+		2AC2B73F0D244223B9977057 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 57B0A0C0B1554CC4B69579EE /* obj2xml */;
+			targetProxy = 50496ABA293F4AFE9C7716C9 /* PBXContainerItemProxy */;
+		};
+		2EF0A44F1733435FAAE19C14 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D13198E96AE745C29CAEC922 /* sys */;
+			targetProxy = EC5DA61E4CD04D59A3B02B6E /* PBXContainerItemProxy */;
+		};
+		37322BFAC30949F09230DBE0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D13198E96AE745C29CAEC922 /* sys */;
+			targetProxy = 5CFED931C4984B2D9AFB7C09 /* PBXContainerItemProxy */;
+		};
+		3FB16849C75343DCBDA11B2D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DE51E4EFB2B64DAC89E8E3AB /* device */;
+			targetProxy = 0925B5FB002241048BDF1392 /* PBXContainerItemProxy */;
+		};
+		4384CFC7817C4716A5332BB1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D13198E96AE745C29CAEC922 /* sys */;
+			targetProxy = A962A739825B46B09DF64737 /* PBXContainerItemProxy */;
+		};
+		48B6516DB162464F836B2EE2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4D4E60E0C9434567AD73D53A /* image */;
+			targetProxy = 11C742434C6D403985747197 /* PBXContainerItemProxy */;
+		};
+		4FE079A1F0514A6B8971E3A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 37F0F2F3C1164578BE4EDBEA /* ZERO_CHECK */;
+			targetProxy = E519DBE599434C129AB6BC78 /* PBXContainerItemProxy */;
+		};
+		5774AC0E3C634911863D5821 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 601A77148E414CC98CC98CEF /* lexers */;
+			targetProxy = 76C80A3BA28B469BB7127640 /* PBXContainerItemProxy */;
+		};
+		5E4D4D76856E4962BD00876A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B2894F9055E14D1DAA55E5FC /* device_singleray */;
+			targetProxy = 970F607B5A3C4774B309FEEC /* PBXContainerItemProxy */;
+		};
+		66BDD9AEB9BE45649C104FC6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4D4E60E0C9434567AD73D53A /* image */;
+			targetProxy = 1DB4504DAE3843AD9BFFA0D7 /* PBXContainerItemProxy */;
+		};
+		67FEFFD6379A437A9828234F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D13198E96AE745C29CAEC922 /* sys */;
+			targetProxy = 90A3A358E6CD4184A0938FD2 /* PBXContainerItemProxy */;
+		};
+		6AF82F407557404C90275228 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 37F0F2F3C1164578BE4EDBEA /* ZERO_CHECK */;
+			targetProxy = 48F39E74890D4E4A9AC4CFC0 /* PBXContainerItemProxy */;
+		};
+		6D247A61B7BA44A3B8A3819D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4D4E60E0C9434567AD73D53A /* image */;
+			targetProxy = 04A0C2EE29354E3CAC205BA9 /* PBXContainerItemProxy */;
+		};
+		6F2DFA5387134774ABA15013 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 37F0F2F3C1164578BE4EDBEA /* ZERO_CHECK */;
+			targetProxy = 33532E1E96E94F929C7F75BC /* PBXContainerItemProxy */;
+		};
+		6FC4FB7A7CE8410BB6430C18 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BC4EFF004A464140811F1BAF /* loaders */;
+			targetProxy = 83D28BD5244C49E5934DDE4E /* PBXContainerItemProxy */;
+		};
+		7638C85DDEB241D2BB908F91 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D13198E96AE745C29CAEC922 /* sys */;
+			targetProxy = 12FABA8244694F5282CCC8A7 /* PBXContainerItemProxy */;
+		};
+		7D9DFFA3F5294C3083C6169B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DE51E4EFB2B64DAC89E8E3AB /* device */;
+			targetProxy = B92844B0DB7C400B9B7E0DC2 /* PBXContainerItemProxy */;
+		};
+		7E54F11099834B2DBEF85DC3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4D4E60E0C9434567AD73D53A /* image */;
+			targetProxy = B9699F6715B64768891627D1 /* PBXContainerItemProxy */;
+		};
+		86A11ABDA9D346D0B76E9E10 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4D4E60E0C9434567AD73D53A /* image */;
+			targetProxy = 4353190B3B414E78B473C6FC /* PBXContainerItemProxy */;
+		};
+		8974A7714F5048369A19282D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BC4EFF004A464140811F1BAF /* loaders */;
+			targetProxy = ACD7C29CED1644A68D0D4DE5 /* PBXContainerItemProxy */;
+		};
+		8B846691887A4C3DBA36B8BC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DE51E4EFB2B64DAC89E8E3AB /* device */;
+			targetProxy = DD7D96B1AAC748A7958DCB93 /* PBXContainerItemProxy */;
+		};
+		96C066E24C9149A4BAE8DC38 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D13198E96AE745C29CAEC922 /* sys */;
+			targetProxy = 03B9ECC1066F4DD9B590FF1D /* PBXContainerItemProxy */;
+		};
+		BADC7F1388EF47EBBDEA2B63 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D13198E96AE745C29CAEC922 /* sys */;
+			targetProxy = 8358602FB1EB419B85792CBE /* PBXContainerItemProxy */;
+		};
+		C3F1B0FD753F442985924451 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 37F0F2F3C1164578BE4EDBEA /* ZERO_CHECK */;
+			targetProxy = C4B983535A1D4C17B3334343 /* PBXContainerItemProxy */;
+		};
+		CDA2BDD203D6462FA3F69383 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 37F0F2F3C1164578BE4EDBEA /* ZERO_CHECK */;
+			targetProxy = 3B38D679831C44EC88433DE8 /* PBXContainerItemProxy */;
+		};
+		D4FFB7337338464C8D62128A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E8D17A7CC4C84190A88F55AC /* riv_main */;
+			targetProxy = 754D1ED4BE8542CCAABEBB4E /* PBXContainerItemProxy */;
+		};
+		D56EF0F1712A44B1951324C2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 37F0F2F3C1164578BE4EDBEA /* ZERO_CHECK */;
+			targetProxy = C91492FB53B54107B7A58F8C /* PBXContainerItemProxy */;
+		};
+		DE5EB6A4AE6D486E9B545750 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 37F0F2F3C1164578BE4EDBEA /* ZERO_CHECK */;
+			targetProxy = 372108BAD8B0494782917830 /* PBXContainerItemProxy */;
+		};
+		ECAD01C782EC4B84BE4EC1C3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 601A77148E414CC98CC98CEF /* lexers */;
+			targetProxy = E4D51D17788D4F7CBEB21992 /* PBXContainerItemProxy */;
+		};
+		EF0326D7CBA34986B399B365 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 37F0F2F3C1164578BE4EDBEA /* ZERO_CHECK */;
+			targetProxy = 6E10979053E24368B7150015 /* PBXContainerItemProxy */;
+		};
+		F0BE38887A4546DB9DE0EAC2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BC4EFF004A464140811F1BAF /* loaders */;
+			targetProxy = 26F90D3F74D444E6B9EDEC97 /* PBXContainerItemProxy */;
+		};
+		F32534E9FCE94443943A9179 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B2894F9055E14D1DAA55E5FC /* device_singleray */;
+			targetProxy = 576457D93E1D4B83A901D260 /* PBXContainerItemProxy */;
+		};
+		F4BEB1C478BF4A3FB6AC6CA7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 601A77148E414CC98CC98CEF /* lexers */;
+			targetProxy = 2655D65410034513A6BE92F9 /* PBXContainerItemProxy */;
+		};
+		F89B52D994304AA69CB89142 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 37F0F2F3C1164578BE4EDBEA /* ZERO_CHECK */;
+			targetProxy = D1DB5E0C046F449793B67F25 /* PBXContainerItemProxy */;
+		};
+		FC6A0C091C824D2FAD12A3E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BC4EFF004A464140811F1BAF /* loaders */;
+			targetProxy = F3A4B1F5EBC04F0C881F8C13 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		066805D790F14915B2195122 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_SEARCH_PATHS = /Users/gerardsimons/Qt/5.3/clang_64/lib;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					QT_WIDGETS_LIB,
+					QT_GUI_LIB,
+					QT_CORE_LIB,
+					QT_OPENGL_LIB,
+					QT_NO_DEBUG,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen/xcode/riv,
+					/Users/gerardsimons/Git/afstuderen/riv,
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtWidgets.framework/Headers,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtGui.framework/Headers,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtCore.framework/Headers,
+					"/Users/gerardsimons/Qt/5.3/clang_64/mkspecs/macx-clang",
+					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/OpenGL.framework/Headers,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtOpenGL.framework/Headers,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtWidgets.framework/QtWidgets,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtOpenGL.framework/QtOpenGL,
+					/Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo/libdevice_singleray.a,
+					"-framework",
+					AGL,
+					"-framework",
+					OpenGL,
+					"-framework",
+					GLUT,
+					"-framework",
+					Cocoa,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtWidgets.framework/QtWidgets,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtGui.framework/QtGui,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtCore.framework/QtCore,
+					/Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo/libloaders.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo/liblexers.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo/libimage.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo/libsys.a,
+					"-lpthread",
+					"-ldl",
+					/Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo/libdevice.a,
+					/usr/local/lib/libembree.dylib,
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = riv_main;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/riv;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		086D26DB0E1B46C8932AD5A6 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel/libsys.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel/libimage.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel/libsys.a,
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = obj2xml;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/tools/obj2xml;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		08AC8B93549E41E5ABD9CF8F /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = loaders;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/devices/device/loaders;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		08CC523697BB4203A3C5C0BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen/xcode/riv,
+					/Users/gerardsimons/Git/afstuderen/riv,
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = riv_main_automoc;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/riv;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		092CF44193DE46BDAA969927 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = sys;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/common/sys;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		0949A6655FB345D59AA4E627 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Release;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_SEARCH_PATHS = /Users/gerardsimons/Qt/5.3/clang_64/lib;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					QT_WIDGETS_LIB,
+					QT_GUI_LIB,
+					QT_CORE_LIB,
+					QT_OPENGL_LIB,
+					QT_NO_DEBUG,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen/xcode/riv,
+					/Users/gerardsimons/Git/afstuderen/riv,
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtWidgets.framework/Headers,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtGui.framework/Headers,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtCore.framework/Headers,
+					"/Users/gerardsimons/Qt/5.3/clang_64/mkspecs/macx-clang",
+					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/OpenGL.framework/Headers,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtOpenGL.framework/Headers,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtWidgets.framework/QtWidgets,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtOpenGL.framework/QtOpenGL,
+					/Users/gerardsimons/Git/afstuderen/xcode/Release/libdevice_singleray.a,
+					"-framework",
+					AGL,
+					"-framework",
+					OpenGL,
+					"-framework",
+					GLUT,
+					"-framework",
+					Cocoa,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtWidgets.framework/QtWidgets,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtGui.framework/QtGui,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtCore.framework/QtCore,
+					/Users/gerardsimons/Git/afstuderen/xcode/Release/libloaders.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Release/liblexers.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Release/libimage.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Release/libsys.a,
+					"-lpthread",
+					"-ldl",
+					/Users/gerardsimons/Git/afstuderen/xcode/Release/libdevice.a,
+					/usr/local/lib/libembree.dylib,
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = riv_main;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/riv;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		0DA3DEAF10B2422CB539C577 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		10231CA81DDF4119B097FF07 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Release;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = sys;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/common/sys;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		161730BED3BA44069D7A20E7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Debug;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/gerardsimons/Git/afstuderen/xcode/Debug/libsys.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Debug/libloaders.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Debug/libimage.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Debug/liblexers.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Debug/libsys.a,
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = xml2obj;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/tools/xml2obj;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		280A90EC8B5443B69CB2C0BD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Release;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+					/Users/gerardsimons/Git/afstuderen/devices/device_singleray,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device_singleray;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/devices/device_singleray;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		2A382F3E69534CE089140B15 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		334DE0568B274A39B02D0213 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "libc++";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk;
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/build;
+			};
+			name = Release;
+		};
+		335B71A569AB4FEFB5FBA84D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen/xcode/riv,
+					/Users/gerardsimons/Git/afstuderen/riv,
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = riv_main_automoc;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/riv;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		3A1C9D9A20A9449796E1A9B7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Release;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = loaders;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/devices/device/loaders;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		3AA363781EC74551B18AA791 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo/libsys.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo/libimage.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo/libsys.a,
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = obj2xml;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/tools/obj2xml;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		3C17B917B4654AAB8CC6B508 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Debug;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = image;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/common/image;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		3C79852A195E49DFA576D6AF /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "libc++";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk;
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/build;
+			};
+			name = MinSizeRel;
+		};
+		3EF0BE68C9F64B01B20CED89 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Debug;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_SEARCH_PATHS = /Users/gerardsimons/Qt/5.3/clang_64/lib;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					QT_WIDGETS_LIB,
+					QT_GUI_LIB,
+					QT_CORE_LIB,
+					QT_OPENGL_LIB,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen/xcode/riv,
+					/Users/gerardsimons/Git/afstuderen/riv,
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtWidgets.framework/Headers,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtGui.framework/Headers,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtCore.framework/Headers,
+					"/Users/gerardsimons/Qt/5.3/clang_64/mkspecs/macx-clang",
+					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/OpenGL.framework/Headers,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtOpenGL.framework/Headers,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtWidgets.framework/QtWidgets,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtOpenGL.framework/QtOpenGL,
+					/Users/gerardsimons/Git/afstuderen/xcode/Debug/libdevice_singleray.a,
+					"-framework",
+					AGL,
+					"-framework",
+					OpenGL,
+					"-framework",
+					GLUT,
+					"-framework",
+					Cocoa,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtWidgets.framework/QtWidgets,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtGui.framework/QtGui,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtCore.framework/QtCore,
+					/Users/gerardsimons/Git/afstuderen/xcode/Debug/libloaders.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Debug/liblexers.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Debug/libimage.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Debug/libsys.a,
+					"-lpthread",
+					"-ldl",
+					/Users/gerardsimons/Git/afstuderen/xcode/Debug/libdevice.a,
+					/usr/local/lib/libembree.dylib,
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = riv_main;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/riv;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		3F6E2A043BEB4369B73F9E71 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_SEARCH_PATHS = /Users/gerardsimons/Qt/5.3/clang_64/lib;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					QT_WIDGETS_LIB,
+					QT_GUI_LIB,
+					QT_CORE_LIB,
+					QT_OPENGL_LIB,
+					QT_NO_DEBUG,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen/xcode/riv,
+					/Users/gerardsimons/Git/afstuderen/riv,
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtWidgets.framework/Headers,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtGui.framework/Headers,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtCore.framework/Headers,
+					"/Users/gerardsimons/Qt/5.3/clang_64/mkspecs/macx-clang",
+					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/OpenGL.framework/Headers,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtOpenGL.framework/Headers,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtWidgets.framework/QtWidgets,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtOpenGL.framework/QtOpenGL,
+					/Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel/libdevice_singleray.a,
+					"-framework",
+					AGL,
+					"-framework",
+					OpenGL,
+					"-framework",
+					GLUT,
+					"-framework",
+					Cocoa,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtWidgets.framework/QtWidgets,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtGui.framework/QtGui,
+					/Users/gerardsimons/Qt/5.3/clang_64/lib/QtCore.framework/QtCore,
+					/Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel/libloaders.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel/liblexers.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel/libimage.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel/libsys.a,
+					"-lpthread",
+					"-ldl",
+					/Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel/libdevice.a,
+					/usr/local/lib/libembree.dylib,
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = riv_main;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/riv;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		437E091746CB471A9A9B02F0 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/devices/device;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		48780FDF4E4A4A67A0D8227D /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/devices/device;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		49DBF388E2204A83B2293A7D /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = image;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/common/image;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		4D6A6512879E48EC81A65816 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Release;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/gerardsimons/Git/afstuderen/xcode/Release/libsys.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Release/libimage.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Release/libsys.a,
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = obj2xml;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/tools/obj2xml;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		5104210E802C45D283308726 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+					/Users/gerardsimons/Git/afstuderen/devices/device_singleray,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device_singleray;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/devices/device_singleray;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		547080A6EDB94C02BBA03CFD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Release;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lexers;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/common/lexers;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		61981BA6BFE14654B2985262 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lexers;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/common/lexers;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		6224731E66CD45D386B5F139 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = loaders;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/devices/device/loaders;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		7532345909B345FA89798407 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+					/Users/gerardsimons/Git/afstuderen/devices/device_singleray,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device_singleray;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/devices/device_singleray;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		7DC3B2E1B6CF40FEAB08FF70 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = image;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/common/image;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		8770789346A3431FA4FD9F14 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel/libsys.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel/libloaders.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel/libimage.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel/liblexers.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/MinSizeRel/libsys.a,
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = xml2obj;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/tools/xml2obj;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		88EA4DCF4E9444B7A14AD240 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Debug;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = loaders;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/devices/device/loaders;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		895A47DCC1664F659CA11884 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Debug;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/devices/device;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		96570654E1F54083A4B99800 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Release;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/devices/device;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		AAF94B4DC0834B8BB55785D4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Debug;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = sys;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/common/sys;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		AD97D12AD61B438DBE69630C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		B094EBFA475D41EB82681891 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen/xcode/riv,
+					/Users/gerardsimons/Git/afstuderen/riv,
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = riv_main_automoc;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/riv;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		B7018D39D1C343738CB85C9E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Debug;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lexers;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/common/lexers;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		B8655167B96148EFAA695063 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		BEA1224DFDB746DD826458B1 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = lexers;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/common/lexers;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		C43C57FDC66A4193B9071EEC /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo/libsys.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo/libloaders.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo/libimage.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo/liblexers.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo/libsys.a,
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = xml2obj;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/tools/xml2obj;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		C589DE1883EF40F49EFE348A /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen/xcode/riv,
+					/Users/gerardsimons/Git/afstuderen/riv,
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = riv_main_automoc;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/riv;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+		D1C80A9BD924411696B73DA8 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/RelWithDebInfo;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "       -DNDEBUG  ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = sys;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/common/sys;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		D7983F2831D44075B1C1D349 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Release;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = image;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/common/image;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		D9437AE261624033B6DF2543 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		DE214419C95A4E7DBC5D6D45 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "libc++";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk;
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/build;
+			};
+			name = RelWithDebInfo;
+		};
+		E77095657E46427CB947DBBB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Release;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    -DNDEBUG   ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DNDEBUG",
+					"-Wstrict-aliasing=0",
+					"-ffast-math",
+					"-g",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/gerardsimons/Git/afstuderen/xcode/Release/libsys.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Release/libloaders.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Release/libimage.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Release/liblexers.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Release/libsys.a,
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = xml2obj;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/tools/xml2obj;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		E99C05D6FDC249E5B886723D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "libc++";
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk;
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/build;
+			};
+			name = Debug;
+		};
+		EB7722226D0D45A784642C37 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Debug;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"-Wl,-search_paths_first",
+					"-Wl,-headerpad_max_install_names",
+					/Users/gerardsimons/Git/afstuderen/xcode/Debug/libsys.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Debug/libimage.a,
+					/Users/gerardsimons/Git/afstuderen/xcode/Debug/libsys.a,
+					"-lpthread",
+					"-ldl",
+				);
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = obj2xml;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/tools/obj2xml;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		ED5CBD1EBEEF44628DC153B0 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = RelWithDebInfo;
+		};
+		EDA31FD0AC654CE5965AC7B5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = /Users/gerardsimons/Git/afstuderen/xcode/Debug;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+					/Users/gerardsimons/Git/afstuderen/devices,
+					/Users/gerardsimons/Git/afstuderen/devices/device_singleray,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "    ";
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fPIC",
+					"-fvisibility-inlines-hidden",
+					"-fvisibility=hidden",
+					"-std=c++11",
+					"-Wno-c++11-narrowing",
+					"-mmacosx-version-min=10.7",
+					"-DDEBUG",
+				);
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = device_singleray;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode/devices/device_singleray;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Debug;
+		};
+		F093D1DD0DD848D983F0CA34 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Release;
+		};
+		FBB5A23BB1E643FF9A16E39F /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					/Users/gerardsimons/Git/afstuderen,
+					/Users/gerardsimons/Git/afstuderen/common,
+					/usr/local/include,
+				);
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "  ";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/gerardsimons/Git/afstuderen/xcode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = MinSizeRel;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		18A2542B1D85482F858651A8 /* Build configuration list for PBXProject "embree" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E99C05D6FDC249E5B886723D /* Debug */,
+				334DE0568B274A39B02D0213 /* Release */,
+				3C79852A195E49DFA576D6AF /* MinSizeRel */,
+				DE214419C95A4E7DBC5D6D45 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		27D42C7A8FF54E1F9A7F34F7 /* Build configuration list for PBXNativeTarget "lexers" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B7018D39D1C343738CB85C9E /* Debug */,
+				547080A6EDB94C02BBA03CFD /* Release */,
+				61981BA6BFE14654B2985262 /* MinSizeRel */,
+				BEA1224DFDB746DD826458B1 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2B1F158B1F634F4AB5B7985E /* Build configuration list for PBXNativeTarget "loaders" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				88EA4DCF4E9444B7A14AD240 /* Debug */,
+				3A1C9D9A20A9449796E1A9B7 /* Release */,
+				08AC8B93549E41E5ABD9CF8F /* MinSizeRel */,
+				6224731E66CD45D386B5F139 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		39A81C6BFD1E44C1ABDF0FC4 /* Build configuration list for PBXAggregateTarget "riv_main_automoc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				335B71A569AB4FEFB5FBA84D /* Debug */,
+				08CC523697BB4203A3C5C0BB /* Release */,
+				C589DE1883EF40F49EFE348A /* MinSizeRel */,
+				B094EBFA475D41EB82681891 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		41FE55E4F28D43018B1CE648 /* Build configuration list for PBXNativeTarget "riv_main" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3EF0BE68C9F64B01B20CED89 /* Debug */,
+				0949A6655FB345D59AA4E627 /* Release */,
+				3F6E2A043BEB4369B73F9E71 /* MinSizeRel */,
+				066805D790F14915B2195122 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		4763947ECA2D45BB95DB4687 /* Build configuration list for PBXNativeTarget "device_singleray" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EDA31FD0AC654CE5965AC7B5 /* Debug */,
+				280A90EC8B5443B69CB2C0BD /* Release */,
+				5104210E802C45D283308726 /* MinSizeRel */,
+				7532345909B345FA89798407 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		48931858C45245E8838BF6AB /* Build configuration list for PBXNativeTarget "xml2obj" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				161730BED3BA44069D7A20E7 /* Debug */,
+				E77095657E46427CB947DBBB /* Release */,
+				8770789346A3431FA4FD9F14 /* MinSizeRel */,
+				C43C57FDC66A4193B9071EEC /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		72EDD8C353234B40AF7D2917 /* Build configuration list for PBXNativeTarget "obj2xml" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB7722226D0D45A784642C37 /* Debug */,
+				4D6A6512879E48EC81A65816 /* Release */,
+				086D26DB0E1B46C8932AD5A6 /* MinSizeRel */,
+				3AA363781EC74551B18AA791 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		935787BDF9B446339DD5B110 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0DA3DEAF10B2422CB539C577 /* Debug */,
+				F093D1DD0DD848D983F0CA34 /* Release */,
+				2A382F3E69534CE089140B15 /* MinSizeRel */,
+				ED5CBD1EBEEF44628DC153B0 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9455D5BE88A5454698DB909B /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D9437AE261624033B6DF2543 /* Debug */,
+				AD97D12AD61B438DBE69630C /* Release */,
+				FBB5A23BB1E643FF9A16E39F /* MinSizeRel */,
+				B8655167B96148EFAA695063 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A2752F163489486A8F542B6A /* Build configuration list for PBXNativeTarget "image" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3C17B917B4654AAB8CC6B508 /* Debug */,
+				D7983F2831D44075B1C1D349 /* Release */,
+				7DC3B2E1B6CF40FEAB08FF70 /* MinSizeRel */,
+				49DBF388E2204A83B2293A7D /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B349A15271374579A5F79644 /* Build configuration list for PBXNativeTarget "device" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				895A47DCC1664F659CA11884 /* Debug */,
+				96570654E1F54083A4B99800 /* Release */,
+				437E091746CB471A9A9B02F0 /* MinSizeRel */,
+				48780FDF4E4A4A67A0D8227D /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DADC60C75C0146349EA6568B /* Build configuration list for PBXNativeTarget "sys" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AAF94B4DC0834B8BB55785D4 /* Debug */,
+				10231CA81DDF4119B097FF07 /* Release */,
+				092CF44193DE46BDAA969927 /* MinSizeRel */,
+				D1C80A9BD924411696B73DA8 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EBDC26432EC64E0480B18756 /* Project object */;
+}

@@ -1,0 +1,22 @@
+dependencies: \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/HeatMapView.cpp \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/HeatMapView.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/DataView.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/DataSet.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/Table.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/Filter.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/Reference.h \
+  /Users/gerardsimons/Git/afstuderen/riv/helper.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/Record.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/Iterator.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/Cluster.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/../Geometry/Geometry.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/ClusterSet.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/../Graphics/Evaluator.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/DataSetListener.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/../reporter.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Graphics/ColorProperty.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/../Graphics/Property.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/../Graphics/ColorPalette.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Data/../Graphics/ColorMap.h \
+  /Users/gerardsimons/Git/afstuderen/riv/Views/../Graphics/SizeProperty.h

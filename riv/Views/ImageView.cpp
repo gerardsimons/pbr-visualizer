@@ -13,21 +13,24 @@
 #include <math.h>
 
 std::vector<RIVImageView*> RIVImageView::instances;
-int RIVImageView::windowHandle = -1;
 
-RIVImageView::RIVImageView(RIVDataSet* dataset, EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size), renderer(renderer) {
+RIVImageView::RIVImageView(int parentWindow, RIVDataSet* dataset, EMBREERenderer* renderer, int x, int y, int width, int height) : RIVDataView(dataset,x,y,width,height), renderer(renderer) {
+	
 	instances.push_back(this);
     identifier = "ImageView";
-	this->renderer = renderer;
-    
+	
+	windowHandle = glutCreateSubWindow(parentWindow,x,y,width,height);
+	glutSetWindow(windowHandle);
+	glutDisplayFunc(RIVImageView::DrawInstances);
+//	glutReshapeFunc(RIVImageView::ReshapeInstances);
+//	glutMouseFunc(RIVImageView::Mouse);
+//	glutMotionFunc(RIVImageView::Motion);
+	glutSetWindow(parentWindow);
+	
 	selection.start.x = -1;
     selection.start.y = -1;
     selection.end.x = -1;
     selection.end.y = -1;
-}
-
-void RIVImageView::InitializeGraphics() {
-	
 }
 
 void RIVImageView::DrawInstances() {
@@ -64,7 +67,7 @@ void RIVImageView::Motion(int x, int y) {
 
 void RIVImageView::Reshape(int width, int height) {
     
-    printf("RIVImageView Reshape\n");
+    printf("RIVImageView Reshape width = %d height = %d\n",width,height);
     
     this->width = width;
     this->height = height;
@@ -83,19 +86,22 @@ void RIVImageView::Reshape(int width, int height) {
     
 //    imageMagnificationX = (width - 2 * paddingX) / (float)renderedImage->sizeX;
 //	imageMagnificationY = (height - 2 * paddingY) / (float)renderedImage->sizeY;
-	
-    glViewport(x, y, width, height);
+	glutSetWindow(windowHandle);
+	glutPositionWindow(x,y);
+	glutReshapeWindow(width,height); //Square bottom left corner
+    glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(0.0, width, 0.0, height);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 	
+	printf(" ***** END RESHAPE IMAGE VIEW *****\n");
 }
 
 void RIVImageView::OnDataChanged() {
 	int currentWindow = glutGetWindow();
-	glutSetWindow(RIVImageView::windowHandle);
+	glutSetWindow(windowHandle);
 	glutPostRedisplay();
 	//Return window to given window
 	glutSetWindow(currentWindow);
@@ -109,13 +115,12 @@ size_t drawCounter = 0;
 void RIVImageView::Draw() {
     dirty = true;
 	
-
-	
 	if(dirty) {
+		glutSetWindow(windowHandle);
 		printf("\nImageView Draw #%zu\n",++drawCounter);
 		glDisable(GL_DEPTH_TEST);
 		
-		glClearColor(1,1,1,0);
+		glClearColor(0,1,1,0);
 		glClear( GL_COLOR_BUFFER_BIT );
 		
 		glMatrixMode(GL_MODELVIEW);

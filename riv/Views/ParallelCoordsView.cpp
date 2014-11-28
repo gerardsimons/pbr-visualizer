@@ -12,22 +12,29 @@
 //Static declarations
 
 std::vector<ParallelCoordsView*> ParallelCoordsView::instances;
-int ParallelCoordsView::windowHandle = -1;
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY,NULL,sizeProperty) {
-	this->pathColor = pathColor;
-	this->rayColor = rayColor;
-    linesAreDirty = true;
-    axesAreDirty = true;
-    selectedAxis = 0;
-    identifier = "ParallelCoordsView";
-	instances.push_back(this);
-    //Nothing else to do
-}
+//ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY,NULL,sizeProperty) {
+//	this->pathColor = pathColor;
+//	this->rayColor = rayColor;
+//    linesAreDirty = true;
+//    axesAreDirty = true;
+//    selectedAxis = 0;
+//    identifier = "ParallelCoordsView";
+//	instances.push_back(this);
+//    //Nothing else to do
+//}
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, RIVColorProperty *pathColor, RIVColorProperty* rayColor, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,NULL,sizeProperty) {
-	this->pathColor = pathColor;
-	this->rayColor = rayColor;
+ParallelCoordsView::ParallelCoordsView(int parentWindow, RIVDataSet* dataset, RIVColorProperty *pathColor, RIVColorProperty* rayColor, RIVSizeProperty* sizeProperty, int x, int y, int width, int height) : RIVDataView(dataset,x,y,width,height), pathColor(pathColor), rayColor(rayColor) {
+	
+	windowHandle = glutCreateSubWindow(parentWindow,x,y,width,height);
+	glutSetWindow(windowHandle);
+	glutDisplayFunc(ParallelCoordsView::DrawInstances);
+	//	glutDisplayFunc(doNothing);
+	glutReshapeFunc(ParallelCoordsView::ReshapeInstances);
+	glutMouseFunc(ParallelCoordsView::Mouse);
+	glutMotionFunc(ParallelCoordsView::Motion);
+//	glutSpecialFunc(keys);
+	
     linesAreDirty = true;
     axesAreDirty = true;
     selectedAxis = 0;

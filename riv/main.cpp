@@ -21,7 +21,9 @@
 //EMBREE STUFF
 #include "devices/device_singleray/embree_renderer.h"
 #include "devices/device_singleray/dataconnector.h"
-//#include "sandbox.h"
+
+#include "Views/RIVWindow.h"
+#include <QApplication>
 
 #if defined(__APPLE__)
 #include <GLUT/glut.h>
@@ -46,13 +48,11 @@ bool isDirty = true;
 int posX = 0;
 int posY = 0;
 
-int mainWindow;                   /* GLUT window handle */
-
 /* All the sub window handles of the custom views */
-int imageViewWindow;
-int sceneViewWindow;
-int parallelViewWindow;
-int heatMapViewWindow;
+//int imageViewWindow;
+//int sceneViewWindow;
+//int parallelViewWindow;
+//int heatMapViewWindow;
 
 /* For debugging purposes, keep track of mouse location */
 int lastMouseX,lastMouseY = 0;
@@ -231,16 +231,16 @@ void reshape(int w, int h)
     //Reshape and reposition all windows according to new dimensions
     
     //Parallel view window
-    glutSetWindow(parallelViewWindow);
-    glutPositionWindow(padding,padding);
 	int newWidthPC = width-2*padding;
 	int newHeightPC = height/2-2*padding;
-    glutReshapeWindow(newWidthPC,newHeightPC); //Upper half and full width of the main window
+
+	
+//	parallelCoordsView->Reshape(newWidthPC,newHeightPC);
+	
     //
     //    //image view window
-    glutSetWindow(imageViewWindow);
-    glutPositionWindow(padding, height/2+padding);
-    glutReshapeWindow(height / 2 - 2 * padding, height /2 - 2 *padding); //Square bottom left corner
+	imageView->Reshape(height / 2 - 2*padding, height / 2 - 2 * padding);
+
     //
 //    //    //3D scene view inspector window
 //    glutSetWindow(sceneViewWindow);
@@ -321,59 +321,42 @@ void createViews() {
 	//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,"radiance R","radiance G","radiance B");
 	RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
 	
-	
-	parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding);
-	ParallelCoordsView::windowHandle = parallelViewWindow;
-	glutSetWindow(parallelViewWindow);
-	glutDisplayFunc(ParallelCoordsView::DrawInstances);
-//	glutDisplayFunc(doNothing);
-	glutReshapeFunc(ParallelCoordsView::ReshapeInstances);
-	glutMouseFunc(ParallelCoordsView::Mouse);
-	glutMotionFunc(ParallelCoordsView::Motion);
-	glutSpecialFunc(keys);
-	
+
 	//Load image
-	float bottomHalfY = height / 2.f + padding;
+	float bottomHalfY = height / 2.F + padding;
 	float squareSize = height / 2.F - 2 * padding;
-	//		image = new BMPImage(bmpPath.c_str(),false);
-	glutSetWindow(imageViewWindow);
-	imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,squareSize,squareSize);
-	imageView = new RIVImageView(dataset,rendererOne,defaultColorProperty,defaultSizeProperty);
-	RIVImageView::windowHandle = imageViewWindow;
-	glutDisplayFunc(RIVImageView::DrawInstances);
-	glutReshapeFunc(RIVImageView::ReshapeInstances);
-	glutMouseFunc(RIVImageView::Mouse);
-	glutMotionFunc(RIVImageView::Motion);
-	glutSpecialFunc(keys);
+//	image = new BMPImage(bmpPath.c_str(),false);
+//	imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,squareSize,squareSize);
+//	imageView = new RIVImageView(mainWindow,dataset,rendererOne,padding,bottomHalfY,squareSize,squareSize);
+//	RIVImageView::windowHandle = imageViewWindow;
+//	glutDisplayFunc(RIVImageView::DrawInstances);
+//	glutReshapeFunc(RIVImageView::ReshapeInstances);
+//	glutMouseFunc(RIVImageView::Mouse);
+//	glutMotionFunc(RIVImageView::Motion);
+//	glutSpecialFunc(keys);
 	
-	sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + squareSize, bottomHalfY, squareSize * 2, squareSize);
-	RIV3DView::windowHandle = sceneViewWindow;
-	glutSetWindow(sceneViewWindow);
-	glutDisplayFunc(RIV3DView::DrawInstances);
-//	glutDisplayFunc(doNothing);
-	glutReshapeFunc(RIV3DView::ReshapeInstances);
-	glutMouseFunc(RIV3DView::Mouse);
-	glutMotionFunc(RIV3DView::Motion);
-	glutSpecialFunc(keys);
+//	sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + squareSize, bottomHalfY, squareSize * 2, squareSize);
+//	RIV3DView::windowHandle = sceneViewWindow;
+
 	
 	//
-	//        heatMapViewWindow = glutCreateSubWindow(mainWindow, padding * 5 + squareSize * 2, bottomHalfY, squareSize, squareSize);
-	//        glutSetWindow(heatMapViewWindow);
-	//        glutReshapeFunc(RIVHeatMapView::ReshapeInstance);
-	//        glutDisplayFunc(RIVHeatMapView::DrawInstance);
-	//        glutMouseFunc(RIVHeatMapView::Mouse);
-	//        glutMotionFunc(RIVHeatMapView::Motion);
+//        heatMapViewWindow = glutCreateSubWindow(mainWindow, padding * 5 + squareSize * 2, bottomHalfY, squareSize, squareSize);
+//        glutSetWindow(heatMapViewWindow);
+//        glutReshapeFunc(RIVHeatMapView::ReshapeInstance);
+//        glutDisplayFunc(RIVHeatMapView::DrawInstance);
+//        glutMouseFunc(RIVHeatMapView::Mouse);
+//        glutMotionFunc(RIVHeatMapView::Motion);
 	
 	//Create views
-	parallelCoordsView = new ParallelCoordsView(dataset,pathColor,intersectionColor,sizeProperty);
-	sceneView = new RIV3DView(dataset,rendererOne,intersectionColor,sizeProperty);
-	RIV3DView* sceneViewTwo = new RIV3DView(dataset,rendererOne,intersectionColor,sizeProperty);
+//	parallelCoordsView = new ParallelCoordsView(mainWindow,dataset,pathColor,intersectionColor,sizeProperty,padding,padding,width-2*padding,height / 2.F - 2*padding);
+//	sceneView = new RIV3DView(mainWindow,dataset,rendererOne,intersectionColor,sizeProperty,padding*3+squareSize,bottomHalfY,squareSize*2,squareSize);
+//	RIV3DView* sceneViewTwo = new RIV3DView(dataset,rendererOne,intersectionColor,sizeProperty);
 	//        heatMapView = new RIVHeatMapView(&dataset);
 	
 	//Add some filter callbacks
-	dataset->AddFilterListener(sceneView);
-	dataset->AddFilterListener(sceneViewTwo);
-	dataset->AddFilterListener(parallelCoordsView);
+//	dataset->AddFilterListener(sceneView);
+//	dataset->AddFilterListener(sceneViewTwo);
+//	dataset->AddFilterListener(parallelCoordsView);
 }
 
 int main(int argc, char **argv)
@@ -397,7 +380,6 @@ int main(int argc, char **argv)
     glutInitWindowPosition(posX,posY);
     
     /* create the window and store the handle to it */
-    mainWindow = glutCreateWindow("Rendering InfoVis" /* title */ );
 	
 	glutIdleFunc(idle);
     

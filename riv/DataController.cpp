@@ -145,7 +145,7 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 		else { //I AM SO FULL, I CANNOT EAT ONE MORE BYTE OF DATA
 			paused = true;
 			//How to resolve the pause, what do we throw out to create more space?
-			dataset->Print(250);
+//			dataset->Print(250);
 			dataset->NotifyDataListeners();
 		}
 	}

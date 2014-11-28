@@ -42,11 +42,11 @@ private:
     
     void clearSelection();
 public:
-    ParallelCoordsView(RIVDataSet* dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty);
-    ParallelCoordsView(RIVDataSet* dataset, RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty);
+	ParallelCoordsView(int parentWindow, RIVDataSet* dataset, RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty,int x, int y, int width, int height);
+//    ParallelCoordsView(RIVDataSet* dataset, RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty);
 	~ParallelCoordsView(void);
 	
-	static int windowHandle;
+	int windowHandle;
     
     //Implemented virtual functions prescribed by DataView
     void Draw();
