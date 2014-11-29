@@ -41,9 +41,9 @@ void DataController::createDataSet() {
 	pathTable->AddRecord(rendererId);
 	pathTable->AddRecord(xPixels);
 	pathTable->AddRecord(yPixels);
-	pathTable->AddRecord(lensUs);
-	pathTable->AddRecord(lensVs);
-	pathTable->AddRecord(times);
+//	pathTable->AddRecord(lensUs);
+//	pathTable->AddRecord(lensVs);
+//	pathTable->AddRecord(times);
 	pathTable->AddRecord(colorRs);
 	pathTable->AddRecord(colorGs);
 	pathTable->AddRecord(colorBs);
@@ -74,8 +74,8 @@ void DataController::createDataSet() {
 	isectsTable->AddRecord(isectColorGs);
 	isectsTable->AddRecord(isectColorBs);
 	isectsTable->AddRecord(primitiveIds);
-	isectsTable->AddRecord(shapeIds);
-	isectsTable->AddRecord(interactionTypes);
+//	isectsTable->AddRecord(shapeIds);
+//	isectsTable->AddRecord(interactionTypes);
 	isectsTable->AddRecord(lightIds);
 	
 	pathsToIsectRef = new RIVMultiReference(pathTable,isectsTable);
@@ -93,18 +93,19 @@ RIVDataSet* DataController::GetDataSet() {
 
 void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 //	printf("New path from renderer #1 received!\n");
+//	return;
 	if(!paused) {
 		if(rendererId->Size() < maxPaths) {
 			size_t nrIntersections = newPath->intersectionData.size();
 			if(nrIntersections > 0) {
-				
+//				mutex.lock();
 //				printf("Adding new path.\n");
 				rendererId->AddValue(renderer);
 				xPixels->AddValue(newPath->imageX);
 				yPixels->AddValue(newPath->imageY);
-				lensUs->AddValue(newPath->lensU);
-				lensVs->AddValue(newPath->lensV);
-				times->AddValue(newPath->timestamp);
+//				lensUs->AddValue(newPath->lensU);
+//				lensVs->AddValue(newPath->lensV);
+//				times->AddValue(newPath->timestamp);
 				colorRs->AddValue(std::min(newPath->radiance[0],1.F));
 				colorGs->AddValue(std::min(newPath->radiance[1],1.F));
 				colorBs->AddValue(std::min(newPath->radiance[2],1.F));
@@ -126,8 +127,8 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 					isectColorGs->AddValue(std::min(isect.color[1],1.F));
 					isectColorBs->AddValue(std::min(isect.color[2],1.F));
 					primitiveIds->AddValue(isect.primitiveId);
-					shapeIds->AddValue(isect.shapeId);
-					interactionTypes->AddValue(isect.interactionType);
+//					shapeIds->AddValue(isect.shapeId);
+//					interactionTypes->AddValue(isect.interactionType);
 					lightIds->AddValue(isect.lightId);
 					
 					isectToPathsRef->AddReference(xs->Size() - 1, rendererId->Size() - 1);
@@ -140,12 +141,14 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 				if(rendererId->Size() % updateThrottle == 0) {
 					dataset->NotifyDataListeners();
 				}
+//				mutex.unlock();
 			}
 		}
 		else { //I AM SO FULL, I CANNOT EAT ONE MORE BYTE OF DATA
 			paused = true;
 			//How to resolve the pause, what do we throw out to create more space?
 			dataset->Print(250);
+			
 			dataset->NotifyDataListeners();
 		}
 	}

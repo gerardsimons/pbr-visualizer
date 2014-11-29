@@ -74,7 +74,13 @@ private:
 	callback_function callback;
 public:
 	//Constructor
+	static size_t IdCounter;
+	size_t id;
+	
 	DataConnector(callback_function callback);
+	DataConnector* Copy() {
+		return new DataConnector(callback);
+	}
 //	void ProcessPath();
 	void FinishPath(unsigned short depth, float r, float g, float b, float throughput_r, float throughput_g, float throughput_b);
 	void StartPath(float x, float y, float lensU, float lensV, float time);

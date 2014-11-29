@@ -112,6 +112,15 @@ void keys(int keyCode, int x, int y) {
             dataset->ClearFilters();
 			dataset->StopFiltering();
             break;
+			
+		case 49: //The '1' key, switch to renderer one if not already using it
+			postRedisplay = imageView->SetActiveRenderer(0);
+			break;
+		case 50: //The '2' key, switch to renderer two if not already using it
+			if(rendererTwo) {
+				postRedisplay = imageView->SetActiveRenderer(1);
+			}
+			break;
         case 98: // 'b' key
             glutSwapBuffers();
             printf("Manual swap buffers\n");
@@ -139,9 +148,13 @@ void keys(int keyCode, int x, int y) {
 		case 112: //The 'p' key, toggle drawing paths in 3D view
 			sceneView->ToggleDrawPaths();
 			break;
-        case 114: // 'r' key, recluster {
+        case 114: // 'r' key, force next frame rendering {
         {
-			printf("Key not set.\n");
+			rendererOne->RenderNextFrame();
+			if(rendererTwo)
+				rendererTwo->RenderNextFrame();
+			postRedisplay = true;
+			break;
         }
         case 111: // 'o' key, optimize clusters (debug feature)
         {
@@ -253,7 +266,7 @@ void reshape(int w, int h)
 //    glutReshapeWindow(height / 2 - 2 * padding, height /2 - 2 *padding);
 }
 
-const int maxFrames = 100;
+const int maxFrames = 2;
 int currentFrame = 0;
 
 bool finished = false;
@@ -262,13 +275,19 @@ void idle() {
 
 	if(currentFrame < maxFrames && !dataController->IsPaused()) {
 		++currentFrame;
+		
 		printf("Rendering frame %d.\n",currentFrame);
 		rendererOne->RenderNextFrame();
+		if(rendererTwo) {
+//			rendererTwo->RenderNextFrame();
+		}
+		
 		glutPostRedisplay();
 	}
 	else if(!finished) {
 		printf("Done......\n");
 		finished = true;
+		glutPostRedisplay();
 	}
 }
 
@@ -292,8 +311,10 @@ void setupDataController(const int argc, char** argv) {
 		printf("1 renderer set up.\n");
 	}
 	else if(argc == 3) {
-		rendererOne = new EMBREERenderer(new DataConnector(processRendererOne), std::string(argv[1]));
-		rendererTwo = new EMBREERenderer(new DataConnector(processRendererTwo), std::string(argv[2]));
+		DataConnector* dcOne = new DataConnector(processRendererOne);
+		DataConnector* dcTwo = new DataConnector(processRendererTwo);
+		rendererOne = new EMBREERenderer(dcOne, std::string(argv[1]));
+		rendererTwo = new EMBREERenderer(dcTwo, std::string(argv[2]));
 		printf("2 renderers set up.\n");
 	}
 	else {
@@ -335,7 +356,7 @@ void createViews() {
 	//Load image
 	float bottomHalfY = height / 2.f + padding;
 	float squareSize = height / 2.F - 2 * padding;
-	//		image = new BMPImage(bmpPath.c_str(),false);
+
 	glutSetWindow(imageViewWindow);
 	imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,squareSize,squareSize);
 	imageView = new RIVImageView(dataset,rendererOne,defaultColorProperty,defaultSizeProperty);
@@ -403,7 +424,6 @@ int main(int argc, char **argv)
     
     // display and idle function
     glutDisplayFunc(display);
-    //    glutIdleFunc(renderSceneAll);
     
     /* --- register callbacks with GLUT ---     */
     
@@ -427,7 +447,6 @@ int main(int argc, char **argv)
     
     /* start the GLUT main loop */
     glutMainLoop();
-    
     
     return EXIT_SUCCESS;
 }

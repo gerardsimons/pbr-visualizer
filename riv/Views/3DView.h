@@ -39,6 +39,7 @@ protected:;
 	TriangleMeshGroup meshes;
 	
 	EMBREERenderer* rendererOne = NULL;
+	EMBREERenderer* rendererTwo = NULL;
 	
 	//Octree generated from 3D points (generated in createPoints)
 	Octree* heatmap = NULL;
@@ -83,8 +84,10 @@ protected:;
     static RIV3DView* instance;
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
-    RIV3DView(RIVDataSet* dataset,EMBREERenderer* rendererOne,int,int,int,int,int,int,RIVColorProperty*,RIVSizeProperty*);
-    RIV3DView(RIVDataSet* dataset,EMBREERenderer* rendererOne,RIVColorProperty*,RIVSizeProperty*);
+	//Single renderer constructor
+    RIV3DView(RIVDataSet* dataset,EMBREERenderer* renderer,RIVColorProperty*,RIVSizeProperty*);
+	//Dual renderer constructor
+	RIV3DView(RIVDataSet* dataset,EMBREERenderer* rendererOne,EMBREERenderer* rendererTwo,RIVColorProperty*,RIVSizeProperty*);
 	
 	//Extract data about the scene from the embree renderer object
 	void GetSceneData();

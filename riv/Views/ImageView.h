@@ -12,6 +12,7 @@
 #include "DataView.h"
 #include "../Geometry/Geometry.h"
 #include "../Graphics/BMPImage.h"
+
 #include "devices/device_singleray/embree_renderer.h"
 
 #if defined(__APPLE__)
@@ -22,8 +23,10 @@
 
 class RIVImageView : public RIVDataView, public RIVDataSetListener {
 public:
-//    RIVImageView(RIVDataSet* dataset,  BMPImage* image, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* colorProperty,RIVSizeProperty* sizeProperty);
+	//Single renderer constructor
     RIVImageView(RIVDataSet* dataset,  EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty *size);
+	//Dual renderer constructor
+	RIVImageView(RIVDataSet* dataset,  EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty* color, RIVSizeProperty *size);
     
     static void DrawInstance();
     static void ReshapeInstance(int,int);
@@ -35,7 +38,8 @@ public:
 	virtual bool HandleMouse(int,int,int,int);
 	virtual bool HandleMouseMotion(int x, int y);
 	
-	void InitializeGraphics();
+	//Change the currently active renderer if necessary, return true if a change was necessary
+	bool SetActiveRenderer(size_t i);
 	
 	void OnFiltersChanged();
 	void OnDataChanged();
@@ -44,9 +48,9 @@ public:
 private:
     static RIVImageView* instance;
 	
-	EMBREERenderer* renderer = NULL;
+	EMBREERenderer* activeRenderer = NULL;
+	std::vector<EMBREERenderer*> renderers;
 	
-    GLuint imageTexture;
 	float imageMagnificationX,imageMagnificationY;
 
     RIVPoint viewToPixelSpace(int x, int y);

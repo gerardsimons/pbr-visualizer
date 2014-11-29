@@ -58,6 +58,7 @@ private:
 	std::string g_accel = "default";
 	std::string g_builder = "default";
 	std::string g_traverser = "default";
+	
 	int g_depth = -1;                       //!< recursion depth
 	int g_spp = 1;                          //!< samples per pixel for ordinary rendering
 	
@@ -118,7 +119,7 @@ public:
 	std::string GetFormat() { return g_format; };
 	Vec2<size_t> GetDimensions();
 	
-	static EMBREERenderer* instance;
+//	static EMBREERenderer* instance;
 	static void displayFuncAccess(void);
 	
 	//Frame buffer mapping and umapping

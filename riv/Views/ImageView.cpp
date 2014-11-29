@@ -15,22 +15,37 @@
 RIVImageView* RIVImageView::instance = NULL;
 int RIVImageView::windowHandle = -1;
 
-RIVImageView::RIVImageView(RIVDataSet* dataset, EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size), renderer(renderer) {
+RIVImageView::RIVImageView(RIVDataSet* dataset, EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size) {
     if(instance != NULL) {
         throw "Only 1 instance of ImageView allowed.";
     }
     instance = this;
     identifier = "ImageView";
-	this->renderer = renderer;
     
 	selection.start.x = -1;
     selection.start.y = -1;
     selection.end.x = -1;
     selection.end.y = -1;
+	
+	activeRenderer = renderer;
+	renderers.push_back(renderer);
 }
 
-void RIVImageView::InitializeGraphics() {
+RIVImageView::RIVImageView(RIVDataSet* dataset, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size) {
+	if(instance != NULL) {
+		throw "Only 1 instance of ImageView allowed.";
+	}
+	instance = this;
+	identifier = "ImageView";
 	
+	selection.start.x = -1;
+	selection.start.y = -1;
+	selection.end.x = -1;
+	selection.end.y = -1;
+	
+	activeRenderer = rendererOne;
+	renderers.push_back(rendererOne);
+	renderers.push_back(rendererTwo);
 }
 
 void RIVImageView::DrawInstance() {
@@ -124,9 +139,9 @@ void RIVImageView::Draw() {
 //		glPushAttrib(GL_ALL_ATTRIB_BITS);
 //		glColor3f(1,1,1);
 		
-		void* ptr = renderer->MapFrameBuffer();
-		std::string format = renderer->GetFormat();
-		Vec2<size_t> dimensions = renderer->GetDimensions();
+		void* ptr = activeRenderer->MapFrameBuffer();
+		std::string format = activeRenderer->GetFormat();
+		Vec2<size_t> dimensions = activeRenderer->GetDimensions();
 		int g_width = dimensions[0];
 		int g_height = dimensions[1];
 
@@ -147,9 +162,9 @@ void RIVImageView::Draw() {
 		glFlush();
 		glutSwapBuffers();
 		
-		renderer->UnmapFrameBuffer();
+		activeRenderer->UnmapFrameBuffer();
 		
-		renderer->outputMode("imageview_out_" + std::to_string(drawCounter) + ".tga");
+//		rendererOne->outputMode("imageview_out_rendererOne" + std::to_string(drawCounter) + ".tga");
 		
 //		void* ptr = renderer->MapFrameBuffer();
 //		char* bytes = (char*)ptr;
@@ -179,7 +194,7 @@ void RIVImageView::Draw() {
 //		else if (g_format == "RGB8")
 //			glDrawPixels((GLsizei)width,(GLsizei)height,GL_RGB,GL_FLOAT,ptr);
 		
-		renderer->UnmapFrameBuffer();
+		activeRenderer->UnmapFrameBuffer();
 
 		//reset to previous state
 //		glPopAttrib();
@@ -197,6 +212,17 @@ void RIVImageView::Draw() {
 		glFlush();
 		glutSwapBuffers();
 	}
+}
+
+bool RIVImageView::SetActiveRenderer(size_t i) {
+	if(i < renderers.size()) {
+		EMBREERenderer* renderer = renderers[i];
+		if(activeRenderer != renderer) {
+			activeRenderer = renderer;
+			return true;
+		}
+	}
+	return false;
 }
 
 #ifdef __APPLE__

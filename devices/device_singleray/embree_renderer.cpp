@@ -24,7 +24,7 @@
 
 using namespace embree;
 
-EMBREERenderer* EMBREERenderer::instance = NULL;
+//EMBREERenderer* EMBREERenderer::instance = NULL;
 
 /******************************************************************************/
 /*                            Object Creation                                 */
@@ -235,10 +235,6 @@ std::vector<Shape*>* EMBREERenderer::GetShapes() {
 //		}
 //	}
 
-void EMBREERenderer::displayFuncAccess() {
-	instance->displayFunc();
-}
-
 void EMBREERenderer::displayFunc(void)
 {
 	
@@ -399,10 +395,12 @@ EMBREERenderer::EMBREERenderer(DataConnector* dataConnector, const std::string& 
 	clearGlobalObjects();
 	
 	//We do not use Device::createDevice because it depends on the dynamic library, which makes things harder
+	//More threads than one does not work
+
 	g_device = new SingleRayDevice(1,g_rtcore_cfg.c_str());
-	g_device->SetDataConnector(dataConnector);
 	
 	g_single_device = dynamic_cast<SingleRayDevice*>(g_device);
+	g_single_device->SetDataConnector(dataConnector);
 	
 	/*! create stream for parsing */
 	FileName file = FileName() + commandsFile;
@@ -422,13 +420,11 @@ EMBREERenderer::EMBREERenderer(DataConnector* dataConnector, const std::string& 
 			rawShapes.push_back(shape);
 		}
 	}
-	
-	instance = this;
 }
 
 void EMBREERenderer::RenderNextFrame() {
-	g_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1);
-	g_device->rtSwapBuffers(g_frameBuffer);
+	g_single_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1);
+	g_single_device->rtSwapBuffers(g_frameBuffer);
 }
 
 bool EMBREERenderer::RayPick(Ray& ray, float& x, float& y, float& z) {

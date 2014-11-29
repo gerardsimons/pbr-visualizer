@@ -28,27 +28,27 @@
 RIV3DView* RIV3DView::instance = NULL;
 int RIV3DView::windowHandle = -1;
 
-RIV3DView::RIV3DView(RIVDataSet* dataset, EMBREERenderer* rendererOne, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty)
-	: RIVDataView(dataset,x,y,width,height,paddingX,paddingY,colorProperty,sizeProperty) {
-	this->rendererOne = rendererOne;
+RIV3DView::RIV3DView(RIVDataSet* dataset,EMBREERenderer* renderer, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,colorProperty,sizeProperty),
+rendererOne(renderer) {
+	
     if(instance != NULL) {
-        throw "Only 1 instance of RIV3DView allowed.";
+		throw std::runtime_error("Only 1 instance of RIV3DView allowed.");
     }
     instance = this;
     identifier = "3DView";
-		
+	
 	GetSceneData();
-		
+	
 	ResetGraphics();
 };
 
-RIV3DView::RIV3DView(RIVDataSet* dataset,EMBREERenderer* rendererOne, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,colorProperty,sizeProperty) {
-	this->rendererOne = rendererOne;
-    if(instance != NULL) {
-        throw "Only 1 instance of RIV3DView allowed.";
-    }
-    instance = this;
-    identifier = "3DView";
+RIV3DView::RIV3DView(RIVDataSet* dataset,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) :
+RIVDataView(dataset,colorProperty,sizeProperty), rendererOne(rendererOne), rendererTwo(rendererTwo) {
+	if(instance != NULL) {
+		throw std::runtime_error("Only 1 instance of RIV3DView allowed.");
+	}
+	instance = this;
+	identifier = "3DView";
 	
 	GetSceneData();
 	

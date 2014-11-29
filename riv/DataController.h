@@ -9,8 +9,9 @@
 #ifndef __embree__DataController__
 #define __embree__DataController__
 
-#include "Data/DataSet.h"
+#include <mutex>
 
+#include "Data/DataSet.h"
 #include "devices/device_singleray/dataconnector.h"
 
 class DataController {
@@ -19,6 +20,8 @@ private:
 	std::vector<RIVDataSetListener*> dataListeners;
 	void notifyFilterListeners();
 	void notifyDataListeners();
+	
+	std::mutex mutex;
 	
 	/* Shortcut pointers for quick access */
 	RIVTable* pathTable;
@@ -56,7 +59,7 @@ private:
 	RIVSingleReference* isectToPathsRef;
 	
 	bool paused = false;
-	size_t maxPaths = 1000000;
+	size_t maxPaths = 100000;
 	size_t updateThrottle = 0;
 	
 	//Generate the dataset; create tables records etc.
