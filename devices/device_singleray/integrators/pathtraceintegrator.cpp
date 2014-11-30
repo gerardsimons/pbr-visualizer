@@ -104,33 +104,6 @@ namespace embree
 		Sample3f wi;
 		BRDFType type;
 		/*! Global illumination. Pick one BRDF component and sample it. */
-		if (lightPath.depth < maxDepth)
-		{
-			/*! sample brdf */
-			Vec2f s  = state.sample->getVec2f(firstScatterSampleID     + lightPath.depth);
-			float ss = state.sample->getFloat(firstScatterTypeSampleID + lightPath.depth);
-			Color c = brdfs.sample(wo, dg, wi, type, s, ss, giBRDFTypes);
-			
-			/*! Continue only if we hit something valid. */
-			if (c != Color(zero) && wi.pdf > 0.0f)
-			{
-				/*! Compute  simple volumetric effect. */
-				const Color& transmission = lightPath.lastMedium.transmission;
-				if (transmission != Color(one)) c *= pow(transmission,lightPath.lastRay.tfar);
-				
-				/*! Tracking medium if we hit a medium interface. */
-				Medium nextMedium = lightPath.lastMedium;
-				if (type & TRANSMISSION) nextMedium = dg.material->nextMedium(lightPath.lastMedium);
-				
-				/*! Continue the path. */
-				Ray newRay(dg.P, wi, dg.error*epsilon, inf, lightPath.lastRay.time);
-				LightPath scatteredPath = lightPath.extended(newRay,nextMedium, c, (type & directLightingBRDFTypes) != NONE);
-		  
-//				Color isectColor =
-				L += c * Li(scatteredPath, scene, state,dataConnector) * rcp(wi.pdf);;
-			}
-		}
-		
 		/*! Check if any BRDF component uses direct lighting. */
 		bool useDirectLighting = false;
 		for (size_t i=0; i<brdfs.size(); i++)
@@ -168,8 +141,37 @@ namespace embree
 				L += ls.L * brdf * rcp(ls.wi.pdf);
 			}
 		}
-		if(dataConnector)
-			dataConnector->AddIntersectionData(dg.P.x,dg.P.y,dg.P.z,L.r,L.g,L.b,lightPath.lastRay.id0,type);
+		
+		if (lightPath.depth < maxDepth)
+		{
+			/*! sample brdf */
+			Vec2f s  = state.sample->getVec2f(firstScatterSampleID     + lightPath.depth);
+			float ss = state.sample->getFloat(firstScatterTypeSampleID + lightPath.depth);
+			Color c = brdfs.sample(wo, dg, wi, type, s, ss, giBRDFTypes);
+			
+			/*! Continue only if we hit something valid. */
+			if (c != Color(zero) && wi.pdf > 0.0f)
+			{
+				/*! Compute  simple volumetric effect. */
+				const Color& transmission = lightPath.lastMedium.transmission;
+				if (transmission != Color(one)) c *= pow(transmission,lightPath.lastRay.tfar);
+				
+				/*! Tracking medium if we hit a medium interface. */
+				Medium nextMedium = lightPath.lastMedium;
+				if (type & TRANSMISSION) nextMedium = dg.material->nextMedium(lightPath.lastMedium);
+				
+				/*! Continue the path. */
+				Ray newRay(dg.P, wi, dg.error*epsilon, inf, lightPath.lastRay.time);
+				LightPath scatteredPath = lightPath.extended(newRay,nextMedium, c, (type & directLightingBRDFTypes) != NONE);
+				
+				if(dataConnector)
+					dataConnector->AddIntersectionData(dg.P.x,dg.P.y,dg.P.z,L.r,L.g,L.b,lightPath.lastRay.id0,type);
+		  
+				Color isectColor = c * Li(scatteredPath, scene, state, dataConnector) * rcp(wi.pdf);
+				L += isectColor;
+			}
+		}
+		
 		return L;
 	}
 	Color PathTraceIntegrator::Li(Ray& ray, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector) {
