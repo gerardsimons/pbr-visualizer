@@ -105,201 +105,12 @@ void EMBREERenderer::clearGlobalObjects() {
 	g_render_scene = null;
 	rtClearTextureCache();
 	rtClearImageCache();
-	delete g_device;
-	g_device = NULL;
+//	delete g_device;
+//	g_device = NULL;
 }
 
 std::vector<Shape*>* EMBREERenderer::GetShapes() {
 	return &rawShapes;
-}
-
-/******************************************************************************/
-/*                      Command line parsing                                  */
-/******************************************************************************/
-
-//	static void parseDebugRenderer(Ref<ParseStream> cin, const FileName& path)
-//	{
-//		g_renderer = g_device->rtNewRenderer("debug");
-//		if (g_depth >= 0) g_device->rtSetInt1(g_renderer, "maxDepth", g_depth);
-//		g_device->rtSetInt1(g_renderer, "sampler.spp", g_spp);
-//		
-//		if (cin->peek() != "{") goto finish;
-//		cin->drop();
-//		
-//		while (cin->peek() != "}") {
-//			std::string tag = cin->getString();
-//			cin->force("=");
-//			if (tag == "depth") g_device->rtSetInt1(g_renderer, "maxDepth", cin->getInt());
-//			else std::cout << "unknown tag \"" << tag << "\" in debug renderer parsing" << std::endl;
-//		}
-//		cin->drop();
-//		
-//	finish:
-//		g_device->rtCommit(g_renderer);
-//	}
-//	
-//	static void parsePathTracer(Ref<ParseStream> cin, const FileName& path)
-//	{
-//		g_renderer = g_device->rtNewRenderer("pathtracer");
-//		if (g_depth >= 0) g_device->rtSetInt1(g_renderer, "maxDepth", g_depth);
-//		g_device->rtSetInt1(g_renderer, "sampler.spp", g_spp);
-//		if (g_backplate) g_device->rtSetImage(g_renderer, "backplate", g_backplate);
-//		
-//		if (cin->peek() != "{") goto finish;
-//		cin->drop();
-//		
-//		while (cin->peek() != "}") {
-//			std::string tag = cin->getString();
-//			cin->force("=");
-//			if      (tag == "depth"          ) g_device->rtSetInt1  (g_renderer, "maxDepth"       , cin->getInt()  );
-//			else if (tag == "spp"            ) g_device->rtSetInt1  (g_renderer, "sampler.spp"    , cin->getInt()  );
-//			else if (tag == "minContribution") g_device->rtSetFloat1(g_renderer, "minContribution", cin->getFloat());
-//			else if (tag == "backplate"      ) g_device->rtSetImage (g_renderer, "backplate", rtLoadImage(path + cin->getFileName()));
-//			else std::cout << "unknown tag \"" << tag << "\" in debug renderer parsing" << std::endl;
-//		}
-//		cin->drop();
-//		
-//	finish:
-//		g_device->rtCommit(g_renderer);
-//	}
-//	
-//	static void displayMode()
-//	{
-//		if (!g_renderer) throw std::runtime_error("no renderer set");
-//		AffineSpace3f camSpace = AffineSpace3f::lookAtPoint(g_camPos, g_camLookAt, g_camUp);
-//		float speed = 0.02f * length(g_camLookAt - g_camPos);
-//		Handle<Device::RTScene> scene = createScene();
-//		GLUTDisplay(camSpace, speed, scene);
-//		g_rendered = true;
-//	}
-//
-//
-//	static std::string parseList(Ref<ParseStream> cin)
-//	{
-//		std::string str;
-//		if (cin->peek() != "" && cin->peek()[0] != '-') {
-//			str += cin->getString();
-//			while (cin->peek() != "" && cin->peek()[0] != '-') str += " " + cin->getString();
-//		}
-//		return str;
-//	}
-//	
-//	static void parseNumThreads(Ref<ParseStream> cin)
-//	{
-//		while (true)
-//		{
-//			std::string tag = cin->peek();
-//			if (tag == "-rtcore") {
-//				cin->getString();
-//				g_rtcore_cfg = cin->getString();
-//			}
-//			
-//			else if (tag == "-threads") {
-//				cin->getString();
-//				g_numThreads = cin->getInt();
-//				g_rtcore_cfg += ",threads=" + std::stringOf(g_numThreads);
-//			}
-//			
-//			/*! enable verbose output mode */
-//			else if (tag == "-verbose") {
-//				cin->getString();
-//				g_verbose_output = 1;
-//				g_rtcore_cfg += ",verbose=" + std::stringOf(g_verbose_output);
-//			}
-//			else break;
-//		}
-//	}
-//	
-//	static void parseDevice(Ref<ParseStream> cin)
-//	{
-//		std::string tag = cin->peek();
-//		if (tag == "") return;
-//		
-//		/* create network device */
-//		if (tag == "-connect") {
-//			cin->getString();
-//			clearGlobalObjects();
-//			if (g_format != "RGBA8") g_format = "RGB8";
-//			g_numBuffers = 2;
-//			std::string type = "network "+parseList(cin);
-//			g_device = Device::rtCreateDevice(type.c_str(),g_numThreads,g_rtcore_cfg.c_str());
-//			createGlobalObjects();
-//		}
-//		
-//		/* parse device */
-//		else if (tag == "-device") {
-//			cin->getString();
-//			clearGlobalObjects();
-//			g_device = Device::rtCreateDevice(cin->getString().c_str(),g_numThreads,g_rtcore_cfg.c_str());
-//			createGlobalObjects();
-//		}
-//	}
-
-void EMBREERenderer::displayFunc(void)
-{
-	
-	/* create random geometry for regression test */
-//	if (g_regression)
-//		g_render_scene = createRandomScene(g_device,1,random<int>()%100,random<int>()%1000);
-	
-	/* set accumulation mode */
-//	int accumulate = g_resetAccumulation ? 0 : g_refine;
-//	g_resetAccumulation = false;
-	
-	/* render image */
-//	Handle<Device::RTCamera> camera = createCamera(AffineSpace3f::lookAtPoint(g_camPos, g_camLookAt, g_camUp));
-	
-	/* render into framebuffer */
-//	g_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,0);
-//	g_device->rtSwapBuffers(g_frameBuffer);
-	
-	/* draw image in OpenGL */
-	void* ptr = MapFrameBuffer();
-	
-	glRasterPos2i(1, 100);
-	glPixelZoom(1.0f, -1.0f);
-	
-	if (g_format == "RGB_FLOAT32")
-		glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_FLOAT,ptr);
-	else if (g_format == "RGBA8")
-		glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGBA,GL_UNSIGNED_BYTE,ptr);
-	else if (g_format == "RGB8")
-		glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_UNSIGNED_BYTE,ptr);
-	else
-		throw std::runtime_error("unknown framebuffer format: "+g_format);
-	
-	glFlush();
-	glutSwapBuffers();
-	
-	UnmapFrameBuffer();
-//	g_device->rtUnmapFrameBuffer(g_frameBuffer,0);
-	
-//	/* calculate rendering time */
-//	double t1 = getSeconds();
-//	g_dt[frameID % avgFrames] = t1-g_t0; g_t0 = t1;
-//	frameID++;
-//	
-//	/* print average render time of previous frames */
-//	size_t num = 0;
-//	double dt = 0.0f;
-//	for (size_t i=0; i<avgFrames; i++) {
-//		if (g_dt[i] != 0.0f) {
-//			dt += g_dt[i]; num++;
-//		}
-//	}
-//	dt /= num;
-//	
-//	std::ostringstream stream;
-//	stream.setf(std::ios::fixed, std::ios::floatfield);
-//	stream.precision(2);
-//	stream << 1.0f/dt << " fps, ";
-//	stream.precision(2);
-//	stream << dt*1000.0f << " ms";
-//	stream << ", " << g_width << "x" << g_height;
-//	if (log_display)
-//		std::cout << "display " << stream.str() << std::endl;
-//	glutSetWindowTitle((std::string("Embree: ") + stream.str()).c_str());
-	
 }
 
 std::string EMBREERenderer::makeFileName(const std::string path, const std::string fileName)
@@ -398,9 +209,9 @@ EMBREERenderer::EMBREERenderer(DataConnector* dataConnector, const std::string& 
 	//More threads than one does not work
 
 	g_device = new SingleRayDevice(1,g_rtcore_cfg.c_str());
+	g_device->SetDataConnector(dataConnector);
 	
 	g_single_device = dynamic_cast<SingleRayDevice*>(g_device);
-	g_single_device->SetDataConnector(dataConnector);
 	
 	/*! create stream for parsing */
 	FileName file = FileName() + commandsFile;
@@ -423,8 +234,9 @@ EMBREERenderer::EMBREERenderer(DataConnector* dataConnector, const std::string& 
 }
 
 void EMBREERenderer::RenderNextFrame() {
-	g_single_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1);
-	g_single_device->rtSwapBuffers(g_frameBuffer);
+	g_device = g_single_device;
+	g_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1);
+	g_device->rtSwapBuffers(g_frameBuffer);
 }
 
 bool EMBREERenderer::RayPick(Ray& ray, float& x, float& y, float& z) {

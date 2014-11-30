@@ -58,17 +58,24 @@ private:
 	RIVMultiReference* pathsToIsectRef;
 	RIVSingleReference* isectToPathsRef;
 	
+	//The number of data points per renderer
+	std::map<ushort,size_t> pathCounts;
+	
 	bool paused = false;
-	size_t maxPaths = 100000;
+	const size_t maxPaths;
 	size_t updateThrottle = 0;
 	
 	//Generate the dataset; create tables records etc.
 	void createDataSet();
+	void clearPathCounts();
 public:
 	bool IsPaused();
-	DataController();
+	//The number of renderers to expect data from and the maximum number of paths per renderer before data reduction should kick in
+	DataController(const ushort renderers, const size_t maxPaths);
 	RIVDataSet* GetDataSet();
 	void ProcessNewPath(ushort renderer, PathData* newPath);
+	//Reduce the data
+	void Reduce();
 };
 
 #endif /* defined(__embree__DataController__) */

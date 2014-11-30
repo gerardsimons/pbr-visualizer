@@ -1,4 +1,4 @@
-	#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
@@ -21,6 +21,7 @@
 //EMBREE STUFF
 #include "devices/device_singleray/embree_renderer.h"
 #include "devices/device_singleray/dataconnector.h"
+//#include "devices/device_singleray_two/embree_renderer_two.h"
 //#include "sandbox.h"
 
 #if defined(__APPLE__)
@@ -46,7 +47,8 @@ bool isDirty = true;
 int posX = 0;
 int posY = 0;
 
-int mainWindow;                   /* GLUT window handle */
+/* GLUT window handle */
+int mainWindow;
 
 /* All the sub window handles of the custom views */
 int imageViewWindow;
@@ -70,7 +72,9 @@ DataController* dataController;
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-/* Draw the window - this is where all the GL actions are */
+const int maxPaths = 500000;
+
+
 void display(void)
 {
     printf("Main display function called.\n");
@@ -266,7 +270,7 @@ void reshape(int w, int h)
 //    glutReshapeWindow(height / 2 - 2 * padding, height /2 - 2 *padding);
 }
 
-const int maxFrames = 2;
+const int maxFrames = 3;
 int currentFrame = 0;
 
 bool finished = false;
@@ -279,7 +283,7 @@ void idle() {
 		printf("Rendering frame %d.\n",currentFrame);
 		rendererOne->RenderNextFrame();
 		if(rendererTwo) {
-//			rendererTwo->RenderNextFrame();
+			rendererTwo->RenderNextFrame();
 		}
 		
 		glutPostRedisplay();
@@ -293,17 +297,17 @@ void idle() {
 
 void processRendererOne(PathData* newPath) {
 //	printf("New path from renderer #1 received!\n");
-	dataController->ProcessNewPath(1,newPath);
+	dataController->ProcessNewPath(0,newPath);
 }
 
 void processRendererTwo(PathData* newPath) {
-	printf("New path from renderer #2 received!\n");
-	dataController->ProcessNewPath(2,newPath);
+//	printf("New path from renderer #2 received!\n");
+	dataController->ProcessNewPath(1,newPath);
 }
 
 void setupDataController(const int argc, char** argv) {
 	//Create the EMBREE renderer
-	dataController = new DataController();
+	dataController = new DataController(argc - 1, maxPaths);
 	dataset = dataController->GetDataSet();
 	if(argc == 2) { //Just one renderer
 		DataConnector* connector = new DataConnector(processRendererOne);
@@ -398,7 +402,7 @@ int main(int argc, char **argv)
 {
     printf("Initialising Rendering InfoVis...\n");
 
-	testFunctions();
+//	testFunctions();
 	
     srand(time(NULL));
     /* initialize GLUT, let it extract command-line

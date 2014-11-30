@@ -64,11 +64,6 @@ ENDIF()
 SET(ISPC_TARGETS "${ISPC_TARGETS}")
 STRING(REGEX REPLACE ";" "," ISPC_TARGETS "${ISPC_TARGETS}")
 
-#########################
-# C++11 Support
-#########################
-SET(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
-
 ##############################################################
 # Compiler
 ##############################################################

@@ -9,11 +9,19 @@
 #include "DataController.h"
 #include <algorithm>
 
-DataController::DataController() {
+DataController::DataController(const ushort renderers, const size_t maxPaths) : maxPaths(maxPaths) {
 	if(updateThrottle == 0) {
 		updateThrottle = maxPaths;
 	}
 	createDataSet();
+	
+	for(ushort i = 0 ; i < renderers ; ++i) {
+		pathCounts[i] = 0;
+	}
+}
+
+void DataController::clearPathCounts() {
+	
 }
 
 void DataController::createDataSet() {
@@ -24,8 +32,8 @@ void DataController::createDataSet() {
 	pathTable = new RIVTable("paths");
 	
 	rendererId = new RIVUnsignedShortRecord("renderer");
-	xPixels = new RIVFloatRecord("x");
-	yPixels = new RIVFloatRecord("y");
+	xPixels = new RIVFloatRecord("pixel_x");
+	yPixels = new RIVFloatRecord("pixel_y");
 	lensUs = new RIVFloatRecord("lens U");
 	lensVs = new RIVFloatRecord("lens V");
 	times = new RIVFloatRecord("time");
@@ -95,7 +103,8 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 //	printf("New path from renderer #1 received!\n");
 //	return;
 	if(!paused) {
-		if(rendererId->Size() < maxPaths) {
+		if(pathCounts[renderer] < maxPaths) {
+			++pathCounts[renderer];
 			size_t nrIntersections = newPath->intersectionData.size();
 			if(nrIntersections > 0) {
 //				mutex.lock();
@@ -145,9 +154,18 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 			}
 		}
 		else { //I AM SO FULL, I CANNOT EAT ONE MORE BYTE OF DATA
+			
+			//Any other renderers that are not full?
+			for(ushort i = 0 ; i < pathCounts.size() ; ++i) {
+				if(i != renderer && pathCounts[i] < maxPaths) {
+//					printf("Renderer #%d still has some room to spare.\n",i);
+					return;
+				}
+			}
+			
 			paused = true;
 			//How to resolve the pause, what do we throw out to create more space?
-			dataset->Print(250);
+			dataset->Print(50);
 			
 			dataset->NotifyDataListeners();
 		}
