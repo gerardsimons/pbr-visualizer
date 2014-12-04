@@ -117,7 +117,7 @@ void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v )
 
 unsigned long factorization(int N,unsigned long maxF) {
     if(N < 0) {
-        throw std::string("Invalid value for N");
+        throw std::runtime_error("Invalid value for N");
     }
     unsigned long f = 1;
     unsigned long lastF = 0; //To observe overflows

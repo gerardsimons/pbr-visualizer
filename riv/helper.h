@@ -156,7 +156,6 @@ unsigned long long
 choose(unsigned long long n, unsigned long long k);
 
 std::vector<std::vector<size_t> > generateCombinations(unsigned long long n, unsigned long long r, size_t requested);
-
 std::vector<std::vector<size_t> > generateCombinations(std::vector<size_t> pool, unsigned long long r, size_t requested);
 
 template <typename T>

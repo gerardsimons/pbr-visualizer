@@ -28,7 +28,7 @@
 RIV3DView* RIV3DView::instance = NULL;
 int RIV3DView::windowHandle = -1;
 
-RIV3DView::RIV3DView(RIVDataSet* dataset,EMBREERenderer* renderer, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,colorProperty,sizeProperty),
+RIV3DView::RIV3DView(RIVDataSet** dataset,EMBREERenderer* renderer, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,colorProperty,sizeProperty),
 rendererOne(renderer) {
 	
     if(instance != NULL) {
@@ -42,7 +42,7 @@ rendererOne(renderer) {
 	ResetGraphics();
 };
 
-RIV3DView::RIV3DView(RIVDataSet* dataset,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) :
+RIV3DView::RIV3DView(RIVDataSet** dataset,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) :
 RIVDataView(dataset,colorProperty,sizeProperty), rendererOne(rendererOne), rendererTwo(rendererTwo) {
 	if(instance != NULL) {
 		throw std::runtime_error("Only 1 instance of RIV3DView allowed.");
@@ -324,7 +324,7 @@ void RIV3DView::drawPoints() {
 	reporter::startTask("Draw points.");
 //	printf("Drawing intersections points.\n");
 	
-	RIVTable* isectTable = dataset->GetTable("intersections");
+	RIVTable* isectTable = (*dataset)->GetTable("intersections");
 	
 	RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("x");
 	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("y");
@@ -357,9 +357,7 @@ void RIV3DView::drawPoints() {
 			float y = yRecord->Value(point->rowIndex);
 			float z = zRecord->Value(point->rowIndex);
 			
-//			float throughput = (throughputR->Value(row) + throughputG->Value(row) + throughputB->Value(row)) / 3;
-			
-			glPushMatrix();
+
 			glColor3f(pointColor.R,pointColor.G,pointColor.B);
 			glVertex3f(x,y,z);
 		}
@@ -381,7 +379,7 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 	
 	size_t row;
 	
-	RIVTable* isectTable = dataset->GetTable("intersections");
+	RIVTable* isectTable = (*dataset)->GetTable("intersections");
 	TableIterator *iterator = isectTable->GetIterator();
 	
 	//Generate the index subset
@@ -428,7 +426,7 @@ void RIV3DView::createPaths() {
 	
 	reporter::startTask("Creating paths");
 	
-	RIVTable* isectTable = dataset->GetTable("intersections");
+	RIVTable* isectTable = (*dataset)->GetTable("intersections");
 	RIVUnsignedShortRecord* bounceRecord = isectTable->GetRecord<RIVUnsignedShortRecord>("bounce_nr");
 	
 	paths.clear();
@@ -500,7 +498,7 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 	int startBounce = floor(startSegment * maxBounce);
 	int endBounce = startBounce + 1;
 	
-	RIVTable* intersectionsTable = dataset->GetTable("intersections");
+	RIVTable* intersectionsTable = (*dataset)->GetTable("intersections");
 	RIVFloatRecord* xRecord = intersectionsTable->GetRecord<RIVFloatRecord>("x");
 	RIVFloatRecord* yRecord = intersectionsTable->GetRecord<RIVFloatRecord>("y");
 	RIVFloatRecord* zRecord = intersectionsTable->GetRecord<RIVFloatRecord>("z");
@@ -703,15 +701,15 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 //		
 		if(refilterNeeded) { //Create path filter
 			printf("Path creation filter");
-			dataset->StartFiltering();
+			(*dataset)->StartFiltering();
 			if(pathFilter == NULL) { //Add to the previous filter
 				riv::Filter* objectFilter = new riv::DiscreteFilter("primitive ID",selectedObjectID);
 				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce_nr",1);
 				std::vector<riv::Filter*> fs;
 				fs.push_back(objectFilter);
 				fs.push_back(bounceFilter);
-				pathFilter = new riv::GroupFilter(new riv::ConjunctiveFilter(fs),dataset->GetTable("paths"));
-				dataset->AddFilter("paths", pathFilter);
+				pathFilter = new riv::GroupFilter(new riv::ConjunctiveFilter(fs),(*dataset)->GetTable("paths"));
+				(*dataset)->AddFilter("paths", pathFilter);
 			}
 			else { //There already is a path creation filter, simply add to it
 				//Find the latest bounce nr filter
@@ -724,11 +722,11 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 				fs.push_back(bounceFilter);
 				pathFilter->AddFilter(new riv::ConjunctiveFilter(fs));
 				
-				dataset->UpdateFilter(pathFilter);
+				(*dataset)->UpdateFilter(pathFilter);
 			}
 			pathFilter->Print();
 			printf("\n");
-			dataset->StopFiltering();
+			(*dataset)->StopFiltering();
 		}
 		
 		isDragging = true;

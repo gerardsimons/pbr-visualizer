@@ -13,7 +13,7 @@
 ParallelCoordsView* ParallelCoordsView::instance = NULL;
 int ParallelCoordsView::windowHandle = -1;
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY,NULL,sizeProperty) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet** dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY,NULL,sizeProperty) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
@@ -27,7 +27,7 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, int x, int y, int wi
     //Nothing else to do
 }
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, RIVColorProperty *pathColor, RIVColorProperty* rayColor, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,NULL,sizeProperty) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet** dataset, RIVColorProperty *pathColor, RIVColorProperty* rayColor, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,NULL,sizeProperty) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
@@ -43,13 +43,13 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet* dataset, RIVColorProperty *pa
 void ParallelCoordsView::createAxes() {
     axisGroups.clear();
     if(dataset != NULL) {
-        size_t total_nr_of_records = dataset->TotalNumberOfRecords();
+        size_t total_nr_of_records = (*dataset)->TotalNumberOfRecords();
 		//    int y = startY + paddingY;
         int y = paddingY; //View port takes care of startY
         int axisHeight = height - 2 * paddingY;
         
         float delta = 1.F / (total_nr_of_records - 1) * (width - 2 * paddingX);
-        std::vector<RIVTable*>* tablePointers = dataset->GetTables();
+        std::vector<RIVTable*>* tablePointers = (*dataset)->GetTables();
         
         int axisIndex = 0;
         
@@ -200,6 +200,7 @@ void ParallelCoordsView::drawLines() {
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
+	printf("Drawing lines\n");
 //	reporter::startTask("drawLines");
 	
 	for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
@@ -263,8 +264,8 @@ void ParallelCoordsView::drawLines() {
 		}
         
         linesAreDirty = false;
-        printf("Drawn %zu lines.\n",linesDrawn);
 //		reporter::stop("drawLines");
+//		printf("%zu lines Drawn.\n",linesDrawn);
     }
 }
 
@@ -396,22 +397,22 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                 
                 Area &selection = selectedAxis->selection;
                 int sizeBox = abs(selection.start.y - selection.end.y);
-				dataset->StartFiltering();
+				(*dataset)->StartFiltering();
                 if(sizeBox > 3) {
                     float lowerBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.start.y));
                     float upperBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.end.y));
-                    dataset->ClearFilter(selectedAxis->name);
+                    (*dataset)->ClearFilter(selectedAxis->name);
                     riv::Filter* rangeFilter = new riv::RangeFilter(selectedAxis->name,lowerBound,upperBound);
-                    dataset->AddFilter(rangeFilter);
+                    (*dataset)->AddFilter(rangeFilter);
                     printf("Selection finalized on axis %s\n",selectedAxis->name.c_str());
                 }
                 else {
-                    dataset->ClearFilter(selectedAxis->name);
+                    (*dataset)->ClearFilter(selectedAxis->name);
                     clearSelection();
                 }
 				
 				//Close access
-				dataset->StopFiltering();
+				(*dataset)->StopFiltering();
             }
             return true;
         }

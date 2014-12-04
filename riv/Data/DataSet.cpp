@@ -11,6 +11,19 @@
 
 void RIVDataSet::AddTable(RIVTable* table) {
     tables.push_back(table);
+	tableRegister[table->GetName()] = table;
+}
+RIVTable* RIVDataSet::CreateTable(const std::string &tableName) {
+	if(tableRegister[tableName]) {
+		throw std::runtime_error("A table already exists with this name.");
+	}
+	else {
+		RIVTable* newTable = new RIVTable(tableName);
+		tables.push_back(newTable);
+		tableRegister[tableName] = newTable;
+		return newTable;
+	}
+	
 }
 //Add a filter to the table with the given name
 void RIVDataSet::AddFilter(const std::string& tablename, riv::Filter *filter) {
@@ -26,7 +39,7 @@ void RIVDataSet::AddFilter(const std::string& tablename, riv::Filter *filter) {
 
     }
     else {
-        throw std::string("Supplied filter is a NULL pointer.");
+        throw std::runtime_error("Supplied filter is a NULL pointer.");
     }
 }
 
@@ -44,7 +57,7 @@ void RIVDataSet::AddFilter(const std::string& tablename, riv::GroupFilter *filte
 		
     }
     else {
-        throw std::string("Supplied filter is a NULL pointer.");
+        throw std::runtime_error("Supplied filter is a NULL pointer.");
     }
 }
 
@@ -193,13 +206,11 @@ RIVRecord* RIVDataSet::FindRecord(std::string name) const {
     return record;
 }
 
-RIVTable* RIVDataSet::GetTable(const std::string& tableName) const {
-    for(RIVTable *table : tables) {
-        if(table->GetName() == tableName) {
-            return table;
-        }
-    } //No such table
-    throw "No such table exists";
+RIVTable* RIVDataSet::GetTable(const std::string& tableName) {
+	RIVTable* table = tableRegister[tableName];
+	if(!table)
+		throw std::runtime_error("No such table exists");
+	else return table;
 }
 
 bool RIVDataSet::IsSet() const {
@@ -228,7 +239,14 @@ void RIVDataSet::StartFiltering() {
 	staleTables.clear();
 }
 
-
+bool RIVDataSet::IsEmpty() {
+	for(RIVTable* table : tables) {
+		if(!table->IsEmpty()) {
+			return false;
+		}
+	}
+	return true;
+}
 void RIVDataSet::StopFiltering() {
 	if(!isFiltering) {
 		throw "Invalid state, StartFiltering was never called.";
@@ -246,4 +264,12 @@ void RIVDataSet::StopFiltering() {
 	isFiltering = false;
 	//Notify the listeners now
 	notifyFilterListeners();
+}
+
+RIVDataSet* RIVDataSet::CloneStructure() {
+	RIVDataSet* clone = new RIVDataSet();
+	for(RIVTable* table : tables) {
+		clone->AddTable(table->CloneStructure());
+	}
+	return clone;
 }

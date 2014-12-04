@@ -15,8 +15,6 @@
 #include "DataSetListener.h"
 #include "ClusterSet.h"
 
-
-
 //Forward declaration
 class RIVDataView;
 class RIVTable;
@@ -32,13 +30,16 @@ private:
 
 	//What tables are changed
 	std::map<RIVTable*,bool> staleTables;
-	
+	std::map<std::string,RIVTable*> tableRegister;
 
 	
 	bool isFiltering = false;
 public:
+	//Generate a N-sized bootstrap sample 
+	RIVDataSet* Bootstrap(size_t N);
 	void NotifyDataListeners();
     void AddTable(RIVTable* table);
+	RIVTable* CreateTable(const std::string& tableName);
 	void AddFilter(const std::string& tableName, riv::GroupFilter *filter);
     void AddFilter(const std::string& tableName, riv::Filter* filter);
 	//Automatically find the table this should be filtered on, the one containing all of the filters attributes
@@ -46,6 +47,7 @@ public:
 	void AddFilter(riv::GroupFilter *filter);
     void AddFilterListener(RIVDataSetListener* listener);
 	void UpdateFilter(riv::Filter* filter);
+	bool IsEmpty();
     void ClearFilters();
 	void ClearFilter(size_t filterID);
     void ClearFilter(const std::string& attributeName);
@@ -53,7 +55,7 @@ public:
     size_t TotalNumberOfRecords() const;
     size_t NumberOfTables() const;
     std::vector<RIVTable*>* GetTables();
-    RIVTable* GetTable(const std::string&) const;
+    RIVTable* GetTable(const std::string&);
     void Print(size_t maxPrint = -1, bool printFiltered = true) const;
     void ClusterTable(const std::string& tableName, const std::string& columnNameX, const std::string& columnNameY, const std::string& columnNameZ, const size_t& K, const size_t& maxRepeat);
     RIVClusterSet* GetClusterSet();
@@ -62,6 +64,8 @@ public:
 	//In order to coalesce several filter operations into one notification to its listeners, its necessary to indicate the start and stop of a filteirng operation
 	void StartFiltering();
 	void StopFiltering();
+	
+	RIVDataSet* CloneStructure();
 //    void PrintUnfiltered();
 };
 

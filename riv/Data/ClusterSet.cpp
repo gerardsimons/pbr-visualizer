@@ -148,7 +148,7 @@ bool RIVClusterSet::SaveToFile(const std::string& fileName) {
 }
 void RIVClusterSet::AssignMembers() {
     if(!initialized) {
-        throw std::string("Initialization is required before assignment is possible.");
+        throw std::runtime_error("Initialization is required before assignment is possible.");
     }
     std::vector<size_t> allMedoids;
     for(RIVCluster* cluster : clusters) {
@@ -181,10 +181,10 @@ void RIVClusterSet::OptimizeClusters() {
 }
 double RIVClusterSet::TotalCost() {
     if(!initialized) {
-        throw std::string("Not yet initialized.");
+        throw std::runtime_error("Not yet initialized.");
     }
     if(!membersAssigned) {
-        throw std::string("Members not yet assigned.");
+        throw std::runtime_error("Members not yet assigned.");
     }
     cost = 0.F;
     for(RIVCluster *cluster : clusters) {

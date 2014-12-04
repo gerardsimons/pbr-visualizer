@@ -31,7 +31,7 @@
 		
 		heatmap.clear();
 		
-		RIVTable *pathTable = dataset->GetTable("path");
+		RIVTable *pathTable = (*dataset)->GetTable("path");
 		
 		//Find x and y record
 		RIVFloatRecord* xRecord = pathTable->GetRecord<RIVFloatRecord>("x");

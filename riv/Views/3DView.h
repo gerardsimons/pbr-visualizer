@@ -85,9 +85,9 @@ protected:;
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
 	//Single renderer constructor
-    RIV3DView(RIVDataSet* dataset,EMBREERenderer* renderer,RIVColorProperty*,RIVSizeProperty*);
+    RIV3DView(RIVDataSet** dataset,EMBREERenderer* renderer,RIVColorProperty*,RIVSizeProperty*);
 	//Dual renderer constructor
-	RIV3DView(RIVDataSet* dataset,EMBREERenderer* rendererOne,EMBREERenderer* rendererTwo,RIVColorProperty*,RIVSizeProperty*);
+	RIV3DView(RIVDataSet** dataset,EMBREERenderer* rendererOne,EMBREERenderer* rendererTwo,RIVColorProperty*,RIVSizeProperty*);
 	
 	//Extract data about the scene from the embree renderer object
 	void GetSceneData();

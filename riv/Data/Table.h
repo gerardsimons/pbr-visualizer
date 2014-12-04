@@ -38,6 +38,9 @@ namespace riv {
 	class RIVTable {
 	private:
 		std::vector<RIVRecord*> records;
+		std::map<std::string,RIVFloatRecord*> floatRecords;
+		std::map<std::string,RIVUnsignedShortRecord*> shortRecords;
+		
 		std::vector<RIVReference*> references;
 		std::vector<RIVDataSetListener*> onChangeListeners;
 		std::vector<size_t> selectedRows;
@@ -60,12 +63,29 @@ namespace riv {
 //		void filterRecords(); //Filter on all filters present in the filters vector
 	public:
 		RIVTable(std::string name);
+		~RIVTable();
+		RIVTable* CloneStructure();
 		RIVRecord* GetRecord(size_t index);
 		RIVRecord* GetRecord(std::string recordName);
+		RIVFloatRecord* CreateFloatRecord(const std::string& name) {
+			RIVFloatRecord* newRecord = new RIVFloatRecord(name);
+			records.push_back(newRecord);
+			floatRecords[name] = newRecord;
+			return newRecord;
+		}
+		RIVUnsignedShortRecord* CreateShortRecord(const std::string& name) {
+			RIVUnsignedShortRecord* newRecord = new RIVUnsignedShortRecord(name);
+			records.push_back(newRecord);
+			shortRecords[name] = newRecord;
+			return newRecord;
+		}
 		template <typename T>
 		T* GetRecord(std::string name) {
 			return dynamic_cast<T*>(GetRecord(name));
 		}
+		bool IsEmpty();
+		void AddValue(const std::string& name,float value);
+		void AddValue(const std::string& name,ushort value);
 		//Filter this table according to the filters that are applied
 		void Filter();
 		void FilterReferences();
@@ -73,9 +93,10 @@ namespace riv {
 		bool ContainsFilter(riv::Filter* filter);
 		void AddFilter(riv::Filter *filter);
 		void AddFilter(riv::GroupFilter *groupFilter);
-//		void AddReference(const RIVReference* reference);
+		void CopyRow(RIVTable* otherTable, size_t row);
 		void AddReference(RIVReference* reference);
 		void AddOnChangeListeners(RIVDataView *dataview);
+		
 		std::vector<std::string> GetAttributes() const;
 		
 		void FilterRow(size_t row);
@@ -112,7 +133,7 @@ namespace riv {
 		
 		size_t GetNumRows() const;
 		
-		//    RIVReference* GetReferenceToTable(std::string tableName,std::vector<std::string> *visitedTables = 0); //DEPRECATED
+		RIVReference* GetReference(size_t n); 
 		bool GetReferenceChainToTable(std::string tableName, RIVReferenceChain& chainToTarget, std::vector<std::string> *visitedTables = 0);
 		RIVReference* GetReferenceToTable(const std::string& tableName);
 		
@@ -121,6 +142,8 @@ namespace riv {
 		size_t NumberOfColumns(); //Columns
 		size_t NumberOfRows();
 		std::vector<RIVRecord*> GetRecords() const;
+		
+		
 		
 		RIVClusterSet& GetClusterSet() { return clusterSet; };
 		void ClusterWithSize(const std::string& xRecordName, const std::string& yRecordName, const std::string& zRecordName, const size_t& clusterSize, const size_t& maxRepeat);

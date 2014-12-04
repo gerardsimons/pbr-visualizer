@@ -9,25 +9,71 @@
 #include "Table.h"
 #include "../helper.h"
 #include <algorithm>
-
+RIVTable::~RIVTable() {
+	for(RIVRecord* record : records) {
+		delete record;
+	}
+}
 RIVTable::RIVTable(std::string name) {
     this->name = name;
 }
-
+RIVTable* RIVTable::CloneStructure() {
+	RIVTable* clone = new RIVTable(name);
+	for(RIVRecord* record : records) {
+		RIVFloatRecord* floatRec = dynamic_cast<RIVFloatRecord*>(record);
+		if(floatRec) {
+			clone->AddRecord(new RIVFloatRecord(floatRec->name));
+		}
+		RIVUnsignedShortRecord* shortRec = dynamic_cast<RIVUnsignedShortRecord*>(record);
+		if(shortRec) {
+			clone->AddRecord(new RIVUnsignedShortRecord(shortRec->name));
+		}
+	}
+	return clone;
+}
 void RIVTable::AddRecord(RIVRecord* record) {
 	size_t rows = NumberOfRows();
     if(rows == 0 || record->Size() == rows) {
         rows = record->Size();
+		
 		attributes.push_back(record->name);
         records.push_back(record);
+		
+		RIVFloatRecord* floatRec = dynamic_cast<RIVFloatRecord*>(record);
+		if(floatRec) {
+			floatRecords[record->name] = floatRec;
+			return;
+		}
+		RIVUnsignedShortRecord* shortRec = dynamic_cast<RIVUnsignedShortRecord*>(record);
+		if(shortRec) {
+			shortRecords[record->name] = shortRec;
+			return;
+		}
+		
+		
     }
-    else throw std::string("Record should have the same size as present records.");
+    else throw std::runtime_error("Record should have the same size as present records.");
 }
 
+void RIVTable::AddValue(const std::string &name, float value) {
+	floatRecords[name]->AddValue(value);
+}
+
+void RIVTable::AddValue(const std::string &name, ushort value) {
+	shortRecords[name]->AddValue(value);
+}
+RIVReference* RIVTable::GetReference(size_t index) {
+	return references[index];
+}
 RIVRecord* RIVTable::GetRecord(size_t index) {
     return records[index];
 }
-
+size_t RIVTable::GetNumRows() const {
+	if(records.size()) {
+		return records[0]->Size();
+	}
+	return 0;
+}
 void RIVTable::Filter() {
 	filteredRows.clear();
 	newlyFilteredRows.clear();
@@ -163,7 +209,23 @@ RIVReference* RIVTable::GetReferenceToTable(const std::string &tableName) {
     }
     return NULL;
 }
-
+void RIVTable::CopyRow(RIVTable *otherTable, size_t row) {
+	for(size_t j = 0 ; j < NumberOfColumns() ; ++j) {
+		RIVRecord* record = GetRecord(j);
+		RIVRecord* otherRecord = otherTable->GetRecord(j);
+		
+		RIVFloatRecord* floatRecord = dynamic_cast<RIVFloatRecord*>(record);
+		if(floatRecord) {
+			RIVFloatRecord* otherFloatRecord = dynamic_cast<RIVFloatRecord*>(otherRecord);
+			floatRecord->AddValue(otherFloatRecord->Value(row));
+		}
+		else {
+			RIVUnsignedShortRecord* shortRecord = dynamic_cast<RIVUnsignedShortRecord*>(record);
+			RIVUnsignedShortRecord* otherShortRecord = dynamic_cast<RIVUnsignedShortRecord*>(otherRecord);
+			shortRecord->AddValue(otherShortRecord->Value(row));
+		}
+	}
+}
 void RIVTable::FilterRow(size_t rowIndex) {
 	
     filteredRows[rowIndex] = true;
@@ -551,7 +613,9 @@ void RIVTable::PrintFilteredRowMap() {
         printf("%s\n", iterator->second ? "filtered" : "not filtered");
     }
 }
-
+bool RIVTable::IsEmpty() {
+	return NumberOfRows() == 0;
+}
 TableIterator* RIVTable::GetIterator() {
 	if(iterator) {
 		delete iterator;
@@ -589,7 +653,7 @@ RIVRecord* RIVTable::GetRecord(std::string recordName) {
             return record;
         }
     }
-    throw std::string("No such record" + recordName);
+    throw std::runtime_error("No such record" + recordName);
 }
 
 //Cluster with requested cluster size, rather than number of clusters
@@ -611,7 +675,7 @@ RIVClusterSet* RIVTable::Cluster(const std::string& xRecordName, const std::stri
     RIVFloatRecord *yRecord = RIVTable::CastToFloatRecord(GetRecord(yRecordName));
     RIVFloatRecord *zRecord = RIVTable::CastToFloatRecord(GetRecord(zRecordName));
     if(K < 1) {
-        // throw std::string("Invalid cluster size " + std::to_string(K));
+        // throw std::runtime_error("Invalid cluster size " + std::to_string(K));
     }
     if(xRecord->Size() == 0) {
         throw "Cannot cluster 0 values.";

@@ -28,7 +28,7 @@ namespace reporter {
     }
     void Task::start() {
         if(isRunning) {
-            throw "Task already running.";
+            throw std::runtime_error("Task already running.");
         }
         printf("Task \"%s\" started ......... ",name.c_str());
         isRunning = true;
@@ -38,7 +38,7 @@ namespace reporter {
         if(isRunning) {
             printf("Task %s is %f%% completed.\n",name.c_str(),completed / maxRounds * 100.F);
         }
-        else throw std::string("No task is running.");
+        else throw std::runtime_error("No task is running.");
     }
     //Undetermined update
     void Task::update() {
@@ -50,7 +50,7 @@ namespace reporter {
             isRunning = false;
             std::cout << "Task " << name << " took " << duration << " seconds.\n";
         }
-        else throw("Task is not running!\n");
+        else throw std::runtime_error("Task is not running!\n");
     }
 }
 
@@ -65,7 +65,7 @@ void reporter::startTask(const std::string& taskName,float maxRounds_) {
         newTask->start();
     }
     else {
-        throw("Some task with this name is already running.\n");
+		throw std::runtime_error("Some task with this name is already running.\n");
     }
 }
 
@@ -74,14 +74,14 @@ void reporter::update(std::string taskName, float completed) {
     if(runningTask) {
         runningTask->update(completed);
     }
-    else throw std::string("No such task is running.");
+    else throw std::runtime_error("No such task is running.");
 }
 void reporter::update(std::string taskName) {
     reporter::Task* runningTask = reporter::runningTasks[taskName];
     if(runningTask) {
         runningTask->update();
     }
-    else throw std::string("No such task is running.");
+    else throw std::runtime_error("No such task is running.");
 }
 void reporter::stop(std::string taskName) {
     reporter::Task* runningTask = reporter::runningTasks[taskName];
@@ -90,5 +90,5 @@ void reporter::stop(std::string taskName) {
         reporter::runningTasks.erase(taskName);
 //		delete runningTask;
     }
-    else throw std::string("No such task is running.");
+	else throw std::runtime_error("No such task is running.");
 }

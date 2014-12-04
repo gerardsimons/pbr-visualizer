@@ -72,8 +72,7 @@ DataController* dataController;
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 500000;
-
+const int maxPaths = 5000;
 
 void display(void)
 {
@@ -346,7 +345,6 @@ void createViews() {
 	//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,"radiance R","radiance G","radiance B");
 	RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
 	
-	
 	parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding);
 	ParallelCoordsView::windowHandle = parallelViewWindow;
 	glutSetWindow(parallelViewWindow);
@@ -363,7 +361,7 @@ void createViews() {
 
 	glutSetWindow(imageViewWindow);
 	imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,squareSize,squareSize);
-	imageView = new RIVImageView(dataset,rendererOne,defaultColorProperty,defaultSizeProperty);
+	imageView = new RIVImageView(&dataset,rendererOne,defaultColorProperty,defaultSizeProperty);
 	RIVImageView::windowHandle = imageViewWindow;
 	glutDisplayFunc(RIVImageView::DrawInstance);
 	glutReshapeFunc(RIVImageView::ReshapeInstance);
@@ -389,8 +387,8 @@ void createViews() {
 	//        glutMotionFunc(RIVHeatMapView::Motion);
 	
 	//Create views
-	parallelCoordsView = new ParallelCoordsView(dataset,pathColor,intersectionColor,sizeProperty);
-	sceneView = new RIV3DView(dataset,rendererOne,intersectionColor,sizeProperty);
+	parallelCoordsView = new ParallelCoordsView(&dataset,pathColor,intersectionColor,sizeProperty);
+	sceneView = new RIV3DView(&dataset,rendererOne,intersectionColor,sizeProperty);
 	//        heatMapView = new RIVHeatMapView(&dataset);
 	
 	//Add some filter callbacks

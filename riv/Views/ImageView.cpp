@@ -15,7 +15,7 @@
 RIVImageView* RIVImageView::instance = NULL;
 int RIVImageView::windowHandle = -1;
 
-RIVImageView::RIVImageView(RIVDataSet* dataset, EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size) {
+RIVImageView::RIVImageView(RIVDataSet** dataset, EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size) {
     if(instance != NULL) {
         throw "Only 1 instance of ImageView allowed.";
     }
@@ -31,7 +31,7 @@ RIVImageView::RIVImageView(RIVDataSet* dataset, EMBREERenderer* renderer, RIVCol
 	renderers.push_back(renderer);
 }
 
-RIVImageView::RIVImageView(RIVDataSet* dataset, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size) {
+RIVImageView::RIVImageView(RIVDataSet** dataset, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size) {
 	if(instance != NULL) {
 		throw "Only 1 instance of ImageView allowed.";
 	}
@@ -253,8 +253,8 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 
 			if(selection.end.x != selection.start.x && selection.end.y != selection.start.y) {
 
-				dataset->ClearFilter("x");
-				dataset->ClearFilter("y");
+				(*dataset)->ClearFilter("x");
+				(*dataset)->ClearFilter("y");
 				
 				//Normalize selection
 				if(selection.end.x < selection.start.x) {
@@ -272,10 +272,10 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 				//Be sure to invert the Y coordinates!
 //				riv::Filter *yFilter = new riv::RangeFilter("y", renderedImage->sizeY - selection.start.y,renderedImage->sizeY - selection.end.y - 1);
 		
-				dataset->StartFiltering();
-//				dataset->AddFilter("path",xFilter);
-//				dataset->AddFilter("path",yFilter);
-				dataset->StopFiltering();
+				(*dataset)->StartFiltering();
+//				(*dataset)->AddFilter("path",xFilter);
+//				(*dataset)->AddFilter("path",yFilter);
+				(*dataset)->StopFiltering();
 					
 			}
 			else {
@@ -310,10 +310,10 @@ void RIVImageView::clearSelection() {
     selection.end.x = -1;
     selection.end.y = -1;
     
-	//Clear any filters that may have been applied to the dataset
+	//Clear any filters that may have been applied to the (*dataset)
     if(dataset) {
-        dataset->ClearFilter("x");
-        dataset->ClearFilter("y");
+        (*dataset)->ClearFilter("x");
+        (*dataset)->ClearFilter("y");
     }
 }
 
