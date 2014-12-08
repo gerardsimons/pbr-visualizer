@@ -15,7 +15,7 @@
 RIVImageView* RIVImageView::instance = NULL;
 int RIVImageView::windowHandle = -1;
 
-RIVImageView::RIVImageView(RIVDataSet** dataset, EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size) {
+RIVImageView::RIVImageView(RIVDataSet<float,ushort>** dataset, EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size) {
     if(instance != NULL) {
         throw "Only 1 instance of ImageView allowed.";
     }
@@ -31,7 +31,7 @@ RIVImageView::RIVImageView(RIVDataSet** dataset, EMBREERenderer* renderer, RIVCo
 	renderers.push_back(renderer);
 }
 
-RIVImageView::RIVImageView(RIVDataSet** dataset, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size) {
+RIVImageView::RIVImageView(RIVDataSet<float,ushort>** dataset, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size) {
 	if(instance != NULL) {
 		throw "Only 1 instance of ImageView allowed.";
 	}

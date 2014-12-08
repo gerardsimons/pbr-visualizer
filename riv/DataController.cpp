@@ -6,6 +6,7 @@
 //
 //
 
+#include "Configuration.h"
 #include "DataController.h"
 #include <algorithm>
 
@@ -13,7 +14,7 @@ DataController::DataController(const ushort renderers, const size_t maxPaths) : 
 	if(updateThrottle == 0) {
 		updateThrottle = maxPaths;
 	}
-	createDataSets();
+	createDataStructures();
 	
 	for(ushort i = 0 ; i < renderers ; ++i) {
 		pathCounts[i] = 0;
@@ -24,117 +25,124 @@ DataController::DataController(const ushort renderers, const size_t maxPaths) : 
 
 void DataController::createHistograms() {
 	
-	xPixelHistogram = Histogram<float>(0,1,bins);
-	yPixelHistogram = Histogram<float>(0,1,bins);
-	lensUHistogram = Histogram<float>(0,1,bins);
-	lensVHistogram = Histogram<float>(0,1,bins);
-	colorRHistogram = Histogram<float>(0,1,bins);
-	colorGHistogram = Histogram<float>(0,1,bins);
-	colorBHistogram = Histogram<float>(0,1,bins);;
-	throughputRHistogram = Histogram<float>(0,1,bins);;
-	throughputGHistogram = Histogram<float>(0,1,bins);;
-	throughputBHistogram = Histogram<float>(0,1,bins);;
-	depthsHistogram = Histogram<ushort>(0,5);
+//	xPixelHistogram = Histogram<float>(0,1,bins);
+//	yPixelHistogram = Histogram<float>(0,1,bins);
+//	lensUHistogram = Histogram<float>(0,1,bins);
+//	lensVHistogram = Histogram<float>(0,1,bins);
+//	colorRHistogram = Histogram<float>(0,1,bins);
+//	colorGHistogram = Histogram<float>(0,1,bins);
+//	colorBHistogram = Histogram<float>(0,1,bins);;
+//	throughputRHistogram = Histogram<float>(0,1,bins);;
+//	throughputGHistogram = Histogram<float>(0,1,bins);;
+//	throughputBHistogram = Histogram<float>(0,1,bins);;
+//	depthsHistogram = Histogram<ushort>(0,5);
+//	
+//	bounceNrsHistogram = Histogram<ushort>(0,5);
+//	xsHistogram = Histogram<float>(0,500,bins);
+//	ysHistogram = Histogram<float>(0,500,bins);
+//	zsHistogram = Histogram<float>(0,500,bins);
+//	isectColorRHistogram = Histogram<float>(0,1,bins);
+//	isectColorGHistogram = Histogram<float>(0,1,bins);
+//	isectColorBHistogram = Histogram<float>(0,1,bins);;
+//	primitiveIdsHistogram = Histogram<ushort>(0,6);
+//	
+	//	shapeIdsHistogram = Histogram<ushort>(0,1);
+	//	interactionTypesHistogram = Histogram<ushort>(0,1,bins);;
+	//	lightIdsHistogram = Histogram<ushort>(0,5,5);
 	
-	bounceNrsHistogram = Histogram<ushort>(0,5);
-	xsHistogram = Histogram<float>(0,500,bins);
-	ysHistogram = Histogram<float>(0,500,bins);
-	zsHistogram = Histogram<float>(0,500,bins);
-	isectColorRHistogram = Histogram<float>(0,1,bins);
-	isectColorGHistogram = Histogram<float>(0,1,bins);
-	isectColorBHistogram = Histogram<float>(0,1,bins);;
-	primitiveIdsHistogram = Histogram<ushort>(0,6);
-	
-//	shapeIdsHistogram = Histogram<ushort>(0,1);
-//	interactionTypesHistogram = Histogram<ushort>(0,1,bins);;
-//	lightIdsHistogram = Histogram<ushort>(0,5,5);
+
 }
 
-void DataController::initDataSet(RIVDataSet *dataset) {
+void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
 	
-	RIVTable* pathTable = dataset->CreateTable("paths");
+	RIVTable<float,ushort>* pathTable = dataset->CreateTable(PATHS_TABLE);
 	
-	pathTable->CreateShortRecord("renderer");
-	pathTable->CreateFloatRecord("pixel x");
-	pathTable->CreateFloatRecord("pixel y");
+	pathTable->CreateRecord<ushort>(RENDERER_ID);
+	pathTable->CreateRecord<float>(PIXEL_X);
+	pathTable->CreateRecord<float>(PIXEL_Y);
 	//	lensUs = pathTable->CreateFloatRecord("lens U");
 	//	lensVs = pathTable->CreateFloatRecord("lens V");
 	//	times = pathTable->CreateFloatRecord("time");
-	pathTable->CreateFloatRecord("R");
-	pathTable->CreateFloatRecord("G");
-	pathTable->CreateFloatRecord("B");
-	pathTable->CreateFloatRecord("throughput R");
-	pathTable->CreateFloatRecord("throughput G");
-	pathTable->CreateFloatRecord("throughput B");
-	pathTable->CreateShortRecord("depth");
+	pathTable->CreateRecord<float>(PATH_R);
+	pathTable->CreateRecord<float>(PATH_G);
+	pathTable->CreateRecord<float>(PATH_B);
+	pathTable->CreateRecord<float>(THROUGHPUT_R);
+	pathTable->CreateRecord<float>(THROUGHPUT_G);
+	pathTable->CreateRecord<float>(THROUGHPUT_B);
+	pathTable->CreateRecord<ushort>(DEPTH);
 	
-	RIVTable* isectsTable = dataset->CreateTable("intersections");
+	RIVTable<float,ushort>* isectsTable = dataset->CreateTable(INTERSECTIONS_TABLE);
 	
-	isectsTable->CreateShortRecord("bounce_nr");
-	isectsTable->CreateFloatRecord("x");
-	isectsTable->CreateFloatRecord("y");
-	isectsTable->CreateFloatRecord("z");
-	isectsTable->CreateFloatRecord("R");
-	isectsTable->CreateFloatRecord("G");
-	isectsTable->CreateFloatRecord("B");
-	isectsTable->CreateShortRecord("primitive ID");
+	isectsTable->CreateRecord<ushort>(BOUNCE_NR);
+	isectsTable->CreateRecord<float>(POS_X);
+	isectsTable->CreateRecord<float>(POS_Y);
+	isectsTable->CreateRecord<float>(POS_Z);
+	isectsTable->CreateRecord<float>(INTERSECTION_R);
+	isectsTable->CreateRecord<float>(INTERSECTION_G);
+	isectsTable->CreateRecord<float>(INTERSECTION_B);
+	isectsTable->CreateRecord<ushort>(PRIMITIVE_ID);
 	//	shapeIds = isectsTable->CreateShortRecord("shape ID");
 	//	interactionTypes = isectsTable->CreateShortRecord("interaction");
 	//	lightIds = isectsTable->CreateShortRecord("light ID");
 	
 	RIVMultiReference* pathsToIsectRef = new RIVMultiReference(pathTable,isectsTable);
-	pathTable->AddReference(pathsToIsectRef);
+	pathTable->SetReference(pathsToIsectRef);
 	RIVSingleReference* isectToPathsRef = new RIVSingleReference(isectsTable,pathTable);
-	isectsTable->AddReference(isectToPathsRef);
+	isectsTable->SetReference(isectToPathsRef);
+	
+	
 }
 
-void DataController::createDataSets() {
+void DataController::createDataStructures() {
 	
-	currentData = new RIVDataSet();
-	candidateData = new RIVDataSet();
+	currentData = new RIVDataSet<float,ushort>();
+	candidateData = new RIVDataSet<float,ushort>();
 	
 	initDataSet(currentData);
 	initDataSet(candidateData);
+	
+	trueDistributions = HistogramSet<float,ushort>(currentData->CreateHistogramSet(bins));
+	trueDistributions.Print();
 	
 	resetPointers();
 }
 
 void DataController::resetPointers() {
-	pathTable = candidateData->GetTable("paths");
-	intersectionsTable = candidateData->GetTable("intersections");
+	currentPathTable = candidateData->GetTable("paths");
+	currentIntersectionsTable = candidateData->GetTable("intersections");
 	
-	isectsToPathsRef = (RIVSingleReference*)intersectionsTable->GetReference(0);
-	pathsToIsectRef = (RIVMultiReference*)pathTable->GetReference(0);
+	isectsToPathsRef = (RIVSingleReference*)currentIntersectionsTable->GetReference();
+	pathsToIsectRef = (RIVMultiReference*)currentPathTable->GetReference();
 	
-	rendererId = pathTable->GetRecord<RIVUnsignedShortRecord>("renderer");
-	xPixels = pathTable->GetRecord<RIVFloatRecord>("pixel x");
-	yPixels = pathTable->GetRecord<RIVFloatRecord>("pixel y");
-	//	lensUs = pathTable->GetRecord<RIVFloatRecord>("lens U");
-	//	lensVs = pathTable->GetRecord<RIVFloatRecord>("lens V");
-	//	times = pathTable->GetRecord<RIVFloatRecord>("time");
-	colorRs = pathTable->GetRecord<RIVFloatRecord>("R");
-	colorGs = pathTable->GetRecord<RIVFloatRecord>("G");
-	colorBs = pathTable->GetRecord<RIVFloatRecord>("B");
-	throughputRs = pathTable->GetRecord<RIVFloatRecord>("throughput R");
-	throughputGs = pathTable->GetRecord<RIVFloatRecord>("throughput G");
-	throughputBs = pathTable->GetRecord<RIVFloatRecord>("throughput B");
-	depths = pathTable->GetRecord<RIVUnsignedShortRecord>("depth");
+	rendererId = currentPathTable->GetRecord<ushort>("renderer");
+	xPixels = currentPathTable->GetRecord<float>(PIXEL_X);
+	yPixels = currentPathTable->GetRecord<float>(PIXEL_Y);
+	//	lensUs = pathTable->GetRecord<float>("lens U");
+	//	lensVs = pathTable->GetRecord<float>("lens V");
+	//	times = pathTable->GetRecord<float>("time");
+	colorRs = currentPathTable->GetRecord<float>(PATH_R);
+	colorGs = currentPathTable->GetRecord<float>(PATH_G);
+	colorBs = currentPathTable->GetRecord<float>(PATH_B);
+	throughputRs = currentPathTable->GetRecord<float>(THROUGHPUT_R);
+	throughputGs = currentPathTable->GetRecord<float>(THROUGHPUT_B);
+	throughputBs = currentPathTable->GetRecord<float>(THROUGHPUT_B);
+	depths = currentPathTable->GetRecord<ushort>(DEPTH);
 	
-	bounceNrs = intersectionsTable->GetRecord<RIVUnsignedShortRecord>("bounce_nr");
-	xs = intersectionsTable->GetRecord<RIVFloatRecord>("x");
-	ys = intersectionsTable->GetRecord<RIVFloatRecord>("y");
-	zs = intersectionsTable->GetRecord<RIVFloatRecord>("z");
-	isectColorRs = intersectionsTable->GetRecord<RIVFloatRecord>("R");
-	isectColorGs = intersectionsTable->GetRecord<RIVFloatRecord>("G");
-	isectColorBs = intersectionsTable->GetRecord<RIVFloatRecord>("B");
-	primitiveIds = intersectionsTable->GetRecord<RIVUnsignedShortRecord>("primitive ID");
+	bounceNrs = currentIntersectionsTable->GetRecord<ushort>(BOUNCE_NR);
+	xs = currentIntersectionsTable->GetRecord<float>(POS_X);
+	ys = currentIntersectionsTable->GetRecord<float>(POS_Y);
+	zs = currentIntersectionsTable->GetRecord<float>(POS_Z);
+	isectColorRs = currentIntersectionsTable->GetRecord<float>(INTERSECTION_R);
+	isectColorGs = currentIntersectionsTable->GetRecord<float>(INTERSECTION_G);
+	isectColorBs = currentIntersectionsTable->GetRecord<float>(INTERSECTION_B);
+	primitiveIds = currentIntersectionsTable->GetRecord<ushort>(PRIMITIVE_ID);
 	//	shapeIds = isectsTable->CreateShortRecord("shape ID");
 	//	interactionTypes = isectsTable->CreateShortRecord("interaction");
 	//	lightIds = isectsTable->CreateShortRecord("light ID");
-
+	
 }
 
-RIVDataSet* DataController::GetDataSet() {
+RIVDataSet<float,ushort>* DataController::GetDataSet() {
 	return currentData;
 }
 
@@ -144,28 +152,30 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 	if(!paused) {
 		//ALWAYS update the histograms
 		ushort nrIntersections = newPath->intersectionData.size();
-		xPixelHistogram.Add(newPath->imageX);
-		yPixelHistogram.Add(newPath->imageY);
-		lensUHistogram.Add(newPath->lensU);
-		lensVHistogram.Add(newPath->lensV);
-		timeHistogram.Add(newPath->timestamp);
-		colorRHistogram.Add(std::min(newPath->radiance[0],1.F));
-		colorGHistogram.Add(std::min(newPath->radiance[1],1.F));
-		colorBHistogram.Add(std::min(newPath->radiance[2],1.F));
-		throughputRHistogram.Add(newPath->throughput[0]);
-		throughputGHistogram.Add(newPath->throughput[1]);
-		throughputBHistogram.Add(newPath->throughput[2]);
-		depthsHistogram.Add((ushort)newPath->intersectionData.size());
-		for(int i = 0 ; i < nrIntersections ; ++i) {
+		
+//		trueDistributions.AddToHistogram(PIXEL_X, newPath->imageX);
+//		trueDistributions.AddToHistogram(PIXEL_Y, newPath->imageY);
+//		trueDistributions.AddToHistogram(PATH_R, std::min(newPath->radiance[0],1.F));
+//		trueDistributions.AddToHistogram(PATH_G, std::min(newPath->radiance[1],1.F));
+//		trueDistributions.AddToHistogram(PATH_B, std::min(newPath->radiance[2],1.F));
+//		trueDistributions.AddToHistogram(THROUGHPUT_R, std::min(newPath->throughput[0],1.F));
+//		trueDistributions.AddToHistogram(THROUGHPUT_G, std::min(newPath->throughput[1],1.F));
+//		trueDistributions.AddToHistogram(THROUGHPUT_B, std::min(newPath->throughput[2],1.F));
+//		trueDistributions.AddToHistogram(DEPTH, nrIntersections);
+	
+		for(ushort i = 0 ; i < nrIntersections ; ++i) {
 			IntersectData& isect = newPath->intersectionData[i];
-			bounceNrsHistogram.Add(i+1);
-			xsHistogram.Add(isect.position[0]);
-			ysHistogram.Add(isect.position[1]);
-			zsHistogram.Add(isect.position[2]);
-			isectColorRHistogram.Add(std::min(isect.color[0],1.F));
-			isectColorGHistogram.Add(std::min(isect.color[1],1.F));
-			isectColorBHistogram.Add(std::min(isect.color[2],1.F));
-			primitiveIdsHistogram.Add(isect.primitiveId);
+			
+//			auto teeeest = trueDistributions.GetHistogram<float>(DEPTH);
+			trueDistributions.AddToHistogram("bounce_nr",(ushort)(i+1));
+//			trueDistributions.AddToHistogram("x", isect.position[0]);
+//			trueDistributions.AddToHistogram("y", isect.position[1]);
+//			trueDistributions.AddToHistogram("z", isect.position[2]);
+//			trueDistributions.AddToHistogram("R", std::min(isect.color[0],1.F));
+//			trueDistributions.AddToHistogram("G", std::min(isect.color[1],1.F));
+//			trueDistributions.AddToHistogram("B", std::min(isect.color[2],1.F));
+//			trueDistributions.AddToHistogram("throughput B", newPath->imageY);
+//			trueDistributions.AddToHistogram("depth", nrIntersections);
 		}
 		//				mutex.lock();
 		//				printf("Adding new path.\n");
@@ -220,12 +230,13 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 			}
 			
 			//How to resolve the pause, what do we throw out to create more space?
-			candidateData->Print(50);
-			candidateData->NotifyDataListeners();
+			currentData->Print(50);
+			currentData->NotifyDataListeners();
 			
 			//Print the histograms
-			xPixelHistogram.Print();
-			yPixelHistogram.Print();
+			trueDistributions.Print();
+			
+			paused = true;
 			
 			Reduce();
 		}
@@ -239,76 +250,48 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 	}
 }
 
-RIVDataSet* DataController::Bootstrap(RIVDataSet* dataset, size_t N) {
 
-	RIVDataSet* bootstrap = dataset->CloneStructure();
-	RIVTable* bootstrapPaths = bootstrap->GetTable("paths");
-	RIVTable* bootstrapIsects = bootstrap->GetTable("intersections");
-	
-	RIVTable* paths = dataset->GetTable("paths");
-	RIVTable* intersections = dataset->GetTable("intersections");
-	size_t rows = paths->GetNumRows();
-	
-	RIVReferenceChain chain;
-	paths->GetReferenceChainToTable("intersections", chain);
-	
-	//Choose N paths, also add the referencing rows
-	for(size_t i = 0 ; i < N ; ++i) {
-		size_t index = rand() % rows;
-		
-		bootstrapPaths->CopyRow(paths, index);
-		RIVMultiReference* ref = static_cast<RIVMultiReference*>(paths->GetReferenceToTable("intersections"));
-		std::pair<size_t*,ushort> refRows = ref->GetIndexReferences(index);
-		
-		for(ushort i = 0 ; i < refRows.second ; ++i) {
-			bootstrapIsects->CopyRow(intersections, refRows.first[i]);
-		}
-	}
-	bootstrap->Print(1000);
-	
-	return bootstrap;
-}
 
 void DataController::Reduce() {
 	//This was the first time we filled up, we already have our data to bootstrap from
 	if(currentData->IsEmpty()) {
 		
 		//Swap current with candidate
-		RIVDataSet* temp = currentData;
+		RIVDataSet<float,ushort>* temp = currentData;
 		currentData = candidateData;
 		candidateData = temp;
 		
 		pathCounts.clear();
 	}
 	else {
-		RIVDataSet* bootstrap = Bootstrap(currentData, 1000);
+		RIVDataSet<float,ushort> bootstrap = Bootstrap(currentData, 1000);
 		
-		RIVTable* paths = bootstrap->GetTable("paths");
+//		RIVTable<float,ushort>* paths = bootstrap.GetTable("paths");
 		
 		//Compare bootstrap histograms with given histograms
 		
-//		HistogramSet<float,ushort> bootstrapHistograms = paths->CreateHistograms();
+		//		HistogramSet<float,ushort> bootstrapHistograms = paths->CreateHistograms();
 		
-//		Histogram<float> bootstrapXHist =
-//		Histogram<float> bootstrapYHist = Histogram<float>(0,1,bins);
-//		Histogram<float> bootstrapLensUHist = Histogram<float>(0,1,bins);
-//		Histogram<float> bootstrapLensVHist = Histogram<float>(0,1,bins);
-//		Histogram<float> bootstrapColorRHist = Histogram<float>(0,1,bins);
-//		Histogram<float> bootstrapColorGHist = Histogram<float>(0,1,bins);
-//		Histogram<float> bootstrapColorBHist = Histogram<float>(0,1,bins);;
-//		Histogram<float> bootstrapThroughputRHist = Histogram<float>(0,1,bins);;
-//		Histogram<float> bootstrapThroughputGHist = Histogram<float>(0,1,bins);;
-//		Histogram<float> bootstrapThroughputBHist = Histogram<float>(0,1,bins);;
-//		Histogram<ushort> bootstrapDepthsHist = Histogram<ushort>(0,5);
+		//		Histogram<float> bootstrapXHist =
+		//		Histogram<float> bootstrapYHist = Histogram<float>(0,1,bins);
+		//		Histogram<float> bootstrapLensUHist = Histogram<float>(0,1,bins);
+		//		Histogram<float> bootstrapLensVHist = Histogram<float>(0,1,bins);
+		//		Histogram<float> bootstrapColorRHist = Histogram<float>(0,1,bins);
+		//		Histogram<float> bootstrapColorGHist = Histogram<float>(0,1,bins);
+		//		Histogram<float> bootstrapColorBHist = Histogram<float>(0,1,bins);;
+		//		Histogram<float> bootstrapThroughputRHist = Histogram<float>(0,1,bins);;
+		//		Histogram<float> bootstrapThroughputGHist = Histogram<float>(0,1,bins);;
+		//		Histogram<float> bootstrapThroughputBHist = Histogram<float>(0,1,bins);;
+		//		Histogram<ushort> bootstrapDepthsHist = Histogram<ushort>(0,5);
 		
-		Histogram<ushort> bootstrapBounceNrs = Histogram<ushort>(0,5);
-		Histogram<float> bootstrapXs = Histogram<float>(0,500,bins);
-		Histogram<float> bootstrapYs = Histogram<float>(0,500,bins);
-		Histogram<float> bootstrapZs = Histogram<float>(0,500,bins);
-		Histogram<float> bootstrapIsectColorR = Histogram<float>(0,1,bins);
-		Histogram<float> bootstrapIsectColorG = Histogram<float>(0,1,bins);
-		Histogram<float> bootstrapIsectColorB = Histogram<float>(0,1,bins);;
-		Histogram<ushort> bootstrapPrimitiveIds = Histogram<ushort>(0,6);
+//		Histogram<ushort> bootstrapBounceNrs = Histogram<ushort>(0,5);
+//		Histogram<float> bootstrapXs = Histogram<float>(0,500,bins);
+//		Histogram<float> bootstrapYs = Histogram<float>(0,500,bins);
+//		Histogram<float> bootstrapZs = Histogram<float>(0,500,bins);
+//		Histogram<float> bootstrapIsectColorR = Histogram<float>(0,1,bins);
+//		Histogram<float> bootstrapIsectColorG = Histogram<float>(0,1,bins);
+//		Histogram<float> bootstrapIsectColorB = Histogram<float>(0,1,bins);;
+//		Histogram<ushort> bootstrapPrimitiveIds = Histogram<ushort>(0,6);
 		
 		
 	}

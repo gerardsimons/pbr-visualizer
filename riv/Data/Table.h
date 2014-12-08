@@ -12,149 +12,379 @@
 #include <vector>
 #include <map>
 #include <stdio.h>
+#include <tuple>
 
 #include <math.h>
+
+#include "TupleIterator.h"
 
 #include "Filter.h"
 #include "Record.h"
 #include "Reference.h"
 #include "Iterator.h"
 #include "DataSetListener.h"
-#include "Cluster.h"
 
 #include "../helper.h"
 #include "../reporter.h"
 
-class RIVReference;
-class RIVReferenceChain;
-class RIVDataView;
+//class RIVReferenceChain;
+//class RIVDataView;
 class TableIterator;
 
-namespace riv {
-	class Filter;
-	class GroupFilter;
-}
+template<template<typename...> class C,typename T>
+struct apply_args;
 
-	class RIVTable {
-	private:
-		std::vector<RIVRecord*> records;
-		std::map<std::string,RIVFloatRecord*> floatRecords;
-		std::map<std::string,RIVUnsignedShortRecord*> shortRecords;
+template<template<typename...> class C,typename R,typename... Args>
+struct apply_args<C, R(Args...) >
+{
+	typedef C<Args...> type;
+};
+
+
+class RIVTableInterface {
+public:
+	const std::string name;
+	RIVReference* reference = NULL;
+//	size_t ID = ++IDCOUNTER;
+	
+	virtual bool HasRecord(const std::string& name) = 0;
+	virtual void FilterRow(size_t row) = 0;
+	virtual size_t NumberOfRows() const = 0;
+protected:
+	RIVTableInterface(const std::string& name) : name(name) {
 		
-		std::vector<RIVReference*> references;
-		std::vector<RIVDataSetListener*> onChangeListeners;
-		std::vector<size_t> selectedRows;
-		RIVClusterSet clusterSet;
+	}
+};
+
+template <typename... Ts>
+class RIVTable : public RIVTableInterface {
+private:
+	std::tuple<std::vector<RIVRecord<Ts>*>...> records;
+	
+	const size_t tupleSize = sizeof...(Ts);
+	
+	std::vector<RIVDataSetListener*> onChangeListeners;
+	std::vector<size_t> selectedRows;
+	
+	bool filtered = false;
+	bool isClustered = false;
+	
+	TableIterator* iterator = NULL;
+	
+	std::tuple<std::vector<riv::Filter<Ts>*>...> filters; //Use pointers because Filter is an abstract class
+	std::tuple<std::vector<riv::GroupFilter<Ts>>...> groupFilters;
+
+	std::vector<std::string> attributes;
+	
+	std::map<size_t,bool> filteredRows;
+	std::vector<size_t> newlyFilteredRows;
+	
+public:
+	RIVTable(std::string name) : RIVTableInterface(name) {
 		
-		bool filtered = false;
-		bool isClustered = false;
-		
-		TableIterator* iterator = NULL;
-		
-		std::vector<riv::Filter*> filters;
-		std::vector<riv::GroupFilter*> groupFilters;
-		
-		std::string name;
-		std::vector<std::string> attributes;
-		
-		std::map<size_t,bool> filteredRows;
-		std::vector<size_t> newlyFilteredRows;
-		
-//		void filterRecords(); //Filter on all filters present in the filters vector
-	public:
-		RIVTable(std::string name);
-		~RIVTable();
-		RIVTable* CloneStructure();
-		RIVRecord* GetRecord(size_t index);
-		RIVRecord* GetRecord(std::string recordName);
-		RIVFloatRecord* CreateFloatRecord(const std::string& name) {
-			RIVFloatRecord* newRecord = new RIVFloatRecord(name);
-			records.push_back(newRecord);
-			floatRecords[name] = newRecord;
-			return newRecord;
+	}
+	~RIVTable() {
+		TupleForEach(filters, [&](auto tFilters) {
+			deletePointerVector(tFilters);
+		});
+	}
+	RIVTable* CloneStructure() {
+		RIVTable* clone = new RIVTable(name);
+		TupleForEach(records, [&](auto records) {
+			for(auto& record : records) {
+				clone->AddRecord(record);
+			}
+		});
+		return clone;
+	}
+	std::tuple<std::vector<RIVRecord<Ts>*>...>& GetAllRecords() {
+		return records;
+	}
+	//Helper function
+	template<typename U>
+	std::vector<RIVRecord<U>*>* GetRecords() {
+		return &std::get<std::vector<RIVRecord<U>*>>(records);
+	}
+	template<typename U>
+	RIVRecord<U>* GetRecord(size_t index) {
+		std::vector<RIVRecord<U>*>* records = GetRecord<U>();
+		if(records->size() > index) {
+			return &(records)[index];
 		}
-		RIVUnsignedShortRecord* CreateShortRecord(const std::string& name) {
-			RIVUnsignedShortRecord* newRecord = new RIVUnsignedShortRecord(name);
-			records.push_back(newRecord);
-			shortRecords[name] = newRecord;
-			return newRecord;
+		return NULL;
+	}
+	template<typename T>
+	RIVRecord<T>* GetRecord(const std::string& name) {
+		std::vector<RIVRecord<T>*>* records = GetRecords<T>();
+		for(size_t i = 0 ; i < records->size() ; ++i) {
+			RIVRecord<T>* record = records->at(i);
+			if(record->name == name) {
+				return record;
+			}
 		}
-		template <typename T>
-		T* GetRecord(std::string name) {
-			return dynamic_cast<T*>(GetRecord(name));
+		//No record with that name was found
+		return NULL;
+	}
+	template<typename T>
+	void AddRecord(RIVRecord<T>* record) {
+		std::get<std::vector<RIVRecord<T>*>>(records).push_back(record);
+		size_t numRows = NumberOfRows();
+		if((numRows != 0 && numRows != record->Size()) || record->Size() == 0) {
+			throw std::runtime_error("RIVRecord is of invalid size");
 		}
-		bool IsEmpty();
-		void AddValue(const std::string& name,float value);
-		void AddValue(const std::string& name,ushort value);
-		//Filter this table according to the filters that are applied
-		void Filter();
-		void FilterReferences();
-		void AddRecord(RIVRecord* record);
-		bool ContainsFilter(riv::Filter* filter);
-		void AddFilter(riv::Filter *filter);
-		void AddFilter(riv::GroupFilter *groupFilter);
-		void CopyRow(RIVTable* otherTable, size_t row);
-		void AddReference(RIVReference* reference);
-		void AddOnChangeListeners(RIVDataView *dataview);
+	}
+	template<typename T>
+	RIVRecord<T>* CreateRecord(const std::string& name) {
+//		AddRecord<float>(RIVRecord<float>(name));
+		std::vector<RIVRecord<T>*>* tRecords = GetRecords<T>();
+		RIVRecord<T>* newRecord = new RIVRecord<T>(name);
+		tRecords->push_back(newRecord);
+		return newRecord;
+	}
+	bool IsEmpty() {
+		TupleForEach(records, [&](auto tRecords) {
+			if(tRecords.size()) {
+				return false;
+			}
+		});
+		return true;
+	}
+	//Filter this table according to the filters that are applied
+	void Filter();
+	void FilterReferences();
+	template<typename T>
+	bool ContainsFilter(riv::Filter<T>* filter);
+	template<typename T>
+	void AddFilter(riv::Filter<T> *filter);
+	template<typename T>
+	void AddFilter(riv::GroupFilter<T> *groupFilter);
+//	void AddRow(const std::tuple<std::vector<Ts>...>) {
+//		
+//	}
+	
+//	template <typename ...Ts>
+//	static void CopyRow(RIVTable<Ts...>* table, RIVTable<Ts...>* otherTable, size_t row) {
+//		size_t recordIndex = 0;
+//		TupleForEach(records, [&](auto records) {
+//			typedef apply_args<records,decltype(myFunc)>::type MyConcrete;
+//			++recordIndex;
+//		});
+//	}
+	//		void AddOnChangeListeners(RIVDataView *dataview);
+	
+	std::vector<std::string> GetAttributes() const;
+	
+	void FilterRow(size_t row) {
+		filteredRows[row] = true;
+		filtered = true;
 		
-		std::vector<std::string> GetAttributes() const;
+	}
+	void SelectRow(size_t row);
+	//    void UnfilterRow(size_t,RIVReference* reference = 0);
+	void FilterRowsUnlinkedTo(RIVTable *table);
+	
+	//Clears all the filters that may be present, returns true if any filters were actually removed
+	bool ClearFilters() {
+		TupleForEach(filters, [&](auto filters) {
+			filters.clear();
+		});
+		TupleForEach(groupFilters, [&](auto groupFilters) {
+			groupFilters.clear();
+		});
+	}
+	//Clears all the filters with the given attribute name, returns true if any filter was actually removed
+	bool ClearFilter(const std::string& filterName) {
+		TupleForEach(filters, [&](auto filters) {
+			size_t i;
+			bool filterFound = false;
+			for(i = 0 ; i < filters.size() ; ++i) {
+				if(filters[i]->AppliesToAttribute(filterName)) {
+					filterFound = true;
+					break;
+				}
+			}
+			if(!filterFound) {
+				throw std::runtime_error("No such filter exists.");
+			}
+			else {
+				filters.erase(filters.begin() + 1);
+			}
+		});
+	}
+	bool ClearFilter(size_t fid);
+	void ClearFilteredRows();
+	bool ContainsColumn(std::string);
+	
+	float PercentageFiltered();
+	bool IsFiltered() { return filtered; }; //Any filters applied?
+	bool IsClustered() { return isClustered; };
+	
+	bool HasRecord(const std::string& name) {
+		TupleForEach(records,[&](auto tRecords) {
+			for(auto record : tRecords) {
+				if(record->name == name) {
+					return true;
+				}
+			}
+		});
+		return false;
+	}
+	
+	TableIterator GetIterator() {
+		if(IsFiltered()) {
+			return FilteredTableIterator(&filteredRows,NumberOfRows(), reference);
+		}
+		else {
+			return TableIterator(NumberOfRows(), reference);
+		}
+	}
+	//		TableIterator* GetPIterator();
+	std::string GetName() const { return name; };
+	
+
+	void SetReference(RIVReference* newReference) {
+		reference = newReference;
+	}
+	RIVReference* GetReference() {
+		return reference;
+	}
+//	bool GetReferenceChainToTable(std::string tableName, RIVReferenceChain& chainToTarget, std::vector<std::string> *visitedTables = 0);
+	RIVReference* GetReferenceToTable(const std::string& tableName);
+	
+	const RIVTable* FindTable(std::string tableName, std::vector<std::string> *visitedTables = 0);
+	
+	size_t NumberOfColumns() const {
+		size_t total = 0;
+		TupleForEach(records, [&](auto tRecords) {
+			total += tRecords.size();
+		});
+		return total;
+	}
+	//TODO: This does not work if the table does not use one of its template types (i.e. if no record exists for
+	size_t NumberOfRows() const {
+		//If the tuple is not empty
+		if(tupleSize > 0) {
+			//And the record
+			auto& t = std::get<0>(records);
+			if(t.size())
+				return t[0]->Size();
+		}
+		return 0;
+	}
+	std::string RowToString(size_t row) {
+	    std::string rowText = "";
+		TupleForEach(records, [&](auto tRecords) {
+			for(auto record : tRecords) {
+	
+				const int columnWidth = 15;
+				std::string valueString;
+				size_t textWidth = 0;
+				valueString = std::to_string(record->Value(row));
+				textWidth = valueString.size();
+				int padding = floor((columnWidth - textWidth - 1) / 2.F);
 		
-		void FilterRow(size_t row);
-		void SelectRow(size_t row);
-		//    void UnfilterRow(size_t,RIVReference* reference = 0);
-		void FilterRowsUnlinkedTo(RIVTable *table);
+				rowText += generateString(' ',padding);
+				rowText += valueString;
+				rowText += generateString(' ',padding);
 		
-		RIVCluster* ClusterForRow(const size_t& row) const;
+				int remainder = (columnWidth - textWidth - 1) % 2;
 		
-		//Clears all the filters that may be present, returns true if any filters were actually removed
-		bool ClearFilters();
-		//Clears all the filters with the given attribute name, returns true if any filter was actually removed
-		bool ClearFilter(const std::string& filterName);
-		bool ClearFilter(size_t fid);
-		void ClearFilteredRows();
-		RIVRecord* GetRecord(std::string name) const;
-		bool ContainsColumn(std::string);
+				rowText += generateString(' ', remainder);
+				rowText += "|";
+			}
+		});
+	    return rowText;
+	}
+	//Print functions
+	void PrintUnfiltered();
+	std::string generateString(char c, size_t number) {
+	    std::string generatedString;
+	
+	    for(size_t i = 0 ; i < number ; i++) {
+	        generatedString += c;
+	    }
+	    return generatedString;
+	}
+	void Print(size_t maxPrint = 1000, bool printFiltered = true) {
+		size_t rows = NumberOfRows();
+		if(maxPrint == 0) {
+			maxPrint = rows;
+		}
+		printf("Table called %s has %zu records and %zu rows.\n First %zu rows:\n",name.c_str(),NumberOfColumns(),rows,maxPrint);
+		std::string headerText = "|";
+		std::string headerOrnament;
+	
+		int columnWidth = 17;
+	
+		TupleForEach(records, [&](auto tRecords) {
+			for(auto record : tRecords) {
 		
-		/* Casting help functions */
-		static RIVFloatRecord* CastToFloatRecord(RIVRecord* record);
-		static RIVUnsignedShortRecord* CastToUnsignedShortRecord(RIVRecord* record);
+				size_t textWidth = record->name.size();
+				if(textWidth > columnWidth) {
+					columnWidth = textWidth;
+				}
+				int padding = (int)((columnWidth - textWidth) / 2.F);
 		
-		float PercentageFiltered();
-		bool IsFiltered() { return filtered; }; //Any filters applied?
-		bool IsClustered() { return isClustered; };
-		bool HasRecord(RIVRecord* record);
-		bool HasRecord(const std::string& name);
-		void FunctionOnRecords(void(*someFunction)(const RIVRecord*));
+				headerText += generateString(' ',padding);
+				headerText += record->name.c_str();
+				headerText += generateString(' ',padding);
+				headerText += "|";
+			}
+		});
+		for(size_t j = 0 ; j < headerText.size() ; j++) {
+			headerOrnament += "-";
+		}
+	
+	
+	
+		printf("%s\n",headerOrnament.c_str());
+		printf("%s\n",headerText.c_str());
+		printf("%s\n",headerOrnament.c_str());
+	
+		for(size_t j = 0 ; j < rows && (j < maxPrint) ; j++) {
+			if(!printFiltered && filteredRows[j]) {
+				continue;
+			}
+			std::string rowText = RowToString(j);
+			if(printFiltered || !filteredRows[j]) {
+
+					std::pair<size_t*,ushort> referenceIndexRange = reference->GetReferenceRows(j);
+	//				printArray(referenceIndexRange.first,referenceIndexRange.second);
+					if(referenceIndexRange.first) {
+						rowText += "---> " + reference->targetTable->name + "{";
+						for(size_t i = 0 ; i < referenceIndexRange.second ; ++i) {
+	
+							 rowText += std::to_string(referenceIndexRange.first[i]);
+							if(i < referenceIndexRange.second - 1) {
+								rowText +=  ",";
+							}
+						}
+						rowText += "}";
+					}
+				
+				if(filteredRows[j]) {
+					rowText += "** FILTERED **";
+				}
+			}
+	
+			printf("%s\n",rowText.c_str());
+		}
+		printf("%s\n",headerOrnament.c_str());
 		
-		const std::vector<RIVReference*>* GetReferences();
-		TableIterator* GetIterator();
-//		TableIterator* GetPIterator();
-		std::string GetName() const { return name; };
+		//    PrintFilteredRowMap();
+	}
+//	void PrintFilteredRowMap(); //Print the underlying filter map
+	
+	HistogramSet<Ts...> CreateHistogramSet(int bins) {
+		HistogramSet<Ts...> histograms;
 		
-		size_t GetNumRows() const;
-		
-		RIVReference* GetReference(size_t n); 
-		bool GetReferenceChainToTable(std::string tableName, RIVReferenceChain& chainToTarget, std::vector<std::string> *visitedTables = 0);
-		RIVReference* GetReferenceToTable(const std::string& tableName);
-		
-		const RIVTable* FindTable(std::string tableName, std::vector<std::string> *visitedTables = 0);
-		
-		size_t NumberOfColumns(); //Columns
-		size_t NumberOfRows();
-		std::vector<RIVRecord*> GetRecords() const;
-		
-		
-		
-		RIVClusterSet& GetClusterSet() { return clusterSet; };
-		void ClusterWithSize(const std::string& xRecordName, const std::string& yRecordName, const std::string& zRecordName, const size_t& clusterSize, const size_t& maxRepeat);
-		RIVClusterSet* Cluster(const std::string& xRecord, const std::string& yRecord, const std::string& zRecord, const size_t& K, const size_t& maxRepeat);
-		
-		//Print functions
-		void PrintUnfiltered();
-		void Print(size_t maxPrint = 1000, bool printFiltered = true); //Print all the rows
-		//    void PrintUnfiltered(); //Print only those rows that are not filtered
-		void PrintFilteredRowMap(); //Print the underlying filter map
-		std::string RowToString(size_t row);
-	};
+		TupleForEach(records, [&](auto tRecords) {
+			for(auto record : tRecords) {
+				histograms.AddHistogram(record->CreateHistogram(bins));
+			}
+		});
+		return histograms;
+	}
+};
 
 #endif /* defined(__RIVDataSet__Table__) */

@@ -11,36 +11,32 @@
 
 #include "ParallelCoordsAxis.h"
 #include "../Data/Table.h"
+
+#include <tuple>
 #include <vector>
 
+template<typename... Ts>
 class ParallelCoordsAxisGroup {
+private:
 public:
-    std::vector<ParallelCoordsAxis> axes;
 	
-    RIVTable* table;
+    RIVTable<Ts...>* table;
+	std::tuple<std::vector<ParallelCoordsAxis<Ts>>...> axes;
+	
+	template<typename U>
+	std::vector<ParallelCoordsAxis<U>>* GetAxes() {
+		return &std::get<std::vector<ParallelCoordsAxis<U>>>(axes);
+	}
+	
+	template<typename U>
+	void AddAxis(ParallelCoordsAxis<U>& newAxis) {
+		auto axes = GetAxes<U>();
+		axes->push_back(newAxis);
+	}
     
-    ParallelCoordsAxisGroup* connectedGroup = 0;
-    ParallelCoordsAxis* connectorAxis;
-    
-    ParallelCoordsAxis* LastAxis() {
-        if(axes.size() > 0) {
-            return &axes[axes.size() - 1];
-        }
-        else {
-            printf("Axis group is empty.");
-            return 0;
-        }
-    }
-    
-    ParallelCoordsAxis* FirstAxis() {
-        if(axes.size() > 0) {
-            return &axes[0];
-        }
-        else {
-            printf("Axis group is empty.");
-            return 0;
-        }
-    }
+//    ParallelCoordsAxisGroup* connectedGroup = 0;
+//    ParallelCoordsAxis* connectorAxis;
+	
 };
 
 #endif /* defined(__Afstuderen__ParallelCoordsAxisGroup__) */

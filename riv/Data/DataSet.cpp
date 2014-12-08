@@ -8,268 +8,268 @@
 
 #include "DataSet.h"
 #include "Table.h"
-
-void RIVDataSet::AddTable(RIVTable* table) {
-    tables.push_back(table);
-	tableRegister[table->GetName()] = table;
-}
-RIVTable* RIVDataSet::CreateTable(const std::string &tableName) {
-	if(tableRegister[tableName]) {
-		throw std::runtime_error("A table already exists with this name.");
-	}
-	else {
-		RIVTable* newTable = new RIVTable(tableName);
-		tables.push_back(newTable);
-		tableRegister[tableName] = newTable;
-		return newTable;
-	}
-	
-}
-//Add a filter to the table with the given name
-void RIVDataSet::AddFilter(const std::string& tablename, riv::Filter *filter) {
-	RIVTable* table = GetTable(tablename);
-    //Find the table containing the attribute
-	if(!isFiltering) {
-		throw "StartFiltering must be called before doing any filter operations";
-	}
-    if(filter != NULL) {
-		table->AddFilter(filter);
-		staleTables[table] = true;
-		return;
-
-    }
-    else {
-        throw std::runtime_error("Supplied filter is a NULL pointer.");
-    }
-}
-
-//Add a filter to the table with the given name
-void RIVDataSet::AddFilter(const std::string& tablename, riv::GroupFilter *filter) {
-	RIVTable* table = GetTable(tablename);
-    //Find the table containing the attribute
-	if(!isFiltering) {
-		throw "StartFiltering must be called before doing any filter operations";
-	}
-    if(filter != NULL) {
-		table->AddFilter(filter);
-		staleTables[table] = true;
-		return;
-		
-    }
-    else {
-        throw std::runtime_error("Supplied filter is a NULL pointer.");
-    }
-}
-
-
-void RIVDataSet::AddFilter(riv::Filter *filter) {
-	//Find the table that contains all of the filter attributes
-	for(RIVTable* table : tables) {
-		bool tableFound = true;
-		for(const std::string& attribute : filter->GetAttributes()) {
-			if(table->HasRecord(attribute) == false) {
-				tableFound = false;
-				break;
-			}
-		}
-		if(tableFound) {
-			table->AddFilter(filter);
-			staleTables[table] = true;
-			return;
-		}
-	}
-	throw "Could not find a table that contains all of the filter's attributes";
-}
-void RIVDataSet::AddFilter(riv::GroupFilter *filter) {
-	//Find the table that contains all of the filter attributes
-	for(RIVTable* table : tables) {
-		bool tableFound = true;
-		for(const std::string& attribute : filter->GetAttributes()) {
-			if(table->HasRecord(attribute) == false) {
-				tableFound = false;
-				break;
-			}
-		}
-		if(tableFound) {
-			table->AddFilter(filter);
-			staleTables[table] = true;
-			return;
-		}
-	}
-	throw "Could not find a table that contains all of the filter's attributes";
-}
-
-void RIVDataSet::ClearFilters() {
-    printf("Clearing all filters on the dataset.\n");
-    for(RIVTable* table : tables) {
-        if(table->ClearFilters()) {
-			staleTables[table] = true;
-			const std::vector<RIVReference*>* refs = table->GetReferences();
-			for(size_t i = 0 ; i < refs->size() ; ++i) {
-				RIVReference* ref = refs->at(i);
-				staleTables[ref->targetTable] = true;
-			}
-		}
-    }
-}
-
-void RIVDataSet::ClearFilter(size_t filterID) {
-	printf("Clearing filter %zu on all tables\n",filterID);
-    for(RIVTable *table : tables) {
-        if(table->ClearFilter(filterID)) {
-			staleTables[table] = true;
-			const std::vector<RIVReference*>* refs = table->GetReferences();
-			for(size_t i = 0 ; i < refs->size() ; ++i) {
-				RIVReference* ref = refs->at(i);
-				staleTables[ref->targetTable] = true;
-			}
-		}
-    }
-}
-
-void RIVDataSet::ClearFilter(const std::string& filterName) {
-    printf("Clearing filter %s on all tables\n",filterName.c_str());
-    for(RIVTable *table : tables) {
-        if(table->ClearFilter(filterName)) {
-			staleTables[table] = true;
-			const std::vector<RIVReference*>* refs = table->GetReferences();
-			for(size_t i = 0 ; i < refs->size() ; ++i) {
-				RIVReference* ref = refs->at(i);
-				staleTables[ref->targetTable] = true;
-			}
-		}
-    }
-}
-
-void RIVDataSet::UpdateFilter(riv::Filter* updateFilter) {
-	for(RIVTable* table : tables) {
-		if(table->ContainsFilter(updateFilter)) {
-			staleTables[table] = true;
-			const std::vector<RIVReference*>* refs = table->GetReferences();
-			for(size_t i = 0 ; i < refs->size() ; ++i) {
-				RIVReference* ref = refs->at(i);
-				staleTables[ref->targetTable] = true;
-			}
-		}
-	}
-}
-
-size_t RIVDataSet::TotalNumberOfRecords() const {
-    size_t size = 0;
-    for(RIVTable *table : tables) {
-        size += table->NumberOfColumns();
-    }
-    return size;
-}
-
-std::vector<RIVTable*>* RIVDataSet::GetTables() {
-    return &tables;
-}
-
-size_t RIVDataSet::NumberOfTables() const {
-    return tables.size();
-}
-
-void RIVDataSet::notifyFilterListeners() {
-    for(RIVDataSetListener *listener : dataListeners) {
-        listener->OnFiltersChanged();
-    }
-}
-
-void RIVDataSet::NotifyDataListeners() {
-	for(RIVDataSetListener* listener : dataListeners) {
-		listener->OnDataChanged();
-	}
-}
-
-void RIVDataSet::AddFilterListener(RIVDataSetListener* listener) {
-    if(listener) {
-        dataListeners.push_back(listener);
-    }
-}
-
-void RIVDataSet::Print(size_t maxPrint, bool printFiltered) const {
-    printf("Dataset containing %zu tables:\n\n",tables.size());
-    for(RIVTable *table : tables) {
-        table->Print(maxPrint, printFiltered);
-    }
-}
-
-RIVRecord* RIVDataSet::FindRecord(std::string name) const {
-    RIVRecord* record = 0;
-    for(RIVTable* table : tables) {
-        record = table->GetRecord(name);
-        if(record) {
-            return record;
-        }
-    }
-    return record;
-}
-
-RIVTable* RIVDataSet::GetTable(const std::string& tableName) {
-	RIVTable* table = tableRegister[tableName];
-	if(!table)
-		throw std::runtime_error("No such table exists");
-	else return table;
-}
-
-bool RIVDataSet::IsSet() const {
-    return tables.size() != 0;
-}
-
-RIVClusterSet* RIVDataSet::GetClusterSet() {
-    return clusterSet;
-}
-
-void RIVDataSet::ClusterTable(const std::string& tableName, const std::string& columnNameX, const std::string& columnNameY, const std::string& columnNameZ, const size_t& K, const size_t& maxRepeat) {
-    RIVTable *table = GetTable(tableName);
-    if(!table) {
-        throw "No such table.";
-    }
-    else {
-        clusterSet = table->Cluster(columnNameX, columnNameY, columnNameZ, K, maxRepeat);
-    }
-}
-
-void RIVDataSet::StartFiltering() {
-	if(isFiltering) {
-		throw "Invalid state, StopFiltering was never called.";
-	}
-	isFiltering = true;
-	staleTables.clear();
-}
-
-bool RIVDataSet::IsEmpty() {
-	for(RIVTable* table : tables) {
-		if(!table->IsEmpty()) {
-			return false;
-		}
-	}
-	return true;
-}
-void RIVDataSet::StopFiltering() {
-	if(!isFiltering) {
-		throw "Invalid state, StartFiltering was never called.";
-	}
-	//Finalize, do the actual filtering operations
-	for(auto iter : staleTables) {
-		iter.first->Filter();
-	}
-	
-	//Make sure linked tables are filtered accordingly
-	for(auto iter : staleTables) {
-		iter.first->FilterReferences();
-	}
-	
-	isFiltering = false;
-	//Notify the listeners now
-	notifyFilterListeners();
-}
-
-RIVDataSet* RIVDataSet::CloneStructure() {
-	RIVDataSet* clone = new RIVDataSet();
-	for(RIVTable* table : tables) {
-		clone->AddTable(table->CloneStructure());
-	}
-	return clone;
-}
+//
+//void RIVDataSet::AddTable(RIVTable* table) {
+//    tables.push_back(table);
+//	tableRegister[table->GetName()] = table;
+//}
+//RIVTable* RIVDataSet::CreateTable(const std::string &tableName) {
+//	if(tableRegister[tableName]) {
+//		throw std::runtime_error("A table already exists with this name.");
+//	}
+//	else {
+//		RIVTable* newTable = new RIVTable(tableName);
+//		tables.push_back(newTable);
+//		tableRegister[tableName] = newTable;
+//		return newTable;
+//	}
+//	
+//}
+////Add a filter to the table with the given name
+//void RIVDataSet::AddFilter(const std::string& tablename, riv::Filter *filter) {
+//	RIVTable* table = GetTable(tablename);
+//    //Find the table containing the attribute
+//	if(!isFiltering) {
+//		throw "StartFiltering must be called before doing any filter operations";
+//	}
+//    if(filter != NULL) {
+//		table->AddFilter(filter);
+//		staleTables[table] = true;
+//		return;
+//
+//    }
+//    else {
+//        throw std::runtime_error("Supplied filter is a NULL pointer.");
+//    }
+//}
+//
+////Add a filter to the table with the given name
+//void RIVDataSet::AddFilter(const std::string& tablename, riv::GroupFilter *filter) {
+//	RIVTable* table = GetTable(tablename);
+//    //Find the table containing the attribute
+//	if(!isFiltering) {
+//		throw "StartFiltering must be called before doing any filter operations";
+//	}
+//    if(filter != NULL) {
+//		table->AddFilter(filter);
+//		staleTables[table] = true;
+//		return;
+//		
+//    }
+//    else {
+//        throw std::runtime_error("Supplied filter is a NULL pointer.");
+//    }
+//}
+//
+//
+//void RIVDataSet::AddFilter(riv::Filter *filter) {
+//	//Find the table that contains all of the filter attributes
+//	for(RIVTable* table : tables) {
+//		bool tableFound = true;
+//		for(const std::string& attribute : filter->GetAttributes()) {
+//			if(table->HasRecord(attribute) == false) {
+//				tableFound = false;
+//				break;
+//			}
+//		}
+//		if(tableFound) {
+//			table->AddFilter(filter);
+//			staleTables[table] = true;
+//			return;
+//		}
+//	}
+//	throw "Could not find a table that contains all of the filter's attributes";
+//}
+//void RIVDataSet::AddFilter(riv::GroupFilter *filter) {
+//	//Find the table that contains all of the filter attributes
+//	for(RIVTable* table : tables) {
+//		bool tableFound = true;
+//		for(const std::string& attribute : filter->GetAttributes()) {
+//			if(table->HasRecord(attribute) == false) {
+//				tableFound = false;
+//				break;
+//			}
+//		}
+//		if(tableFound) {
+//			table->AddFilter(filter);
+//			staleTables[table] = true;
+//			return;
+//		}
+//	}
+//	throw "Could not find a table that contains all of the filter's attributes";
+//}
+//
+//void RIVDataSet::ClearFilters() {
+//    printf("Clearing all filters on the dataset.\n");
+//    for(RIVTable* table : tables) {
+//        if(table->ClearFilters()) {
+//			staleTables[table] = true;
+//			const std::vector<RIVReference*>* refs = table->GetReferences();
+//			for(size_t i = 0 ; i < refs->size() ; ++i) {
+//				RIVReference* ref = refs->at(i);
+//				staleTables[ref->targetTable] = true;
+//			}
+//		}
+//    }
+//}
+//
+//void RIVDataSet::ClearFilter(size_t filterID) {
+//	printf("Clearing filter %zu on all tables\n",filterID);
+//    for(RIVTable *table : tables) {
+//        if(table->ClearFilter(filterID)) {
+//			staleTables[table] = true;
+//			const std::vector<RIVReference*>* refs = table->GetReferences();
+//			for(size_t i = 0 ; i < refs->size() ; ++i) {
+//				RIVReference* ref = refs->at(i);
+//				staleTables[ref->targetTable] = true;
+//			}
+//		}
+//    }
+//}
+//
+//void RIVDataSet::ClearFilter(const std::string& filterName) {
+//    printf("Clearing filter %s on all tables\n",filterName.c_str());
+//    for(RIVTable *table : tables) {
+//        if(table->ClearFilter(filterName)) {
+//			staleTables[table] = true;
+//			const std::vector<RIVReference*>* refs = table->GetReferences();
+//			for(size_t i = 0 ; i < refs->size() ; ++i) {
+//				RIVReference* ref = refs->at(i);
+//				staleTables[ref->targetTable] = true;
+//			}
+//		}
+//    }
+//}
+//
+//void RIVDataSet::UpdateFilter(riv::Filter* updateFilter) {
+//	for(RIVTable* table : tables) {
+//		if(table->ContainsFilter(updateFilter)) {
+//			staleTables[table] = true;
+//			const std::vector<RIVReference*>* refs = table->GetReferences();
+//			for(size_t i = 0 ; i < refs->size() ; ++i) {
+//				RIVReference* ref = refs->at(i);
+//				staleTables[ref->targetTable] = true;
+//			}
+//		}
+//	}
+//}
+//
+//size_t RIVDataSet::TotalNumberOfRecords() const {
+//    size_t size = 0;
+//    for(RIVTable *table : tables) {
+//        size += table->NumberOfColumns();
+//    }
+//    return size;
+//}
+//
+//std::vector<RIVTable*>* RIVDataSet::GetTables() {
+//    return &tables;
+//}
+//
+//size_t RIVDataSet::NumberOfTables() const {
+//    return tables.size();
+//}
+//
+//void RIVDataSet::notifyFilterListeners() {
+//    for(RIVDataSetListener *listener : dataListeners) {
+//        listener->OnFiltersChanged();
+//    }
+//}
+//
+//void RIVDataSet::NotifyDataListeners() {
+//	for(RIVDataSetListener* listener : dataListeners) {
+//		listener->OnDataChanged();
+//	}
+//}
+//
+//void RIVDataSet::AddFilterListener(RIVDataSetListener* listener) {
+//    if(listener) {
+//        dataListeners.push_back(listener);
+//    }
+//}
+//
+//void RIVDataSet::Print(size_t maxPrint, bool printFiltered) const {
+//    printf("Dataset containing %zu tables:\n\n",tables.size());
+//    for(RIVTable *table : tables) {
+//        table->Print(maxPrint, printFiltered);
+//    }
+//}
+//
+//RIVRecord* RIVDataSet::FindRecord(std::string name) const {
+//    RIVRecord* record = 0;
+//    for(RIVTable* table : tables) {
+//        record = table->GetRecord(name);
+//        if(record) {
+//            return record;
+//        }
+//    }
+//    return record;
+//}
+//
+//RIVTable* RIVDataSet::GetTable(const std::string& tableName) {
+//	RIVTable* table = tableRegister[tableName];
+//	if(!table)
+//		throw std::runtime_error("No such table exists");
+//	else return table;
+//}
+//
+//bool RIVDataSet::IsSet() const {
+//    return tables.size() != 0;
+//}
+//
+//RIVClusterSet* RIVDataSet::GetClusterSet() {
+//    return clusterSet;
+//}
+//
+//void RIVDataSet::ClusterTable(const std::string& tableName, const std::string& columnNameX, const std::string& columnNameY, const std::string& columnNameZ, const size_t& K, const size_t& maxRepeat) {
+//    RIVTable *table = GetTable(tableName);
+//    if(!table) {
+//        throw "No such table.";
+//    }
+//    else {
+//        clusterSet = table->Cluster(columnNameX, columnNameY, columnNameZ, K, maxRepeat);
+//    }
+//}
+//
+//void RIVDataSet::StartFiltering() {
+//	if(isFiltering) {
+//		throw "Invalid state, StopFiltering was never called.";
+//	}
+//	isFiltering = true;
+//	staleTables.clear();
+//}
+//
+//bool RIVDataSet::IsEmpty() {
+//	for(RIVTable* table : tables) {
+//		if(!table->IsEmpty()) {
+//			return false;
+//		}
+//	}
+//	return true;
+//}
+//void RIVDataSet::StopFiltering() {
+//	if(!isFiltering) {
+//		throw "Invalid state, StartFiltering was never called.";
+//	}
+//	//Finalize, do the actual filtering operations
+//	for(auto iter : staleTables) {
+//		iter.first->Filter();
+//	}
+//	
+//	//Make sure linked tables are filtered accordingly
+//	for(auto iter : staleTables) {
+//		iter.first->FilterReferences();
+//	}
+//	
+//	isFiltering = false;
+//	//Notify the listeners now
+//	notifyFilterListeners();
+//}
+//
+//RIVDataSet* RIVDataSet::CloneStructure() {
+//	RIVDataSet* clone = new RIVDataSet();
+//	for(RIVTable* table : tables) {
+//		clone->AddTable(table->CloneStructure());
+//	}
+//	return clone;
+//}

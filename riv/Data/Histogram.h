@@ -13,8 +13,10 @@
 #include <vector>
 #include <exception>
 #include <iostream>
+#include <string>
 #include <cmath>
 
+#include "TupleIterator.h"
 #include "SampleSet.h"
 
 //histogram implementation. Counts the values in the given vector and divides by the number of samples to normalize
@@ -24,26 +26,19 @@ private:
 	std::map<T,size_t> hist;
 	size_t nrElements;
 	
+
+	
 	T lowerBound;
 	T upperBound;
 	
 	unsigned int bins = 0;
 	float binWidth = 0;
 	
-	void createFromData(const std::vector<T>& ts, unsigned int bins) {
-		
-		this->bins = bins;
-		
-		if(ts.size() == 0) {
-			throw std::runtime_error("Empty data vector");
-		}
-		
-		lowerBound = ts[0];
-		upperBound = ts[0];
-		for(const T& t : ts) {
-			lowerBound = std::min(lowerBound,t);
-			upperBound = std::max(upperBound,t);
-		}
+	//Count the values and divide by the total number to get a normalized histogram
+	void count(const std::vector<T>& ts) {
+//		if(ts.size() == 0) {
+//			throw std::runtime_error("Empty data vector");
+//		}
 		
 		for(const T& t : ts) {
 			Add(t);
@@ -51,16 +46,14 @@ private:
 		
 		nrElements = ts.size();
 	}
+	//Create the histogram from the given values and also use it to determine the natural bounds of the data
 	void createFromData(const std::vector<T>& ts) {
+//		if(ts.size() == 0) {
+//			throw std::runtime_error("Empty data vector");
+//		}
 		
-		if(ts.size() == 0) {
-			throw std::runtime_error("Empty data vector");
-		}
+		count(ts);
 		
-		for(const T& t : ts) {
-			++hist[t];
-		}
-
 		lowerBound = ts[0];
 		upperBound = ts[0];
 		
@@ -78,27 +71,32 @@ private:
 		return hist[key];
 	}
 public:
+	std::string name;
+	
 	Histogram() {
 		nrElements = 0;
 	}
-	Histogram(ushort lowerBound, ushort upperBound) {
+	Histogram(const std::string& name, ushort lowerBound, ushort upperBound) {
 		nrElements = 0;
 		bins = upperBound - lowerBound;
 		binWidth = 1;
 	}
-	Histogram(T lowerBound, T upperBound, unsigned int bins) : lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()) {
+	Histogram(const std::string& name, T lowerBound, T upperBound, unsigned int bins) : lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()) {
 		nrElements = 0;
 	}
-	Histogram(const std::vector<T>& ts, unsigned int bins) {
+	Histogram(const std::string& name, const std::vector<T>& ts, T lowerBound, T upperBound, unsigned int bins) : lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()) {
+		count(ts);
+	}
+	Histogram(const std::string& name, const std::vector<T>& ts, unsigned int bins)  : name(name) {
 		createFromData(ts,bins);
 	}
-	Histogram(const SampleSet<T>& sampleset, unsigned int bins){
+	Histogram(const std::string& name, const SampleSet<T>& sampleset, unsigned int bins) : name(name){
 		createFromData(sampleset.GetSamples(),bins);
 	}
-	Histogram(const std::vector<T>& ts) {
+	Histogram(const std::string& name, const std::vector<T>& ts) : name(name){
 		createFromData(ts);
 	}
-	Histogram(const SampleSet<T>& sampleset) {
+	Histogram(const std::string& name, const SampleSet<T>& sampleset) : name(name){
 		createFromData(sampleset.GetSamples());
 	}
 	T LowerBound() {
@@ -136,6 +134,7 @@ public:
 	}
 	void Print() {
 		int maxBarSize = 48;
+		printf("Histogram %s :\n",name.c_str());
 		for(int i = 0 ; i < bins ; ++i) {
 			printf("%.1f - %.1f : ",(float)i * binWidth,float(i+1)*binWidth);
 			float normalValue = NormalizedValue(i);
@@ -149,6 +148,7 @@ public:
 			}
 			std::cout << value(i) << std::endl;
 		}
+		std::cout << std::endl;
 	}
 };
 
@@ -156,6 +156,11 @@ template <typename... Ts>
 class HistogramSet {
 private:
 	std::tuple<std::vector<Histogram<Ts>>...> histograms;
+	std::tuple<std::map<std::string,Histogram<Ts>*>...> histogramRegisters; //Maps a name to a histogram pointer
+	
+	//When set to dynamic the set will create new histograms for values added to not yet exsistent histograms
+//	bool dynamic = true;
+	
 //	std::tuple<std::vector<Ts>...> values;
 //	std::tuple<std::vector<Histogram<float>>,std::vector<Histogram<ushort>>> histograms;
 //	std::tuple<int> ints;
@@ -167,52 +172,95 @@ public:
 //	std::vector<T> GetValue() {
 //		return std::get<std::vector<T>>(values);
 //	}
-//	
+//
+//	HistogramSet() {
+//		
+//	}
+//	HistogramSet(const HistogramSet& other) {
+//		histograms = other.histograms;
+//		histogramRegisters = other.histogramRegisters;
+//	}
+//	HistogramSet& operator=(const HistogramSet& other) {
+//		histograms = other.histograms;
+//		histogramRegisters = other.histogramRegisters;
+//		return *this;
+//	}
+	
 	template<typename T>
 	std::vector<Histogram<T>>* GetHistograms() {
 		return &std::get<std::vector<Histogram<T>>>(histograms);
 	}
 	
 	template<typename T>
+	std::map<std::string,Histogram<T>*>& GetHistogramRegister() {
+		return std::get<std::map<std::string,Histogram<T>*>>(histogramRegisters);
+	}
+	
+	template<typename T>
+	Histogram<T>* GetHistogram(const std::string& name) {
+		std::map<std::string,Histogram<T>*>& histogramRegister = GetHistogramRegister<T>();
+		return histogramRegister[name];
+	}
+	
+	
+	template<typename T>
+	void AddToHistogram(const std::string name,T value) {
+		Histogram<T>* histogram = GetHistogram<T>(name);
+//		if(!histogram)
+			//TODO: Create histogram when set to dynamic and histogram was not found
+		histogram->Add(value);
+	}
+	
+	template<typename T>
 	void AddHistogram(const Histogram<T>& hist) {
-		std::get<std::vector<Histogram<T>>>(histograms).push_back(hist);
-	}
-	
-//	template<typename U,typename... Us>
-//	float compare(HistogramSet<Us...>& other) {
-//		float result = 0;
-//		std::vector<Histogram<U>>* hists = GetHistograms<U>();
-//		std::vector<Histogram<U>>* otherhHists = other.GetHistograms<U>();
-//		for(size_t i = 0 ; i < hists->size() ; ++i) {
-//			result += hists->get(i) - otherhHists->get(i);
-//		}
-//		return result + compare<Us...>(other);
-//	}
-
-	template <typename...Us>
-	struct comparison {
+		std::vector<Histogram<T>>* histograms = GetHistograms<T>();
 		
-	};
-	
-	template<typename... Us>
-	float compare() {
-		return 1;
+		histograms->push_back(hist);
+		std::get<std::map<std::string,Histogram<T>*>>(histogramRegisters)[hist.name] = &histograms->at(histograms->size() - 1);
 	}
 	
-	
-	
-	template<typename U,typename... Us>
-	float compare() {
-		return compare<Us...>();
-	}
-	
-//	float compare() {
-//		return 0;
-//	}
-	
+	//This assumes the right hand operand histogram set is a superset of this histogram set, throws a runtime_error if a histogram in this set could not be found.
 	float operator-(HistogramSet<Ts...>& other) {
-		return compare<Ts...>();
-//		return 0;
+//		return compare<Ts...>();
+		
+		float total = 0;
+		
+		TupleForEach(histograms, [&](auto tHistograms) {
+			for(auto& histogram : tHistograms) {
+				bool found = false;
+				TupleForEach(other.histograms, [&](auto otherTHistograms) {
+					for(auto& otherHistogram : otherTHistograms) {
+						if(otherHistogram.name == histogram.name) {
+							total += (otherHistogram - histogram);
+							found = true;
+							break;
+						}
+					}
+				});
+				if(!found) {
+					throw std::runtime_error("Histogram " + histogram.name + " not found in right hand operand");
+				}
+			}
+		});
+		
+		return total;
+	}
+	
+	void Print() {
+		printf("Histogram set : \n");
+		TupleForEach(histograms, [&](auto tHistograms) {
+			for(auto& histogram : tHistograms) {
+				histogram.Print();
+			}
+		});
+	}
+		
+	void Join(const HistogramSet& other) {
+		TupleForEach(other.histograms, [&](auto tHistograms) {
+			for(auto& histogram : tHistograms) {
+//				AddHistogram(histogram);
+			}
+		});
 	}
 //
 //	template<typename T>

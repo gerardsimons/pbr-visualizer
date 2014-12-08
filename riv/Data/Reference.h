@@ -12,32 +12,29 @@
 #include <stdio.h>
 #include <vector>
 #include "helper.h"
-#include "Table.h"
 
+class RIVTableInterface;
 typedef unsigned short ushort;
-
-class RIVTable;
 
 class RIVReference {
 protected:
-	RIVReference(RIVTable* sourceTable, RIVTable* targetTable) {
-		this->sourceTable = sourceTable;
-		this->targetTable = targetTable;
+	RIVReference(RIVTableInterface* sourceTable, RIVTableInterface* targetTable) : sourceTable(sourceTable), targetTable(targetTable) {
+		
 	}
 public:
-	RIVTable* sourceTable;
-	RIVTable* targetTable;
-	virtual std::pair<size_t*,ushort> GetIndexReferences(size_t row) = 0;
+	RIVTableInterface* sourceTable;
+	RIVTableInterface* targetTable;
+	virtual std::pair<size_t*,ushort> GetReferenceRows(size_t row) = 0;
 	virtual bool HasReference(size_t row) = 0;
 };
 
 class RIVSingleReference : public RIVReference {
 private:
-public:
-	RIVSingleReference(const std::map<size_t,size_t>& indexMap, RIVTable* sourceTable, RIVTable* targetTable);
-	RIVSingleReference(RIVTable* sourceTable, RIVTable* targetTable);
 	std::map<size_t,size_t> indexMap;;
-	std::pair<size_t*,ushort> GetIndexReferences(size_t row);
+public:
+	RIVSingleReference(const std::map<size_t,size_t>& indexMap, RIVTableInterface* sourceTable, RIVTableInterface* targetTable);
+	RIVSingleReference(RIVTableInterface* sourceTable, RIVTableInterface* targetTable);
+	std::pair<size_t*,ushort> GetReferenceRows(size_t row);
 	void Print();
 	void AddReference(size_t fromRow, size_t toRow);
 	void FilterReferenceRow(size_t row);
@@ -48,12 +45,12 @@ public:
 class RIVMultiReference : public RIVReference {
 public:
 	std::map<size_t,std::pair<size_t*,ushort> > indexMap;
-	RIVMultiReference(std::map<size_t,std::pair<size_t*,ushort> >& indexMap, RIVTable* sourceTable, RIVTable* targetTable);
-	RIVMultiReference(RIVTable* sourceTable, RIVTable* targetTable);
+	RIVMultiReference(std::map<size_t,std::pair<size_t*,ushort> >& indexMap, RIVTableInterface* sourceTable, RIVTableInterface* targetTable);
+	RIVMultiReference(RIVTableInterface* sourceTable, RIVTableInterface* targetTable);
 	RIVSingleReference* ReverseReference();
 	bool HasReference(size_t row);
 	void AddReferences(size_t fromRow, const std::pair<size_t*,ushort>& toRows);
-	std::pair<size_t*,ushort> GetIndexReferences(size_t row);
+	std::pair<size_t*,ushort> GetReferenceRows(size_t row);
 	void FilterReferenceRow(size_t row);
 	void Print();
 };
@@ -66,7 +63,7 @@ public:
 	RIVReferenceChain() { }
 	RIVReferenceChain(RIVReference* singleReference);
 	RIVReferenceChain(const std::vector<RIVReference*>& references);
-	//Remove last added reference, useful for backtracking algorithm used in RIVTable::GetReferenceChainToTable(...)
+	//Remove last added reference, useful for backtracking algorithm used in RIVTableInterface::GetReferenceChainToTable(...)
 	void PopReference();
 	void AddReference(RIVReference* newReference);
 	std::vector<size_t> ResolveRow(const size_t& row);

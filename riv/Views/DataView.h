@@ -8,15 +8,12 @@
 
 #include <string>
 
- 
-
-	class RIVDataSet;
 	class RIVColorProperty;
 
 	class RIVDataView
 	{
 	protected:
-		RIVDataSet** dataset = NULL;
+		RIVDataSet<float,ushort>** dataset = NULL;
 		
 		RIVColorProperty* colorProperty = NULL;
 		RIVSizeProperty* sizeProperty = NULL;
@@ -24,7 +21,7 @@
 		bool needsRedraw;
 
 		//constructor
-		RIVDataView(RIVDataSet** dataset, int startX, int startY, int width, int height, int paddingX, int paddingY, RIVColorProperty* colorProperty, RIVSizeProperty* sizeProperty) {
+		RIVDataView(RIVDataSet<float,ushort>** dataset, int startX, int startY, int width, int height, int paddingX, int paddingY, RIVColorProperty* colorProperty, RIVSizeProperty* sizeProperty) {
 			this->startX = startX;
 			this->startY = startY;
 			
@@ -39,7 +36,7 @@
 			
 			this->dataset = dataset;
 		};
-		RIVDataView(RIVDataSet** dataset, int startX, int startY, int width, int height, int paddingX, int paddingY) {
+		RIVDataView(RIVDataSet<float,ushort>** dataset, int startX, int startY, int width, int height, int paddingX, int paddingY) {
 			this->startX = startX;
 			this->startY = startY;
 			
@@ -51,12 +48,12 @@
 			
 			this->dataset = dataset;
 		}
-		RIVDataView(RIVDataSet** dataset, RIVColorProperty* colorProperty_, RIVSizeProperty* sizeProperty_) {
+		RIVDataView(RIVDataSet<float,ushort>** dataset, RIVColorProperty* colorProperty_, RIVSizeProperty* sizeProperty_) {
 			this->dataset = dataset;
 			colorProperty = colorProperty_;
 			sizeProperty = sizeProperty_;
 		};
-		RIVDataView(RIVDataSet** dataset) {
+		RIVDataView(RIVDataSet<float,ushort>** dataset) {
 			this->dataset = dataset;
 		}
 		~RIVDataView(void) { /* Delete some stuff I guess */ };

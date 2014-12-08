@@ -13,7 +13,7 @@
 #include "../Data/Table.h"
 #include "../helper.h"
 	
-class RIVTable;
+class RIVTableInterface;
 
 enum INTERPOLATION_SCHEME {
 	DISCRETE,
@@ -22,17 +22,16 @@ enum INTERPOLATION_SCHEME {
 
 class RIVProperty {
 public:
-	virtual bool Value(RIVTable*,const size_t&,float& value) = 0;
+	virtual bool Value(RIVTableInterface*,const size_t&,float& value) = 0;
 };
 
 template <typename T>
 class RIVEvaluatedProperty {
 protected:
 	//The table whose index defines the value of the property
-	RIVTable* propertyReference;
+	RIVTableInterface* propertyReference;
 	
-	RIVFloatRecord* referenceFloatRecord = NULL;
-	RIVUnsignedShortRecord* referenceShortRecord = NULL;
+	RIVRecord<T>* referenceRecord = NULL;
 	
 	const INTERPOLATION_SCHEME defaultInterpolationMode = CONTINUOUS;
 	
@@ -64,38 +63,7 @@ protected:
 			}
 		}
 	}
-	//SUPER HACK ALERT
-	void init(const std::vector<ushort> &interpolationValues) {
-		//Now what? This is so hacky
-		//convert to floats
-		std::vector<float> interpolationValuesFloats;
-		for(ushort i : interpolationValues) {
-			interpolationValuesFloats.push_back(i);
-		}
-		switch(interpolationMode) {
-			case CONTINUOUS:
-			{
-				defaultEvaluator = new LinearInterpolator<float>(interpolationValuesFloats);
-				break;
-			}
-			case DISCRETE:
-			{
-				defaultEvaluator = new DiscreteInterpolator<float>(interpolationValuesFloats);
-				break;
-			}
-		}
-	}
-	void initRecord(RIVRecord* record) {
-		RIVFloatRecord *floatRecord =  RIVTable::CastToFloatRecord(record);
-		if(floatRecord) {
-			referenceFloatRecord = floatRecord;
-			return;
-		}
-		RIVUnsignedShortRecord *shortRecord = RIVTable::CastToUnsignedShortRecord(record);
-		if(shortRecord) {
-			referenceShortRecord = shortRecord;
-		}
-	}
+
 //    float const* colorForMultipleResolvedRows(const std::vector<size_t>& rows);
 public:
 	~RIVEvaluatedProperty() {
@@ -103,55 +71,50 @@ public:
 		evaluatorRegister.clear();
 	}
 	void Reset() {
-		if(referenceFloatRecord) {
-			std::pair<float,float> minMax = referenceFloatRecord->MinMax();
-			std::vector<float> interpolationValues;
+		if(referenceRecord) {
+			std::pair<T,T> minMax = referenceRecord->MinMax();
+			std::vector<T> interpolationValues;
 			interpolationValues.push_back(minMax.first);
 			interpolationValues.push_back(minMax.second);
 			init(interpolationValues);
 		}
 		
 	}
-	bool Value(RIVTable* sourceTable, const size_t& row, float& computedValue) {
+	bool Value(RIVTableInterface* sourceTable, const size_t& row, float& computedValue) {
 		//Determine what interpolator we should use to compute the color
-		if(sourceTable->GetName() == propertyReference->GetName()) {
+		if(sourceTable->name == propertyReference->name) {
 			Evaluator<T,float>* evaluator = evaluatorRegister[row];
 			if(evaluator == NULL) {
 				evaluator = defaultEvaluator;
 			}
 			//If we want the value according to a certain record
-			if(referenceFloatRecord) {
-				computedValue = evaluator->Evaluate(referenceFloatRecord->Value(row));
-			}
-			else if(referenceShortRecord) {
-				computedValue = evaluator->Evaluate(referenceShortRecord->Value(row));
+			if(referenceRecord) {
+				computedValue = evaluator->Evaluate(referenceRecord->Value(row));
 			}
 			else computedValue = evaluator->Evaluate(row); //just use the row as input
 			return true;
 		}
 		else {
-			//Find the table through its chain of references
-			RIVReferenceChain chainToColorTable;
 			//If found
-			if(sourceTable->GetReferenceChainToTable(propertyReference->GetName(),chainToColorTable)) {
+			if(sourceTable->reference->targetTable->name == propertyReference->name) {
 				//Find target index
-				std::vector<size_t> targetRange = chainToColorTable.ResolveRow(row);
-				if(targetRange.size() > 0){
+				std::pair<size_t*,ushort> rows = sourceTable->reference->GetReferenceRows(row);
+				if(rows.second > 0){
 //						size_t propertyIndex = (targetRange)[0]; //Very arbitrary, pass all and average?
 					//Repeat using the new row and table
-					return Value(propertyReference,targetRange,computedValue);
+					return Value(propertyReference,rows,computedValue);
 				}
 			}
 		}
 		return false;
 	}
-	bool Value(RIVTable* sourceTable, const std::vector<size_t>& rows,float& computedValue) {
+	bool Value(RIVTableInterface* sourceTable, const std::pair<size_t*,ushort>& rows,float& computedValue) {
 		//    float const* overallColor = NULL;
 		Evaluator<T,float>* specificEvaluator = NULL;
 		Evaluator<T,float>* evaluator = defaultEvaluator;
 		size_t rowFound = 0;
-		for(size_t i = 0 ; i < rows.size() ; ++i) {
-			rowFound = rows[i];
+		for(size_t i = 0 ; i < rows.second ; ++i) {
+			rowFound = rows.first[i];
 			//Give preference to special interpolators
 			specificEvaluator = evaluatorRegister[rowFound];
 			if(specificEvaluator != NULL) {
@@ -160,11 +123,8 @@ public:
 			}
 		}
 		//If we want the value according to a certain record
-		if(referenceFloatRecord) {
-			computedValue = evaluator->Evaluate(referenceFloatRecord->Value(rowFound));
-		}
-		else if(referenceShortRecord) {
-			computedValue = evaluator->Evaluate(referenceShortRecord->Value(rowFound));
+		if(referenceRecord) {
+			computedValue = evaluator->Evaluate(referenceRecord->Value(rowFound));
 		}
 		else computedValue = evaluator->Evaluate(rowFound); //just use the row as input
 		return true;
@@ -182,69 +142,38 @@ public:
 		else throw "New evaluator cannot be NULL.";
 	}
 
-	RIVEvaluatedProperty(RIVTable *propertyReference_,float fixedValue) {
+	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,float fixedValue) {
 		propertyReference = propertyReference_;
 		defaultEvaluator = new FixedEvaluator<T, float>(fixedValue);
 	}
-	RIVEvaluatedProperty(RIVTable *propertyReference_,std::vector<size_t>& interpolationValues) {
+	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,std::vector<size_t>& interpolationValues) {
 		propertyReference = propertyReference_;
 		init(interpolationValues);
 	}
-	RIVEvaluatedProperty(RIVTable *propertyReference_) {
+	RIVEvaluatedProperty(RIVTableInterface *propertyReference_) {
 		propertyReference = propertyReference_;
 		T lower = 0;
-		T upper = propertyReference_->GetNumRows();
+		T upper = propertyReference_->NumberOfRows();
 		std::vector<T> interpolationValues;
 		interpolationValues.push_back(lower);
 		interpolationValues.push_back(upper);
 		init(propertyReference_, interpolationValues);
 	}
-	RIVEvaluatedProperty(RIVTable *propertyReference_,std::vector<size_t>& interpolationValues, const INTERPOLATION_SCHEME& scheme) {
+	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,std::vector<size_t>& interpolationValues, const INTERPOLATION_SCHEME& scheme) {
 		interpolationMode = scheme;
 		propertyReference = propertyReference_;
 		init(propertyReference_, scheme, interpolationValues);
 	}
-	RIVEvaluatedProperty(RIVTable *propertyReference_,RIVRecord* referenceRecord) {
+	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,RIVRecord<T>* referenceRecord) {
 		interpolationMode = defaultInterpolationMode;
 		propertyReference = propertyReference_;
-		initRecord(referenceRecord);
-		if(referenceFloatRecord) {
-			std::vector<float> interpolationValues;
-			interpolationValues.push_back(referenceFloatRecord->Min());
-			interpolationValues.push_back(referenceFloatRecord->Max());
-			init(propertyReference_,defaultInterpolationMode,interpolationValues);
-		}
-		else {
-			std::vector<ushort> interpolationValues;
-			interpolationValues.push_back(referenceShortRecord->Min());
-			interpolationValues.push_back(referenceShortRecord->Max());
-			
-			init(propertyReference_,defaultInterpolationMode,interpolationValues);
-		}
-		if(!propertyReference->HasRecord(referenceRecord)) {
-			throw "Reference table does not contain reference record.";
-		}
-	}
-	RIVEvaluatedProperty(RIVTable *propertyReference_,const std::string& referenceRecordName) {
-		interpolationMode = defaultInterpolationMode;
-		propertyReference = propertyReference_;
-		RIVRecord* referenceRecord = propertyReference->GetRecord(referenceRecordName);
-		initRecord(referenceRecord);
-		if(referenceFloatRecord) {
-			std::vector<float> interpolationValues;
-			interpolationValues.push_back(referenceFloatRecord->Min());
-			interpolationValues.push_back(referenceFloatRecord->Max());
-			init(interpolationValues);
-		}
-		else {
-			std::vector<ushort> interpolationValues;
-			interpolationValues.push_back(referenceShortRecord->Min());
-			interpolationValues.push_back(referenceShortRecord->Max());
-			init(interpolationValues);
-		}
-		if(!propertyReference->HasRecord(referenceRecord)) {
-			throw "Reference table does not contain reference record.";
-		}
+
+		std::vector<T> interpolationValues;
+		interpolationValues.push_back(referenceRecord->Min());
+		interpolationValues.push_back(referenceRecord->Max());
+		init(interpolationValues);
+		
+		
 	}
 };
 

@@ -9,27 +9,12 @@
 #include "Iterator.h"
 #include "../helper.h"
 
-TableIterator::TableIterator(size_t maxIndex_, RIVClusterSet* clusterSet_,std::vector<RIVReference*>* references) {
-	this->references = references;
-	maxIndex = maxIndex_;
+TableIterator::TableIterator(size_t maxIndex, RIVReference* reference) : maxIndex(maxIndex), reference(reference) {
 	index = 0;
-	clusterIndex = 0;
-	clusterSet = clusterSet_;
 };
-void TableIterator::BackToStart() { index = 0; };
-bool TableIterator::GetNextCluster(size_t& row, RIVCluster*& cluster, RIVClusterSet*& parentSet) {
-	if(index >= maxIndex || (clusterSet && clusterIndex >= clusterSet->Size())) {
-		return false;
-	}
-	else {
-		cluster = clusterSet->GetCluster(clusterIndex);
-		parentSet = clusterSet;
-		row = cluster->GetMedoidIndex();
-		clusterIndex++;
-		index = row;
-		return (clusterIndex - 1) < clusterSet->Size();
-	}
-}
+void TableIterator::BackToStart() {
+	index = 0;
+};
 bool TableIterator::GetNext(size_t& row) {
 	if(index >= maxIndex) {
 		return false;
@@ -46,26 +31,12 @@ bool TableIterator::GetNext(size_t& row, size_t*& refRow) {
 	}
 	else {
 		row = index;
-		for(size_t j = 0 ; j < references->size() ; ++j) {
-			std::pair<size_t*,ushort> refRows = references->at(j)->GetIndexReferences(row);
+
+			std::pair<size_t*,ushort> refRows = reference->GetReferenceRows(row);
 			if(refRows.first) {
 				refRow = &refRows.first[0];
 			}
-		}
-		index++;
-		return (index - 1) < maxIndex;
-	}
-}
-bool TableIterator::GetNext(size_t& row, RIVCluster*& cluster, RIVClusterSet*& parentSet,bool requestCluster) {
-	if(index >= maxIndex) {
-		return false;
-	}
-	else {
-		row = index;
-		if(requestCluster) {
-			cluster = clusterSet->ClusterForMemberIndex(index);
-			parentSet = clusterSet;
-		}
+		
 		index++;
 		return (index - 1) < maxIndex;
 	}
@@ -97,31 +68,12 @@ bool FilteredTableIterator::GetNext(size_t& row, size_t*& refRow) {
 			//                printf("index = %zu\n",index);
 		}
 		row = index;
-		for(size_t j = 0 ; j < references->size() ; ++j) {
-			std::pair<size_t*,ushort> refRows = references->at(j)->GetIndexReferences(row);
+//		for(size_t j = 0 ; j < references->size() ; ++j) {
+			std::pair<size_t*,ushort> refRows = reference->GetReferenceRows(row);
 			if(refRows.first) {
 				refRow = &refRows.first[0];
 			}
-		}
-		index++;
-		return !filtered && index <= maxIndex;
-	}
-	return false;
-}
-
-bool FilteredTableIterator::GetNext(size_t& row, RIVCluster*& cluster, RIVClusterSet*& parentSet,bool requestCluster) {
-	if(index < maxIndex) {
-		bool filtered = (*indexPointers)[index];
-		while(filtered && index < maxIndex) {
-			index++;
-			filtered = (*indexPointers)[index];
-			//                printf("index = %zu\n",index);
-		}
-		row = index;
-		if(clusterSet) {
-			cluster = clusterSet->ClusterForMemberIndex(row);
-			parentSet = clusterSet;
-		}
+//		}
 		index++;
 		return !filtered && index <= maxIndex;
 	}

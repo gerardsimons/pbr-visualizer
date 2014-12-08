@@ -13,7 +13,7 @@
 ParallelCoordsView* ParallelCoordsView::instance = NULL;
 int ParallelCoordsView::windowHandle = -1;
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet** dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY,NULL,sizeProperty) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY,NULL,sizeProperty) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
@@ -27,7 +27,7 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet** dataset, int x, int y, int w
     //Nothing else to do
 }
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet** dataset, RIVColorProperty *pathColor, RIVColorProperty* rayColor, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,NULL,sizeProperty) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, RIVColorProperty *pathColor, RIVColorProperty* rayColor, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,NULL,sizeProperty) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
@@ -49,91 +49,90 @@ void ParallelCoordsView::createAxes() {
         int axisHeight = height - 2 * paddingY;
         
         float delta = 1.F / (total_nr_of_records - 1) * (width - 2 * paddingX);
-        std::vector<RIVTable*>* tablePointers = (*dataset)->GetTables();
-        
-        int axisIndex = 0;
-        
-        ParallelCoordsAxisGroup *fromConnection = NULL;
-        ParallelCoordsAxis *lastAxis = NULL;
-        
+        std::vector<RIVTable<float,ushort>*>* tablePointers = (*dataset)->GetTables();
+	
+		size_t axisIndex = 0;
+//		std::vector<std::string> pathTableRecordNames = {"pixel x","pixel y","R","G","B","throughput R","throughput G","throughput B","renderer","depth"};
+		
         for(size_t j = 0 ; j < tablePointers->size() ; j++) {
-            RIVTable *table = tablePointers->at(j);
-            ParallelCoordsAxisGroup axisGroup;
-            size_t numberOfRecords = table->NumberOfColumns();
-            for(size_t i = 0 ; i < numberOfRecords ; ++i) {
-                RIVRecord* record = table->GetRecord(i);
-                RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(record);
-                int x = delta * (axisIndex) + paddingX;
-                if(floatRecord) {
-                    
-                    std::pair<float,float> minMax = floatRecord->MinMax();
-                    
-                    ParallelCoordsAxis axis(x,y,axisHeight,minMax.first,minMax.second,record->name);
-                    
-                    axis.ComputeScale(4);
-                    axis.RecordPointer = record;
-                    
-                    axisGroup.axes.push_back(axis);
-                    lastAxis = &axis;
-                    axisIndex++;
-                    continue;
-                }
-                RIVUnsignedShortRecord* shortRecord = RIVTable::CastToUnsignedShortRecord(record);
-                if(shortRecord) {
-                    
-                    const std::pair<ushort,ushort> &minMax = shortRecord->MinMax();
-                    ParallelCoordsAxis axis(x,y,axisHeight,minMax.first,minMax.second,record->name);
-                    
-                    axis.ComputeScale(4);
-                    axis.RecordPointer = record;
-                    axisIndex++;
-                    lastAxis = &axis;
-                    axisGroup.axes.push_back(axis);
-                }
-            }
-            axisGroup.table = table;
-            if(fromConnection) { //Any outstanding connections to be made?
-                axisGroup.connectorAxis = lastAxis;
-                axisGroup.connectedGroup = fromConnection;
-				//            printf("Axis groups connected\n");
-                //Erase connection pointer
-            }
-            if(j < tablePointers->size() - 1) { //Only connect if not last
-                //What is the next table group?
-                RIVTable* nextTable = (*tablePointers)[j + 1];
-                const RIVTable* result = table->FindTable(nextTable->GetName());
-                if(result) { //If a reference exists, connect the groups
-                    //But the next axisgroup is not yet made, so cache it until it is made
-                    fromConnection = &axisGroup;
-                    axisGroup.connectorAxis = lastAxis;
-                }
-            }
-            axisGroups.push_back(axisGroup);
-        }
+            RIVTable<float,ushort> *table = tablePointers->at(j);
+            ParallelCoordsAxisGroup<float,ushort> axisGroup;
+			
+			std::vector<RIVRecord<float>*>* floatRecords = table->GetRecords<float>();
+			std::vector<RIVRecord<ushort>*>* shortRecords = table->GetRecords<ushort>();
+
+			
+			for(size_t i = 0 ; i < floatRecords->size() ; ++i) {
+				auto* floatRecord = floatRecords->at(i);
+			
+				int x = delta * (axisIndex) + paddingX;
+	
+				std::pair<float,float> minMax = floatRecord->MinMax();
+				
+				ParallelCoordsAxis<float> axis(x,y,axisHeight,minMax.first,minMax.second,floatRecord->name,floatRecord,4);
+				
+				axisGroup.AddAxis(axis);
+				axisIndex++;
+			}
+			for(size_t i = 0 ; i < floatRecords->size() ; ++i) {
+				auto* shortRecord = shortRecords->at(i);
+				
+				int x = delta * (axisIndex) + paddingX;
+				
+				std::pair<ushort,ushort> minMax = shortRecord->MinMax();
+				
+				ParallelCoordsAxis<ushort> axis(x,y,axisHeight,minMax.first,minMax.second,shortRecord->name,shortRecord,4);
+				
+				axisGroup.AddAxis(axis);
+				axisIndex++;
+			}
+			axisGroups.push_back(axisGroup);
+		}
+
+		//DEAD CODE, intended as a way of hooking up distinct tables in the view
+//            axisGroup.table = table;
+//            if(fromConnection) { //Any outstanding connections to be made?
+//                axisGroup.connectorAxis = lastAxis;
+//                axisGroup.connectedGroup = fromConnection;
+//				//            printf("Axis groups connected\n");
+//                //Erase connection pointer
+//            }
+//            if(j < tablePointers->size() - 1) { //Only connect if not last
+//                //What is the next table group?
+//                RIVTable* nextTable = (*tablePointers)[j + 1];
+//                const RIVTable* result = table->FindTable(nextTable->GetName());
+//                if(result) { //If a reference exists, connect the groups
+//                    //But the next axisgroup is not yet made, so cache it until it is made
+//                    fromConnection = &axisGroup;
+//                    axisGroup.connectorAxis = lastAxis;
+//                }
+//            }
+//            axisGroups.push_back(axisGroup);
+		
     }
 }
 
 void ParallelCoordsView::drawSelectionBoxes() {
-	for(ParallelCoordsAxisGroup& axisGroup : axisGroups) {
-		for(ParallelCoordsAxis& axis : axisGroup.axes) {
-			if(axis.HasSelectionBox) {
-				glColor3f(1, 0, 0);
-				glBegin(GL_LINE_STRIP);
-				
-				Area &selectionBox  = axis.selection;
-				
-				glVertex3f(selectionBox.start.x,selectionBox.start.y,0);
-				glVertex3f(selectionBox.end.x,selectionBox.start.y,0);
-				
-				glVertex3f(selectionBox.end.x,selectionBox.end.y,0);
-				glVertex3f(selectionBox.start.x,selectionBox.end.y,0);
-				
-				glVertex3f(selectionBox.start.x,selectionBox.start.y,0);
-				
-				glEnd();
-			}
-		}
-	}
+//	for(ParallelCoordsAxisGroup& axisGroup : axisGroups) {
+//		for(ParallelCoordsAxis& axis : axisGroup.axes) {
+//			if(axis.HasSelectionBox) {
+//				glColor3f(1, 0, 0);
+//				glBegin(GL_LINE_STRIP);
+//				
+//				Area &selectionBox  = axis.selection;
+//				
+//				glVertex3f(selectionBox.start.x,selectionBox.start.y,0);
+//				glVertex3f(selectionBox.end.x,selectionBox.start.y,0);
+//				
+//				glVertex3f(selectionBox.end.x,selectionBox.end.y,0);
+//				glVertex3f(selectionBox.start.x,selectionBox.end.y,0);
+//				
+//				glVertex3f(selectionBox.start.x,selectionBox.start.y,0);
+//				
+//				glEnd();
+//			}
+//		}
+//	}
 }
 
 
@@ -143,12 +142,14 @@ void ParallelCoordsView::drawAxes() {
     glLineWidth(1.F);
 	
     glBegin(GL_LINES);
-    for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
-        for(ParallelCoordsAxis &axis : axisGroup.axes) {
-            glColor3f(0,0,0);
-            glVertex3f(axis.x,axis.y,0);
-            glVertex3f(axis.x,axis.y+axis.height,0);
-        }
+    for(auto& axisGroup : axisGroups) {
+		TupleForEach(axisGroup.axes, [&](auto tAxes) {
+			for(auto& axis : tAxes) {
+				glColor3f(0,0,0);
+				glVertex3f(axis.x,axis.y,0);
+				glVertex3f(axis.x,axis.y+axis.height,0);
+			}
+		});
     }
     glEnd();
     
@@ -158,36 +159,39 @@ void ParallelCoordsView::drawAxes() {
     float textColor[3] = {0,0,0};
     
     //Draw texts
-    for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
-        for(ParallelCoordsAxis &axis : axisGroup.axes) {
-            std::string text = axis.name;
-            
-            drawText(text,axis.x,axis.y - 15,textColor,.1F);
-            
-            std::vector<float> &scale = axis.scale;
-            
-            //Draw the scales indicators
-			if(scale.size() > 0) {
-				for(size_t j = 0 ; j < scale.size() ; j++) {
-					float value = axis.ValueOnScale(scale[j]);
-					int height = axis.PositionOnScaleForScalar(scale[j]);
-					
-					//Draw small line to indicate
-//					glBegin(GL_LINES);
-//					glVertex2f(axis.x, height);
-//					glVertex2f(axis.x + 10, height);
-//					glEnd();
-					
-					std::string text = std::to_string(value);
-					
-					char buffer[4];
-					sprintf(buffer,"%.2f",value);
-					
-					drawText(buffer,4,axis.x - 12,height,textColor,.1F);
+	
+	for(auto& axisGroup : axisGroups) {
+		TupleForEach(axisGroup.axes, [&](auto tAxes) {
+			for(auto& axis : tAxes) {
+				std::string& text = axis.name;
+				
+				drawText(text,axis.x,axis.y - 15,textColor,.1F);
+				
+				std::vector<float> &scale = axis.scale;
+				
+				//Draw the scales indicators
+				if(scale.size() > 0) {
+					for(size_t j = 0 ; j < scale.size() ; j++) {
+						float value = axis.ValueOnScale(scale[j]);
+						int height = axis.PositionOnScaleForScalar(scale[j]);
+						
+						//Draw small line to indicate
+						//					glBegin(GL_LINES);
+						//					glVertex2f(axis.x, height);
+						//					glVertex2f(axis.x + 10, height);
+						//					glEnd();
+						
+						std::string text = std::to_string(value);
+						
+						char buffer[4];
+						sprintf(buffer,"%.2f",value);
+						
+						drawText(buffer,4,axis.x - 12,height,textColor,.1F);
+					}
 				}
 			}
-        }
-    }
+		});
+	}
     axesAreDirty = false;
 }
 
@@ -203,70 +207,70 @@ void ParallelCoordsView::drawLines() {
 	printf("Drawing lines\n");
 //	reporter::startTask("drawLines");
 	
-	for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
-		RIVTable *table = axisGroup.table;
-		
-		size_t row = 0;
-
-		TableIterator* iterator = table->GetIterator();
-
-		//Find what color property to use for this table
-		RIVColorProperty* colorProperty = pathColor;
-		if(table->GetName() == "intersections") {
-			colorProperty = rayColor;
-		}
-
-//			
-		riv::Color lineColor;
-		while(iterator->GetNext(row)) {
-			if(colorProperty->ComputeColor(table, row, lineColor)) {
-				glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
-				
-//					float size = sizeProperty->ComputeSize(table,row);
-				float size = 1;
-				glLineWidth(size);
-				glColor4f(lineColor.R, lineColor.G, lineColor.B,0.1F);
-				for(ParallelCoordsAxis &axis : axisGroup.axes) {
-					RIVRecord *ptr = axis.RecordPointer;
-					RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(ptr);
+//	for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
+//		RIVTable *table = axisGroup.table;
+//		
+//		size_t row = 0;
+//
+//		TableIterator* iterator = table->GetIterator();
+//
+//		//Find what color property to use for this table
+//		RIVColorProperty* colorProperty = pathColor;
+//		if(table->GetName() == "intersections") {
+//			colorProperty = rayColor;
+//		}
+//
+////			
+//		riv::Color lineColor;
+//		while(iterator->GetNext(row)) {
+//			if(colorProperty->ComputeColor(table, row, lineColor)) {
+//				glBegin(GL_LINE_STRIP); //Unconnected groups, draw connections later as they are not 1-to-1
+//				
+////					float size = sizeProperty->ComputeSize(table,row);
+//				float size = 1;
+//				glLineWidth(size);
+//				glColor4f(lineColor.R, lineColor.G, lineColor.B,0.1F);
+//				for(ParallelCoordsAxis &axis : axisGroup.axes) {
+//					RIVRecord *ptr = axis.RecordPointer;
+//					RIVFloatRecord* floatRecord = RIVTable::CastToFloatRecord(ptr);
+//	
+//					if(floatRecord) {
+//						float value = floatRecord->Value(row);
+//						float x = axis.x;
+//						float y = axis.PositionOnScaleForValue(value);
+//
+//						++linesDrawn;
+//						glVertex3f(x, y, 0);
+////                            if(y > axis.y + axis.height || y < axis.y) {
+////                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
+////                            }
+//						continue;
+//					}
+//					RIVUnsignedShortRecord* shortRecord = RIVTable::CastToUnsignedShortRecord(ptr);
+//					if(shortRecord) {
+//						//Code here
+//						
+//						ushort value = shortRecord->Value(row);
+//						
+//						float x = axis.x;
+//						float y = axis.PositionOnScaleForValue(value);
+//						glVertex3f(x, y, 0);
+//						
+////                            if(y > axis.y + axis.height || y < axis.y) {
+////                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
+////                            }
+//						++linesDrawn;
+//					}
+//				}
+//				glEnd();
+//			}
+//			lineIndex++;
+//		}
 	
-					if(floatRecord) {
-						float value = floatRecord->Value(row);
-						float x = axis.x;
-						float y = axis.PositionOnScaleForValue(value);
-
-						++linesDrawn;
-						glVertex3f(x, y, 0);
-//                            if(y > axis.y + axis.height || y < axis.y) {
-//                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
-//                            }
-						continue;
-					}
-					RIVUnsignedShortRecord* shortRecord = RIVTable::CastToUnsignedShortRecord(ptr);
-					if(shortRecord) {
-						//Code here
-						
-						ushort value = shortRecord->Value(row);
-						
-						float x = axis.x;
-						float y = axis.PositionOnScaleForValue(value);
-						glVertex3f(x, y, 0);
-						
-//                            if(y > axis.y + axis.height || y < axis.y) {
-//                                throw new std::string("A line was being drawn outside ot the parallel coordinates view");
-//                            }
-						++linesDrawn;
-					}
-				}
-				glEnd();
-			}
-			lineIndex++;
-		}
-        
         linesAreDirty = false;
 //		reporter::stop("drawLines");
 //		printf("%zu lines Drawn.\n",linesDrawn);
-    }
+//    }
 }
 
 void ParallelCoordsView::DrawInstance() {
@@ -363,33 +367,33 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
             int proximityMax = 50;
             
             //            printf("(x,y)=(%d,%d)",x,y);
-            for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
-                for(ParallelCoordsAxis &axis : axisGroup.axes) {
-                    int distanceX = abs(axis.x - x);
-//                    printf("distance=%d\n",distanceX);
-                    
-                    if(distanceX < proximityMax) {
-                        //Close enough..
-                        
-                        axis.selection.start.x = axis.x - 10;
-                        axis.selection.end.x = axis.x + 10;
-                        axis.selection.start.y = y;
-                        axis.selection.end.y = y;
-                        
-                        axis.HasSelectionBox = true;
-                        
-                        selectedAxis = &axis;
-                        
-                        isDragging = true;
-                        axesAreDirty = true;
-                        linesAreDirty = true;
-                        
-//                        printf("Selected axis %s\n",axis.name.c_str());
-                        
-                        return true;
-                    }
-                }
-            }
+//            for(ParallelCoordsAxisGroup &axisGroup : axisGroups) {
+//                for(ParallelCoordsAxis &axis : axisGroup.axes) {
+//                    int distanceX = abs(axis.x - x);
+////                    printf("distance=%d\n",distanceX);
+//                    
+//                    if(distanceX < proximityMax) {
+//                        //Close enough..
+//                        
+//                        axis.selection.start.x = axis.x - 10;
+//                        axis.selection.end.x = axis.x + 10;
+//                        axis.selection.start.y = y;
+//                        axis.selection.end.y = y;
+//                        
+//                        axis.HasSelectionBox = true;
+//                        
+//                        selectedAxis = &axis;
+//                        
+//                        isDragging = true;
+//                        axesAreDirty = true;
+//                        linesAreDirty = true;
+//                        
+////                        printf("Selected axis %s\n",axis.name.c_str());
+//                        
+//                        return true;
+//                    }
+//                }
+//            }
             selectedAxis = NULL;
         }
         else if(state == GLUT_UP) { //Finish selection
@@ -402,9 +406,9 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                     float lowerBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.start.y));
                     float upperBound = selectedAxis->ValueOnScale(selectedAxis->ScaleValueForY(selection.end.y));
                     (*dataset)->ClearFilter(selectedAxis->name);
-                    riv::Filter* rangeFilter = new riv::RangeFilter(selectedAxis->name,lowerBound,upperBound);
-                    (*dataset)->AddFilter(rangeFilter);
-                    printf("Selection finalized on axis %s\n",selectedAxis->name.c_str());
+//                    riv::Filter* rangeFilter = new riv::RangeFilter(selectedAxis->name,lowerBound,upperBound);
+//                    (*dataset)->AddFilter(rangeFilter);
+//                    printf("Selection finalized on axis %s\n",selectedAxis->name.c_str());
                 }
                 else {
                     (*dataset)->ClearFilter(selectedAxis->name);

@@ -24,9 +24,9 @@
 class RIVImageView : public RIVDataView, public RIVDataSetListener {
 public:
 	//Single renderer constructor
-    RIVImageView(RIVDataSet** dataset,  EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty *size);
+    RIVImageView(RIVDataSet<float,ushort>** dataset,  EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty *size);
 	//Dual renderer constructor
-	RIVImageView(RIVDataSet** dataset,  EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty* color, RIVSizeProperty *size);
+	RIVImageView(RIVDataSet<float,ushort>** dataset,  EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty* color, RIVSizeProperty *size);
     
     static void DrawInstance();
     static void ReshapeInstance(int,int);

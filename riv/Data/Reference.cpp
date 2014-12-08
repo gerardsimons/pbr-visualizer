@@ -7,22 +7,23 @@
 //
 
 #include "Reference.h"
-RIVSingleReference::RIVSingleReference(RIVTable* sourceTable, RIVTable* targetTable) : RIVReference(sourceTable,targetTable) {
+#include "Table.h"
+
+RIVSingleReference::RIVSingleReference(RIVTableInterface* sourceTable, RIVTableInterface* targetTable) : RIVReference(sourceTable,targetTable) {
 	
 }
-RIVSingleReference::RIVSingleReference(const std::map<size_t,size_t>& indexMap, RIVTable* sourceTable, RIVTable* targetTable) : RIVReference(sourceTable,targetTable){
-	this->indexMap = indexMap;
+RIVSingleReference::RIVSingleReference(const std::map<size_t,size_t>& indexMap, RIVTableInterface* sourceTable, RIVTableInterface* targetTable) : RIVReference(sourceTable,targetTable), indexMap(indexMap) {
 }
-std::pair<size_t*,ushort> RIVSingleReference::GetIndexReferences(size_t row) {
+std::pair<size_t*,ushort> RIVSingleReference::GetReferenceRows(size_t row) {
 	return std::pair<size_t*,ushort>(&indexMap[row],1);
 }
 void RIVSingleReference::Print() {
 	printf("MultiReference has %zu mappings : \n",indexMap.size());
 	printMap(indexMap);
 }
-void RIVSingleReference::FilterReferenceRow(size_t row) {
-	RIVReference::targetTable->FilterRow(row);
-}
+//void RIVSingleReference::FilterReferenceRow(size_t row) {
+//	RIVReference::targetTable->FilterRow(row);
+//}
 bool RIVSingleReference::HasReference(size_t row) {
 	if ( indexMap.find(row) == indexMap.end() ) {
 		return false;
@@ -33,10 +34,10 @@ bool RIVSingleReference::HasReference(size_t row) {
 void RIVSingleReference::AddReference(size_t fromRow, size_t toRow) {
 	indexMap[fromRow] = toRow;
 }
-RIVMultiReference::RIVMultiReference(std::map<size_t,std::pair<size_t*,ushort> >& indexMap, RIVTable* sourceTable, RIVTable* targetTable) : RIVReference(sourceTable,targetTable) {
-	this->indexMap = indexMap;
+RIVMultiReference::RIVMultiReference(std::map<size_t,std::pair<size_t*,ushort> >& indexMap, RIVTableInterface* sourceTable, RIVTableInterface* targetTable) : RIVReference(sourceTable,targetTable), indexMap(indexMap) {
+	
 }
-RIVMultiReference::RIVMultiReference(RIVTable* sourceTable, RIVTable* targetTable) : RIVReference(sourceTable,targetTable) {
+RIVMultiReference::RIVMultiReference(RIVTableInterface* sourceTable, RIVTableInterface* targetTable) : RIVReference(sourceTable,targetTable) {
 	
 }
 void RIVMultiReference::AddReferences(size_t fromRow, const std::pair<size_t*, ushort>& toRows) {
@@ -61,11 +62,11 @@ bool RIVMultiReference::HasReference(size_t row) {
 		return true;
 	}
 }
-std::pair<size_t*,ushort> RIVMultiReference::GetIndexReferences(size_t row) {
+std::pair<size_t*,ushort> RIVMultiReference::GetReferenceRows(size_t row) {
 	return indexMap[row];
 }
 void RIVMultiReference::FilterReferenceRow(size_t row) {
-	std::pair<size_t*,ushort> rows = GetIndexReferences(row);
+	std::pair<size_t*,ushort> rows = GetReferenceRows(row);
 	for(ushort i = 0 ; i < rows.second ; ++i) {
 //		printf("Filter row->referenceRow : %zu->%zu in table %s\n",row,rows.first[i],targetTable->GetName().c_str());
 		targetTable->FilterRow(rows.first[i]);
@@ -106,7 +107,7 @@ std::vector<size_t> RIVReferenceChain::ResolveRow(const size_t& sourceRow) {
 	for(RIVReference *reference : references) {
 		std::vector<size_t> intermediateRows;
 		for(size_t row : sourceRows) {
-			std::pair<size_t*,ushort> mappedRows = reference->GetIndexReferences(row);
+			std::pair<size_t*,ushort> mappedRows = reference->GetReferenceRows(row);
 			if(mappedRows.first != NULL) {
 				for(ushort i = 0 ; i < mappedRows.second ; ++i) {
 					intermediateRows.push_back(mappedRows.first[i]);

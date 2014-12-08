@@ -28,7 +28,7 @@
 RIV3DView* RIV3DView::instance = NULL;
 int RIV3DView::windowHandle = -1;
 
-RIV3DView::RIV3DView(RIVDataSet** dataset,EMBREERenderer* renderer, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,colorProperty,sizeProperty),
+RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset,colorProperty,sizeProperty),
 rendererOne(renderer) {
 	
     if(instance != NULL) {
@@ -42,7 +42,7 @@ rendererOne(renderer) {
 	ResetGraphics();
 };
 
-RIV3DView::RIV3DView(RIVDataSet** dataset,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) :
+RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) :
 RIVDataView(dataset,colorProperty,sizeProperty), rendererOne(rendererOne), rendererTwo(rendererTwo) {
 	if(instance != NULL) {
 		throw std::runtime_error("Only 1 instance of RIV3DView allowed.");
@@ -277,18 +277,18 @@ void RIV3DView::Draw() {
 
 bool RIV3DView::isSelectedObject(ushort objectId) {
 	if(pathFilter) {
-		std::vector<riv::Filter*> filters = pathFilter->GetFilters();
-		for(riv::Filter* f : filters) { //One conjunctive filter at a time
-			riv::ConjunctiveFilter* conjunctiveF = dynamic_cast<riv::ConjunctiveFilter*>(f);
-			if(conjunctiveF) {
-				for(riv::Filter* f2 : conjunctiveF->GetFilters()) {
-					riv::DiscreteFilter* singleF = dynamic_cast<riv::DiscreteFilter*>(f2);
-					if(singleF && singleF->GetAttribute() == "object ID" && almost_equal(singleF->GetValue(), (float)objectId, 0.001)) {
-						return true;
-					}
-				}
-			}
-		}
+//		std::vector<riv::Filter*> filters = pathFilter->GetFilters();
+//		for(riv::Filter* f : filters) { //One conjunctive filter at a time
+//			riv::ConjunctiveFilter* conjunctiveF = dynamic_cast<riv::ConjunctiveFilter*>(f);
+//			if(conjunctiveF) {
+//				for(riv::Filter* f2 : conjunctiveF->GetFilters()) {
+//					riv::DiscreteFilter* singleF = dynamic_cast<riv::DiscreteFilter*>(f2);
+//					if(singleF && singleF->GetAttribute() == "object ID" && almost_equal(singleF->GetValue(), (float)objectId, 0.001)) {
+//						return true;
+//					}
+//				}
+//			}
+//		}
 	}
 
 	return false;
@@ -324,11 +324,11 @@ void RIV3DView::drawPoints() {
 	reporter::startTask("Draw points.");
 //	printf("Drawing intersections points.\n");
 	
-	RIVTable* isectTable = (*dataset)->GetTable("intersections");
+	RIVTable<float,ushort>* isectTable = (*dataset)->GetTable("intersections");
 	
-	RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("x");
-	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("y");
-	RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("z");
+	RIVFloatRecord* xRecord = isectTable->GetRecord<float>("x");
+	RIVFloatRecord* yRecord = isectTable->GetRecord<float>("y");
+	RIVFloatRecord* zRecord = isectTable->GetRecord<float>("z");
 	
 //	RIVFloatRecord* throughputR = isectTable->GetRecord<RIVFloatRecord>("throughput R");
 //	RIVFloatRecord* throughputG = isectTable->GetRecord<RIVFloatRecord>("throughput G");
@@ -342,13 +342,13 @@ void RIV3DView::drawPoints() {
 		glPointSize(size);
 	}
 	size_t row = 0;
-	TableIterator* it = isectTable->GetIterator();
+	TableIterator it = isectTable->GetIterator();
 	
 	glBegin(GL_POINTS);
 	for(Path& path : paths) {
 		for(size_t i = 0 ; i < path.Size() ; ++i) {
 			
-			it->GetNext(row);
+			it.GetNext(row);
 			
 			PathPoint* point = path.GetPoint(i);
 			riv::Color pointColor = point->color;
@@ -379,22 +379,22 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 	
 	size_t row;
 	
-	RIVTable* isectTable = (*dataset)->GetTable("intersections");
-	TableIterator *iterator = isectTable->GetIterator();
+	RIVTable<float,ushort>* isectTable = (*dataset)->GetTable("intersections");
+	TableIterator iterator = isectTable->GetIterator();
 	
 	//Generate the index subset
 	std::vector<size_t> indices;
 	
-	while(iterator->GetNext(row)) {
+	while(iterator.GetNext(row)) {
 		indices.push_back(row);
 	}
 	
-	RIVFloatRecord* xRecord = isectTable->GetRecord<RIVFloatRecord>("x");
-	std::vector<float>* xValues = xRecord->GetValuesPointer();
-	RIVFloatRecord* yRecord = isectTable->GetRecord<RIVFloatRecord>("y");
-	std::vector<float>* yValues = yRecord->GetValuesPointer();
-	RIVFloatRecord* zRecord = isectTable->GetRecord<RIVFloatRecord>("z");
-	std::vector<float>* zValues = zRecord->GetValuesPointer();
+	RIVFloatRecord* xRecord = isectTable->GetRecord<float>("x");
+	std::vector<float>* xValues = xRecord->GetValues();
+	RIVFloatRecord* yRecord = isectTable->GetRecord<float>("y");
+	std::vector<float>* yValues = yRecord->GetValues();
+	RIVFloatRecord* zRecord = isectTable->GetRecord<float>("z");
+	std::vector<float>* zValues = zRecord->GetValues();
 	
 	OctreeConfig config = OctreeConfig(maxDepth, maxCapacity, minNodeSize);
 	heatmap = new Octree(xValues, yValues, zValues, indices, config);
@@ -426,14 +426,14 @@ void RIV3DView::createPaths() {
 	
 	reporter::startTask("Creating paths");
 	
-	RIVTable* isectTable = (*dataset)->GetTable("intersections");
-	RIVUnsignedShortRecord* bounceRecord = isectTable->GetRecord<RIVUnsignedShortRecord>("bounce_nr");
+	RIVTable<float,ushort>* isectTable = (*dataset)->GetTable("intersections");
+	RIVShortRecord* bounceRecord = isectTable->GetRecord<ushort>("bounce_nr");
 	
 	paths.clear();
 	
     //Get the records we want;
     //Get the iterator, this iterator is aware of what rows are filtered and not
-    TableIterator* iterator = isectTable->GetIterator();
+    TableIterator iterator = isectTable->GetIterator();
     
     size_t row = 0;
 	size_t *pathID = 0;
@@ -443,7 +443,7 @@ void RIV3DView::createPaths() {
 	sizesAllTheSame = true;
 	std::vector<PathPoint> points;
 	
-    while(iterator->GetNext(row,pathID)) {
+    while(iterator.GetNext(row,pathID)) {
 		if(*pathID != oldPathID && points.size() > 0) {
 			paths.push_back(Path(points));
 			points.clear();
@@ -498,10 +498,10 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 	int startBounce = floor(startSegment * maxBounce);
 	int endBounce = startBounce + 1;
 	
-	RIVTable* intersectionsTable = (*dataset)->GetTable("intersections");
-	RIVFloatRecord* xRecord = intersectionsTable->GetRecord<RIVFloatRecord>("x");
-	RIVFloatRecord* yRecord = intersectionsTable->GetRecord<RIVFloatRecord>("y");
-	RIVFloatRecord* zRecord = intersectionsTable->GetRecord<RIVFloatRecord>("z");
+	RIVTable<float,ushort>* intersectionsTable = (*dataset)->GetTable("intersections");
+	RIVFloatRecord* xRecord = intersectionsTable->GetRecord<float>("x");
+	RIVFloatRecord* yRecord = intersectionsTable->GetRecord<float>("y");
+	RIVFloatRecord* zRecord = intersectionsTable->GetRecord<float>("z");
 	
 //	printf("start,end bounce = %d,%d\n",startBounce,endBounce);
 	
@@ -703,28 +703,28 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 			printf("Path creation filter");
 			(*dataset)->StartFiltering();
 			if(pathFilter == NULL) { //Add to the previous filter
-				riv::Filter* objectFilter = new riv::DiscreteFilter("primitive ID",selectedObjectID);
-				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce_nr",1);
-				std::vector<riv::Filter*> fs;
-				fs.push_back(objectFilter);
-				fs.push_back(bounceFilter);
-				pathFilter = new riv::GroupFilter(new riv::ConjunctiveFilter(fs),(*dataset)->GetTable("paths"));
-				(*dataset)->AddFilter("paths", pathFilter);
+//				riv::Filter* objectFilter = new riv::DiscreteFilter("primitive ID",selectedObjectID);
+//				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce_nr",1);
+//				std::vector<riv::Filter*> fs;
+//				fs.push_back(objectFilter);
+//				fs.push_back(bounceFilter);
+//				pathFilter = new riv::GroupFilter(new riv::ConjunctiveFilter(fs),(*dataset)->GetTable("paths"));
+//				(*dataset)->AddFilter("paths", pathFilter);
 			}
 			else { //There already is a path creation filter, simply add to it
 				//Find the latest bounce nr filter
-				size_t bounce_nr = pathFilter->Size() + 1;
-				
-				riv::Filter* objectFilter = new riv::DiscreteFilter("primitive ID",selectedObjectID);
-				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce_nr",bounce_nr);
-				std::vector<riv::Filter*> fs;
-				fs.push_back(objectFilter);
-				fs.push_back(bounceFilter);
-				pathFilter->AddFilter(new riv::ConjunctiveFilter(fs));
-				
-				(*dataset)->UpdateFilter(pathFilter);
+//				size_t bounce_nr = pathFilter->Size() + 1;
+//				
+//				riv::Filter* objectFilter = new riv::DiscreteFilter("primitive ID",selectedObjectID);
+//				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce_nr",bounce_nr);
+//				std::vector<riv::Filter*> fs;
+//				fs.push_back(objectFilter);
+//				fs.push_back(bounceFilter);
+//				pathFilter->AddFilter(new riv::ConjunctiveFilter(fs));
+//				
+//				(*dataset)->UpdateFilter(pathFilter);
 			}
-			pathFilter->Print();
+//			pathFilter->Print();
 			printf("\n");
 			(*dataset)->StopFiltering();
 		}

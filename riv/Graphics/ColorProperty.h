@@ -13,10 +13,10 @@
 
 #include <stdio.h>
 #include <string.h>
+
+#include "../Data/Record.h"
 #include "ColorPalette.h"
 #include "ColorMap.h"
-
-class RIVRecord;
 
 //Interface for a color property
 class RIVColorProperty {
@@ -30,7 +30,7 @@ protected:
     }
 public:
 	//Determine the color for the row of a given table assuming there is a connection between the given table and the reference table
-    virtual bool ComputeColor(RIVTable* table, size_t row, riv::Color& color) = 0;
+    virtual bool ComputeColor(RIVTableInterface* table, size_t row, riv::Color& color) = 0;
 	//Recompute the evaulators, this should happen when the reference table changed, leave unimplemented when not needed
 	virtual void Reset() { };
 };
@@ -53,7 +53,7 @@ public:
 		fixedColor.G = g;
 		fixedColor.B = b;
     }
-    bool ComputeColor(RIVTable* table, size_t row, riv::Color& color) {
+    bool ComputeColor(RIVTableInterface* table, size_t row, riv::Color& color) {
 		color = fixedColor;
         return true; //Always possible
     }
@@ -87,24 +87,24 @@ public:
 //        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
 //        //    clusterColorInterpolator = NULL;
 //    }
-    RIVEvaluatedColorProperty(RIVTable *colorReference_, float const* colorOne_, float const* colorTwo_) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_){
-//        memcpy(colorOne, colorOne_, sizeof(colorOne));
-//        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
-        
-		colorMap.AddColor(colorOne_);
-		colorMap.AddColor(colorTwo_);
-		
+//    RIVEvaluatedColorProperty(RIVTableInterface *colorReference_, float const* colorOne_, float const* colorTwo_) : RIVColorProperty(), RIVEvaluatedProperty<T,U>(colorReference_){
+////        memcpy(colorOne, colorOne_, sizeof(colorOne));
+////        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
+//        
+//		colorMap.AddColor(colorOne_);
+//		colorMap.AddColor(colorTwo_);
+//		
+////        colorMap[0] = colorOne_;
+////        colorMap[1] = colorOne_;
+//    }
+//    RIVEvaluatedColorProperty(RIVTableInterface *colorReference_, RIVRecord<U>* record, float const* colorOne_, float const* colorTwo_) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
+////        memcpy(colorOne, colorOne_, sizeof(colorOne));
+////        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
+//        
+////        colorMap.resize(2);
 //        colorMap[0] = colorOne_;
-//        colorMap[1] = colorOne_;
-    }
-    RIVEvaluatedColorProperty(RIVTable *colorReference_, RIVRecord* record, float const* colorOne_, float const* colorTwo_) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
-//        memcpy(colorOne, colorOne_, sizeof(colorOne));
-//        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
-        
-//        colorMap.resize(2);
-        colorMap[0] = colorOne_;
-        colorMap[1] = colorTwo_;
-    }
+//        colorMap[1] = colorTwo_;
+//    }
 //    RIVEvaluatedColorProperty(RIVTable *colorReference_, RIVRecord* record, const std::vector<const float*>& colors) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
 //        //        memcpy(colorOne, colorOne_, sizeof(colorOne));
 //        //        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
@@ -113,21 +113,21 @@ public:
 //			colorMap.AddColor(color);
 //		}
 //    }
-	RIVEvaluatedColorProperty(RIVTable *colorReference_, RIVRecord* record, const riv::ColorMap& colorMap) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
-        //        memcpy(colorOne, colorOne_, sizeof(colorOne));
-        //        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
-        
-		this->colorMap = colorMap;
-    }
+//	RIVEvaluatedColorProperty(RIVTableInterface *colorReference_, RIVRecord<U>* record, const riv::ColorMap& colorMap) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
+//        //        memcpy(colorOne, colorOne_, sizeof(colorOne));
+//        //        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
+//        
+//		this->colorMap = colorMap;
+//    }
+//	
+//	RIVEvaluatedColorProperty(RIVTableInterface *colorReference_, const std::string& recordName, const riv::ColorMap& colorMap) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,recordName){
+//		//        memcpy(colorOne, colorOne_, sizeof(colorOne));
+//		//        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
+//		
+//		this->colorMap = colorMap;
+//	}
 	
-	RIVEvaluatedColorProperty(RIVTable *colorReference_, const std::string& recordName, const riv::ColorMap& colorMap) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,recordName){
-		//        memcpy(colorOne, colorOne_, sizeof(colorOne));
-		//        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
-		
-		this->colorMap = colorMap;
-	}
-	
-    bool ComputeColor(RIVTable* table, size_t row, riv::Color& color) {
+    bool ComputeColor(RIVTableInterface* table, size_t row, riv::Color& color) {
         float value; //Assuming this value will be between 0 and 1
         if(RIVEvaluatedProperty<T>::Value(table,row,value))  {
 //            printf("Color value = %f\n",value);
@@ -153,7 +153,7 @@ public:
         colorsToUse = colorsToUse_;
         colors = colors_;
     }
-    bool ComputeColor(RIVTable* table, size_t row, riv::Color& color) {
+    bool ComputeColor(RIVTableInterface* table, size_t row, riv::Color& color) {
         size_t index = colorPointer % colorsToUse;
         colorPointer++;
         return colors[index];
@@ -180,12 +180,12 @@ public:
 //		greenColorProperty = new RIVEvaluatedProperty<T>(referenceTable,greenRecord);
 //		blueColorProperty = new RIVEvaluatedProperty<T>(referenceTable,blueRecord);
 //    }
-	RIVColorRGBProperty(RIVTable* referenceTable, const std::string& redRecord, const std::string& greenRecord,const std::string& blueRecord) {
+	RIVColorRGBProperty(RIVTableInterface* referenceTable, RIVRecord<T>* redRecord, RIVRecord<T>* greenRecord, RIVRecord<T>* blueRecord) {
 		redColorProperty = new RIVEvaluatedProperty<T>(referenceTable,redRecord);
 		greenColorProperty = new RIVEvaluatedProperty<T>(referenceTable,greenRecord);
 		blueColorProperty = new RIVEvaluatedProperty<T>(referenceTable,blueRecord);
     }
-    bool ComputeColor(RIVTable* table, size_t row, riv::Color& color) {
+    bool ComputeColor(RIVTableInterface* table, size_t row, riv::Color& color) {
 		float ratioRed;
 		float ratioGreen;
 		float ratioBlue;

@@ -22,7 +22,7 @@ protected:
         defaultSize = defaultSize_;
     }
 public:
-    virtual float ComputeSize(RIVTable* sourceTable,const size_t& row) = 0;
+    virtual float ComputeSize(RIVTableInterface* sourceTable,const size_t& row) = 0;
 };
 
 
@@ -31,7 +31,7 @@ public:
     RIVFixedSizeProperty(float defaultSize) : RIVSizeProperty(defaultSize) {
         
     }
-    float ComputeSize(RIVTable* sourceTable, const size_t& row) {
+    float ComputeSize(RIVTableInterface* sourceTable, const size_t& row) {
         return defaultSize;
     }
 };
@@ -41,7 +41,7 @@ class RIVEvaluatedSizeProperty : public RIVSizeProperty, public RIVEvaluatedProp
 private:
     
 public:
-    float ComputeSize(RIVTable* sourceTable, const size_t& row) {
+    float ComputeSize(RIVTableInterface* sourceTable, const size_t& row) {
         float size;
         if(RIVEvaluatedProperty<T>::Value(sourceTable, row, size)) {
             return size;
@@ -49,7 +49,7 @@ public:
         else return defaultSize;
     }
     
-    RIVEvaluatedSizeProperty(RIVTable* sourceTable, float defaultSize_) : RIVEvaluatedProperty<T>(sourceTable,defaultSize_), RIVSizeProperty(defaultSize_) {
+    RIVEvaluatedSizeProperty(RIVTableInterface* sourceTable, float defaultSize_) : RIVEvaluatedProperty<T>(sourceTable,defaultSize_), RIVSizeProperty(defaultSize_) {
         defaultSize = defaultSize_;
     }
 

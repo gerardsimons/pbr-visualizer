@@ -9,7 +9,6 @@
 #include "Views/ParallelCoordsView.h"
 #include "Data/DataSet.h"
 #include "Views/ImageView.h"
-#include "Data/DataFileReader.h"
 #include "Views/3DView.h"
 #include "Graphics/ColorPalette.h"
 #include "Graphics/ColorProperty.h"
@@ -64,7 +63,7 @@ RIV3DView *sceneView = NULL;
 ParallelCoordsView *parallelCoordsView = NULL;
 RIVHeatMapView *heatMapView = NULL;
 
-RIVDataSet* dataset;
+RIVDataSet<float,ushort>* dataset = NULL;
 
 /* The dataset, views have pointers to this in order to draw their views consistently */
 DataController* dataController;
@@ -111,9 +110,9 @@ void keys(int keyCode, int x, int y) {
         case 27: //ESC key
             printf("Clear filters\n");
             //            invalidateAllViews();
-			dataset->StartFiltering();
-            dataset->ClearFilters();
-			dataset->StopFiltering();
+//			dataset->StartFiltering();
+//            dataset->ClearFilters();
+//			dataset->StopFiltering();
             break;
 			
 		case 49: //The '1' key, switch to renderer one if not already using it
@@ -175,34 +174,34 @@ void keys(int keyCode, int x, int y) {
 //			riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",1);
 //			dataset.AddFilter("path",objectFilter);
 			
-			std::vector<riv::Filter*> allFilters;
-			std::vector<ushort> selectedObjectIDs;
-			selectedObjectIDs.push_back(3);
-//			selectedObjectIDs.push_back(1);
-//			selectedObjectIDs.push_back(1);
-//			selectedObjectIDs.push_back(1);
-//			selectedObjectIDs.push_back(1);
-			
-			for(int i = 0 ; i < selectedObjectIDs.size() ; ++i) {
-				riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectIDs[i]);
-				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",i+1);
-				std::vector<riv::Filter*> fs;
-				fs.push_back(objectFilter);
-				fs.push_back(bounceFilter);
-				allFilters.push_back(new riv::ConjunctiveFilter(fs));
-			}
-			riv::GroupFilter* pathCreationFilter = new riv::GroupFilter(allFilters,dataset->GetTable("path"));
-			riv::DiscreteFilter* bounceOneFilter = new riv::DiscreteFilter("bounce#",1);
-			pathCreationFilter->Print();
-			printf("\n");
-			dataset->StartFiltering();
-			dataset->AddFilter("path", pathCreationFilter);
-			dataset->StopFiltering();
-			dataset->StartFiltering();
-			dataset->AddFilter("intersections", bounceOneFilter);
-			dataset->StopFiltering();
-			postRedisplay = false;
-            break;
+//			std::vector<riv::Filter*> allFilters;
+//			std::vector<ushort> selectedObjectIDs;
+//			selectedObjectIDs.push_back(3);
+////			selectedObjectIDs.push_back(1);
+////			selectedObjectIDs.push_back(1);
+////			selectedObjectIDs.push_back(1);
+////			selectedObjectIDs.push_back(1);
+//			
+//			for(int i = 0 ; i < selectedObjectIDs.size() ; ++i) {
+//				riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectIDs[i]);
+//				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",i+1);
+//				std::vector<riv::Filter*> fs;
+//				fs.push_back(objectFilter);
+//				fs.push_back(bounceFilter);
+//				allFilters.push_back(new riv::ConjunctiveFilter(fs));
+//			}
+//			riv::GroupFilter* pathCreationFilter = new riv::GroupFilter(allFilters,dataset->GetTable("path"));
+//			riv::DiscreteFilter* bounceOneFilter = new riv::DiscreteFilter("bounce#",1);
+//			pathCreationFilter->Print();
+//			printf("\n");
+//			dataset->StartFiltering();
+//			dataset->AddFilter("path", pathCreationFilter);
+//			dataset->StopFiltering();
+//			dataset->StartFiltering();
+//			dataset->AddFilter("intersections", bounceOneFilter);
+//			dataset->StopFiltering();
+//			postRedisplay = false;
+//            break;
         }
         case 119: // 'w' key, move camera in Y direction
             sceneView->MoveCamera(0,camSpeed,0);
@@ -335,12 +334,22 @@ void createViews() {
 	RIVSizeProperty *defaultSizeProperty = new RIVFixedSizeProperty(0.1);
 	RIVColorProperty *defaultColorProperty = new RIVFixedColorProperty(1,1,1);
 	
-	RIVTable *intersectionsTable = dataset->GetTable("intersections");
-	RIVTable *pathsTable = dataset->GetTable("paths");
+
+	
+	RIVTable<float,ushort> *intersectionsTable = dataset->GetTable("intersections");
+	RIVTable<float,ushort> *pathsTable = dataset->GetTable("paths");
+	
+	RIVRecord<float>* isectRRecord = intersectionsTable->GetRecord<float>("R");
+	RIVRecord<float>* isectGRecord = intersectionsTable->GetRecord<float>("G");
+	RIVRecord<float>* isectBrRecord = intersectionsTable->GetRecord<float>("B");
+	
+	RIVRecord<float>* pathRRecord = intersectionsTable->GetRecord<float>("R");
+	RIVRecord<float>* pathGRecord = intersectionsTable->GetRecord<float>("G");
+	RIVRecord<float>* pathBRecord = intersectionsTable->GetRecord<float>("B");
 	
 	riv::ColorMap jetColorMap = colors::jetColorMap();
-	RIVColorProperty *intersectionColor = new RIVColorRGBProperty<float>(intersectionsTable,"R","G","B");
-	RIVColorProperty *pathColor = new RIVColorRGBProperty<float>(pathsTable,"R","G","B");
+	RIVColorProperty *intersectionColor = new RIVColorRGBProperty<float>(intersectionsTable,isectRRecord,isectGRecord,isectBrRecord);
+	RIVColorProperty *pathColor = new RIVColorRGBProperty<float>(pathsTable,pathRRecord,pathGRecord,pathBRecord);
 	//		RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,intersectionsTable->GetRecord("bounce#"),jetColorMap);
 	//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,"radiance R","radiance G","radiance B");
 	RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);

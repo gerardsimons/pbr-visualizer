@@ -32,8 +32,10 @@ private:
 	RIVColorProperty* rayColor;
     
     //Properties
-    std::vector<ParallelCoordsAxisGroup> axisGroups;
-    ParallelCoordsAxis* selectedAxis = NULL;
+    std::vector<ParallelCoordsAxisGroup<float,ushort>> axisGroups;
+	
+	//TODO : template this
+    ParallelCoordsAxis<float>* selectedAxis = NULL;
 	
 	//Determines what graphical primitives should be redrawn
     bool axesAreDirty = true;
@@ -42,8 +44,8 @@ private:
     
     void clearSelection();
 public:
-    ParallelCoordsView(RIVDataSet** dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty);
-    ParallelCoordsView(RIVDataSet** dataset, RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty);
+    ParallelCoordsView(RIVDataSet<float,ushort>** dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty);
+    ParallelCoordsView(RIVDataSet<float,ushort>** dataset, RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty);
 	~ParallelCoordsView(void);
 	
 	static int windowHandle;

@@ -58,8 +58,8 @@ protected:;
 	Ray pickRay;
 	
 	bool meshSelected = false;
-	riv::GroupFilter* pathFilter = NULL;
-    
+	riv::GroupFilter<ushort>* pathFilter = NULL;
+	
     //Buffered graphics point data, generated from the data, stored here for speed, TODO: Only store indices and a pointer to these records?
 	bool sizesAllTheSame; //Because sizes are often set to the same, we take advantage of this to get a big performance boost
 	//Indices of the points to draw
@@ -85,9 +85,9 @@ protected:;
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
 	//Single renderer constructor
-    RIV3DView(RIVDataSet** dataset,EMBREERenderer* renderer,RIVColorProperty*,RIVSizeProperty*);
+    RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,RIVColorProperty*,RIVSizeProperty*);
 	//Dual renderer constructor
-	RIV3DView(RIVDataSet** dataset,EMBREERenderer* rendererOne,EMBREERenderer* rendererTwo,RIVColorProperty*,RIVSizeProperty*);
+	RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* rendererOne,EMBREERenderer* rendererTwo,RIVColorProperty*,RIVSizeProperty*);
 	
 	//Extract data about the scene from the embree renderer object
 	void GetSceneData();

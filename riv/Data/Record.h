@@ -14,151 +14,183 @@
 #include <limits>
 #include <typeinfo>
 
+#include "Histogram.h"
+
 typedef unsigned short ushort;
 
+template<typename T>
 class RIVRecord {
 public:
-    std::string name;
+	std::vector<T> values;
+	std::pair<T,T> minMax;
+	const std::string name;
 protected:
     bool minMaxComputed;
 public:
-    virtual ~RIVRecord() {
+    ~RIVRecord() {
         //do jack shit
     }
-    virtual size_t Size() const = 0;
-    virtual float ScaleValue(const size_t& row) = 0;
-};
-
-class RIVFloatRecord : public RIVRecord {
-private:
-    std::vector<float> values;
-    std::pair<float,float> minMax;
-public:
-	RIVFloatRecord(const std::string& name) { this->name = name; minMaxComputed = false; };
-    RIVFloatRecord(const std::string& name, const std::vector<float>& values) { this->name = name; this->values = values; minMaxComputed = false; };
-    float Value(size_t i) const { return values[i]; };
-    void SetValues(std::vector<float> _values) {
-        values = _values;
-        minMaxComputed = false;
-    }
-    size_t Size() const {
-        return values.size();
-    }
-    float ScaleValue(const size_t& row) {
-        std::pair<float,float> minMax = MinMax();
-        const float& value = Value(row);
-        return (value - minMax.first) / (minMax.second - minMax.first);
-    }
-	void AddValue(float newValue) {
-		values.emplace_back(newValue);
-		minMaxComputed = false;
+	RIVRecord(const std::string& name) : name(name) {
+		
 	}
-    float Min() {
-        return MinMax().first;
-    }
-    float Max() {
-        return MinMax().second;
-    }
-    const std::pair<float,float>& MinMax() {
-//        printf("MINMAX OF RECORD \"%s\" CALLED\n",name.c_str());
+	RIVRecord(const std::string& name, const std::vector<T>& values) : name(name), values(values) {
+		minMaxComputed = false;
+	};
+	size_t Size() const {
+		return values.size();
+	}
+	T Min() {
+		return MinMax().first;
+	}
+	T Max() {
+		return MinMax().second;
+	}
+	float Value(size_t i) const {
+		return values[i];
+	}
+	void AddValue(const T& value) {
+		values.push_back(value);
+	}
+	std::pair<T,T> MinMax() {
 		if(!minMaxComputed) {
-			float min = std::numeric_limits<float>::max();
-			float max = std::numeric_limits<float>::min();
+			float min = std::numeric_limits<T>::max();
+			float max = std::numeric_limits<T>::min();
 			for(float value : values) {
-                if(value < min) {
-                    min = value;
-                }
-                if(value > max) {
-                    max = value;
-                }
-            }
-			minMax = std::pair<float,float>(min,max);
-
-			minMaxComputed = true;
-		}
-        return minMax;
-	}
-    std::vector<float>* GetValuesPointer() {
-        return &values;
-    }
-    void Print() {
-        printf("RIVFloatRecord %s has %lu records. ",name.c_str(), values.size());
-        minMaxComputed ? printf(" (min,max) = (%f,%f)\n",minMax.first, minMax.second) : printf("no minmax yet computed.\n");
-    }
-};
-
-class RIVUnsignedShortRecord : public RIVRecord {
-private:
-    std::pair<ushort,ushort> minMax;
-    std::vector<ushort> values;
-public:
-    RIVUnsignedShortRecord(const std::string& name) {
-        this->name = name;
-        minMaxComputed = false;
-    };
-    RIVUnsignedShortRecord(const std::string& name, const std::vector<ushort>& values) {
-        this->name = name;
-        this->values = values;
-    }
-    RIVUnsignedShortRecord(std::string name_, ushort min, ushort max) {
-        name = name_;
-        minMax.first = min;
-        minMax.second = max;
-        minMaxComputed = true;
-    };
-    ushort Value(size_t i) { return values[i]; };
-    void Print() {
-        std::cout << "RIVRecord " << name << " containing " << values.size() << " " << typeid(int).name() << " values.\n";
-    }
-    std::vector<ushort>* GetValues() {
-        return &values;
-    }
-	void AddValue(ushort newValue) {
-		values.emplace_back(newValue);
-		minMaxComputed = false;
-	}
-    void SetValues(std::vector<ushort> _values) {
-        values = _values;
-    }
-    size_t Size() const {
-        return values.size();
-    }
-    float ScaleValue(const size_t& row) {
-        std::pair<ushort,ushort> minMax = MinMax();
-        const ushort& value = Value(row);
-        float scaleValue = (value - minMax.first) / (float)(minMax.second - minMax.first);
-        return scaleValue;
-    }
-    float Min() {
-        return MinMax().first;
-    }
-    float Max() {
-        return MinMax().second;
-    }
-    const std::pair<ushort,ushort>& MinMax() {
-		if(!minMaxComputed) {
-			float min = std::numeric_limits<float>::max();
-			float max = std::numeric_limits<float>::min();
-            
-			if(!values.empty()) {
-				for(size_t i = 0 ; i < values.size() ; i++) {
-					auto value = values[i];
-					if(value > max) {
-						max = value;
-					}
-					if(value < min) {
-						min = value;
-					}
+				if(value < min) {
+					min = value;
+				}
+				if(value > max) {
+					max = value;
 				}
 			}
-			minMax = std::pair<float,float>(min,max);
-			//TODO: min_max caching does not work properly, uncomment below to enable caching!
+			minMax = std::pair<T,T>(min,max);
 			minMaxComputed = true;
 		}
 		return minMax;
 	}
+	float RelativeValue(const size_t& row) {
+		std::pair<T,T> minMax = MinMax();
+		T value = Value(row);
+		return (value - minMax.first) / (float)(minMax.second - minMax.first);
+	}
+	std::vector<T>* GetValues() {
+		return &values;
+	}
+	Histogram<T> CreateHistogram(const T& lowerBound, const T& upperBound, int bins) {
+		return Histogram<T>(name, values, lowerBound,upperBound,bins);
+	}
+	Histogram<T> CreateHistogram(size_t bins) {
+		std::pair<T,T> minMax = MinMax();
+		return Histogram<T>(name, values, minMax.first,minMax.second,bins);
+	}
 };
 
+typedef RIVRecord<float> RIVFloatRecord;
+typedef RIVRecord<unsigned short> RIVShortRecord;
+
+//
+//class RIVFloatRecord : public RIVRecord {
+//private:
+//    std::vector<float> values;
+//    std::pair<float,float> minMax;
+//public:
+//	RIVFloatRecord(const std::string& name) { this->name = name; minMaxComputed = false; };
+//
+//
+//    void SetValues(std::vector<float> _values) {
+//        values = _values;
+//        minMaxComputed = false;
+//    }
+//    size_t Size() const {
+//        return values.size();
+//    }
+//
+//	void AddValue(float newValue) {
+//		values.emplace_back(newValue);
+//		minMaxComputed = false;
+//	}
+//
+//    std::vector<float>* GetValuesPointer() {
+//        return &values;
+//    }
+//    void Print() {
+//        printf("RIVFloatRecord %s has %lu records. ",name.c_str(), values.size());
+//        minMaxComputed ? printf(" (min,max) = (%f,%f)\n",minMax.first, minMax.second) : printf("no minmax yet computed.\n");
+//    }
+//};
+//
+//class RIVUnsignedShortRecord : public RIVRecord {
+//private:
+//    std::pair<ushort,ushort> minMax;
+//    std::vector<ushort> values;
+//public:
+//    RIVUnsignedShortRecord(const std::string& name) {
+//        this->name = name;
+//        minMaxComputed = false;
+//    };
+//    RIVUnsignedShortRecord(const std::string& name, const std::vector<ushort>& values) {
+//        this->name = name;
+//        this->values = values;
+//    }
+//    RIVUnsignedShortRecord(std::string name_, ushort min, ushort max) {
+//        name = name_;
+//        minMax.first = min;
+//        minMax.second = max;
+//        minMaxComputed = true;
+//    };
+//    ushort Value(size_t i) { return values[i]; };
+//    void Print() {
+//        std::cout << "RIVRecord " << name << " containing " << values.size() << " " << typeid(int).name() << " values.\n";
+//    }
+//    std::vector<ushort>* GetValues() {
+//        return &values;
+//    }
+//	void AddValue(ushort newValue) {
+//		values.emplace_back(newValue);
+//		minMaxComputed = false;
+//	}
+//    void SetValues(std::vector<ushort> _values) {
+//        values = _values;
+//    }
+//    size_t Size() const {
+//        return values.size();
+//    }
+//    float ScaleValue(const size_t& row) {
+//        std::pair<ushort,ushort> minMax = MinMax();
+//        const ushort& value = Value(row);
+//        float scaleValue = (value - minMax.first) / (float)(minMax.second - minMax.first);
+//        return scaleValue;
+//    }
+//    float Min() {
+//        return MinMax().first;
+//    }
+//    float Max() {
+//        return MinMax().second;
+//    }
+//    const std::pair<ushort,ushort>& MinMax() {
+//		if(!minMaxComputed) {
+//			float min = std::numeric_limits<float>::max();
+//			float max = std::numeric_limits<float>::min();
+//            
+//			if(!values.empty()) {
+//				for(size_t i = 0 ; i < values.size() ; i++) {
+//					auto value = values[i];
+//					if(value > max) {
+//						max = value;
+//					}
+//					if(value < min) {
+//						min = value;
+//					}
+//				}
+//			}
+//			minMax = std::pair<float,float>(min,max);
+//			//TODO: min_max caching does not work properly, uncomment below to enable caching!
+//			minMaxComputed = true;
+//		}
+//		return minMax;
+//	}
+//};
+//
 
 
 #endif /* defined(__RIVDataSet__Record__) */
