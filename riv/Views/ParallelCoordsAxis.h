@@ -13,17 +13,30 @@
 #include "../Data/Record.h"
 #include "../Geometry/Geometry.h"
 
-	template <typename T>
-	class ParallelCoordsAxis {
-	public:
-		ParallelCoordsAxis(int x,int y, int height, float minValue, float maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision) {
-			this->x = x;
-			this->y = y;
-			this->height = height;
-			this->name = name;
-			this->minValue = minValue;
-			this->maxValue = maxValue;
-			this->recordPointer = recordPointer;
+	//Interface class for parallel coords axis
+class ParallelCoordsAxisInterface {
+public:
+	int height;
+	int x;
+	int y;
+	std::string name; //Usually points to a record's name, acts as unique ID!
+	
+	bool HasSelectionBox;
+	Area selection;
+protected:
+	ParallelCoordsAxisInterface(int x, int y, int height, const std::string& name) : x(x), y(y), height(height), name(name) {
+
+	}
+};
+
+template <typename T>
+class ParallelCoordsAxis : public ParallelCoordsAxisInterface {
+public:
+	std::vector<T> scale;
+	T minValue, maxValue; 
+	RIVRecord<T>* recordPointer;
+	ParallelCoordsAxis(int x,int y, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision)
+	: ParallelCoordsAxisInterface(x,y,height,name),minValue(minValue),maxValue(maxValue),recordPointer(recordPointer) {
 			ComputeScale(scaleDivision);
 		}
 		
@@ -70,7 +83,7 @@
 			if(value >= 0.F && value <= 1.F) {
 				return (1 - value) * minValue + value * maxValue;
 			}
-			else return std::numeric_limits<float>::quiet_NaN();
+			else return std::numeric_limits<T>::quiet_NaN();
 		}
 		
 		void ComputeScale(int n) {
@@ -83,18 +96,6 @@
 			}
 			scale.push_back(1.F);
 		}
-
-		//properties
-		std::vector<float> scale;
-		int x,y;
-		float minValue, maxValue; //TODO: template
-		int height;
-		
-		std::string name; //Usually points to a record's name, acts as unique ID!
-		RIVRecord<T>* recordPointer;
-		
-		bool HasSelectionBox;
-		Area selection;
 	};
 
 #endif

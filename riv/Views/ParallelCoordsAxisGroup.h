@@ -33,6 +33,13 @@ public:
 		auto axes = GetAxes<U>();
 		axes->push_back(newAxis);
 	}
+	
+	template<typename U>
+	ParallelCoordsAxis<U>* CreateAxis(RIVRecord<U>* record, int x, int y, int axisHeight, int min, int max, const std::string& name, int divisionCount) {
+		std::vector<ParallelCoordsAxis<U>>* tAxes = GetAxes<U>();
+		tAxes->push_back(ParallelCoordsAxis<U>(x,y,axisHeight,min,max,name,record,4));
+		return &tAxes->at(tAxes->size() - 1);
+	}
     
 //    ParallelCoordsAxisGroup* connectedGroup = 0;
 //    ParallelCoordsAxis* connectorAxis;

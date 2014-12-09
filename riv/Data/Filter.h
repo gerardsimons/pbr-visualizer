@@ -22,15 +22,20 @@ namespace riv {
 	protected:
 		size_t fid; //The id of the filter, automatically created to be unique for every filter
 	public:
+		T type; //TODO: WARNING: This is a hack, I sometimes want to get decltype of the filter template argument, but am unsure how to do it any canonical way, so I do it like this
 		size_t GetId();
 		//Only used internally
+
+//		virtual bool PassesFilter(RIVTableInterface* table,size_t row) = 0;
 		virtual bool PassesFilter(const std::string& name, T value) = 0;
 		virtual bool AppliesToAttribute(const std::string& name) = 0;
 //		virtual bool AppliesToTable(const std::string& name) = 0;
 //		virtual bool PassesFilter(const std::string& name, unsigned short value) = 0;
 		//Determines whether this filter is targeted at the given table
 //		virtual std::vector<std::string> GetAttributes() = 0;
-		virtual void Print() = 0;
+		virtual void Print() {
+			printf("Generic filter object\n");
+		}
 	};
 	
 	template <typename T>
@@ -41,8 +46,10 @@ namespace riv {
 			
 		}
 	public:
-		std::string GetAttribute();
-		bool AppliesToAttributes(const std::string& name) {
+		std::string GetAttribute() {
+			return attributeName;
+		}
+		virtual bool AppliesToAttribute(const std::string& name) {
 			return attributeName == name;
 		}
 //		bool AppliesToTable(const RIVTable* table);
@@ -55,8 +62,12 @@ namespace riv {
 		T minValue;
 		T maxValue;
 	public :
-		RangeFilter(const std::string& attributeName, T minValue, T maxValue);
-		bool PassesFilter(const std::string& name, T value);
+		RangeFilter(const std::string& attributeName, T minValue, T maxValue) : SingularFilter<T>(attributeName), minValue(minValue), maxValue(maxValue) {
+			
+		}
+		bool PassesFilter(const std::string& name, T value) {
+			return (SingularFilter<T>::AppliesToAttribute(name) >= minValue && value <= maxValue);
+		}
 		void Print() {
 //			printf("RangeFilter [attributeName = %s, (min,max) = (%f,%f)]\n",attributeName.c_str(),minValue,maxValue);
 		}

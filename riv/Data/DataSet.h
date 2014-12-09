@@ -82,7 +82,16 @@ public:
 	template<typename T>
 	void AddFilter(const std::string& tableName, riv::GroupFilter<T> *filter);
 	template<typename T>
-	void AddFilter(const std::string& tableName, riv::Filter<T>* filter);
+	void AddFilter(riv::SingularFilter<T>* filter) {
+		//Find the table that contains all of the filter attributes
+		for(auto table : tables) {
+			if(table->HasRecord(filter->GetAttribute()) == false) {
+				table->AddFilter(filter);
+				staleTables[table] = true;
+				return;
+			}
+		}
+	}
 	//Automatically find the table this should be filtered on, the one containing all of the filters attributes
 //	void AddFilter(riv::Filter* filter);
 //	void AddFilter(riv::GroupFilter *filter);
@@ -93,7 +102,7 @@ public:
 	
 	void StartFiltering() {
 		if(isFiltering) {
-			throw "Invalid state, StopFiltering was never called.";
+			throw std::runtime_error("Invalid state, StopFiltering was never called.");
 		}
 		isFiltering = true;
 //		staleTables.clear();
@@ -113,14 +122,14 @@ public:
 		}
 		//TODO: Fix this
 		//Finalize, do the actual filtering operations
-//		for(auto iter : staleTables) {
-//			iter.first->Filter();
-//		}
+		for(auto iter : staleTables) {
+			iter.first->Filter();
+		}
 	
-		//Make sure linked tables are filtered accordingly
-//		for(auto iter : staleTables) {
-//			iter.first->FilterReferences();
-//		}
+//		Make sure linked tables are filtered accordingly
+		for(auto iter : staleTables) {
+			iter.first->FilterReferences();
+		}
 	
 		isFiltering = false;
 		//Notify the listeners now
@@ -211,7 +220,6 @@ public:
 	}
 	
 	HistogramSet<Ts...> CreateHistogramSet(int bins) {
-		std::vector<HistogramSet<Ts...>> histogramsets;
 		HistogramSet<Ts...> histograms;
 		for(auto table : tables) {
 			auto histogramset = table->CreateHistogramSet(bins);

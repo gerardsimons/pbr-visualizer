@@ -164,7 +164,7 @@ public:
 		propertyReference = propertyReference_;
 		init(propertyReference_, scheme, interpolationValues);
 	}
-	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,RIVRecord<T>* referenceRecord) {
+	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,RIVRecord<T>* referenceRecord) : propertyReference(propertyReference_), referenceRecord(referenceRecord) {
 		interpolationMode = defaultInterpolationMode;
 		propertyReference = propertyReference_;
 

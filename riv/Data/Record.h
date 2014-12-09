@@ -26,12 +26,22 @@ public:
 	const std::string name;
 protected:
     bool minMaxComputed;
+	//When set to true, any values falling outside the predetermined bounds will be clamped
+	bool clampOutliers = false;
 public:
     ~RIVRecord() {
         //do jack shit
     }
 	RIVRecord(const std::string& name) : name(name) {
 		
+	}
+	RIVRecord(const std::string& name, const T& min, const T& max, bool clampOutliers) : name(name), clampOutliers(clampOutliers) {
+		minMax = std::pair<T,T>(min,max);
+		minMaxComputed = true;
+	}
+	RIVRecord(const std::string& name, const T& min, const T& max) : name(name) {
+		minMax = std::pair<T,T>(min,max);
+		minMaxComputed = true;
 	}
 	RIVRecord(const std::string& name, const std::vector<T>& values) : name(name), values(values) {
 		minMaxComputed = false;
@@ -49,7 +59,13 @@ public:
 		return values[i];
 	}
 	void AddValue(const T& value) {
-		values.push_back(value);
+		if(!clampOutliers) {
+			values.push_back(value);
+		}
+		else {
+			const std::pair<T,T>& minmax = MinMax();
+			values.push_back(std::max(std::min(value,minmax.second),minmax.first));
+		}
 	}
 	std::pair<T,T> MinMax() {
 		if(!minMaxComputed) {

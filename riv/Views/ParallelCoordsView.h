@@ -35,7 +35,8 @@ private:
     std::vector<ParallelCoordsAxisGroup<float,ushort>> axisGroups;
 	
 	//TODO : template this
-    ParallelCoordsAxis<float>* selectedAxis = NULL;
+	std::string selectedAxis;
+	Area* selection = NULL;
 	
 	//Determines what graphical primitives should be redrawn
     bool axesAreDirty = true;

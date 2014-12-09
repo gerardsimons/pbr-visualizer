@@ -57,30 +57,31 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
 	
 	RIVTable<float,ushort>* pathTable = dataset->CreateTable(PATHS_TABLE);
 	
-	pathTable->CreateRecord<ushort>(RENDERER_ID);
-	pathTable->CreateRecord<float>(PIXEL_X);
-	pathTable->CreateRecord<float>(PIXEL_Y);
+	pathTable->CreateRecord<ushort>(RENDERER_ID,0,1);
+	pathTable->CreateRecord<float>(PIXEL_X,0,1,true);
+	pathTable->CreateRecord<float>(PIXEL_Y,0,1,true);
 	//	lensUs = pathTable->CreateFloatRecord("lens U");
 	//	lensVs = pathTable->CreateFloatRecord("lens V");
 	//	times = pathTable->CreateFloatRecord("time");
-	pathTable->CreateRecord<float>(PATH_R);
-	pathTable->CreateRecord<float>(PATH_G);
-	pathTable->CreateRecord<float>(PATH_B);
-	pathTable->CreateRecord<float>(THROUGHPUT_R);
-	pathTable->CreateRecord<float>(THROUGHPUT_G);
-	pathTable->CreateRecord<float>(THROUGHPUT_B);
-	pathTable->CreateRecord<ushort>(DEPTH);
+	pathTable->CreateRecord<float>(PATH_R,0,1);
+	pathTable->CreateRecord<float>(PATH_G,0,1);
+	pathTable->CreateRecord<float>(PATH_B,0,1);
+	pathTable->CreateRecord<float>(THROUGHPUT_R,0,1);
+	pathTable->CreateRecord<float>(THROUGHPUT_G,0,1);
+	pathTable->CreateRecord<float>(THROUGHPUT_B,0,1);
+	pathTable->CreateRecord<ushort>(DEPTH,0,5);
 	
 	RIVTable<float,ushort>* isectsTable = dataset->CreateTable(INTERSECTIONS_TABLE);
 	
-	isectsTable->CreateRecord<ushort>(BOUNCE_NR);
-	isectsTable->CreateRecord<float>(POS_X);
-	isectsTable->CreateRecord<float>(POS_Y);
-	isectsTable->CreateRecord<float>(POS_Z);
-	isectsTable->CreateRecord<float>(INTERSECTION_R);
-	isectsTable->CreateRecord<float>(INTERSECTION_G);
-	isectsTable->CreateRecord<float>(INTERSECTION_B);
-	isectsTable->CreateRecord<ushort>(PRIMITIVE_ID);
+	//TODO: Determine this by reading from the renderer settings
+	isectsTable->CreateRecord<ushort>(BOUNCE_NR,0,5);
+	isectsTable->CreateRecord<float>(POS_X,0,600,true);
+	isectsTable->CreateRecord<float>(POS_Y,0,600,true);
+	isectsTable->CreateRecord<float>(POS_Z,0,600,true);
+	isectsTable->CreateRecord<float>(INTERSECTION_R,0,1);
+	isectsTable->CreateRecord<float>(INTERSECTION_G,0,1);
+	isectsTable->CreateRecord<float>(INTERSECTION_B,0,1);
+	isectsTable->CreateRecord<ushort>(PRIMITIVE_ID,0,10);
 	//	shapeIds = isectsTable->CreateShortRecord("shape ID");
 	//	interactionTypes = isectsTable->CreateShortRecord("interaction");
 	//	lightIds = isectsTable->CreateShortRecord("light ID");
@@ -101,20 +102,20 @@ void DataController::createDataStructures() {
 	initDataSet(currentData);
 	initDataSet(candidateData);
 	
-	trueDistributions = HistogramSet<float,ushort>(currentData->CreateHistogramSet(bins));
+	trueDistributions = currentData->CreateHistogramSet(bins);
 	trueDistributions.Print();
 	
-	resetPointers();
+	resetPointers(currentData);
 }
 
-void DataController::resetPointers() {
-	currentPathTable = candidateData->GetTable("paths");
-	currentIntersectionsTable = candidateData->GetTable("intersections");
+void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
+	currentPathTable = dataset->GetTable(PATHS_TABLE);
+	currentIntersectionsTable = dataset->GetTable(INTERSECTIONS_TABLE);
 	
 	isectsToPathsRef = (RIVSingleReference*)currentIntersectionsTable->GetReference();
 	pathsToIsectRef = (RIVMultiReference*)currentPathTable->GetReference();
 	
-	rendererId = currentPathTable->GetRecord<ushort>("renderer");
+	rendererId = currentPathTable->GetRecord<ushort>(RENDERER_ID);
 	xPixels = currentPathTable->GetRecord<float>(PIXEL_X);
 	yPixels = currentPathTable->GetRecord<float>(PIXEL_Y);
 	//	lensUs = pathTable->GetRecord<float>("lens U");
@@ -124,7 +125,7 @@ void DataController::resetPointers() {
 	colorGs = currentPathTable->GetRecord<float>(PATH_G);
 	colorBs = currentPathTable->GetRecord<float>(PATH_B);
 	throughputRs = currentPathTable->GetRecord<float>(THROUGHPUT_R);
-	throughputGs = currentPathTable->GetRecord<float>(THROUGHPUT_B);
+	throughputGs = currentPathTable->GetRecord<float>(THROUGHPUT_G);
 	throughputBs = currentPathTable->GetRecord<float>(THROUGHPUT_B);
 	depths = currentPathTable->GetRecord<ushort>(DEPTH);
 	
@@ -166,8 +167,7 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 		for(ushort i = 0 ; i < nrIntersections ; ++i) {
 			IntersectData& isect = newPath->intersectionData[i];
 			
-//			auto teeeest = trueDistributions.GetHistogram<float>(DEPTH);
-			trueDistributions.AddToHistogram("bounce_nr",(ushort)(i+1));
+			trueDistributions.AddToHistogram(BOUNCE_NR,(ushort)(i+1));
 //			trueDistributions.AddToHistogram("x", isect.position[0]);
 //			trueDistributions.AddToHistogram("y", isect.position[1]);
 //			trueDistributions.AddToHistogram("z", isect.position[2]);
@@ -234,11 +234,11 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 			currentData->NotifyDataListeners();
 			
 			//Print the histograms
-			trueDistributions.Print();
+//			trueDistributions.Print();
 			
 			paused = true;
 			
-			Reduce();
+//			Reduce();
 		}
 		
 		
@@ -254,7 +254,7 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 
 void DataController::Reduce() {
 	//This was the first time we filled up, we already have our data to bootstrap from
-	if(currentData->IsEmpty()) {
+	if(currentData == NULL || currentData->IsEmpty()) {
 		
 		//Swap current with candidate
 		RIVDataSet<float,ushort>* temp = currentData;

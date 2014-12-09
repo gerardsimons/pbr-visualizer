@@ -110,7 +110,7 @@ private:
 	
 	void initDataSet(RIVDataSet<float,ushort> *dataset) ;
 	//Setup the shortcut pointer to the innards of the dataset, tables etc.
-	void resetPointers();
+	void resetPointers(RIVDataSet<float,ushort>* dataset);
 public:
 	template<typename ...Ts>
 	RIVDataSet<Ts...> Bootstrap(RIVDataSet<Ts...>* dataset, size_t N) {

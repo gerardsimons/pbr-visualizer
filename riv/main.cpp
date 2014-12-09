@@ -4,6 +4,7 @@
 #include <math.h>
 #include <exception>
 
+#include "Configuration.h"
 #include "Data/Filter.h"
 #include "Views/DataView.h"
 #include "Views/ParallelCoordsView.h"

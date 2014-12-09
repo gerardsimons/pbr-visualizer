@@ -76,15 +76,15 @@ public:
 	Histogram() {
 		nrElements = 0;
 	}
-	Histogram(const std::string& name, ushort lowerBound, ushort upperBound) {
+	Histogram(const std::string& name, ushort lowerBound, ushort upperBound) : name(name), lowerBound(lowerBound), upperBound(upperBound) {
 		nrElements = 0;
 		bins = upperBound - lowerBound;
 		binWidth = 1;
 	}
-	Histogram(const std::string& name, T lowerBound, T upperBound, unsigned int bins) : lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()) {
+	Histogram(const std::string& name, T lowerBound, T upperBound, unsigned int bins) : name(name), lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()) {
 		nrElements = 0;
 	}
-	Histogram(const std::string& name, const std::vector<T>& ts, T lowerBound, T upperBound, unsigned int bins) : lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()) {
+	Histogram(const std::string& name, const std::vector<T>& ts, T lowerBound, T upperBound, unsigned int bins) : name(name), lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()) {
 		count(ts);
 	}
 	Histogram(const std::string& name, const std::vector<T>& ts, unsigned int bins)  : name(name) {
@@ -115,6 +115,10 @@ public:
 	}
 	float operator-(Histogram& right) {
 		
+		if(right.bins != bins) {
+			throw std::runtime_error("The histograms should have the same number of bins");
+		}
+		
 		T lowerBound = std::min(LowerBound(),right.LowerBound());
 		T upperBound = std::max(UpperBound(),right.UpperBound());
 		float totalDiff = 0;
@@ -130,7 +134,10 @@ public:
 		
 	}
 	float NormalizedValue(int i) {
-		return value(i) / (float) nrElements;
+		if(nrElements)
+			return value(i) / (float) nrElements;
+		else
+			return 0;
 	}
 	void Print() {
 		int maxBarSize = 48;
@@ -204,7 +211,7 @@ public:
 	
 	
 	template<typename T>
-	void AddToHistogram(const std::string name,T value) {
+	void AddToHistogram(const std::string name,const T& value) {
 		Histogram<T>* histogram = GetHistogram<T>(name);
 //		if(!histogram)
 			//TODO: Create histogram when set to dynamic and histogram was not found
@@ -258,7 +265,7 @@ public:
 	void Join(const HistogramSet& other) {
 		TupleForEach(other.histograms, [&](auto tHistograms) {
 			for(auto& histogram : tHistograms) {
-//				AddHistogram(histogram);
+				AddHistogram(histogram);
 			}
 		});
 	}

@@ -141,21 +141,104 @@ public:
 		tRecords->push_back(newRecord);
 		return newRecord;
 	}
+	template<typename T>
+	RIVRecord<T>* CreateRecord(const std::string& name, T min, T max,bool clampOutliers = false) {
+		//		AddRecord<float>(RIVRecord<float>(name));
+		std::vector<RIVRecord<T>*>* tRecords = GetRecords<T>();
+		RIVRecord<T>* newRecord = new RIVRecord<T>(name,min,max,clampOutliers);
+		tRecords->push_back(newRecord);
+		return newRecord;
+	}
 	bool IsEmpty() {
+		bool empty = true;
 		TupleForEach(records, [&](auto tRecords) {
 			if(tRecords.size()) {
-				return false;
+				empty = false;
+				return;
 			}
 		});
-		return true;
+		return empty;
 	}
 	//Filter this table according to the filters that are applied
-	void Filter();
+	void Filter() {
+		filteredRows.clear();
+		newlyFilteredRows.clear();
+		std::string task = "Filter " + name;
+		reporter::startTask(task);
+			printf("Filtering table %s with filter:\n",name.c_str());
+//			for(riv::Filter* f : filters) {
+//				printf("\t");
+//				f->Print();
+//			}
+//			printf("\n");
+			size_t rows = NumberOfRows();
+			for(size_t row = 0 ; row < rows ; row++) {
+				if(filteredRows[row]) {
+					//				printf("row %zu was already filtered\n",row);
+					continue; //Already filtered
+				}
+				bool filterSourceRow = false;
+				//Group filters
+//				for(riv::GroupFilter* groupFilter : groupFilters) {
+//					//				printf("Group filtering : ");
+//					//				groupFilter->Print();
+//					if(!groupFilter->PassesFilter(this, row)) {
+//						//					printf("row = %zu FILTERED\n",row);
+//						filterSourceRow = true;
+//						break;
+//					}
+//					else {
+//						//					printf("row = %zu SELECTED\n",row);
+//					}
+//				}
+	
+				if(!filterSourceRow) {
+					TupleForEach(filters, [&](auto tFilters) {
+						for(auto filter : tFilters) {
+							//If the filter applies to this table, filter according to
+							if(filter->AppliesToTable(this)) {
+								auto recordForFilter = GetRecord<<#typename T#>>(<#const std::string &name#>)
+								filterSourceRow = !filter->PassesFilter(this, row);
+								if(filterSourceRow) {
+									break;
+								}
+							}
+						}
+					});
+				}
+	
+				if(filterSourceRow) {
+					//				printf("row = %zu FILTERED\n",row);
+					FilterRow(row);
+	
+					newlyFilteredRows.push_back(row);
+				}
+				else {
+					//				printf("row = %zu SELECTED\n",row);
+				}
+			}
+		
+		reporter::stop(task);
+	//	printf("After filtering : ");
+	//	PrintUnfiltered();
+	
+	//	printf("References : ");
+	//	for(RIVReference* ref : references) {
+	//		ref->targetTable->PrintUnfiltered();
+	//	}
+	}
 	void FilterReferences();
+	template<typename T>
+	std::vector<riv::Filter<T>*>* GetFilters() {
+		return &std::get<std::vector<riv::Filter<T>*>>(filters);
+	}
 	template<typename T>
 	bool ContainsFilter(riv::Filter<T>* filter);
 	template<typename T>
-	void AddFilter(riv::Filter<T> *filter);
+	void AddFilter(riv::Filter<T> *filter) {
+		auto tFilters = GetFilters<T>();
+		tFilters->push_back(filter);
+	}
 	template<typename T>
 	void AddFilter(riv::GroupFilter<T> *groupFilter);
 //	void AddRow(const std::tuple<std::vector<Ts>...>) {
@@ -204,7 +287,7 @@ public:
 				}
 			}
 			if(!filterFound) {
-				throw std::runtime_error("No such filter exists.");
+				printf("No such filter found.\n");
 			}
 			else {
 				filters.erase(filters.begin() + 1);
@@ -240,7 +323,6 @@ public:
 	}
 	//		TableIterator* GetPIterator();
 	std::string GetName() const { return name; };
-	
 
 	void SetReference(RIVReference* newReference) {
 		reference = newReference;
