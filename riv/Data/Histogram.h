@@ -232,10 +232,10 @@ public:
 		
 		float total = 0;
 		
-		TupleForEach(histograms, [&](auto tHistograms) {
+		tuple_for_each(histograms, [&](auto tHistograms) {
 			for(auto& histogram : tHistograms) {
 				bool found = false;
-				TupleForEach(other.histograms, [&](auto otherTHistograms) {
+				tuple_for_each(other.histograms, [&](auto otherTHistograms) {
 					for(auto& otherHistogram : otherTHistograms) {
 						if(otherHistogram.name == histogram.name) {
 							total += (otherHistogram - histogram);
@@ -255,7 +255,7 @@ public:
 	
 	void Print() {
 		printf("Histogram set : \n");
-		TupleForEach(histograms, [&](auto tHistograms) {
+		tuple_for_each(histograms, [&](auto tHistograms) {
 			for(auto& histogram : tHistograms) {
 				histogram.Print();
 			}
@@ -263,7 +263,7 @@ public:
 	}
 		
 	void Join(const HistogramSet& other) {
-		TupleForEach(other.histograms, [&](auto tHistograms) {
+		tuple_for_each(other.histograms, [&](auto tHistograms) {
 			for(auto& histogram : tHistograms) {
 				AddHistogram(histogram);
 			}

@@ -16,7 +16,6 @@
 #include <algorithm>
 #include <iterator>
 
-
 #if __APPLE__
     #include <GLUT/GLUT.h>
 #elif __linux
@@ -32,6 +31,14 @@ void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v );
 //};
 
 void println(const std::string& text);
+
+template <typename C> struct get_template_type;
+
+template <template <typename > class C, typename T>
+struct get_template_type<C<T>>
+{
+	using type = T;
+};
 
 namespace riv {
 	template <typename T>
@@ -134,23 +141,6 @@ public:
         }
     }
 };
-
-//TO STRING FIX FOR SOME COMPILERS
-//#include<sstream>
-//namespace std {
-//	template <typename T>
-//	std::string to_string(T value)
-//	{
-//		//create an output string stream
-//		std::ostringstream os ;
-//		
-//		//throw the value into the string stream
-//		os << value ;
-//		
-//		//convert the string stream into a string and return
-//		return os.str() ;
-//	}
-//}
 
 unsigned long long
 choose(unsigned long long n, unsigned long long k);

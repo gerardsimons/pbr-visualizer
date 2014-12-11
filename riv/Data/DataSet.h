@@ -85,7 +85,7 @@ public:
 	void AddFilter(riv::SingularFilter<T>* filter) {
 		//Find the table that contains all of the filter attributes
 		for(auto table : tables) {
-			if(table->HasRecord(filter->GetAttribute()) == false) {
+			if(table->HasRecord(filter->GetAttribute())) {
 				table->AddFilter(filter);
 				staleTables[table] = true;
 				return;
@@ -105,7 +105,7 @@ public:
 			throw std::runtime_error("Invalid state, StopFiltering was never called.");
 		}
 		isFiltering = true;
-//		staleTables.clear();
+		staleTables.clear();
 	}
 	
 	bool IsEmpty() {
@@ -167,16 +167,11 @@ public:
 	void ClearFilter(const std::string& filterName) {
 		printf("Clearing filter %s on all tables\n",filterName.c_str());
 		
-		
-		
 		for(RIVTable<Ts...>* table : tables) {
 			if(table->ClearFilter(filterName)) {
-//				staleTables[table] = true;
-//				const std::vector<RIVReference*>* refs = table.GetReferences();
-//				for(size_t i = 0 ; i < refs->size() ; ++i) {
-					RIVReference* ref = table->GetReference();
-//					staleTables[ref->targetTable] = true;
-//				}
+				staleTables[table] = true;
+				RIVReference* reference = table->reference;
+				staleTables[(RIVTable<Ts...>*)reference->targetTable] = true;
 			}
 		}
 	}

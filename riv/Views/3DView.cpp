@@ -342,13 +342,13 @@ void RIV3DView::drawPoints() {
 		glPointSize(size);
 	}
 	size_t row = 0;
-	TableIterator it = isectTable->GetIterator();
+	TableIterator* it = isectTable->GetIterator();
 	
 	glBegin(GL_POINTS);
 	for(Path& path : paths) {
 		for(size_t i = 0 ; i < path.Size() ; ++i) {
 			
-			it.GetNext(row);
+			it->GetNext(row);
 			
 			PathPoint* point = path.GetPoint(i);
 			riv::Color pointColor = point->color;
@@ -380,12 +380,12 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 	size_t row;
 	
 	RIVTable<float,ushort>* isectTable = (*dataset)->GetTable("intersections");
-	TableIterator iterator = isectTable->GetIterator();
+	TableIterator* iterator = isectTable->GetIterator();
 	
 	//Generate the index subset
 	std::vector<size_t> indices;
 	
-	while(iterator.GetNext(row)) {
+	while(iterator->GetNext(row)) {
 		indices.push_back(row);
 	}
 	
@@ -433,7 +433,7 @@ void RIV3DView::createPaths() {
 	
     //Get the records we want;
     //Get the iterator, this iterator is aware of what rows are filtered and not
-    TableIterator iterator = isectTable->GetIterator();
+    TableIterator* iterator = isectTable->GetIterator();
     
     size_t row = 0;
 	size_t *pathID = 0;
@@ -443,7 +443,7 @@ void RIV3DView::createPaths() {
 	sizesAllTheSame = true;
 	std::vector<PathPoint> points;
 	
-    while(iterator.GetNext(row,pathID)) {
+    while(iterator->GetNext(row,pathID)) {
 		if(*pathID != oldPathID && points.size() > 0) {
 			paths.push_back(Path(points));
 			points.clear();

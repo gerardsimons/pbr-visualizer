@@ -20,25 +20,31 @@ class ParallelCoordsAxisGroup {
 private:
 public:
 	
+	~ParallelCoordsAxisGroup() {
+		tuple_for_each(axes, [&](auto tAxes) {
+//			deletePointerVector(tAxes);
+		});
+	}
+	
     RIVTable<Ts...>* table;
-	std::tuple<std::vector<ParallelCoordsAxis<Ts>>...> axes;
+	std::tuple<std::vector<ParallelCoordsAxis<Ts>*>...> axes;
 	
 	template<typename U>
-	std::vector<ParallelCoordsAxis<U>>* GetAxes() {
-		return &std::get<std::vector<ParallelCoordsAxis<U>>>(axes);
+	std::vector<ParallelCoordsAxis<U>*>* GetAxes() {
+		return &std::get<std::vector<ParallelCoordsAxis<U>*>>(axes);
 	}
 	
 	template<typename U>
-	void AddAxis(ParallelCoordsAxis<U>& newAxis) {
+	void AddAxis(ParallelCoordsAxis<U*>& newAxis) {
 		auto axes = GetAxes<U>();
 		axes->push_back(newAxis);
 	}
 	
 	template<typename U>
 	ParallelCoordsAxis<U>* CreateAxis(RIVRecord<U>* record, int x, int y, int axisHeight, int min, int max, const std::string& name, int divisionCount) {
-		std::vector<ParallelCoordsAxis<U>>* tAxes = GetAxes<U>();
-		tAxes->push_back(ParallelCoordsAxis<U>(x,y,axisHeight,min,max,name,record,4));
-		return &tAxes->at(tAxes->size() - 1);
+		std::vector<ParallelCoordsAxis<U>*>* tAxes = GetAxes<U>();
+		tAxes->push_back(new ParallelCoordsAxis<U>(x,y,axisHeight,min,max,name,record,divisionCount));
+		return tAxes->at(tAxes->size() - 1);
 	}
     
 //    ParallelCoordsAxisGroup* connectedGroup = 0;

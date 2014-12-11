@@ -5,13 +5,15 @@
 #include <string>
 #include <vector>
 
+#include "Reference.h"
+#include "TableInterface.h"
+
 typedef unsigned short ushort;
 
-
-#include "Reference.h"
+//#include "Table.h"
 
 //class RIVReference;
-class RIVTableInterface;
+//class RIVTableInterface;
 
 namespace riv {
 	template <typename T>
@@ -22,14 +24,13 @@ namespace riv {
 	protected:
 		size_t fid; //The id of the filter, automatically created to be unique for every filter
 	public:
-		T type; //TODO: WARNING: This is a hack, I sometimes want to get decltype of the filter template argument, but am unsure how to do it any canonical way, so I do it like this
 		size_t GetId();
 		//Only used internally
 
 //		virtual bool PassesFilter(RIVTableInterface* table,size_t row) = 0;
-		virtual bool PassesFilter(const std::string& name, T value) = 0;
+		virtual bool PassesFilter(const std::string& name, const T& value) = 0;
 		virtual bool AppliesToAttribute(const std::string& name) = 0;
-//		virtual bool AppliesToTable(const std::string& name) = 0;
+		virtual bool AppliesToTable(const RIVTableInterface* table) = 0;
 //		virtual bool PassesFilter(const std::string& name, unsigned short value) = 0;
 		//Determines whether this filter is targeted at the given table
 //		virtual std::vector<std::string> GetAttributes() = 0;
@@ -52,6 +53,10 @@ namespace riv {
 		virtual bool AppliesToAttribute(const std::string& name) {
 			return attributeName == name;
 		}
+		virtual bool AppliesToTable(const RIVTableInterface* table) {
+			return table->HasRecord(attributeName);
+		}
+		virtual bool PassesFilter(const T& value) = 0;
 //		bool AppliesToTable(const RIVTable* table);
 		std::vector<std::string> GetAttributes();
 	};
@@ -62,14 +67,24 @@ namespace riv {
 		T minValue;
 		T maxValue;
 	public :
-		RangeFilter(const std::string& attributeName, T minValue, T maxValue) : SingularFilter<T>(attributeName), minValue(minValue), maxValue(maxValue) {
-			
+		RangeFilter(const std::string& attributeName, T minValue, T maxValue) : SingularFilter<T>(attributeName) {
+			if(minValue < maxValue) {
+				this->minValue = minValue;
+				this->maxValue = maxValue;
+			}
+			else { //Swap them
+				this->minValue = maxValue;
+				this->maxValue = minValue;
+			}
 		}
-		bool PassesFilter(const std::string& name, T value) {
-			return (SingularFilter<T>::AppliesToAttribute(name) >= minValue && value <= maxValue);
+		bool PassesFilter(const T& value) {
+			return (value >= minValue && value <= maxValue);
+		}
+		bool PassesFilter(const std::string& name, const T& value) {
+			return SingularFilter<T>::AppliesToAttribute(name) && PassesFilter(value);
 		}
 		void Print() {
-//			printf("RangeFilter [attributeName = %s, (min,max) = (%f,%f)]\n",attributeName.c_str(),minValue,maxValue);
+			std::cout << "RangeFilter on " << SingularFilter<T>::attributeName << " (" << minValue << ", " << maxValue << ")" << std::endl;
 		}
 	};
 	

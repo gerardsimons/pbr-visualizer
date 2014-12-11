@@ -1,15 +1,14 @@
 \
 #include "ParallelCoordsView.h"
 #include "DataView.h"
-#include "../Geometry/Geometry.h"
 #include "../helper.h"
+#include "../Geometry/Geometry.h"
 #include "../Data/DataSet.h"
 #include "../Data/Table.h"
+#include "../Configuration.h"
 
 #include <math.h>
 #include <stdio.h>
-
-extern const char* INTERSECTIONS_TABLE;
 
 //Static declarations
 ParallelCoordsView* ParallelCoordsView::instance = NULL;
@@ -41,6 +40,7 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, RIVCo
 }
 
 void ParallelCoordsView::createAxes() {
+	printf("Create axes\n");
     axisGroups.clear();
     if(dataset != NULL) {
         size_t total_nr_of_records = (*dataset)->TotalNumberOfRecords();
@@ -59,7 +59,7 @@ void ParallelCoordsView::createAxes() {
 			ParallelCoordsAxisGroup<float,ushort> axisGroup;
 
 			auto recordsTuple = table->GetAllRecords();
-			TupleForEach(recordsTuple, [&](auto tRecords) {
+			tuple_for_each(recordsTuple, [&](auto tRecords) {
 				for(size_t i = 0 ; i < tRecords.size() ; ++i) {
 					auto& record = tRecords.at(i);
 					
@@ -75,7 +75,7 @@ void ParallelCoordsView::createAxes() {
 			axisGroup.table = table;
 			axisGroups.push_back(axisGroup);
 		}
-
+	printf("Create axes finished\n");
 		//DEAD CODE, intended as a way of hooking up distinct tables in the view
 //            axisGroup.table = table;
 //            if(fromConnection) { //Any outstanding connections to be made?
@@ -100,26 +100,25 @@ void ParallelCoordsView::createAxes() {
 }
 
 void ParallelCoordsView::drawSelectionBoxes() {
-//	for(ParallelCoordsAxisGroup& axisGroup : axisGroups) {
-//		for(ParallelCoordsAxis& axis : axisGroup.axes) {
-//			if(axis.HasSelectionBox) {
-//				glColor3f(1, 0, 0);
-//				glBegin(GL_LINE_STRIP);
-//				
-//				Area &selectionBox  = axis.selection;
-//				
-//				glVertex3f(selectionBox.start.x,selectionBox.start.y,0);
-//				glVertex3f(selectionBox.end.x,selectionBox.start.y,0);
-//				
-//				glVertex3f(selectionBox.end.x,selectionBox.end.y,0);
-//				glVertex3f(selectionBox.start.x,selectionBox.end.y,0);
-//				
-//				glVertex3f(selectionBox.start.x,selectionBox.start.y,0);
-//				
-//				glEnd();
-//			}
-//		}
-//	}
+	
+	
+	if(selectedAxis.size()) {
+		printf("Drawing selection box on axis %s\n",selectedAxis.c_str());
+	
+		glColor3f(1, 0, 0);
+		glBegin(GL_LINE_STRIP);
+		
+		glVertex3f(selection->start.x,selection->start.y,0);
+		glVertex3f(selection->end.x,selection->start.y,0);
+		
+		glVertex3f(selection->end.x,selection->end.y,0);
+		glVertex3f(selection->start.x,selection->end.y,0);
+		
+		glVertex3f(selection->start.x,selection->start.y,0);
+		
+		glEnd();
+
+	}
 }
 
 
@@ -130,11 +129,11 @@ void ParallelCoordsView::drawAxes() {
 	
     glBegin(GL_LINES);
     for(auto& axisGroup : axisGroups) {
-		TupleForEach(axisGroup.axes, [&](auto tAxes) {
+		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto& axis : tAxes) {
 				glColor3f(0,0,0);
-				glVertex3f(axis.x,axis.y,0);
-				glVertex3f(axis.x,axis.y+axis.height,0);
+				glVertex3f(axis->x,axis->y,0);
+				glVertex3f(axis->x,axis->y+axis->height,0);
 			}
 		});
     }
@@ -148,19 +147,19 @@ void ParallelCoordsView::drawAxes() {
     //Draw texts
 	
 	for(auto& axisGroup : axisGroups) {
-		TupleForEach(axisGroup.axes, [&](auto tAxes) {
+		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto& axis : tAxes) {
-				std::string& text = axis.name;
+				std::string& text = axis->name;
 				
-				drawText(text,axis.x,axis.y - 15,textColor,.1F);
+				drawText(text,axis->x,axis->y - 15,textColor,.1F);
 				
-				auto &scale = axis.scale;
+				auto &scale = axis->scale;
 				
 				//Draw the scales indicators
 				if(scale.size() > 0) {
 					for(size_t j = 0 ; j < scale.size() ; j++) {
-						float value = axis.ValueOnScale(scale[j]);
-						int height = axis.PositionOnScaleForScalar(scale[j]);
+						float value = axis->ValueOnScale(scale[j]);
+						int height = axis->PositionOnScaleForScalar(scale[j]);
 						
 						//Draw small line to indicate
 						//					glBegin(GL_LINES);
@@ -173,7 +172,7 @@ void ParallelCoordsView::drawAxes() {
 						char buffer[4];
 						sprintf(buffer,"%.2f",value);
 						
-						drawText(buffer,4,axis.x - 12,height,textColor,.1F);
+						drawText(buffer,4,axis->x - 12,height,textColor,.1F);
 					}
 				}
 			}
@@ -197,7 +196,7 @@ void ParallelCoordsView::drawLines() {
 	for(auto &axisGroup : axisGroups) {
 		size_t row = 0;
 		auto table = axisGroup.table;
-		TableIterator iterator = table->GetIterator();
+		TableIterator* iterator = table->GetIterator();
 		
 		//Find what color property to use for this table
 		RIVColorProperty* colorProperty = pathColor;
@@ -207,17 +206,17 @@ void ParallelCoordsView::drawLines() {
 
 		//You gotta love 'auto'!
 		riv::Color lineColor;
-		while(iterator.GetNext(row)) {
+		while(iterator->GetNext(row)) {
 			if(colorProperty->ComputeColor(table, row, lineColor)) {
 				glColor4f(lineColor.R, lineColor.G, lineColor.B, 0.1F);
 				glBegin(GL_LINE_STRIP);
-				TupleForEach(axisGroup.axes, [&](auto tAxes) {
+				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 					for(auto& axis : tAxes) {
-						auto record = axis.recordPointer;
+						auto record = axis->recordPointer;
 						auto value = record->Value(row);
 						
-						float x = axis.x;
-						float y = axis.PositionOnScaleForValue(value);
+						float x = axis->x;
+						float y = axis->PositionOnScaleForValue(value);
 						
 						glVertex3f(x, y, 0);
 					}
@@ -290,10 +289,11 @@ void ParallelCoordsView::InitializeGraphics() {
 size_t drawCount = 0;
 void ParallelCoordsView::Draw() {
 	//    printf("linesAreDirty = %d axesAreDirty = %d\n",linesAreDirty,axesAreDirty);
+	
 	std::string taskName = "ParallelCoordsView Draw";
 	
 	reporter::startTask(taskName);
-	
+	printf("\n");
 	
 	if(axesAreDirty && linesAreDirty && selectionIsDirty) {
 		printf("Clear PCV window\n");
@@ -335,30 +335,30 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
             //            printf("(x,y)=(%d,%d)",x,y);
 			for(auto& axisGroup : axisGroups) {
 				bool found = false;
-				TupleForEach(axisGroup.axes, [&](auto tAxes) {
+				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 					for(auto& axis : tAxes) {
-						int distanceX = abs(axis.x - x);
+						int distanceX = abs(axis->x - x);
 	//                    printf("distance=%d\n",distanceX);
 						
 						if(distanceX < proximityMax) {
 							//Close enough..
 							
-							axis.selection.start.x = axis.x - 10;
-							axis.selection.end.x = axis.x + 10;
-							axis.selection.start.y = y;
-							axis.selection.end.y = y;
+							axis->selection.start.x = axis->x - 10;
+							axis->selection.end.x = axis->x + 10;
+							axis->selection.start.y = y;
+							axis->selection.end.y = y;
 							
-							axis.HasSelectionBox = true;
+							axis->HasSelectionBox = true;
 							found = true;
 							
-							selectedAxis = axis.name;
-							selection = &axis.selection;
+							selectedAxis = axis->name;
+							selection = &axis->selection;
 							
 							isDragging = true;
 							axesAreDirty = true;
 							linesAreDirty = true;
 							
-	                        printf("Selected axis %s\n",axis.name.c_str());
+	                        printf("Selected axis %s\n",axis->name.c_str());
 							
 							return;
 						}
@@ -373,22 +373,29 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
         else if(state == GLUT_UP) { //Finish selection
             if(isDragging && selectedAxis.size() > 0) {
 				for(auto& axisGroup : axisGroups) {
-					TupleForEach(axisGroup.axes, [&](auto tAxes) {
+					tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 						for(auto& axis : tAxes) {
-							if(axis.name == selectedAxis) {
-								int sizeBox = abs(axis.selection.start.y - axis.selection.end.y);
+							if(axis->name == selectedAxis) {
+								int sizeBox = abs(axis->selection.start.y - axis->selection.end.y);
 								(*dataset)->StartFiltering();
 								if(sizeBox > 3) {
-									auto lowerBound = axis.ValueOnScale(axis.ScaleValueForY(axis.selection.start.y));
-									auto upperBound = axis.ValueOnScale(axis.ScaleValueForY(axis.selection.end.y));
-									(*dataset)->ClearFilter(axis.name);
-									riv::SingularFilter<decltype(lowerBound)>* rangeFilter = new riv::RangeFilter<decltype(lowerBound)>(axis.name,lowerBound,upperBound);
+									auto lowerBound = axis->ValueOnScale(axis->ScaleValueForY(axis->selection.start.y));
+									auto upperBound = axis->ValueOnScale(axis->ScaleValueForY(axis->selection.end.y));
+									
+									(*dataset)->ClearFilter(axis->name);
+									//A super clever way of deducing the type of the template parameter of the axis that was selected so we can create a filter of the same type
+									typedef typename get_template_type<typename std::decay<decltype(*axis)>::type>::type Type;
+									
+									riv::SingularFilter<Type>* rangeFilter = new riv::RangeFilter<Type>(axis->name,lowerBound,upperBound);
+									printf("New filter on axis %s : ",axis->name.c_str());
+									rangeFilter->Print();
 									(*dataset)->AddFilter(rangeFilter);
-									printf("Selection finalized on axis %s\n",axis.name.c_str());
-									selection = &axis.selection;
+									
+//									printf("Selection finalized on axis %s\n",axis->name.c_str());
+									selection = &axis->selection;
 								}
 								else {
-									(*dataset)->ClearFilter(axis.name);
+									(*dataset)->ClearFilter(axis->name);
 									clearSelection();
 								}
 								//Close access
@@ -422,10 +429,10 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
 		
 		//TODO: Not very efficient to find the axis everytime, but pointer sucks due to templates
 		for(auto& axisGroup : axisGroups) {
-			TupleForEach(axisGroup.axes, [&](auto tAxes) {
+			tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 				for(auto& axis : tAxes) {
-					if(axis.name == selectedAxis) {
-						selection->end.y = axis.PositionOnScaleForViewY(y);
+					if(axis->name == selectedAxis) {
+						selection->end.y = axis->PositionOnScaleForViewY(y);
 					}
 				}
 			});
@@ -456,7 +463,8 @@ void ParallelCoordsView::OnDataChanged() {
 }
 
 void ParallelCoordsView::OnFiltersChanged() {
-    printf("ParallelCoordsView received a on dataset changed callback.\n");
+    printf("ParallelCoordsView received a on filters changed callback.\n");
+	
     linesAreDirty = true;
     axesAreDirty = true;
 	
