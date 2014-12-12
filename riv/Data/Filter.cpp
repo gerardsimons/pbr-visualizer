@@ -293,7 +293,8 @@
 //	}
 //
 //	//Check if the given row of the table passes this filter or not by checking all of its filter in AND (conjunctive) logic
-//	bool GroupFilter::PassesFilter(RIVTable* table, size_t row) {
+//	template<typename... Ts>
+//	bool riv::GroupFilter<T>::PassesFilter(RIVTable<Ts...>* table, size_t row) {
 //		for(riv::Filter* f : filters) {
 //			bool thisFilterPassed = false;
 //			std::pair<size_t*,ushort> refRows = ref->GetIndexReferences(row);
@@ -310,5 +311,29 @@
 //			if(!thisFilterPassed) return false;
 //		}
 //		return true;
+//	}
+//}
+
+//namespace riv {
+//	template <class... Ts>
+//	bool PassesFilter(RIVTable<Ts...>* table, size_t row);
+//	
+//	template <class... Ts>
+//	bool GroupFilter<Ts...>::PassesFilter(RIVTable<Ts...>* table, size_t row) {
+//		for(riv::CompoundFilter<Ts...>* f : CompoundFilter<Ts...>::compoundFilters) {
+//			bool thisFilterPassed = false;
+//			std::pair<size_t*,ushort> refRows = ref->GetReferenceRows(row);
+//	//			printArray(refRows.first, refRows.second);
+//			if(refRows.first) {
+//				for(size_t i = 0 ; i < refRows.second ; ++i) {
+//					if(f->PassesFilter(ref->targetTable, refRows.first[i])) {
+//						thisFilterPassed = true;
+//						break;
+//					}
+//				}
+//			}
+//			//The filter was not passed by any reference row
+//			if(!thisFilterPassed) return false;
+//		}
 //	}
 //}

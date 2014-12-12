@@ -67,7 +67,7 @@ public:
 		return &tables;
 	}
 	RIVTable<Ts...>* GetTable(const std::string& name) {
-		for(auto* table : tables) {
+		for(auto table : tables) {
 			if(table->name == name) {
 				return table;
 			}
@@ -79,18 +79,41 @@ public:
 		AddTable(newTable);
 		return newTable;
 	}
-	template<typename T>
-	void AddFilter(const std::string& tableName, riv::GroupFilter<T> *filter);
+//	template<typename T>
+//	void AddFilter(const std::string& tableName, riv::GroupFilter<T> *filter) {
+//		
+//	}
 	template<typename T>
 	void AddFilter(riv::SingularFilter<T>* filter) {
 		//Find the table that contains all of the filter attributes
 		for(auto table : tables) {
-			if(table->HasRecord(filter->GetAttribute())) {
+			if(filter->AppliesToTable(table)) {
 				table->AddFilter(filter);
 				staleTables[table] = true;
 				return;
 			}
 		}
+		throw std::runtime_error("Filter applies to no table in this dataset.");
+	}
+	template<typename... Us>
+	void UpdateFilter(riv::GroupFilter<Us...>* filter) {
+		for(auto table : tables) {
+			if(table->HasFilter(filter)) {
+				staleTables[table] = true;
+			}
+		}
+	}
+	template<typename... Us>
+	void AddFilter(riv::GroupFilter<Us...>* filter) {
+		//Find the table that contains all of the filter attributes
+		for(auto table : tables) {
+			if(filter->AppliesToTable(table)) {
+				table->AddFilter(filter);
+				staleTables[table] = true;
+				return;
+			}
+		}
+		throw std::runtime_error("Filter applies to no table in this dataset.");
 	}
 	//Automatically find the table this should be filtered on, the one containing all of the filters attributes
 //	void AddFilter(riv::Filter* filter);
@@ -164,11 +187,12 @@ public:
 //		}
 //	}
 	
+	template<typename T>
 	void ClearFilter(const std::string& filterName) {
 		printf("Clearing filter %s on all tables\n",filterName.c_str());
 		
 		for(RIVTable<Ts...>* table : tables) {
-			if(table->ClearFilter(filterName)) {
+			if(table->template ClearFilter<T>(filterName)) {
 				staleTables[table] = true;
 				RIVReference* reference = table->reference;
 				staleTables[(RIVTable<Ts...>*)reference->targetTable] = true;
@@ -204,8 +228,11 @@ public:
 			table->Print(maxPrint, printFiltered);
 		}
 	}
-    bool IsSet() const;
-	
+	void AddDataSet(RIVDataSet* otherDataset) {
+		for(RIVTable<Ts...> table : tables) {
+			
+		}
+	}
 	RIVDataSet CloneStructure() {
 		RIVDataSet<Ts...> clone = RIVDataSet<Ts...>();
 		for(RIVTable<Ts...>* table : tables) {

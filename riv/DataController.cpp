@@ -110,6 +110,8 @@ void DataController::createDataStructures() {
 
 void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
 	currentPathTable = dataset->GetTable(PATHS_TABLE);
+//	currentPathTable->ClearFilters();
+//	currentPathTable->ClearFilter("");
 	currentIntersectionsTable = dataset->GetTable(INTERSECTIONS_TABLE);
 	
 	isectsToPathsRef = (RIVSingleReference*)currentIntersectionsTable->GetReference();
@@ -167,7 +169,7 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 		for(ushort i = 0 ; i < nrIntersections ; ++i) {
 			IntersectData& isect = newPath->intersectionData[i];
 			
-			trueDistributions.AddToHistogram(BOUNCE_NR,(ushort)(i+1));
+//			trueDistributions.AddToHistogram(BOUNCE_NR,(ushort)(i+1));
 //			trueDistributions.AddToHistogram("x", isect.position[0]);
 //			trueDistributions.AddToHistogram("y", isect.position[1]);
 //			trueDistributions.AddToHistogram("z", isect.position[2]);
@@ -229,16 +231,15 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 				}
 			}
 			
-			//How to resolve the pause, what do we throw out to create more space?
-			currentData->Print(50);
-			currentData->NotifyDataListeners();
-			
 			//Print the histograms
-//			trueDistributions.Print();
+			trueDistributions.Print();
 			
-			paused = true;
+			currentData->Print(50);
 			
-//			Reduce();
+			Reduce();
+		
+
+		
 		}
 		
 		
@@ -254,7 +255,13 @@ void DataController::ProcessNewPath(ushort renderer, PathData* newPath) {
 
 void DataController::Reduce() {
 	//This was the first time we filled up, we already have our data to bootstrap from
-	if(currentData == NULL || currentData->IsEmpty()) {
+	printf("Candidate data is full...\n");
+	if(candidateData == NULL || candidateData->IsEmpty()) {
+		
+		printf("Swapping candidate and current data\n");
+		
+		//Important to notify before the swap
+		currentData->NotifyDataListeners();
 		
 		//Swap current with candidate
 		RIVDataSet<float,ushort>* temp = currentData;
@@ -263,8 +270,14 @@ void DataController::Reduce() {
 		
 		pathCounts.clear();
 	}
-	else {
-		RIVDataSet<float,ushort> bootstrap = Bootstrap(currentData, 1000);
+	else { //Both are full, join the two sets, bootstrap
+		
+		paused = true;
+		//Join the two datasets
+//		currentData->Add(candidateData);
+		
+		
+//		RIVDataSet<float,ushort> bootstrap = Bootstrap(currentData, 1000);
 		
 //		RIVTable<float,ushort>* paths = bootstrap.GetTable("paths");
 		

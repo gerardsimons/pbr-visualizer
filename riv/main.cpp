@@ -72,7 +72,7 @@ DataController* dataController;
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 5000;
+const int maxPaths = 500000;
 
 void display(void)
 {
@@ -83,7 +83,13 @@ void display(void)
 }
 
 void testFunctions() {
-    //    RangeFilter *bounceNrs = new RangeFilter("bounce#",0,1);
+	
+//	RIVTable<float,ushort> testTable("test");
+//	riv::SingularFilter<ushort> *bounceNrs = new riv::RangeFilter<ushort>("bounce#",0,1);
+//	testTable.AddFilter(bounceNrs);
+	
+	
+	
     //    RIVTable *intersectionstTable = dataset.GetTable("intersections");
     //    intersectionstTable->AddFilter(bounceNrs);
     
@@ -334,9 +340,7 @@ void createViews() {
 
 	RIVSizeProperty *defaultSizeProperty = new RIVFixedSizeProperty(0.1);
 	RIVColorProperty *defaultColorProperty = new RIVFixedColorProperty(1,1,1);
-	
 
-	
 	RIVTable<float,ushort> *intersectionsTable = dataset->GetTable("intersections");
 	RIVTable<float,ushort> *pathsTable = dataset->GetTable("paths");
 	
@@ -410,7 +414,7 @@ int main(int argc, char **argv)
 {
     printf("Initialising Rendering InfoVis...\n");
 
-//	testFunctions();
+	testFunctions();
 	
     srand(time(NULL));
     /* initialize GLUT, let it extract command-line

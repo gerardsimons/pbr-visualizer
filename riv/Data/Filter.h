@@ -4,7 +4,9 @@
 
 #include <string>
 #include <vector>
+#include <tuple>
 
+#include "TupleIterator.h"
 #include "Reference.h"
 #include "TableInterface.h"
 
@@ -16,31 +18,24 @@ typedef unsigned short ushort;
 //class RIVTableInterface;
 
 namespace riv {
-	template <typename T>
 	class Filter
 	{
 	private:
-		size_t fidCounter = 1;
+		static size_t fidCounter;
 	protected:
 		size_t fid; //The id of the filter, automatically created to be unique for every filter
 	public:
 		size_t GetId();
-		//Only used internally
-
-//		virtual bool PassesFilter(RIVTableInterface* table,size_t row) = 0;
-		virtual bool PassesFilter(const std::string& name, const T& value) = 0;
 		virtual bool AppliesToAttribute(const std::string& name) = 0;
 		virtual bool AppliesToTable(const RIVTableInterface* table) = 0;
-//		virtual bool PassesFilter(const std::string& name, unsigned short value) = 0;
-		//Determines whether this filter is targeted at the given table
-//		virtual std::vector<std::string> GetAttributes() = 0;
 		virtual void Print() {
 			printf("Generic filter object\n");
 		}
+		
 	};
 	
 	template <typename T>
-	class SingularFilter : public Filter<T> {
+	class SingularFilter : public Filter {
 	protected:
 		std::string attributeName;
 		SingularFilter(const std::string& attributeName) : attributeName(attributeName) {
@@ -50,16 +45,47 @@ namespace riv {
 		std::string GetAttribute() {
 			return attributeName;
 		}
-		virtual bool AppliesToAttribute(const std::string& name) {
+		virtual bool PassesFilter(const T& value) = 0;
+		virtual bool PassesFilter(const std::string& name, const T& value) = 0;
+		bool AppliesToAttribute(const std::string& name) {
 			return attributeName == name;
 		}
-		virtual bool AppliesToTable(const RIVTableInterface* table) {
+		bool AppliesToTable(const RIVTableInterface* table) {
 			return table->HasRecord(attributeName);
 		}
-		virtual bool PassesFilter(const T& value) = 0;
 //		bool AppliesToTable(const RIVTable* table);
 		std::vector<std::string> GetAttributes();
 	};
+	
+	template <typename T>
+	class DiscreteFilter : public SingularFilter<T> {
+	private:
+		T value;
+		//		float epsilon = 0.00001F;
+	public:
+		DiscreteFilter(const std::string& attributeName,const T& value) : SingularFilter<T>(attributeName), value(value) {
+			
+		}
+		T GetValue() {
+			return value;
+		}
+		bool PassesFilter(const std::string& name,const T& value) {
+			return (SingularFilter<T>::AppliesToAttribute(name) && PassesFilter(value));
+		}
+		bool PassesFilter(const T& value) {
+			bool pass = this->value == value;
+//			if(pass) {
+//				printf("DiscreteFilter pass : ");
+//				std::cout << this->value << " = " << value << std::endl;
+//			}
+			return pass;
+		}
+		void Print() {
+			printf("DiscreteFilter [attributeName = %s, value = ",SingularFilter<T>::attributeName.c_str());
+			std::cout << value << std::endl;
+		}
+	};
+	
 
 	template <typename T>
 	class RangeFilter : public SingularFilter<T> {
@@ -84,133 +110,209 @@ namespace riv {
 			return SingularFilter<T>::AppliesToAttribute(name) && PassesFilter(value);
 		}
 		void Print() {
-			std::cout << "RangeFilter on " << SingularFilter<T>::attributeName << " (" << minValue << ", " << maxValue << ")" << std::endl;
+//			std::cout << "RangeFilter on " << SingularFilter::attributeName << " (" << minValue << ", " << maxValue << ")" << std::endl;
 		}
 	};
 	
-	template <typename T>
-	class DiscreteFilter : public SingularFilter<T> {
-	private:
-		T value;
-//		float epsilon = 0.00001F;
-	public:
-		DiscreteFilter(const std::string& attributeName, float value);
-		float GetValue();
-		bool PassesFilter(const std::string& name, float value);
-		bool PassesFilter(const std::string& name, unsigned short value);
-		void Print() {
-//			printf("DiscreteFilter [attributeName = %s, value = %f]\n",attributeName.c_str(),value);
-		}
-	};
-	
-	template<typename T>
-	class CompoundFilter : public Filter<T> {
+
+	template<typename... Ts>
+	class CompoundFilter : public Filter {
 	protected:
-		std::vector<Filter<T>*> filters;
-		CompoundFilter(const std::vector<Filter<T>*>& filters) {
-			this->filters = filters;
+
+		std::tuple<std::vector<SingularFilter<Ts>*>...> singlefilters;
+		std::vector<CompoundFilter<Ts...>*> compoundFilters;
+		
+		CompoundFilter(const std::vector<CompoundFilter<Ts...>*>& compoundFilters) : compoundFilters(compoundFilters) {
+			
 		}
-		CompoundFilter(Filter<T>* f) {
-			filters.push_back(f);
+//		template<typename T>
+//		CompoundFilter(const std::vector<SingularFilter<T>>* singleFilter) {
+//			GetSingularFilters<T>()->push_back(singleFilter);
+//		}
+		template<typename T>
+		CompoundFilter(const std::vector<SingularFilter<T>*>& singleFilters) {
+			processSingle(singleFilters);
 		}
-		CompoundFilter( const CompoundFilter& other ) {
-			filters = other.filters;
+		CompoundFilter(const std::vector<SingularFilter<Ts>*>&... singleFilters) {
+			processSingle(singleFilters...);
 		}
+		CompoundFilter(CompoundFilter<Ts...>* compoundFilter) {
+			compoundFilters.push_back(compoundFilter);
+		}
+//		CompoundFilter(CompoundFilter<Ts...>* compoundFilter) {
+//			compoundFilters.push_back(compoundFilter);
+//		}
+		template<typename T>
+		CompoundFilter(const SingularFilter<T>* singularFilter) {
+			
+		}
+		template <typename T>
+		void processSingle(const std::vector<SingularFilter<T>*>& first) {
+			for(auto newFilter : first) {
+				GetSingularFilters<T>()->push_back(newFilter);
+			}
+		}
+		template<typename U,typename... Us>
+		void processSingle(const std::vector<SingularFilter<U>*>& first, const std::vector<SingularFilter<Us>>... others) {
+			for(auto newFilter : first) {
+				GetSingularFilters<U>()->push_back(newFilter);
+			}
+			processSingle<Us...>(others...);
+		}
+//		CompoundFilter(Filter* f) {
+//			filters.push_back(f);
+//		}
+//		CompoundFilter( const CompoundFilter& other ) {
+//			filters = other.filters;
+//		}
 		CompoundFilter& operator=( const CompoundFilter& assigned ) {
 			//			GroupFilter newFilter(assigned.filters,assigned.sourceTable);
 			//			filters = assigned.filters;
-			filters = assigned.filters;
+//			filters = assigned.filters;
 			return *this;
-		}
-		void Print() {
-			printf("Compound filter containing : \n");
-			for(Filter<T>* f : filters) {
-				printf("\t");
-				f->Print();
-			}
 		}
 	public:
 		~CompoundFilter() {
-			for(Filter<T>* f : filters) {
-				delete f;
-			}
+//			for(Filter* f : filters) {
+//				delete f;
+//			}
+		}
+		
+		std::tuple<std::vector<SingularFilter<Ts>*>...>& GetAllSingularFilters() {
+			return singlefilters;
+		}
+		template<typename T>
+		std::vector<SingularFilter<T>*>* GetSingularFilters() {
+			return &std::get<std::vector<SingularFilter<T>*>>(singlefilters);
+		}
+		std::vector<CompoundFilter<Ts...>*>* GetCompoundFilters() {
+			return &compoundFilters;
 		}
 		bool AppliesToAttribute(const std::string& name) {
-			for(Filter<T>* filter : filters) {
-				if(filter->AppliesToAttribute(name)) {
-					return true;
-				}
-			}
+//			for(Filter* filter : filters) {
+//				if(filter->AppliesToAttribute(name)) {
+//					return true;
+//				}
+//			}
 			return false;
 		}
-		std::vector<Filter<T>*> GetFilters();
-		size_t Size();
-		void AddFilter(Filter<T>* newFilter);
+		bool AppliesToTable(const RIVTableInterface* table) {
+			bool applies = false;
+			bool continueTuple = true;
+			tuple_for_each(singlefilters, [&](auto tSingleFilters) {
+				if(continueTuple) {
+					//Each filter should apply to the table
+					for(auto& singleFilter : tSingleFilters) {
+						applies = true;
+						if(!singleFilter->AppliesToTable(table)) {
+							applies = false;
+						}
+					}
+					if(!applies) {
+						continueTuple = false;
+					}
+				}
+			});
+			if(!applies){
+				for(auto& compoundFilter : compoundFilters) {
+					applies = true;
+					if(!compoundFilter->AppliesToTable(table)) {
+						return false;
+					}
+				}
+			}
+			return applies;
+		}
+		size_t Size() {
+//			return filters.size();
+			return 1;
+		}
+		template<typename T>
+		void AddFilter(SingularFilter<T>* newFilter) {
+			if(!newFilter) {
+				GetSingularFilters<T>()->push_back(newFilter);
+			}
+		}
+		void AddCompoundFilter(CompoundFilter<Ts...>* newFilter) {
+			compoundFilters.push_back(newFilter);
+		}
+		void Print() {
+//			printf("Compound filter containing : \n");
+//			for(Filter* f : filters) {
+//				printf("\t");
+//				f->Print();
+//			}
+		}
+		
 		std::vector<std::string> GetAttributes();
 	};
 	
-	template<typename T>
-	class ConjunctiveFilter : public CompoundFilter<T> {
+	template<typename... Ts>
+	class ConjunctiveFilter : public CompoundFilter<Ts...> {
 	public:
-		ConjunctiveFilter(const std::vector<Filter<T>*>& filters);
-		
+		template<typename T>
+		ConjunctiveFilter(const std::vector<SingularFilter<T>*>& filters) : CompoundFilter<Ts...>(filters) {
+			
+		}
+		template<typename T>
+		ConjunctiveFilter(const SingularFilter<T>* filter) : CompoundFilter<Ts...>(filter) {
+			
+		}
+		ConjunctiveFilter() {
+			
+		}
+		bool PassesFilter(const std::string& name..., Ts... value) {
+//			for(auto* filter : CompoundFilter<Ts...>::filters) {
+//				if(filter->AppliesToAttribute(name) && !filter->PassesFilter(name,value)) {
+//					return false;
+//				}
+//			}
+			return true;
+		}
 	};
-	
-	template<typename T>
-	class DisjunctiveFilter : public CompoundFilter<T> {
-	public:
-		DisjunctiveFilter(const std::vector<Filter<T>*>& filters);
-		bool PassesFilter(const std::string &name, const T& value);
-//		bool AppliesToTable(const RIVTable* table);
-		std::vector<std::string> AllAttributes();
-//		bool PassesFilter(RIVTable<T>* table, size_t row);
-	};
+
+//	template<typename T>
+//	class DisjunctiveFilter : public CompoundFilter {
+//	public:
+//		DisjunctiveFilter(const std::vector<Filter*>& filters);
+//		bool PassesFilter(const std::string &name, const T& value);
+////		bool AppliesToTable(const RIVTable* table);
+//		std::vector<std::string> AllAttributes();
+////		bool PassesFilter(RIVTable<T>* table, size_t row);
+//	};
 	
 	//This composite filter takes a table, searches its reffering rows to which its filters apply and tests the group of row to see if ALL the filters are met by atleast one row in the group
 	//Of referring rows
-	template<typename T>
-	class GroupFilter : public CompoundFilter<T> {
+	template<typename... Ts>
+	class GroupFilter : public CompoundFilter<Ts...> {
 	private:
 		RIVReference* ref = NULL;
-//		RIVTable* sourceTable = NULL;
+//		RIVTable<Ts...>* sourceTable = NULL;
 		void fetchReferenceRows();
 	public:
 		~GroupFilter() {
-//			for(Filter<T>* f : filters) {
+//			for(Filter* f : filters) {
 ////				delete f;
 //			}
 		}
-
-//		GroupFilter(Filter<T>* filter, RIVTable* sourceTable);
-//		GroupFilter(const std::vector<Filter*>& filters, RIVTable* sourceTable);
+		template<typename T>
+		GroupFilter(const std::vector<riv::SingularFilter<T>*>& filters) : CompoundFilter<Ts...>(filters) {
+			
+		}
+		GroupFilter(riv::CompoundFilter<Ts...>* filter) : CompoundFilter<Ts...>(filter) {
+			
+		}
 //		bool AppliesToTable(const RIVTable* table);
-		bool PassesFilter(RIVTableInterface* table, size_t row) {
-			for(riv::Filter<T>* f : CompoundFilter<T>::filters) {
-				bool thisFilterPassed = false;
-				std::pair<size_t*,ushort> refRows = ref->GetReferenceRows(row);
-	//			printArray(refRows.first, refRows.second);
-				if(refRows.first) {
-					for(size_t i = 0 ; i < refRows.second ; ++i) {
-						if(f->PassesFilter(ref->targetTable, refRows.first[i])) {
-							thisFilterPassed = true;
-							break;
-						}
-					}
-				}
-				//The filter was not passed by any reference row
-				if(!thisFilterPassed) return false;
-			}
-			return true;
-		}
+//		bool PassesFilter(RIVTable<Ts...>* table, size_t row);
 		
-		bool PassesFilter(const std::string& name, T value) {
-			for(Filter<T>* filter : CompoundFilter<T>::filters) {
-				if(filter->AppliesToAttribute(name) && filter->PassesFilter(name,value)) {
-					return true;
-				}
-			}
-			return false;
-		}
+//		bool PassesFilter(const std::string& name, T value) {
+//			for(Filter* filter : CompoundFilter::filters) {
+//				if(filter->AppliesToAttribute(name) && filter->PassesFilter(name,value)) {
+//					return true;
+//				}
+//			}
+//			return false;
+//		}
 //		void Print() {
 //			printf("Group filter containing : \n");
 //			for(Filter* f : filters) {

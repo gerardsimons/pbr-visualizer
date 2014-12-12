@@ -703,26 +703,29 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 			printf("Path creation filter");
 			(*dataset)->StartFiltering();
 			if(pathFilter == NULL) { //Add to the previous filter
-//				riv::Filter* objectFilter = new riv::DiscreteFilter("primitive ID",selectedObjectID);
-//				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce_nr",1);
-//				std::vector<riv::Filter*> fs;
-//				fs.push_back(objectFilter);
-//				fs.push_back(bounceFilter);
-//				pathFilter = new riv::GroupFilter(new riv::ConjunctiveFilter(fs),(*dataset)->GetTable("paths"));
-//				(*dataset)->AddFilter("paths", pathFilter);
+				riv::SingularFilter<ushort>* objectFilter = new riv::DiscreteFilter<ushort>("primitive ID",selectedObjectID);
+				riv::SingularFilter<ushort>* bounceFilter = new riv::DiscreteFilter<ushort>("bounce_nr",1);
+				std::vector<riv::SingularFilter<ushort>*> fs;
+				fs.push_back(objectFilter);
+				fs.push_back(bounceFilter);
+
+				pathFilter = new riv::GroupFilter<ushort>(new riv::ConjunctiveFilter<ushort>(fs));
+				(*dataset)->AddFilter(pathFilter);
 			}
 			else { //There already is a path creation filter, simply add to it
 				//Find the latest bounce nr filter
-//				size_t bounce_nr = pathFilter->Size() + 1;
-//				
-//				riv::Filter* objectFilter = new riv::DiscreteFilter("primitive ID",selectedObjectID);
-//				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce_nr",bounce_nr);
-//				std::vector<riv::Filter*> fs;
-//				fs.push_back(objectFilter);
-//				fs.push_back(bounceFilter);
-//				pathFilter->AddFilter(new riv::ConjunctiveFilter(fs));
-//				
-//				(*dataset)->UpdateFilter(pathFilter);
+				size_t bounce_nr = pathFilter->Size() + 1;
+			
+//				(*dataset)->RemoveFilter(pathFilter);
+
+				riv::SingularFilter<ushort>* objectFilter = new riv::DiscreteFilter<ushort>("primitive ID",selectedObjectID);
+				riv::SingularFilter<ushort>* bounceFilter = new riv::DiscreteFilter<ushort>("bounce_nr",bounce_nr);
+				std::vector<riv::SingularFilter<ushort>*> fs;
+				fs.push_back(objectFilter);
+				fs.push_back(bounceFilter);
+				pathFilter->AddCompoundFilter(new riv::ConjunctiveFilter<ushort>(fs));
+				(*dataset)->UpdateFilter(pathFilter);
+
 			}
 //			pathFilter->Print();
 			printf("\n");

@@ -253,8 +253,8 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 
 			if(selection.end.x != selection.start.x && selection.end.y != selection.start.y) {
 
-				(*dataset)->ClearFilter("x");
-				(*dataset)->ClearFilter("y");
+				(*dataset)->ClearFilter<ushort>("x");
+				(*dataset)->ClearFilter<ushort>("y");
 				
 				//Normalize selection
 				if(selection.end.x < selection.start.x) {
@@ -312,8 +312,8 @@ void RIVImageView::clearSelection() {
     
 	//Clear any filters that may have been applied to the (*dataset)
     if(dataset) {
-        (*dataset)->ClearFilter("x");
-        (*dataset)->ClearFilter("y");
+        (*dataset)->ClearFilter<ushort>("x");
+        (*dataset)->ClearFilter<ushort>("y");
     }
 }
 

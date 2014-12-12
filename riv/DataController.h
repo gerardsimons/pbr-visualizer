@@ -123,7 +123,7 @@ public:
 		RIVTable<float,ushort>* intersections = dataset->GetTable("intersections");
 		size_t rows = paths->NumberOfRows();
 		
-		RIVReferenceChain chain;
+//		RIVReferenceChain chain;
 //		paths->GetReferenceChainToTable("intersections", chain);
 		
 		//path records

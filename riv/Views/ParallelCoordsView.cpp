@@ -103,21 +103,29 @@ void ParallelCoordsView::drawSelectionBoxes() {
 	
 	
 	if(selectedAxis.size()) {
-		printf("Drawing selection box on axis %s\n",selectedAxis.c_str());
-	
-		glColor3f(1, 0, 0);
-		glBegin(GL_LINE_STRIP);
 		
-		glVertex3f(selection->start.x,selection->start.y,0);
-		glVertex3f(selection->end.x,selection->start.y,0);
-		
-		glVertex3f(selection->end.x,selection->end.y,0);
-		glVertex3f(selection->start.x,selection->end.y,0);
-		
-		glVertex3f(selection->start.x,selection->start.y,0);
-		
-		glEnd();
-
+		for(auto& axisGroup : axisGroups) {
+			tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+				for(auto& axis : tAxes) {
+					if(axis->HasSelectionBox) {
+						printf("Drawing selection box on axis %s\n",selectedAxis.c_str());
+						
+						glColor3f(1, 0, 0);
+						glBegin(GL_LINE_STRIP);
+						
+						glVertex3f(axis->selection.start.x,axis->selection.start.y,0);
+						glVertex3f(axis->selection.end.x,axis->selection.start.y,0);
+						
+						glVertex3f(axis->selection.end.x,axis->selection.end.y,0);
+						glVertex3f(axis->selection.start.x,axis->selection.end.y,0);
+						
+						glVertex3f(axis->selection.start.x,axis->selection.start.y,0);
+						
+						glEnd();
+					}
+				}
+			});
+		}
 	}
 }
 
@@ -378,13 +386,15 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 							if(axis->name == selectedAxis) {
 								int sizeBox = abs(axis->selection.start.y - axis->selection.end.y);
 								(*dataset)->StartFiltering();
+								//A super clever way of deducing the type of the template parameter of the axis that was selected so we can clear/create a filter of the same type
+								typedef typename get_template_type<typename std::decay<decltype(*axis)>::type>::type Type;
 								if(sizeBox > 3) {
 									auto lowerBound = axis->ValueOnScale(axis->ScaleValueForY(axis->selection.start.y));
 									auto upperBound = axis->ValueOnScale(axis->ScaleValueForY(axis->selection.end.y));
 									
-									(*dataset)->ClearFilter(axis->name);
-									//A super clever way of deducing the type of the template parameter of the axis that was selected so we can create a filter of the same type
-									typedef typename get_template_type<typename std::decay<decltype(*axis)>::type>::type Type;
+
+									(*dataset)->ClearFilter<Type>(axis->name);
+
 									
 									riv::SingularFilter<Type>* rangeFilter = new riv::RangeFilter<Type>(axis->name,lowerBound,upperBound);
 									printf("New filter on axis %s : ",axis->name.c_str());
@@ -395,8 +405,9 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 									selection = &axis->selection;
 								}
 								else {
-									(*dataset)->ClearFilter(axis->name);
-									clearSelection();
+									(*dataset)->ClearFilter<Type>(axis->name);
+									axis->HasSelectionBox = false;
+									selectedAxis.clear();
 								}
 								//Close access
 								(*dataset)->StopFiltering();
@@ -413,14 +424,6 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 		return true;
 	}
     return false;
-}
-
-void ParallelCoordsView::clearSelection() {
-    if(selection != NULL) {
-		selectedAxis.clear();
-        
-        printf("Selection cleared.");
-    }
 }
 
 bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
