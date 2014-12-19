@@ -64,7 +64,8 @@ RIV3DView *sceneView = NULL;
 ParallelCoordsView *parallelCoordsView = NULL;
 RIVHeatMapView *heatMapView = NULL;
 
-RIVDataSet<float,ushort>* dataset = NULL;
+RIVDataSet<float,ushort>** datasetOne = NULL;
+RIVDataSet<float,ushort>** datasetTwo = NULL;
 
 /* The dataset, views have pointers to this in order to draw their views consistently */
 DataController* dataController;
@@ -72,7 +73,7 @@ DataController* dataController;
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 500000;
+const int maxPaths = 1000;
 
 void display(void)
 {
@@ -80,6 +81,8 @@ void display(void)
     // Clear frame buffer
     glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);
+	
+//	dataController->Unpause();
 }
 
 void testFunctions() {
@@ -88,15 +91,13 @@ void testFunctions() {
 //	riv::SingularFilter<ushort> *bounceNrs = new riv::RangeFilter<ushort>("bounce#",0,1);
 //	testTable.AddFilter(bounceNrs);
 	
-	
-	
-    //    RIVTable *intersectionstTable = dataset.GetTable("intersections");
-    //    intersectionstTable->AddFilter(bounceNrs);
-    
-    //    RangeFilter *throughputFilter = new RangeFilter("throughput 3",0.17,0.30);
-//    riv::RangeFilter *intersectionsNr = new riv::RangeFilter("#intersections",0.5,1.5);
-//    RIVTable *intersectionstTable = dataset.GetTable("path");
-//    intersectionstTable->AddFilter(intersectionsNr);
+//   RIVTable *intersectionstTable = dataset.GetTable("intersections");
+//   intersectionstTable->AddFilter(bounceNrs);
+
+//   RangeFilter *throughputFilter = new RangeFilter("throughput 3",0.17,0.30);
+//   riv::RangeFilter *intersectionsNr = new riv::RangeFilter("#intersections",0.5,1.5);
+//   RIVTable *intersectionstTable = dataset.GetTable("path");
+//   intersectionstTable->AddFilter(intersectionsNr);
 	
 //	RIVFloatRecord *testRecord = new RIVFloatRecord("test");
 //	
@@ -121,7 +122,9 @@ void keys(int keyCode, int x, int y) {
 //            dataset->ClearFilters();
 //			dataset->StopFiltering();
             break;
-			
+		case 32:
+			dataController->TogglePause();
+			break;
 		case 49: //The '1' key, switch to renderer one if not already using it
 			postRedisplay = imageView->SetActiveRenderer(0);
 			break;
@@ -313,7 +316,7 @@ void processRendererTwo(PathData* newPath) {
 void setupDataController(const int argc, char** argv) {
 	//Create the EMBREE renderer
 	dataController = new DataController(argc - 1, maxPaths);
-	dataset = dataController->GetDataSet();
+	datasetOne = dataController->GetDataSetOne();
 	if(argc == 2) { //Just one renderer
 		DataConnector* connector = new DataConnector(processRendererOne);
 		rendererOne = new EMBREERenderer(connector, std::string(argv[1]));
@@ -324,6 +327,7 @@ void setupDataController(const int argc, char** argv) {
 		DataConnector* dcTwo = new DataConnector(processRendererTwo);
 		rendererOne = new EMBREERenderer(dcOne, std::string(argv[1]));
 		rendererTwo = new EMBREERenderer(dcTwo, std::string(argv[2]));
+		datasetTwo = dataController->GetDataSetTwo();
 		printf("2 renderers set up.\n");
 	}
 	else {
@@ -341,8 +345,8 @@ void createViews() {
 	RIVSizeProperty *defaultSizeProperty = new RIVFixedSizeProperty(0.1);
 	RIVColorProperty *defaultColorProperty = new RIVFixedColorProperty(1,1,1);
 
-	RIVTable<float,ushort> *intersectionsTable = dataset->GetTable("intersections");
-	RIVTable<float,ushort> *pathsTable = dataset->GetTable("paths");
+	RIVTable<float,ushort> *intersectionsTable = (*datasetOne)->GetTable("intersections");
+	RIVTable<float,ushort> *pathsTable = (*datasetOne)->GetTable("paths");
 	
 	RIVRecord<float>* isectRRecord = intersectionsTable->GetRecord<float>("R");
 	RIVRecord<float>* isectGRecord = intersectionsTable->GetRecord<float>("G");
@@ -375,7 +379,7 @@ void createViews() {
 
 	glutSetWindow(imageViewWindow);
 	imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,squareSize,squareSize);
-	imageView = new RIVImageView(&dataset,rendererOne,defaultColorProperty,defaultSizeProperty);
+	imageView = new RIVImageView(datasetOne,rendererOne,defaultColorProperty,defaultSizeProperty);
 	RIVImageView::windowHandle = imageViewWindow;
 	glutDisplayFunc(RIVImageView::DrawInstance);
 	glutReshapeFunc(RIVImageView::ReshapeInstance);
@@ -401,13 +405,13 @@ void createViews() {
 	//        glutMotionFunc(RIVHeatMapView::Motion);
 	
 	//Create views
-	parallelCoordsView = new ParallelCoordsView(&dataset,pathColor,intersectionColor,sizeProperty);
-	sceneView = new RIV3DView(&dataset,rendererOne,intersectionColor,sizeProperty);
+	parallelCoordsView = new ParallelCoordsView(datasetOne,pathColor,intersectionColor,sizeProperty);
+	sceneView = new RIV3DView(datasetOne,rendererOne,intersectionColor,sizeProperty);
 	//        heatMapView = new RIVHeatMapView(&dataset);
 	
 	//Add some filter callbacks
-	dataset->AddFilterListener(sceneView);
-	dataset->AddFilterListener(parallelCoordsView);
+	(*datasetOne)->AddFilterListener(sceneView);
+	(*datasetOne)->AddFilterListener(parallelCoordsView);
 }
 
 int main(int argc, char **argv)
@@ -449,7 +453,7 @@ int main(int argc, char **argv)
 	
 	setupDataController(argc, argv);
 	
-//    loadData();
+//    loadData();	
 	
     createViews();
 	

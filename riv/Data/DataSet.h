@@ -46,10 +46,16 @@ private:
 	
 
 public:
-	//Generate a N-sized bootstrap sample 
 //	RIVDataSet* Bootstrap(size_t N);
-
-	
+	~RIVDataSet() {
+		deletePointerVector(tables);
+	}
+	std::vector<RIVDataSetListener*> GetDataListeners() {
+		return dataListeners;
+	}
+	void SetDataListeners(const std::vector<RIVDataSetListener*>& listeners) {
+		dataListeners = listeners;
+	}
 	void NotifyDataListeners() {
 		for(RIVDataSetListener* listener : dataListeners) {
 			listener->OnDataChanged();
@@ -199,7 +205,12 @@ public:
 			}
 		}
 	}
-
+	
+	void ClearData() {
+		for(RIVTable<Ts...>* table : tables) {
+			table->ClearData();
+		}
+	}
 //    RIVRecord* FindRecord(std::string name) const;
 	size_t TotalNumberOfRecords() const {
 		size_t numRecords = 0;
@@ -222,21 +233,22 @@ public:
 		}
 		return NULL;
 	}
-	void Print(size_t maxPrint = -1, bool printFiltered = true) {
+	void Print(size_t maxPrint = 0, bool printFiltered = true) {
 		printf("Dataset containing %zu tables:\n\n",tables.size());
 		for(auto table : tables) {
 			table->Print(maxPrint, printFiltered);
 		}
 	}
 	void AddDataSet(RIVDataSet* otherDataset) {
-		for(RIVTable<Ts...> table : tables) {
-			
+		for(RIVTable<Ts...>* table : tables) {
+			RIVTable<Ts...>* otherTable = otherDataset->GetTable(table->name);
+			table->JoinTable(otherTable);
 		}
 	}
-	RIVDataSet CloneStructure() {
-		RIVDataSet<Ts...> clone = RIVDataSet<Ts...>();
+	RIVDataSet* CloneStructure() {
+		RIVDataSet<Ts...>* clone = new RIVDataSet<Ts...>();
 		for(RIVTable<Ts...>* table : tables) {
-			clone.AddTable(table->CloneStructure());
+			clone->AddTable(table->CloneStructure());
 		}
 		return clone;
 	}
@@ -245,6 +257,7 @@ public:
 		HistogramSet<Ts...> histograms;
 		for(auto table : tables) {
 			auto histogramset = table->CreateHistogramSet(bins);
+//			histogramset.Print();
 			histograms.Join(histogramset);
 		}
 		return histograms;

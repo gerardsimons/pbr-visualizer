@@ -36,6 +36,33 @@ bool almost_equal(double x, double y, double epsilon)
     }
     return false;
 }
+void printHeader(const std::string& text,unsigned int width) {
+	printf("\n");
+	char delimiter = '*';
+	for(unsigned int i = 0 ; i < width ; ++i ) {
+		std::cout << delimiter;
+	}
+	std::cout << std::endl;
+	
+	int whiteSpaces = width - text.size();
+	if(whiteSpaces < 0) {
+		whiteSpaces = 0;
+	}
+	int firstHalf = round(whiteSpaces / 2.F);
+	int secondHalf = whiteSpaces - firstHalf;
+	for(unsigned int i = 0 ; i < firstHalf ; ++i ) {
+		std::cout << ' ';
+	}
+	std::cout << text;
+	for(unsigned int i = 0 ; i < secondHalf ; ++i ) {
+		std::cout << ' ';
+	}
+	std::cout << std::endl;
+	for(unsigned int i = 0 ; i < width ; ++i ) {
+		std::cout << delimiter;
+	}
+	std::cout << std::endl;
+}
 
 
 // r,g,b values are from 0 to 1

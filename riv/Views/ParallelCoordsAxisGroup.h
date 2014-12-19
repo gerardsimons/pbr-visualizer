@@ -41,7 +41,7 @@ public:
 	}
 	
 	template<typename U>
-	ParallelCoordsAxis<U>* CreateAxis(RIVRecord<U>* record, int x, int y, int axisHeight, int min, int max, const std::string& name, int divisionCount) {
+	ParallelCoordsAxis<U>* CreateAxis(RIVRecord<U>* record, int x, int y, int axisHeight, U min, U max, const std::string& name, int divisionCount) {
 		std::vector<ParallelCoordsAxis<U>*>* tAxes = GetAxes<U>();
 		tAxes->push_back(new ParallelCoordsAxis<U>(x,y,axisHeight,min,max,name,record,divisionCount));
 		return tAxes->at(tAxes->size() - 1);

@@ -162,7 +162,7 @@ public:
 template <typename... Ts>
 class HistogramSet {
 private:
-	std::tuple<std::vector<Histogram<Ts>>...> histograms;
+	std::tuple<std::vector<Histogram<Ts>*>...> histograms;
 	std::tuple<std::map<std::string,Histogram<Ts>*>...> histogramRegisters; //Maps a name to a histogram pointer
 	
 	//When set to dynamic the set will create new histograms for values added to not yet exsistent histograms
@@ -194,8 +194,8 @@ public:
 //	}
 	
 	template<typename T>
-	std::vector<Histogram<T>>* GetHistograms() {
-		return &std::get<std::vector<Histogram<T>>>(histograms);
+	std::vector<Histogram<T>*>* GetHistograms() {
+		return &std::get<std::vector<Histogram<T>*>>(histograms);
 	}
 	
 	template<typename T>
@@ -212,18 +212,19 @@ public:
 	
 	template<typename T>
 	void AddToHistogram(const std::string name,const T& value) {
-		Histogram<T>* histogram = GetHistogram<T>(name);
-//		if(!histogram)
-			//TODO: Create histogram when set to dynamic and histogram was not found
+//		printf("name = %s\n",name.c_str());
+		Histogram<T>* histogram = NULL;
+		histogram = GetHistogram<T>(name);
+		//TODO: Create histogram when set to dynamic and histogram was not found
 		histogram->Add(value);
 	}
 	
 	template<typename T>
-	void AddHistogram(const Histogram<T>& hist) {
-		std::vector<Histogram<T>>* histograms = GetHistograms<T>();
+	void AddHistogram(Histogram<T>* hist) {
+		std::vector<Histogram<T>*>* histograms = GetHistograms<T>();
 		
 		histograms->push_back(hist);
-		std::get<std::map<std::string,Histogram<T>*>>(histogramRegisters)[hist.name] = &histograms->at(histograms->size() - 1);
+		std::get<std::map<std::string,Histogram<T>*>>(histogramRegisters)[hist->name] = hist;
 	}
 	
 	//This assumes the right hand operand histogram set is a superset of this histogram set, throws a runtime_error if a histogram in this set could not be found.
@@ -233,20 +234,15 @@ public:
 		float total = 0;
 		
 		tuple_for_each(histograms, [&](auto tHistograms) {
-			for(auto& histogram : tHistograms) {
-				bool found = false;
-				tuple_for_each(other.histograms, [&](auto otherTHistograms) {
-					for(auto& otherHistogram : otherTHistograms) {
-						if(otherHistogram.name == histogram.name) {
-							total += (otherHistogram - histogram);
-							found = true;
-							break;
-						}
-					}
-				});
-				if(!found) {
-					throw std::runtime_error("Histogram " + histogram.name + " not found in right hand operand");
+			for(auto histogram : tHistograms) {
+				
+//				typedef typename get_template_type<typename std::decay<decltype(*histogram)>::type>::type templateType;
+				auto otherHistogram = other.GetHistogram<decltype(histogram->LowerBound())>(histogram->name);
+				if(!otherHistogram) {
+					throw std::runtime_error("Histogram " + histogram->name + " not found in right hand operand");
 				}
+				
+				total += (*histogram) - (*otherHistogram);
 			}
 		});
 		
@@ -257,7 +253,7 @@ public:
 		printf("Histogram set : \n");
 		tuple_for_each(histograms, [&](auto tHistograms) {
 			for(auto& histogram : tHistograms) {
-				histogram.Print();
+				histogram->Print();
 			}
 		});
 	}

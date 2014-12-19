@@ -12,6 +12,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <map>
+#include <math.h>
 #include <vector>
 #include <algorithm>
 #include <iterator>
@@ -98,6 +99,8 @@ void printVar(const char* name, T var) {
     std::cout << name << " = " << var << std::endl;
 }
 
+void printHeader(const std::string& text,unsigned int width = 50);
+
 template <typename T>
 class NonReplacementSampler {
     std::vector<T> samplePool;
@@ -147,6 +150,8 @@ choose(unsigned long long n, unsigned long long k);
 
 std::vector<std::vector<size_t> > generateCombinations(unsigned long long n, unsigned long long r, size_t requested);
 std::vector<std::vector<size_t> > generateCombinations(std::vector<size_t> pool, unsigned long long r, size_t requested);
+
+
 
 template <typename T>
 size_t find(std::vector<T> haystack, T needle) {

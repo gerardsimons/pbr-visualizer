@@ -26,16 +26,31 @@ private:
 	
 	std::mutex mutex;
 	
-	//The dataset currently being used
-	RIVDataSet<float,ushort>* currentData;
+	//The datasets currently being used, this is what the views use to draw
+	RIVDataSet<float,ushort>* rendererDataOne;
+	RIVDataSet<float,ushort>* rendererDataTwo;
+	
 	//Fresh dataset that is a candidate for becoming the current data set
-	RIVDataSet<float,ushort>* candidateData;
+	RIVDataSet<float,ushort>* candidateDataOne;
+	RIVDataSet<float,ushort>* candidateDataTwo;
+	
+	//Bootstrap sets
+	RIVDataSet<float,ushort>* bootstrapOne = NULL;
+	RIVDataSet<float,ushort>* bootstrapTwo = NULL;
+	
+	//The scores of the bootstrap sets for the renderers
+	float bestBootstrapResultOne = -1;
+	float bestBootstrapResultTwo = -1;
+	
+	/* Histograms to approximate the true distribution */
+	HistogramSet<float,ushort> trueDistributionsOne;
+	HistogramSet<float,ushort> trueDistributionsTwo;
 	
 	/* Shortcut pointers for quick access */
 	RIVTable<float,ushort>* currentPathTable;
 	RIVTable<float,ushort>* currentIntersectionsTable;
 //
-	RIVShortRecord *rendererId = NULL;
+//	RIVShortRecord *rendererId = NULL;
 	RIVFloatRecord* xPixels = NULL;
 	RIVFloatRecord* yPixels = NULL;
 	RIVFloatRecord* lensUs = NULL;
@@ -61,44 +76,18 @@ private:
 	RIVShortRecord *interactionTypes = NULL;
 	RIVShortRecord *lightIds = NULL;
 	
-//	RIVDataSet* dataset;
-	
 	RIVMultiReference* pathsToIsectRef = NULL;
 	RIVSingleReference* isectsToPathsRef = NULL;
 	
 	const int bins = 10;
 	
-	/* Histograms to approximate the true distribution */
-	HistogramSet<float,ushort> trueDistributions;
-	
-//	Histogram<float> xPixelHistogram;
-//	Histogram<float> yPixelHistogram;
-//	Histogram<float> lensUHistogram;
-//	Histogram<float> lensVHistogram;
-//	Histogram<float> timeHistogram;
-//	Histogram<float> colorRHistogram;
-//	Histogram<float> colorGHistogram;
-//	Histogram<float> colorBHistogram;
-//	Histogram<float> throughputRHistogram;
-//	Histogram<float> throughputGHistogram;
-//	Histogram<float> throughputBHistogram;
-//	Histogram<ushort> depthsHistogram;
-//	
-//	Histogram<ushort> bounceNrsHistogram;
-//	Histogram<float> xsHistogram;
-//	Histogram<float> ysHistogram;
-//	Histogram<float> zsHistogram;
-//	Histogram<float> isectColorRHistogram;
-//	Histogram<float> isectColorGHistogram;
-//	Histogram<float> isectColorBHistogram;
-//	Histogram<ushort> primitiveIdsHistogram;
-//	Histogram<ushort> shapeIdsHistogram;
-//	Histogram<ushort> interactionTypesHistogram;
-//	Histogram<ushort> lightIdsHistogram;
+
 	
 	//The number of data points per renderer
 	std::map<ushort,size_t> pathCounts;
 	
+	//The first time we will fill both the candidate and current, after which we will bootstrap, keep the best bootstrap as current and only fill up candidate
+	bool firstTime = true;
 	bool paused = false;
 	const size_t maxPaths;
 	size_t updateThrottle = 0;
@@ -112,79 +101,29 @@ private:
 	//Setup the shortcut pointer to the innards of the dataset, tables etc.
 	void resetPointers(RIVDataSet<float,ushort>* dataset);
 public:
-	template<typename ...Ts>
-	RIVDataSet<Ts...> Bootstrap(RIVDataSet<Ts...>* dataset, size_t N) {
-		
-		RIVDataSet<Ts...> bootstrap = dataset->CloneStructure();
-		RIVTable<float,ushort>* bootstrapPaths = bootstrap.GetTable("paths");
-		RIVTable<float,ushort>* bootstrapIsects = bootstrap.GetTable("intersections");
-		
-		RIVTable<float,ushort>* paths = dataset->GetTable("paths");
-		RIVTable<float,ushort>* intersections = dataset->GetTable("intersections");
-		size_t rows = paths->NumberOfRows();
-		
-//		RIVReferenceChain chain;
-//		paths->GetReferenceChainToTable("intersections", chain);
-		
-		//path records
-		std::vector<RIVRecord<float>*>* floatRecords = paths->GetRecords<float>();
-		std::vector<RIVRecord<float>*>* bootstrapFloatRecords = bootstrapPaths->GetRecords<float>();
-		std::vector<RIVRecord<ushort>*>* shortRecords = paths->GetRecords<ushort>();
-		std::vector<RIVRecord<ushort>*>* bootstrapShortRecords = bootstrapPaths->GetRecords<ushort>();
-		
-		//Intersection records
-		std::vector<RIVRecord<float>*>* isectFloatRecords = intersections->GetRecords<float>();
-		std::vector<RIVRecord<float>*>* bootstrapIsectFloatRecords = bootstrapIsects->GetRecords<float>();
-		std::vector<RIVRecord<ushort>*>* isectShortRecords = intersections->GetRecords<ushort>();
-		std::vector<RIVRecord<ushort>*>* bootstrapIsectShortRecords = bootstrapIsects->GetRecords<ushort>();
-		
-		//Choose N paths, also add the referencing rows
-		for(size_t i = 0 ; i < N ; ++i) {
-			size_t index = rand() % rows;
-			
-			//TODO: Get the tuple from the table and iterate over the tuple and then iterate over the vectors
-			for(size_t i = 0 ; i < floatRecords->size() ; ++i) {
-				auto bootFloat = bootstrapFloatRecords->at(i);
-				auto floatRec = floatRecords->at(i);
-				
-				bootFloat->AddValue(floatRec->Value(index));
-			}
 
-			for(size_t i = 0 ; i < shortRecords->size() ; ++i) {
-				auto bootShort = bootstrapShortRecords->at(i);
-				auto shortRec = isectShortRecords->at(i);
-				
-				bootShort->AddValue(shortRec->Value(index));
-			}
-			
-			RIVMultiReference* ref = static_cast<RIVMultiReference*>(paths->GetReference());
-			std::pair<size_t*,ushort> refRows = ref->GetReferenceRows(index);
-			
-			for(size_t i = 0 ; i < isectFloatRecords->size() ; ++i) {
-				auto bootFloat = bootstrapIsectFloatRecords->at(i);
-				auto floatRec = isectFloatRecords->at(i);
-				
-				bootFloat->AddValue(floatRec->Value(index));
-			}
-			
-			for(size_t i = 0 ; i < isectShortRecords->size() ; ++i) {
-				auto bootShort = bootstrapIsectShortRecords->at(i);
-				auto shortRec = isectShortRecords->at(i);
-				
-				bootShort->AddValue(shortRec->Value(index));
-			}
+	RIVDataSet<float,ushort>* Bootstrap(RIVDataSet<float, ushort>* dataset, const size_t N);
+	void Unpause() {
+		paused = false;
+	}
+	void TogglePause() {
+		paused = !paused;
+		printf("DataController is now ");
+		if(!paused) {
+			printf("running.\n");
 		}
-		bootstrap.Print(1000);
-		
-		return bootstrap;
+		else printf("paused.\n");
 	}
 	bool IsPaused();
 	//The number of renderers to expect data from and the maximum number of paths per renderer before data reduction should kick in
 	DataController(const ushort renderers, const size_t maxPaths);
-	RIVDataSet<float,ushort>* GetDataSet();
+	//Returns a pointer to a pointer of the dataset for renderer one
+	RIVDataSet<float,ushort>** GetDataSetOne();
+	//Returns a pointer to a pointer of the dataset for renderer two
+	RIVDataSet<float,ushort>** GetDataSetTwo();
 	void ProcessNewPath(ushort renderer, PathData* newPath);
-	//Reduce the data
-	void Reduce();
+	//Reduce the data, first dataset is the current data being used for a renderer, candidate data is the new dataset, bestBootstrap is the slot used for creating and maintaining the best bootstrap and the best bootstrap results so far...
+	void Reduce(RIVDataSet<float,ushort>** rendererData, RIVDataSet<float,ushort>** candidateData, HistogramSet<float,ushort>* trueDistribution, RIVDataSet<float,ushort>** bestBootstrap, float* bestBootstrapResult);
 };
 
 #endif /* defined(__embree__DataController__) */

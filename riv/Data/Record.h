@@ -61,6 +61,7 @@ public:
 	void AddValue(const T& value) {
 		if(!clampOutliers) {
 			values.push_back(value);
+			minMaxComputed = false;
 		}
 		else {
 			const std::pair<T,T>& minmax = MinMax();
@@ -89,15 +90,34 @@ public:
 		T value = Value(row);
 		return (value - minMax.first) / (float)(minMax.second - minMax.first);
 	}
+	void AppendRecord(RIVRecord* otherRecord) {
+		if(otherRecord->name != name) {
+			throw std::runtime_error("Can only add two records of the same name");
+		}
+		for(size_t i = 0 ; i < otherRecord->Size() ; ++i) {
+			AddValue(otherRecord->Value(i));
+		}
+	}
+	void Clear() {
+		values.clear();
+	}
 	std::vector<T>* GetValues() {
 		return &values;
 	}
-	Histogram<T> CreateHistogram(const T& lowerBound, const T& upperBound, int bins) {
-		return Histogram<T>(name, values, lowerBound,upperBound,bins);
+	RIVRecord* CloneStructure() {
+		if(clampOutliers) {
+			return new RIVRecord<T>(name,Min(),Max(),clampOutliers);
+		}
+		else {
+			return new RIVRecord<T>(name);
+		}
 	}
-	Histogram<T> CreateHistogram(size_t bins) {
-		std::pair<T,T> minMax = MinMax();
-		return Histogram<T>(name, values, minMax.first,minMax.second,bins);
+	Histogram<T>* CreateHistogram(const T& lowerBound, const T& upperBound, int bins) {
+		return new Histogram<T>(name, values, lowerBound,upperBound,bins);
+	}
+	Histogram<T>* CreateHistogram(size_t bins) {
+		const std::pair<T,T>& minMax = MinMax();
+		return new Histogram<T>(name, values, minMax.first,minMax.second,bins);
 	}
 };
 

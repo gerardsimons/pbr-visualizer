@@ -33,7 +33,8 @@ template <typename T>
 class ParallelCoordsAxis : public ParallelCoordsAxisInterface {
 public:
 	std::vector<T> scale;
-	T minValue, maxValue; 
+	T minValue;
+	T maxValue;
 	RIVRecord<T>* recordPointer;
 	ParallelCoordsAxis(int x,int y, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision)
 	: ParallelCoordsAxisInterface(x,y,height,name),minValue(minValue),maxValue(maxValue),recordPointer(recordPointer) {

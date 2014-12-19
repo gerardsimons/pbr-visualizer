@@ -67,6 +67,8 @@ void ParallelCoordsView::createAxes() {
 					
 					//A tuple containing the min and max values of the record
 					auto minMax = record->MinMax();
+					printf("Record %s has min-max : ",record->name.c_str());
+					std::cout << " " << minMax.first << ", " << minMax.second << std::endl;
 					
 					axisGroup.CreateAxis(record, x, y, axisHeight, minMax.first, minMax.second, record->name, divisionCount);
 					axisIndex++;

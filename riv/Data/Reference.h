@@ -30,8 +30,14 @@ public:
 
 class RIVSingleReference : public RIVReference {
 private:
-	std::map<size_t,size_t> indexMap;;
+	std::map<size_t,size_t> indexMap;
 public:
+	std::map<size_t,size_t>& GetIndexMap() {
+		return indexMap;
+	}
+	~RIVSingleReference() {
+		
+	}
 	RIVSingleReference(const std::map<size_t,size_t>& indexMap, RIVTableInterface* sourceTable, RIVTableInterface* targetTable);
 	RIVSingleReference(RIVTableInterface* sourceTable, RIVTableInterface* targetTable);
 	std::pair<size_t*,ushort> GetReferenceRows(size_t row);
@@ -43,8 +49,19 @@ public:
 
 //Class that maps a row in one table to multiple other rows in another table. The char represents a very short unsigned short (max 256) number of rows it maps to
 class RIVMultiReference : public RIVReference {
-public:
+private:
 	std::map<size_t,std::pair<size_t*,ushort> > indexMap;
+public:
+	//The index arrays are allocated on the stack
+	~RIVMultiReference() {
+		for(auto iter : indexMap) {
+			delete iter.second.first;
+		}
+	}
+	std::map<size_t,std::pair<size_t*,ushort>>& GetIndexMap() {
+		return indexMap;
+	}
+
 	RIVMultiReference(std::map<size_t,std::pair<size_t*,ushort> >& indexMap, RIVTableInterface* sourceTable, RIVTableInterface* targetTable);
 	RIVMultiReference(RIVTableInterface* sourceTable, RIVTableInterface* targetTable);
 	RIVSingleReference* ReverseReference();
