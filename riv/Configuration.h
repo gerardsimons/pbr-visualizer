@@ -9,6 +9,9 @@
 #ifndef embree_Configuration_h
 #define embree_Configuration_h
 
+extern const char* DATASET_ONE;
+extern const char* DATASET_TWO;
+
 extern const char* INTERSECTIONS_TABLE;
 extern const char* PATHS_TABLE;
 

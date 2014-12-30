@@ -11,12 +11,15 @@
 
 #include "Filter.h"
 
+template<typename...Ts>
+class RIVDataSet;
+
 class RIVDataSetListener {
 public:
 	//Did some filter get added, removed or altered?
     virtual void OnFiltersChanged() = 0;
 	//Did new data get added or old data removed?
-	virtual void OnDataChanged() = 0;
+	virtual void OnDataChanged(RIVDataSet<float,ushort>* source) = 0;
 };
 
 #endif

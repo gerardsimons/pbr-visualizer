@@ -86,6 +86,7 @@ namespace embree
 		private:
 			double t0;                     //!< start time of rendering
 			Atomic tileID;                 //!< ID of current tile
+			Atomic atomicNumPaths;
 			Atomic atomicNumRays;          //!< for counting number of shoot rays
 			Progress progress;             //!< Progress printer
 			TaskScheduler::Task task;

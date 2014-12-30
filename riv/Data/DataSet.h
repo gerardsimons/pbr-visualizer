@@ -25,8 +25,6 @@ template <typename ...Ts>
 class RIVDataSet {
 private:
 	
-//	std::tuple<std::vector<RIVTable<Ts...>>> tables;
-//	std::vector<RIVTable<Ts...>> tables;
 	std::vector<RIVTable<Ts...>*> tables;
 	std::map<RIVTable<Ts...>*,bool> staleTables;
 	
@@ -36,19 +34,20 @@ private:
 			listener->OnFiltersChanged();
 		}
 	}
-
-	//What tables are changed
-//	std::map<RIVTable*,bool> staleTables;
-//	std::map<std::string,RIVTable*> tableRegister;
-
 	
 	bool isFiltering = false;
-	
+	std::string name;
 
 public:
-//	RIVDataSet* Bootstrap(size_t N);
+	RIVDataSet(const std::string& name) : name(name) {
+		
+	}
 	~RIVDataSet() {
 		deletePointerVector(tables);
+//		printf("delete pointer vector\n");
+	}
+	std::string& GetName() {
+		return name;
 	}
 	std::vector<RIVDataSetListener*> GetDataListeners() {
 		return dataListeners;
@@ -58,7 +57,7 @@ public:
 	}
 	void NotifyDataListeners() {
 		for(RIVDataSetListener* listener : dataListeners) {
-			listener->OnDataChanged();
+			listener->OnDataChanged(this);
 		}
 	}
 	void AddTable(RIVTable<Ts...>* table) {
@@ -246,7 +245,7 @@ public:
 		}
 	}
 	RIVDataSet* CloneStructure() {
-		RIVDataSet<Ts...>* clone = new RIVDataSet<Ts...>();
+		RIVDataSet<Ts...>* clone = new RIVDataSet<Ts...>(name);
 		for(RIVTable<Ts...>* table : tables) {
 			clone->AddTable(table->CloneStructure());
 		}

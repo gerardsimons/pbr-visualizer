@@ -112,12 +112,12 @@ public:
 			return new RIVRecord<T>(name);
 		}
 	}
-	Histogram<T>* CreateHistogram(const T& lowerBound, const T& upperBound, int bins) {
-		return new Histogram<T>(name, values, lowerBound,upperBound,bins);
+	Histogram<T> CreateHistogram(const T& lowerBound, const T& upperBound, int bins) {
+		return Histogram<T>(name, values, lowerBound,upperBound,bins);
 	}
-	Histogram<T>* CreateHistogram(size_t bins) {
+	Histogram<T> CreateHistogram(size_t bins) {
 		const std::pair<T,T>& minMax = MinMax();
-		return new Histogram<T>(name, values, minMax.first,minMax.second,bins);
+		return Histogram<T>(name, values, minMax.first,minMax.second,bins);
 	}
 };
 

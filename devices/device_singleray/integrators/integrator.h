@@ -26,11 +26,12 @@ namespace embree
 	/*! Integrator State */
 	struct IntegratorState
 	{
-		IntegratorState () : sample(NULL), pixel(0.0f,0.0f), numRays(0) {}
+		IntegratorState () : sample(NULL), pixel(0.0f,0.0f), numRays(0), numPaths(0) {}
 	public:
 		const PrecomputedSample* sample;  /*!< Sampler used to generate (pseudo) random numbers. */
 		Vec2f                    pixel;   /*!< normalized pixel location on screen */
 		size_t                   numRays; /*!< Used to count the number of rays shot.            */
+		size_t					 numPaths;
 	};
 	
 	/*! Interface to different integrators. The task of the integrator

@@ -16,6 +16,8 @@
 
 #include "integrators/pathtraceintegrator.h"
 #include "../dataconnector.h"
+#include <chrono>
+#include <thread>
 
 namespace embree
 {
@@ -171,7 +173,6 @@ namespace embree
 				L += isectColor;
 			}
 		}
-		
 		return L;
 	}
 	Color PathTraceIntegrator::Li(Ray& ray, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector) {
@@ -180,6 +181,7 @@ namespace embree
 		Color L = Li(lightPath,scene,state,dataConnector);
 		//We now have the complete path
 		dataConnector->FinishPath(lightPath.depth,L.r,L.g,L.b,throughputCache.r,throughputCache.g,throughputCache.b);
+		++state.numPaths;
 		return L;
 	}
 	

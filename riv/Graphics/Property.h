@@ -30,8 +30,10 @@ class RIVEvaluatedProperty {
 protected:
 	//The table whose index defines the value of the property
 	RIVTableInterface* propertyReference;
+	std::string tableName;
 	
 	RIVRecord<T>* referenceRecord = NULL;
+	std::string recordName;
 	
 	const INTERPOLATION_SCHEME defaultInterpolationMode = CONTINUOUS;
 	
@@ -70,15 +72,17 @@ public:
 		deletePointerVector(specificEvaluators);
 		evaluatorRegister.clear();
 	}
-	void Reset() {
-		if(referenceRecord) {
+	void Reset(RIVDataSet<float,ushort>* newDataSource) {
+		auto newTable = newDataSource->GetTable(tableName);
+		propertyReference = newTable;
+		referenceRecord = newTable->template GetRecord<T>(recordName);
+//		if(referenceRecord) {
 			std::pair<T,T> minMax = referenceRecord->MinMax();
 			std::vector<T> interpolationValues;
 			interpolationValues.push_back(minMax.first);
 			interpolationValues.push_back(minMax.second);
 			init(interpolationValues);
-		}
-		
+//		}
 	}
 	bool Value(RIVTableInterface* sourceTable, const size_t& row, float& computedValue) {
 		//Determine what interpolator we should use to compute the color
@@ -141,30 +145,32 @@ public:
 		}
 		else throw "New evaluator cannot be NULL.";
 	}
-
-	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,float fixedValue) {
-		propertyReference = propertyReference_;
-		defaultEvaluator = new FixedEvaluator<T, float>(fixedValue);
-	}
-	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,std::vector<size_t>& interpolationValues) {
-		propertyReference = propertyReference_;
-		init(interpolationValues);
-	}
-	RIVEvaluatedProperty(RIVTableInterface *propertyReference_) {
-		propertyReference = propertyReference_;
-		T lower = 0;
-		T upper = propertyReference_->NumberOfRows();
-		std::vector<T> interpolationValues;
-		interpolationValues.push_back(lower);
-		interpolationValues.push_back(upper);
-		init(propertyReference_, interpolationValues);
-	}
-	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,std::vector<size_t>& interpolationValues, const INTERPOLATION_SCHEME& scheme) {
-		interpolationMode = scheme;
-		propertyReference = propertyReference_;
-		init(propertyReference_, scheme, interpolationValues);
-	}
+//	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,float fixedValue) {
+//		propertyReference = propertyReference_;
+//		defaultEvaluator = new FixedEvaluator<T, float>(fixedValue);
+//	}
+//	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,std::vector<size_t>& interpolationValues) {
+//		propertyReference = propertyReference_;
+//		init(interpolationValues);
+//	}
+//	RIVEvaluatedProperty(RIVTableInterface *propertyReference_) {
+//		propertyReference = propertyReference_;
+//		T lower = 0;
+//		T upper = propertyReference_->NumberOfRows();
+//		std::vector<T> interpolationValues;
+//		interpolationValues.push_back(lower);
+//		interpolationValues.push_back(upper);
+//		init(propertyReference_, interpolationValues);
+//	}
+//	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,std::vector<size_t>& interpolationValues, const INTERPOLATION_SCHEME& scheme) {
+//		interpolationMode = scheme;
+//		propertyReference = propertyReference_;
+//		init(propertyReference_, scheme, interpolationValues);
+//	}
 	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,RIVRecord<T>* referenceRecord) : propertyReference(propertyReference_), referenceRecord(referenceRecord) {
+		recordName = referenceRecord->name;
+		tableName = propertyReference->name;
+		
 		interpolationMode = defaultInterpolationMode;
 		propertyReference = propertyReference_;
 

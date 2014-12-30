@@ -149,6 +149,8 @@ namespace embree
 		
 		rtcDebug();
 		
+		dataConnector->FinishFrame(atomicNumPaths,atomicNumRays);
+		
 		delete this;
 	}
 	
@@ -221,5 +223,6 @@ namespace embree
 		
 		/*! we access the atomic ray counter only once per tile */
 		atomicNumRays += state.numRays;
+		atomicNumPaths += state.numPaths;
 	}
 }

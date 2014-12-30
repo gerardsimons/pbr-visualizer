@@ -226,15 +226,15 @@ public:
 		std::string task = "Filter " + name;
 		reporter::startTask(task);
 		
-		printf("Filtering table %s with filters:\n",name.c_str());
-		tuple_for_each(filters, [&](auto tFilters) {
-			for(auto filter : tFilters) {
-				printf("\t");
-				filter->Print();
-			}
-		});
-		printf("\n");
-//			printf("\n");
+//		printf("Filtering table %s with filters:\n",name.c_str());
+//		tuple_for_each(filters, [&](auto tFilters) {
+//			for(auto filter : tFilters) {
+//				printf("\t");
+//				filter->Print();
+//			}
+//		});
+//		printf("\n");
+		
 		size_t invalidId = -1;
 		size_t latestRefId = invalidId;
 		bool groupPassed = false;
@@ -330,7 +330,7 @@ public:
 //					printf("row = %zu SELECTED\n",row);
 				}
 			}
-		Print();
+//		Print();
 		reporter::stop(task);
 	}
 	void FilterReferences() {

@@ -61,7 +61,6 @@ public:
 	std::map<size_t,std::pair<size_t*,ushort>>& GetIndexMap() {
 		return indexMap;
 	}
-
 	RIVMultiReference(std::map<size_t,std::pair<size_t*,ushort> >& indexMap, RIVTableInterface* sourceTable, RIVTableInterface* targetTable);
 	RIVMultiReference(RIVTableInterface* sourceTable, RIVTableInterface* targetTable);
 	RIVSingleReference* ReverseReference();

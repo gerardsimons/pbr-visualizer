@@ -36,10 +36,17 @@ protected:;
 	bool drawLightPaths = false;
 	
 	//Mesh model data
-	TriangleMeshGroup meshes;
+	TriangleMeshGroup meshesOne;
+	TriangleMeshGroup meshesTwo;
 	
-	EMBREERenderer* rendererOne = NULL;
+	bool drawDataSetOne = true;
+	bool drawDataSetTwo = false;
+	
+	EMBREERenderer* rendererOne;
 	EMBREERenderer* rendererTwo = NULL;
+	
+	RIVColorProperty* colorProperty;
+	RIVSizeProperty* sizeProperty;
 	
 	//Octree generated from 3D points (generated in createPoints)
 	Octree* heatmap = NULL;
@@ -71,7 +78,7 @@ protected:;
 	//Determines if the objectId is currently selected
 	bool isSelectedObject(ushort objectId);
 	//Draw the mesh model loaded from the PBRT file
-	void drawMeshModel();
+	void drawMeshModel(TriangleMeshGroup* meshGroup);
     void drawPaths(float startSegment, float stopSegment); //Draw the paths between two consecutive bounces
 	//Draw octree representation of the generated points
 	void drawHeatmap();
@@ -87,10 +94,10 @@ public:
 	//Single renderer constructor
     RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,RIVColorProperty*,RIVSizeProperty*);
 	//Dual renderer constructor
-	RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* rendererOne,EMBREERenderer* rendererTwo,RIVColorProperty*,RIVSizeProperty*);
+	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
 	
 	//Extract data about the scene from the embree renderer object
-	void GetSceneData();
+	void GetSceneData(TriangleMeshGroup* target);
 	
 	static int windowHandle;
 	
@@ -99,7 +106,7 @@ public:
     bool HandleMouse(int button, int state, int x, int y);
     bool HandleMouseMotion(int x, int y);
 	
-    void OnDataChanged();
+    void OnDataChanged(RIVDataSet<float,ushort>* source);
 	void OnFiltersChanged();
 	
 	void ResetGraphics();
@@ -114,6 +121,8 @@ public:
     void ToggleDrawIntersectionPoints();
 	void ToggleDrawHeatmap();
 	void ToggleDrawPaths();
+	void ToggleDrawDataSetOne();
+	void ToggleDrawDataSetTwo();
     void SetModelData(const MeshModel&);
     void MoveCamera(float,float,float);
     

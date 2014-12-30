@@ -13,16 +13,16 @@
 #include <stdexcept>
 #include <stdio.h>
 
-
-#define DEBUG_THIS
-
 size_t DataConnector::IdCounter = 0;
 
-DataConnector::DataConnector(callback_function callback) : callback(callback) {
+void DataConnector::FinishFrame(size_t numPaths, size_t numRays) {
+	ffCallback(numPaths,numRays);
+}
+DataConnector::DataConnector(path_finished pfCallback, frame_finished ffCallback) : pfCallback(pfCallback), ffCallback(ffCallback) {
 	id = ++IdCounter;
 }
 //Finish the current path with the latest data
-void DataConnector::FinishPath(unsigned short depth, float r, float g, float b, float throughput_r, float throughput_g, float throughput_b) {
+bool DataConnector::FinishPath(unsigned short depth, float r, float g, float b, float throughput_r, float throughput_g, float throughput_b) {
 	//Find callback
 	if(pathSet) {
 		currentPath.radiance[0] = r;
@@ -33,9 +33,8 @@ void DataConnector::FinishPath(unsigned short depth, float r, float g, float b, 
 		currentPath.throughput[1] = throughput_g;
 		currentPath.throughput[2] = throughput_b;
 		
-		
 //		printf("Finishing Path\n");
-		callback(&currentPath);
+		return pfCallback(&currentPath);
 		pathSet = false;
 	}
 	else {

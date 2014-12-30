@@ -22,34 +22,13 @@
 #endif
 
 class RIVImageView : public RIVDataView, public RIVDataSetListener {
-public:
-	//Single renderer constructor
-    RIVImageView(RIVDataSet<float,ushort>** dataset,  EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty *size);
-	//Dual renderer constructor
-	RIVImageView(RIVDataSet<float,ushort>** dataset,  EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty* color, RIVSizeProperty *size);
-    
-    static void DrawInstance();
-    static void ReshapeInstance(int,int);
-    static void Mouse(int state,int button,int x,int y);
-    static void Motion(int x, int y);
-    
-    virtual void Draw(); //Override
-    void Reshape(int newWidth, int newHeight);
-	virtual bool HandleMouse(int,int,int,int);
-	virtual bool HandleMouseMotion(int x, int y);
-	
-	//Change the currently active renderer if necessary, return true if a change was necessary
-	bool SetActiveRenderer(size_t i);
-	
-	void OnFiltersChanged();
-	void OnDataChanged();
-	
-	static int windowHandle;
 private:
     static RIVImageView* instance;
 	
-	EMBREERenderer* activeRenderer = NULL;
-	std::vector<EMBREERenderer*> renderers;
+	EMBREERenderer* rendererOne;
+	EMBREERenderer* rendererTwo = NULL;
+	
+//	std::vector<EMBREERenderer*> renderers;
 	
 	float imageMagnificationX,imageMagnificationY;
 
@@ -62,6 +41,31 @@ private:
 	int imageWidth, imageHeight;
     
 	Area selection;
+	
+	void drawRenderedImage(EMBREERenderer* renderer,int startX, int startY, int width, int height);
+public:
+	//Single renderer constructor
+	RIVImageView(RIVDataSet<float,ushort>** datasetOne,  EMBREERenderer* rendererOne);
+	//Dual renderer constructor
+	RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo);
+	
+	static void DrawInstance();
+	static void ReshapeInstance(int,int);
+	static void Mouse(int state,int button,int x,int y);
+	static void Motion(int x, int y);
+	
+	virtual void Draw(); //Override
+	void Reshape(int newWidth, int newHeight);
+	virtual bool HandleMouse(int,int,int,int);
+	virtual bool HandleMouseMotion(int x, int y);
+	
+	//Change the currently active renderer if necessary, return true if a change was necessary
+//	bool SetActiveRenderer(size_t i);
+	
+	void OnFiltersChanged();
+	void OnDataChanged(RIVDataSet<float,ushort>* dataset);
+	
+	static int windowHandle;
 };
 
 #endif /* IMAGEVIEW_H */

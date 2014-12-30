@@ -69,20 +69,23 @@ private:
 	bool pathSet = false;
 	PathData currentPath;
 	
-	typedef void (*callback_function)(PathData* newPath); // type for conciseness
+	typedef bool (*path_finished)(PathData* newPath); // type for conciseness
+	typedef void (*frame_finished)(size_t numPaths, size_t numRays);
 	
-	callback_function callback;
+	path_finished pfCallback;
+	frame_finished ffCallback;
 public:
 	//Constructor
 	static size_t IdCounter;
 	size_t id;
 	
-	DataConnector(callback_function callback);
+	DataConnector(path_finished pfCallback, frame_finished ffCallback);
 	DataConnector* Copy() {
-		return new DataConnector(callback);
+		return new DataConnector(pfCallback,ffCallback);
 	}
 //	void ProcessPath();
-	void FinishPath(unsigned short depth, float r, float g, float b, float throughput_r, float throughput_g, float throughput_b);
+	void FinishFrame(size_t numPaths, size_t numRays);
+	bool FinishPath(unsigned short depth, float r, float g, float b, float throughput_r, float throughput_g, float throughput_b);
 	void StartPath(float x, float y, float lensU, float lensV, float time);
 //	void set_callback((void) (*newCallBack)(PathData*));
 	void AddIntersectionData(float x, float y, float z, float r, float g, float b, int primitive_id, ushort type);

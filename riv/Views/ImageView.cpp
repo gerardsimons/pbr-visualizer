@@ -12,10 +12,12 @@
 
 #include <math.h>
 
+typedef unsigned short ushort;
+
 RIVImageView* RIVImageView::instance = NULL;
 int RIVImageView::windowHandle = -1;
 
-RIVImageView::RIVImageView(RIVDataSet<float,ushort>** dataset, EMBREERenderer* renderer, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size) {
+RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, EMBREERenderer* renderer) : RIVDataView(datasetOne) {
     if(instance != NULL) {
         throw "Only 1 instance of ImageView allowed.";
     }
@@ -27,11 +29,12 @@ RIVImageView::RIVImageView(RIVDataSet<float,ushort>** dataset, EMBREERenderer* r
     selection.end.x = -1;
     selection.end.y = -1;
 	
-	activeRenderer = renderer;
-	renderers.push_back(renderer);
+	
+	rendererOne = renderer;
 }
 
-RIVImageView::RIVImageView(RIVDataSet<float,ushort>** dataset, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty* color, RIVSizeProperty* size) : RIVDataView(dataset,color,size) {
+RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo) : RIVDataView(datasetOne,datasetTwo),
+	rendererOne(rendererOne), rendererTwo(rendererTwo) {
 	if(instance != NULL) {
 		throw "Only 1 instance of ImageView allowed.";
 	}
@@ -42,10 +45,6 @@ RIVImageView::RIVImageView(RIVDataSet<float,ushort>** dataset, EMBREERenderer* r
 	selection.start.y = -1;
 	selection.end.x = -1;
 	selection.end.y = -1;
-	
-	activeRenderer = rendererOne;
-	renderers.push_back(rendererOne);
-	renderers.push_back(rendererTwo);
 }
 
 void RIVImageView::DrawInstance() {
@@ -107,7 +106,7 @@ void RIVImageView::Reshape(int width, int height) {
 	
 }
 
-void RIVImageView::OnDataChanged() {
+void RIVImageView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 	int currentWindow = glutGetWindow();
 	glutSetWindow(RIVImageView::windowHandle);
 	glutPostRedisplay();
@@ -119,11 +118,33 @@ void RIVImageView::OnFiltersChanged() {
 	//Nothing to do for imageview
 }
 
+void RIVImageView::drawRenderedImage(EMBREERenderer *renderer, int startX, int startY, int imageWidth, int imageHeight) {
+	void* ptr = renderer->MapFrameBuffer();
+	std::string format = renderer->GetFormat();
+	Vec2<size_t> dimensions = renderer->GetDimensions();
+	int g_width = dimensions[0];
+	int g_height = dimensions[1];
+	
+	//Make sure it is scaled according to the available space as well flipped vertically
+	glPixelZoom((float)imageWidth / g_width, -((float)imageHeight / g_height));
+	//Because we flip it we have to translate it back to the top
+	glRasterPos2i(1+startX, imageHeight);
+	
+	if (format == "RGB_FLOAT32")
+		glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_FLOAT,ptr);
+	else if (format == "RGBA8")
+		glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGBA,GL_UNSIGNED_BYTE,ptr);
+	else if (format == "RGB8")
+		glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_UNSIGNED_BYTE,ptr);
+	else
+		throw std::runtime_error("unknown framebuffer format: "+format);
+	
+	renderer->UnmapFrameBuffer();
+}
+
 size_t drawCounter = 0;
 void RIVImageView::Draw() {
     needsRedraw = true;
-	
-
 	
 	if(needsRedraw) {
 		printf("\nImageView Draw #%zu\n",++drawCounter);
@@ -138,91 +159,21 @@ void RIVImageView::Draw() {
 		//remember all states of the GPU
 //		glPushAttrib(GL_ALL_ATTRIB_BITS);
 //		glColor3f(1,1,1);
-		
-		void* ptr = activeRenderer->MapFrameBuffer();
-		std::string format = activeRenderer->GetFormat();
-		Vec2<size_t> dimensions = activeRenderer->GetDimensions();
-		int g_width = dimensions[0];
-		int g_height = dimensions[1];
-
-		//Make sure it is scaled according to the available space as well flipped vertically
-		glPixelZoom((float)width / g_width, -((float)height / g_height));
-		//Because we flip it we have to translate it back to the top
-		glRasterPos2i(1, height);
-		
-		if (format == "RGB_FLOAT32")
-			glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_FLOAT,ptr);
-		else if (format == "RGBA8")
-			glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGBA,GL_UNSIGNED_BYTE,ptr);
-		else if (format == "RGB8")
-			glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_UNSIGNED_BYTE,ptr);
-		else
-			throw std::runtime_error("unknown framebuffer format: "+format);
-		
-		glFlush();
-		glutSwapBuffers();
-		
-		activeRenderer->UnmapFrameBuffer();
-		
-//		rendererOne->outputMode("imageview_out_rendererOne" + std::to_string(drawCounter) + ".tga");
-		
-//		void* ptr = renderer->MapFrameBuffer();
-//		char* bytes = (char*)ptr;
-
-//		int size = width*height;
-//		float* pixels = new float[size*3];
-//		for(int i=0;i<size;i++) {
-//			pixels[i] = i / (float)size;
-//		}
-//		for(int x = 0 ; x < width ; x++) {
-//			for(int y = 0 ; y < height ; y++) {
-//				pixels[x*width+y] = x / (float)height;
-//				printf("bytes[%d]=%d\n",x*width+y,(int)bytes[x*width+y]);
-//				bytes[x*width+y] = 128;
-//			}
-//			printf("\n");
-//		}
-		
-//		glRasterPos2i(1, 100);
-//		glPixelZoom(1.0f, -1.0f);
-//		glDrawPixels((GLsizei)512,(GLsizei)512,GL_RGBA,GL_UNSIGNED_BYTE,ptr);
-//		std::string g_format = "RGB8";
-//		if (g_format == "RGB_FLOAT32")
-//			glDrawPixels((GLsizei)width,(GLsizei)height,GL_RGB,GL_FLOAT,ptr);
-//		else if (g_format == "RGBA8")
-//			glDrawPixels((GLsizei)width,(GLsizei)height,GL_RGBA,GL_UNSIGNED_BYTE,ptr);
-//		else if (g_format == "RGB8")
-//			glDrawPixels((GLsizei)width,(GLsizei)height,GL_RGB,GL_FLOAT,ptr);
-		
-		activeRenderer->UnmapFrameBuffer();
-
-		//reset to previous state
-//		glPopAttrib();
-		
-		//if selection, draw
-//		if(selection.start.x != -1) {
-//			glColor4f(0.317F,.553F, .741F,.5F); //Nice light blue color for selection
-//			glBegin(GL_QUADS);
-//				glVertex3f(selection.start.x * imageMagnificationX,selection.start.y  * imageMagnificationY,1);			
-//				glVertex3f(selection.end.x  * imageMagnificationX,selection.start.y  * imageMagnificationY,1);
-//				glVertex3f(selection.end.x  * imageMagnificationX,selection.end.y  * imageMagnificationY,1);
-//				glVertex3f(selection.start.x  * imageMagnificationX,selection.end.y  * imageMagnificationY,1);
-//			glEnd();
-//		}
-		glFlush();
-		glutSwapBuffers();
-	}
-}
-
-bool RIVImageView::SetActiveRenderer(size_t i) {
-	if(i < renderers.size()) {
-		EMBREERenderer* renderer = renderers[i];
-		if(activeRenderer != renderer) {
-			activeRenderer = renderer;
-			return true;
+		if(rendererTwo == NULL) {
+			drawRenderedImage(rendererOne,0,0,width,height);
 		}
+		else {
+			int halfWidth = width/2.F;
+			drawRenderedImage(rendererOne,0,0,halfWidth,height);
+			drawRenderedImage(rendererTwo,halfWidth,0,halfWidth,height);
+		}
+		
+		glFlush();
+		glutSwapBuffers();
+
+		glFlush();
+		glutSwapBuffers();
 	}
-	return false;
 }
 
 #ifdef __APPLE__
@@ -253,8 +204,8 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 
 			if(selection.end.x != selection.start.x && selection.end.y != selection.start.y) {
 
-				(*dataset)->ClearFilter<ushort>("x");
-				(*dataset)->ClearFilter<ushort>("y");
+				(*datasetOne)->ClearFilter<ushort>("x");
+				(*datasetOne)->ClearFilter<ushort>("y");
 				
 				//Normalize selection
 				if(selection.end.x < selection.start.x) {
@@ -268,14 +219,14 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 					selection.end.y = tempY;
 				}
 
-//				riv::Filter *xFilter = new riv::RangeFilter("x",selection.start.x,selection.end.x - 1);
+				riv::SingularFilter<ushort> *xFilter = new riv::RangeFilter<ushort>("x",selection.start.x,selection.end.x - 1);
 				//Be sure to invert the Y coordinates!
-//				riv::Filter *yFilter = new riv::RangeFilter("y", renderedImage->sizeY - selection.start.y,renderedImage->sizeY - selection.end.y - 1);
+//				riv::SingularFilter<ushort> *yFilter = new riv::RangeFilter<ushort>("y", renderedImage->sizeY - selection.start.y,renderedImage->sizeY - selection.end.y - 1);
 		
-				(*dataset)->StartFiltering();
-//				(*dataset)->AddFilter("path",xFilter);
-//				(*dataset)->AddFilter("path",yFilter);
-				(*dataset)->StopFiltering();
+				(*datasetOne)->StartFiltering();
+//				(*datasetOne)->AddFilter("path",xFilter);
+//				(*datasetOne)->AddFilter("path",yFilter);
+				(*datasetOne)->StopFiltering();
 					
 			}
 			else {
@@ -311,10 +262,10 @@ void RIVImageView::clearSelection() {
     selection.end.y = -1;
     
 	//Clear any filters that may have been applied to the (*dataset)
-    if(dataset) {
-        (*dataset)->ClearFilter<ushort>("x");
-        (*dataset)->ClearFilter<ushort>("y");
-    }
+
+	(*datasetOne)->ClearFilter<ushort>("x");
+	(*datasetOne)->ClearFilter<ushort>("y");
+	
 }
 
 RIVPoint RIVImageView::viewToPixelSpace(int x, int y) {

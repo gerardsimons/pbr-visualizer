@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "../Data/DataSet.h"
 #include "../Data/Record.h"
 #include "ColorPalette.h"
 #include "ColorMap.h"
@@ -32,7 +33,7 @@ public:
 	//Determine the color for the row of a given table assuming there is a connection between the given table and the reference table
     virtual bool ComputeColor(RIVTableInterface* table, size_t row, riv::Color& color) = 0;
 	//Recompute the evaulators, this should happen when the reference table changed, leave unimplemented when not needed
-	virtual void Reset() { };
+	virtual void Reset(RIVDataSet<float,ushort>* newDataSource) { };
 };
 
 class RIVFixedColorProperty : public RIVColorProperty{
@@ -81,65 +82,17 @@ private:
     //What to do when multiple rows (returned by reference chain) have different membmerships to different color interpolators? This function deals with this
     float const* colorForMultipleResolvedRows(const std::vector<size_t>& rows);
 public:
-    
-//    RIVEvaluatedColorProperty(RIVTable *colorReference_, float* colorOne_, float* colorTwo_, float* alternateColor_) : RIVColorProperty(alternateColor_),RIVEvaluatedProperty<T>(colorReference_){
-//        memcpy(colorOne, colorOne_, sizeof(colorOne));
-//        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
-//        //    clusterColorInterpolator = NULL;
-//    }
-//    RIVEvaluatedColorProperty(RIVTableInterface *colorReference_, float const* colorOne_, float const* colorTwo_) : RIVColorProperty(), RIVEvaluatedProperty<T,U>(colorReference_){
-////        memcpy(colorOne, colorOne_, sizeof(colorOne));
-////        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
-//        
-//		colorMap.AddColor(colorOne_);
-//		colorMap.AddColor(colorTwo_);
-//		
-////        colorMap[0] = colorOne_;
-////        colorMap[1] = colorOne_;
-//    }
-//    RIVEvaluatedColorProperty(RIVTableInterface *colorReference_, RIVRecord<U>* record, float const* colorOne_, float const* colorTwo_) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
-////        memcpy(colorOne, colorOne_, sizeof(colorOne));
-////        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
-//        
-////        colorMap.resize(2);
-//        colorMap[0] = colorOne_;
-//        colorMap[1] = colorTwo_;
-//    }
-//    RIVEvaluatedColorProperty(RIVTable *colorReference_, RIVRecord* record, const std::vector<const float*>& colors) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
-//        //        memcpy(colorOne, colorOne_, sizeof(colorOne));
-//        //        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
-//        
-//		for(const float* color : colors) {
-//			colorMap.AddColor(color);
-//		}
-//    }
-//	RIVEvaluatedColorProperty(RIVTableInterface *colorReference_, RIVRecord<U>* record, const riv::ColorMap& colorMap) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,record){
-//        //        memcpy(colorOne, colorOne_, sizeof(colorOne));
-//        //        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
-//        
-//		this->colorMap = colorMap;
-//    }
-//	
-//	RIVEvaluatedColorProperty(RIVTableInterface *colorReference_, const std::string& recordName, const riv::ColorMap& colorMap) : RIVColorProperty(), RIVEvaluatedProperty<T>(colorReference_,recordName){
-//		//        memcpy(colorOne, colorOne_, sizeof(colorOne));
-//		//        memcpy(colorTwo, colorTwo_, sizeof(colorTwo));
-//		
-//		this->colorMap = colorMap;
-//	}
-	
     bool ComputeColor(RIVTableInterface* table, size_t row, riv::Color& color) {
         float value; //Assuming this value will be between 0 and 1
         if(RIVEvaluatedProperty<T>::Value(table,row,value))  {
-//            printf("Color value = %f\n",value);
-			//
 			color = colorMap.ComputeColor(value);
 			return true;
         }
         return false;
     }
 	
-	void Reset() {
-		RIVEvaluatedProperty<T>::Reset();
+	void Reset(RIVDataSet<float,ushort>* newDataSource) {
+		RIVEvaluatedProperty<T>::Reset(newDataSource);
 	}
 };
 //Returns color by cycling through a fixed pre-determined set of colors
@@ -199,10 +152,10 @@ public:
 		}
 		return false;
 	}
-	void Reset() {
-		redColorProperty->Reset();
-		greenColorProperty->Reset();
-		blueColorProperty->Reset();
+	void Reset(RIVDataSet<float,ushort>* newDataSource) {
+		redColorProperty->Reset(newDataSource);
+		greenColorProperty->Reset(newDataSource);
+		blueColorProperty->Reset(newDataSource);
 	}
 };
 

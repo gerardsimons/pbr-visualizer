@@ -69,8 +69,8 @@ private:
 	float g_gamma = 1.0f;
 	bool g_vignetting = false;
 	bool g_fullscreen = false;
-	size_t g_width = 512;
-	size_t g_height = 512;
+	size_t g_width = 256;
+	size_t g_height = 256;
 	std::string g_format = "RGBA8";
 	std::string g_rtcore_cfg = "";
 	std::string g_outFileName = "";
@@ -99,6 +99,10 @@ private:
 public:
 	Handle<Device::RTCamera> createCamera(const AffineSpace3f& space);
 	void createScene();
+	
+	int getWidth();
+	int getHeight();
+	int getSamplesPerPixel();
 	
 	EMBREERenderer(DataConnector* dataConnector, const std::string& commandsFile);
 

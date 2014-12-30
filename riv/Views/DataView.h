@@ -13,15 +13,13 @@
 	class RIVDataView
 	{
 	protected:
-		RIVDataSet<float,ushort>** dataset = NULL;
-		
-		RIVColorProperty* colorProperty = NULL;
-		RIVSizeProperty* sizeProperty = NULL;
+		RIVDataSet<float,ushort>** datasetOne = NULL;
+		RIVDataSet<float,ushort>** datasetTwo = NULL;
 
 		bool needsRedraw;
 
-		//constructor
-		RIVDataView(RIVDataSet<float,ushort>** dataset, int startX, int startY, int width, int height, int paddingX, int paddingY, RIVColorProperty* colorProperty, RIVSizeProperty* sizeProperty) {
+		//Configuration using only one renderer dataset
+		RIVDataView(RIVDataSet<float,ushort>** datasetOne,int startX, int startY, int width, int height, int paddingX, int paddingY) {
 			this->startX = startX;
 			this->startY = startY;
 			
@@ -31,30 +29,27 @@
 			this->paddingX = paddingX;
 			this->paddingY = paddingY;
 			
-			this->colorProperty = colorProperty;
-			this->sizeProperty = sizeProperty;
-			
-			this->dataset = dataset;
-		};
-		RIVDataView(RIVDataSet<float,ushort>** dataset, int startX, int startY, int width, int height, int paddingX, int paddingY) {
-			this->startX = startX;
-			this->startY = startY;
-			
-			this->width = width;
-			this->height = height;
-			
-			this->paddingX = paddingX;
-			this->paddingY = paddingY;
-			
-			this->dataset = dataset;
+			this->datasetOne = datasetOne;
 		}
-		RIVDataView(RIVDataSet<float,ushort>** dataset, RIVColorProperty* colorProperty_, RIVSizeProperty* sizeProperty_) {
-			this->dataset = dataset;
-			colorProperty = colorProperty_;
-			sizeProperty = sizeProperty_;
-		};
-		RIVDataView(RIVDataSet<float,ushort>** dataset) {
-			this->dataset = dataset;
+		RIVDataView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, int startX, int startY, int width, int height, int paddingX, int paddingY) {
+			this->startX = startX;
+			this->startY = startY;
+			
+			this->width = width;
+			this->height = height;
+			
+			this->paddingX = paddingX;
+			this->paddingY = paddingY;
+			
+			this->datasetOne = datasetOne;
+			this->datasetTwo = datasetTwo;
+		}
+		RIVDataView(RIVDataSet<float,ushort>** datasetOne) {
+			this->datasetOne = datasetOne;
+		}
+		RIVDataView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo) {
+			this->datasetOne = datasetOne;
+			this->datasetTwo = datasetTwo;
 		}
 		~RIVDataView(void) { /* Delete some stuff I guess */ };
 	public:
@@ -76,14 +71,6 @@
 		void SetPadding(int paddingX, int paddingY) {
 			this->paddingX = paddingX;
 			this->paddingY = paddingY;
-		}
-		
-		void SetColorProperty(RIVColorProperty* newColorProperty) {
-			colorProperty = newColorProperty;
-		}
-		
-		void SetSizeProperty(RIVSizeProperty* newSizeProperty) {
-			sizeProperty = newSizeProperty;
 		}
 		
 		//Should be converted to view space coordinates!

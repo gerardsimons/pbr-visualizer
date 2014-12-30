@@ -644,6 +644,18 @@ void EMBREERenderer::UnmapFrameBuffer() {
 	g_device->rtUnmapFrameBuffer(g_frameBuffer);
 }
 
+int EMBREERenderer::getWidth() {
+	return g_width;
+}
+
+int EMBREERenderer::getHeight() {
+	return g_height;
+}
+
+int EMBREERenderer::getSamplesPerPixel() {
+	return g_spp;
+}
+
 /******************************************************************************/
 /*                               Main Function                                */
 /******************************************************************************/

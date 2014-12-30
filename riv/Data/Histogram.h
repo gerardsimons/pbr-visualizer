@@ -23,10 +23,9 @@
 template<typename T>
 class Histogram {
 private:
-	std::map<T,size_t> hist;
+	//Use ints because we also want to have negative counts when using difference of two histograms
+	std::map<unsigned int,int> hist;
 	size_t nrElements;
-	
-
 	
 	T lowerBound;
 	T upperBound;
@@ -39,11 +38,9 @@ private:
 //		if(ts.size() == 0) {
 //			throw std::runtime_error("Empty data vector");
 //		}
-		
 		for(const T& t : ts) {
 			Add(t);
 		}
-		
 		nrElements = ts.size();
 	}
 	//Create the histogram from the given values and also use it to determine the natural bounds of the data
@@ -65,14 +62,19 @@ private:
 		nrElements = ts.size();
 	}
 	float determineBinWidth() {
-		return (float)(upperBound - lowerBound) / bins;
-	}
-	size_t value(T key) {
-		return hist[key];
+		if(upperBound == lowerBound) {
+			return 0.5F;
+		}
+		else return (float)(upperBound - lowerBound) / bins;
 	}
 public:
 	std::string name;
-	
+	int BinValue(int key) {
+		return hist[key];
+	}
+	~Histogram() {
+		
+	}
 	Histogram() {
 		nrElements = 0;
 	}
@@ -83,6 +85,9 @@ public:
 	}
 	Histogram(const std::string& name, T lowerBound, T upperBound, unsigned int bins) : name(name), lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()) {
 		nrElements = 0;
+	}
+	Histogram(const std::string& name, T lowerBound, T upperBound, unsigned int bins, size_t nrElements) : name(name), lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()), nrElements(nrElements) {
+		
 	}
 	Histogram(const std::string& name, const std::vector<T>& ts, T lowerBound, T upperBound, unsigned int bins) : name(name), lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()) {
 		count(ts);
@@ -105,39 +110,78 @@ public:
 	T UpperBound() {
 		return upperBound;
 	}
+	void Set(unsigned int bin, int count) {
+		hist[bin] = count;
+	}
 	void Add(const T& value) {
 		
-		float interpolated = (float)(value - lowerBound) / (upperBound - lowerBound);
-		unsigned int bin = round(interpolated);
+		T delta = upperBound - lowerBound;
+		float interpolated = (float)(value - lowerBound) / (delta);
+		unsigned int bin = floor(interpolated * bins);
 		
 		++hist[bin];
 		++nrElements;
 	}
-	float operator-(Histogram& right) {
-		
+	unsigned int NumberOfBins() {
+		return bins;
+	}
+	Histogram operator-(Histogram& right) {
 		if(right.bins != bins) {
 			throw std::runtime_error("The histograms should have the same number of bins");
 		}
 		
+		
+		printf("left - right = \n\n");
+		printf("left = \n");
+		Print();
+		printf("right = \n");
+		right.Print();
+		printf("\n");
+		
 		T lowerBound = std::min(LowerBound(),right.LowerBound());
 		T upperBound = std::max(UpperBound(),right.UpperBound());
+		Histogram result(name,lowerBound,upperBound,bins,nrElements + right.NumberOfElements());
+		
+		//Use normalized values!
+		for(int i = 0 ; i < bins ; i++) {
+			int thisValue = BinValue(i);
+			int rightValue = right.BinValue(i);
+			int diff = (thisValue - rightValue);
+			result.Set(i,diff);
+
+		}
+		printf("Result = \n");
+		result.Print();
+		return result;
+	}
+	
+	float DistanceTo(Histogram* right) {
+		if(right->bins != bins) {
+			throw std::runtime_error("The histograms should have the same number of bins");
+		}
+		
+		T lowerBound = std::min(LowerBound(),right->LowerBound());
+		T upperBound = std::max(UpperBound(),right->UpperBound());
 		float totalDiff = 0;
 		
 		//Use normalized values!
 		for(T i = lowerBound ; i <= upperBound ; i++) {
 			float thisValue = NormalizedValue(i);
-			float rightValue = right.NormalizedValue(i);
+			float rightValue = right->NormalizedValue(i);
 			float diff = std::abs((double)(thisValue - rightValue));
 			totalDiff += diff;
 		}
 		return totalDiff;
-		
 	}
 	float NormalizedValue(int i) {
 		if(nrElements)
-			return value(i) / (float) nrElements;
+			return BinValue(i) / (float) nrElements;
 		else
 			return 0;
+	}
+	void Clear() {
+		hist.clear();
+		nrElements = 0;
 	}
 	void Print() {
 		int maxBarSize = 48;
@@ -153,16 +197,20 @@ public:
 			for(int i = 0 ; i < tabs ; ++i) {
 				std::cout << "\t";
 			}
-			std::cout << value(i) << std::endl;
+			int value = BinValue(i);
+			std::cout << value << std::endl;
 		}
 		std::cout << std::endl;
+	}
+	size_t NumberOfElements() {
+		return nrElements;
 	}
 };
 
 template <typename... Ts>
 class HistogramSet {
 private:
-	std::tuple<std::vector<Histogram<Ts>*>...> histograms;
+	std::tuple<std::vector<Histogram<Ts>>...> histograms;
 	std::tuple<std::map<std::string,Histogram<Ts>*>...> histogramRegisters; //Maps a name to a histogram pointer
 	
 	//When set to dynamic the set will create new histograms for values added to not yet exsistent histograms
@@ -173,7 +221,25 @@ private:
 //	std::tuple<int> ints;
 	
 public:
-
+	~HistogramSet() {
+//		tuple_for_each(histograms, [&](auto tHistograms) {
+//			deletePointerVector(tHistograms);
+//		});
+	}
+	HistogramSet() {
+		
+	}
+	/** Copy Assignment Operator */
+	HistogramSet& operator= (const HistogramSet& other)
+	{
+		histograms = other.histograms;
+		return *this;
+	}
+	/** Copy Constructor */
+	HistogramSet (const HistogramSet& other)
+	{
+		histograms = other.histograms;
+	}
 	
 //	template<typename T>
 //	std::vector<T> GetValue() {
@@ -194,8 +260,8 @@ public:
 //	}
 	
 	template<typename T>
-	std::vector<Histogram<T>*>* GetHistograms() {
-		return &std::get<std::vector<Histogram<T>*>>(histograms);
+	std::vector<Histogram<T>>* GetHistograms() {
+		return &std::get<std::vector<Histogram<T>>>(histograms);
 	}
 	
 	template<typename T>
@@ -206,7 +272,23 @@ public:
 	template<typename T>
 	Histogram<T>* GetHistogram(const std::string& name) {
 		std::map<std::string,Histogram<T>*>& histogramRegister = GetHistogramRegister<T>();
-		return histogramRegister[name];
+		auto hist = histogramRegister[name];
+		if(hist) {
+			return hist;
+		}
+		else {
+			void* returnPointer = NULL;
+			auto tHistograms = GetHistograms<T>();
+			
+			for(size_t i = 0 ; i < tHistograms->size() ; ++i) {
+				auto hist = tHistograms->at(i);
+					if(hist.name == name) {
+						histogramRegister[name] = &tHistograms->at(i);
+						return &tHistograms->at(i);
+					}
+				}
+//				return returnPointer;
+		}
 	}
 	
 	
@@ -220,29 +302,50 @@ public:
 	}
 	
 	template<typename T>
-	void AddHistogram(Histogram<T>* hist) {
-		std::vector<Histogram<T>*>* histograms = GetHistograms<T>();
+	void AddHistogram(const Histogram<T>& hist) {
+		std::vector<Histogram<T>>* histograms = GetHistograms<T>();
 		
 		histograms->push_back(hist);
-		std::get<std::map<std::string,Histogram<T>*>>(histogramRegisters)[hist->name] = hist;
+		auto newHistogram = &histograms->at(histograms->size() - 1);
+		std::get<std::map<std::string,Histogram<T>*>>(histogramRegisters)[hist.name] = newHistogram;
 	}
 	
 	//This assumes the right hand operand histogram set is a superset of this histogram set, throws a runtime_error if a histogram in this set could not be found.
-	float operator-(HistogramSet<Ts...>& other) {
+	HistogramSet operator-(HistogramSet<Ts...>& other) {
 //		return compare<Ts...>();
 		
 		float total = 0;
+		HistogramSet result;
 		
 		tuple_for_each(histograms, [&](auto tHistograms) {
 			for(auto histogram : tHistograms) {
 				
-//				typedef typename get_template_type<typename std::decay<decltype(*histogram)>::type>::type templateType;
+
 				auto otherHistogram = other.GetHistogram<decltype(histogram->LowerBound())>(histogram->name);
 				if(!otherHistogram) {
 					throw std::runtime_error("Histogram " + histogram->name + " not found in right hand operand");
 				}
 				
-				total += (*histogram) - (*otherHistogram);
+				auto diff = (*histogram) - (*otherHistogram);
+				result.AddHistogram(diff);
+			}
+		});
+		
+		return total;
+	}
+	
+	float DistanceTo(HistogramSet<Ts...>& other) {
+		float total = 0;
+		
+		tuple_for_each(histograms, [&](auto tHistograms) {
+			for(auto& histogram : tHistograms) {
+			
+				auto otherHistogram = other.GetHistogram<decltype(histogram.LowerBound())>(histogram.name);
+				if(!otherHistogram) {
+					throw std::runtime_error("Histogram " + histogram.name + " not found in right hand operand");
+				}
+				
+				total += histogram.DistanceTo(otherHistogram);
 			}
 		});
 		
@@ -253,7 +356,7 @@ public:
 		printf("Histogram set : \n");
 		tuple_for_each(histograms, [&](auto tHistograms) {
 			for(auto& histogram : tHistograms) {
-				histogram->Print();
+				histogram.Print();
 			}
 		});
 	}

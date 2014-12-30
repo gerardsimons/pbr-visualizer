@@ -8,6 +8,9 @@
 
 #include "Configuration.h"
 
+const char* DATASET_ONE = "renderer_one";
+const char* DATASET_TWO = "renderer_two";
+
 const char* INTERSECTIONS_TABLE = "intersections";
 const char* PATHS_TABLE = "paths";
 

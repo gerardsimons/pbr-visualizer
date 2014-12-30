@@ -17,19 +17,15 @@ class ParallelCoordsView : public RIVDataView, public RIVDataSetListener
 {
 private:
     std::vector<std::string> axesOrder;
-    //Create functions
-    void createAxes();
-    //Draw helper functions
-    void drawAxes();
-    void drawLines();
-	void drawSelectionBoxes();
-    void drawText(char*,int,int,int,float[3],float);
-    void drawText(std::string,int,int,float[3],float);
-//    float* computeColor(size_t lineIndex, size_t totalNrOfLines);
 	
-	//Two separate color properties, one for the entire path and one for a single ray-intersection
-	RIVColorProperty* pathColor;
-	RIVColorProperty* rayColor;
+	//Two separate color properties, one for the entire path and one for a single ray-intersection and for each renderer separate
+	RIVColorProperty* pathColorOne = NULL;
+	RIVColorProperty* rayColorOne = NULL;
+	RIVColorProperty* pathColorTwo = NULL;
+	RIVColorProperty* rayColorTwo = NULL;
+	
+	bool drawDataSetOne = true;
+	bool drawDataSetTwo = true;
     
     //Properties
     std::vector<ParallelCoordsAxisGroup<float,ushort>> axisGroups;
@@ -44,10 +40,26 @@ private:
 	bool selectionIsDirty = true;
     
     void clearSelection();
+	//Create functions
+	void createAxes();
+	void createAxisDensities();
+	//Draw helper functions
+	void drawDensities();
+	void drawAxes();
+	void drawLines(RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColors, RIVColorProperty* rayColors);
+	void drawSelectionBoxes();
+	void drawText(char*,int,int,int,float[3],float);
+	void drawText(std::string,int,int,float[3],float);
+	
+	void redisplayWindow();
 public:
-    ParallelCoordsView(RIVDataSet<float,ushort>** dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty);
-    ParallelCoordsView(RIVDataSet<float,ushort>** dataset, RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSizeProperty* sizeProperty);
-	~ParallelCoordsView(void);
+    ParallelCoordsView(RIVDataSet<float,ushort>** dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColor, RIVColorProperty *rayColor);
+    ParallelCoordsView(RIVDataSet<float,ushort>** dataset, RIVColorProperty *pathColor, RIVColorProperty *rayColor);
+	//Constructors for double renderers
+	ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColor, RIVColorProperty *rayColor,RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo);
+	ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo);
+
+	~ParallelCoordsView();
 	
 	static int windowHandle;
     
@@ -57,8 +69,11 @@ public:
 	bool HandleMouse(int,int,int,int);
 	bool HandleMouseMotion(int,int);
 	
+	void toggleDrawDataSetOne();
+	void toggleDrawDataSetTwo();
+	
     //implement virtual functions prescribed by DataSetListener
-    virtual void OnDataChanged();
+    virtual void OnDataChanged(RIVDataSet<float,ushort>* source);
 	virtual void OnFiltersChanged();
 	
 	//Create graphical primitives based on data currently set
