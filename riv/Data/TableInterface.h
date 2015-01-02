@@ -20,6 +20,7 @@ public:
 	virtual bool HasRecord(const std::string& name) const = 0;
 	virtual void FilterRow(size_t row) = 0;
 	virtual size_t NumberOfRows() const = 0;
+	virtual void ClearFilteredRows() = 0;
 protected:
 	RIVTableInterface(const std::string& name) : name(name) {
 		

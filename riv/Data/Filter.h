@@ -110,7 +110,7 @@ namespace riv {
 			return SingularFilter<T>::AppliesToAttribute(name) && PassesFilter(value);
 		}
 		void Print() {
-//			std::cout << "RangeFilter on " << SingularFilter::attributeName << " (" << minValue << ", " << maxValue << ")" << std::endl;
+			std::cout << "RangeFilter on " << SingularFilter<T>::attributeName << " (" << minValue << " : " << maxValue << ")" << std::endl;
 		}
 	};
 	

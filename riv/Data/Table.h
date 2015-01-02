@@ -48,7 +48,7 @@ private:
 	
 	std::tuple<std::vector<riv::SingularFilter<Ts>*>...> filters;
 	std::tuple<std::vector<riv::GroupFilter<Ts>*>...> groupFilters;
-
+	
 	std::vector<std::string> attributes;
 	
 	//Stored here so I can easily clean them up as they are newly allocated
@@ -143,7 +143,7 @@ public:
 			size_t lastIndex = indices.rbegin()->first + 1;
 			size_t lastToIndex = indices[lastIndex - 1] + 1;
 			for(auto it : otherIndices) {
-			
+				
 				singleRef->AddReference(it.first + lastIndex, it.second + lastToIndex);
 			}
 			//Increment all by
@@ -171,7 +171,7 @@ public:
 	}
 	template<typename T>
 	RIVRecord<T>* CreateRecord(const std::string& name) {
-//		AddRecord<float>(RIVRecord<float>(name));
+		//		AddRecord<float>(RIVRecord<float>(name));
 		std::vector<RIVRecord<T>*>* tRecords = GetRecords<T>();
 		RIVRecord<T>* newRecord = new RIVRecord<T>(name);
 		tRecords->push_back(newRecord);
@@ -221,116 +221,94 @@ public:
 	
 	//Filter this table according to the filters that are applied
 	void Filter() {
-		filteredRows.clear();
+//		filteredRows.clear();
 		newlyFilteredRows.clear();
 		std::string task = "Filter " + name;
 		reporter::startTask(task);
 		
-//		printf("Filtering table %s with filters:\n",name.c_str());
-//		tuple_for_each(filters, [&](auto tFilters) {
-//			for(auto filter : tFilters) {
-//				printf("\t");
-//				filter->Print();
-//			}
-//		});
-//		printf("\n");
+		//		printf("Filtering table %s with filters:\n",name.c_str());
+		//		tuple_for_each(filters, [&](auto tFilters) {
+		//			for(auto filter : tFilters) {
+		//				printf("\t");
+		//				filter->Print();
+		//			}
+		//		});
+		//		printf("\n");
 		
 		size_t invalidId = -1;
 		size_t latestRefId = invalidId;
 		bool groupPassed = false;
-			size_t rows = NumberOfRows();
-			for(size_t row = 0 ; row < rows ; row++) {
-				size_t refId = reference->GetReferenceRows(row).first[0];
-//				printf("refId = %zu\n",refId);
-//				printf("latest refId = %zu\n",latestRefId);
-				if(filteredRows[row]) {
-					//				printf("row %zu was already filtered\n",row);
-					continue; //Already filtered
-				}
-				bool filterSourceRow = false;
-				//Group filters
-				RIVTableInterface* thisTableInterface = this;
-				
-//				for(riv::GroupFilter<Ts...>* groupFilter : groupFilters) {
-//					printf("Found a group filter...\n");
-//					groupFilter->Print();
-//		
-//					if(!groupFilter->PassesFilter(this, row)) {
-//						printf("row = %zu FILTERED\n",row);
-//						filterSourceRow = true;
-//						break;
-//					}
-//					else {
-//						//					printf("row = %zu SELECTED\n",row);
-//					}
-//				}
-				
-//				tuple_for_each(groupFilters, [&](auto tFilters) {
-				if(refId != latestRefId) {
-					groupPassed = false;
-//					printf("New group...");
-				}
-				if(!groupPassed) {
-					tuple_for_each(groupFilters, [&](auto groupTFilters) {
-						for(auto groupFilter : groupTFilters) {
-//							groupFilter->Print();
-							
-							auto& compoundFilters = *groupFilter->GetCompoundFilters();
-							for(auto compoundFilter : compoundFilters) {
-								auto singleFilters = compoundFilter->GetAllSingularFilters();
-								bool filtersPassed = true;
-								tuple_for_each(singleFilters, [&](auto singleTFilters) {
-									for(auto& filter : singleTFilters) {
-										typedef typename get_template_type<typename std::decay<decltype(*filter)>::type>::type templateType;
-										auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
-//										std::cout << "record " << recordForFilter->name << " : " << recordForFilter->Value(row) << std::endl;
-//										std::cout << "filter ";
-//										filter->Print();
-//										std::cout << std::endl;
-										bool filterThis = !filter->PassesFilter(recordForFilter->name, recordForFilter->Value(row));
-										if(filterThis) {
-//											printf("Does not pass the filter!\n");
-											filtersPassed = false;
-											break;
-										}
-									}
-								});
-								if(filtersPassed) {
-//									printf("Group passed!\n");
-									groupPassed = true;
-								}
-							}
-						}
-					});
-				}
-				latestRefId = refId;
-				filterSourceRow = !groupPassed;
-				if(!filterSourceRow) {
-					tuple_for_each(filters, [&](auto tFilters) {
-						for(auto filter : tFilters) {
-							
-//							If the filter applies to this table, filter according to
-//							if(filter->AppliesToTable(thisInterface)) {
-								typedef typename get_template_type<typename std::decay<decltype(*filter)>::type>::type templateType;
-								auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
-								filterSourceRow = !filter->PassesFilter(recordForFilter->Value(row));
-								if(filterSourceRow) {
-									break;
-								}
-//							}
-						}
-					});
-				}
-				if(filterSourceRow) {
-//									printf("row = %zu FILTERED\n",row);
-					FilterRow(row);
-					newlyFilteredRows.push_back(row);
-				}
-				else {
-//					printf("row = %zu SELECTED\n",row);
-				}
+		size_t rows = NumberOfRows();
+		for(size_t row = 0 ; row < rows ; row++) {
+			size_t refId = reference->GetReferenceRows(row).first[0];
+			//				printf("refId = %zu\n",refId);
+			//				printf("latest refId = %zu\n",latestRefId);
+			if(filteredRows[row]) {
+				//				printf("row %zu was already filtered\n",row);
+				continue; //Already filtered
 			}
-//		Print();
+			bool filterSourceRow = false;
+			if(refId != latestRefId) {
+				groupPassed = true;
+				//					printf("New group...");
+			}
+			if(!groupPassed) {
+				tuple_for_each(groupFilters, [&](auto groupTFilters) {
+					for(auto groupFilter : groupTFilters) {
+						groupFilter->Print();
+						auto& compoundFilters = *groupFilter->GetCompoundFilters();
+						for(auto compoundFilter : compoundFilters) {
+							auto singleFilters = compoundFilter->GetAllSingularFilters();
+							bool filtersPassed = true;
+							tuple_for_each(singleFilters, [&](auto singleTFilters) {
+								for(auto& filter : singleTFilters) {
+									typedef typename get_template_type<typename std::decay<decltype(*filter)>::type>::type templateType;
+									auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
+									//										std::cout << "record " << recordForFilter->name << " : " << recordForFilter->Value(row) << std::endl;
+									//										std::cout << "filter ";
+									//										filter->Print();
+									//										std::cout << std::endl;
+									bool filterThis = !filter->PassesFilter(recordForFilter->name, recordForFilter->Value(row));
+									if(filterThis) {
+										//											printf("Does not pass the filter!\n");
+										groupPassed = false;
+										break;
+									}
+								}
+							});
+						}
+					}
+				});
+			}
+			latestRefId = refId;
+			filterSourceRow = !groupPassed;
+			if(groupPassed) {
+				tuple_for_each(filters, [&](auto tFilters) {
+					for(auto filter : tFilters) {
+//						printf("Considering singular filter ");
+//						filter->Print();
+						//							If the filter applies to this table, filter according to
+						//							if(filter->AppliesToTable(thisInterface)) {
+						typedef typename get_template_type<typename std::decay<decltype(*filter)>::type>::type templateType;
+						auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
+						filterSourceRow = !filter->PassesFilter(recordForFilter->Value(row));
+						if(filterSourceRow) {
+							break;
+						}
+						//							}
+					}
+				});
+			}
+			if(filterSourceRow) {
+//				printf("row = %zu FILTERED\n",row);
+				FilterRow(row);
+				newlyFilteredRows.push_back(row);
+			}
+			else {
+//				printf("row = %zu SELECTED\n",row);
+			}
+		}
+		//		Print();
 		reporter::stop(task);
 	}
 	void FilterReferences() {
@@ -389,7 +367,7 @@ public:
 	template<typename U>
 	void AddFilter(riv::GroupFilter<U> *groupFilter) {
 		GetGroupFilters<U>()->push_back(groupFilter);
-//		groupFilters.push_back(groupFilter);
+		//		groupFilters.push_back(groupFilter);
 	}
 	template<typename ...Us>
 	bool HasFilter(riv::GroupFilter<Us...> *groupFilter) {
@@ -422,48 +400,50 @@ public:
 			filters.clear();
 			printf("Clear!!!!\n");
 		});
-			groupFilters.clear();
-
+		groupFilters.clear();
+		
 	}
 	//Clears all the filters with the given attribute name, returns true if any filter was actually removed
 	template<typename T>
 	bool ClearFilter(const std::string& filterName) {
 		bool filterFound = false;
 		int filtersPresent = 0;
-		int tupleIndex = 0;
-//		tuple_for_each(filters, [&](auto tFilters) {
 		
 		auto tFilters = GetFilters<T>();
 		
-			size_t i;
-			filterFound = false;
-			filtersPresent += tFilters->size();
-			for(i = 0 ; i < tFilters->size() ; ++i) {
-				if(tFilters->at(i)->GetAttribute() == filterName) {
-					filterFound = true;
-					break;
-				}
+		size_t i;
+		filterFound = false;
+		filtersPresent += tFilters->size();
+		for(i = 0 ; i < tFilters->size() ; ++i) {
+			if(tFilters->at(i)->GetAttribute() == filterName) {
+				filterFound = true;
+				break;
 			}
-			if(filterFound) {
-				printf("Filter found.\n");
-				--filtersPresent;
-				tFilters->erase(tFilters->begin() + i);
-				if(filtersPresent == 0) {
-					filtered = false;
-				}
-				return true;
+		}
+		if(filterFound) {
+			printf("Filter found.\n");
+			--filtersPresent;
+			tFilters->erase(tFilters->begin() + i);
+			if(filtersPresent == 0) {
+				filtered = false;
 			}
 
+			filteredRows.clear();
+			if(reference) {
+				reference->targetTable->ClearFilteredRows();
+			}
+			
+			return true;
+		}
 		
-
 		printf("No such filter found.\n");
-		
 		return false;
 	}
-	bool ClearFilter(size_t fid);
 	bool IsFiltered() { return filtered; }; //Any filters applied?
 	bool IsClustered() { return isClustered; };
-	
+	void ClearFilteredRows() {
+		filteredRows.clear();
+	}
 	bool HasRecord(const std::string& name) const {
 		bool found = false;
 		tuple_for_each(records,[&](auto tRecords) {
@@ -491,7 +471,7 @@ public:
 	}
 	//		TableIterator* GetPIterator();
 	std::string GetName() const { return name; };
-
+	
 	void SetReference(RIVReference* newReference) {
 		reference = newReference;
 	}
@@ -518,52 +498,52 @@ public:
 		return 0;
 	}
 	std::string RowToString(size_t row,size_t columnWidth) {
-	    std::string rowText = "|";
+		std::string rowText = "|";
 		
-
-//		tuple_for_each(records, [&](auto tRecords) {
-//			for(auto record : tRecords) {
-//				std::string valueString = std::to_string(record->Value(row));
-//				size_t textWidth = valueString.size();
-//				if(textWidth > columnWidth) {
-//					columnWidth = textWidth;
-//				}
-//				int padding = (int)((columnWidth - textWidth) / 2.F);
-//				
-//				rowText += generateString(' ',padding);
-//				rowText += record->name.c_str();
-//				rowText += generateString(' ',padding);
-//				rowText += "|";
-//			}
-//		});
-//		return rowText;
+		
+		//		tuple_for_each(records, [&](auto tRecords) {
+		//			for(auto record : tRecords) {
+		//				std::string valueString = std::to_string(record->Value(row));
+		//				size_t textWidth = valueString.size();
+		//				if(textWidth > columnWidth) {
+		//					columnWidth = textWidth;
+		//				}
+		//				int padding = (int)((columnWidth - textWidth) / 2.F);
+		//
+		//				rowText += generateString(' ',padding);
+		//				rowText += record->name.c_str();
+		//				rowText += generateString(' ',padding);
+		//				rowText += "|";
+		//			}
+		//		});
+		//		return rowText;
 		tuple_for_each(records, [&](auto tRecords) {
 			for(auto record : tRecords) {
-
+				
 				size_t textWidth = 0;
 				std::string valueString = std::to_string(record->Value(row));
 				textWidth = valueString.size();
 				int padding = (int)((columnWidth - textWidth) / 2.F);
-		
+				
 				rowText += generateString(' ',padding);
 				rowText += valueString;
 				rowText += generateString(' ',padding);
-		
+				
 				int remainder = columnWidth - textWidth - 2 * padding;
-//
+				//
 				rowText += generateString(' ', remainder);
 				rowText += "|";
 			}
 		});
-	    return rowText;
+		return rowText;
 	}
 	std::string generateString(char c, size_t number) {
-	    std::string generatedString;
-	
-	    for(size_t i = 0 ; i < number ; i++) {
-	        generatedString += c;
-	    }
-	    return generatedString;
+		std::string generatedString;
+		
+		for(size_t i = 0 ; i < number ; i++) {
+			generatedString += c;
+		}
+		return generatedString;
 	}
 	void Print(size_t maxPrint = 0, bool printFiltered = true) {
 		size_t rows = NumberOfRows();
@@ -573,18 +553,18 @@ public:
 		printf("Table called %s has %zu records and %zu rows.\n First %zu rows:\n",name.c_str(),NumberOfColumns(),rows,maxPrint);
 		std::string headerText = "|";
 		std::string headerOrnament;
-	
+		
 		int columnWidth = 17;
-	
+		
 		tuple_for_each(records, [&](auto tRecords) {
 			for(auto record : tRecords) {
-		
+				
 				size_t textWidth = record->name.size();
 				if(textWidth > columnWidth) {
 					columnWidth = textWidth;
 				}
 				int padding = (int)((columnWidth - textWidth) / 2.F);
-
+				
 				headerText += generateString(' ',padding);
 				headerText += record->name.c_str();
 				headerText += generateString(' ',padding);
@@ -596,11 +576,11 @@ public:
 		for(size_t j = 0 ; j < headerText.size() ; j++) {
 			headerOrnament += "-";
 		}
-	
+		
 		printf("%s\n",headerOrnament.c_str());
 		printf("%s\n",headerText.c_str());
 		printf("%s\n",headerOrnament.c_str());
-	
+		
 		for(size_t j = 0 ; j < maxPrint ; j++) {
 			if(!printFiltered && filteredRows[j]) {
 				continue;
@@ -609,12 +589,12 @@ public:
 			if(printFiltered || !filteredRows[j]) {
 				if(reference) {
 					std::pair<size_t*,ushort> referenceIndexRange = reference->GetReferenceRows(j);
-	//				printArray(referenceIndexRange.first,referenceIndexRange.second);
+					//				printArray(referenceIndexRange.first,referenceIndexRange.second);
 					if(referenceIndexRange.first) {
 						rowText += "---> " + reference->targetTable->name + "{";
 						for(size_t i = 0 ; i < referenceIndexRange.second ; ++i) {
-	
-							 rowText += std::to_string(referenceIndexRange.first[i]);
+							
+							rowText += std::to_string(referenceIndexRange.first[i]);
 							if(i < referenceIndexRange.second - 1) {
 								rowText +=  ",";
 							}

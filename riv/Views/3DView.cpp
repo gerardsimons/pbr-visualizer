@@ -37,7 +37,7 @@ rendererOne(renderer), sizeProperty(sizeProperty), colorProperty(colorProperty) 
     instance = this;
     identifier = "3DView";
 	
-	GetSceneData(&meshesOne);
+	GetSceneData(rendererOne, &meshesOne);
 	
 	ResetGraphics();
 };
@@ -51,15 +51,15 @@ RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(render
 	instance = this;
 	identifier = "3DView";
 	
-	GetSceneData(&meshesOne);
-	GetSceneData(&meshesTwo);
+	GetSceneData(rendererOne, &meshesOne);
+	GetSceneData(rendererTwo, &meshesTwo);
 	
 	ResetGraphics();
 };
 
-void RIV3DView::GetSceneData(TriangleMeshGroup* target) {
+void RIV3DView::GetSceneData(EMBREERenderer* renderer, TriangleMeshGroup* target) {
 	//Get the shapes and see what are trianglemeshes that we can draw
-	std::vector<Shape*>* shapes = rendererOne->GetShapes();
+	std::vector<Shape*>* shapes = renderer->GetShapes();
 	std::vector<TriangleMeshFull*> embreeMeshes;
 	for(size_t i = 0 ; i < shapes->size() ; ++i) {
 		TriangleMeshFull* t = dynamic_cast<TriangleMeshFull*>(shapes->at(i));
@@ -199,6 +199,10 @@ void RIV3DView::ToggleDrawDataSetTwo() {
 	else printf("No second dataset set.");
 }
 
+//void RIV3DView::Draw(RIVDataSet<float,ushort>* dataset) {
+//	
+//}
+
 void RIV3DView::Draw() {
 //    printf("3DView Draw #%zu\n",++drawCounter_);
 	
@@ -223,20 +227,29 @@ void RIV3DView::Draw() {
 	
 	glPushMatrix();
 	float scale = meshesOne.GetScale();
+	Vec3f modelCenter = meshesOne.GetCenter();
 	
-	if(drawDataSetTwo) {
-		scale = std::max(scale,meshesTwo.GetScale());
+	if(datasetTwo && drawDataSetTwo) {
+		float scaleTwo = meshesTwo.GetScale();
+		if(scaleTwo > scale) {
+			scale = scaleTwo;
+			modelCenter = meshesTwo.GetCenter();
+		}
 	}
 	
 	glScalef(scale,scale,scale);
-	Vec3f modelCenter = meshesOne.GetCenter();
+
 	glTranslatef(-modelCenter[0], -modelCenter[1], -modelCenter[2]);
 	
-	if(drawDataSetOne)
-		drawMeshModel(&meshesOne);
-	if(drawDataSetTwo)
-		drawMeshModel(&meshesTwo);
-	
+	if(drawDataSetOne) {
+//		float purpleColor[3] =  {.5f,.2f,1.0f};
+		float redColor[] = {1,0,0};
+		drawMeshModel(&meshesOne,redColor);
+	}
+	if(drawDataSetTwo) {
+		float blueColor[] = {0,0,1};
+		drawMeshModel(&meshesTwo,blueColor);
+	}
 	if(drawIntersectionPoints)
 		drawPoints();
 	
@@ -293,6 +306,8 @@ void RIV3DView::Draw() {
 	reporter::stop("3D Draw");
 }
 
+
+
 bool RIV3DView::isSelectedObject(ushort objectId) {
 	if(pathFilter) {
 //		std::vector<riv::Filter*> filters = pathFilter->GetFilters();
@@ -312,12 +327,13 @@ bool RIV3DView::isSelectedObject(ushort objectId) {
 	return false;
 }
 
-void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup) {
+void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color) {
 	
 	reporter::startTask("Draw mesh model");
 	
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-    glColor3f(.5f,.2f,1.0f); //Purple
+//    glColor3f(.5f,.2f,1.0f); //Purple
+	glColor3f(color[0],color[1],color[2]);
     /** Draw the model **/
     glBegin(GL_TRIANGLES);
 	
@@ -338,10 +354,17 @@ void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup) {
 }
 
 void RIV3DView::drawPoints() {
+	drawPoints(*datasetOne,pathsOne);
+	if(datasetTwo && drawDataSetTwo) {
+		drawPoints(*datasetTwo, pathsTwo);
+	}
+}
+
+void RIV3DView::drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths) {
 	reporter::startTask("Draw points.");
 //	printf("Drawing intersections points.\n");
 	
-	RIVTable<float,ushort>* isectTable = (*datasetOne)->GetTable("intersections");
+	RIVTable<float,ushort>* isectTable = dataset->GetTable("intersections");
 	
 	RIVFloatRecord* xRecord = isectTable->GetRecord<float>("x");
 	RIVFloatRecord* yRecord = isectTable->GetRecord<float>("y");
@@ -426,8 +449,8 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 }
 
 void RIV3DView::ResetGraphics() {
-	paths.clear();
 
+	
 	if(heatmap) {
 		delete heatmap;
 //		generateOctree(7, 1, .00001F);
@@ -437,15 +460,25 @@ void RIV3DView::ResetGraphics() {
 	}
 }
 
-//Create buffered data for points, not working anymore, colors seem to be red all the time.
+//(Re)create the paths objects for the datasets being used
 void RIV3DView::createPaths() {
+	pathsOne.clear();
+	pathsTwo.clear();
+	pathsOne = createPaths(*datasetOne);
+	if(datasetTwo) {
+		pathsTwo = createPaths(*datasetTwo);
+	}
+}
+
+//Create buffered data for points, not working anymore, colors seem to be red all the time.
+std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset) {
 	
 	reporter::startTask("Creating paths");
 	
 	RIVTable<float,ushort>* isectTable = (*datasetOne)->GetTable("intersections");
 	RIVShortRecord* bounceRecord = isectTable->GetRecord<ushort>("bounce_nr");
 	
-	paths.clear();
+	std::vector<Path> paths;
 	
     //Get the records we want;
     //Get the iterator, this iterator is aware of what rows are filtered and not
@@ -478,6 +511,8 @@ void RIV3DView::createPaths() {
 	pathsCreated = true;
 	reporter::stop("Creating paths");
 	reportVectorStatistics("paths", paths);
+	
+	return paths;
 }
 
 void RIV3DView::MovePathSegment(float ratioIncrement) {
@@ -497,6 +532,15 @@ void RIV3DView::MovePathSegment(float ratioIncrement) {
 }
 
 void RIV3DView::drawPaths(float startSegment, float stopSegment) {
+	if(drawDataSetOne) {
+		drawPaths(pathsOne, startSegment, stopSegment);
+	}
+	if(datasetTwo && drawDataSetTwo) {
+		drawPaths(pathsOne, startSegment, stopSegment);
+	}
+}
+
+void RIV3DView::drawPaths(const std::vector<Path>& paths, float startSegment, float stopSegment) {
 //	char taskname[100];
 //	sprintf(taskname,"drawPaths %f - %f\n",startSegment,stopSegment);
 //	reporter::startTask(taskname);
@@ -504,8 +548,8 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 	for(float i = 1 ; i < maxBounce ; i++) {
 		if(startSegment < i / maxBounce && stopSegment > i / maxBounce) {
 			//                printf("(%f,%f) segment split in (%f,%f) and (%f,%f)\n",startSegment,stopSegment,startSegment,i/maxBounce,i/maxBounce,stopSegment);
-			drawPaths(startSegment, i / maxBounce);
-			drawPaths(i / maxBounce, stopSegment);
+			drawPaths(paths,startSegment, i / maxBounce);
+			drawPaths(paths,i / maxBounce, stopSegment);
 			return;
 		}
 	}
@@ -523,7 +567,7 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 	
 	glBegin(GL_LINES);
 	if(startBounce == 0) {
-		for(Path& path : paths) {
+		for(const Path& path : paths) {
 			PathPoint *p = path.GetPointWithBounce(1);
 			if(p != NULL) {
 				
@@ -547,7 +591,7 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 		}
 	}
 	else {
-		for(Path& path : paths) {
+		for(const Path& path : paths) {
 			if(path.Size() >= 2) {
 				PathPoint* startPoint = path.GetPointWithBounce(startBounce);
 				PathPoint* endPoint = path.GetPointWithBounce(endBounce);

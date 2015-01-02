@@ -109,7 +109,6 @@ void ParallelCoordsView::createAxes() {
 		for(size_t j = 0 ; j < tablePointers->size() ; j++) {
 			RIVTable<float,ushort> *table = tablePointers->at(j);
 			ParallelCoordsAxisGroup<float,ushort> axisGroup(table->GetName());
-			
 			auto recordsTuple = table->GetAllRecords();
 			tuple_for_each(recordsTuple, [&](auto tRecords) {
 				for(size_t i = 0 ; i < tRecords.size() ; ++i) {
@@ -134,7 +133,6 @@ void ParallelCoordsView::createAxes() {
 
 void ParallelCoordsView::drawSelectionBoxes() {
 	if(selectedAxis.size()) {
-		
 		for(auto& axisGroup : axisGroups) {
 			tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 				for(auto& axis : tAxes) {
@@ -184,15 +182,16 @@ void ParallelCoordsView::drawDensities() {
 					int endY = startY + height;
 					int centerY = startY + (endY - startY) / 2.F;
 					
-//					auto binValue = resultHistogram->NormalizedValue(i);
-//					std::cout << "binValue = " << binValue << std::endl;
-					
 					float valueOne = histogramOne->NormalizedValue(i);
 					float valueTwo = histogramTwo->NormalizedValue(i);
 					
+//					printf("Histogram one \n");
+//					histogramOne->Print();
+//					printf("Histogram two \n");
+//					histogramTwo->Print();
+					
 					//Value one > value two
 					if(valueOne > valueTwo) {
-						
 						float colorValue = (valueOne - valueTwo) / valueOne;
 						std::string text = std::to_string(colorValue);
 						drawText("",axis->x,centerY - 15,textColor,.1F);
@@ -276,7 +275,7 @@ void ParallelCoordsView::drawAxes() {
     axesAreDirty = false;
 }
 
-void ParallelCoordsView::drawLines(RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColors, RIVColorProperty* rayColors) {
+void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColors, RIVColorProperty* rayColors) {
 //	linesAreDirty = true;
 
 	size_t lineIndex = 0;
@@ -284,13 +283,8 @@ void ParallelCoordsView::drawLines(RIVDataSet<float,ushort>* dataset, RIVColorPr
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	printf("Drawing lines\n");
+	printf("Drawing lines for dataset %d\n",dataset->datasetID);
 	reporter::startTask("drawLines");
-	
-	int histogramIndex = 0;
-	if(dataset->GetName() == DATASET_TWO) {
-		histogramIndex = 1;
-	}
 	
 	glLineWidth(1);
 	for(auto &axisGroup : axisGroups) {
@@ -313,11 +307,10 @@ void ParallelCoordsView::drawLines(RIVDataSet<float,ushort>* dataset, RIVColorPr
 				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 					for(auto axis : tAxes) {
 						
-						
 						auto record = table->GetRecord<decltype(axis->minValue)>(axis->name);
 						auto value = record->Value(row);
 						
-						axis->GetHistogram(histogramIndex)->Add(value);
+						axis->GetHistogram(datasetId)->Add(value);
 						
 						float x = axis->x;
 						float y = axis->PositionOnScaleForValue(value);
@@ -412,10 +405,10 @@ void ParallelCoordsView::Draw() {
         //Draw the lines from each axis
 	if(linesAreDirty) {
 		if(drawDataSetOne)
-			drawLines(*datasetOne,pathColorOne,rayColorOne);
+			drawLines(0,*datasetOne,pathColorOne,rayColorOne);
 		if(datasetTwo) {
 			if(drawDataSetTwo)
-				drawLines(*datasetTwo,pathColorTwo,rayColorTwo);
+				drawLines(1,*datasetTwo,pathColorTwo,rayColorTwo);
 		}
 	}
 	
@@ -524,7 +517,6 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 										(*datasetTwo)->ClearFilter<Type>(axis->name);
 									}
 
-									
 									riv::SingularFilter<Type>* rangeFilter = new riv::RangeFilter<Type>(axis->name,lowerBound,upperBound);
 									printf("New filter on axis %s : ",axis->name.c_str());
 									rangeFilter->Print();
@@ -533,7 +525,6 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 										(*datasetTwo)->AddFilter(rangeFilter);
 									}
 									
-//									printf("Selection finalized on axis %s\n",axis->name.c_str());
 									selection = &axis->selection;
 								}
 								else {

@@ -46,7 +46,7 @@ private:
 	//Draw helper functions
 	void drawDensities();
 	void drawAxes();
-	void drawLines(RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColors, RIVColorProperty* rayColors);
+	void drawLines(int datasetId, RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColors, RIVColorProperty* rayColors);
 	void drawSelectionBoxes();
 	void drawText(char*,int,int,int,float[3],float);
 	void drawText(std::string,int,int,float[3],float);

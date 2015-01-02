@@ -129,7 +129,7 @@ public:
 	}
 	
 	//Returns the value
-	float ValueOnScale(T value) {
+	T ValueOnScale(float value) {
 		if(value >= 0.F && value <= 1.F) {
 			return (1 - value) * minValue + value * maxValue;
 		}

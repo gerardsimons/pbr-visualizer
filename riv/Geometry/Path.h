@@ -68,7 +68,7 @@ public:
 	bool IsEmpty() {
 		return size == 0;
 	}
-	PathPoint* GetPointWithBounce(ushort bounceNr) {
+	PathPoint* GetPointWithBounce(ushort bounceNr) const {
 		for(ushort i = 0 ; i < size ; ++i) {
 			if(points[i].bounceNr == bounceNr) {
 				return &points[i];

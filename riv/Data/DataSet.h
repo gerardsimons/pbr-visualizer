@@ -25,6 +25,8 @@ template <typename ...Ts>
 class RIVDataSet {
 private:
 	
+	static int ID_COUNTER;
+	
 	std::vector<RIVTable<Ts...>*> tables;
 	std::map<RIVTable<Ts...>*,bool> staleTables;
 	
@@ -37,10 +39,10 @@ private:
 	
 	bool isFiltering = false;
 	std::string name;
-
 public:
+	int datasetID;
 	RIVDataSet(const std::string& name) : name(name) {
-		
+		datasetID = ID_COUNTER++;
 	}
 	~RIVDataSet() {
 		deletePointerVector(tables);
@@ -263,5 +265,8 @@ public:
 	}
 //    void PrintUnfiltered();
 };
+
+template<typename ...Ts>
+int RIVDataSet<Ts...>::ID_COUNTER = 0;
 
 #endif /* defined(__RIVDataSet__DataSet__) */

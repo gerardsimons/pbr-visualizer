@@ -40,7 +40,10 @@ protected:;
 	TriangleMeshGroup meshesTwo;
 	
 	bool drawDataSetOne = true;
-	bool drawDataSetTwo = false;
+	bool drawDataSetTwo = true;
+	
+	std::vector<Path> pathsOne;
+	std::vector<Path> pathsTwo;
 	
 	EMBREERenderer* rendererOne;
 	EMBREERenderer* rendererTwo = NULL;
@@ -70,7 +73,7 @@ protected:;
     //Buffered graphics point data, generated from the data, stored here for speed, TODO: Only store indices and a pointer to these records?
 	bool sizesAllTheSame; //Because sizes are often set to the same, we take advantage of this to get a big performance boost
 	//Indices of the points to draw
-	std::vector<Path> paths;
+//	std::vector<Path> paths;
 	bool pathsCreated = false;
 
 	//Generate a octree from the unfiltered intersection points
@@ -78,16 +81,19 @@ protected:;
 	//Determines if the objectId is currently selected
 	bool isSelectedObject(ushort objectId);
 	//Draw the mesh model loaded from the PBRT file
-	void drawMeshModel(TriangleMeshGroup* meshGroup);
-    void drawPaths(float startSegment, float stopSegment); //Draw the paths between two consecutive bounces
+	void drawMeshModel(TriangleMeshGroup* meshGroup, float* color);
+	void drawPaths(float startSegment, float stopSegment);
+    void drawPaths(const std::vector<Path>& paths, float startSegment, float stopSegment); //Draw the paths between two consecutive bounces
 	//Draw octree representation of the generated points
 	void drawHeatmap();
-	//Draw the intersection points
 	void drawPoints();
+	//Draw the intersection points
+	void drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths);
 	//draw the leaf nodes starting from the given node
 	void drawLeafNodes(OctreeNode* node);
-	//Create graphics buffer from unfiltered data rows
 	void createPaths();
+	//Create graphics buffer from unfiltered data rows
+	std::vector<Path> createPaths(RIVDataSet<float,ushort>*);
     static RIV3DView* instance;
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
@@ -97,7 +103,7 @@ public:
 	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
 	
 	//Extract data about the scene from the embree renderer object
-	void GetSceneData(TriangleMeshGroup* target);
+	void GetSceneData(EMBREERenderer* renderer, TriangleMeshGroup* target);
 	
 	static int windowHandle;
 	
@@ -125,12 +131,7 @@ public:
 	void ToggleDrawDataSetTwo();
     void SetModelData(const MeshModel&);
     void MoveCamera(float,float,float);
-    
-    //The models to draw
-
-    //The camera
-    
-    //Anything else?
+	
 };
 
 #endif /* defined(__Afstuderen___DView__) */

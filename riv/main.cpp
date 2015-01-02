@@ -73,12 +73,13 @@ RIVDataSet<float,ushort>** datasetOne = NULL;
 RIVDataSet<float,ushort>** datasetTwo = NULL;
 
 /* The dataset, views have pointers to this in order to draw their views consistently */
-DataController* dataController;
+DataController* dataControllerOne;
+DataController* dataControllerTwo = NULL; //It is possible this one will not be used
 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 1000;
+const int maxPaths = 10000;
 
 void display(void)
 {
@@ -128,7 +129,8 @@ void keys(int keyCode, int x, int y) {
 //			dataset->StopFiltering();
             break;
 		case 32: //Space bar
-			dataController->TogglePause();
+			dataControllerOne->TogglePause();
+			dataControllerTwo->TogglePause();
 			break;
 		case 49: //The '1' key, switch to renderer one if not already using it
 			parallelCoordsView->toggleDrawDataSetOne();
@@ -294,18 +296,34 @@ int currentFrame = 0;
 bool finished = false;
 
 void idle() {
-	if(dataController->IsActive() && currentFrame < maxFrames) {
-		printf("Rendering frame %d.\n",currentFrame);
-		rendererOne->RenderNextFrame();
-		if(rendererTwo) {
-			rendererTwo->RenderNextFrame();
+	
+	bool postRedisplay = false;
+	if(currentFrame < maxFrames) {
+		if(dataControllerOne->IsActive()) {
+			rendererOne->RenderNextFrame();
+			postRedisplay = true;
 		}
-		++currentFrame;
+		if(dataControllerTwo && dataControllerTwo->IsActive()) {
+			rendererTwo->RenderNextFrame();
+			postRedisplay = true;
+		}
+	}
+	if(postRedisplay) {
 		glutPostRedisplay();
 	}
-	else {
+	++currentFrame;
+//	if(dataControllerOne->IsActive() && (dataControllerTwo == NULL || dataControllerTwo->IsActive()) && currentFrame < maxFrames) {
+//		printf("Rendering frame %d.\n",currentFrame);
+//		rendererOne->RenderNextFrame();
+//		if(rendererTwo) {
+//			
+//		}
+//
+//
+//	}
+//	else {
 //		printf("Nothing to do ...\n");
-	}
+//	}
 //	else {
 //		printf("Done......\n");
 //		finished = true;
@@ -315,41 +333,42 @@ void idle() {
 
 bool processRendererOne(PathData* newPath) {
 //	printf("New path from renderer #1 received!\n");
-	return dataController->ProcessNewPath(currentFrame,0,newPath);
+	return dataControllerOne->ProcessNewPath(currentFrame,newPath);
 }
 
 void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
-	dataController->RendererOneFinishedFrame(numPaths,numRays);
+	dataControllerTwo->RendererOneFinishedFrame(numPaths,numRays);
 }
 
 bool processRendererTwo(PathData* newPath) {
 //	printf("New path from renderer #2 received!\n");
-	return dataController->ProcessNewPath(currentFrame,1,newPath);
+	return dataControllerTwo->ProcessNewPath(currentFrame,newPath);
 }
 
 void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
-	dataController->RendererTwoFinishedFrame(numPaths,numRays);
+	dataControllerTwo->RendererTwoFinishedFrame(numPaths,numRays);
 }
 
 void setupDataController(const int argc, char** argv) {
 	//Create the EMBREE renderer
-	dataController = new DataController(argc - 1, maxPaths);
-	datasetOne = dataController->GetDataSetOne();
+	dataControllerOne = new DataController(argc - 1, maxPaths);
+	datasetOne = dataControllerOne->GetDataSet();
 	if(argc == 2) { //Just one renderer
 		DataConnector* connector = new DataConnector(processRendererOne,rendererOneFinishedFrame);
 		rendererOne = new EMBREERenderer(connector, std::string(argv[1]));
-		dataController->SetAcceptProbabilityOne(1.F * maxPaths / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel()));
+		dataControllerOne->SetAcceptProbability(1.F * maxPaths / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel()));
 		printf("1 renderer set up.\n");
 	}
 	else if(argc == 3) {
+		dataControllerTwo = new DataController(argc - 1, maxPaths);
 		DataConnector* dcOne = new DataConnector(processRendererOne,rendererOneFinishedFrame);
 		DataConnector* dcTwo = new DataConnector(processRendererTwo,rendererTwoFinishedFrame);
 		rendererOne = new EMBREERenderer(dcOne, std::string(argv[1]));
 		rendererTwo = new EMBREERenderer(dcTwo, std::string(argv[2]));
-		datasetTwo = dataController->GetDataSetTwo();
+		datasetTwo = dataControllerTwo->GetDataSet();
 		float acceptProbOne = 1.F * maxPaths / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel());
-		dataController->SetAcceptProbabilityOne(acceptProbOne);
-		dataController->SetAcceptProbabilityTwo(1.F * maxPaths / (rendererTwo->getWidth() * rendererTwo->getHeight() * rendererTwo->getSamplesPerPixel()));
+		dataControllerOne->SetAcceptProbability(acceptProbOne);
+		dataControllerTwo->SetAcceptProbability(1.F * maxPaths / (rendererTwo->getWidth() * rendererTwo->getHeight() * rendererTwo->getSamplesPerPixel()));
 		printf("2 renderers set up.\n");
 	}
 	else {

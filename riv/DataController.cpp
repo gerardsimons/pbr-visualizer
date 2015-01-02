@@ -16,12 +16,8 @@ DataController::DataController(const ushort renderers, const size_t maxPaths) : 
 		updateThrottle = maxPaths;
 	}
 	createDataStructures();
+
 	
-	for(ushort i = 0 ; i < renderers ; ++i) {
-		pathCounts[i] = 0;
-	}
-	
-	createHistograms();
 }
 
 RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* dataset,const size_t N) {
@@ -92,36 +88,6 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 	return bootstrap;
 }
 
-void DataController::createHistograms() {
-	
-	//	xPixelHistogram = Histogram<float>(0,1,bins);
-	//	yPixelHistogram = Histogram<float>(0,1,bins);
-	//	lensUHistogram = Histogram<float>(0,1,bins);
-	//	lensVHistogram = Histogram<float>(0,1,bins);
-	//	colorRHistogram = Histogram<float>(0,1,bins);
-	//	colorGHistogram = Histogram<float>(0,1,bins);
-	//	colorBHistogram = Histogram<float>(0,1,bins);;
-	//	throughputRHistogram = Histogram<float>(0,1,bins);;
-	//	throughputGHistogram = Histogram<float>(0,1,bins);;
-	//	throughputBHistogram = Histogram<float>(0,1,bins);;
-	//	depthsHistogram = Histogram<ushort>(0,5);
-	//
-	//	bounceNrsHistogram = Histogram<ushort>(0,5);
-	//	xsHistogram = Histogram<float>(0,500,bins);
-	//	ysHistogram = Histogram<float>(0,500,bins);
-	//	zsHistogram = Histogram<float>(0,500,bins);
-	//	isectColorRHistogram = Histogram<float>(0,1,bins);
-	//	isectColorGHistogram = Histogram<float>(0,1,bins);
-	//	isectColorBHistogram = Histogram<float>(0,1,bins);;
-	//	primitiveIdsHistogram = Histogram<ushort>(0,6);
-	//
-	//	shapeIdsHistogram = Histogram<ushort>(0,1);
-	//	interactionTypesHistogram = Histogram<ushort>(0,1,bins);;
-	//	lightIdsHistogram = Histogram<ushort>(0,5,5);
-	
-	
-}
-
 void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
 	
 	RIVTable<float,ushort>* pathTable = dataset->CreateTable(PATHS_TABLE);
@@ -159,26 +125,27 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
 	pathTable->SetReference(pathsToIsectRef);
 	RIVSingleReference* isectToPathsRef = new RIVSingleReference(isectsTable,pathTable);
 	isectsTable->SetReference(isectToPathsRef);
-	
-	
 }
 
 void DataController::createDataStructures() {
 	
-	rendererDataOne = new RIVDataSet<float,ushort>(DATASET_ONE);
-	rendererDataTwo = new RIVDataSet<float,ushort>(DATASET_TWO);
+	rendererData = new RIVDataSet<float,ushort>(DATASET_ONE);
+//	rendererDataTwo = new RIVDataSet<float,ushort>(DATASET_TWO);
 	
-	candidateDataOne = new RIVDataSet<float,ushort>(DATASET_ONE);
-	candidateDataTwo = new RIVDataSet<float,ushort>(DATASET_TWO);
+	candidateData = new RIVDataSet<float,ushort>(DATASET_ONE);
+//	candidateDataTwo = new RIVDataSet<float,ushort>(DATASET_TWO);
 	
-	initDataSet(rendererDataOne);
-	initDataSet(candidateDataOne);
+	//Create the records and such for the datasets
+	initDataSet(rendererData);
+	initDataSet(candidateData);
 	
-	initDataSet(rendererDataTwo);
-	initDataSet(candidateDataTwo);
+//	initDataSet(rendererDataTwo);
+//	initDataSet(candidateDataTwo);
 	
-	trueDistributionsOne = rendererDataOne->CreateHistogramSet(bins);
-	trueDistributionsTwo = rendererDataTwo->CreateHistogramSet(bins);
+	trueDistributions = rendererData->CreateHistogramSet(bins);
+//	trueDistributionsTwo = rendererDataTwo->CreateHistogramSet(bins);
+	
+	resetPointers(rendererData);
 }
 
 void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
@@ -217,87 +184,49 @@ void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
 	//	lightIds = isectsTable->CreateShortRecord("light ID");
 	
 }
-RIVDataSet<float,ushort>** DataController::GetDataSetOne() {
-	return &rendererDataOne;
+RIVDataSet<float,ushort>** DataController::GetDataSet() {
+	return &rendererData;
 }
-RIVDataSet<float,ushort>** DataController::GetDataSetTwo() {
-	return &rendererDataTwo;
-}
-bool DataController::ProcessNewPath(int frame, ushort renderer, PathData* newPath) {
-	int* currentFrame = &lastFrameOne;
-	if(renderer == 0) {
-//		++pathsPerFrameOne;
-//		raysPerFrameOne += newPath->intersectionData.size();
-//		printf("Paths per frame ONE = %zu\n",pathsPerFrameOne);
-	}
-	else {
-		currentFrame = &lastFrameTwo;
-//		++pathsPerFrameTwo;
-//		raysPerFrameTwo += newPath->intersectionData.size();
-//		printf("Paths per frame ONE = %zu\n",pathsPerFrameTwo);
-	}
+//RIVDataSet<float,ushort>** DataController::GetDataSetTwo() {
+//	return &rendererDataTwo;
+//}
+bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 	if(IsActive()) {
-		HistogramSet<float,ushort>* trueDistributions;
-		RIVDataSet<float,ushort>** currentData;
-		RIVDataSet<float,ushort>** candidateData;
-		RIVDataSet<float,ushort>** bestBootstrap;
 		float* bestResult;
-		float acceptProbability;
-		
-		if(renderer == 0) {
-			resetPointers(rendererDataOne);
-			currentData = &rendererDataOne;
-			candidateData = &candidateDataOne;
-			trueDistributions = &trueDistributionsOne;
-			bestResult = &bestBootstrapResultOne;
-			bestBootstrap = &bootstrapOne;
-			
-			acceptProbability = acceptProbabilityOne;
-		}
-		else {
-			resetPointers(rendererDataTwo);
-			currentData = &rendererDataTwo;
-			candidateData = &candidateDataTwo;
-			trueDistributions = &trueDistributionsTwo;
-			bestResult = &bestBootstrapResultTwo;
-			bestBootstrap = &bootstrapTwo;
-//			++pathsPerFrameTwo;
-			acceptProbability = acceptProbabilityTwo;
-		}
 		
 		//ALWAYS update the histograms
 		ushort nrIntersections = newPath->intersectionData.size();
 		
-		trueDistributions->AddToHistogram(PIXEL_X, newPath->imageX);
-		trueDistributions->AddToHistogram(PIXEL_Y, newPath->imageY);
-		trueDistributions->AddToHistogram(PATH_R, std::min(newPath->radiance[0],1.F));
-		trueDistributions->AddToHistogram(PATH_G, std::min(newPath->radiance[1],1.F));
-		trueDistributions->AddToHistogram(PATH_B, std::min(newPath->radiance[2],1.F));
-		trueDistributions->AddToHistogram(THROUGHPUT_R, std::min(newPath->throughput[0],1.F));
-		trueDistributions->AddToHistogram(THROUGHPUT_G, std::min(newPath->throughput[1],1.F));
-		trueDistributions->AddToHistogram(THROUGHPUT_B, std::min(newPath->throughput[2],1.F));
-		trueDistributions->AddToHistogram(DEPTH, nrIntersections);
+		trueDistributions.AddToHistogram(PIXEL_X, newPath->imageX);
+		trueDistributions.AddToHistogram(PIXEL_Y, newPath->imageY);
+		trueDistributions.AddToHistogram(PATH_R, std::min(newPath->radiance[0],1.F));
+		trueDistributions.AddToHistogram(PATH_G, std::min(newPath->radiance[1],1.F));
+		trueDistributions.AddToHistogram(PATH_B, std::min(newPath->radiance[2],1.F));
+		trueDistributions.AddToHistogram(THROUGHPUT_R, std::min(newPath->throughput[0],1.F));
+		trueDistributions.AddToHistogram(THROUGHPUT_G, std::min(newPath->throughput[1],1.F));
+		trueDistributions.AddToHistogram(THROUGHPUT_B, std::min(newPath->throughput[2],1.F));
+		trueDistributions.AddToHistogram(DEPTH, nrIntersections);
 		
 		for(ushort i = 0 ; i < nrIntersections ; ++i) {
 			IntersectData& isect = newPath->intersectionData[i];
 			
-			trueDistributions->AddToHistogram(BOUNCE_NR,(ushort)(i+1));
-			trueDistributions->AddToHistogram(POS_X, isect.position[0]);
-			trueDistributions->AddToHistogram(POS_Y, isect.position[1]);
-			trueDistributions->AddToHistogram(POS_Z, isect.position[2]);
-			trueDistributions->AddToHistogram(INTERSECTION_R, std::min(isect.color[0],1.F));
-			trueDistributions->AddToHistogram(INTERSECTION_G, std::min(isect.color[1],1.F));
-			trueDistributions->AddToHistogram(INTERSECTION_B, std::min(isect.color[2],1.F));
+			trueDistributions.AddToHistogram(BOUNCE_NR,(ushort)(i+1));
+			trueDistributions.AddToHistogram(POS_X, isect.position[0]);
+			trueDistributions.AddToHistogram(POS_Y, isect.position[1]);
+			trueDistributions.AddToHistogram(POS_Z, isect.position[2]);
+			trueDistributions.AddToHistogram(INTERSECTION_R, std::min(isect.color[0],1.F));
+			trueDistributions.AddToHistogram(INTERSECTION_G, std::min(isect.color[1],1.F));
+			trueDistributions.AddToHistogram(INTERSECTION_B, std::min(isect.color[2],1.F));
 			//			trueDistributions.AddToHistogram("depth", nrIntersections);
 		}
 		//				mutex.lock();
 		//				printf("Adding new path.\n");
-		bool tableFull = pathCounts[renderer] >= maxPaths;
+		bool tableFull = pathCount >= maxPaths;
 		if(!tableFull) {
 			float accept = rand() / (float)RAND_MAX;
 //			printf("Accept prob = %f\n",accept);
 			if(accept <= acceptProbability) {
-				++pathCounts[renderer];
+				++pathCount;
 				//			rendererId->AddValue(renderer);
 				xPixels->AddValue(newPath->imageX);
 				yPixels->AddValue(newPath->imageY);
@@ -335,25 +264,20 @@ bool DataController::ProcessNewPath(int frame, ushort renderer, PathData* newPat
 				}
 				return true;
 			}
-			else { //I AM SO FULL, I CANNOT EAT ONE MORE BYTE OF DATA
-				
-				//Any other renderers that are not full?
-				for(ushort i = 0 ; i < pathCounts.size() ; ++i) {
-					if(i != renderer && pathCounts[i] < maxPaths) {
-						//					printf("Renderer #%d still has some room to spare.\n",i);
-						return true;
-					}
-				}
-				
-				//Print the histograms
-				//			trueDistributions.Print();
-				//			currentData->Print(50);
-				
-				Reduce(currentData,candidateData,trueDistributions,bestBootstrap, bestResult);
-				
-				return false;
-			}
 		}
+		else { //I AM SO FULL, I CANNOT EAT ONE MORE BYTE OF DATA
+			
+
+			
+			//Print the histograms
+			//			trueDistributions.Print();
+			//			currentData->Print(50);
+			
+			Reduce();
+			
+			return false;
+		}
+		
 	}
 	else {
 		if(paused) {
@@ -372,56 +296,55 @@ bool DataController::ProcessNewPath(int frame, ushort renderer, PathData* newPat
 	}
 }
 
-void DataController::Reduce(RIVDataSet<float,ushort>** currentData, RIVDataSet<float,ushort>** candidateData, HistogramSet<float,ushort>* trueDistributions, RIVDataSet<float,ushort>** bestBootstrap, float* bestBootstrapResult) {
+void DataController::Reduce() {
 	//This was the first time we filled up, we already have our data to bootstrap from
 	if(firstTime) {
 //		printf("Current data is full...\n");
 //		printf("Swapping candidate and current data\n");
 		
 //		printf("\nCURRENT DATA = \n");
-//		(*currentData)->Print(100);
+//		rendererData->Print(100);
 		
 		//Important to notify before the swap
-		(*currentData)->NotifyDataListeners();
+		rendererData->NotifyDataListeners();
 		
 		//Swap current with candidate
-		(*candidateData)->SetDataListeners((*currentData)->GetDataListeners());
-		RIVDataSet<float,ushort>* temp = *currentData;
-		(*currentData) = *candidateData;
-		(*candidateData) = temp;
+		candidateData->SetDataListeners(rendererData->GetDataListeners());
+		RIVDataSet<float,ushort>* temp = rendererData;
+		rendererData = candidateData;
+		candidateData = temp;
 		
-		pathCounts.clear();
+		pathCount = 0;
 		
 		firstTime = false;
 	}
 	else { //Both are full, join the two sets, bootstrap
 		
 		//Join the two datasets
-		(*currentData)->AddDataSet(*candidateData);
+		rendererData->AddDataSet(candidateData);
 		
 		printHeader("BOOTSTRAPPING",100);
 		HistogramSet<float,ushort> bootstrapHistograms;
 		
 		bool newBootstrapFound = false;
 
-		RIVDataSet<float,unsigned short>* bootstrap = NULL;
 		for(int i = 0 ; i < bootstrapRepeat ; ++i) {
 //			printf("Round #%d\n",i);
-			bootstrap = Bootstrap((*currentData), maxPaths);
+			auto bootstrap = Bootstrap(rendererData, maxPaths);
 			
 			bootstrapHistograms = bootstrap->CreateHistogramSet(bins);
-			float score = trueDistributions->DistanceTo(bootstrapHistograms);
+			float score = trueDistributions.DistanceTo(bootstrapHistograms);
 //			float score = maxPaths - i;
 			
-			if(*bestBootstrapResult < 0 || score < *bestBootstrapResult) {
+			if(bestBootstrapResult < 0 || score < bestBootstrapResult) {
 				
 				printf("BETTER BOOTSTRAP FOUND! SCORE = %f\n",score);
-				if((*bestBootstrap)) {
+				if(bestBootstrap) { //A new and better bootstrap was found, delete the old bestBootstrap
 //					printf("Delete previous best bootstrap\n");
-					delete (*bestBootstrap);
+					delete bestBootstrap;
 				}
 				
-				(*bestBootstrap) = bootstrap;
+				bestBootstrap = bootstrap;
 				
 //					printf("\nTRUE HISTOGRAMS = \n");
 //					trueDistributions->Print();
@@ -433,11 +356,10 @@ void DataController::Reduce(RIVDataSet<float,ushort>** currentData, RIVDataSet<f
 				//	bootstrap->Print(100);
 				
 				
-				*bestBootstrapResult = score;
+				bestBootstrapResult = score;
 				newBootstrapFound = true;
 			}
-			else {
-//				printf("No good, delete bootstrap\n");
+			else { //This bootstrap is not a better fit than the previous one, delete it
 				delete bootstrap;
 			}
 			bootstrap = NULL;
@@ -452,33 +374,30 @@ void DataController::Reduce(RIVDataSet<float,ushort>** currentData, RIVDataSet<f
 //			(*bestBootstrap)->Print();
 			
 			printf("\nTRUE HISTOGRAMS = \n");
-			trueDistributions->Print();
+			trueDistributions.Print();
 			
 			printf("\nBOOTSTRAP HISTOGRAMS = \n");
 			bootstrapHistograms.Print();
 			
-			(*bestBootstrap)->SetDataListeners((*currentData)->GetDataListeners());
-			auto pathsTable = (*bestBootstrap)->GetTable(PATHS_TABLE);
-			auto isectsTable = (*bestBootstrap)->GetTable(INTERSECTIONS_TABLE);
+			bestBootstrap->SetDataListeners(rendererData->GetDataListeners());
+			auto pathsTable = bestBootstrap->GetTable(PATHS_TABLE);
+			auto isectsTable = bestBootstrap->GetTable(INTERSECTIONS_TABLE);
 			
 			//Create new references as they are not created by the bootstrapping
 			pathsTable->SetReference(new RIVMultiReference(pathsTable,isectsTable));
 			isectsTable->SetReference(new RIVSingleReference(isectsTable,pathsTable));
 			
-			//Delete the old current data
-			delete (*currentData);
-			(*currentData) = (*bestBootstrap);
-			(*bestBootstrap) = NULL;
-			resetPointers((*currentData));//Reset the different pointers to the new current data
+			//Delete the old renderer data and replace it with the bootstrap dataset,
+			delete rendererData;
+			rendererData = bestBootstrap;
+			bestBootstrap = NULL;
+			resetPointers(rendererData);	//Reset the shortcut pointers to the new data
 			
-			(*candidateData)->ClearData();
+			candidateData->ClearData();
 			
 			//Fix the new reference paths
 			size_t intersectionsCount = 0;
 			size_t pathsCount = 0;
-			
-			//			printf("\nBOOTSTRAP RESULT = \n");
-			//			(*currentData)->Print(100);
 			
 			for(size_t i = 0 ; i < depths->Size() ; ++i) {
 				ushort depth = depths->Value(i);
@@ -498,12 +417,12 @@ void DataController::Reduce(RIVDataSet<float,ushort>** currentData, RIVDataSet<f
 			//			printf("\nBOOTSTRAP RESULT = \n");
 			//			(*currentData)->Print(100);
 			
-			pathCounts.clear();
-			(*currentData)->NotifyDataListeners();
-			++reduceRounds;
-			if(reduceRounds % 2 == 0) {
-				Pause();	
-			}
+			pathCount = 0;
+			rendererData->NotifyDataListeners();
+//			++reduceRounds;
+//			if(reduceRounds % 2 == 0) {
+				Pause();
+//			}
 		}
 		else {
 			printf("\n Could not find a better bootstrap... \n");
@@ -513,18 +432,18 @@ void DataController::Reduce(RIVDataSet<float,ushort>** currentData, RIVDataSet<f
 
 void DataController::RendererOneFinishedFrame(size_t numPaths,size_t numRays) {
 	//Recompute the acceptance probability
-	if(maxPaths > pathsPerFrameOne) {
+//	if(maxPaths > pathsPerFrameOne) {
 //		acceptProbabilityOne = 1;
-	}
-	else {
+//	}
+//	else {
 //		acceptProbabilityOne = maxPaths / (float)numPaths;
-	}
+//	}
 //	printf("Renderer one finished a frame.\n");
 //	printf("%zu rays generated\n",raysPerFrameOne);
 //	printf("%zu paths generated\n",pathsPerFrameOne);
 //	printf("New acceptance probability = %f\n",acceptProbabilityOne);
-	pathsPerFrameOne = 0;
-	raysPerFrameOne = 0;
+//	pathsPerFrameOne = 0;
+//	raysPerFrameOne = 0;
 }
 
 void DataController::RendererTwoFinishedFrame(size_t numPaths,size_t numRays) {
@@ -538,14 +457,14 @@ void DataController::RendererTwoFinishedFrame(size_t numPaths,size_t numRays) {
 //	printf("%zu rays generated\n",raysPerFrameTwo);
 //	printf("%zu paths generated\n",pathsPerFrameTwo);
 //	printf("New acceptance probability = %f\n",acceptProbabilityTwo);
-	pathsPerFrameTwo = 0;
-	raysPerFrameTwo = 0;
+//	pathsPerFrameTwo = 0;
+//	raysPerFrameTwo = 0;
 }
 
-void DataController::SetAcceptProbabilityOne(float newProb) {
-	acceptProbabilityOne = newProb;
+void DataController::SetAcceptProbability(float newProb) {
+	acceptProbability = newProb;
 }
-
-void DataController::SetAcceptProbabilityTwo(float newProb) {
-	acceptProbabilityTwo = newProb;
-}
+//
+//void DataController::SetAcceptProbabilityTwo(float newProb) {
+//	acceptProbabilityTwo = newProb;
+//}

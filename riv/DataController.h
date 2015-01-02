@@ -27,24 +27,19 @@ private:
 	std::mutex mutex;
 	
 	//The datasets currently being used, this is what the views use to draw
-	RIVDataSet<float,ushort>* rendererDataOne;
-	RIVDataSet<float,ushort>* rendererDataTwo;
+	RIVDataSet<float,ushort>* rendererData;
 	
 	//Fresh dataset that is a candidate for becoming the current data set
-	RIVDataSet<float,ushort>* candidateDataOne;
-	RIVDataSet<float,ushort>* candidateDataTwo;
+	RIVDataSet<float,ushort>* candidateData;
 	
-	//Bootstrap sets
-	RIVDataSet<float,ushort>* bootstrapOne = NULL;
-	RIVDataSet<float,ushort>* bootstrapTwo = NULL;
+	//Bootstrap set
+	RIVDataSet<float,ushort>* bestBootstrap = NULL;
 	
 	//The scores of the bootstrap sets for the renderers
-	float bestBootstrapResultOne = -1;
-	float bestBootstrapResultTwo = -1;
+	float bestBootstrapResult = -1;
 	
 	/* Histograms to approximate the true distribution */
-	HistogramSet<float,ushort> trueDistributionsOne;
-	HistogramSet<float,ushort> trueDistributionsTwo;
+	HistogramSet<float,ushort> trueDistributions;
 	
 	/* Shortcut pointers for quick access */
 	RIVTable<float,ushort>* currentPathTable;
@@ -82,18 +77,11 @@ private:
 	const int bins = 10;
 	int reduceRounds = 0;
 	
-	int lastFrameOne = 0;
-	size_t pathsPerFrameOne = 0;
-	size_t raysPerFrameOne = 0;
-	float acceptProbabilityOne = .5F;
-	
-	int lastFrameTwo = 0;
-	size_t pathsPerFrameTwo = 0;
-	size_t raysPerFrameTwo = 0;
-	float acceptProbabilityTwo = .5F;
+	int lastFrame = 0;
+	float acceptProbability = .5F;
 	
 	//The number of data points per renderer
-	std::map<ushort,size_t> pathCounts;
+	size_t pathCount = 0;
 	
 	//The first time we will fill both the candidate and current, after which we will bootstrap, keep the best bootstrap as current and only fill up candidate
 	bool firstTime = true;
@@ -106,12 +94,11 @@ private:
 	
 	const size_t maxPaths;
 	size_t updateThrottle = 0;
-	const size_t bootstrapRepeat = 1000;
+	const size_t bootstrapRepeat = 10;
 	
 	//Generate the datasets; create tables records and the histogramset
 	void createDataStructures();
 	void clearPathCounts();
-	void createHistograms();
 	
 	void initDataSet(RIVDataSet<float,ushort> *dataset) ;
 	//Setup the shortcut pointer to the innards of the dataset, tables etc.
@@ -160,17 +147,14 @@ public:
 		return false;
 		
 	}
-	void SetAcceptProbabilityOne(float newProb);
-	void SetAcceptProbabilityTwo(float newProb);
+	void SetAcceptProbability(float newProb);
 	//The number of renderers to expect data from and the maximum number of paths per renderer before data reduction should kick in
 	DataController(const ushort renderers, const size_t maxPaths);
 	//Returns a pointer to a pointer of the dataset for renderer one
-	RIVDataSet<float,ushort>** GetDataSetOne();
-	//Returns a pointer to a pointer of the dataset for renderer two
-	RIVDataSet<float,ushort>** GetDataSetTwo();
-	bool ProcessNewPath(int frame, ushort renderer, PathData* newPath);
+	RIVDataSet<float,ushort>** GetDataSet();
+	bool ProcessNewPath(int frame, PathData* newPath);
 	//Reduce the data, first dataset is the current data being used for a renderer, candidate data is the new dataset, bestBootstrap is the slot used for creating and maintaining the best bootstrap and the best bootstrap results so far...
-	void Reduce(RIVDataSet<float,ushort>** rendererData, RIVDataSet<float,ushort>** candidateData, HistogramSet<float,ushort>* trueDistribution, RIVDataSet<float,ushort>** bestBootstrap, float* bestBootstrapResult);
+	void Reduce();
 	void RendererOneFinishedFrame(size_t numPaths,size_t numRays);
 	void RendererTwoFinishedFrame(size_t numPaths,size_t numRays);
 };
