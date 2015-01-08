@@ -1,4 +1,4 @@
-//
+c//
 //  Table.h
 //  RIVDataSet
 //
@@ -235,10 +235,18 @@ public:
 		//			}
 		//		});
 		//		printf("\n");
-		
+		bool groupPassed = false;
+		bool groupFiltersPresent = false;
+		tuple_for_each(groupFilters, [&](auto groupTFilters) {
+			if(groupTFilters.size()) {
+				groupFiltersPresent = true;
+			}
+		});
+		if(!groupFiltersPresent) {
+			groupPassed = true;
+		}
 		size_t invalidId = -1;
 		size_t latestRefId = invalidId;
-		bool groupPassed = false;
 		size_t rows = NumberOfRows();
 		for(size_t row = 0 ; row < rows ; row++) {
 			size_t refId = reference->GetReferenceRows(row).first[0];
@@ -249,49 +257,63 @@ public:
 				continue; //Already filtered
 			}
 			bool filterSourceRow = false;
-			if(refId != latestRefId) {
-				groupPassed = false;
-				//					printf("New group...");
-			}
-			if(!groupPassed) {
-				tuple_for_each(groupFilters, [&](auto groupTFilters) {
-					for(auto groupFilter : groupTFilters) { // A group filter of type T
-						groupFilter->Print();
-						auto& compoundFilters = *groupFilter->GetCompoundFilters();
-						int filtersPassed = 0;
-						int filtersToPass = 0;
-						for(auto compoundFilter : compoundFilters) { //All the group filters conjunctive filters
-							auto singleFilters = compoundFilter->GetAllSingularFilters();
-							tuple_for_each(singleFilters, [&](auto singleTFilters) {
-								filtersToPass += singleTFilters.size();
-								for(auto& filter : singleTFilters) {
-									typedef typename get_template_type<typename std::decay<decltype(*filter)>::type>::type templateType;
-									auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
-//									std::cout << "record " << recordForFilter->name << " : " << recordForFilter->Value(row) << std::endl;
-//									std::cout << "filter ";
-//									filter->Print();
-//									std::cout << std::endl;
-									bool filterThis = !filter->PassesFilter(recordForFilter->name, recordForFilter->Value(row));
-									if(filterThis) {
-										//											printf("Does not pass the filter!\n");
-										groupPassed = false;
-										break;
+			if(groupFiltersPresent) {
+				if(refId != latestRefId) {
+					groupPassed = false;
+					//					printf("New group...");
+				}
+				if(!groupPassed) {
+					tuple_for_each(groupFilters, [&](auto groupTFilters) {
+						for(auto groupFilter : groupTFilters) { // A group filter of type T
+							groupFilter->Print();
+							auto& compoundFilters = *groupFilter->GetCompoundFilters();
+							int filtersPassed = 0;
+							int filtersToPass = 0;
+							for(auto compoundFilter : compoundFilters) { //All the group filters conjunctive filters
+								auto singleFilters = compoundFilter->GetAllSingularFilters();
+								tuple_for_each(singleFilters, [&](auto singleTFilters) {
+									filtersToPass += singleTFilters.size();
+									for(auto& filter : singleTFilters) {
+										typedef typename get_template_type<typename std::decay<decltype(*filter)>::type>::type templateType;
+										auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
+	//									std::cout << "record " << recordForFilter->name << " : " << recordForFilter->Value(row) << std::endl;
+	//									std::cout << "filter ";
+	//									filter->Print();
+	//									std::cout << std::endl;
+										bool filterThis = !filter->PassesFilter(recordForFilter->name, recordForFilter->Value(row));
+										if(filterThis) {
+											//											printf("Does not pass the filter!\n");
+											groupPassed = false;
+											break;
+										}
+											else {
+											++filtersPassed;
+										}
 									}
-										else {
-										++filtersPassed;
-									}
+								});
+								if(filtersPassed == filtersToPass) {
+									groupPassed = true;
 								}
-							});
-							if(filtersPassed == filtersToPass) {
-								groupPassed = true;
 							}
 						}
-					}
-				});
+					});
+				}
+				latestRefId = refId;
+				filterSourceRow = !groupPassed;
 			}
-			latestRefId = refId;
-			filterSourceRow = !groupPassed;
-			if(groupPassed) {
+			// Process the manual row filters
+			if(!filterSourceRow) {
+				for(auto filter : rowFilters) {
+
+					filterSourceRow = !filter->PassesFilter(row);
+					if(filterSourceRow) {
+						break;
+					}
+					//							}
+				}
+			}
+			//Process the regular filters such as range filters discrete filters etc.
+			if(!filterSourceRow) {
 				tuple_for_each(filters, [&](auto tFilters) {
 					for(auto filter : tFilters) {
 						//						printf("Considering singular filter ");
@@ -304,17 +326,19 @@ public:
 						if(filterSourceRow) {
 							break;
 						}
-						//							}
 					}
 				});
 			}
+			
+			//FINISH UP
+			
 			if(filterSourceRow) {
 //				printf("row = %zu FILTERED\n",row);
 				FilterRow(row);
 				newlyFilteredRows[row] = true;
 			}
 			else {
-				//				printf("row = %zu SELECTED\n",row);
+//					printf("row = %zu SELECTED\n",row);
 			}
 		}
 		//		Print();

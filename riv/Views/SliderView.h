@@ -43,6 +43,7 @@ private:
 	
 	riv::ColorMap colorMap;
 	
+	void redisplayWindow();
 	void createHistograms(RIVDataSet<float,ushort>* datasetSource);
 	void resetPointers();
 	void filterDataSets();

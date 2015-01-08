@@ -60,7 +60,7 @@ void RIVSliderView::Draw() {
 	
 	if(needsRedraw) {
 		
-//		printHeader("DRAW SLIDERVIEW",100);
+		printHeader("DRAW SLIDERVIEW",60);
 		
 		glClearColor(1,1,1,0);
 		glClear( GL_COLOR_BUFFER_BIT );
@@ -361,7 +361,6 @@ void RIVSliderView::filterDataSets() {
 }
 bool RIVSliderView::HandleMouse(int button, int state, int x, int y) {
 	float minDistance = 10;
-	printf("Slider handle mouse (%d,%d)\n",x,y);
 	bool mouseCaught = false;
 	printf("state = %d\n",state);
 	if(state == GLUT_DOWN) {
@@ -385,18 +384,18 @@ bool RIVSliderView::HandleMouse(int button, int state, int x, int y) {
 		}
 	}
 	else if(state == GLUT_UP) {
-		printf("GLUT_UP\n");
-		if(selectedPointer || movePointers) {
+		int distance = abs(x - startDragX);
+		if(selectedPointer || (movePointers && distance > 1)) {
 			selectedPointer = NULL;
 			printf("Pointer de-selected.\n");
 			mouseCaught = true;
 			
 			filterDataSets();
+			movePointers = false;
 		}
 	}
 	if(mouseCaught) {
-		Invalidate();
-		glutPostRedisplay();
+		redisplayWindow();
 	}
 	return mouseCaught;
 }
@@ -428,12 +427,20 @@ bool RIVSliderView::HandleMouseMotion(int x, int y) {
 	}
 	return false;
 }
+void RIVSliderView::redisplayWindow() {
+	int currentWindow = glutGetWindow();
+	glutSetWindow(RIVSliderView::windowHandle);
+	needsRedraw = true;
+	glutPostRedisplay();
+	//Return window to given window
+	glutSetWindow(currentWindow);
+}
 //Dataset listener functions
 void RIVSliderView::OnFiltersChanged() {
 	//Do nothing...?
 }
 void RIVSliderView::OnDataChanged(RIVDataSet<float,ushort>* source) {
-	
+	printf("*** RIVSliderView received a on dataset changed notification!\n" );
 	if(source == *datasetOne) {
 		printHeader("CREATE MEMBERSHIP HISTOGRAM ONE");
 		uniquenessHistogramOne.Clear();
@@ -448,7 +455,6 @@ void RIVSliderView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 		printf("UNKNOWN DATASET\n");
 	}
 	
-	Invalidate();
-	glutPostRedisplay();
+	redisplayWindow();
 	
 }
