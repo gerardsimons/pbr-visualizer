@@ -39,6 +39,9 @@ rendererOne(renderer), sizeProperty(sizeProperty), colorProperty(colorProperty) 
 	
 	GetSceneData(rendererOne, &meshesOne);
 	
+	scale = meshesOne.GetScale();
+	center = meshesTwo.GetCenter();
+	
 	ResetGraphics();
 };
 
@@ -53,6 +56,25 @@ RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(render
 	
 	GetSceneData(rendererOne, &meshesOne);
 	GetSceneData(rendererTwo, &meshesTwo);
+	
+	Vec3f modelCenterOne = meshesOne.GetCenter();
+	
+	scale = meshesOne.GetScale();
+	center = meshesTwo.GetCenter();
+	
+	if(datasetTwo && drawDataSetTwo) {
+		float scaleTwo = meshesTwo.GetScale();
+		if(scaleTwo > scale) {
+			scale = scaleTwo;
+			
+		}
+		Vec3fa modelCenterTwo = meshesTwo.GetCenter();
+		float lengthOne = length(modelCenterOne);
+		float lengthTwo = length(modelCenterTwo);
+		if( lengthTwo > lengthOne ) {
+			center = modelCenterTwo;
+		}
+	}
 	
 	ResetGraphics();
 };
@@ -80,7 +102,7 @@ void RIV3DView::Reshape(int newWidth, int newHeight) {
     
     eye.x = 0;
     eye.y = 0;
-    eye.z = 2;
+    eye.z = 2.5;
     
 //    selectionBox = Box3D(0,0,0,1.F,1.F,1.F);
     
@@ -156,7 +178,7 @@ void RIV3DView::drawLeafNodes(OctreeNode* node) {
 		glColor4f(cubeColor.R,cubeColor.G,cubeColor.B,.5F);
 		
 //		if(almost_equal(ratio,0.05,.1) || almost_equal(ratio,0,.001)) {
-		if(pointsInNode > 14) {
+//		if(pointsInNode > 14) {
 //			printf("Points in node = %zu\n",pointsInNode);
 ////			printf("Node density = %f\n",density);
 ////			printf("Max density = %f\n",maxDensity);
@@ -165,7 +187,7 @@ void RIV3DView::drawLeafNodes(OctreeNode* node) {
 //			printf("Color = ");
 //			printArray(color, 3);
 //			printf("\n");
-		}
+//		}
 		
 		glPushMatrix();
 		glTranslatef(nodeCenter.x, nodeCenter.y, nodeCenter.z);
@@ -206,7 +228,7 @@ void RIV3DView::ToggleDrawDataSetTwo() {
 void RIV3DView::Draw() {
 //    printf("3DView Draw #%zu\n",++drawCounter_);
 	
-	reporter::startTask("3D Draw");
+//	reporter::startTask("3D Draw");
 	
     glEnable(GL_DEPTH_TEST);
 	glClearColor (1.0, 1.0, 1.0, 0.0);
@@ -226,20 +248,10 @@ void RIV3DView::Draw() {
     drawCoordSystem();
 	
 	glPushMatrix();
-	float scale = meshesOne.GetScale();
-	Vec3f modelCenter = meshesOne.GetCenter();
-	
-	if(datasetTwo && drawDataSetTwo) {
-		float scaleTwo = meshesTwo.GetScale();
-		if(scaleTwo > scale) {
-			scale = scaleTwo;
-			modelCenter = meshesTwo.GetCenter();
-		}
-	}
 	
 	glScalef(scale,scale,scale);
 
-	glTranslatef(-modelCenter[0], -modelCenter[1], -modelCenter[2]);
+	glTranslatef(-center[0], -center[1], -center[2]);
 	
 	if(drawDataSetOne) {
 //		float purpleColor[3] =  {.5f,.2f,1.0f};
@@ -303,7 +315,7 @@ void RIV3DView::Draw() {
 	
 	glDisable(GL_BLEND);
 	
-	reporter::stop("3D Draw");
+//	reporter::stop("3D Draw");
 }
 
 
@@ -329,7 +341,7 @@ bool RIV3DView::isSelectedObject(ushort objectId) {
 
 void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color) {
 	
-	reporter::startTask("Draw mesh model");
+//	reporter::startTask("Draw mesh model");
 	
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 //    glColor3f(.5f,.2f,1.0f); //Purple
@@ -337,9 +349,17 @@ void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color) {
     /** Draw the model **/
     glBegin(GL_TRIANGLES);
 	
+	size_t meshindex = 0;
+	
 	for(TriangleMeshFull* mesh : meshGroup->GetTriangleMeshes()) {
 		vector_t<TriangleMeshFull::Triangle> triangles = mesh->triangles;
 		vector_t<Vec3fa>& position = mesh->position;
+		if(meshindex == selectedMesh) {
+			glColor3f(0.8, 0.8, 0.6);
+		}
+		else {
+			glColor3f(color[0], color[1], color[2]);
+		}
 		for(size_t i = 0 ; i < triangles.size() ; ++i) {
 			Vec3fa& v0 = position[triangles[i].v0];
 			Vec3fa& v1 = position[triangles[i].v1];
@@ -348,20 +368,24 @@ void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color) {
 			glVertex3f(v1[0],v1[1],v1[2]);
 			glVertex3f(v2[0],v2[1],v2[2]);
 		}
+		meshindex++;
 	}
-	reporter::stop("Draw mesh model");
+//	reporter::stop("Draw mesh model");
 	glEnd();
 }
 
 void RIV3DView::drawPoints() {
-	drawPoints(*datasetOne,pathsOne);
-	if(datasetTwo && drawDataSetTwo) {
-		drawPoints(*datasetTwo, pathsTwo);
+	if(drawIntersectionPoints) {
+		if(drawDataSetOne)
+			drawPoints(*datasetOne,pathsOne);
+		if(datasetTwo && drawDataSetTwo) {
+			drawPoints(*datasetTwo, pathsTwo);
+		}
 	}
 }
 
 void RIV3DView::drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths) {
-	reporter::startTask("Draw points.");
+//	reporter::startTask("Draw points.");
 //	printf("Drawing intersections points.\n");
 	
 	RIVTable<float,ushort>* isectTable = dataset->GetTable("intersections");
@@ -403,7 +427,7 @@ void RIV3DView::drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<
 	}
 	glEnd();
 	
-	reporter::stop("Draw points.");
+//	reporter::stop("Draw points.");
 }
 
 //Move this function somewhere else
@@ -475,7 +499,7 @@ std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset) {
 	
 	reporter::startTask("Creating paths");
 	
-	RIVTable<float,ushort>* isectTable = (*datasetOne)->GetTable("intersections");
+	RIVTable<float,ushort>* isectTable = dataset->GetTable("intersections");
 	RIVShortRecord* bounceRecord = isectTable->GetRecord<ushort>("bounce_nr");
 	
 	std::vector<Path> paths;
@@ -533,14 +557,14 @@ void RIV3DView::MovePathSegment(float ratioIncrement) {
 
 void RIV3DView::drawPaths(float startSegment, float stopSegment) {
 	if(drawDataSetOne) {
-		drawPaths(pathsOne, startSegment, stopSegment);
+		drawPaths((*datasetOne),pathsOne, startSegment, stopSegment);
 	}
 	if(datasetTwo && drawDataSetTwo) {
-		drawPaths(pathsOne, startSegment, stopSegment);
+		drawPaths((*datasetTwo),pathsTwo, startSegment, stopSegment);
 	}
 }
 
-void RIV3DView::drawPaths(const std::vector<Path>& paths, float startSegment, float stopSegment) {
+void RIV3DView::drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths, float startSegment, float stopSegment) {
 //	char taskname[100];
 //	sprintf(taskname,"drawPaths %f - %f\n",startSegment,stopSegment);
 //	reporter::startTask(taskname);
@@ -548,8 +572,8 @@ void RIV3DView::drawPaths(const std::vector<Path>& paths, float startSegment, fl
 	for(float i = 1 ; i < maxBounce ; i++) {
 		if(startSegment < i / maxBounce && stopSegment > i / maxBounce) {
 			//                printf("(%f,%f) segment split in (%f,%f) and (%f,%f)\n",startSegment,stopSegment,startSegment,i/maxBounce,i/maxBounce,stopSegment);
-			drawPaths(paths,startSegment, i / maxBounce);
-			drawPaths(paths,i / maxBounce, stopSegment);
+			drawPaths(dataset,paths,startSegment, i / maxBounce);
+			drawPaths(dataset,paths,i / maxBounce, stopSegment);
 			return;
 		}
 	}
@@ -558,7 +582,7 @@ void RIV3DView::drawPaths(const std::vector<Path>& paths, float startSegment, fl
 	int startBounce = floor(startSegment * maxBounce);
 	int endBounce = startBounce + 1;
 	
-	RIVTable<float,ushort>* intersectionsTable = (*datasetOne)->GetTable("intersections");
+	RIVTable<float,ushort>* intersectionsTable = dataset->GetTable("intersections");
 	RIVFloatRecord* xRecord = intersectionsTable->GetRecord<float>("x");
 	RIVFloatRecord* yRecord = intersectionsTable->GetRecord<float>("y");
 	RIVFloatRecord* zRecord = intersectionsTable->GetRecord<float>("z");
@@ -583,7 +607,6 @@ void RIV3DView::drawPaths(const std::vector<Path>& paths, float startSegment, fl
 			
 //			size_t point = path.GetPoint(0);
 //			Color c = path.GetColor(0);
-//
 //
 //			glVertex3f(cameraPosition[0] + deltaX * startSegment * maxBounce,cameraPosition[1] + deltaY * startSegment * maxBounce,cameraPosition[2] + deltaZ * startSegment * maxBounce);
 //			glColor3f(c.R,c.G,c.B);
@@ -723,6 +746,59 @@ Vec3fa RIV3DView::screenToWorldCoordinates(int screenX, int screenY, float zPlan
     
     return worldPos;
 }
+//Checks if a ray intersects with the mesh group and creates the path filters accordingly and applies them to the dataset
+bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes) {
+	ushort selectedObjectID;
+	float distance;
+	
+	bool intersects = meshes.Intersect(pickRay, selectedObjectID, Phit, distance);
+	bool refilterNeeded = false;
+	
+	if(intersects && selectRound < maxBounce) {
+		printf("new selected object ID = %hu\n",selectedObjectID);
+		meshSelected = true;
+		selectedMesh = selectedObjectID;
+		refilterNeeded = true;
+	}
+	else {
+		selectedMesh = -1;
+		selectedObjectID = -1;
+		refilterNeeded = false;
+	}
+	//
+	if(refilterNeeded) { //Create path filter
+		printf("Path creation filter");
+		dataset->StartFiltering();
+		if(pathFilter == NULL) { //Add to the previous filter
+			riv::SingularFilter<ushort>* objectFilter = new riv::DiscreteFilter<ushort>("primitive ID",selectedObjectID);
+			riv::SingularFilter<ushort>* bounceFilter = new riv::DiscreteFilter<ushort>("bounce_nr",1);
+			std::vector<riv::SingularFilter<ushort>*> fs;
+			fs.push_back(objectFilter);
+			fs.push_back(bounceFilter);
+			
+			pathFilter = new riv::GroupFilter<ushort>(new riv::ConjunctiveFilter<ushort>(fs));
+			dataset->AddFilter(pathFilter);
+		}
+		else { //There already is a path creation filter, simply add to it
+			//Find the latest bounce nr filter
+			size_t bounce_nr = pathFilter->Size() + 1;
+			
+			riv::SingularFilter<ushort>* objectFilter = new riv::DiscreteFilter<ushort>("primitive ID",selectedObjectID);
+			riv::SingularFilter<ushort>* bounceFilter = new riv::DiscreteFilter<ushort>("bounce_nr",bounce_nr);
+			std::vector<riv::SingularFilter<ushort>*> fs;
+			fs.push_back(objectFilter);
+			fs.push_back(bounceFilter);
+//			pathFilter->AddFilter(new riv::ConjunctiveFilter<ushort>(fs));
+//			dataset->UpdateFilter(pathFilter);
+			
+			dataset->AddFilter(new riv::GroupFilter<ushort>(new riv::ConjunctiveFilter<ushort>(fs)));
+		}
+
+		printf("\n");
+		dataset->StopFiltering();
+	}
+	return refilterNeeded;
+}
 
 bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
     y = height - y;
@@ -731,8 +807,8 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 		Vec3fa selectNear = screenToWorldCoordinates(x, y, 0);
 		Vec3fa selectFar = screenToWorldCoordinates(x, y, 1);
 		
-		Vec3fa modelPosition = -meshesOne.GetCenter();
-		float reverseScaleModel = 1 / meshesOne.GetScale();
+		Vec3fa modelPosition = -center;
+		float reverseScaleModel = 1 / scale;
 		
 		Vec3fa dest = reverseScaleModel * selectNear;
 		dest = dest - modelPosition;
@@ -741,56 +817,11 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 		
 		Vec3fa dir = dest - origin;
 		
-		ushort selectedObjectID;
-//
 		pickRay = Ray(origin, dir);
-		float distance;
 		
-		bool intersects = meshesOne.Intersect(pickRay, selectedObjectID, Phit, distance);
-		bool refilterNeeded = false;
-	
-		if(intersects && selectRound < maxBounce) {
-			printf("new selected object ID = %hu\n",selectedObjectID);
-			meshSelected = true;
-			refilterNeeded = true;
-		}
-		else {
-			selectedObjectID = 1;
-			refilterNeeded = false;
-		}
-//		
-		if(refilterNeeded) { //Create path filter
-			printf("Path creation filter");
-			(*datasetOne)->StartFiltering();
-			if(pathFilter == NULL) { //Add to the previous filter
-				riv::SingularFilter<ushort>* objectFilter = new riv::DiscreteFilter<ushort>("primitive ID",selectedObjectID);
-				riv::SingularFilter<ushort>* bounceFilter = new riv::DiscreteFilter<ushort>("bounce_nr",1);
-				std::vector<riv::SingularFilter<ushort>*> fs;
-				fs.push_back(objectFilter);
-				fs.push_back(bounceFilter);
-
-				pathFilter = new riv::GroupFilter<ushort>(new riv::ConjunctiveFilter<ushort>(fs));
-				(*datasetOne)->AddFilter(pathFilter);
-			}
-			else { //There already is a path creation filter, simply add to it
-				//Find the latest bounce nr filter
-				size_t bounce_nr = pathFilter->Size() + 1;
-			
-//				(*dataset)->RemoveFilter(pathFilter);
-
-				riv::SingularFilter<ushort>* objectFilter = new riv::DiscreteFilter<ushort>("primitive ID",selectedObjectID);
-				riv::SingularFilter<ushort>* bounceFilter = new riv::DiscreteFilter<ushort>("bounce_nr",bounce_nr);
-				std::vector<riv::SingularFilter<ushort>*> fs;
-				fs.push_back(objectFilter);
-				fs.push_back(bounceFilter);
-				pathFilter->AddCompoundFilter(new riv::ConjunctiveFilter<ushort>(fs));
-				(*datasetOne)->UpdateFilter(pathFilter);
-
-			}
-//			pathFilter->Print();
-			printf("\n");
-			(*datasetOne)->StopFiltering();
-		}
+//		if(!pathCreation(*datasetOne, meshesOne)) {
+			pathCreation(*datasetTwo, meshesTwo);
+//		}
 		
 		isDragging = true;
 		tbMouseFunc(button, state, width-x, y);

@@ -92,12 +92,8 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
 	
 	RIVTable<float,ushort>* pathTable = dataset->CreateTable(PATHS_TABLE);
 	
-	//	pathTable->CreateRecord<ushort>(RENDERER_ID,0,1);
 	pathTable->CreateRecord<float>(PIXEL_X,0,1,true);
 	pathTable->CreateRecord<float>(PIXEL_Y,0,1,true);
-	//	lensUs = pathTable->CreateFloatRecord("lens U");
-	//	lensVs = pathTable->CreateFloatRecord("lens V");
-	//	times = pathTable->CreateFloatRecord("time");
 	pathTable->CreateRecord<float>(PATH_R,0,1);
 	pathTable->CreateRecord<float>(PATH_G,0,1);
 	pathTable->CreateRecord<float>(PATH_B,0,1);
@@ -109,7 +105,7 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
 	RIVTable<float,ushort>* isectsTable = dataset->CreateTable(INTERSECTIONS_TABLE);
 	
 	//TODO: Determine this by reading from the renderer settings
-	isectsTable->CreateRecord<ushort>(BOUNCE_NR,0,5);
+	isectsTable->CreateRecord<ushort>(BOUNCE_NR,1,5);
 	isectsTable->CreateRecord<float>(POS_X,0,600,true);
 	isectsTable->CreateRecord<float>(POS_Y,0,600,true);
 	isectsTable->CreateRecord<float>(POS_Z,0,600,true);
@@ -157,7 +153,6 @@ void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
 	isectsToPathsRef = (RIVSingleReference*)currentIntersectionsTable->GetReference();
 	pathsToIsectRef = (RIVMultiReference*)currentPathTable->GetReference();
 	
-	//	rendererId = currentPathTable->GetRecord<ushort>(RENDERER_ID);
 	xPixels = currentPathTable->GetRecord<float>(PIXEL_X);
 	yPixels = currentPathTable->GetRecord<float>(PIXEL_Y);
 	//	lensUs = pathTable->GetRecord<float>("lens U");
@@ -192,8 +187,6 @@ RIVDataSet<float,ushort>** DataController::GetDataSet() {
 //}
 bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 	if(IsActive()) {
-		float* bestResult;
-		
 		//ALWAYS update the histograms
 		ushort nrIntersections = newPath->intersectionData.size();
 		
@@ -242,7 +235,7 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 				depths->AddValue((ushort)newPath->intersectionData.size());
 				size_t* indices = new size_t[nrIntersections];
 				
-				pathsToIsectRef->AddReferences(xPixels->Size() - 1, std::pair<size_t*,ushort>(indices,nrIntersections));
+				pathsToIsectRef->AddReferences(colorRs->Size() - 1, std::pair<size_t*,ushort>(indices,nrIntersections));
 				
 				for(int i = 0 ; i < nrIntersections ; ++i) {
 					IntersectData& isect = newPath->intersectionData[i];
@@ -259,7 +252,7 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 					//					interactionTypes->AddValue(isect.interactionType);
 					//					lightIds->AddValue(isect.lightId);
 					
-					isectsToPathsRef->AddReference(xs->Size() - 1, xPixels->Size() - 1);
+					isectsToPathsRef->AddReference(xs->Size() - 1, colorRs->Size() - 1);
 					indices[i] = xs->Size() - 1;
 				}
 				return true;
@@ -414,19 +407,19 @@ void DataController::Reduce() {
 				++pathsCount;
 			}
 			
-			//			printf("\nBOOTSTRAP RESULT = \n");
-			//			(*currentData)->Print(100);
+			//	printf("\nBOOTSTRAP RESULT = \n");
+			//	(*currentData)->Print(100);
 			
 			pathCount = 0;
 			rendererData->NotifyDataListeners();
 //			++reduceRounds;
 //			if(reduceRounds % 2 == 0) {
-				Pause();
 //			}
 		}
 		else {
 			printf("\n Could not find a better bootstrap... \n");
 		}
+		Pause();
 	}
 }
 

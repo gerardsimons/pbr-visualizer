@@ -47,7 +47,9 @@ private:
 	std::tuple<std::map<std::string,RIVRecord<Ts>*>...> recordsRegister;
 	
 	std::tuple<std::vector<riv::SingularFilter<Ts>*>...> filters;
-	std::tuple<std::vector<riv::GroupFilter<Ts>*>...> groupFilters;
+	std::tuple<std::vector<riv::CompoundFilter<Ts>*>...> compoundFilters;
+	std::tuple<std::vector<riv::GroupFilter<Ts>*>...> groupFilters; //Group filter are treated differently
+	std::vector<riv::RowFilter*> rowFilters; //Custom row filters
 	
 	std::vector<std::string> attributes;
 	
@@ -55,7 +57,7 @@ private:
 	TableIterator* iterator = NULL;
 	
 	std::map<size_t,bool> filteredRows;
-	std::vector<size_t> newlyFilteredRows;
+	std::map<size_t,bool> newlyFilteredRows;
 	
 	template<typename T>
 	std::map<std::string,RIVRecord<T>*>& getRecordsRegister() {
@@ -204,7 +206,6 @@ public:
 		empty = true;
 	}
 	bool IsEmpty() {
-		
 		tuple_for_each(records, [&](auto tRecords) {
 			for(auto& record : tRecords) {
 				if(record->Size()) {
@@ -221,7 +222,7 @@ public:
 	
 	//Filter this table according to the filters that are applied
 	void Filter() {
-//		filteredRows.clear();
+		//		filteredRows.clear();
 		newlyFilteredRows.clear();
 		std::string task = "Filter " + name;
 		reporter::startTask(task);
@@ -249,33 +250,41 @@ public:
 			}
 			bool filterSourceRow = false;
 			if(refId != latestRefId) {
-				groupPassed = true;
+				groupPassed = false;
 				//					printf("New group...");
 			}
 			if(!groupPassed) {
 				tuple_for_each(groupFilters, [&](auto groupTFilters) {
-					for(auto groupFilter : groupTFilters) {
+					for(auto groupFilter : groupTFilters) { // A group filter of type T
 						groupFilter->Print();
 						auto& compoundFilters = *groupFilter->GetCompoundFilters();
-						for(auto compoundFilter : compoundFilters) {
+						int filtersPassed = 0;
+						int filtersToPass = 0;
+						for(auto compoundFilter : compoundFilters) { //All the group filters conjunctive filters
 							auto singleFilters = compoundFilter->GetAllSingularFilters();
-							bool filtersPassed = true;
 							tuple_for_each(singleFilters, [&](auto singleTFilters) {
+								filtersToPass += singleTFilters.size();
 								for(auto& filter : singleTFilters) {
 									typedef typename get_template_type<typename std::decay<decltype(*filter)>::type>::type templateType;
 									auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
-									//										std::cout << "record " << recordForFilter->name << " : " << recordForFilter->Value(row) << std::endl;
-									//										std::cout << "filter ";
-									//										filter->Print();
-									//										std::cout << std::endl;
+//									std::cout << "record " << recordForFilter->name << " : " << recordForFilter->Value(row) << std::endl;
+//									std::cout << "filter ";
+//									filter->Print();
+//									std::cout << std::endl;
 									bool filterThis = !filter->PassesFilter(recordForFilter->name, recordForFilter->Value(row));
 									if(filterThis) {
 										//											printf("Does not pass the filter!\n");
 										groupPassed = false;
 										break;
 									}
+										else {
+										++filtersPassed;
+									}
 								}
 							});
+							if(filtersPassed == filtersToPass) {
+								groupPassed = true;
+							}
 						}
 					}
 				});
@@ -285,8 +294,8 @@ public:
 			if(groupPassed) {
 				tuple_for_each(filters, [&](auto tFilters) {
 					for(auto filter : tFilters) {
-//						printf("Considering singular filter ");
-//						filter->Print();
+						//						printf("Considering singular filter ");
+						//						filter->Print();
 						//							If the filter applies to this table, filter according to
 						//							if(filter->AppliesToTable(thisInterface)) {
 						typedef typename get_template_type<typename std::decay<decltype(*filter)>::type>::type templateType;
@@ -302,10 +311,10 @@ public:
 			if(filterSourceRow) {
 //				printf("row = %zu FILTERED\n",row);
 				FilterRow(row);
-				newlyFilteredRows.push_back(row);
+				newlyFilteredRows[row] = true;
 			}
 			else {
-//				printf("row = %zu SELECTED\n",row);
+				//				printf("row = %zu SELECTED\n",row);
 			}
 		}
 		//		Print();
@@ -320,8 +329,10 @@ public:
 		//This happens to paths table
 		RIVMultiReference* forwardRef = dynamic_cast<RIVMultiReference*>(reference);
 		if(forwardRef) {
-			for(size_t row : newlyFilteredRows) {
-				forwardRef->FilterReferenceRow(row);
+			for(auto row : newlyFilteredRows) {
+				if(row.second) {
+					forwardRef->FilterReferenceRow(row.first);
+				}
 			}
 		}
 		else { //This happens to intersections table
@@ -329,27 +340,34 @@ public:
 			RIVMultiReference* multiRef = dynamic_cast<RIVMultiReference*>(backReference);
 			if(multiRef) {
 				for(auto iterator : multiRef->GetIndexMap()) {
-					std::pair<size_t*,ushort> backRows = iterator.second;
-					bool filterReference = true;
-					//					printMap(filteredRows);
-					for(ushort i = 0 ; i < backRows.second ; ++i) { //Does the filtered map contain ALL of these rows? If so we should filter it in the reference table
-						//						printArray(backRows.first, backRows.second);
-						bool filteredBackRow = filteredRows[backRows.first[i]];
-						if(!filteredBackRow) {
-							filterReference = false;
-							break;
+					if(newlyFilteredRows[iterator.first]) {
+						std::pair<size_t*,ushort> backRows = iterator.second;
+						size_t rowsFound = 0;
+						size_t rowsRequired = backRows.second;
+						//					printMap(filteredRows);
+						for(ushort i = 0 ; i < backRows.second ; ++i) { //Does the filtered map contain ALL of these rows? If so we should filter it in the reference table
+							//						printArray(backRows.first, backRows.second);
+							bool filteredBackRow = filteredRows[backRows.first[i]];
+							if(!filteredBackRow) {
+								break;
+							}
+							++rowsFound;
 						}
-					}
-					
-					if(filterReference) {
-						//						printf("Filter reference row %zu at %s\n",iterator->first,reference->targetTable->name.c_str());
-						reference->targetTable->FilterRow(iterator.first);
+						if(rowsFound == rowsRequired) {
+							//						printf("Filter reference row %zu at %s\n",iterator->first,reference->targetTable->name.c_str());
+							reference->targetTable->FilterRow(iterator.first);
+						}
 					}
 				}
 			}
-			newlyFilteredRows.clear();
 		}
+		newlyFilteredRows.clear();
 		reporter::stop("Filter References");
+	}
+	void ClearRowFilters() {
+		deletePointerVector(rowFilters);
+		rowFilters.clear();
+		ClearFilteredRows();
 	}
 	template<typename T>
 	std::vector<riv::SingularFilter<T>*>* GetFilters() {
@@ -360,6 +378,10 @@ public:
 		return &std::get<std::vector<riv::GroupFilter<T>*>>(groupFilters);
 	}
 	template<typename T>
+	std::vector<riv::CompoundFilter<T>*>* GetCompoundFilters() {
+		return &std::get<std::vector<riv::CompoundFilter<T>*>>(compoundFilters);
+	}
+	template<typename T>
 	void AddFilter(riv::SingularFilter<T> *filter) {
 		auto tFilters = GetFilters<T>();
 		tFilters->push_back(filter);
@@ -368,6 +390,13 @@ public:
 	void AddFilter(riv::GroupFilter<U> *groupFilter) {
 		GetGroupFilters<U>()->push_back(groupFilter);
 		//		groupFilters.push_back(groupFilter);
+	}
+	void AddFilter(riv::RowFilter* rowFilter) {
+		rowFilters.push_back(rowFilter);
+	}
+	template<typename U>
+	void AddFilter(riv::CompoundFilter<U>* compoundFilter) {
+		GetCompoundFilters<U>()->push_back(compoundFilter);
 	}
 	template<typename ...Us>
 	bool HasFilter(riv::GroupFilter<Us...> *groupFilter) {
@@ -384,16 +413,11 @@ public:
 		return found;
 	}
 	std::vector<std::string> GetAttributes() const;
-	
 	void FilterRow(size_t row) {
 		filteredRows[row] = true;
 		filtered = true;
 		
 	}
-	void SelectRow(size_t row);
-	//    void UnfilterRow(size_t,RIVReference* reference = 0);
-	void FilterRowsUnlinkedTo(RIVTable *table);
-	
 	//Clears all the filters that may be present, returns true if any filters were actually removed
 	bool ClearFilters() {
 		tuple_for_each(filters, [&](auto filters) {
@@ -479,7 +503,7 @@ public:
 		return reference;
 	}
 	
-	size_t NumberOfColumns() const {
+	size_t NumberOfRecords() const {
 		size_t total = 0;
 		tuple_for_each(records, [&](auto tRecords) {
 			total += tRecords.size();
@@ -550,7 +574,7 @@ public:
 		if(maxPrint == 0 || maxPrint > rows) {
 			maxPrint = rows;
 		}
-		printf("Table called %s has %zu records and %zu rows.\n First %zu rows:\n",name.c_str(),NumberOfColumns(),rows,maxPrint);
+		printf("Table called %s has %zu records and %zu rows.\n First %zu rows:\n",name.c_str(),NumberOfRecords(),rows,maxPrint);
 		std::string headerText = "|";
 		std::string headerOrnament;
 		
@@ -610,7 +634,69 @@ public:
 		}
 		printf("%s\n",headerOrnament.c_str());
 	}
-	
+	void PrintFilteredRows(size_t maxPrint = 0) {
+		size_t rows = NumberOfRows();
+		if(maxPrint == 0 || maxPrint > rows) {
+			maxPrint = rows;
+		}
+		printf("Table called %s has %zu records and %zu rows.\n First %zu rows:\n",name.c_str(),NumberOfRecords(),rows,maxPrint);
+		std::string headerText = "|";
+		std::string headerOrnament;
+		
+		int columnWidth = 17;
+		
+		tuple_for_each(records, [&](auto tRecords) {
+			for(auto record : tRecords) {
+				
+				size_t textWidth = record->name.size();
+				if(textWidth > columnWidth) {
+					columnWidth = textWidth;
+				}
+				int padding = (int)((columnWidth - textWidth) / 2.F);
+				
+				headerText += generateString(' ',padding);
+				headerText += record->name.c_str();
+				headerText += generateString(' ',padding);
+				int remainder = columnWidth - textWidth - 2 * padding;
+				headerText += generateString(' ',remainder);
+				headerText += "|";
+			}
+		});
+		for(size_t j = 0 ; j < headerText.size() ; j++) {
+			headerOrnament += "-";
+		}
+		
+		printf("%s\n",headerOrnament.c_str());
+		printf("%s\n",headerText.c_str());
+		printf("%s\n",headerOrnament.c_str());
+		
+		for(size_t j = 0 ; j < maxPrint ; j++) {
+			if(filteredRows[j]) {
+			std::string rowText = RowToString(j,columnWidth);
+			if(reference) {
+				std::pair<size_t*,ushort> referenceIndexRange = reference->GetReferenceRows(j);
+				//				printArray(referenceIndexRange.first,referenceIndexRange.second);
+				if(referenceIndexRange.first) {
+					rowText += "---> " + reference->targetTable->name + "{";
+					for(size_t i = 0 ; i < referenceIndexRange.second ; ++i) {
+						
+						rowText += std::to_string(referenceIndexRange.first[i]);
+						if(i < referenceIndexRange.second - 1) {
+							rowText +=  ",";
+						}
+					}
+					rowText += "}";
+				}
+			}
+			if(filteredRows[j]) {
+				rowText += "** FILTERED **";
+			}
+			
+			printf("%s\n",rowText.c_str());
+			}
+		}
+		printf("%s\n",headerOrnament.c_str());
+	}
 	HistogramSet<Ts...> CreateHistogramSet(int bins) {
 		HistogramSet<Ts...> histograms;
 		

@@ -94,7 +94,7 @@ private:
 	
 	const size_t maxPaths;
 	size_t updateThrottle = 0;
-	const size_t bootstrapRepeat = 10;
+	const size_t bootstrapRepeat = 1;
 	
 	//Generate the datasets; create tables records and the histogramset
 	void createDataStructures();
@@ -124,6 +124,9 @@ public:
 			printf("paused.\n");
 			Pause();
 		}
+	}
+	HistogramSet<float,ushort>* GetTrueDistributions() {
+		return &trueDistributions;
 	}
 	void Pause() {
 		paused = true;

@@ -30,8 +30,8 @@ namespace riv {
 			this->indices = indices;
 		}
 		Vec3Df GetVertex(size_t vertexIndex) const;
-		bool Intersect(const Ray<float>& r, Vec3Df& Phit);
-		bool Contains(const Vec3Df& point, size_t& triangleIndex);
+		bool Intersect(const Ray<float>& r, Vec3Df& Phit) const;
+		bool Contains(const Vec3Df& point, size_t& triangleIndex) const ;
 		
 		void AssignShapeId(size_t triangleIndex, ushort shapeID);
 	};

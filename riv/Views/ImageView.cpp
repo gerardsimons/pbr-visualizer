@@ -147,7 +147,8 @@ void RIVImageView::Draw() {
     needsRedraw = true;
 	
 	if(needsRedraw) {
-		printf("\nImageView Draw #%zu\n",++drawCounter);
+		printHeader("IMAGE VIEW DRAW");
+//		printf("\nImageView Draw #%zu\n",++drawCounter);
 		glDisable(GL_DEPTH_TEST);
 		
 		glClearColor(1,1,1,0);
@@ -168,9 +169,6 @@ void RIVImageView::Draw() {
 			drawRenderedImage(rendererTwo,halfWidth,0,halfWidth,height);
 		}
 		
-		glFlush();
-		glutSwapBuffers();
-
 		glFlush();
 		glutSwapBuffers();
 	}

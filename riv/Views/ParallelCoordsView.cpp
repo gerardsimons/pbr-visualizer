@@ -1,6 +1,6 @@
-\
 #include "ParallelCoordsView.h"
 #include "DataView.h"
+#include "../Graphics/graphics_helper.h"
 #include "../helper.h"
 #include "../Geometry/Geometry.h"
 #include "../Data/DataSet.h"
@@ -14,7 +14,7 @@
 ParallelCoordsView* ParallelCoordsView::instance = NULL;
 int ParallelCoordsView::windowHandle = -1;
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne,RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo) : RIVDataView(datasetOne,datasetTwo,x,y,width,height,paddingX,paddingY), pathColorOne(pathColorOne), rayColorOne(rayColorOne), pathColorTwo(pathColorTwo), rayColorTwo(rayColorTwo) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne,RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo) : RIVDataView(datasetOne,datasetTwo,x,y,width,height,paddingX,paddingY), pathColorOne(pathColorOne), rayColorOne(rayColorOne), pathColorTwo(pathColorTwo), rayColorTwo(rayColorTwo), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo) {
 	if(instance != NULL) {
 		throw "Only 1 instance allowed.";
 	}
@@ -23,8 +23,8 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RI
 	identifier = "ParallelCoordsView";
 	instance = this;
 }
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne, RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo) :
-	RIVDataView(datasetOne,datasetTwo), pathColorOne(pathColorOne), rayColorOne(rayColorOne),pathColorTwo(pathColorTwo), rayColorTwo(rayColorTwo)
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne, RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo) :
+RIVDataView(datasetOne,datasetTwo), pathColorOne(pathColorOne), rayColorOne(rayColorOne),pathColorTwo(pathColorTwo), rayColorTwo(rayColorTwo), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo)
 {
 	if(instance != NULL) {
 		throw "Only 1 instance allowed.";
@@ -35,7 +35,7 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RI
 	instance = this;
 }
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* pathColor, RIVColorProperty *rayColor) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, HistogramSet<float,ushort>* distributionsOne, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* pathColor, RIVColorProperty *rayColor) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY), distributionsOne(distributionsOne) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
@@ -48,7 +48,7 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, int x
     //Nothing else to do
 }
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, RIVColorProperty *pathColor, RIVColorProperty* rayColor) : RIVDataView(dataset) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, HistogramSet<float,ushort>* distributionsOne, RIVColorProperty *pathColor, RIVColorProperty* rayColor) : RIVDataView(dataset), distributionsOne(distributionsOne) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
@@ -68,7 +68,7 @@ void ParallelCoordsView::createAxes() {
 	int y = paddingY; //View port takes care of startY
 	int axisHeight = height - 2 * paddingY;
 	int axisWidth = 20;
-	int bins = 10;
+
 	float delta = 1.F / (total_nr_of_records - 1) * (width - 2 * paddingX);
 	std::vector<RIVTable<float,ushort>*>* tablePointers = (*datasetOne)->GetTables();
 	size_t axisIndex = 0;
@@ -79,6 +79,7 @@ void ParallelCoordsView::createAxes() {
 			std::vector<RIVTable<float,ushort>*>* otherTablePointers = (*datasetTwo)->GetTables();
 			RIVTable<float,ushort> *table = tablePointers->at(j);
 			RIVTable<float,ushort> *otherTable = otherTablePointers->at(j);
+			
 		
 			ParallelCoordsAxisGroup<float,ushort> axisGroup(table->GetName());
 			
@@ -97,8 +98,8 @@ void ParallelCoordsView::createAxes() {
 					auto otherMinMax = otherRecord->MinMax();
 					//				printf("Record %s has min-max : ",record->name.c_str());
 					//				std::cout << " " << minMax.first << ", " << minMax.second << std::endl;
-					
-					axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,bins);
+					std::string name = record->name;
+					axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,distributionsOne->GetHistogram<Type>(name),distributionsTwo->GetHistogram<Type>(name));
 					axisIndex++;
 				}
 			});
@@ -114,14 +115,16 @@ void ParallelCoordsView::createAxes() {
 				for(size_t i = 0 ; i < tRecords.size() ; ++i) {
 					auto& record = tRecords.at(i);
 					
-					int x = delta * (axisIndex) + paddingX;
+					typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
 					
+					int x = delta * (axisIndex) + paddingX;
+					std::string name = record->name;
 					//A tuple containing the min and max values of the record
 					auto minMax = record->MinMax();
 					//				printf("Record %s has min-max : ",record->name.c_str());
 					//				std::cout << " " << minMax.first << ", " << minMax.second << std::endl;
 					
-					axisGroup.CreateAxis(record, x, y, axisHeight, axisWidth, minMax.first, minMax.second, record->name, divisionCount, bins);
+					axisGroup.CreateAxis(record, x, y, axisHeight, axisWidth, minMax.first, minMax.second, name, divisionCount, distributionsOne->GetHistogram<Type>(name));
 					axisIndex++;
 				}
 			});
@@ -165,18 +168,19 @@ void ParallelCoordsView::drawDensities() {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto axis : tAxes) {
 				
-//				printf("axis %s\n",axis->name.c_str());
+				auto histogramOne = axis->densityHistogramOne;
+				auto histogramTwo = axis->densityHistogramTwo;
 				
-				auto histogramOne = &axis->densityHistogramOne;
-				auto histogramTwo = &axis->densityHistogramTwo;
-				
+				int numBins = histogramOne->NumberOfBins();
 				int startX = axis->x - axis->width / 2.F;
 				int endX = startX + axis->width;
-				int height = axis->height / (float)axis->bins;
+				int height = axis->height / (float)numBins;
 				
-//				auto resultHistogram = axis->GetDifferenceDensity();
-//				int numBins = resultHistogram->NumberOfBins();
-				int numBins = histogramOne->NumberOfBins();
+//				printf("Histogram one \n");
+//				histogramOne->Print();
+//				printf("Histogram two \n");
+//				histogramTwo->Print();
+				
 				for(int i = 0 ; i < numBins ; ++i) {
 					int startY = i * height + axis->y;
 					int endY = startY + height;
@@ -185,23 +189,18 @@ void ParallelCoordsView::drawDensities() {
 					float valueOne = histogramOne->NormalizedValue(i);
 					float valueTwo = histogramTwo->NormalizedValue(i);
 					
-//					printf("Histogram one \n");
-//					histogramOne->Print();
-//					printf("Histogram two \n");
-//					histogramTwo->Print();
-					
 					//Value one > value two
 					if(valueOne > valueTwo) {
 						float colorValue = (valueOne - valueTwo) / valueOne;
-						std::string text = std::to_string(colorValue);
-						drawText("",axis->x,centerY - 15,textColor,.1F);
+//						std::string text = std::to_string(colorValue);
+//						drawText(text,axis->x,centerY - 15,textColor,.1F);
 //						printf("glColor3f(%f,0,0)\n",colorValue);
 						glColor3f(colorValue, 0, 0);
 					}
 					else {
 						float colorValue = (valueTwo - valueOne) / valueTwo;
-						std::string text = std::to_string(colorValue);
-						drawText("",axis->x,centerY - 15,textColor,.1F);
+//						std::string text = std::to_string(colorValue);
+//						drawText(text,axis->x,centerY - 15,textColor,.1F);
 //						printf("glColor3f(0,0,%f)\n",colorValue);
 						glColor3f(0, 0, colorValue);
 					}
@@ -616,24 +615,24 @@ void ParallelCoordsView::OnFiltersChanged() {
 	redisplayWindow();
 }
 
-void ParallelCoordsView::drawText(char *text, int size, int x, int y, float *color, float sizeModifier) {
-    //Estimate center, seems to be the magic number for font pixel size
-    float xCenter = 60 * sizeModifier * size / 2.F;
-    
-    glLineWidth(1);
-	glColor3f(*color,*(color+1),*(color+2));
-    glPushMatrix();
-	glTranslatef(x - xCenter,y, 0);
-    glPushMatrix();
-	glScalef(sizeModifier,sizeModifier,1);
-	for(size_t i = 0 ; i < size ; i++) {
-		glutStrokeCharacter(GLUT_STROKE_ROMAN, text[i]);
-	}
-    glPopMatrix();
-    glPopMatrix();
-    
-}
+//void ParallelCoordsView::drawText(char *text, int size, int x, int y, float *color, float sizeModifier) {
+//    //Estimate center, seems to be the magic number for font pixel size
+//    float xCenter = 60 * sizeModifier * size / 2.F;
+//    
+//    glLineWidth(1);
+//	glColor3f(*color,*(color+1),*(color+2));
+//    glPushMatrix();
+//	glTranslatef(x - xCenter,y, 0);
+//    glPushMatrix();
+//	glScalef(sizeModifier,sizeModifier,1);
+//	for(size_t i = 0 ; i < size ; i++) {
+//		glutStrokeCharacter(GLUT_STROKE_ROMAN, text[i]);
+//	}
+//    glPopMatrix();
+//    glPopMatrix();
+//    
+//}
 
-void ParallelCoordsView::drawText(std::string text, int x, int y, float *color, float sizeModifier) {
-    drawText((char*)text.c_str(),(int)text.size(),x,y,color,sizeModifier);
-}
+//void ParallelCoordsView::drawText(std::string text, int x, int y, float *color, float sizeModifier) {
+//    drawText((char*)text.c_str(),(int)text.size(),x,y,color,sizeModifier);
+//}

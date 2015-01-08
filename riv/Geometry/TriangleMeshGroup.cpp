@@ -53,12 +53,13 @@ void TriangleMeshGroup::init() {
 }
 
 
-bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& Phit, float& shortestDistance) {
+bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& Phit, float& shortestDistance) const {
 	bool intersects = false;
-	shortestDistance = -10000;
+	shortestDistance = -1000000;
 	Vec3fa bestPhit = Phit;
 	for(size_t i = 0 ; i < triangleMeshes.size() ; ++i) {
 		//			float d;
+//		printf("i = %d\n",i);
 		TriangleMeshFull* mesh = triangleMeshes[i];
 		vector_t<TriangleMeshFull::Triangle> triangles = mesh->triangles;
 		vector_t<Vec3fa>& position = mesh->position;
@@ -121,12 +122,20 @@ bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& P
 //			printf("WOW a succesful intersection test with mesh %zu triangle %zu.\n",i,j);
 //			printf("Phit = ");
 //			std::cout << Phit << std::endl;
-			resultIndex = i;
-			return true;
+//			resultIndex = i;
+			
+			float distance = embree::length((ray.org - Phit));
+			if(distance > shortestDistance ) {
+				resultIndex = i;
+				shortestDistance = distance;
+				bestPhit = Phit;
+				intersects = true;
+			}
 		}
 	}
-	if(!intersects)
-		//			printf("\n******* NO INTERSECTION *******\n");
-		Phit = bestPhit;
-	return false;
+//	if(!intersects)
+//		printf("\n******* NO INTERSECTION *******\n");
+	
+	Phit = bestPhit;
+	return intersects;
 }

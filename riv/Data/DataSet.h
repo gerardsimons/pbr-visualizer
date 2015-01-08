@@ -102,11 +102,12 @@ public:
 		}
 		throw std::runtime_error("Filter applies to no table in this dataset.");
 	}
-	template<typename... Us>
-	void UpdateFilter(riv::GroupFilter<Us...>* filter) {
+	void AddFilter(riv::RowFilter* rowFilter) {
 		for(auto table : tables) {
-			if(table->HasFilter(filter)) {
+			if(rowFilter->AppliesToTable(table)) {
+				table->AddFilter(rowFilter);
 				staleTables[table] = true;
+				return;
 			}
 		}
 	}
@@ -122,10 +123,30 @@ public:
 		}
 		throw std::runtime_error("Filter applies to no table in this dataset.");
 	}
+	template<typename... Us>
+	void AddFilter(riv::CompoundFilter<Us...>* filter) {
+		for(auto table : tables) {
+			if(filter->AppliesToTable(table)) {
+				table->AddFilter(filter);
+				staleTables[table] = true;
+				return;
+			}
+		}
+		throw std::runtime_error("Filter applies to no table in this dataset.");
+	}
+	template<typename... Us>
+	void UpdateFilter(riv::GroupFilter<Us...>* filter) {
+		for(auto table : tables) {
+			if(table->HasFilter(filter)) {
+				staleTables[table] = true;
+			}
+		}
+	}
+
 	//Automatically find the table this should be filtered on, the one containing all of the filters attributes
 //	void AddFilter(riv::Filter* filter);
 //	void AddFilter(riv::GroupFilter *filter);
-	void AddFilterListener(RIVDataSetListener* listener) {
+	void AddDataListener(RIVDataSetListener* listener) {
 		dataListeners.push_back(listener);
 	}
 //	void UpdateFilter(riv::Filter* filter);
@@ -216,7 +237,7 @@ public:
 	size_t TotalNumberOfRecords() const {
 		size_t numRecords = 0;
 		for(auto* table : tables) {
-			numRecords += table->NumberOfColumns();
+			numRecords += table->NumberOfRecords();
 		}
 		return numRecords;
 	}
@@ -238,6 +259,12 @@ public:
 		printf("Dataset containing %zu tables:\n\n",tables.size());
 		for(auto table : tables) {
 			table->Print(maxPrint, printFiltered);
+		}
+	}
+	void PrintFilteredRows(size_t maxPrint = 0) {
+		printf("Dataset containing %zu tables:\n\n",tables.size());
+		for(auto table : tables) {
+			table->PrintFilteredRows(maxPrint);
 		}
 	}
 	void AddDataSet(RIVDataSet* otherDataset) {

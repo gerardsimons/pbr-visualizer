@@ -18,7 +18,7 @@ namespace riv {
 		else throw "Vertex out of bounds";
 	}
 
-	bool TriangleMesh::Intersect(const Ray<float>& r, Vec3Df& Phit) {
+	bool TriangleMesh::Intersect(const Ray<float>& r, Vec3Df& Phit) const {
 	//	size_t i = 0;
 		for(size_t index = 0 ; index < indices.size() ; index += 3) {
 	//		printf("Testing triangle %zu\n",i);
@@ -97,7 +97,7 @@ namespace riv {
 		return false;
 	}
 
-	bool TriangleMesh::Contains(const Vec3Df &point, size_t& triangleIndex) {
+	bool TriangleMesh::Contains(const Vec3Df &point, size_t& triangleIndex) const {
 		for(size_t index = 0 ; index < indices.size() ; index += 3) {
 			Vec3Df v0 = GetVertex(indices[index]);
 			Vec3Df v1 = GetVertex(indices[index+1]);

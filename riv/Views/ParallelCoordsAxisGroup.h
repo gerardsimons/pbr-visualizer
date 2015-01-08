@@ -45,18 +45,25 @@ public:
 	}
 	
 	template<typename U>
-	ParallelCoordsAxis<U>* CreateAxis(RIVRecord<U>* record, int x, int y, int axisWidth, int axisHeight, U min, U max, const std::string& name, int divisionCount,int bins) {
+	ParallelCoordsAxis<U>* CreateAxis(RIVRecord<U>* record, int x, int y, int axisWidth, int axisHeight, U min, U max, const std::string& name, int divisionCount, Histogram<U>* histogramOne) {
 		std::vector<ParallelCoordsAxis<U>*>* tAxes = GetAxes<U>();
-		tAxes->push_back(new ParallelCoordsAxis<U>(x,y,axisWidth,axisHeight,min,max,name,record,divisionCount,bins));
+		tAxes->push_back(new ParallelCoordsAxis<U>(x,y,axisWidth,axisHeight,min,max,name,record,divisionCount,histogramOne));
 		return tAxes->at(tAxes->size() - 1);
 	}
 	
-	ParallelCoordsAxis<ushort>* CreateAxis(RIVRecord<ushort>* record, int x, int y, int axisWidth, int axisHeight, ushort min, ushort max, const std::string& name, int divisionCount, int bins) {
-		std::vector<ParallelCoordsAxis<ushort>*>* tAxes = GetAxes<ushort>();
-		tAxes->push_back(new ParallelCoordsAxis<ushort>(x,y,axisWidth,axisHeight,min,max,name,record,divisionCount,max-min));
+	template<typename U>
+	ParallelCoordsAxis<U>* CreateAxis(RIVRecord<U>* record, int x, int y, int axisWidth, int axisHeight, U min, U max, const std::string& name, int divisionCount, Histogram<U>* histogramOne, Histogram<U>* histogramTwo) {
+		std::vector<ParallelCoordsAxis<U>*>* tAxes = GetAxes<U>();
+		tAxes->push_back(new ParallelCoordsAxis<U>(x,y,axisWidth,axisHeight,min,max,name,record,divisionCount,histogramOne, histogramTwo));
 		return tAxes->at(tAxes->size() - 1);
 	}
-    
+	
+//	ParallelCoordsAxis<ushort>* CreateAxis(RIVRecord<ushort>* record, int x, int y, int axisWidth, int axisHeight, ushort min, ushort max, const std::string& name, int divisionCount, int bins) {
+//		std::vector<ParallelCoordsAxis<ushort>*>* tAxes = GetAxes<ushort>();
+//		tAxes->push_back(new ParallelCoordsAxis<ushort>(x,y,axisWidth,axisHeight,min,max,name,record,divisionCount,));
+//		return tAxes->at(tAxes->size() - 1);
+//	}
+	
 //    ParallelCoordsAxisGroup* connectedGroup = 0;
 //    ParallelCoordsAxis* connectorAxis;
 	

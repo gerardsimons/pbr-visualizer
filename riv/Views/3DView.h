@@ -22,11 +22,14 @@
 #include <limits>
 
 class RIV3DView : public RIVDataView, public RIVDataSetListener {
-protected:;
+protected:
 
     float cameraPosition[3] = {278, 273, -500}; //The original
     Point3D eye;
     bool isDirty = true;
+	
+	float scale;
+	Vec3fa center;
 	
     //Whether to draw the members of clusters, or only the cluster medoid
     bool drawIntersectionPoints = false;
@@ -34,6 +37,8 @@ protected:;
 	//Whether the generated octree should be drawn (if any is generated)
 	bool drawHeatmapTree = false;
 	bool drawLightPaths = false;
+	
+	size_t selectedMesh = -1;
 	
 	//Mesh model data
 	TriangleMeshGroup meshesOne;
@@ -83,7 +88,7 @@ protected:;
 	//Draw the mesh model loaded from the PBRT file
 	void drawMeshModel(TriangleMeshGroup* meshGroup, float* color);
 	void drawPaths(float startSegment, float stopSegment);
-    void drawPaths(const std::vector<Path>& paths, float startSegment, float stopSegment); //Draw the paths between two consecutive bounces
+    void drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths, float startSegment, float stopSegment); //Draw the paths between two consecutive bounces
 	//Draw octree representation of the generated points
 	void drawHeatmap();
 	void drawPoints();
@@ -92,6 +97,8 @@ protected:;
 	//draw the leaf nodes starting from the given node
 	void drawLeafNodes(OctreeNode* node);
 	void createPaths();
+	
+	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes);
 	//Create graphics buffer from unfiltered data rows
 	std::vector<Path> createPaths(RIVDataSet<float,ushort>*);
     static RIV3DView* instance;

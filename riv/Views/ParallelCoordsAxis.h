@@ -20,13 +20,12 @@ public:
 	int y;
 	int width;
 	int height;
-	int bins;
 	std::string name; //Usually points to a record's name, acts as unique ID!
 	
 	bool HasSelectionBox;
 	Area selection;
 protected:
-	ParallelCoordsAxisInterface(int x, int y, int width, int height, int bins, const std::string& name) : x(x), y(y), width(width), height(height), bins(bins), name(name) {
+	ParallelCoordsAxisInterface(int x, int y, int width, int height, const std::string& name) : x(x), y(y), width(width), height(height), name(name) {
 		
 	}
 };
@@ -36,11 +35,11 @@ class ParallelCoordsAxis : public ParallelCoordsAxisInterface {
 public:
 	std::vector<T> scale;
 	
-	Histogram<T> densityHistogramOne;
-	Histogram<T> densityHistogramTwo;
+	Histogram<T>* densityHistogramOne;
+	Histogram<T>* densityHistogramTwo = NULL;
 	
 	//Ease of access using index
-	std::vector<Histogram<T>*> histograms;
+//	std::vector<Histogram<T>*> histograms;
 	
 	Histogram<T> differenceDensity;
 	bool differenceDensityComputed = false;
@@ -48,15 +47,26 @@ public:
 	T minValue;
 	T maxValue;
 	RIVRecord<T>* recordPointer;
-	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision, int bins)
-	: ParallelCoordsAxisInterface(x,y,width,height,bins,name),minValue(minValue),maxValue(maxValue),recordPointer(recordPointer) {
+	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision, Histogram<T>* histogramOne)
+	: ParallelCoordsAxisInterface(x,y,width,height,name),minValue(minValue),maxValue(maxValue),recordPointer(recordPointer), densityHistogramOne(histogramOne) {
 		ComputeScale(scaleDivision);
 		
-		densityHistogramOne = Histogram<T>(name,minValue,maxValue,bins);
-		densityHistogramTwo = Histogram<T>(name,minValue,maxValue,bins);
+//		densityHistogramOne = Histogram<T>(name,minValue,maxValue,bins);
+//		densityHistogramTwo = Histogram<T>(name,minValue,maxValue,bins);
+//		
+//		histograms.push_back(&densityHistogramOne);
+//		histograms.push_back(&densityHistogramTwo);
+	}
+	
+	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision, Histogram<T>* histogramOne,Histogram<T>* histogramTwo)
+	: ParallelCoordsAxisInterface(x,y,width,height,name),minValue(minValue),maxValue(maxValue),recordPointer(recordPointer),densityHistogramOne(histogramOne), densityHistogramTwo(histogramTwo) {
+		ComputeScale(scaleDivision);
 		
-		histograms.push_back(&densityHistogramOne);
-		histograms.push_back(&densityHistogramTwo);
+		//		densityHistogramOne = Histogram<T>(name,minValue,maxValue,bins);
+		//		densityHistogramTwo = Histogram<T>(name,minValue,maxValue,bins);
+		//
+		//		histograms.push_back(&densityHistogramOne);
+		//		histograms.push_back(&densityHistogramTwo);
 	}
 	
 	ParallelCoordsAxis() {
@@ -65,20 +75,23 @@ public:
 	
 	Histogram<T>* GetDifferenceDensity() {
 		if(!differenceDensityComputed) {
-			differenceDensity = densityHistogramOne - densityHistogramTwo;
-			differenceDensityComputed = true;
+			differenceDensity = (*densityHistogramOne) - (*densityHistogramTwo);
+//			differenceDensityComputed = true;
 		}
 		return &differenceDensity;
 	}
 	
 	void ResetDensities() {
-		densityHistogramOne->Clear();
-		densityHistogramTwo->Clear();
+//		densityHistogramOne->Clear();
+//		densityHistogramTwo->Clear();
 		differenceDensityComputed = false;
 	}
 	
 	Histogram<T>* GetHistogram(int i) {
-		return histograms[i];
+		if(i == 0) {
+			return densityHistogramOne;
+		}
+		else return densityHistogramTwo;
 	}
 	
 	Histogram<T>& GetHistogramOne() {
@@ -89,9 +102,9 @@ public:
 		return densityHistogramTwo;
 	}
 	
-	void SetHistogram(Histogram<T>& densityHistogram) {
-		this->densityHistogram = densityHistogram;
-	}
+//	void SetHistogram(Histogram<T>& densityHistogram) {
+//		this->densityHistogram = densityHistogram;
+//	}
 	
 	//A ratio value indicating where an arbitrary Y position is according the axis (0 = bottom, 1 = top)
 	float ScaleValueForY(int yPos) {

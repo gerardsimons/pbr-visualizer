@@ -11,6 +11,7 @@
 #include "Data/DataSet.h"
 #include "Views/ImageView.h"
 #include "Views/3DView.h"
+#include "Views/SliderView.h"
 #include "Graphics/ColorPalette.h"
 #include "Graphics/ColorProperty.h"
 #include "Graphics/SizeProperty.h"
@@ -29,8 +30,6 @@
 #else
 #include <GL/glut.h>
 #endif
-
-//const float DEG2RAD = 3.14159/180;
 
 /* window width and height */
 //int width = 1650
@@ -60,6 +59,7 @@ int imageViewWindow;
 int sceneViewWindow;
 int parallelViewWindow;
 int heatMapViewWindow;
+int sliderViewWindow;
 
 /* For debugging purposes, keep track of mouse location */
 int lastMouseX,lastMouseY = 0;
@@ -68,6 +68,7 @@ RIVImageView *imageView = NULL;
 RIV3DView *sceneView = NULL;
 ParallelCoordsView *parallelCoordsView = NULL;
 RIVHeatMapView *heatMapView = NULL;
+RIVSliderView* sliderView = NULL;
 
 RIVDataSet<float,ushort>** datasetOne = NULL;
 RIVDataSet<float,ushort>** datasetTwo = NULL;
@@ -79,7 +80,9 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 10000;
+const int maxPaths = 50000;
+
+int sliderViewHeight = 50;
 
 void display(void)
 {
@@ -124,9 +127,13 @@ void keys(int keyCode, int x, int y) {
         case 27: //ESC key
             printf("Clear filters\n");
             //            invalidateAllViews();
-//			dataset->StartFiltering();
-//            dataset->ClearFilters();
-//			dataset->StopFiltering();
+//			(*datasetOne)->StartFiltering();
+//            (*datasetOne)->ClearFilters();
+//			datasetOne)->StopFiltering();
+//			
+//			datasetOne->StartFiltering();
+//			datasetOne->ClearFilters();
+//			datasetOne->StopFiltering();
             break;
 		case 32: //Space bar
 			dataControllerOne->TogglePause();
@@ -266,17 +273,17 @@ void reshape(int w, int h)
     glutSetWindow(parallelViewWindow);
     glutPositionWindow(padding,padding);
 	int newWidthPC = width-2*padding;
-	int newHeightPC = height/2-2*padding;
+	int newHeightPC = height/2-2*padding - sliderViewHeight / 2.F;
     glutReshapeWindow(newWidthPC,newHeightPC); //Upper half and full width of the main window
     //
     //    //image view window
-	float squareSize = height / 2.F - 2 * padding;
+	float squareSize = height / 2.F - 2 * padding - sliderViewHeight / 2.F;
 	float imageViewWidth = squareSize;
 	if(datasetTwo) {
 		imageViewWidth += imageViewWidth;
 	}
     glutSetWindow(imageViewWindow);
-    glutPositionWindow(padding, height/2+padding);
+    glutPositionWindow(padding, height/2+padding + sliderViewHeight / 2.F);
     glutReshapeWindow(imageViewWidth,squareSize); //Square bottom left corner
     //
 //    //    //3D scene view inspector window
@@ -296,39 +303,26 @@ int currentFrame = 0;
 bool finished = false;
 
 void idle() {
-	
 	bool postRedisplay = false;
 	if(currentFrame < maxFrames) {
+		bool currentFrameIncremented = false;
 		if(dataControllerOne->IsActive()) {
+			++currentFrame;
+			currentFrameIncremented = true;
 			rendererOne->RenderNextFrame();
 			postRedisplay = true;
 		}
 		if(dataControllerTwo && dataControllerTwo->IsActive()) {
 			rendererTwo->RenderNextFrame();
+			if(!currentFrameIncremented) {
+				++currentFrame;
+			}
 			postRedisplay = true;
 		}
 	}
 	if(postRedisplay) {
 		glutPostRedisplay();
 	}
-	++currentFrame;
-//	if(dataControllerOne->IsActive() && (dataControllerTwo == NULL || dataControllerTwo->IsActive()) && currentFrame < maxFrames) {
-//		printf("Rendering frame %d.\n",currentFrame);
-//		rendererOne->RenderNextFrame();
-//		if(rendererTwo) {
-//			
-//		}
-//
-//
-//	}
-//	else {
-//		printf("Nothing to do ...\n");
-//	}
-//	else {
-//		printf("Done......\n");
-//		finished = true;
-//		glutPostRedisplay();
-//	}
 }
 
 bool processRendererOne(PathData* newPath) {
@@ -406,12 +400,18 @@ RIVColorProperty* createRayColorProperty(RIVDataSet<float,ushort>* dataset) {
 
 void createViews() {
 
-
+	std::vector<riv::Color> colors;
+	colors.push_back(colors::BLUE);
+	colors.push_back(colors::RED);
+	riv::ColorMap redBlue(colors);
+	
 	//		RIVColorProperty *colorProperty = new RIVEvaluatedColorProperty<float>(intersectionsTable,intersectionsTable->GetRecord("bounce#"),jetColorMap);
 	//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,"radiance R","radiance G","radiance B");
 	RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
 	
-	parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding);
+	
+	
+	parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding - sliderViewHeight / 2.F);
 	ParallelCoordsView::windowHandle = parallelViewWindow;
 	glutSetWindow(parallelViewWindow);
 	glutDisplayFunc(ParallelCoordsView::DrawInstance);
@@ -422,8 +422,8 @@ void createViews() {
 	glutSpecialFunc(keys);
 	
 	//Load image
-	float bottomHalfY = height / 2.f + padding;
-	float squareSize = height / 2.F - 2 * padding;
+	float bottomHalfY = height / 2.f + padding + sliderViewHeight / 2.F;
+	float squareSize = height / 2.F - 2 * padding - sliderViewHeight / 2.F;
 	float imageViewWidth = squareSize;
 	if(datasetTwo) {
 		imageViewWidth += imageViewWidth;
@@ -455,6 +455,16 @@ void createViews() {
 	//        glutMouseFunc(RIVHeatMapView::Mouse);
 	//        glutMotionFunc(RIVHeatMapView::Motion);
 	
+	sliderViewWindow = glutCreateSubWindow(mainWindow, padding, height/2.F-2*padding, width - 2* padding, sliderViewHeight);
+	RIVSliderView::windowHandle = sliderViewWindow;
+	glutSetWindow(sliderViewWindow);
+	glutDisplayFunc(RIVSliderView::DrawInstance);
+	//	glutDisplayFunc(doNothing);
+	glutReshapeFunc(RIVSliderView::ReshapeInstance);
+	glutMouseFunc(RIVSliderView::Mouse);
+	glutMotionFunc(RIVSliderView::Motion);
+	glutSpecialFunc(keys);
+	
 	//Create views for two renderers
 	auto pathColorOne = createPathColorProperty(*datasetOne);
 	auto rayColorOne = createRayColorProperty(*datasetOne);
@@ -464,27 +474,33 @@ void createViews() {
 		auto pathColorTwo = createPathColorProperty(*datasetTwo);
 		auto rayColorTwo = createRayColorProperty(*datasetTwo);
 		
-		
 		//Fixed colors for testing
 		RIVColorProperty* colorOne = new RIVFixedColorProperty(1, 0, 0);
 		RIVColorProperty* colorTwo = new RIVFixedColorProperty(0, 0, 1);
 		
 //		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
-		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,colorOne,colorOne,colorTwo,colorTwo);
+		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),colorOne,colorOne,colorTwo,colorTwo);
 		
 		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,rayColorOne,sizeProperty);
 		imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo);
+		sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),redBlue);
+		
+		(*datasetTwo)->AddDataListener(sceneView);
+		(*datasetTwo)->AddDataListener(parallelCoordsView);
+		(*datasetTwo)->AddDataListener(sliderView);
+		(*datasetOne)->AddDataListener(sliderView);
 	}
 	else {
-		parallelCoordsView = new ParallelCoordsView(datasetOne,pathColorOne,rayColorOne);
+		parallelCoordsView = new ParallelCoordsView(datasetOne,dataControllerOne->GetTrueDistributions(),pathColorOne,rayColorOne);
 		sceneView = new RIV3DView(datasetOne,rendererOne,rayColorOne,sizeProperty);
 		imageView = new RIVImageView(datasetOne,rendererOne);
 	}
 	//        heatMapView = new RIVHeatMapView(&dataset);
 	
 	//Add some filter callbacks
-	(*datasetOne)->AddFilterListener(sceneView);
-	(*datasetOne)->AddFilterListener(parallelCoordsView);
+
+	(*datasetOne)->AddDataListener(sceneView);
+	(*datasetOne)->AddDataListener(parallelCoordsView);
 }
 
 int main(int argc, char **argv)

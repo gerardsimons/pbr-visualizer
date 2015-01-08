@@ -28,7 +28,7 @@ public:
 	void init();
 	operator bool() const { return triangleMeshes.size() > 0; };
 	
-	bool Intersect(const Ray& r, ushort& resultIndex, Vec3fa& Phit, float& shortestDistance);
+	bool Intersect(const Ray& r, ushort& resultIndex, Vec3fa& Phit, float& shortestDistance) const ;
 	
 	//Getters
 	float GetScale() const { return scale; };

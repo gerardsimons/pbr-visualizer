@@ -57,6 +57,25 @@ namespace riv {
 		std::vector<std::string> GetAttributes();
 	};
 	
+	class RowFilter : public Filter {
+	private:
+		std::map<size_t,bool> selectedRows;
+		std::string tableName;
+	public:
+		RowFilter(const std::string& tableName, const std::map<size_t,bool>& selectedRows) : selectedRows(selectedRows), tableName(tableName)  {
+			
+		}
+		bool PassesFilter(size_t row) {
+			return selectedRows[row];
+		}
+		virtual bool AppliesToAttribute(const std::string& name) {
+			return true;
+		}
+		virtual bool AppliesToTable(const RIVTableInterface* table) {
+			return table->name == tableName;
+		}
+	};
+	
 	template <typename T>
 	class DiscreteFilter : public SingularFilter<T> {
 	private:
@@ -85,7 +104,6 @@ namespace riv {
 			std::cout << value << std::endl;
 		}
 	};
-	
 
 	template <typename T>
 	class RangeFilter : public SingularFilter<T> {
@@ -113,7 +131,6 @@ namespace riv {
 			std::cout << "RangeFilter on " << SingularFilter<T>::attributeName << " (" << minValue << " : " << maxValue << ")" << std::endl;
 		}
 	};
-	
 
 	template<typename... Ts>
 	class CompoundFilter : public Filter {
@@ -122,30 +139,45 @@ namespace riv {
 		std::tuple<std::vector<SingularFilter<Ts>*>...> singlefilters;
 		std::vector<CompoundFilter<Ts...>*> compoundFilters;
 		
-		CompoundFilter(const std::vector<CompoundFilter<Ts...>*>& compoundFilters) : compoundFilters(compoundFilters) {
-			
+		std::vector<std::string> attributes;
+		
+		void createAttributes() {
+			std::map<std::string,bool> attributesPresent;
+			tuple_for_each(singlefilters, [&](auto tFilters) {
+				for(auto filter : tFilters) {
+					attributesPresent[filter->GetAttribute()] = true;
+				}
+			});
+			for(auto filter : compoundFilters) {
+				const std::vector<std::string>& otherAttributes = filter->GetAttributes();
+				for(const std::string& attribute : otherAttributes) {
+					attributesPresent[attribute] = true;
+				}
+			}
+			for(auto it : attributesPresent) {
+				attributes.push_back(it.first);
+			}
 		}
-//		template<typename T>
-//		CompoundFilter(const std::vector<SingularFilter<T>>* singleFilter) {
-//			GetSingularFilters<T>()->push_back(singleFilter);
-//		}
+		
+		CompoundFilter(const std::vector<CompoundFilter<Ts...>*>& compoundFilters) : compoundFilters(compoundFilters) {
+			createAttributes();
+		}
 		template<typename T>
 		CompoundFilter(const std::vector<SingularFilter<T>*>& singleFilters) {
 			processSingle(singleFilters);
+			createAttributes();
 		}
 		CompoundFilter(const std::vector<SingularFilter<Ts>*>&... singleFilters) {
 			processSingle(singleFilters...);
+			createAttributes();
 		}
 		CompoundFilter(CompoundFilter<Ts...>* compoundFilter) {
 			compoundFilters.push_back(compoundFilter);
 		}
-//		CompoundFilter(CompoundFilter<Ts...>* compoundFilter) {
-//			compoundFilters.push_back(compoundFilter);
+//		template<typename T>
+//		CompoundFilter(const SingularFilter<T>* singularFilter) {
+//
 //		}
-		template<typename T>
-		CompoundFilter(const SingularFilter<T>* singularFilter) {
-			
-		}
 		template <typename T>
 		void processSingle(const std::vector<SingularFilter<T>*>& first) {
 			for(auto newFilter : first) {
@@ -159,25 +191,21 @@ namespace riv {
 			}
 			processSingle<Us...>(others...);
 		}
-//		CompoundFilter(Filter* f) {
-//			filters.push_back(f);
-//		}
-//		CompoundFilter( const CompoundFilter& other ) {
-//			filters = other.filters;
-//		}
-		CompoundFilter& operator=( const CompoundFilter& assigned ) {
+		std::vector<std::string> GetAttributes() {
+			return attributes;
+		}
+//		CompoundFilter& operator=( const CompoundFilter& assigned ) {
 			//			GroupFilter newFilter(assigned.filters,assigned.sourceTable);
 			//			filters = assigned.filters;
 //			filters = assigned.filters;
-			return *this;
-		}
+//			return *this;
+//		}
 	public:
 		~CompoundFilter() {
 //			for(Filter* f : filters) {
 //				delete f;
 //			}
 		}
-		
 		std::tuple<std::vector<SingularFilter<Ts>*>...>& GetAllSingularFilters() {
 			return singlefilters;
 		}
@@ -189,11 +217,11 @@ namespace riv {
 			return &compoundFilters;
 		}
 		bool AppliesToAttribute(const std::string& name) {
-//			for(Filter* filter : filters) {
-//				if(filter->AppliesToAttribute(name)) {
-//					return true;
-//				}
-//			}
+			for(const std::string& attribute : attributes) {
+				if(attribute == name) {
+					return true;
+				}
+			}
 			return false;
 		}
 		bool AppliesToTable(const RIVTableInterface* table) {
@@ -224,17 +252,24 @@ namespace riv {
 			return applies;
 		}
 		size_t Size() {
-//			return filters.size();
-			return 1;
+			//Sum of the singular filters and the compound filters vector
+			size_t size = 0;
+			tuple_for_each(singlefilters, [&](auto singularTFilters) {
+				size += singularTFilters.size();
+			});
+			size += compoundFilters.size();
+			return size;
 		}
 		template<typename T>
 		void AddFilter(SingularFilter<T>* newFilter) {
 			if(!newFilter) {
 				GetSingularFilters<T>()->push_back(newFilter);
 			}
+			createAttributes();
 		}
-		void AddCompoundFilter(CompoundFilter<Ts...>* newFilter) {
+		void AddFilter(CompoundFilter<Ts...>* newFilter) {
 			compoundFilters.push_back(newFilter);
+			createAttributes();
 		}
 		void Print() {
 //			printf("Compound filter containing : \n");
@@ -243,8 +278,6 @@ namespace riv {
 //				f->Print();
 //			}
 		}
-		
-		std::vector<std::string> GetAttributes();
 	};
 	
 	template<typename... Ts>
@@ -271,15 +304,57 @@ namespace riv {
 		}
 	};
 
-//	template<typename T>
-//	class DisjunctiveFilter : public CompoundFilter {
-//	public:
-//		DisjunctiveFilter(const std::vector<Filter*>& filters);
-//		bool PassesFilter(const std::string &name, const T& value);
-////		bool AppliesToTable(const RIVTable* table);
-//		std::vector<std::string> AllAttributes();
-////		bool PassesFilter(RIVTable<T>* table, size_t row);
-//	};
+	template<typename... Ts>
+	class DisjunctiveFilter : public CompoundFilter<Ts...> {
+	public:
+		template <typename T>
+		DisjunctiveFilter(const std::vector<SingularFilter<T>*>& filters) : CompoundFilter<Ts...>(filters) {
+			
+		}
+		template <typename T>
+		bool PassesFilter(const std::string &name, const T& value) {
+			
+		}
+		template <typename T>
+		bool PassesFilter(const T& value) {
+			//Does it pass all the single filters
+			bool filterPassed = true;
+			tuple_for_each(CompoundFilter<Ts...>::singlefilters, [&](auto tSingleFilters) {
+				if(filterPassed) {
+					//Each filter should apply to the table
+					for(auto& singleFilter : tSingleFilters) {
+						if(!singleFilter->PassesFilter(value)) {
+							filterPassed = false;
+						}
+					}
+				}
+			});
+			if(!filterPassed) {
+				return false;
+			}
+			else {
+				for(auto& compoundFilter : CompoundFilter<Ts...>::compoundFilters) {
+					if(!compoundFilter->PassesFilter(value)) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+//		bool AppliesToTable(const RIVTable* table);
+		std::vector<std::string> AllAttributes();
+		void Print() {
+			std::cout << "DisjunctiveFilter containing : \n";
+			std::cout << "SingularFilters:" << std::endl;
+			tuple_for_each(CompoundFilter<Ts...>::singlefilters, [&](auto tSingleFilters) {
+				//Each filter should apply to the table
+				for(auto& singleFilter : tSingleFilters) {
+					singleFilter->Print();
+				}
+			});
+		}
+//		bool PassesFilter(RIVTable<T>* table, size_t row);
+	};
 	
 	//This composite filter takes a table, searches its reffering rows to which its filters apply and tests the group of row to see if ALL the filters are met by atleast one row in the group
 	//Of referring rows
@@ -302,24 +377,16 @@ namespace riv {
 		GroupFilter(riv::CompoundFilter<Ts...>* filter) : CompoundFilter<Ts...>(filter) {
 			
 		}
-//		bool AppliesToTable(const RIVTable* table);
-//		bool PassesFilter(RIVTable<Ts...>* table, size_t row);
-		
-//		bool PassesFilter(const std::string& name, T value) {
-//			for(Filter* filter : CompoundFilter::filters) {
-//				if(filter->AppliesToAttribute(name) && filter->PassesFilter(name,value)) {
-//					return true;
-//				}
-//			}
-//			return false;
-//		}
-//		void Print() {
+
+		void Print() {
 //			printf("Group filter containing : \n");
-//			for(Filter* f : filters) {
-//				printf("\t");
-//				f->Print();
-//			}
-//		}
+			tuple_for_each(CompoundFilter<Ts...>::singlefilters, [&](auto tFilters) {
+				for(auto* f : tFilters) {
+					f->Print();
+				}
+			});
+
+		}
 	};
 }
 #endif

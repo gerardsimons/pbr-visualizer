@@ -110,14 +110,15 @@ public:
 	T UpperBound() {
 		return upperBound;
 	}
-	void Set(unsigned int bin, int count) {
+	float GetBinWidth() {
+		return binWidth;
+	}
+	void Set(int bin, int count) {
 		hist[bin] = count;
 	}
 	void Add(const T& value) {
 		
-		T delta = upperBound - lowerBound;
-		float interpolated = (float)(value - lowerBound) / (delta);
-		unsigned int bin = floor(interpolated * bins);
+		unsigned int bin = BinForValue(value);
 		
 		++hist[bin];
 		++nrElements;
@@ -130,13 +131,12 @@ public:
 			throw std::runtime_error("The histograms should have the same number of bins");
 		}
 		
-		
-		printf("left - right = \n\n");
-		printf("left = \n");
-		Print();
-		printf("right = \n");
-		right.Print();
-		printf("\n");
+//		printf("left - right = \n\n");
+//		printf("left = \n");
+//		Print();
+//		printf("right = \n");
+//		right.Print();
+//		printf("\n");
 		
 		T lowerBound = std::min(LowerBound(),right.LowerBound());
 		T upperBound = std::max(UpperBound(),right.UpperBound());
@@ -150,11 +150,15 @@ public:
 			result.Set(i,diff);
 
 		}
-		printf("Result = \n");
-		result.Print();
+//		printf("Result = \n");
+//		result.Print();
 		return result;
 	}
-	
+	int BinForValue(const T& value) {
+		T delta = upperBound - lowerBound;
+		float interpolated = (float)(value - lowerBound) / (delta);
+		return floor(interpolated * bins);
+	}
 	float DistanceTo(Histogram* right) {
 		if(right->bins != bins) {
 			throw std::runtime_error("The histograms should have the same number of bins");
@@ -186,8 +190,9 @@ public:
 	void Print() {
 		int maxBarSize = 48;
 		printf("Histogram %s :\n",name.c_str());
+		
 		for(int i = 0 ; i < bins ; ++i) {
-			printf("%.1f - %.1f : ",(float)i * binWidth,float(i+1)*binWidth);
+			printf("%.2f - %.2f : ",(float)i * binWidth,float(i+1)*binWidth);
 			float normalValue = NormalizedValue(i);
 			int barSize = normalValue * maxBarSize;
 			int tabs = maxBarSize / 4 - barSize / 4  + 1; //4 is the tabwidth in spaces
@@ -240,7 +245,6 @@ public:
 	{
 		histograms = other.histograms;
 	}
-	
 //	template<typename T>
 //	std::vector<T> GetValue() {
 //		return std::get<std::vector<T>>(values);
@@ -258,6 +262,9 @@ public:
 //		histogramRegisters = other.histogramRegisters;
 //		return *this;
 //	}
+	const std::tuple<std::vector<Histogram<Ts>>...>& GetAllHistograms() {
+		return histograms;
+	}
 	
 	template<typename T>
 	std::vector<Histogram<T>>* GetHistograms() {
