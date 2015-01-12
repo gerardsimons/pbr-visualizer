@@ -18,11 +18,13 @@ class RIVSliderView : public RIVDataView, public RIVDataSetListener {
 private:
 	static RIVSliderView* instance;
 	
-	int bottom, top;
-	int leftBound, rightBound;
+	int bottom = 0;
+	int top = 0;
+	int leftBound = 0;
+	int rightBound = 0;
 	
 	int pointerWidth = 5;
-	int histogramBins = 10;
+	int histogramBins = 20;
 	
 	bool movePointers = false;
 	
@@ -38,17 +40,23 @@ private:
 	HistogramSet<float,ushort>* distributionsOne;
 	HistogramSet<float,ushort>* distributionsTwo;
 	
-	Histogram<float> uniquenessHistogramOne;
-	Histogram<float> uniquenessHistogramTwo;
+	//What rows belong to which bin
+	std::map<int,std::vector<size_t>> rowBinMembershipsOne;
+	std::map<int,std::vector<size_t>> rowBinMembershipsTwo;
+	
+	Histogram<float> membershipHistogramOne;
+	Histogram<float> membershipHistogramTwo;
 	
 	riv::ColorMap colorMap;
 	
+	int lastRowsFiltered = 0;
+	
 	void redisplayWindow();
-	void createHistograms(RIVDataSet<float,ushort>* datasetSource);
+	void createMembershipData(RIVDataSet<float,ushort>* datasetSource, std::map<int,std::vector<size_t>>& rowBinMembership);
 	void resetPointers();
 	void filterDataSets();
 	//Filter a dataset according to its uniqueness
-	void filterDataSet(RIVDataSet<float,ushort>* dataset, HistogramSet<float,ushort>* distributions, bool isLeftSet, float minBound, float maxBound);
+	void filterDataSet(RIVDataSet<float,ushort>* dataset, HistogramSet<float,ushort>* distributions, bool isLeftSet, float minBound, float maxBound,std::map<int,std::vector<size_t>>& rowBinMembership);
 public:
 	static int windowHandle;
 	

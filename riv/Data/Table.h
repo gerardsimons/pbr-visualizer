@@ -1,4 +1,4 @@
-c//
+//
 //  Table.h
 //  RIVDataSet
 //
@@ -504,7 +504,13 @@ public:
 		});
 		return found;
 	}
-	
+	void ReserveRows(const size_t rows) {
+		tuple_for_each(records,[&](auto tRecords) {
+			for(auto record : tRecords) {
+				record->Reserve(rows);
+			}
+		});
+	}
 	TableIterator* GetIterator() {
 		if(iterator) {
 			delete iterator;

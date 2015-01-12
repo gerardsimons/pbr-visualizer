@@ -46,6 +46,9 @@ public:
 	RIVRecord(const std::string& name, const std::vector<T>& values) : name(name), values(values) {
 		minMaxComputed = false;
 	};
+	void Reserve(const size_t N) {
+		values.reserve(N);
+	}
 	size_t Size() const {
 		return values.size();
 	}
@@ -105,19 +108,27 @@ public:
 		return &values;
 	}
 	RIVRecord* CloneStructure() {
-		if(clampOutliers) {
+//		if(clampOutliers) {
 			return new RIVRecord<T>(name,Min(),Max(),clampOutliers);
-		}
-		else {
-			return new RIVRecord<T>(name);
-		}
+//		}
+//		else {
+//			return new RIVRecord<T>(name);
+//		}
 	}
 	Histogram<T> CreateHistogram(const T& lowerBound, const T& upperBound, int bins) {
 		return Histogram<T>(name, values, lowerBound,upperBound,bins);
 	}
+//	Histogram<ushort> CreateHistogram(const ushort& lowerBound, const ushort& upperBound, int bins) {
+//		return Histogram<T>(name, values, lowerBound,upperBound,upperBound - lowerBound);
+//	}
 	Histogram<T> CreateHistogram(size_t bins) {
 		const std::pair<T,T>& minMax = MinMax();
-		return Histogram<T>(name, values, minMax.first,minMax.second,bins);
+		
+//		return Histogram<T>(name, values, minMax.first,minMax.second,bins);
+		if(typeid(minMax.first) == typeid(unsigned short)) {
+			return CreateHistogram(minMax.first, minMax.second, minMax.second - minMax.first);
+		}
+		return CreateHistogram(minMax.first, minMax.second, bins);
 	}
 };
 

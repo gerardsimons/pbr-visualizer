@@ -37,7 +37,7 @@ void drawCoordSystem(float length)
 	glPopAttrib();
 }
 
-void drawText(char *text, int size, int x, int y, float *color, float sizeModifier) {
+void drawText(char* text, int size, int x, int y, float* color, float sizeModifier) {
 	//Estimate center, seems to be the magic number for font pixel size
 	float xCenter = 60 * sizeModifier * size / 2.F;
 	
@@ -56,6 +56,11 @@ void drawText(char *text, int size, int x, int y, float *color, float sizeModifi
 
 void drawText(std::string text, int x, int y, float *color, float sizeModifier) {
 	drawText((char*)text.c_str(),(int)text.size(),x,y,color,sizeModifier);
+}
+
+void drawText(std::string text, int x, int y, float sizeModifier) {
+	float black[] = {0,0,0};
+	drawText((char*)text.c_str(),(int)text.size(),x,y,black,sizeModifier);
 }
 
 void drawUnitFace()

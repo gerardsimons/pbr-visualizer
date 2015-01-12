@@ -53,7 +53,8 @@ protected:
 	EMBREERenderer* rendererOne;
 	EMBREERenderer* rendererTwo = NULL;
 	
-	RIVColorProperty* colorProperty;
+	RIVColorRGBProperty<float>* colorProperty;
+	
 	RIVSizeProperty* sizeProperty;
 	
 	//Octree generated from 3D points (generated in createPoints)
@@ -105,9 +106,9 @@ protected:
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
 	//Single renderer constructor
-    RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,RIVColorProperty*,RIVSizeProperty*);
+    RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,	RIVColorRGBProperty<float>*,RIVSizeProperty*);
 	//Dual renderer constructor
-	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty);
+	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, 	RIVColorRGBProperty<float>* colorProperty, RIVSizeProperty* sizeProperty);
 	
 	//Extract data about the scene from the embree renderer object
 	void GetSceneData(EMBREERenderer* renderer, TriangleMeshGroup* target);

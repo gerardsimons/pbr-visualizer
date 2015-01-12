@@ -94,7 +94,7 @@ private:
 	
 	const size_t maxPaths;
 	size_t updateThrottle = 0;
-	const size_t bootstrapRepeat = 1;
+	const size_t bootstrapRepeat = 100;
 	
 	//Generate the datasets; create tables records and the histogramset
 	void createDataStructures();
@@ -104,7 +104,6 @@ private:
 	//Setup the shortcut pointer to the innards of the dataset, tables etc.
 	void resetPointers(RIVDataSet<float,ushort>* dataset);
 public:
-
 	RIVDataSet<float,ushort>* Bootstrap(RIVDataSet<float, ushort>* dataset, const size_t N);
 	void Unpause() {
 		paused = false;
@@ -152,7 +151,7 @@ public:
 	}
 	void SetAcceptProbability(float newProb);
 	//The number of renderers to expect data from and the maximum number of paths per renderer before data reduction should kick in
-	DataController(const ushort renderers, const size_t maxPaths);
+	DataController(const ushort renderers, const size_t maxPaths, const size_t bootstrapRepeat);
 	//Returns a pointer to a pointer of the dataset for renderer one
 	RIVDataSet<float,ushort>** GetDataSet();
 	bool ProcessNewPath(int frame, PathData* newPath);

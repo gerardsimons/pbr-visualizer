@@ -13,7 +13,7 @@
 #include "../trackball.h"
 #include "../Graphics/ColorPalette.h"
 #include "../Graphics/graphics_helper.h"
-
+#include "../Configuration.h"
 #include "devices/device_singleray/embree_renderer.h"
 #include "devices/device_singleray/shapes/shape.h"
 //#include "devices/device_singleray/api/instance.h"
@@ -28,7 +28,7 @@
 RIV3DView* RIV3DView::instance = NULL;
 int RIV3DView::windowHandle = -1;
 
-RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset),
+RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer, 	RIVColorRGBProperty<float>* colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset),
 rendererOne(renderer), sizeProperty(sizeProperty), colorProperty(colorProperty) {
 	
     if(instance != NULL) {
@@ -45,7 +45,7 @@ rendererOne(renderer), sizeProperty(sizeProperty), colorProperty(colorProperty) 
 	ResetGraphics();
 };
 
-RIV3DView::RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty *colorProperty, RIVSizeProperty* sizeProperty) :
+RIV3DView::RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorRGBProperty<float>* colorProperty, RIVSizeProperty* sizeProperty) :
 RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(rendererTwo), sizeProperty(sizeProperty), colorProperty(colorProperty) {
 	
 	if(instance != NULL) {
@@ -497,10 +497,14 @@ void RIV3DView::createPaths() {
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
 std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset) {
 	
+
+	
 	reporter::startTask("Creating paths");
 	
 	RIVTable<float,ushort>* isectTable = dataset->GetTable("intersections");
 	RIVShortRecord* bounceRecord = isectTable->GetRecord<ushort>("bounce_nr");
+	
+	colorProperty->SetColorRecords(isectTable->GetRecord<float>(INTERSECTION_R),isectTable->GetRecord<float>(INTERSECTION_G),isectTable->GetRecord<float>(INTERSECTION_B));
 	
 	std::vector<Path> paths;
 	
@@ -785,7 +789,9 @@ bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMe
 			
 			riv::SingularFilter<ushort>* objectFilter = new riv::DiscreteFilter<ushort>("primitive ID",selectedObjectID);
 			riv::SingularFilter<ushort>* bounceFilter = new riv::DiscreteFilter<ushort>("bounce_nr",bounce_nr);
+			
 			std::vector<riv::SingularFilter<ushort>*> fs;
+			
 			fs.push_back(objectFilter);
 			fs.push_back(bounceFilter);
 //			pathFilter->AddFilter(new riv::ConjunctiveFilter<ushort>(fs));

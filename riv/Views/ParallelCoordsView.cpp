@@ -80,7 +80,6 @@ void ParallelCoordsView::createAxes() {
 			RIVTable<float,ushort> *table = tablePointers->at(j);
 			RIVTable<float,ushort> *otherTable = otherTablePointers->at(j);
 			
-		
 			ParallelCoordsAxisGroup<float,ushort> axisGroup(table->GetName());
 			
 			auto recordsTuple = table->GetAllRecords();
@@ -163,6 +162,7 @@ void ParallelCoordsView::drawSelectionBoxes() {
 void ParallelCoordsView::drawDensities() {
 	//Draw the densities
 	float textColor[3] = {1,1,0};
+	float epsilon = 0.01F;
 	
 	for(auto& axisGroup : axisGroups) {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
@@ -184,32 +184,43 @@ void ParallelCoordsView::drawDensities() {
 				for(int i = 0 ; i < numBins ; ++i) {
 					int startY = i * height + axis->y;
 					int endY = startY + height;
-					int centerY = startY + (endY - startY) / 2.F;
+//					int centerY = startY + (endY - startY) / 2.F;
 					
 					float valueOne = histogramOne->NormalizedValue(i);
 					float valueTwo = histogramTwo->NormalizedValue(i);
 					
-					//Value one > value two
+					float valueDelta = valueOne - valueTwo;
+					
+					//If the values are rougly equal
+					if(valueDelta < epsilon && valueDelta > -epsilon) {
+						glColor3f(.8F, .8F, .8F);
+						continue;
+					}
 					if(valueOne > valueTwo) {
-						float colorValue = (valueOne - valueTwo) / valueOne;
+						float colorValue = valueDelta / valueOne;
 //						std::string text = std::to_string(colorValue);
 //						drawText(text,axis->x,centerY - 15,textColor,.1F);
 //						printf("glColor3f(%f,0,0)\n",colorValue);
-						glColor3f(colorValue, 0, 0);
+						glColor3f(colorValue, 0, 1-colorValue);
 					}
 					else {
-						float colorValue = (valueTwo - valueOne) / valueTwo;
+						float colorValue = -valueDelta / valueTwo;
 //						std::string text = std::to_string(colorValue);
 //						drawText(text,axis->x,centerY - 15,textColor,.1F);
 //						printf("glColor3f(0,0,%f)\n",colorValue);
-						glColor3f(0, 0, colorValue);
+						glColor3f(1-colorValue, 0, colorValue);
 					}
-					glRectf(startX, startY+2, endX, endY-2);
+					glRectf(startX, startY, endX, endY);
 				}
 				
 				glColor3f(0,0,0);
-				glVertex3f(axis->x,axis->y,0);
-				glVertex3f(axis->x,axis->y+axis->height,0);
+				glBegin(GL_LINES);
+				for(int i = 0 ; i < numBins ; ++i) {
+					int y = i * height + axis->y;
+					glVertex2f(startX, y);
+					glVertex2f(startX + axis->width, y);
+				}
+				glEnd();
 			}
 		});
 	}
@@ -220,18 +231,21 @@ void ParallelCoordsView::drawAxes() {
     glColor3f(1,1,1);
     glLineWidth(1.F);
 	
-    glBegin(GL_LINES);
+//    glBegin(GL_LINES);
     for(auto& axisGroup : axisGroups) {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto& axis : tAxes) {
-				glColor3f(0,0,0);
-				glVertex3f(axis->x,axis->y,0);
-				glVertex3f(axis->x,axis->y+axis->height,0);
+				float halfWidth = axis->width / 2.F;
+				
+				glRectf(axis->x - halfWidth, axis->y, axis->x + halfWidth, axis->y + axis->height);
+				
+//				glVertex3f(axis->x,axis->y,0);
+//				glVertex3f(axis->x,axis->y+axis->height,0);
 			}
 		});
     }
-    glEnd();
-    
+//    glEnd();
+	
     glColor3f(1,0,0);
     glLineWidth(1.F);
     
@@ -313,8 +327,10 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 						
 						float x = axis->x;
 						float y = axis->PositionOnScaleForValue(value);
+						float halfWidth = axis->width / 2.F;
 						
-						glVertex3f(x, y, 0);
+						glVertex3f(x - halfWidth, y, 0);
+						glVertex3f(x + halfWidth, y, 0);
 					}
 					++lineIndex;
 				});
@@ -581,18 +597,39 @@ void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 	linesAreDirty = true;
 	
 	//Recreate the color property
-	if(source->GetName() == DATASET_ONE) {
-		pathColorOne->Reset(source);
-		rayColorOne->Reset(source);
+	if(source == (*datasetOne)) {
+		
+		auto rgbPath = dynamic_cast<RIVColorRGBProperty<float>*>(pathColorOne);
+		auto rgbRay = dynamic_cast<RIVColorRGBProperty<float>*>(rayColorOne);
+		
+		if(rgbPath) {
+			auto pathTable = source->GetTable(PATHS_TABLE);
+			auto isectTable = source->GetTable(INTERSECTIONS_TABLE);
+			rgbPath->SetColorRecords(pathTable->GetRecord<float>(PATH_R), pathTable->GetRecord<float>(PATH_G), pathTable->GetRecord<float>(PATH_B));
+			rgbRay->SetColorRecords(isectTable->GetRecord<float>(INTERSECTION_R), isectTable->GetRecord<float>(INTERSECTION_G), isectTable->GetRecord<float>(INTERSECTION_B));
+		}
+		else {
+			pathColorOne->Reset(source);
+			rayColorOne->Reset(source);
+		}
 	}
-	else if(source->GetName() == DATASET_TWO) {
-		pathColorTwo->Reset(source);
-		rayColorTwo->Reset(source);
+	else if(source == (*datasetTwo)) {
+		auto rgbPath = dynamic_cast<RIVColorRGBProperty<float>*>(pathColorTwo);
+		auto rgbRay = dynamic_cast<RIVColorRGBProperty<float>*>(rayColorTwo);
+		if(rgbPath) {
+			auto pathTable = source->GetTable(PATHS_TABLE);
+			auto isectTable = source->GetTable(INTERSECTIONS_TABLE);
+			rgbPath->SetColorRecords(pathTable->GetRecord<float>(PATH_R), pathTable->GetRecord<float>(PATH_G), pathTable->GetRecord<float>(PATH_B));
+			rgbRay->SetColorRecords(isectTable->GetRecord<float>(INTERSECTION_R), isectTable->GetRecord<float>(INTERSECTION_G), isectTable->GetRecord<float>(INTERSECTION_B));
+		}
+		else {
+			pathColorTwo->Reset(source);
+			rayColorTwo->Reset(source);
+		}
 	}
 	else {
 		throw std::runtime_error("Unknown dataset " + source->GetName());
 	}
-	
 	createAxes();
 	
 	redisplayWindow();
@@ -614,25 +651,3 @@ void ParallelCoordsView::OnFiltersChanged() {
 	
 	redisplayWindow();
 }
-
-//void ParallelCoordsView::drawText(char *text, int size, int x, int y, float *color, float sizeModifier) {
-//    //Estimate center, seems to be the magic number for font pixel size
-//    float xCenter = 60 * sizeModifier * size / 2.F;
-//    
-//    glLineWidth(1);
-//	glColor3f(*color,*(color+1),*(color+2));
-//    glPushMatrix();
-//	glTranslatef(x - xCenter,y, 0);
-//    glPushMatrix();
-//	glScalef(sizeModifier,sizeModifier,1);
-//	for(size_t i = 0 ; i < size ; i++) {
-//		glutStrokeCharacter(GLUT_STROKE_ROMAN, text[i]);
-//	}
-//    glPopMatrix();
-//    glPopMatrix();
-//    
-//}
-
-//void ParallelCoordsView::drawText(std::string text, int x, int y, float *color, float sizeModifier) {
-//    drawText((char*)text.c_str(),(int)text.size(),x,y,color,sizeModifier);
-//}

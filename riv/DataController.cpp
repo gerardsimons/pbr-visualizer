@@ -11,7 +11,7 @@
 
 #include <algorithm>
 
-DataController::DataController(const ushort renderers, const size_t maxPaths) : maxPaths(maxPaths) {
+DataController::DataController(const ushort renderers, const size_t maxPaths, const size_t bootstrapRepeat) : maxPaths(maxPaths), bootstrapRepeat(bootstrapRepeat) {
 	if(updateThrottle == 0) {
 		updateThrottle = maxPaths;
 	}
@@ -22,6 +22,10 @@ DataController::DataController(const ushort renderers, const size_t maxPaths) : 
 
 RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* dataset,const size_t N) {
 	
+	
+	const std::string taskName = "Creating bootstrap";
+	reporter::startTask("Creating bootstrap", N);
+	
 	RIVDataSet<float,ushort>* bootstrap = dataset->CloneStructure();
 	RIVTable<float,ushort>* bootstrapPaths = bootstrap->GetTable("paths");
 	RIVTable<float,ushort>* bootstrapIsects = bootstrap->GetTable("intersections");
@@ -29,8 +33,10 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 	RIVTable<float,ushort>* paths = dataset->GetTable("paths");
 	RIVTable<float,ushort>* intersections = dataset->GetTable("intersections");
 	size_t rows = paths->NumberOfRows();
-
 	
+	//Give the underlying data structure a chance to reserve space
+	bootstrapPaths->ReserveRows(N);
+
 	//path records
 	std::vector<RIVRecord<float>*>* floatRecords = paths->GetRecords<float>();
 	std::vector<RIVRecord<float>*>* bootstrapFloatRecords = bootstrapPaths->GetRecords<float>();
@@ -47,6 +53,7 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 	
 	//Choose N paths, also add the referencing rows
 	for(size_t i = 0 ; i < N ; ++i) {
+		reporter::update(taskName);
 		size_t index = rand() % rows;
 		
 		//TODO: Get the tuple from the table and iterate over the tuple and then iterate over the vectors
@@ -85,6 +92,7 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 	}
 	//		bootstrap.Print(1000);
 	
+	reporter::stop("Creating bootstrap");
 	return bootstrap;
 }
 
@@ -100,19 +108,19 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
 	pathTable->CreateRecord<float>(THROUGHPUT_R,0,1);
 	pathTable->CreateRecord<float>(THROUGHPUT_G,0,1);
 	pathTable->CreateRecord<float>(THROUGHPUT_B,0,1);
-	pathTable->CreateRecord<ushort>(DEPTH,0,5);
+	pathTable->CreateRecord<ushort>(DEPTH,0,5,true);
 	
 	RIVTable<float,ushort>* isectsTable = dataset->CreateTable(INTERSECTIONS_TABLE);
 	
 	//TODO: Determine this by reading from the renderer settings
-	isectsTable->CreateRecord<ushort>(BOUNCE_NR,1,5);
+	isectsTable->CreateRecord<ushort>(BOUNCE_NR,1,5,true);
 	isectsTable->CreateRecord<float>(POS_X,0,600,true);
 	isectsTable->CreateRecord<float>(POS_Y,0,600,true);
 	isectsTable->CreateRecord<float>(POS_Z,0,600,true);
 	isectsTable->CreateRecord<float>(INTERSECTION_R,0,1);
 	isectsTable->CreateRecord<float>(INTERSECTION_G,0,1);
 	isectsTable->CreateRecord<float>(INTERSECTION_B,0,1);
-	isectsTable->CreateRecord<ushort>(PRIMITIVE_ID,0,10);
+	isectsTable->CreateRecord<ushort>(PRIMITIVE_ID,0,10,true);
 	//	shapeIds = isectsTable->CreateShortRecord("shape ID");
 	//	interactionTypes = isectsTable->CreateShortRecord("interaction");
 	//	lightIds = isectsTable->CreateShortRecord("light ID");
@@ -126,10 +134,8 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
 void DataController::createDataStructures() {
 	
 	rendererData = new RIVDataSet<float,ushort>(DATASET_ONE);
-//	rendererDataTwo = new RIVDataSet<float,ushort>(DATASET_TWO);
 	
 	candidateData = new RIVDataSet<float,ushort>(DATASET_ONE);
-//	candidateDataTwo = new RIVDataSet<float,ushort>(DATASET_TWO);
 	
 	//Create the records and such for the datasets
 	initDataSet(rendererData);

@@ -47,6 +47,7 @@ public:
 	T minValue;
 	T maxValue;
 	RIVRecord<T>* recordPointer;
+	
 	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision, Histogram<T>* histogramOne)
 	: ParallelCoordsAxisInterface(x,y,width,height,name),minValue(minValue),maxValue(maxValue),recordPointer(recordPointer), densityHistogramOne(histogramOne) {
 		ComputeScale(scaleDivision);

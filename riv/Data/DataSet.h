@@ -273,6 +273,11 @@ public:
 			table->JoinTable(otherTable);
 		}
 	}
+	void ClearRowFilters() {
+		for(auto table : tables) {
+			table->ClearRowFilters();
+		}
+	}
 	RIVDataSet* CloneStructure() {
 		RIVDataSet<Ts...>* clone = new RIVDataSet<Ts...>(name);
 		for(RIVTable<Ts...>* table : tables) {

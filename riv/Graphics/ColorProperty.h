@@ -133,6 +133,11 @@ public:
 //		greenColorProperty = new RIVEvaluatedProperty<T>(referenceTable,greenRecord);
 //		blueColorProperty = new RIVEvaluatedProperty<T>(referenceTable,blueRecord);
 //    }
+	void SetColorRecords(RIVRecord<T>* redColorRecord,RIVRecord<T>* greenColorRecord,RIVRecord<T>* blueColorRecord) {
+		redColorProperty->SetReferenceRecord(redColorRecord);
+		greenColorProperty->SetReferenceRecord(greenColorRecord);
+		blueColorProperty->SetReferenceRecord(blueColorRecord);
+	}
 	RIVColorRGBProperty(RIVTableInterface* referenceTable, RIVRecord<T>* redRecord, RIVRecord<T>* greenRecord, RIVRecord<T>* blueRecord) {
 		redColorProperty = new RIVEvaluatedProperty<T>(referenceTable,redRecord);
 		greenColorProperty = new RIVEvaluatedProperty<T>(referenceTable,greenRecord);

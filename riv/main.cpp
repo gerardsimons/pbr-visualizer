@@ -80,8 +80,8 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 50000;
-
+const int maxPaths = 2500;
+const int bootstrapRepeat = 10;
 int sliderViewHeight = 50;
 
 void display(void)
@@ -345,7 +345,7 @@ void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
 
 void setupDataController(const int argc, char** argv) {
 	//Create the EMBREE renderer
-	dataControllerOne = new DataController(argc - 1, maxPaths);
+	dataControllerOne = new DataController(argc - 1, maxPaths, bootstrapRepeat);
 	datasetOne = dataControllerOne->GetDataSet();
 	if(argc == 2) { //Just one renderer
 		DataConnector* connector = new DataConnector(processRendererOne,rendererOneFinishedFrame);
@@ -354,7 +354,7 @@ void setupDataController(const int argc, char** argv) {
 		printf("1 renderer set up.\n");
 	}
 	else if(argc == 3) {
-		dataControllerTwo = new DataController(argc - 1, maxPaths);
+		dataControllerTwo = new DataController(argc - 1, maxPaths,bootstrapRepeat);
 		DataConnector* dcOne = new DataConnector(processRendererOne,rendererOneFinishedFrame);
 		DataConnector* dcTwo = new DataConnector(processRendererTwo,rendererTwoFinishedFrame);
 		rendererOne = new EMBREERenderer(dcOne, std::string(argv[1]));
@@ -376,7 +376,7 @@ void doNothing() {
 }
 
 //Helper functions to create color property for a given dataset
-RIVColorProperty* createPathColorProperty(RIVDataSet<float,ushort>* dataset) {
+RIVColorRGBProperty<float>* createPathColorProperty(RIVDataSet<float,ushort>* dataset) {
 	RIVTable<float,ushort> *pathsTable = (*datasetOne)->GetTable(PATHS_TABLE);
 	
 	RIVRecord<float>* pathRRecord = pathsTable->GetRecord<float>(PATH_R);
@@ -387,7 +387,7 @@ RIVColorProperty* createPathColorProperty(RIVDataSet<float,ushort>* dataset) {
 	return new RIVColorRGBProperty<float>(pathsTable,pathRRecord,pathGRecord,pathBRecord);
 }
 
-RIVColorProperty* createRayColorProperty(RIVDataSet<float,ushort>* dataset) {
+RIVColorRGBProperty<float>* createRayColorProperty(RIVDataSet<float,ushort>* dataset) {
 	RIVTable<float,ushort> *intersectionsTable = (*datasetOne)->GetTable(INTERSECTIONS_TABLE);
 	
 	RIVRecord<float>* isectRRecord = intersectionsTable->GetRecord<float>(INTERSECTION_R);
@@ -478,7 +478,7 @@ void createViews() {
 		RIVColorProperty* colorOne = new RIVFixedColorProperty(1, 0, 0);
 		RIVColorProperty* colorTwo = new RIVFixedColorProperty(0, 0, 1);
 		
-//		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
+//		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
 		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),colorOne,colorOne,colorTwo,colorTwo);
 		
 		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,rayColorOne,sizeProperty);
@@ -507,7 +507,7 @@ int main(int argc, char **argv)
 {
     printf("Initialising Rendering InfoVis...\n");
 
-	testFunctions();
+//	testFunctions();
 	
     srand(time(NULL));
     /* initialize GLUT, let it extract command-line

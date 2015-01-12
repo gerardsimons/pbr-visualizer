@@ -41,7 +41,7 @@ protected:
 	INTERPOLATION_SCHEME interpolationMode = defaultInterpolationMode;
 	
 	//The default evaluator to be used to evaluate a given row and return a size
-	Evaluator<T,float>* defaultEvaluator;
+	Evaluator<T,float>* defaultEvaluator = NULL;
 	
 	//Any optional special non-default interpolators to be used
 	std::vector<Evaluator<T,float>*> specificEvaluators;
@@ -52,6 +52,9 @@ protected:
 		
 	}
 	void init(const std::vector<T> &interpolationValues) {
+		if(defaultEvaluator) {
+			delete defaultEvaluator;
+		}
 		switch(interpolationMode) {
 			case CONTINUOUS:
 			{
@@ -144,6 +147,9 @@ public:
 			evaluatorRegister[index] = newEvaluator;
 		}
 		else throw "New evaluator cannot be NULL.";
+	}
+	void SetReferenceRecord(RIVRecord<T>* newReferenceRecord) {
+		referenceRecord = newReferenceRecord;
 	}
 //	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,float fixedValue) {
 //		propertyReference = propertyReference_;

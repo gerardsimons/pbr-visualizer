@@ -21,10 +21,12 @@
 namespace reporter {
     
     std::map<std::string,Task*> runningTasks;
+	int currentRound;
+	int updateRound;
     
-    Task::Task(std::string name_,float maxRounds_) {
-        name = name_;
-        maxRounds = maxRounds_;
+	Task::Task(std::string name,float maxRounds) : name(name), maxRounds(maxRounds) {
+
+		updateRound = maxRounds / 10.F;
     }
     void Task::start() {
         if(isRunning) {
@@ -37,12 +39,16 @@ namespace reporter {
     void Task::update(float completed) {
         if(isRunning) {
             printf("Task %s is %f%% completed.\n",name.c_str(),completed / maxRounds * 100.F);
+//			printf(".");
         }
         else throw std::runtime_error("No task is running.");
     }
     //Undetermined update
     void Task::update() {
-        printf(".");
+		++currentRound;
+		if(currentRound++ % updateRound == 0) {
+			printf(".");
+		}
     }
     void Task::stop() {
         if(isRunning) {

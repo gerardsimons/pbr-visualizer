@@ -17,8 +17,8 @@
 void drawCoordSystem(float length=1);
 
 void drawText(char *text, int size, int x, int y, float *color, float sizeModifier);
-
 void drawText(std::string text, int x, int y, float *color, float sizeModifier);
+void drawText(std::string text, int x, int y, float sizeModifier);
 
 void drawUnitFace();
 

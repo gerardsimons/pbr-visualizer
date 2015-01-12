@@ -116,12 +116,14 @@ public:
 	void Set(int bin, int count) {
 		hist[bin] = count;
 	}
-	void Add(const T& value) {
+	unsigned int Add(const T& value) {
 		
 		unsigned int bin = BinForValue(value);
 		
 		++hist[bin];
 		++nrElements;
+		
+		return bin;
 	}
 	unsigned int NumberOfBins() {
 		return bins;
