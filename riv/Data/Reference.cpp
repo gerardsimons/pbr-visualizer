@@ -14,7 +14,7 @@ RIVSingleReference::RIVSingleReference(RIVTableInterface* sourceTable, RIVTableI
 }
 RIVSingleReference::RIVSingleReference(const std::map<size_t,size_t>& indexMap, RIVTableInterface* sourceTable, RIVTableInterface* targetTable) : RIVReference(sourceTable,targetTable), indexMap(indexMap) {
 }
-std::pair<size_t*,ushort> RIVSingleReference::GetReferenceRows(size_t row) {
+const std::pair<size_t*,ushort>& RIVSingleReference::GetReferenceRows(size_t row) {
 	return std::pair<size_t*,ushort>(&indexMap[row],1);
 }
 void RIVSingleReference::Print() {
@@ -62,7 +62,7 @@ bool RIVMultiReference::HasReference(size_t row) {
 		return true;
 	}
 }
-std::pair<size_t*,ushort> RIVMultiReference::GetReferenceRows(size_t row) {
+const std::pair<size_t*,ushort>& RIVMultiReference::GetReferenceRows(size_t row) {
 	return indexMap[row];
 }
 void RIVMultiReference::FilterReferenceRow(size_t row) {

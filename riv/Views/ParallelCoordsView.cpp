@@ -177,6 +177,9 @@ void ParallelCoordsView::drawAxes() {
 				int endX = startX + axis->width;
 				int height = axis->height / (float)numBins;
 				
+				float maxValueOne = histogramOne.MaximumValue();
+				float maxValueTwo = histogramTwo.MaximumValue();
+				
 //				printf("Histogram one \n");
 //				histogramOne->Print();
 //				printf("Histogram two \n");
@@ -187,20 +190,46 @@ void ParallelCoordsView::drawAxes() {
 					int endY = startY + height;
 //					int centerY = startY + (endY - startY) / 2.F;
 					
-					float valueOne = histogramOne.NormalizedValue(i);
-					float valueTwo = histogramTwo.NormalizedValue(i);
+					float binValueOne = histogramOne.BinValue(i);
+					float binValueTwo = histogramTwo.BinValue(i);
+					
+					size_t nrElementsOne = histogramOne.NumberOfElements();
+					size_t nrElementsTwo = histogramTwo.NumberOfElements();
+					
+					float normalizedValueOne = 0;
+					float normalizedValueTwo = 0;
+					if(nrElementsOne)
+						normalizedValueOne = binValueOne / histogramOne.NumberOfElements();
+					if(nrElementsTwo)
+						normalizedValueTwo = binValueTwo / histogramTwo.NumberOfElements();
 					
 //					float valueDelta = valueTwo - valueTwo;
 					
-					float blueColorValue = (valueTwo - valueOne) / valueTwo;
-					float redColorValue = (valueOne - valueTwo) / valueOne;
-					if(redColorValue < 0) {
-						redColorValue = 0;
+					float blueColorValue = ((normalizedValueTwo - normalizedValueOne) / normalizedValueTwo + 1) / 2.F;
+//					float redColorValue = ((normalizedValueOne - normalizedValueTwo) / normalizedValueOne + 1) / 2.F;
+					
+					float h,s,v;
+					RGBtoHSV(1-blueColorValue, 0, blueColorValue, &h, &s, &v);
+					
+//					if(redColorValue < 0) {
+//						redColorValue = 0;
+//					}
+//					if(blueColorValue < 0) {
+//						blueColorValue = 0;
+//					}
+			
+					float sInterpolated;
+					if(blueColorValue > 0.5F) {
+						sInterpolated = binValueOne / maxValueOne;
 					}
-					if(blueColorValue < 0) {
-						blueColorValue = 0;
+					else {
+						sInterpolated = binValueTwo / maxValueTwo;
 					}
-					glColor3f(redColorValue, 0, blueColorValue);
+					
+					float r,g,b;
+					HSVtoRGB(&r, &g, &b, h, s, v);
+					
+					glColor3f(r, g, b);
 					glRectf(startX, startY, endX, endY);
 				}
 				

@@ -24,7 +24,7 @@ protected:
 public:
 	RIVTableInterface* sourceTable;
 	RIVTableInterface* targetTable;
-	virtual std::pair<size_t*,ushort> GetReferenceRows(size_t row) = 0;
+	virtual const std::pair<size_t*,ushort>& GetReferenceRows(size_t row) = 0;
 	virtual bool HasReference(size_t row) = 0;
 };
 
@@ -40,7 +40,7 @@ public:
 	}
 	RIVSingleReference(const std::map<size_t,size_t>& indexMap, RIVTableInterface* sourceTable, RIVTableInterface* targetTable);
 	RIVSingleReference(RIVTableInterface* sourceTable, RIVTableInterface* targetTable);
-	std::pair<size_t*,ushort> GetReferenceRows(size_t row);
+	const std::pair<size_t*,ushort>& GetReferenceRows(size_t row);
 	void Print();
 	void AddReference(size_t fromRow, size_t toRow);
 	void FilterReferenceRow(size_t row);
@@ -66,7 +66,7 @@ public:
 	RIVSingleReference* ReverseReference();
 	bool HasReference(size_t row);
 	void AddReferences(size_t fromRow, const std::pair<size_t*,ushort>& toRows);
-	std::pair<size_t*,ushort> GetReferenceRows(size_t row);
+	const std::pair<size_t*,ushort>& GetReferenceRows(size_t row);
 	void FilterReferenceRow(size_t row);
 	void Print();
 };

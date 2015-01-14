@@ -30,6 +30,9 @@ private:
 	T lowerBound;
 	T upperBound;
 	
+	T* maxValue = NULL;
+	T* minValue = NULL;
+	
 	unsigned int bins = 0;
 	float binWidth = 0;
 	
@@ -69,9 +72,6 @@ private:
 	}
 public:
 	std::string name;
-	int BinValue(int key) {
-		return hist[key];
-	}
 	~Histogram() {
 		
 	}
@@ -109,6 +109,18 @@ public:
 	}
 	T UpperBound() {
 		return upperBound;
+	}
+	T MaximumValue() {
+		T max = std::numeric_limits<T>::min();
+		for(auto iter : hist) {
+			if(iter.second > max) {
+				max = iter.second;
+			}
+		}
+		return max;
+	}
+	int BinValue(int key) {
+		return hist[key];
 	}
 	float GetBinWidth() {
 		return binWidth;

@@ -49,6 +49,12 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 	
 	RIVMultiReference* ref = static_cast<RIVMultiReference*>(paths->GetReference());
 	
+//	bool includeReference = (rand() % 2) > 0;
+//	if(includeReference)
+//		printf("Include references...\n");
+//	else {
+//		printf("NOT include references...\n");
+//	}
 	//Choose N paths, also add the referencing rows
 	for(size_t i = 0 ; i < N ; ++i) {
 //		reporter::update(taskName);
@@ -68,8 +74,8 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 			
 			bootShort->AddValue(shortRec->Value(index));
 		}
-		
-		std::pair<size_t*,ushort> refRows = ref->GetReferenceRows(index);
+
+		const std::pair<size_t*,ushort>& refRows = ref->GetReferenceRows(index);
 		for(size_t i = 0 ; i < isectFloatRecords->size() ; ++i) {
 			for(size_t j = 0 ; j < refRows.second ; ++j) {
 				auto bootFloat = bootstrapIsectFloatRecords->at(i);
@@ -87,6 +93,7 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 				bootShort->AddValue(shortRec->Value(refRows.first[j]));
 			}
 		}
+		
 	}
 	//		bootstrap.Print(1000);
 	
