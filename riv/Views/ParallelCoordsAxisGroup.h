@@ -20,12 +20,15 @@ class ParallelCoordsAxisGroup {
 private:
 public:
 	
+	bool isSelected = false;
+	
 	~ParallelCoordsAxisGroup() {
 		tuple_for_each(axes, [&](auto tAxes) {
 //			deletePointerVector(tAxes);
 		});
 	}
 	
+	std::vector<ParallelCoordsAxisInterface*> axisOrder;
 	std::string tableName;
 	std::tuple<std::vector<ParallelCoordsAxis<Ts>*>...> axes;
 	
@@ -45,16 +48,20 @@ public:
 	}
 	
 	template<typename U>
-	ParallelCoordsAxis<U>* CreateAxis(RIVRecord<U>* record, int x, int y, int axisWidth, int axisHeight, U min, U max, const std::string& name, int divisionCount, Histogram<U>* histogramOne) {
+	ParallelCoordsAxis<U>* CreateAxis(RIVRecord<U>* record, int x, int y, int axisWidth, int axisHeight, U min, U max, const std::string& name, int divisionCount,const Histogram<U>& histogramOne) {
 		std::vector<ParallelCoordsAxis<U>*>* tAxes = GetAxes<U>();
-		tAxes->push_back(new ParallelCoordsAxis<U>(x,y,axisWidth,axisHeight,min,max,name,record,divisionCount,histogramOne));
+		auto axis = new ParallelCoordsAxis<U>(x,y,axisWidth,axisHeight,min,max,name,record,divisionCount,histogramOne);
+		tAxes->push_back(axis);
+		axisOrder.push_back(axis);
 		return tAxes->at(tAxes->size() - 1);
 	}
 	
 	template<typename U>
-	ParallelCoordsAxis<U>* CreateAxis(RIVRecord<U>* record, int x, int y, int axisWidth, int axisHeight, U min, U max, const std::string& name, int divisionCount, Histogram<U>* histogramOne, Histogram<U>* histogramTwo) {
+	ParallelCoordsAxis<U>* CreateAxis(RIVRecord<U>* record, int x, int y, int axisWidth, int axisHeight, U min, U max, const std::string& name, int divisionCount,const  Histogram<U>& histogramOne, const Histogram<U>& histogramTwo) {
 		std::vector<ParallelCoordsAxis<U>*>* tAxes = GetAxes<U>();
-		tAxes->push_back(new ParallelCoordsAxis<U>(x,y,axisWidth,axisHeight,min,max,name,record,divisionCount,histogramOne, histogramTwo));
+		auto axis = new ParallelCoordsAxis<U>(x,y,axisWidth,axisHeight,min,max,name,record,divisionCount,histogramOne, histogramTwo);
+		tAxes->push_back(axis);
+		axisOrder.push_back(axis);
 		return tAxes->at(tAxes->size() - 1);
 	}
 	

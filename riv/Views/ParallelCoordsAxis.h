@@ -22,7 +22,10 @@ public:
 	int height;
 	std::string name; //Usually points to a record's name, acts as unique ID!
 	
-	bool HasSelectionBox;
+	//If the axis is selected it may update other views such as the slider view to change it focus to include this data dimension
+	bool isSelected = false;
+	//Does it have a selection box used to filter data according to its dimensions
+	bool HasSelectionBox = false;
 	Area selection;
 protected:
 	ParallelCoordsAxisInterface(int x, int y, int width, int height, const std::string& name) : x(x), y(y), width(width), height(height), name(name) {
@@ -35,8 +38,8 @@ class ParallelCoordsAxis : public ParallelCoordsAxisInterface {
 public:
 	std::vector<T> scale;
 	
-	Histogram<T>* densityHistogramOne;
-	Histogram<T>* densityHistogramTwo = NULL;
+	Histogram<T> densityHistogramOne;
+	Histogram<T> densityHistogramTwo;
 	
 	//Ease of access using index
 //	std::vector<Histogram<T>*> histograms;
@@ -48,7 +51,7 @@ public:
 	T maxValue;
 	RIVRecord<T>* recordPointer;
 	
-	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision, Histogram<T>* histogramOne)
+	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision, const Histogram<T>& histogramOne)
 	: ParallelCoordsAxisInterface(x,y,width,height,name),minValue(minValue),maxValue(maxValue),recordPointer(recordPointer), densityHistogramOne(histogramOne) {
 		ComputeScale(scaleDivision);
 		
@@ -59,7 +62,7 @@ public:
 //		histograms.push_back(&densityHistogramTwo);
 	}
 	
-	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision, Histogram<T>* histogramOne,Histogram<T>* histogramTwo)
+	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision,const Histogram<T>& histogramOne, const Histogram<T>& histogramTwo)
 	: ParallelCoordsAxisInterface(x,y,width,height,name),minValue(minValue),maxValue(maxValue),recordPointer(recordPointer),densityHistogramOne(histogramOne), densityHistogramTwo(histogramTwo) {
 		ComputeScale(scaleDivision);
 		
@@ -90,9 +93,9 @@ public:
 	
 	Histogram<T>* GetHistogram(int i) {
 		if(i == 0) {
-			return densityHistogramOne;
+			return &densityHistogramOne;
 		}
-		else return densityHistogramTwo;
+		else return &densityHistogramTwo;
 	}
 	
 	Histogram<T>& GetHistogramOne() {
@@ -128,8 +131,8 @@ public:
 			return y + scalar * height;
 		}
 		else {
-			//				throw new std::string("scalar out of bounds : %f \n",scalar);
-			//				return std::numeric_limits<float>::quiet_NaN();
+			// throw new std::string("scalar out of bounds : %f \n",scalar);
+			// return std::numeric_limits<float>::quiet_NaN();
 			return y;
 		}
 	}

@@ -80,8 +80,8 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 2500;
-const int bootstrapRepeat = 10;
+const int maxPaths = 15000;
+const int bootstrapRepeat = 100;
 int sliderViewHeight = 50;
 
 void display(void)
@@ -409,8 +409,6 @@ void createViews() {
 	//	RIVColorProperty *colorProperty = new RIVColorRGBProperty<float>(pathTable,"radiance R","radiance G","radiance B");
 	RIVSizeProperty *sizeProperty = new RIVFixedSizeProperty(2);
 	
-	
-	
 	parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding - sliderViewHeight / 2.F);
 	ParallelCoordsView::windowHandle = parallelViewWindow;
 	glutSetWindow(parallelViewWindow);
@@ -479,11 +477,11 @@ void createViews() {
 		RIVColorProperty* colorTwo = new RIVFixedColorProperty(0, 0, 1);
 		
 //		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
-		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),colorOne,colorOne,colorTwo,colorTwo);
 		
 		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,rayColorOne,sizeProperty);
 		imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo);
 		sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),redBlue);
+		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),colorOne,colorOne,colorTwo,colorTwo,sliderView);
 		
 		(*datasetTwo)->AddDataListener(sceneView);
 		(*datasetTwo)->AddDataListener(parallelCoordsView);
@@ -491,7 +489,7 @@ void createViews() {
 		(*datasetOne)->AddDataListener(sliderView);
 	}
 	else {
-		parallelCoordsView = new ParallelCoordsView(datasetOne,dataControllerOne->GetTrueDistributions(),pathColorOne,rayColorOne);
+		parallelCoordsView = new ParallelCoordsView(datasetOne,dataControllerOne->GetTrueDistributions(),pathColorOne,rayColorOne,sliderView);
 		sceneView = new RIV3DView(datasetOne,rendererOne,rayColorOne,sizeProperty);
 		imageView = new RIVImageView(datasetOne,rendererOne);
 	}

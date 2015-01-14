@@ -129,7 +129,9 @@ void RIV3DView::ToggleDrawIntersectionPoints() {
 	}
 	printf("drawIntersectionPoints is now ");
 	if(drawIntersectionPoints) printf("ON\n"); else printf("OFF\n");
-    isDirty = true;
+	
+	Invalidate();
+	glutPostRedisplay();
 }
 void RIV3DView::ToggleDrawHeatmap() {
 	drawHeatmapTree = !drawHeatmapTree;

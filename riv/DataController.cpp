@@ -16,14 +16,12 @@ DataController::DataController(const ushort renderers, const size_t maxPaths, co
 		updateThrottle = maxPaths;
 	}
 	createDataStructures();
-
-	
 }
 
 RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* dataset,const size_t N) {
 	
 	
-	const std::string taskName = "Creating bootstrap";
+//	const std::string taskName = "Creating bootstrap";
 	reporter::startTask("Creating bootstrap", N);
 	
 	RIVDataSet<float,ushort>* bootstrap = dataset->CloneStructure();
@@ -53,7 +51,7 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 	
 	//Choose N paths, also add the referencing rows
 	for(size_t i = 0 ; i < N ; ++i) {
-		reporter::update(taskName);
+//		reporter::update(taskName);
 		size_t index = rand() % rows;
 		
 		//TODO: Get the tuple from the table and iterate over the tuple and then iterate over the vectors
@@ -323,6 +321,9 @@ void DataController::Reduce() {
 		rendererData->AddDataSet(candidateData);
 		
 		printHeader("BOOTSTRAPPING",100);
+		
+		const std::string taskName = "bootstrapping";
+		reporter::startTask("bootstrapping");
 		HistogramSet<float,ushort> bootstrapHistograms;
 		
 		bool newBootstrapFound = false;
@@ -345,11 +346,11 @@ void DataController::Reduce() {
 				
 				bestBootstrap = bootstrap;
 				
-//					printf("\nTRUE HISTOGRAMS = \n");
-//					trueDistributions->Print();
-//				
-//					printf("\nBOOTSTRAP HISTOGRAMS = \n");
-//					bootstrapHistograms.Print();
+					printf("\nTRUE HISTOGRAMS = \n");
+					trueDistributions.Print();
+				
+					printf("\nBOOTSTRAP HISTOGRAMS = \n");
+					bootstrapHistograms.Print();
 				
 				//	printf("Bootstrap = \n\n");
 				//	bootstrap->Print(100);
@@ -372,11 +373,11 @@ void DataController::Reduce() {
 			
 //			(*bestBootstrap)->Print();
 			
-			printf("\nTRUE HISTOGRAMS = \n");
-			trueDistributions.Print();
-			
-			printf("\nBOOTSTRAP HISTOGRAMS = \n");
-			bootstrapHistograms.Print();
+//			printf("\nTRUE HISTOGRAMS = \n");
+//			trueDistributions.Print();
+//			
+//			printf("\nBOOTSTRAP HISTOGRAMS = \n");
+//			bootstrapHistograms.Print();
 			
 			bestBootstrap->SetDataListeners(rendererData->GetDataListeners());
 			auto pathsTable = bestBootstrap->GetTable(PATHS_TABLE);
@@ -425,6 +426,7 @@ void DataController::Reduce() {
 		else {
 			printf("\n Could not find a better bootstrap... \n");
 		}
+		reporter::stop("bootstrapping");
 		Pause();
 	}
 }

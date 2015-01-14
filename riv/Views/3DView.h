@@ -31,7 +31,6 @@ protected:
 	float scale;
 	Vec3fa center;
 	
-    //Whether to draw the members of clusters, or only the cluster medoid
     bool drawIntersectionPoints = false;
 	
 	//Whether the generated octree should be drawn (if any is generated)

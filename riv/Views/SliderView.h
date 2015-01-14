@@ -13,6 +13,7 @@
 #include "../Graphics/ColorProperty.h"
 
 #include <stdio.h>
+#include <set>
 
 class RIVSliderView : public RIVDataView, public RIVDataSetListener {
 private:
@@ -37,6 +38,10 @@ private:
 	int pointerOneX;
 	int pointerTwoX;
 	
+	//A constrain on the selection of records to be used for membership computation is that they should be of the same table
+	std::string selectedTable;
+	std::set<std::string> selectedRecords;
+	
 	HistogramSet<float,ushort>* distributionsOne;
 	HistogramSet<float,ushort>* distributionsTwo;
 	
@@ -52,7 +57,8 @@ private:
 	int lastRowsFiltered = 0;
 	
 	void redisplayWindow();
-	void createMembershipData(RIVDataSet<float,ushort>* datasetSource, std::map<int,std::vector<size_t>>& rowBinMembership);
+	void createMembershipData(RIVDataSet<float,ushort>* datasetSource, bool isLeftSet);
+	void createMembershipData();
 	void resetPointers();
 	void filterDataSets();
 	//Filter a dataset according to its uniqueness
@@ -67,6 +73,9 @@ public:
 	static void ReshapeInstance(int width, int height);
 	static void Mouse(int state,int button,int x,int y);
 	static void Motion(int x, int y);
+	
+	void AddSelectedRecord(const std::string& tableName,const std::string& recordName);
+	void RemoveSelectedRecord(const std::string &recordName);
 	
 	void OnFiltersChanged();
 	void OnDataChanged(RIVDataSet<float,ushort>* source);

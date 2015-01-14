@@ -193,9 +193,11 @@ public:
 		int maxBarSize = 48;
 		printf("Histogram %s :\n",name.c_str());
 		
-		for(int i = 0 ; i < bins ; ++i) {
-			printf("%.2f - %.2f : ",(float)i * binWidth,float(i+1)*binWidth);
-			float normalValue = NormalizedValue(i);
+		int binIndex = BinForValue(lowerBound);
+//
+		for(float i = lowerBound ; i < upperBound ; i += binWidth) {
+			printf("%.2f - %.2f : ",i,i+binWidth);
+			float normalValue = NormalizedValue(binIndex);
 			int barSize = normalValue * maxBarSize;
 			int tabs = maxBarSize / 4 - barSize / 4  + 1; //4 is the tabwidth in spaces
 			for(int i = 0 ; i < barSize ; i++) {
@@ -204,7 +206,8 @@ public:
 			for(int i = 0 ; i < tabs ; ++i) {
 				std::cout << "\t";
 			}
-			int value = BinValue(i);
+			++binIndex;
+			int value = BinValue(binIndex);
 			std::cout << value << std::endl;
 		}
 		std::cout << std::endl;

@@ -1,4 +1,5 @@
 #include "ParallelCoordsView.h"
+#include "SliderView.h"
 #include "DataView.h"
 #include "../Graphics/graphics_helper.h"
 #include "../helper.h"
@@ -14,7 +15,7 @@
 ParallelCoordsView* ParallelCoordsView::instance = NULL;
 int ParallelCoordsView::windowHandle = -1;
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne,RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo) : RIVDataView(datasetOne,datasetTwo,x,y,width,height,paddingX,paddingY), pathColorOne(pathColorOne), rayColorOne(rayColorOne), pathColorTwo(pathColorTwo), rayColorTwo(rayColorTwo), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne,RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView) : RIVDataView(datasetOne,datasetTwo,x,y,width,height,paddingX,paddingY), pathColorOne(pathColorOne), rayColorOne(rayColorOne), pathColorTwo(pathColorTwo), rayColorTwo(rayColorTwo), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo), sliderView(sliderView) {
 	if(instance != NULL) {
 		throw "Only 1 instance allowed.";
 	}
@@ -23,8 +24,8 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RI
 	identifier = "ParallelCoordsView";
 	instance = this;
 }
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne, RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo) :
-RIVDataView(datasetOne,datasetTwo), pathColorOne(pathColorOne), rayColorOne(rayColorOne),pathColorTwo(pathColorTwo), rayColorTwo(rayColorTwo), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo)
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne, RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView) :
+RIVDataView(datasetOne,datasetTwo), pathColorOne(pathColorOne), rayColorOne(rayColorOne),pathColorTwo(pathColorTwo), rayColorTwo(rayColorTwo), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo), sliderView(sliderView)
 {
 	if(instance != NULL) {
 		throw "Only 1 instance allowed.";
@@ -35,7 +36,7 @@ RIVDataView(datasetOne,datasetTwo), pathColorOne(pathColorOne), rayColorOne(rayC
 	instance = this;
 }
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, HistogramSet<float,ushort>* distributionsOne, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* pathColor, RIVColorProperty *rayColor) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY), distributionsOne(distributionsOne) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, HistogramSet<float,ushort>* distributionsOne, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* pathColor, RIVColorProperty *rayColor,RIVSliderView* sliderView) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY), distributionsOne(distributionsOne),sliderView(sliderView) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
@@ -48,7 +49,7 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, Histo
     //Nothing else to do
 }
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, HistogramSet<float,ushort>* distributionsOne, RIVColorProperty *pathColor, RIVColorProperty* rayColor) : RIVDataView(dataset), distributionsOne(distributionsOne) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, HistogramSet<float,ushort>* distributionsOne, RIVColorProperty *pathColor, RIVColorProperty* rayColor,RIVSliderView* sliderView) : RIVDataView(dataset), distributionsOne(distributionsOne), sliderView(sliderView) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
@@ -65,8 +66,8 @@ void ParallelCoordsView::createAxes() {
     axisGroups.clear();
 	size_t total_nr_of_records = (*datasetOne)->TotalNumberOfRecords();
 	//    int y = startY + paddingY;
-	int y = paddingY; //View port takes care of startY
-	int axisHeight = height - 2 * paddingY;
+	int y = 1.5F * paddingY; //View port takes care of startY
+	int axisHeight = height - 2.5F * paddingY;
 	int axisWidth = 20;
 
 	float delta = 1.F / (total_nr_of_records - 1) * (width - 2 * paddingX);
@@ -95,10 +96,19 @@ void ParallelCoordsView::createAxes() {
 					//A tuple containing the min and max values of the record
 					auto minMax = record->MinMax();
 					auto otherMinMax = otherRecord->MinMax();
+					const std::string& name = record->name;
 					//				printf("Record %s has min-max : ",record->name.c_str());
 					//				std::cout << " " << minMax.first << ", " << minMax.second << std::endl;
-					std::string name = record->name;
-					axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,distributionsOne->GetHistogram<Type>(name),distributionsTwo->GetHistogram<Type>(name));
+					
+					auto histOne = distributionsOne->GetHistogram<Type>(name);
+					auto histTwo = distributionsTwo->GetHistogram<Type>(name);
+
+//					axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,distributionsOne->GetHistogram<Type>(name),distributionsTwo->GetHistogram<Type>(name));
+					
+					auto dataHistOne = Histogram<Type>(name,histOne->LowerBound(),histOne->UpperBound(),histOne->NumberOfBins());
+					auto dataHistTwo = Histogram<Type>(name,histTwo->LowerBound(),histTwo->UpperBound(),histTwo->NumberOfBins());
+					
+					axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,dataHistOne,dataHistTwo);
 					axisIndex++;
 				}
 			});
@@ -123,7 +133,10 @@ void ParallelCoordsView::createAxes() {
 					//				printf("Record %s has min-max : ",record->name.c_str());
 					//				std::cout << " " << minMax.first << ", " << minMax.second << std::endl;
 					
-					axisGroup.CreateAxis(record, x, y, axisHeight, axisWidth, minMax.first, minMax.second, name, divisionCount, distributionsOne->GetHistogram<Type>(name));
+					auto histOne = distributionsOne->GetHistogram<Type>(name);
+					auto dataHistOne = Histogram<Type>(name,histOne->LowerBound(),histOne->UpperBound(),histOne->NumberOfBins());
+
+					axisGroup.CreateAxis(record, x, y, axisHeight, axisWidth, minMax.first, minMax.second, name, divisionCount, dataHistOne);
 					axisIndex++;
 				}
 			});
@@ -134,44 +147,32 @@ void ParallelCoordsView::createAxes() {
 }
 
 void ParallelCoordsView::drawSelectionBoxes() {
-	if(selectedAxis.size()) {
-		for(auto& axisGroup : axisGroups) {
-			tuple_for_each(axisGroup.axes, [&](auto tAxes) {
-				for(auto& axis : tAxes) {
-					if(axis->HasSelectionBox) {
-						printf("Drawing selection box on axis %s\n",selectedAxis.c_str());
-						
-						glColor3f(1, 0, 0);
-						glBegin(GL_LINE_STRIP);
-						
-						glVertex3f(axis->selection.start.x,axis->selection.start.y,0);
-						glVertex3f(axis->selection.end.x,axis->selection.start.y,0);
-						
-						glVertex3f(axis->selection.end.x,axis->selection.end.y,0);
-						glVertex3f(axis->selection.start.x,axis->selection.end.y,0);
-						
-						glVertex3f(axis->selection.start.x,axis->selection.start.y,0);
-						
-						glEnd();
-					}
+	for(auto& axisGroup : axisGroups) {
+		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+			for(auto& axis : tAxes) {
+				if(axis->HasSelectionBox) {
+					printf("Drawing selection box on axis %s\n",selectedAxis.c_str());
+					
+					glColor4f(1, 1, 1,.3F);
+					glRectf(axis->selection.start.x - 1, axis->selection.start.y, axis->selection.end.x, axis->selection.end.y);
+					
 				}
-			});
-		}
+			}
+		});
 	}
+	
 }
-void ParallelCoordsView::drawDensities() {
+void ParallelCoordsView::drawAxes() {
 	//Draw the densities
-	float textColor[3] = {1,1,0};
-	float epsilon = 0.01F;
 	
 	for(auto& axisGroup : axisGroups) {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto axis : tAxes) {
 				
-				auto histogramOne = axis->densityHistogramOne;
-				auto histogramTwo = axis->densityHistogramTwo;
+				auto& histogramOne = axis->densityHistogramOne;
+				auto& histogramTwo = axis->densityHistogramTwo;
 				
-				int numBins = histogramOne->NumberOfBins();
+				int numBins = histogramOne.NumberOfBins();
 				int startX = axis->x - axis->width / 2.F;
 				int endX = startX + axis->width;
 				int height = axis->height / (float)numBins;
@@ -186,79 +187,83 @@ void ParallelCoordsView::drawDensities() {
 					int endY = startY + height;
 //					int centerY = startY + (endY - startY) / 2.F;
 					
-					float valueOne = histogramOne->NormalizedValue(i);
-					float valueTwo = histogramTwo->NormalizedValue(i);
+					float valueOne = histogramOne.NormalizedValue(i);
+					float valueTwo = histogramTwo.NormalizedValue(i);
 					
-					float valueDelta = valueOne - valueTwo;
+//					float valueDelta = valueTwo - valueTwo;
 					
-					//If the values are rougly equal
-					if(valueDelta < epsilon && valueDelta > -epsilon) {
-						glColor3f(.8F, .8F, .8F);
-						continue;
+					float blueColorValue = (valueTwo - valueOne) / valueTwo;
+					float redColorValue = (valueOne - valueTwo) / valueOne;
+					if(redColorValue < 0) {
+						redColorValue = 0;
 					}
-					if(valueOne > valueTwo) {
-						float colorValue = valueDelta / valueOne;
-//						std::string text = std::to_string(colorValue);
-//						drawText(text,axis->x,centerY - 15,textColor,.1F);
-//						printf("glColor3f(%f,0,0)\n",colorValue);
-						glColor3f(colorValue, 0, 1-colorValue);
+					if(blueColorValue < 0) {
+						blueColorValue = 0;
 					}
-					else {
-						float colorValue = -valueDelta / valueTwo;
-//						std::string text = std::to_string(colorValue);
-//						drawText(text,axis->x,centerY - 15,textColor,.1F);
-//						printf("glColor3f(0,0,%f)\n",colorValue);
-						glColor3f(1-colorValue, 0, colorValue);
-					}
+					glColor3f(redColorValue, 0, blueColorValue);
 					glRectf(startX, startY, endX, endY);
 				}
 				
 				glColor3f(0,0,0);
 				glBegin(GL_LINES);
-				for(int i = 0 ; i < numBins ; ++i) {
+				for(int i = 0 ; i <= numBins ; ++i) {
 					int y = i * height + axis->y;
 					glVertex2f(startX, y);
 					glVertex2f(startX + axis->width, y);
 				}
+				glVertex2f(axis->x - axis->width / 2.F, axis->y);
+				glVertex2f(axis->x - axis->width / 2.F, axis->y + axis->height);
+				glVertex2f(axis->x + axis->width / 2.F, axis->y);
+				glVertex2f(axis->x + axis->width / 2.F, axis->y + axis->height);
 				glEnd();
 			}
 		});
 	}
 }
 
-void ParallelCoordsView::drawAxes() {
+void ParallelCoordsView::drawAxesExtras() {
 	
     glColor3f(1,1,1);
     glLineWidth(1.F);
 	
-//    glBegin(GL_LINES);
-    for(auto& axisGroup : axisGroups) {
-		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
-			for(auto& axis : tAxes) {
-				float halfWidth = axis->width / 2.F;
-				
-				glRectf(axis->x - halfWidth, axis->y, axis->x + halfWidth, axis->y + axis->height);
-				
-//				glVertex3f(axis->x,axis->y,0);
-//				glVertex3f(axis->x,axis->y+axis->height,0);
-			}
-		});
-    }
-//    glEnd();
+//    for(auto& axisGroup : axisGroups) {
+//		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+//			for(auto& axis : tAxes) {
+//				float halfWidth = axis->width / 2.F;
+//				
+//				glRectf(axis->x - halfWidth, axis->y, axis->x + halfWidth, axis->y + axis->height);
+//			}
+//		});
+//    }
 	
     glColor3f(1,0,0);
     glLineWidth(1.F);
     
     float textColor[3] = {0,0,0};
-    
-    //Draw texts
 	
+	//Half of its size
+	int selectionGlyphSize = 7;
+    
+    //Draw texts and extras
 	for(auto& axisGroup : axisGroups) {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto& axis : tAxes) {
-				std::string& text = axis->name;
 				
-				drawText(text,axis->x,axis->y - 15,textColor,.1F);
+				//Draw the name of the data dimension at the bottom of the axis
+				std::string& text = axis->name;
+				drawText(text,axis->x,axis->y - 12,textColor,.08F);
+				
+				//Draw a selection glyph if it is selected
+				if(axis->isSelected) {
+					int glyphY = axis->y - 20;
+					
+					glBegin(GL_POLYGON);
+						glVertex2f(axis->x - selectionGlyphSize,glyphY - selectionGlyphSize);
+						glVertex2f(axis->x + selectionGlyphSize,glyphY - selectionGlyphSize);
+						glVertex2f(axis->x,glyphY);
+					glEnd();
+//					glRectf(axis->x - selectionGlyphSize, glyphY - selectionGlyphSize, axis->x + selectionGlyphSize, glyphY + selectionGlyphSize);
+				}
 				
 				auto &scale = axis->scale;
 				
@@ -268,18 +273,18 @@ void ParallelCoordsView::drawAxes() {
 						float value = axis->ValueOnScale(scale[j]);
 						int height = axis->PositionOnScaleForScalar(scale[j]);
 						
-						//Draw small line to indicate
-						//					glBegin(GL_LINES);
-						//					glVertex2f(axis.x, height);
-						//					glVertex2f(axis.x + 10, height);
-						//					glEnd();
+						// Draw small line to indicate
+						// glBegin(GL_LINES);
+						//	glVertex2f(axis.x, height);
+						//	glVertex2f(axis.x + 10, height);
+						// glEnd();
 						
 						std::string text = std::to_string(value);
 						
 						char buffer[4];
 						sprintf(buffer,"%.2f",value);
 						
-						drawText(buffer,4,axis->x - 12,height,textColor,.1F);
+						drawText(buffer,4,axis->x + axis->width + 2,height,textColor,.08F);
 					}
 				}
 			}
@@ -296,8 +301,16 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	printf("Drawing lines for dataset %d\n",dataset->datasetID);
+//	printf("Drawing lines for dataset %d\n",dataset->datasetID);
 	reporter::startTask("drawLines");
+	
+	for(auto &axisGroup : axisGroups) {
+		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+			for(auto axis : tAxes) {
+				axis->GetHistogram(datasetId)->Clear();
+			}
+		});
+	}
 	
 	glLineWidth(1);
 	for(auto &axisGroup : axisGroups) {
@@ -383,7 +396,7 @@ void ParallelCoordsView::Reshape(int width, int height) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     
-    paddingX = 20;
+    paddingX = 30;
     paddingY = 20;
     
     axesAreDirty = true;
@@ -400,7 +413,6 @@ void ParallelCoordsView::InitializeGraphics() {
 size_t drawCount = 0;
 void ParallelCoordsView::Draw() {
 	//    printf("linesAreDirty = %d axesAreDirty = %d\n",linesAreDirty,axesAreDirty);
-	
 	printHeader("PC VIEW DRAW");
 	
 	std::string taskName = "ParallelCoordsView Draw";
@@ -412,10 +424,6 @@ void ParallelCoordsView::Draw() {
         glClearColor(0.9, 0.9, 0.9, 0.0);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	}
-		
-	//Draw the axes
-	if(axesAreDirty)
-        drawAxes();
         
         //Draw the lines from each axis
 	if(linesAreDirty) {
@@ -427,11 +435,16 @@ void ParallelCoordsView::Draw() {
 		}
 	}
 	
-	drawDensities();
+	drawAxes();
+	
+	//Draw the axes
+	if(axesAreDirty)
+		drawAxesExtras();
 	
 	if(selectionIsDirty)
 		drawSelectionBoxes();
-        
+	
+	glFlush();
 	glutSwapBuffers();
 	
 	reporter::stop(taskName);
@@ -457,12 +470,6 @@ void ParallelCoordsView::toggleDrawDataSetTwo() {
 	redisplayWindow();
 }
 
-//Filter object from axis type
-//template <typename T>
-//RangeFilter* filter_from_axis(const ParallelCoordsAxis<T>& axis, T lowerBound, T upperBound) {
-//	return new RangeFilter<T>(
-//}
-
 bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 	//    printf("PCV HandleMouse\n");
 //    ToViewSpaceCoordinates(&x, &y);
@@ -471,36 +478,87 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 		//What axis was selected
         if(state == GLUT_DOWN) {
             int proximityMax = 50;
-            
-            //            printf("(x,y)=(%d,%d)",x,y);
-			for(auto& axisGroup : axisGroups) {
+			
+			for(int i = 0 ; i < axisGroups.size() ; i++) {
+				
+				auto& axisGroup = axisGroups[i];
 				bool found = false;
 				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 					for(auto& axis : tAxes) {
+						
+						//Start creating a selection box if the mouse is on the axis
 						int distanceX = abs(axis->x - x);
-	//                    printf("distance=%d\n",distanceX);
 						
 						if(distanceX < proximityMax) {
-							//Close enough..
-							
-							axis->selection.start.x = axis->x - 10;
-							axis->selection.end.x = axis->x + 10;
-							axis->selection.start.y = y;
-							axis->selection.end.y = y;
-							
-							axis->HasSelectionBox = true;
-							found = true;
-							
-							selectedAxis = axis->name;
-							selection = &axis->selection;
-							
-							isDragging = true;
-							axesAreDirty = true;
-							linesAreDirty = true;
-							
-	                        printf("Selected axis %s\n",axis->name.c_str());
-							
-							return;
+//							if(axis->HasSelectionBox) {
+//								//Is it inside the selection box?
+//								if(y >= axis->selection.start.y && y <= axis->selection.end.y) {
+//									selectedAxis = axis->name;
+//									dragSelectionBox = true;
+//									startDragBoxY = y;
+//									found = true;
+//									
+//									return;
+//								}
+//							}
+							//Is it at least inside the axis
+							if(y > axis->y) {
+
+								if(y < axis->y + axis->height) {
+									
+									//Close enough..
+									axis->selection.start.x = axis->x - 10;
+									axis->selection.end.x = axis->x + 10;
+									axis->selection.start.y = y;
+									axis->selection.end.y = y;
+									
+									axis->HasSelectionBox = true;
+									found = true;
+									
+									selectedAxis = axis->name;
+									selection = &axis->selection;
+									
+									isDragging = true;
+									axesAreDirty = true;
+									linesAreDirty = true;
+									
+									printf("Selected axis %s\n",axis->name.c_str());
+									return;
+								}
+							}
+							else {
+								printf("Toggle selection of axis %s.\n",axis->name.c_str());
+								axis->isSelected = !axis->isSelected;
+								
+								//Deselect all the other table records
+								for(int j = 0 ; j < axisGroups.size() ; j++) {
+									if(i != j) {
+										auto& otherAxisGroup = axisGroups[j];
+										axisGroup.isSelected = false;
+										tuple_for_each(otherAxisGroup.axes, [&](auto otherTAxes) {
+											for(auto& otherAxis : otherTAxes) {
+												otherAxis->isSelected = false;
+											}
+										});
+									}
+								}
+					
+								if(axis->isSelected) {
+									sliderView->AddSelectedRecord(axisGroup.tableName, axis->name);
+								}
+								else {
+									sliderView->RemoveSelectedRecord(axis->name);
+								}
+								
+								axesAreDirty = true;
+								linesAreDirty = true;
+								
+								found = true;
+								
+								glutPostRedisplay();
+								
+								return;
+							}
 						}
 					}
 				});
@@ -572,20 +630,39 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 
 bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
     y = height - y;
-    if(isDragging && selectedAxis.size()) {
-		
-		//TODO: Not very efficient to find the axis everytime, but pointer sucks due to templates
-		for(auto& axisGroup : axisGroups) {
-			tuple_for_each(axisGroup.axes, [&](auto tAxes) {
-				for(auto& axis : tAxes) {
-					if(axis->name == selectedAxis) {
-						selection->end.y = axis->PositionOnScaleForViewY(y);
+	if(selectedAxis.size()) {
+		if(isDragging) {
+			//TODO: Not very efficient to find the axis everytime, but pointer sucks due to templates
+			for(auto& axisGroup : axisGroups) {
+				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+					for(auto& axis : tAxes) {
+						if(axis->name == selectedAxis) {
+							selection->end.y = axis->PositionOnScaleForViewY(y);
+						}
 					}
-				}
-			});
+				});
+			}
+			selectionIsDirty = true;
+			glutPostRedisplay();
+			return true;
 		}
-		return true;
-    }
+		else if(dragSelectionBox) {
+			int deltaY = y - startDragBoxY;
+			for(auto& axisGroup : axisGroups) {
+				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+					for(auto& axis : tAxes) {
+						if(axis->name == selectedAxis) {
+							selection->start.y += deltaY;
+							selection->end.y += deltaY;
+						}
+					}
+				});
+			}
+			selectionIsDirty = true;
+			glutPostRedisplay();
+			return true;
+		}
+	}
     return false;
 }
 

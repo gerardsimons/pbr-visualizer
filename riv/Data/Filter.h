@@ -59,14 +59,14 @@ namespace riv {
 	
 	class RowFilter : public Filter {
 	private:
-		std::map<size_t,bool> selectedRows;
+		std::map<size_t,bool> filteredRows;
 		std::string tableName;
 	public:
-		RowFilter(const std::string& tableName, const std::map<size_t,bool>& selectedRows) : selectedRows(selectedRows), tableName(tableName)  {
+		RowFilter(const std::string& tableName, const std::map<size_t,bool>& filteredRows) : filteredRows(filteredRows), tableName(tableName)  {
 			
 		}
 		bool PassesFilter(size_t row) {
-			return selectedRows[row];
+			return !filteredRows[row];
 		}
 		virtual bool AppliesToAttribute(const std::string& name) {
 			return true;
