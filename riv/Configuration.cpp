@@ -13,6 +13,11 @@ const char* DATASET_TWO = "renderer_two";
 
 const char* INTERSECTIONS_TABLE = "intersections";
 const char* PATHS_TABLE = "paths";
+const char* PATH_MEMBERSHIP_TABLE = "path_membership";
+const char* ISECT_MEMBERSHIP_TABLE = "path_membership";
+
+//* MEMBERSHIP RECORD NAME *//
+const char* MEMBERSHIP = "membership";
 
 //* PATH RECORD NAMES *//
 const char* RENDERER_ID = "renderer";

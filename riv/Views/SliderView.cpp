@@ -21,6 +21,7 @@ void RIVSliderView::resetPointers() {
 }
 
 RIVSliderView::RIVSliderView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, const riv::ColorMap& colorMap) : RIVDataView(datasetOne,datasetTwo), colorMap(colorMap), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo) {
+
 	if(!instance) {
 		instance = this;
 	}
@@ -29,8 +30,9 @@ RIVSliderView::RIVSliderView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<f
 	}
 	paddingX = 0;
 	paddingX = 0;
-	membershipHistogramOne = Histogram<float>("uniqueness_one", -1, 1, histogramBins);
-	membershipHistogramTwo = Histogram<float>("uniqueness_two", -1, 1, histogramBins);
+	membershipHistogramOne = Histogram<float>("membership_one", -1, 1, histogramBins);
+	membershipHistogramTwo = Histogram<float>("membership_two", -1, 1, histogramBins);
+
 }
 
 void RIVSliderView::Mouse(int state,int button,int x,int y) {
@@ -202,13 +204,11 @@ void RIVSliderView::Reshape(int newWidth, int newHeight) {
 	glLoadIdentity();
 }
 void RIVSliderView::createMembershipData() {
-	
-	
-	
 	createMembershipData(*datasetOne,true);
 	createMembershipData(*datasetTwo,false);
 }
 void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource, bool isLeftSet) {
+	
 	
 	//	printf("Creating membership data\n\n");
 	
@@ -225,6 +225,8 @@ void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource
 	//	selectedRecords.insert(PATH_G);
 	//	selectedRecords.insert(PATH_B);
 	
+
+	
 	if(isLeftSet) {
 		membershipHistogramOne.Clear();
 		rowBinMembershipsOne.clear();
@@ -233,11 +235,14 @@ void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource
 		membershipHistogramTwo.Clear();
 		rowBinMembershipsTwo.clear();
 	}
-	
 	if(selectedRecords.size()) {
-		//		auto tables = datasetSource->GetTables();
 		
-		auto table = datasetSource->GetTable(selectedTable);
+		RIVTable<float,ushort>* table = datasetSource->GetTable(selectedTable);
+		RIVTable<float,ushort>* membershipTable = datasetSource->GetTable(selectedMembershipTable);
+		
+		membershipTable->ClearData();
+		RIVRecord<float>* membershipRecord = membershipTable->GetRecord<float>(MEMBERSHIP);
+		//		auto tables = datasetSource->GetTables();
 		
 		size_t row = 0;
 		TableIterator* iterator = table->GetIterator();
@@ -247,7 +252,6 @@ void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource
 			auto& allRecords = table->GetAllRecords();
 			tuple_for_each(allRecords, [&](auto tRecords) {
 				for(auto record : tRecords) {
-					
 					if(selectedRecords.find(record->name) != selectedRecords.end()) {
 						auto value = record->Value(row);
 						
@@ -277,6 +281,7 @@ void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource
 			//Normalize it
 			totalDiff /= selectedRecords.size();
 			//			printf("totalDiff = %f\n",totalDiff);
+			membershipRecord->AddValue(totalDiff);
 			
 			if(isLeftSet) {
 				int bin = membershipHistogramOne.Add(totalDiff);
@@ -287,6 +292,13 @@ void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource
 				rowBinMembershipsTwo[bin].push_back(row);
 			}
 		}
+		
+		//Normalize
+		float maxValue = membershipRecord->Max();
+		for(size_t row = 0 ; row < membershipRecord->Size() ; ++row) {
+			float oldValue = membershipRecord->Value(row);
+			membershipRecord->SetValue(row, oldValue / maxValue);
+		}
 	}
 	
 	membershipHistogramOne.Print();
@@ -296,9 +308,29 @@ void RIVSliderView::AddSelectedRecord(const std::string& tableName, const std::s
 	if(tableName != selectedTable) {
 		selectedRecords.clear();
 		selectedTable = tableName;
+		
+		if(tableName == PATHS_TABLE) {
+//			membershipTableOne = pathMembershipOneTable;
+//			membershipTableTwo = pathMembershipTwoTable;
+			selectedMembershipTable = PATH_MEMBERSHIP_TABLE;
+		}
+		else if(tableName == INTERSECTIONS_TABLE) {
+//			membershipTableOne = isectMembershipOneTable;
+//			membershipTableTwo = isectMembershipTwoTable;
+			selectedMembershipTable = ISECT_MEMBERSHIP_TABLE;
+		}
 	}
 	if(selectedRecords.find(recordName) == selectedRecords.end()) {
 		selectedRecords.insert(recordName);
+		
+		if(tableName == PATHS_TABLE) {
+
+			selectedMembershipTable = PATH_MEMBERSHIP_TABLE;
+		}
+		else if(tableName == INTERSECTIONS_TABLE) {
+
+			selectedMembershipTable = ISECT_MEMBERSHIP_TABLE;
+		}
 		
 		//Recreate the membership data
 		createMembershipData();
@@ -422,21 +454,28 @@ bool RIVSliderView::HandleMouse(int button, int state, int x, int y) {
 	if(state == GLUT_DOWN) {
 		//Is there a pointer close by?
 		
-		int distance = abs(pointerOneX - x);
-		int distanceTwo = abs(pointerTwoX - x);
-		if(distance < minDistance) {
-			selectedPointer = &pointerOneX;
-			printf("Pointer one selected.\n");
-			mouseCaught = true;
+		if(button == GLUT_LEFT_BUTTON) {
+			int distance = abs(pointerOneX - x);
+			int distanceTwo = abs(pointerTwoX - x);
+			if(distance < minDistance) {
+				selectedPointer = &pointerOneX;
+				printf("Pointer one selected.\n");
+				mouseCaught = true;
+			}
+			else if(distanceTwo < minDistance) {
+				selectedPointer = &pointerTwoX;
+				printf("Pointer two selected.\n");
+				mouseCaught = true;
+			}
+			else if(x - pointerOneX > 0 && x - pointerTwoX < 0) { //It is in between the two pointers, try and move them both
+				movePointers = true;
+				startDragX = x;
+			}
 		}
-		else if(distanceTwo < minDistance) {
-			selectedPointer = &pointerTwoX;
-			printf("Pointer two selected.\n");
+		else if(button == GLUT_RIGHT_BUTTON) {
+			resetPointers();
+			filterDataSets();
 			mouseCaught = true;
-		}
-		else if(x - pointerOneX > 0 && x - pointerTwoX < 0) { //It is in between the two pointers, try and move them both
-			movePointers = true;
-			startDragX = x;
 		}
 	}
 	else if(state == GLUT_UP) {

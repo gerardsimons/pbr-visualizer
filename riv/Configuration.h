@@ -14,6 +14,10 @@ extern const char* DATASET_TWO;
 
 extern const char* INTERSECTIONS_TABLE;
 extern const char* PATHS_TABLE;
+extern const char* PATH_MEMBERSHIP_TABLE;
+extern const char* ISECT_MEMBERSHIP_TABLE;
+
+extern const char* MEMBERSHIP;
 
 //* PATH RECORD NAMES *//
 extern const char* RENDERER_ID;

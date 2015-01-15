@@ -25,11 +25,11 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 //	reporter::startTask("Creating bootstrap", N);
 	
 	RIVDataSet<float,ushort>* bootstrap = dataset->CloneStructure();
-	RIVTable<float,ushort>* bootstrapPaths = bootstrap->GetTable("paths");
-	RIVTable<float,ushort>* bootstrapIsects = bootstrap->GetTable("intersections");
+	RIVTable<float,ushort>* bootstrapPaths = bootstrap->GetTable(PATHS_TABLE);
+	RIVTable<float,ushort>* bootstrapIsects = bootstrap->GetTable(INTERSECTIONS_TABLE);
 	
-	RIVTable<float,ushort>* paths = dataset->GetTable("paths");
-	RIVTable<float,ushort>* intersections = dataset->GetTable("intersections");
+	RIVTable<float,ushort>* paths = dataset->GetTable(PATHS_TABLE);
+	RIVTable<float,ushort>* intersections = dataset->GetTable(INTERSECTIONS_TABLE);
 	size_t rows = paths->NumberOfRows();
 	
 	//Give the underlying data structure a chance to reserve space
@@ -134,6 +134,17 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
 	pathTable->SetReference(pathsToIsectRef);
 	RIVSingleReference* isectToPathsRef = new RIVSingleReference(isectsTable,pathTable);
 	isectsTable->SetReference(isectToPathsRef);
+	
+	auto pathMembershipOneTable = dataset->CreateTable(PATH_MEMBERSHIP_TABLE);
+	auto isectMembershipOneTable = dataset->CreateTable(ISECT_MEMBERSHIP_TABLE);
+	
+	auto pathMembershipTwoTable = dataset->CreateTable(PATH_MEMBERSHIP_TABLE);
+	auto isectMembershipTwoTable = dataset->CreateTable(ISECT_MEMBERSHIP_TABLE);
+	
+	pathMembershipOneTable->CreateRecord<float>(MEMBERSHIP);
+	isectMembershipOneTable->CreateRecord<float>(MEMBERSHIP);
+	pathMembershipTwoTable->CreateRecord<float>(MEMBERSHIP);
+	isectMembershipTwoTable->CreateRecord<float>(MEMBERSHIP);
 }
 
 void DataController::createDataStructures() {

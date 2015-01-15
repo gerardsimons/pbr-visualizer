@@ -469,7 +469,7 @@ void createViews() {
 	if(datasetTwo) {
 		
 		//Im so lazy ....
-		auto pathColorTwo = createPathColorProperty(*datasetTwo);
+//		auto pathColorTwo = createPathColorProperty(*datasetTwo);
 		auto rayColorTwo = createRayColorProperty(*datasetTwo);
 		
 		//Fixed colors for testing
@@ -485,8 +485,9 @@ void createViews() {
 		
 		(*datasetTwo)->AddDataListener(sceneView);
 		(*datasetTwo)->AddDataListener(parallelCoordsView);
-		(*datasetTwo)->AddDataListener(sliderView);
+		
 		(*datasetOne)->AddDataListener(sliderView);
+		(*datasetTwo)->AddDataListener(sliderView);
 	}
 	else {
 		parallelCoordsView = new ParallelCoordsView(datasetOne,dataControllerOne->GetTrueDistributions(),pathColorOne,rayColorOne,sliderView);

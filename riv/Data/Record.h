@@ -101,6 +101,9 @@ public:
 			AddValue(otherRecord->Value(i));
 		}
 	}
+	void SetValue(size_t row, T newValue) {
+		values[row] = newValue;
+	}
 	void Clear() {
 		values.clear();
 	}

@@ -30,6 +30,8 @@ private:
 	bool drawDataSetOne = true;
 	bool drawDataSetTwo = true;
 	
+	int axisWidth = 20;
+	
 	HistogramSet<float,ushort>* distributionsOne;
 	HistogramSet<float,ushort>* distributionsTwo = NULL;
     
@@ -60,7 +62,8 @@ private:
 	void drawAxes();
 	//Draw scale indicators and selection glyphs
 	void drawAxesExtras();
-	void drawLines(int datasetId, RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColors, RIVColorProperty* rayColors);
+	//Draws the lines of the parallel coordinates plot for the given dataset, note that it also 
+	void drawLines(int datasetNumber, RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColors, RIVColorProperty* rayColors);
 	void drawSelectionBoxes();
 
 	void filterData();

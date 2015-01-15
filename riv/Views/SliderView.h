@@ -40,6 +40,7 @@ private:
 	
 	//A constrain on the selection of records to be used for membership computation is that they should be of the same table
 	std::string selectedTable;
+	std::string selectedMembershipTable;
 	std::set<std::string> selectedRecords;
 	
 	HistogramSet<float,ushort>* distributionsOne;
@@ -51,6 +52,16 @@ private:
 	
 	Histogram<float> membershipHistogramOne;
 	Histogram<float> membershipHistogramTwo;
+	
+//	//Points to either a path or intersection membership table, depending on the records selected
+//	RIVTable<float,ushort>* membershipTableOne = NULL;
+//	RIVTable<float,ushort>* membershipTableTwo = NULL;
+//	
+//	RIVTable<float,ushort>* pathMembershipOneTable;
+//	RIVTable<float,ushort>* pathMembershipTwoTable;
+//	
+//	RIVTable<float,ushort>* isectMembershipOneTable;
+//	RIVTable<float,ushort>* isectMembershipTwoTable;
 	
 	riv::ColorMap colorMap;
 	

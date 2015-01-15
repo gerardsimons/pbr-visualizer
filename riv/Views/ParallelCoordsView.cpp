@@ -64,22 +64,28 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, Histo
 void ParallelCoordsView::createAxes() {
 	printf("Create axes\n");
     axisGroups.clear();
-	size_t total_nr_of_records = (*datasetOne)->TotalNumberOfRecords();
+	size_t total_nr_of_records = 0;
 	//    int y = startY + paddingY;
 	int y = 1.5F * paddingY; //View port takes care of startY
 	int axisHeight = height - 2.5F * paddingY;
-	int axisWidth = 20;
+	
+	std::vector<std::string> tablesToDisplay = {PATHS_TABLE,INTERSECTIONS_TABLE};
+	
+	for(const std::string& tableName : tablesToDisplay) {
+		RIVTable<float,ushort> *table = (*datasetOne)->GetTable(tableName);
+		total_nr_of_records += table->NumberOfRecords();
+	}
 
 	float delta = 1.F / (total_nr_of_records - 1) * (width - 2 * paddingX);
-	std::vector<RIVTable<float,ushort>*>* tablePointers = (*datasetOne)->GetTables();
+
 	size_t axisIndex = 0;
 	//		std::vector<std::string> pathTableRecordNames = {"pixel x","pixel y","R","G","B","throughput R","throughput G","throughput B","renderer","depth"};
 	const int divisionCount = 4;
 	if(datasetTwo) {
-		for(size_t j = 0 ; j < tablePointers->size() ; j++) {
-			std::vector<RIVTable<float,ushort>*>* otherTablePointers = (*datasetTwo)->GetTables();
-			RIVTable<float,ushort> *table = tablePointers->at(j);
-			RIVTable<float,ushort> *otherTable = otherTablePointers->at(j);
+		for(const std::string& tableName : tablesToDisplay) {
+//			std::vector<RIVTable<float,ushort>*>* otherTablePointers = (*datasetTwo)->GetTables();
+			RIVTable<float,ushort> *table = (*datasetOne)->GetTable(tableName);
+			RIVTable<float,ushort> *otherTable = (*datasetTwo)->GetTable(tableName);
 			
 			ParallelCoordsAxisGroup<float,ushort> axisGroup(table->GetName());
 			
@@ -116,8 +122,8 @@ void ParallelCoordsView::createAxes() {
 		}
 	}
 	else {
-		for(size_t j = 0 ; j < tablePointers->size() ; j++) {
-			RIVTable<float,ushort> *table = tablePointers->at(j);
+		for(const std::string& tableName : tablesToDisplay) {
+			RIVTable<float,ushort> *table = (*datasetOne)->GetTable(tableName);
 			ParallelCoordsAxisGroup<float,ushort> axisGroup(table->GetName());
 			auto recordsTuple = table->GetAllRecords();
 			tuple_for_each(recordsTuple, [&](auto tRecords) {
@@ -164,13 +170,16 @@ void ParallelCoordsView::drawSelectionBoxes() {
 }
 void ParallelCoordsView::drawAxes() {
 	//Draw the densities
-	
 	for(auto& axisGroup : axisGroups) {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto axis : tAxes) {
 				
 				auto& histogramOne = axis->densityHistogramOne;
 				auto& histogramTwo = axis->densityHistogramTwo;
+				
+//				histogramOne.Print();
+//				printf("TWO:\n");
+//				histogramTwo.Print();
 				
 				int numBins = histogramOne.NumberOfBins();
 				int startX = axis->x - axis->width / 2.F;
@@ -188,7 +197,6 @@ void ParallelCoordsView::drawAxes() {
 				for(int i = 0 ; i < numBins ; ++i) {
 					int startY = i * height + axis->y;
 					int endY = startY + height;
-//					int centerY = startY + (endY - startY) / 2.F;
 					
 					float binValueOne = histogramOne.BinValue(i);
 					float binValueTwo = histogramTwo.BinValue(i);
@@ -196,49 +204,41 @@ void ParallelCoordsView::drawAxes() {
 					size_t nrElementsOne = histogramOne.NumberOfElements();
 					size_t nrElementsTwo = histogramTwo.NumberOfElements();
 					
-					float normalizedValueOne = 0;
-					float normalizedValueTwo = 0;
-					if(nrElementsOne)
-						normalizedValueOne = binValueOne / histogramOne.NumberOfElements();
-					if(nrElementsTwo)
-						normalizedValueTwo = binValueTwo / histogramTwo.NumberOfElements();
-					
-//					float valueDelta = valueTwo - valueTwo;
-					
-					float blueColorValue = ((normalizedValueTwo - normalizedValueOne) / normalizedValueTwo + 1) / 2.F;
-//					float redColorValue = ((normalizedValueOne - normalizedValueTwo) / normalizedValueOne + 1) / 2.F;
-					
-					float h,s,v;
-					RGBtoHSV(1-blueColorValue, 0, blueColorValue, &h, &s, &v);
-					
-//					if(redColorValue < 0) {
-//						redColorValue = 0;
-//					}
-//					if(blueColorValue < 0) {
-//						blueColorValue = 0;
-//					}
-			
-//					float sInterpolated;
-//					if(blueColorValue > 0.5F) {
-//						sInterpolated = binValueOne / maxValueOne;
-//					}
-//					else {
-//						sInterpolated = binValueTwo / maxValueTwo;
-//					}
-//					
-//					if(sInterpolated < 0.3) {
-//												sInterpolated = 0.3;
-//					}
-//					else if(sInterpolated > 0.7) {
-//						sInterpolated = 0.7;
-//					}
-//					printf("sInterpolated = %f\n",sInterpolated);
-					
-					float r,g,b;
-					HSVtoRGB(&r, &g, &b, h, s, v);
-					
-					glColor3f(r, g, b);
-					glRectf(startX, startY, endX, endY);
+					if(nrElementsOne || nrElementsTwo) {
+						float normalizedValueOne = 0;
+						float normalizedValueTwo = 0;
+						if(nrElementsOne)
+							normalizedValueOne = binValueOne / nrElementsOne;
+						if(nrElementsTwo)
+							normalizedValueTwo = binValueTwo / nrElementsTwo;
+						
+	//					float valueDelta = valueTwo - valueTwo;
+						float blueColorValue;
+						float redColorValue;
+						float saturation;
+						
+						if(normalizedValueTwo > normalizedValueOne) {
+							blueColorValue = ((normalizedValueTwo - normalizedValueOne) / normalizedValueTwo + 1) / 2.F;
+							redColorValue = 1-blueColorValue;
+							saturation = binValueTwo / maxValueTwo;
+						}
+						else {
+							redColorValue = ((normalizedValueOne - normalizedValueTwo) / normalizedValueOne + 1) / 2.F;
+							blueColorValue = 1 - redColorValue;
+							saturation = binValueOne / maxValueOne;
+						}
+						
+						//Convert the values to HSV
+						float h,s,v;
+						RGBtoHSV(redColorValue, 0, blueColorValue, &h, &s, &v);
+						
+						//And back again but use the computed saturation instead
+						float r,g,b;
+						HSVtoRGB(&r, &g, &b, h, saturation, v);
+						
+						glColor3f(r,g,b);
+						glRectf(startX, startY, endX, endY);
+					}
 				}
 				
 				glColor3f(0,0,0);
@@ -338,8 +338,18 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-//	printf("Drawing lines for dataset %d\n",dataset->datasetID);
-//	reporter::startTask("drawLines");
+	RIVTable<float,ushort>* pathMembershipTable = dataset->GetTable(PATH_MEMBERSHIP_TABLE);
+	RIVTable<float,ushort>* isectMembershipTable = dataset->GetTable(ISECT_MEMBERSHIP_TABLE);
+	
+	RIVFloatRecord* pathMembershipRecord = NULL;
+	RIVFloatRecord* isectMembershipRecord = NULL;
+	
+	if(pathMembershipTable && isectMembershipTable) {
+		pathMembershipRecord = pathMembershipTable->GetRecord<float>(MEMBERSHIP);
+		isectMembershipRecord = isectMembershipTable->GetRecord<float>(MEMBERSHIP);
+		
+		
+	}
 	
 	for(auto &axisGroup : axisGroups) {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
@@ -355,6 +365,14 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 		auto table = dataset->GetTable(axisGroup.tableName);
 		TableIterator* iterator = table->GetIterator();
 		
+		RIVFloatRecord* membershipRecord = NULL;
+		if(table->name == PATHS_TABLE) {
+			membershipRecord = pathMembershipRecord;
+		}
+		else if(table->name == INTERSECTIONS_TABLE) {
+			membershipRecord = isectMembershipRecord;
+		}
+		
 		//Find what color property to use for this table
 		RIVColorProperty* colorProperty = pathColors;
 		if(table->GetName() == INTERSECTIONS_TABLE) {
@@ -364,9 +382,22 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 		//You gotta love 'auto'!
 		riv::Color lineColor;
 		while(iterator->GetNext(row)) {
+			float offset = axisWidth / 2.F;
+
 			if(colorProperty->ComputeColor(table, row, lineColor)) {
-				glColor4f(lineColor.R, lineColor.G, lineColor.B, 0.1F);
+				
+				if(membershipRecord && membershipRecord->Size()) {
+					float membershipValue = membershipRecord->Value(row);
+					float blueColorValue = (membershipValue + 1) / 2.F;
+					glColor4f(1-blueColorValue, lineColor.G, blueColorValue, 0.1F);
+				}
+				else {
+					glColor4f(lineColor.R, lineColor.G, lineColor.B, 0.1F);
+				}
+
+				//TODO: Optimize this; unnecessary lines are being drawn 'through' the axis
 				glBegin(GL_LINE_STRIP);
+//				int axisIndex = 0;
 				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 					for(auto axis : tAxes) {
 						
@@ -377,10 +408,10 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 						
 						float x = axis->x;
 						float y = axis->PositionOnScaleForValue(value);
-						float halfWidth = axis->width / 2.F;
-						
-						glVertex3f(x - halfWidth, y, 0);
-						glVertex3f(x + halfWidth, y, 0);
+
+						glVertex2f(x - offset, y);
+						glVertex2f(x + offset, y);
+//						offset = -offset * axisIndex++;
 					}
 					++lineIndex;
 				});
@@ -472,11 +503,12 @@ void ParallelCoordsView::Draw() {
 		}
 	}
 	
-	drawAxes();
 	
 	//Draw the axes
-	if(axesAreDirty)
+	if(axesAreDirty) {
+		drawAxes();
 		drawAxesExtras();
+	}
 	
 	if(selectionIsDirty)
 		drawSelectionBoxes();
