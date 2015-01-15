@@ -37,6 +37,7 @@ private:
 	//In screenspace
 	RIVPoint imageStart;
 	RIVPoint imageEnd;
+	bool isDragging;
 	//image size in pixels
 	int imageWidth, imageHeight;
     

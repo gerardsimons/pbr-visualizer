@@ -40,7 +40,12 @@ private:
 	std::string selectedAxis;
 	Area* selection = NULL;
 	bool dragSelectionBox = false;
+	bool createSelectionBox = false;
+	
+	//Declares both where dragging the selection box originated and the last known point
 	int startDragBoxY = 0;
+	int dragBoxLastY;
+	bool selectionBoxChanged = false;
 	
 	//Determines what graphical primitives should be redrawn
     bool axesAreDirty = true;
@@ -57,8 +62,8 @@ private:
 	void drawAxesExtras();
 	void drawLines(int datasetId, RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColors, RIVColorProperty* rayColors);
 	void drawSelectionBoxes();
-//	void drawText(char*,int,int,int,float[3],float);
-//	void drawText(std::string,int,int,float[3],float);
+
+	void filterData();
 	
 	void redisplayWindow();
 public:

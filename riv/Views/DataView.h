@@ -57,7 +57,7 @@
 		int startX,startY;
 		int width,height;
 		int paddingX,paddingY = 0;
-		bool isDragging;
+
 		std::string identifier;
 		//functions
 //		void SetData(RIVDataSet *newDataSet) { dataset = newDataSet; needsRedraw = true;}

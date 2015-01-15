@@ -46,6 +46,8 @@ protected:
 	bool drawDataSetOne = true;
 	bool drawDataSetTwo = true;
 	
+	bool isDragging = false;
+	
 	std::vector<Path> pathsOne;
 	std::vector<Path> pathsTwo;
 	

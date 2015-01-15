@@ -22,7 +22,7 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 	
 	
 //	const std::string taskName = "Creating bootstrap";
-	reporter::startTask("Creating bootstrap", N);
+//	reporter::startTask("Creating bootstrap", N);
 	
 	RIVDataSet<float,ushort>* bootstrap = dataset->CloneStructure();
 	RIVTable<float,ushort>* bootstrapPaths = bootstrap->GetTable("paths");
@@ -97,7 +97,7 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 	}
 	//		bootstrap.Print(1000);
 	
-	reporter::stop("Creating bootstrap");
+//	reporter::stop("Creating bootstrap");
 	return bootstrap;
 }
 
@@ -353,11 +353,11 @@ void DataController::Reduce() {
 				
 				bestBootstrap = bootstrap;
 				
-					printf("\nTRUE HISTOGRAMS = \n");
-					trueDistributions.Print();
-				
-					printf("\nBOOTSTRAP HISTOGRAMS = \n");
-					bootstrapHistograms.Print();
+//					printf("\nTRUE HISTOGRAMS = \n");
+//					trueDistributions.Print();
+//				
+//					printf("\nBOOTSTRAP HISTOGRAMS = \n");
+//					bootstrapHistograms.Print();
 				
 				//	printf("Bootstrap = \n\n");
 				//	bootstrap->Print(100);

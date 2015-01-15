@@ -81,7 +81,7 @@ EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
 const int maxPaths = 15000;
-const int bootstrapRepeat = 100;
+const int bootstrapRepeat = 1;
 int sliderViewHeight = 50;
 
 void display(void)
