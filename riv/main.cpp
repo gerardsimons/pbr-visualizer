@@ -80,9 +80,9 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 15000;
+const int maxPaths = 10000;
 const int bootstrapRepeat = 1;
-int sliderViewHeight = 50;
+const int sliderViewHeight = 50;
 
 void display(void)
 {
@@ -122,6 +122,10 @@ void testFunctions() {
 void keys(int keyCode, int x, int y) {
     //    printf("Pressed %d at (%d,%d)\n",keyCode,x,y);
     bool postRedisplay = true;
+	
+	char key = (char)keyCode;
+	printf("'%c' key pressed.\n",key);
+	
     float camSpeed = .1F;
     switch(keyCode) {
         case 27: //ESC key
@@ -131,10 +135,23 @@ void keys(int keyCode, int x, int y) {
 //            (*datasetOne)->ClearFilters();
 //			datasetOne)->StopFiltering();
 //			
-//			datasetOne->StartFiltering();
-//			datasetOne->ClearFilters();
-//			datasetOne->StopFiltering();
+			(*datasetOne)->StartFiltering();
+			(*datasetOne)->ClearAllFilters();
+			(*datasetOne)->StopFiltering();
+			
+			(*datasetOne)->StartFiltering();
+			(*datasetOne)->ClearAllFilters();
+			(*datasetOne)->StopFiltering();
             break;
+		case 45: // - key
+			parallelCoordsView->DecreaseLineOpacity();
+			break;
+		case 43: // + key
+			parallelCoordsView->IncreaseLineOpacity();
+			break;
+		case 61: // = key is on the same physical keyboard button as +, so cut the user some slack and
+			parallelCoordsView->IncreaseLineOpacity();
+			break;
 		case 32: //Space bar
 			dataControllerOne->TogglePause();
 			dataControllerTwo->TogglePause();

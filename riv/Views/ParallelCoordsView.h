@@ -14,6 +14,17 @@
 
 #include <typeinfo>
 
+enum INTERACTION_STATE {
+	IDLE,
+	MOUSE_DOWN_AXIS,
+	MOUSE_DOWN_SELECTION,
+	MOUSE_DOWN_AXIS_EXTRA,
+	CREATE_SELECTION_BOX,
+	DRAG_AXIS,
+	DRAG_SELECTION,
+};
+
+
 class ParallelCoordsView : public RIVDataView, public RIVDataSetListener
 {
 private:
@@ -39,20 +50,27 @@ private:
     std::vector<ParallelCoordsAxisGroup<float,ushort>> axisGroups;
 	
 	//TODO : template this
-	std::string selectedAxis;
+	ParallelCoordsAxisInterface* selectedAxis = NULL;
 	Area* selection = NULL;
-	bool dragSelectionBox = false;
-	bool createSelectionBox = false;
+	
+	INTERACTION_STATE interactionState = IDLE;
+	
+	int mouseDownX;
+	int mouseDownY;
+	
+	int axisUpdateY;
+	int axisUpdateX;
+	
+	float lineOpacity = 0.1F;
+	float lineOpacityIncrement = 0.01F;
 	
 	//Declares both where dragging the selection box originated and the last known point
-	int startDragBoxY = 0;
 	int dragBoxLastY;
 	bool selectionBoxChanged = false;
 	
 	//Determines what graphical primitives should be redrawn
     bool axesAreDirty = true;
     bool linesAreDirty = true;
-	bool selectionIsDirty = true;
 	
     void clearSelection();
 	//Create functions
@@ -65,6 +83,7 @@ private:
 	//Draws the lines of the parallel coordinates plot for the given dataset, note that it also 
 	void drawLines(int datasetNumber, RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColors, RIVColorProperty* rayColors);
 	void drawSelectionBoxes();
+	void swapAxes(ParallelCoordsAxisGroup<float,ushort>* axisGroup, const std::string& swapAxisOne, const std::string& swapAxisTwo);
 
 	void filterData();
 	
@@ -92,6 +111,9 @@ public:
     //implement virtual functions prescribed by DataSetListener
     virtual void OnDataChanged(RIVDataSet<float,ushort>* source);
 	virtual void OnFiltersChanged();
+	
+	bool DecreaseLineOpacity();
+	bool IncreaseLineOpacity();
 	
 	//Create graphical primitives based on data currently set
 	void InitializeGraphics();

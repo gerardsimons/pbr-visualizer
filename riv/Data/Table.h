@@ -446,10 +446,11 @@ public:
 	bool ClearFilters() {
 		tuple_for_each(filters, [&](auto filters) {
 			filters.clear();
-			printf("Clear!!!!\n");
 		});
-		groupFilters.clear();
-		
+		tuple_for_each(groupFilters, [&](auto filters) {
+			filters.clear();
+		});
+		rowFilters.clear();
 	}
 	//Clears all the filters with the given attribute name, returns true if any filter was actually removed
 	template<typename T>

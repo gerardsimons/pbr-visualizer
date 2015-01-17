@@ -36,6 +36,16 @@ public:
 		
 	}
 	
+	void SwapAxes(size_t swapIndexOne, size_t swapIndexTwo) {
+		auto oldAxis = axes[swapIndexOne];
+		
+		axes[swapIndexOne] = axes[swapIndexTwo];
+		axes[swapIndexTwo] = oldAxis;
+	
+		axes[swapIndexTwo]->x = axes[swapIndexOne]->x;
+		axes[swapIndexOne]->x = oldAxis->x;
+	}
+	
 	template<typename U>
 	std::vector<ParallelCoordsAxis<U>*>* GetAxes() {
 		return &std::get<std::vector<ParallelCoordsAxis<U>*>>(axes);

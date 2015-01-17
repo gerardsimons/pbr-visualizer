@@ -74,6 +74,7 @@ private:
 	RIVMultiReference* pathsToIsectRef = NULL;
 	RIVSingleReference* isectsToPathsRef = NULL;
 	
+	const int bootstrapBeforePause = 3;
 	const int bins = 10;
 	int reduceRounds = 0;
 	

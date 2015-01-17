@@ -157,7 +157,7 @@ void ParallelCoordsView::drawSelectionBoxes() {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto& axis : tAxes) {
 				if(axis->HasSelectionBox) {
-					printf("Drawing selection box on axis %s\n",selectedAxis.c_str());
+					printf("Drawing selection box on axis %s\n",selectedAxis->name.c_str());
 					
 					glColor4f(1, 1, 1,.3F);
 					glRectf(axis->selection.start.x - 1, axis->selection.start.y, axis->selection.end.x, axis->selection.end.y);
@@ -367,7 +367,7 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 		
 		RIVFloatRecord* membershipRecord = NULL;
 		if(table->name == PATHS_TABLE) {
-			membershipRecord = pathMembershipRecord;
+//			membershipRecord = pathMembershipRecord;
 		}
 		else if(table->name == INTERSECTIONS_TABLE) {
 			membershipRecord = isectMembershipRecord;
@@ -389,15 +389,16 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 				if(membershipRecord && membershipRecord->Size()) {
 					float membershipValue = membershipRecord->Value(row);
 					float blueColorValue = (membershipValue + 1) / 2.F;
-					glColor4f(1-blueColorValue, lineColor.G, blueColorValue, 0.1F);
+					glColor4f(1-blueColorValue, lineColor.G, blueColorValue, lineOpacity);
 				}
 				else {
-					glColor4f(lineColor.R, lineColor.G, lineColor.B, 0.1F);
+					glColor4f(lineColor.R, lineColor.G, lineColor.B, lineOpacity);
 				}
 
 				//TODO: Optimize this; unnecessary lines are being drawn 'through' the axis
 				glBegin(GL_LINE_STRIP);
 //				int axisIndex = 0;
+				
 				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 					for(auto axis : tAxes) {
 						
@@ -487,7 +488,7 @@ void ParallelCoordsView::Draw() {
 	reporter::startTask(taskName);
 	printf("\n");
 	
-	if(axesAreDirty && linesAreDirty && selectionIsDirty) {
+	if(axesAreDirty && linesAreDirty) {
 //		printf("Clear PCV window\n");
         glClearColor(0.9, 0.9, 0.9, 0.0);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -508,10 +509,9 @@ void ParallelCoordsView::Draw() {
 	if(axesAreDirty) {
 		drawAxes();
 		drawAxesExtras();
+		drawSelectionBoxes();
 	}
 	
-	if(selectionIsDirty)
-		drawSelectionBoxes();
 	
 	glFlush();
 	glutSwapBuffers();
@@ -523,7 +523,6 @@ void ParallelCoordsView::toggleDrawDataSetOne() {
 	drawDataSetOne = !drawDataSetOne;
 	
 	axesAreDirty = true;
-	selectionIsDirty = true;
 	linesAreDirty = true;
 	
 	redisplayWindow();
@@ -533,7 +532,6 @@ void ParallelCoordsView::toggleDrawDataSetTwo() {
 	drawDataSetTwo = !drawDataSetTwo;
 	
 	axesAreDirty = true;
-	selectionIsDirty = true;
 	linesAreDirty = true;
 	
 	redisplayWindow();
@@ -548,90 +546,58 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
         if(state == GLUT_DOWN) {
             int proximityMax = 50;
 			
+			mouseDownX = x;
+			mouseDownY = y;
+			
 			for(int i = 0 ; i < axisGroups.size() ; i++) {
 				
 				auto& axisGroup = axisGroups[i];
-				bool found = false;
+				bool axisFound = false;
 				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 					for(auto& axis : tAxes) {
 						
 						int distanceX = abs(axis->x - x);
 						
 						if(distanceX < proximityMax) {
-							if(axis->HasSelectionBox) {
+							selectedAxis = axis;
+							//Select the
+							if(axis->HasSelectionBox && ((y >= axis->selection.start.y && y <= axis->selection.end.y) || (y >= axis->selection.end.y && y <= axis->selection.start.y))) {
 								//Is it inside the selection box?
-								if((y >= axis->selection.start.y && y <= axis->selection.end.y) || (y >= axis->selection.end.y && y <= axis->selection.start.y)) {
-									selectedAxis = axis->name;
-									dragSelectionBox = true;
-									createSelectionBox = false;
-									startDragBoxY = y;
-									dragBoxLastY = y;
-									
-									found = true;
-									
-									axesAreDirty = true;
-									linesAreDirty = true;
-									selectionBoxChanged = false;
-									
-									return;
-								}
+
+								interactionState = MOUSE_DOWN_SELECTION;
+								
+								printf("NEW STATE IS MOUSE_DOWN_SELECTION\n");
+								
+								axisFound = true;
+								
+								return;
 							}
 							//Is it at least inside the axis
-							else if(y > axis->y) {
+							else if(y > axis->y && y < axis->y + axis->height) {
 
-								if(y < axis->y + axis->height) {
+								interactionState = MOUSE_DOWN_AXIS;
+								
+								printf("NEW STATE IS MOUSE_DOWN_AXIS\n");
+									//Possibly create a selection box or swap axes
 									
 									//Close enough..
-									axis->selection.start.x = axis->x - 10;
-									axis->selection.end.x = axis->x + 10;
-									axis->selection.start.y = y;
-									axis->selection.end.y = y;
-									
-									startDragBoxY = y;
-									
-									axis->HasSelectionBox = true;
-									found = true;
-									
-									selectedAxis = axis->name;
-									selection = &axis->selection;
-									
-									selectionBoxChanged = false;
-									createSelectionBox = true;
-									axesAreDirty = true;
-									linesAreDirty = true;
-									
-									printf("Selected axis %s\n",axis->name.c_str());
+									axisFound = true;
+								
 									return;
-								}
+								
 							}
 							else {
-								printf("Toggle selection of axis %s.\n",axis->name.c_str());
-								axis->isSelected = !axis->isSelected;
 								
-								//Deselect all the other table records
-								for(int j = 0 ; j < axisGroups.size() ; j++) {
-									if(i != j) {
-										auto& otherAxisGroup = axisGroups[j];
-										axisGroup.isSelected = false;
-										tuple_for_each(otherAxisGroup.axes, [&](auto otherTAxes) {
-											for(auto& otherAxis : otherTAxes) {
-												otherAxis->isSelected = false;
-											}
-										});
-									}
-								}
-					
-								if(axis->isSelected) {
-									sliderView->AddSelectedRecord(axisGroup.tableName, axis->name);
-								}
-								else {
-									sliderView->RemoveSelectedRecord(axis->name);
-								}
+								interactionState = MOUSE_DOWN_AXIS_EXTRA;
+								
+								printf("NEW STATE IS MOUSE_DOWN_AXIS_EXTRA\n");
+								
+								selectedAxis = axis;
 								
 								axesAreDirty = true;
 								linesAreDirty = true;
 								
-								found = true;
+								axisFound = true;
 								
 								glutPostRedisplay();
 								
@@ -640,42 +606,88 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 						}
 					}
 				});
-				if(found) {
+				if(axisFound) {
 					return true;
 				}
 			}
-			selectedAxis.clear();
+			selectedAxis = NULL;
         }
         else if(state == GLUT_UP) { //Finish selection
-            if(selectionBoxChanged && selectedAxis.size() > 0) {
-				filterData();
-            }
-			else {
-				for(auto& axisGroup : axisGroups) {
-					tuple_for_each(axisGroup.axes, [&](auto tAxes) {
-						for(auto& axis : tAxes) {
-							if(axis->name == selectedAxis) {
-								axis->HasSelectionBox = false;
-								typedef typename get_template_type<typename std::decay<decltype(*axis)>::type>::type Type;
-								(*datasetOne)->StartFiltering();
-								if(datasetTwo) {
-									(*datasetTwo)->StartFiltering();
+			
+			switch (interactionState) {
+				case DRAG_AXIS: {
+//					int distance = std::abs(x - mouseDownX);
+					int minDistance = 15;
+					int shortestDistance = 10000;
+					ParallelCoordsAxisInterface* swapAxis = NULL;
+					//				if(distance > 25) {
+					//Should the axis be swapped with another axis?
+					for(auto& axisGroup : axisGroups) {
+						bool axisGroupFound = false;
+						swapAxis = NULL;
+						tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+							
+							for(auto& axis : tAxes) {
+								if(axis->name == selectedAxis->name) {
+									axisGroupFound = true;
 								}
-								(*datasetOne)->ClearFilter<Type>(axis->name);
-								if(datasetTwo) {
-									(*datasetTwo)->ClearFilter<Type>(axis->name);
-								}
-								axis->HasSelectionBox = false;
-								selectedAxis.clear();
-								(*datasetOne)->StopFiltering();
-								if(datasetTwo) {
-									(*datasetTwo)->StopFiltering();
+								else {
+									int distance = std::abs(axis->x - selectedAxis->x);
+									if(distance < shortestDistance) {
+										shortestDistance = distance;
+										swapAxis = axis;
+									}
 								}
 							}
+						
+						});
+						
+						if(axisGroupFound && swapAxis != NULL && shortestDistance < minDistance) {
+							auto selectedX = selectedAxis->x;
+
+							selectedAxis->x = swapAxis->x;
+							swapAxis->x = selectedX;
+							
+							printf("SWAP SELECTED AXIS %s WITH AXIS %s\n",selectedAxis->name.c_str(), swapAxis->name.c_str());
 						}
-					});
+					}
+					//				}
+					break;
 				}
+				case DRAG_SELECTION:
+					filterData();
+					break;
+				case CREATE_SELECTION_BOX:
+					filterData();
+					break;
+				case MOUSE_DOWN_SELECTION:
+					for(auto& axisGroup : axisGroups) {
+						tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+							for(auto& axis : tAxes) {
+								if(axis->name == selectedAxis->name) {
+									axis->HasSelectionBox = false;
+									typedef typename get_template_type<typename std::decay<decltype(*axis)>::type>::type Type;
+									(*datasetOne)->StartFiltering();
+									if(datasetTwo) {
+										(*datasetTwo)->StartFiltering();
+									}
+									(*datasetOne)->ClearFilter<Type>(axis->name);
+									if(datasetTwo) {
+										(*datasetTwo)->ClearFilter<Type>(axis->name);
+									}
+									(*datasetOne)->StopFiltering();
+									if(datasetTwo) {
+										(*datasetTwo)->StopFiltering();
+									}
+								}
+							}
+						});
+					}
+					break;
 			}
+			
+			printf("NEW STATE IS IDLE\n");
+			interactionState = IDLE;
             return true;
         }
 		return true;
@@ -683,11 +695,126 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
     return false;
 }
 
+int dragStartSensitivity = 5;
+int updateSensitivity = 3;
+bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
+	y = height - y;
+	
+	int yDistanceTravelled = std::abs(y - mouseDownY);
+	int xDistanceTravelled = std::abs(x - mouseDownX);
+	
+	printf("Distance travelleld = (%d,%d)\n",xDistanceTravelled, yDistanceTravelled);
+	
+
+	switch (interactionState) {
+		case IDLE:
+			return true;
+		case MOUSE_DOWN_AXIS_EXTRA:
+			return true;
+		case MOUSE_DOWN_AXIS:
+			if(yDistanceTravelled > dragStartSensitivity) {
+				interactionState = CREATE_SELECTION_BOX;
+				printf("NEW STATE IS CREATE_SELECTION_BOX\n");
+				selectedAxis->HasSelectionBox = true;
+				selectedAxis->selection.start.x = selectedAxis->x - 10;
+				selectedAxis->selection.end.x = selectedAxis->x + 10;
+				selectedAxis->selection.start.y = y;
+				selectedAxis->selection.end.y = y;
+				selection = &selectedAxis->selection;
+				
+				selectionBoxChanged = false;
+				axesAreDirty = true;
+				linesAreDirty = true;
+				
+				axisUpdateY = y;
+				return true;
+			}
+			else if(xDistanceTravelled > dragStartSensitivity) {
+				interactionState = DRAG_AXIS;
+				printf("NEW STATE IS DRAG_AXIS\n");
+				
+				selectionBoxChanged = false;
+				axesAreDirty = true;
+				linesAreDirty = true;
+				
+				axisUpdateX = x;
+
+				return true;
+			}
+		case MOUSE_DOWN_SELECTION:
+			if(yDistanceTravelled > 5) {
+				printf("NEW STATE IS DRAG_SELECTION\n");
+				axisUpdateY = y;
+				interactionState = DRAG_SELECTION;
+				dragBoxLastY = y;
+			}
+			return true;
+	  case CREATE_SELECTION_BOX:
+			printf("CREATE SELECTION....\n");
+			//TODO: Not very efficient to find the axis everytime, but pointer sucks due to templates
+			for(auto& axisGroup : axisGroups) {
+				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+					for(auto& axis : tAxes) {
+						if(axis->name == selectedAxis->name) {
+							selection->end.y = axis->PositionOnScaleForViewY(y);
+						}
+					}
+				});
+			}
+			if(std::abs(y - axisUpdateY) > updateSensitivity) {
+				axisUpdateY = y;
+				filterData();
+				linesAreDirty = true;
+				selectionBoxChanged = true;
+			}
+			axesAreDirty = true;
+			glutPostRedisplay();
+			return true;
+		case DRAG_SELECTION: {
+			printf("DRAG SELECTION...\n");
+			int deltaY = y - dragBoxLastY;
+			for(auto& axisGroup : axisGroups) {
+				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+					for(auto& axis : tAxes) {
+						if(axis->name == selectedAxis->name) {
+							selection->start.y += deltaY;
+							selection->end.y += deltaY;
+						}
+					}
+				});
+			}
+			if(std::abs(y - axisUpdateY) > updateSensitivity) {
+				axisUpdateY = y;
+				filterData();
+				linesAreDirty = true;
+				selectionBoxChanged = true;
+			}
+			dragBoxLastY = y;
+			glutPostRedisplay();
+			return true;
+		}
+		case DRAG_AXIS: {
+			if(std::abs(x - axisUpdateX) > updateSensitivity) {
+				axisUpdateX = x;
+				selectedAxis->x = x;
+				
+				linesAreDirty = true;
+				axesAreDirty = true;
+				
+				glutPostRedisplay();
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
+
 void ParallelCoordsView::filterData() {
 	for(auto& axisGroup : axisGroups) {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto& axis : tAxes) {
-				if(axis->name == selectedAxis) {
+				if(axis->name == selectedAxis->name) {
 					int sizeBox = abs(axis->selection.start.y - axis->selection.end.y);
 					(*datasetOne)->StartFiltering();
 					if(datasetTwo) {
@@ -720,7 +847,7 @@ void ParallelCoordsView::filterData() {
 							(*datasetTwo)->ClearFilter<Type>(axis->name);
 						}
 						axis->HasSelectionBox = false;
-						selectedAxis.clear();
+						selectedAxis = NULL;
 					}
 					//Close access
 					(*datasetOne)->StopFiltering();
@@ -734,57 +861,12 @@ void ParallelCoordsView::filterData() {
 	}
 }
 
-bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
-    y = height - y;
-	if(selectedAxis.size()) {
-		if(createSelectionBox) {
-			//TODO: Not very efficient to find the axis everytime, but pointer sucks due to templates
-			for(auto& axisGroup : axisGroups) {
-				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
-					for(auto& axis : tAxes) {
-						if(axis->name == selectedAxis) {
-							selection->end.y = axis->PositionOnScaleForViewY(y);
-						}
-					}
-				});
-			}
-			if(std::abs(y - startDragBoxY) > 3) {
-				startDragBoxY = y;
-				filterData();
-				linesAreDirty = true;
-				selectionBoxChanged = true;
-			}
-			axesAreDirty = true;
-			selectionIsDirty = true;
-			glutPostRedisplay();
-			return true;
-		}
-		else if(dragSelectionBox) {
-			int deltaY = y - dragBoxLastY;
-			for(auto& axisGroup : axisGroups) {
-				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
-					for(auto& axis : tAxes) {
-						if(axis->name == selectedAxis) {
-							selection->start.y += deltaY;
-							selection->end.y += deltaY;
-						}
-					}
-				});
-			}
-			if(std::abs(y - startDragBoxY) > 3) {
-				startDragBoxY = y;
-				filterData();
-				linesAreDirty = true;
-				selectionBoxChanged = true;
-			}
-			dragBoxLastY = y;
-			selectionIsDirty = true;
-			glutPostRedisplay();
-			return true;
-		}
-	}
-    return false;
-}
+
+//void ParallelCoordsView::swapAxes(ParallelCoordsAxisGroup<float,ushort>* axisGroup, const std::string& swapAxisOne, const std::string& swapAxisTwo) {
+//	
+//	
+//	
+//}
 
 void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 	//Recreate the axes
@@ -847,4 +929,32 @@ void ParallelCoordsView::OnFiltersChanged() {
     axesAreDirty = true;
 	
 	redisplayWindow();
+}
+
+bool ParallelCoordsView::DecreaseLineOpacity() {
+	if(lineOpacity > 0.F) {
+		lineOpacity -= lineOpacityIncrement;
+		if(lineOpacity < 0.F) {
+			lineOpacity = 0;
+		}
+		linesAreDirty = true;
+		axesAreDirty = true;
+		redisplayWindow();
+		return true;
+	}
+	else return false;
+}
+
+bool ParallelCoordsView::IncreaseLineOpacity() {
+	if(lineOpacity < 1.F) {
+		lineOpacity += lineOpacityIncrement;
+		if(lineOpacity > 1.F) {
+			lineOpacity = 1;
+		}
+		linesAreDirty = true;
+		axesAreDirty = true;
+		redisplayWindow();
+		return true;
+	}
+	else return false;
 }

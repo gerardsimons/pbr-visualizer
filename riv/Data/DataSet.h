@@ -255,6 +255,11 @@ public:
 		}
 		return NULL;
 	}
+	void ClearAllFilters() {
+		for(auto table : tables) {
+			table->ClearFilters();
+		}
+	}
 	void Print(size_t maxPrint = 0, bool printFiltered = true) {
 		printf("Dataset containing %zu tables:\n\n",tables.size());
 		for(auto table : tables) {

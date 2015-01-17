@@ -475,8 +475,6 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 }
 
 void RIV3DView::ResetGraphics() {
-
-	
 	if(heatmap) {
 		delete heatmap;
 //		generateOctree(7, 1, .00001F);
@@ -498,8 +496,6 @@ void RIV3DView::createPaths() {
 
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
 std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset) {
-	
-
 	
 	reporter::startTask("Creating paths");
 	
