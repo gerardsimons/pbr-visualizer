@@ -15,12 +15,24 @@
 
 //Interface class for parallel coords axis
 class ParallelCoordsAxisInterface {
+private:
+	std::vector<int> pointsOne; //Only Y needs to defined for a axiss
+	std::vector<int> pointsTwo;
 public:
 	int x;
 	int y;
 	int width;
 	int height;
+	
 	std::string name; //Usually points to a record's name, acts as unique ID!
+
+	std::vector<int>& GetPoints(int index) {
+		if(index == 0) {
+			return pointsOne;
+		}
+		else
+			return pointsTwo;
+	}
 	
 	//If the axis is selected it may update other views such as the slider view to change it focus to include this data dimension
 	bool isSelected = false;
@@ -77,14 +89,6 @@ public:
 		
 	}
 	
-	Histogram<T>* GetDifferenceDensity() {
-		if(!differenceDensityComputed) {
-			differenceDensity = (*densityHistogramOne) - (*densityHistogramTwo);
-//			differenceDensityComputed = true;
-		}
-		return &differenceDensity;
-	}
-	
 	void ResetDensities() {
 //		densityHistogramOne->Clear();
 //		densityHistogramTwo->Clear();
@@ -98,12 +102,12 @@ public:
 		else return &densityHistogramTwo;
 	}
 	
-	Histogram<T>& GetHistogramOne() {
-		return densityHistogramOne;
+	Histogram<T>* GetHistogramOne() {
+		return &densityHistogramOne;
 	}
 	
-	Histogram<T>& GetHistogramTwo() {
-		return densityHistogramTwo;
+	Histogram<T> GetHistogramTwo() {
+		return &densityHistogramTwo;
 	}
 	
 //	void SetHistogram(Histogram<T>& densityHistogram) {
@@ -136,7 +140,7 @@ public:
 			return y;
 		}
 	}
-	
+	//TODO: Return as int?
 	float PositionOnScaleForValue(float value) {
 		float scalar = (value - minValue) / (maxValue - minValue);
 		if(minValue == maxValue) {

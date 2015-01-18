@@ -33,7 +33,7 @@ private:
     std::vector<RIVDataSetListener*> dataListeners;
 	void notifyFilterListeners() {
 		for(RIVDataSetListener *listener : dataListeners) {
-			listener->OnFiltersChanged();
+			listener->OnFiltersChanged(this);
 		}
 	}
 	

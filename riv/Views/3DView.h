@@ -122,7 +122,7 @@ public:
     bool HandleMouseMotion(int x, int y);
 	
     void OnDataChanged(RIVDataSet<float,ushort>* source);
-	void OnFiltersChanged();
+	void OnFiltersChanged(RIVDataSet<float,ushort>* source);
 	
 	void ResetGraphics();
 	

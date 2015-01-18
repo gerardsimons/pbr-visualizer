@@ -177,10 +177,6 @@ void ParallelCoordsView::drawAxes() {
 				auto& histogramOne = axis->densityHistogramOne;
 				auto& histogramTwo = axis->densityHistogramTwo;
 				
-//				histogramOne.Print();
-//				printf("TWO:\n");
-//				histogramTwo.Print();
-				
 				int numBins = histogramOne.NumberOfBins();
 				int startX = axis->x - axis->width / 2.F;
 				int endX = startX + axis->width;
@@ -188,11 +184,6 @@ void ParallelCoordsView::drawAxes() {
 				
 				float maxValueOne = histogramOne.MaximumValue();
 				float maxValueTwo = histogramTwo.MaximumValue();
-				
-//				printf("Histogram one \n");
-//				histogramOne->Print();
-//				printf("Histogram two \n");
-//				histogramTwo->Print();
 				
 				for(int i = 0 ; i < numBins ; ++i) {
 					int startY = i * height + axis->y;
@@ -260,19 +251,6 @@ void ParallelCoordsView::drawAxes() {
 
 void ParallelCoordsView::drawAxesExtras() {
 	
-    glColor3f(1,1,1);
-    glLineWidth(1.F);
-	
-//    for(auto& axisGroup : axisGroups) {
-//		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
-//			for(auto& axis : tAxes) {
-//				float halfWidth = axis->width / 2.F;
-//				
-//				glRectf(axis->x - halfWidth, axis->y, axis->x + halfWidth, axis->y + axis->height);
-//			}
-//		});
-//    }
-	
     glColor3f(1,0,0);
     glLineWidth(1.F);
     
@@ -329,7 +307,79 @@ void ParallelCoordsView::drawAxesExtras() {
 	}
     axesAreDirty = false;
 }
-
+void ParallelCoordsView::createAxisPoints() {
+	
+//	printf("CREATE AXIS POINTS!!!\n");
+	
+	createAxisPoints(0, *datasetOne);
+	if(datasetTwo) {
+		createAxisPoints(1, *datasetTwo);
+	}
+}
+void ParallelCoordsView::createAxisDensities() {
+	createAxisDensities(0, *datasetOne);
+	if(datasetTwo) {
+		createAxisDensities(1, *datasetTwo);
+	}
+}
+void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ushort>* dataset) {
+	printf("CREATE AXIS POINTS %d\n",datasetId);
+	for(auto &axisGroup : axisGroups) {
+		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+			for(auto axis : tAxes) {
+				axis->GetHistogram(datasetId)->Clear();
+			}
+		});
+	}
+	
+	for(auto &axisGroup : axisGroups) {
+		size_t row = 0;
+		
+		auto table = dataset->GetTable(axisGroup.tableName);
+		TableIterator* iterator = table->GetIterator();
+		
+		while(iterator->GetNext(row)) {
+			
+			tuple_for_each(axisGroup.axes, [&](auto& tAxes) {
+				for(auto& axis : tAxes) {
+					auto record = table->GetRecord<decltype(axis->minValue)>(axis->name);
+					auto value = record->Value(row);
+					
+					axis->GetHistogram(datasetId)->Add(value);
+				}
+			});
+		}
+	}
+}
+void ParallelCoordsView::createAxisPoints(int datasetId, RIVDataSet<float,ushort>* dataset) {
+	printf("CREATE AXIS POINTS %d\n",datasetId);
+	for(auto &axisGroup : axisGroups) {
+		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+			for(auto axis : tAxes) {
+				axis->GetPoints(datasetId).clear();
+			}
+		});
+	}
+	
+	for(auto &axisGroup : axisGroups) {
+		size_t row = 0;
+		
+		auto table = dataset->GetTable(axisGroup.tableName);
+		TableIterator* iterator = table->GetIterator();
+		
+		while(iterator->GetNext(row)) {
+			
+			tuple_for_each(axisGroup.axes, [&](auto& tAxes) {
+				for(auto& axis : tAxes) {
+					auto record = table->GetRecord<decltype(axis->minValue)>(axis->name);
+					auto value = record->Value(row);
+					
+					axis->GetPoints(datasetId).push_back(axis->PositionOnScaleForValue(value));
+				}
+			});
+		}
+	}
+}
 void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColors, RIVColorProperty* rayColors) {
 //	linesAreDirty = true;
 
@@ -347,23 +397,20 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 	if(pathMembershipTable && isectMembershipTable) {
 		pathMembershipRecord = pathMembershipTable->GetRecord<float>(MEMBERSHIP);
 		isectMembershipRecord = isectMembershipTable->GetRecord<float>(MEMBERSHIP);
-		
-		
 	}
 	
-	for(auto &axisGroup : axisGroups) {
-		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
-			for(auto axis : tAxes) {
-				axis->GetHistogram(datasetId)->Clear();
-			}
-		});
-	}
-	
+
 	glLineWidth(1);
 	for(auto &axisGroup : axisGroups) {
+		
 		size_t row = 0;
 		auto table = dataset->GetTable(axisGroup.tableName);
 		TableIterator* iterator = table->GetIterator();
+		
+		if(table->NumberOfRows() != axisGroup.axisInterfaces[0]->GetPoints(datasetId).size()) {
+			printf("Points not present...\n\n");
+			return;
+		}
 		
 		RIVFloatRecord* membershipRecord = NULL;
 		if(table->name == PATHS_TABLE) {
@@ -378,47 +425,47 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 		if(table->GetName() == INTERSECTIONS_TABLE) {
 			colorProperty = rayColors;
 		}
+		
 
-		//You gotta love 'auto'!
-		riv::Color lineColor;
-		while(iterator->GetNext(row)) {
-			float offset = axisWidth / 2.F;
+			//You gotta love 'auto'!
+			riv::Color lineColor;
+			while(iterator->GetNext(row)) {
+				float offset = axisWidth / 2.F;
 
-			if(colorProperty->ComputeColor(table, row, lineColor)) {
-				
-				if(membershipRecord && membershipRecord->Size()) {
-					float membershipValue = membershipRecord->Value(row);
-					float blueColorValue = (membershipValue + 1) / 2.F;
-					glColor4f(1-blueColorValue, lineColor.G, blueColorValue, lineOpacity);
-				}
-				else {
-					glColor4f(lineColor.R, lineColor.G, lineColor.B, lineOpacity);
-				}
-
-				//TODO: Optimize this; unnecessary lines are being drawn 'through' the axis
-				glBegin(GL_LINE_STRIP);
-//				int axisIndex = 0;
-				
-				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
-					for(auto axis : tAxes) {
-						
-						auto record = table->GetRecord<decltype(axis->minValue)>(axis->name);
-						auto value = record->Value(row);
-						
-						axis->GetHistogram(datasetId)->Add(value);
-						
-						float x = axis->x;
-						float y = axis->PositionOnScaleForValue(value);
-
-						glVertex2f(x - offset, y);
-						glVertex2f(x + offset, y);
-//						offset = -offset * axisIndex++;
+				if(colorProperty->ComputeColor(table, row, lineColor)) {
+					
+					if(membershipRecord && membershipRecord->Size()) {
+						float membershipValue = membershipRecord->Value(row);
+						float blueColorValue = (membershipValue + 1) / 2.F;
+						glColor4f(1-blueColorValue, lineColor.G, blueColorValue, lineOpacity);
 					}
-					++lineIndex;
-				});
-				glEnd();
+					else {
+						glColor4f(lineColor.R, lineColor.G, lineColor.B, lineOpacity);
+					}
+
+					//TODO: Optimize this; unnecessary lines are being drawn 'through' the axis
+					glBegin(GL_LINE_STRIP);
+	//				int axisIndex = 0;
+					
+
+					for(auto axis : axisGroup.axisInterfaces) {
+
+							float x = axis->x;
+							float y = axis->GetPoints(datasetId)[row];
+
+							glVertex2f(x - offset, y);
+							glVertex2f(x + offset, y);
+		//						offset = -offset * axisIndex++;
+								
+						}
+					
+
+	//					++lineIndex;
+					
+					glEnd();
+				}
 			}
-		}
+		
 		linesAreDirty = false;
 	}
 //	printf("Parallel coordinates view drew %zu polylines\n",lineIndex);
@@ -617,38 +664,44 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 			switch (interactionState) {
 				case DRAG_AXIS: {
 //					int distance = std::abs(x - mouseDownX);
-					int minDistance = 15;
-					int shortestDistance = 10000;
+					int minDistance = 25;
+
 					ParallelCoordsAxisInterface* swapAxis = NULL;
 					//				if(distance > 25) {
 					//Should the axis be swapped with another axis?
 					for(auto& axisGroup : axisGroups) {
 						bool axisGroupFound = false;
-						swapAxis = NULL;
-						tuple_for_each(axisGroup.axes, [&](auto tAxes) {
-							
-							for(auto& axis : tAxes) {
-								if(axis->name == selectedAxis->name) {
-									axisGroupFound = true;
-								}
-								else {
-									int distance = std::abs(axis->x - selectedAxis->x);
-									if(distance < shortestDistance) {
-										shortestDistance = distance;
-										swapAxis = axis;
-									}
+						int shortestDistance = 10000;
+						int axisIndex = 0;
+						int swapAxisIndex = 0;
+						for(size_t i = 0 ; i < axisGroup.axisInterfaces.size() ; ++i) {
+							ParallelCoordsAxisInterface* axis = axisGroup.axisInterfaces[i];
+							if(axis->name == selectedAxis->name) {
+								axisGroupFound = true;
+								axisIndex = i;
+							}
+							else {
+								int distance = std::abs(axis->x - selectedAxis->x);
+								if(distance < shortestDistance) {
+									shortestDistance = distance;
+									swapAxis = axis;
+									swapAxisIndex = i;
 								}
 							}
-						
-						});
-						
-						if(axisGroupFound && swapAxis != NULL && shortestDistance < minDistance) {
-							auto selectedX = selectedAxis->x;
-
-							selectedAxis->x = swapAxis->x;
-							swapAxis->x = selectedX;
-							
-							printf("SWAP SELECTED AXIS %s WITH AXIS %s\n",selectedAxis->name.c_str(), swapAxis->name.c_str());
+							if(axisGroupFound && swapAxis != NULL && shortestDistance < minDistance) {
+								auto selectedX = selectedAxis->x;
+								selectedAxis->x = axisOriginX;
+								axisGroup.SwapAxes(axisIndex,swapAxisIndex);
+								
+								axesAreDirty = true;
+								linesAreDirty = true;
+								
+								glutPostRedisplay();
+								
+								printf("SWAP SELECTED AXIS %s WITH AXIS %s\n",selectedAxis->name.c_str(), swapAxis->name.c_str());
+								
+								return true;
+							}
 						}
 					}
 					//				}
@@ -696,15 +749,14 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 }
 
 int dragStartSensitivity = 5;
-int updateSensitivity = 3;
+int updateSensitivity = 7;
 bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
 	y = height - y;
 	
 	int yDistanceTravelled = std::abs(y - mouseDownY);
 	int xDistanceTravelled = std::abs(x - mouseDownX);
 	
-	printf("Distance travelleld = (%d,%d)\n",xDistanceTravelled, yDistanceTravelled);
-	
+	printf("Distance travelled = (%d,%d)\n",xDistanceTravelled, yDistanceTravelled);
 
 	switch (interactionState) {
 		case IDLE:
@@ -737,6 +789,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
 				axesAreDirty = true;
 				linesAreDirty = true;
 				
+				axisOriginX = x;
 				axisUpdateX = x;
 
 				return true;
@@ -750,7 +803,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
 			}
 			return true;
 	  case CREATE_SELECTION_BOX:
-			printf("CREATE SELECTION....\n");
+			printf("CREATE SELECTION...\n");
 			//TODO: Not very efficient to find the axis everytime, but pointer sucks due to templates
 			for(auto& axisGroup : axisGroups) {
 				tuple_for_each(axisGroup.axes, [&](auto tAxes) {
@@ -855,7 +908,6 @@ void ParallelCoordsView::filterData() {
 						(*datasetTwo)->StopFiltering();
 					}
 				}
-				
 			}
 		});
 	}
@@ -877,10 +929,9 @@ void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 	
 	//Recreate the color property
 	if(source == (*datasetOne)) {
-		
+		printf("Dataset One was changed.\n\n");
 		auto rgbPath = dynamic_cast<RIVColorRGBProperty<float>*>(pathColorOne);
 		auto rgbRay = dynamic_cast<RIVColorRGBProperty<float>*>(rayColorOne);
-		
 		if(rgbPath) {
 			auto pathTable = source->GetTable(PATHS_TABLE);
 			auto isectTable = source->GetTable(INTERSECTIONS_TABLE);
@@ -893,6 +944,7 @@ void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 		}
 	}
 	else if(source == (*datasetTwo)) {
+		printf("Dataset Two was changed.\n\n");
 		auto rgbPath = dynamic_cast<RIVColorRGBProperty<float>*>(pathColorTwo);
 		auto rgbRay = dynamic_cast<RIVColorRGBProperty<float>*>(rayColorTwo);
 		if(rgbPath) {
@@ -911,6 +963,11 @@ void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 	}
 	createAxes();
 	
+	//Change the ordering to have the bounce_nr to be the first of the second axis group
+//	axisGroups[1].Reorder(6,0);
+	
+	createAxisPoints();
+	createAxisDensities();
 	redisplayWindow();
 }
 
@@ -922,9 +979,15 @@ void ParallelCoordsView::redisplayWindow() {
 	glutSetWindow(currentWindow);
 }
 
-void ParallelCoordsView::OnFiltersChanged() {
+void ParallelCoordsView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
     printf("ParallelCoordsView received a on filters changed callback.\n");
 	
+	if(dataset == *datasetOne) {
+		createAxisDensities(0, dataset);
+	}
+	else if(dataset == *datasetTwo) {
+		createAxisDensities(1, dataset);
+	}
     linesAreDirty = true;
     axesAreDirty = true;
 	

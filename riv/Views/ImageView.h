@@ -63,7 +63,7 @@ public:
 	//Change the currently active renderer if necessary, return true if a change was necessary
 //	bool SetActiveRenderer(size_t i);
 	
-	void OnFiltersChanged();
+	void OnFiltersChanged(RIVDataSet<float,ushort>* dataset);
 	void OnDataChanged(RIVDataSet<float,ushort>* dataset);
 	
 	static int windowHandle;

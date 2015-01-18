@@ -17,7 +17,7 @@ class RIVDataSet;
 class RIVDataSetListener {
 public:
 	//Did some filter get added, removed or altered?
-    virtual void OnFiltersChanged() = 0;
+    virtual void OnFiltersChanged(RIVDataSet<float,ushort>* source) = 0;
 	//Did new data get added or old data removed?
 	virtual void OnDataChanged(RIVDataSet<float,ushort>* source) = 0;
 };

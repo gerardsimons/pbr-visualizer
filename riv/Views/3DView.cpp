@@ -696,7 +696,7 @@ void RIV3DView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 	//Nothing
 }
 
-void RIV3DView::OnFiltersChanged() {
+void RIV3DView::OnFiltersChanged(RIVDataSet<float,ushort>* source) {
     printf("3D View received on filter change.");
 	
 	ResetGraphics();

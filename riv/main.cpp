@@ -487,7 +487,7 @@ void createViews() {
 		
 		//Im so lazy ....
 //		auto pathColorTwo = createPathColorProperty(*datasetTwo);
-		auto rayColorTwo = createRayColorProperty(*datasetTwo);
+//		auto rayColorTwo = createRayColorProperty(*datasetTwo);
 		
 		//Fixed colors for testing
 		RIVColorProperty* colorOne = new RIVFixedColorProperty(1, 0, 0);

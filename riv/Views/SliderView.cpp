@@ -552,7 +552,7 @@ void RIVSliderView::redisplayWindow() {
 	glutSetWindow(currentWindow);
 }
 //Dataset listener functions
-void RIVSliderView::OnFiltersChanged() {
+void RIVSliderView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
 	//Do nothing...?
 }
 void RIVSliderView::OnDataChanged(RIVDataSet<float,ushort>* source) {

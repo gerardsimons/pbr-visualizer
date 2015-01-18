@@ -88,7 +88,7 @@ public:
 	void AddSelectedRecord(const std::string& tableName,const std::string& recordName);
 	void RemoveSelectedRecord(const std::string &recordName);
 	
-	void OnFiltersChanged();
+	void OnFiltersChanged(RIVDataSet<float,ushort>* dataset);
 	void OnDataChanged(RIVDataSet<float,ushort>* source);
 	
 	void Reshape(int newWidth, int newHeight);

@@ -60,6 +60,7 @@ private:
 	
 	int axisUpdateY;
 	int axisUpdateX;
+	int axisOriginX;
 	
 	float lineOpacity = 0.1F;
 	float lineOpacityIncrement = 0.01F;
@@ -75,7 +76,10 @@ private:
     void clearSelection();
 	//Create functions
 	void createAxes();
+	void createAxisPoints();
+	void createAxisPoints(int datasetId, RIVDataSet<float,ushort>* dataset);
 	void createAxisDensities();
+	void createAxisDensities(int datasetId, RIVDataSet<float,ushort>* dataset);
 	//Draw helper functions
 	void drawAxes();
 	//Draw scale indicators and selection glyphs
@@ -110,7 +114,7 @@ public:
 	
     //implement virtual functions prescribed by DataSetListener
     virtual void OnDataChanged(RIVDataSet<float,ushort>* source);
-	virtual void OnFiltersChanged();
+	virtual void OnFiltersChanged(RIVDataSet<float,ushort>* dataset);
 	
 	bool DecreaseLineOpacity();
 	bool IncreaseLineOpacity();

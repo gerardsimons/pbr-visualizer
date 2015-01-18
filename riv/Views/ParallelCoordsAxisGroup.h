@@ -12,14 +12,15 @@
 #include "ParallelCoordsAxis.h"
 #include "../Data/Table.h"
 
+
 #include <tuple>
+#include <map>
 #include <vector>
 
 template<typename... Ts>
 class ParallelCoordsAxisGroup {
 private:
 public:
-	
 	bool isSelected = false;
 	
 	~ParallelCoordsAxisGroup() {
@@ -28,7 +29,9 @@ public:
 		});
 	}
 	
-	std::vector<ParallelCoordsAxisInterface*> axisOrder;
+	std::vector<ParallelCoordsAxisInterface*> axisInterfaces;
+	std::vector<std::pair<size_t,size_t>> axisOrder;
+	
 	std::string tableName;
 	std::tuple<std::vector<ParallelCoordsAxis<Ts>*>...> axes;
 	
@@ -37,13 +40,51 @@ public:
 	}
 	
 	void SwapAxes(size_t swapIndexOne, size_t swapIndexTwo) {
-		auto oldAxis = axes[swapIndexOne];
+		auto axisOne = axisInterfaces[swapIndexOne];
+		auto axisTwo = axisInterfaces[swapIndexTwo];
 		
-		axes[swapIndexOne] = axes[swapIndexTwo];
-		axes[swapIndexTwo] = oldAxis;
+		auto xTemp = axisOne->x;
+		
+		axisOne->x = axisTwo->x;
+		axisTwo->x = xTemp;
+		
+		axisInterfaces[swapIndexOne] = axisTwo;
+		axisInterfaces[swapIndexTwo] = axisOne;
+	}
 	
-		axes[swapIndexTwo]->x = axes[swapIndexOne]->x;
-		axes[swapIndexOne]->x = oldAxis->x;
+	void Reorder(int oldPosition, int newPosition) {
+		//How much should the other axes scoot over?
+		if(oldPosition < axisInterfaces.size() - 1 && newPosition < axisInterfaces.size() - 1 && newPosition != oldPosition) {
+			
+			axisInterfaces[oldPosition]->x = axisInterfaces[newPosition]->x;
+			if(newPosition > oldPosition) {
+				for(int i = newPosition + 1 ; i > newPosition ; --i) {
+					axisInterfaces[i]->x = axisInterfaces[i-1]->x;
+				}
+			}
+			else {
+				for(int i = newPosition ; i < oldPosition ; ++i) {
+					printf("Shift axis %s from %d to ",axisInterfaces[i]->name.c_str(),axisInterfaces[i]->x);
+					axisInterfaces[i]->x = axisInterfaces[i+1]->x;
+					printf("%d.\n",axisInterfaces[i+1]->x);
+				}
+			}
+			auto copy = axisInterfaces[oldPosition];
+			axisInterfaces.erase(axisInterfaces.begin() + oldPosition);
+			axisInterfaces.insert(axisInterfaces.begin() + newPosition,copy);
+			
+			//It has a right neighbor, shift all those right neighbors to the right
+//			if(newPosition < axisInterfaces.size() - 1) {
+//				for(int i = 0 ; i < axisInterfaces.size() ; ++i) {
+//					
+//				}
+//			}
+//			else {
+//				
+//			}
+			
+			
+		}
 	}
 	
 	template<typename U>
@@ -62,7 +103,7 @@ public:
 		std::vector<ParallelCoordsAxis<U>*>* tAxes = GetAxes<U>();
 		auto axis = new ParallelCoordsAxis<U>(x,y,axisWidth,axisHeight,min,max,name,record,divisionCount,histogramOne);
 		tAxes->push_back(axis);
-		axisOrder.push_back(axis);
+		axisInterfaces.push_back(axis);
 		return tAxes->at(tAxes->size() - 1);
 	}
 	
@@ -71,19 +112,10 @@ public:
 		std::vector<ParallelCoordsAxis<U>*>* tAxes = GetAxes<U>();
 		auto axis = new ParallelCoordsAxis<U>(x,y,axisWidth,axisHeight,min,max,name,record,divisionCount,histogramOne, histogramTwo);
 		tAxes->push_back(axis);
-		axisOrder.push_back(axis);
+		axisInterfaces.push_back(axis);
 		return tAxes->at(tAxes->size() - 1);
 	}
-	
-//	ParallelCoordsAxis<ushort>* CreateAxis(RIVRecord<ushort>* record, int x, int y, int axisWidth, int axisHeight, ushort min, ushort max, const std::string& name, int divisionCount, int bins) {
-//		std::vector<ParallelCoordsAxis<ushort>*>* tAxes = GetAxes<ushort>();
-//		tAxes->push_back(new ParallelCoordsAxis<ushort>(x,y,axisWidth,axisHeight,min,max,name,record,divisionCount,));
-//		return tAxes->at(tAxes->size() - 1);
-//	}
-	
-//    ParallelCoordsAxisGroup* connectedGroup = 0;
-//    ParallelCoordsAxis* connectorAxis;
-	
+
 };
 
 #endif /* defined(__Afstuderen__ParallelCoordsAxisGroup__) */

@@ -114,7 +114,7 @@ void RIVImageView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 	glutSetWindow(currentWindow);
 }
 
-void RIVImageView::OnFiltersChanged() {
+void RIVImageView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
 	//Nothing to do for imageview
 }
 

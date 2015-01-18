@@ -512,6 +512,15 @@ public:
 			}
 		});
 	}
+	TableIterator* GetFullIterator() {
+		if(iterator) {
+			delete iterator;
+		}
+		else {
+			iterator = new TableIterator(NumberOfRows(), reference);
+		}
+		return iterator;
+	}
 	TableIterator* GetIterator() {
 		if(iterator) {
 			delete iterator;

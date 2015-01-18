@@ -324,7 +324,7 @@ public:
 		//TODO: Create histogram when set to dynamic and histogram was not found
 		histogram->Add(value);
 	}
-	
+
 	template<typename T>
 	void AddHistogram(const Histogram<T>& hist) {
 		std::vector<Histogram<T>>* histograms = GetHistograms<T>();
