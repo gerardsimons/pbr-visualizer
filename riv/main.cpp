@@ -80,8 +80,8 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 10000;
-const int bootstrapRepeat = 1;
+const int maxPaths = 5000;
+const int bootstrapRepeat = 100;
 const int sliderViewHeight = 50;
 
 void display(void)

@@ -395,8 +395,8 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 	RIVFloatRecord* isectMembershipRecord = NULL;
 	
 	if(pathMembershipTable && isectMembershipTable) {
-		pathMembershipRecord = pathMembershipTable->GetRecord<float>(MEMBERSHIP);
-		isectMembershipRecord = isectMembershipTable->GetRecord<float>(MEMBERSHIP);
+//		pathMembershipRecord = pathMembershipTable->GetRecord<float>(MEMBERSHIP);
+//		isectMembershipRecord = isectMembershipTable->GetRecord<float>(MEMBERSHIP);
 	}
 	
 
@@ -425,8 +425,6 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 		if(table->GetName() == INTERSECTIONS_TABLE) {
 			colorProperty = rayColors;
 		}
-		
-
 			//You gotta love 'auto'!
 			riv::Color lineColor;
 			while(iterator->GetNext(row)) {
@@ -640,6 +638,15 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 								printf("NEW STATE IS MOUSE_DOWN_AXIS_EXTRA\n");
 								
 								selectedAxis = axis;
+								
+								if(axis->isSelected) {
+									axis->isSelected = false;
+									sliderView->RemoveSelectedRecord(axis->name);
+								}
+								else {
+									axis->isSelected = true;
+									sliderView->AddSelectedRecord(axisGroup.tableName, axis->name);
+								}
 								
 								axesAreDirty = true;
 								linesAreDirty = true;
