@@ -151,28 +151,16 @@ public:
 	void SetReferenceRecord(RIVRecord<T>* newReferenceRecord) {
 		referenceRecord = newReferenceRecord;
 	}
-//	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,float fixedValue) {
-//		propertyReference = propertyReference_;
-//		defaultEvaluator = new FixedEvaluator<T, float>(fixedValue);
-//	}
-//	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,std::vector<size_t>& interpolationValues) {
-//		propertyReference = propertyReference_;
-//		init(interpolationValues);
-//	}
-//	RIVEvaluatedProperty(RIVTableInterface *propertyReference_) {
-//		propertyReference = propertyReference_;
-//		T lower = 0;
-//		T upper = propertyReference_->NumberOfRows();
-//		std::vector<T> interpolationValues;
-//		interpolationValues.push_back(lower);
-//		interpolationValues.push_back(upper);
-//		init(propertyReference_, interpolationValues);
-//	}
-//	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,std::vector<size_t>& interpolationValues, const INTERPOLATION_SCHEME& scheme) {
-//		interpolationMode = scheme;
-//		propertyReference = propertyReference_;
-//		init(propertyReference_, scheme, interpolationValues);
-//	}
+	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,RIVRecord<T>* referenceRecord, T min, T max) : propertyReference(propertyReference_), referenceRecord(referenceRecord) {
+		recordName = referenceRecord->name;
+		tableName = propertyReference->name;
+		
+		interpolationMode = defaultInterpolationMode;
+		propertyReference = propertyReference_;
+		
+		std::vector<T> interpolationValues = {min,max};
+		init(interpolationValues);
+	}
 	RIVEvaluatedProperty(RIVTableInterface *propertyReference_,RIVRecord<T>* referenceRecord) : propertyReference(propertyReference_), referenceRecord(referenceRecord) {
 		recordName = referenceRecord->name;
 		tableName = propertyReference->name;
@@ -184,8 +172,6 @@ public:
 		interpolationValues.push_back(referenceRecord->Min());
 		interpolationValues.push_back(referenceRecord->Max());
 		init(interpolationValues);
-		
-		
 	}
 };
 

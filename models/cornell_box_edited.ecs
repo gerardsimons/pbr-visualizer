@@ -1,4 +1,4 @@
--i cornell_box.obj
+-i cornell_box_edited.obj
 -quadlight 213 548.77 227 130 0 0 0 0 105 50 50 50
 #-pointlight 213 300 227 150000 150000 150000
 #-spotlight 213 300 227 -1 -1 1 300000 300000 300000 90 90

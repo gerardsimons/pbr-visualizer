@@ -124,50 +124,52 @@ public:
 		}
 	}
 	void JoinTable(RIVTable* otherTable) {
-		tuple_for_each(records, [&](auto tRecords) {
-			for(auto& record : tRecords) {
-				
-				typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type templateType;
-				auto otherRecord = otherTable->template GetRecord<templateType>(record->name);
-				
-				record->AppendRecord(otherRecord);
-			}
-		});
-		
-		RIVReference* otherReference = otherTable->reference;
-		RIVSingleReference* otherSingleRef = dynamic_cast<RIVSingleReference*>(otherReference);
-		RIVMultiReference* otherMultiRef = dynamic_cast<RIVMultiReference*>(otherReference);
-		RIVSingleReference* singleRef = dynamic_cast<RIVSingleReference*>(reference);
-		RIVMultiReference* multiRef = dynamic_cast<RIVMultiReference*>(reference);
-		if(otherSingleRef) { //Single references
-			auto otherIndices = otherSingleRef->GetIndexMap();
-			auto indices = singleRef->GetIndexMap();
-			size_t lastIndex = indices.rbegin()->first + 1;
-			size_t lastToIndex = indices[lastIndex - 1] + 1;
-			for(auto it : otherIndices) {
-				
-				singleRef->AddReference(it.first + lastIndex, it.second + lastToIndex);
-			}
-			//Increment all by
-		}
-		else if(otherMultiRef) { //Multi reference
-			auto otherIndices = otherMultiRef->GetIndexMap();
-			auto indices = multiRef->GetIndexMap();
-			size_t lastIndex = indices.rbegin()->first + 1;
-			auto toRows = indices[lastIndex - 1];
-			size_t lastToIndex = 0;
-			//Find end of this reference
-			for(auto it : indices) {
-				lastToIndex += it.second.second;
-			}
-			
-			for(auto it : otherIndices) {
-				size_t* newToRows = new size_t[it.second.second];
-				for(ushort i = 0 ; i < it.second.second ; ++i) {
-					newToRows[i] = lastToIndex++;
+		if(otherTable != NULL) {
+			tuple_for_each(records, [&](auto tRecords) {
+				for(auto& record : tRecords) {
+					
+					typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type templateType;
+					auto otherRecord = otherTable->template GetRecord<templateType>(record->name);
+					
+					record->AppendRecord(otherRecord);
 				}
-				std::pair<size_t*,ushort> mapping(newToRows,it.second.second);
-				multiRef->AddReferences(it.first + lastIndex, mapping);
+			});
+			
+			RIVReference* otherReference = otherTable->reference;
+			RIVSingleReference* otherSingleRef = dynamic_cast<RIVSingleReference*>(otherReference);
+			RIVMultiReference* otherMultiRef = dynamic_cast<RIVMultiReference*>(otherReference);
+			RIVSingleReference* singleRef = dynamic_cast<RIVSingleReference*>(reference);
+			RIVMultiReference* multiRef = dynamic_cast<RIVMultiReference*>(reference);
+			if(otherSingleRef) { //Single references
+				auto otherIndices = otherSingleRef->GetIndexMap();
+				auto indices = singleRef->GetIndexMap();
+				size_t lastIndex = indices.rbegin()->first + 1;
+				size_t lastToIndex = indices[lastIndex - 1] + 1;
+				for(auto it : otherIndices) {
+					
+					singleRef->AddReference(it.first + lastIndex, it.second + lastToIndex);
+				}
+				//Increment all by
+			}
+			else if(otherMultiRef) { //Multi reference
+				auto otherIndices = otherMultiRef->GetIndexMap();
+				auto indices = multiRef->GetIndexMap();
+				size_t lastIndex = indices.rbegin()->first + 1;
+				auto toRows = indices[lastIndex - 1];
+				size_t lastToIndex = 0;
+				//Find end of this reference
+				for(auto it : indices) {
+					lastToIndex += it.second.second;
+				}
+				
+				for(auto it : otherIndices) {
+					size_t* newToRows = new size_t[it.second.second];
+					for(ushort i = 0 ; i < it.second.second ; ++i) {
+						newToRows[i] = lastToIndex++;
+					}
+					std::pair<size_t*,ushort> mapping(newToRows,it.second.second);
+					multiRef->AddReferences(it.first + lastIndex, mapping);
+				}
 			}
 		}
 	}
@@ -276,17 +278,17 @@ public:
 									for(auto& filter : singleTFilters) {
 										typedef typename get_template_type<typename std::decay<decltype(*filter)>::type>::type templateType;
 										auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
-	//									std::cout << "record " << recordForFilter->name << " : " << recordForFilter->Value(row) << std::endl;
-	//									std::cout << "filter ";
-	//									filter->Print();
-	//									std::cout << std::endl;
+										//									std::cout << "record " << recordForFilter->name << " : " << recordForFilter->Value(row) << std::endl;
+										//									std::cout << "filter ";
+										//									filter->Print();
+										//									std::cout << std::endl;
 										bool filterThis = !filter->PassesFilter(recordForFilter->name, recordForFilter->Value(row));
 										if(filterThis) {
 											//											printf("Does not pass the filter!\n");
 											groupPassed = false;
 											break;
 										}
-											else {
+										else {
 											++filtersPassed;
 										}
 									}
@@ -304,7 +306,7 @@ public:
 			// Process the manual row filters
 			if(!filterSourceRow) {
 				for(auto filter : rowFilters) {
-
+					
 					filterSourceRow = !filter->PassesFilter(row);
 					if(filterSourceRow) {
 						break;
@@ -333,15 +335,16 @@ public:
 			//FINISH UP
 			
 			if(filterSourceRow) {
-//				printf("row = %zu FILTERED\n",row);
+				//				printf("row = %zu FILTERED\n",row);
 				FilterRow(row);
 				newlyFilteredRows[row] = true;
 			}
 			else {
-//					printf("row = %zu SELECTED\n",row);
+				//					printf("row = %zu SELECTED\n",row);
 			}
 		}
-		//		Print();
+		printf("%zu rows filtered in table %s\n",newlyFilteredRows.size(),name.c_str());
+		//				Print();
 		reporter::stop(task);
 	}
 	void FilterReferences() {
@@ -364,23 +367,24 @@ public:
 			RIVMultiReference* multiRef = dynamic_cast<RIVMultiReference*>(backReference);
 			if(multiRef) {
 				for(auto iterator : multiRef->GetIndexMap()) {
-					if(newlyFilteredRows[iterator.first]) {
-						std::pair<size_t*,ushort> backRows = iterator.second;
-						size_t rowsFound = 0;
-						size_t rowsRequired = backRows.second;
-						//					printMap(filteredRows);
-						for(ushort i = 0 ; i < backRows.second ; ++i) { //Does the filtered map contain ALL of these rows? If so we should filter it in the reference table
-							//						printArray(backRows.first, backRows.second);
-							bool filteredBackRow = filteredRows[backRows.first[i]];
-							if(!filteredBackRow) {
-								break;
-							}
-							++rowsFound;
+					size_t referenceTableRow = iterator.first;
+					
+					std::pair<size_t*,ushort>& backRows = iterator.second;
+					size_t rowsFound = 0;
+					size_t rowsRequired = backRows.second;
+					//					printMap(filteredRows);
+					for(ushort i = 0 ; i < backRows.second ; ++i) { //Does the filtered map contain ALL of these rows? If so we should filter it in the reference table
+						//						printArray(backRows.first, backRows.second);
+						bool filteredBackRow = filteredRows[backRows.first[i]];
+						if(!filteredBackRow) {
+							break;
 						}
-						if(rowsFound == rowsRequired) {
-							//						printf("Filter reference row %zu at %s\n",iterator->first,reference->targetTable->name.c_str());
-							reference->targetTable->FilterRow(iterator.first);
-						}
+						++rowsFound;
+					}
+					if(rowsFound == rowsRequired) {
+						//							printf("Filter reference row %zu at %s\n",referenceTableRow,reference->targetTable->name.c_str());
+						reference->targetTable->FilterRow(referenceTableRow);
+						
 					}
 				}
 			}
@@ -476,7 +480,7 @@ public:
 			if(filtersPresent == 0) {
 				filtered = false;
 			}
-
+			
 			filteredRows.clear();
 			if(reference) {
 				reference->targetTable->ClearFilteredRows();
@@ -712,27 +716,27 @@ public:
 		
 		for(size_t j = 0 ; j < maxPrint ; j++) {
 			if(filteredRows[j]) {
-			std::string rowText = RowToString(j,columnWidth);
-			if(reference) {
-				std::pair<size_t*,ushort> referenceIndexRange = reference->GetReferenceRows(j);
-				//				printArray(referenceIndexRange.first,referenceIndexRange.second);
-				if(referenceIndexRange.first) {
-					rowText += "---> " + reference->targetTable->name + "{";
-					for(size_t i = 0 ; i < referenceIndexRange.second ; ++i) {
-						
-						rowText += std::to_string(referenceIndexRange.first[i]);
-						if(i < referenceIndexRange.second - 1) {
-							rowText +=  ",";
+				std::string rowText = RowToString(j,columnWidth);
+				if(reference) {
+					std::pair<size_t*,ushort> referenceIndexRange = reference->GetReferenceRows(j);
+					//				printArray(referenceIndexRange.first,referenceIndexRange.second);
+					if(referenceIndexRange.first) {
+						rowText += "---> " + reference->targetTable->name + "{";
+						for(size_t i = 0 ; i < referenceIndexRange.second ; ++i) {
+							
+							rowText += std::to_string(referenceIndexRange.first[i]);
+							if(i < referenceIndexRange.second - 1) {
+								rowText +=  ",";
+							}
 						}
+						rowText += "}";
 					}
-					rowText += "}";
 				}
-			}
-			if(filteredRows[j]) {
-				rowText += "** FILTERED **";
-			}
-			
-			printf("%s\n",rowText.c_str());
+				if(filteredRows[j]) {
+					rowText += "** FILTERED **";
+				}
+				
+				printf("%s\n",rowText.c_str());
 			}
 		}
 		printf("%s\n",headerOrnament.c_str());

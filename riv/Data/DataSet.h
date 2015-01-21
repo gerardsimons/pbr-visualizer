@@ -11,6 +11,7 @@
 
 #include <vector>
 #include <tuple>
+#include <set>
 
 #include "Histogram.h"
 #include "TupleIterator.h"
@@ -290,13 +291,33 @@ public:
 		}
 		return clone;
 	}
-	
+	RIVDataSet* CloneStructure(const std::set<std::string>& tablesToClone) {
+		RIVDataSet<Ts...>* clone = new RIVDataSet<Ts...>(name);
+		for(RIVTable<Ts...>* table : tables) {
+			if(tablesToClone.find(table->name) != tablesToClone.end()) {
+				clone->AddTable(table->CloneStructure());
+			}
+		}
+		return clone;
+	}
 	HistogramSet<Ts...> CreateHistogramSet(int bins) {
 		HistogramSet<Ts...> histograms;
 		for(auto table : tables) {
 			auto histogramset = table->CreateHistogramSet(bins);
 //			histogramset.Print();
 			histograms.Join(histogramset);
+		}
+		return histograms;
+	}
+	
+	HistogramSet<Ts...> CreateHistogramSet(int bins, const std::set<std::string>& tableNamesToUse) {
+		HistogramSet<Ts...> histograms;
+		for(auto table : tables) {
+			if(tableNamesToUse.find(table->name) != tableNamesToUse.end()) {
+				auto histogramset = table->CreateHistogramSet(bins);
+				//			histogramset.Print();
+				histograms.Join(histogramset);
+			}
 		}
 		return histograms;
 	}

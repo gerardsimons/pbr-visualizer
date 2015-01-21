@@ -153,8 +153,8 @@ void RIVSliderView::Draw() {
 		}
 		x = barWidth / 2.F;
 		
-		//		printf("RIGHT HISTOGRAM BARS DRAWING : \n\n");
-		//		membershipHistogramTwo.Print();
+//				printf("RIGHT HISTOGRAM BARS DRAWING : \n\n");
+//				membershipHistogramTwo.Print();
 		
 		for(int i = histogramBins / 2 ; i < histogramBins ; ++i) { //Draw them backwards as the most unique should be to the left
 			std::string nrMembers = std::to_string(rowBinMembershipsTwo[i].size());
@@ -162,8 +162,8 @@ void RIVSliderView::Draw() {
 			
 			float histValue = membershipHistogramTwo.NormalizedValue(i);
 			float barHeight = histValue * maxBarHeight;
-			//			printf("bar height (i = %d) = %f\n",i,barHeight);
-			//		printf("glRectf(%f,%f,%f,%f)\n",x,bottom,x+binWidth,bottom+barHeight);
+//						printf("bar height (i = %d) = %f\n",i,barHeight);
+//					printf("glRectf(%f,%f,%f,%f)\n",x,bottom,x+binWidth,bottom+barHeight);
 			glColor3f(0, 0, 1);
 			glRectf(x, bottom, x+binWidth, bottom + barHeight);
 			
@@ -208,25 +208,6 @@ void RIVSliderView::createMembershipData() {
 	createMembershipData(*datasetTwo,false);
 }
 void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource, bool isLeftSet) {
-	
-	
-	//	printf("Creating membership data\n\n");
-	
-	//	selectedRecords.clear();
-	//	selectedRecords.insert(INTERSECTION_R);
-	//	selectedRecords.insert(INTERSECTION_G);
-	//	selectedRecords.insert(INTERSECTION_B);
-	
-	//	selectedRecords.insert(POS_X);
-	//	selectedRecords.insert(POS_Y);
-	//	selectedRecords.insert(POS_Z);
-	
-	//	selectedRecords.insert(PATH_R);
-	//	selectedRecords.insert(PATH_G);
-	//	selectedRecords.insert(PATH_B);
-	
-
-	
 	if(isLeftSet) {
 		membershipHistogramOne.Clear();
 		rowBinMembershipsOne.clear();
@@ -240,8 +221,8 @@ void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource
 		RIVTable<float,ushort>* table = datasetSource->GetTable(selectedTable);
 		RIVTable<float,ushort>* membershipTable = datasetSource->GetTable(selectedMembershipTable);
 		
-		membershipTable->ClearData();
 		RIVRecord<float>* membershipRecord = membershipTable->GetRecord<float>(MEMBERSHIP);
+		membershipRecord->Clear();
 		//		auto tables = datasetSource->GetTables();
 		
 		size_t row = 0;
@@ -266,13 +247,23 @@ void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource
 						//Dataset one
 						float binValueOne = histogramOne->NormalizedValue(bin);
 						float binValueTwo = histogramTwo->NormalizedValue(bin);
+						
+						float diff;
+						
+						if(binValueTwo > binValueOne) {
+							diff = (binValueTwo - binValueOne) / binValueTwo;
+						}
+						else {
+							diff = -1 * (binValueOne - binValueTwo) / binValueOne;
+						}
 						//						float binValueTwo = histogramTwo->NormalizedValue(bin);
 						//						float binValueDelta;
 						
-						float diff = binValueTwo - binValueOne;
+//						float diff = binValueTwo - binValueOne;
 						//					if(diff > maxDifference) {
 						//						maxDifference = diff;
 						//					}
+//						printf("diff = %f\n",diff);
 						totalDiff += diff;
 					}
 				}
@@ -280,7 +271,7 @@ void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource
 			});
 			//Normalize it
 			totalDiff /= selectedRecords.size();
-			//			printf("totalDiff = %f\n",totalDiff);
+//			printf("totalDiff = %f\n",totalDiff);
 			membershipRecord->AddValue(totalDiff);
 			
 			if(isLeftSet) {
@@ -294,15 +285,15 @@ void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource
 		}
 		
 		//Normalize
-		float maxValue = membershipRecord->Max();
-		for(size_t row = 0 ; row < membershipRecord->Size() ; ++row) {
-			float oldValue = membershipRecord->Value(row);
-			membershipRecord->SetValue(row, oldValue / maxValue);
-		}
+//		float maxValue = membershipRecord->Max();
+//		for(size_t row = 0 ; row < membershipRecord->Size() ; ++row) {
+//			float oldValue = membershipRecord->Value(row);
+//			membershipRecord->SetValue(row, oldValue / maxValue);
+//		}
+		
+		membershipHistogramOne.Print();
+		membershipHistogramTwo.Print();
 	}
-	
-	membershipHistogramOne.Print();
-	membershipHistogramTwo.Print();
 }
 void RIVSliderView::AddSelectedRecord(const std::string& tableName, const std::string &recordName) {
 	if(tableName != selectedTable) {
@@ -349,6 +340,10 @@ void RIVSliderView::RemoveSelectedRecord(const std::string &recordName) {
 		
 		//Post for redisplay
 		redisplayWindow();
+		
+		if(selectedRecords.size() == 0) {
+			filterDataSets();
+		}
 	}
 	else {
 		printf("No such record selected.");

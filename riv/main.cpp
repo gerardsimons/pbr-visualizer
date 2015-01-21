@@ -493,6 +493,10 @@ void createViews() {
 		RIVColorProperty* colorOne = new RIVFixedColorProperty(1, 0, 0);
 		RIVColorProperty* colorTwo = new RIVFixedColorProperty(0, 0, 1);
 		
+		auto isectTable = (*datasetTwo)->GetTable(INTERSECTIONS_TABLE);
+		
+		RIVEvaluatedColorProperty<float>* xLinear = new RIVEvaluatedColorProperty<float>(redBlue, isectTable, isectTable->GetRecord<float>(POS_X));
+		
 //		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
 		
 		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,rayColorOne,sizeProperty);

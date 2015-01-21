@@ -10,6 +10,7 @@
 #define __embree__DataController__
 
 #include <mutex>
+#include <set>
 
 #include "Data/DataSet.h"
 #include "Data/SampleSet.h"
@@ -73,6 +74,8 @@ private:
 	
 	RIVMultiReference* pathsToIsectRef = NULL;
 	RIVSingleReference* isectsToPathsRef = NULL;
+	
+	const std::set<std::string> tablesToBootstrap = {PATHS_TABLE,INTERSECTIONS_TABLE};
 	
 	const int bootstrapBeforePause = 3;
 	const int bins = 10;
@@ -150,6 +153,7 @@ public:
 		return false;
 		
 	}
+	void AddMembershipDataStructures(RIVDataSet<float,ushort>* dataset);
 	void SetAcceptProbability(float newProb);
 	//The number of renderers to expect data from and the maximum number of paths per renderer before data reduction should kick in
 	DataController(const ushort renderers, const size_t maxPaths, const size_t bootstrapRepeat);

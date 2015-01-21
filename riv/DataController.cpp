@@ -9,6 +9,7 @@
 #include "Configuration.h"
 #include "DataController.h"
 
+#include <set>
 #include <algorithm>
 
 DataController::DataController(const ushort renderers, const size_t maxPaths, const size_t bootstrapRepeat) : maxPaths(maxPaths), bootstrapRepeat(bootstrapRepeat) {
@@ -24,7 +25,7 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 //	const std::string taskName = "Creating bootstrap";
 //	reporter::startTask("Creating bootstrap", N);
 	
-	RIVDataSet<float,ushort>* bootstrap = dataset->CloneStructure();
+	RIVDataSet<float,ushort>* bootstrap = dataset->CloneStructure(tablesToBootstrap);
 	RIVTable<float,ushort>* bootstrapPaths = bootstrap->GetTable(PATHS_TABLE);
 	RIVTable<float,ushort>* bootstrapIsects = bootstrap->GetTable(INTERSECTIONS_TABLE);
 	
@@ -134,7 +135,9 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
 	pathTable->SetReference(pathsToIsectRef);
 	RIVSingleReference* isectToPathsRef = new RIVSingleReference(isectsTable,pathTable);
 	isectsTable->SetReference(isectToPathsRef);
-	
+}
+
+void DataController::AddMembershipDataStructures(RIVDataSet<float,ushort>* dataset) {
 	auto pathMembershipOneTable = dataset->CreateTable(PATH_MEMBERSHIP_TABLE);
 	auto isectMembershipOneTable = dataset->CreateTable(ISECT_MEMBERSHIP_TABLE);
 	
@@ -160,8 +163,9 @@ void DataController::createDataStructures() {
 //	initDataSet(rendererDataTwo);
 //	initDataSet(candidateDataTwo);
 	
-	trueDistributions = rendererData->CreateHistogramSet(bins);
-//	trueDistributionsTwo = rendererDataTwo->CreateHistogramSet(bins);
+
+	
+	trueDistributions = rendererData->CreateHistogramSet(bins,tablesToBootstrap);
 	
 	resetPointers(rendererData);
 }
@@ -444,6 +448,9 @@ void DataController::Reduce() {
 		else {
 			printf("\n Could not find a better bootstrap... \n");
 		}
+		
+		AddMembershipDataStructures(rendererData);
+		
 		reporter::stop("bootstrapping");
 		Pause();
 	}

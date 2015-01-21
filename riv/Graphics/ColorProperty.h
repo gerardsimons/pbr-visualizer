@@ -90,7 +90,12 @@ public:
         }
         return false;
     }
-	
+	RIVEvaluatedColorProperty<T>(const riv::ColorMap& colorMap, RIVTableInterface* tableReference, RIVRecord<T>* recordReference) : RIVEvaluatedProperty<T>(tableReference,recordReference), colorMap(colorMap){
+		
+	}
+	RIVEvaluatedColorProperty<T>(const riv::ColorMap& colorMap, RIVTableInterface* tableReference, RIVRecord<T>* recordReference, T min, T max) : RIVEvaluatedProperty<T>(tableReference,recordReference,min,max), colorMap(colorMap){
+		
+	}
 	void Reset(RIVDataSet<float,ushort>* newDataSource) {
 		RIVEvaluatedProperty<T>::Reset(newDataSource);
 	}

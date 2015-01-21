@@ -14,7 +14,7 @@ const char* DATASET_TWO = "renderer_two";
 const char* INTERSECTIONS_TABLE = "intersections";
 const char* PATHS_TABLE = "paths";
 const char* PATH_MEMBERSHIP_TABLE = "path_membership";
-const char* ISECT_MEMBERSHIP_TABLE = "path_membership";
+const char* ISECT_MEMBERSHIP_TABLE = "isect_membership";
 
 //* MEMBERSHIP RECORD NAME *//
 const char* MEMBERSHIP = "membership";
@@ -38,6 +38,9 @@ const char* BOUNCE_NR = "bounce_nr";
 const char* POS_X = "x";
 const char* POS_Y = "y";
 const char* POS_Z = "z";
+const char* DIR_X = "x_dir";
+const char* DIR_Y = "y_dir";
+const char* DIR_Z = "z_dir";
 const char* INTERSECTION_R = "R";
 const char* INTERSECTION_G = "G";
 const char* INTERSECTION_B = "B";

@@ -388,17 +388,39 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
+	bool pathMembershipDataPresent = false;
+	bool isectMembershipDataPresent = false;
+	
 	RIVTable<float,ushort>* pathMembershipTable = dataset->GetTable(PATH_MEMBERSHIP_TABLE);
 	RIVTable<float,ushort>* isectMembershipTable = dataset->GetTable(ISECT_MEMBERSHIP_TABLE);
 	
 	RIVFloatRecord* pathMembershipRecord = NULL;
 	RIVFloatRecord* isectMembershipRecord = NULL;
 	
+	riv::ColorMap colorMap;
 	if(pathMembershipTable && isectMembershipTable) {
-//		pathMembershipRecord = pathMembershipTable->GetRecord<float>(MEMBERSHIP);
-//		isectMembershipRecord = isectMembershipTable->GetRecord<float>(MEMBERSHIP);
+	
+		pathMembershipRecord = pathMembershipTable->GetRecord<float>(MEMBERSHIP);
+		isectMembershipRecord = isectMembershipTable->GetRecord<float>(MEMBERSHIP);
+		
+		colorMap.AddColor(colors::RED);
+		colorMap.AddColor(colors::BLUE);
+		
+		pathMembershipDataPresent = pathMembershipRecord->Size();
+		isectMembershipDataPresent = isectMembershipRecord->Size();
+		
 	}
 	
+//	if(pathMembershipRecord->Size()) {
+//		
+//		
+//	
+//		pathMembershipRecord = pathMembershipTable->GetRecord<float>(MEMBERSHIP);
+//		isectMembershipRecord = isectMembershipTable->GetRecord<float>(MEMBERSHIP);
+//		
+//		membershipDataPresent = true;
+//	}
+//	
 
 	glLineWidth(1);
 	for(auto &axisGroup : axisGroups) {
@@ -408,23 +430,29 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 		TableIterator* iterator = table->GetIterator();
 		
 		if(table->NumberOfRows() != axisGroup.axisInterfaces[0]->GetPoints(datasetId).size()) {
-			printf("Points not present...\n\n");
+			printf("Points not yet present...\n");
 			return;
-		}
-		
-		RIVFloatRecord* membershipRecord = NULL;
-		if(table->name == PATHS_TABLE) {
-//			membershipRecord = pathMembershipRecord;
-		}
-		else if(table->name == INTERSECTIONS_TABLE) {
-			membershipRecord = isectMembershipRecord;
 		}
 		
 		//Find what color property to use for this table
 		RIVColorProperty* colorProperty = pathColors;
-		if(table->GetName() == INTERSECTIONS_TABLE) {
-			colorProperty = rayColors;
+		if(table->name == PATHS_TABLE) {
+			if(pathMembershipDataPresent) {
+				colorProperty = new RIVEvaluatedColorProperty<float>(colorMap,table,pathMembershipRecord,-1,1);
+			}
+			else colorProperty = pathColors;
+//			membershipRecord = pathMembershipRecord;
 		}
+		else if(table->name == INTERSECTIONS_TABLE) {
+			if(isectMembershipDataPresent) {
+				colorProperty = new RIVEvaluatedColorProperty<float>(colorMap,table,isectMembershipRecord,-1,1);
+			}
+			else colorProperty = rayColors;
+			
+			
+		}
+		
+
 			//You gotta love 'auto'!
 			riv::Color lineColor;
 			while(iterator->GetNext(row)) {
@@ -432,14 +460,14 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 
 				if(colorProperty->ComputeColor(table, row, lineColor)) {
 					
-					if(membershipRecord && membershipRecord->Size()) {
-						float membershipValue = membershipRecord->Value(row);
-						float blueColorValue = (membershipValue + 1) / 2.F;
-						glColor4f(1-blueColorValue, lineColor.G, blueColorValue, lineOpacity);
-					}
-					else {
+//					if(membershipRecord && membershipRecord->Size()) {
+//						float membershipValue = membershipRecord->Value(row);
+//						float blueColorValue = (membershipValue + 1) / 2.F;
+//						glColor4f(1-blueColorValue, lineColor.G, blueColorValue, lineOpacity);
+//					}
+//					else {
 						glColor4f(lineColor.R, lineColor.G, lineColor.B, lineOpacity);
-					}
+//					}
 
 					//TODO: Optimize this; unnecessary lines are being drawn 'through' the axis
 					glBegin(GL_LINE_STRIP);
@@ -696,7 +724,6 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 								}
 							}
 							if(axisGroupFound && swapAxis != NULL && shortestDistance < minDistance) {
-								auto selectedX = selectedAxis->x;
 								selectedAxis->x = axisOriginX;
 								axisGroup.SwapAxes(axisIndex,swapAxisIndex);
 								
@@ -874,7 +901,7 @@ void ParallelCoordsView::filterData() {
 	for(auto& axisGroup : axisGroups) {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto& axis : tAxes) {
-				if(axis->name == selectedAxis->name) {
+				if(selectedAxis && axis->name == selectedAxis->name) {
 					int sizeBox = abs(axis->selection.start.y - axis->selection.end.y);
 					(*datasetOne)->StartFiltering();
 					if(datasetTwo) {
@@ -922,7 +949,7 @@ void ParallelCoordsView::filterData() {
 
 
 //void ParallelCoordsView::swapAxes(ParallelCoordsAxisGroup<float,ushort>* axisGroup, const std::string& swapAxisOne, const std::string& swapAxisTwo) {
-//	
+//
 //	
 //	
 //}
