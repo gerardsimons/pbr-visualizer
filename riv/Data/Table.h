@@ -221,7 +221,9 @@ public:
 		});
 		return empty;
 	}
-	
+	std::tuple<std::vector<RIVRecord<Ts>*>...>& GetRecords() {
+		return records;
+	}
 	//Filter this table according to the filters that are applied
 	void Filter() {
 		//		filteredRows.clear();

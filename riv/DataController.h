@@ -64,6 +64,9 @@ private:
 	RIVFloatRecord* xs = NULL;
 	RIVFloatRecord* ys = NULL;
 	RIVFloatRecord* zs = NULL;
+	RIVFloatRecord* dirX = NULL;
+	RIVFloatRecord* dirY = NULL;
+	RIVFloatRecord* dirZ = NULL;
 	RIVFloatRecord* isectColorRs = NULL;
 	RIVFloatRecord* isectColorGs = NULL;
 	RIVFloatRecord* isectColorBs = NULL;
@@ -98,7 +101,7 @@ private:
 	
 	const size_t maxPaths;
 	size_t updateThrottle = 0;
-	const size_t bootstrapRepeat = 100;
+	const size_t bootstrapRepeat;
 	
 	//Generate the datasets; create tables records and the histogramset
 	void createDataStructures();
@@ -162,7 +165,5 @@ public:
 	bool ProcessNewPath(int frame, PathData* newPath);
 	//Reduce the data, first dataset is the current data being used for a renderer, candidate data is the new dataset, bestBootstrap is the slot used for creating and maintaining the best bootstrap and the best bootstrap results so far...
 	void Reduce();
-	void RendererOneFinishedFrame(size_t numPaths,size_t numRays);
-	void RendererTwoFinishedFrame(size_t numPaths,size_t numRays);
 };
 #endif /* defined(__embree__DataController__) */

@@ -167,7 +167,7 @@ namespace embree
 				LightPath scatteredPath = lightPath.extended(newRay,nextMedium, c, (type & directLightingBRDFTypes) != NONE);
 				
 				if(dataConnector)
-					dataConnector->AddIntersectionData(dg.P.x,dg.P.y,dg.P.z,L.r,L.g,L.b,lightPath.lastRay.id0,type);
+					dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,type);
 		  
 				Color isectColor = c * Li(scatteredPath, scene, state, dataConnector) * rcp(wi.pdf);
 				L += isectColor;
@@ -180,7 +180,7 @@ namespace embree
 		LightPath lightPath(ray);
 		Color L = Li(lightPath,scene,state,dataConnector);
 		//We now have the complete path
-		dataConnector->FinishPath(lightPath.depth,L.r,L.g,L.b,throughputCache.r,throughputCache.g,throughputCache.b);
+		dataConnector->FinishPath(lightPath.depth,L,throughputCache);
 		++state.numPaths;
 		return L;
 	}

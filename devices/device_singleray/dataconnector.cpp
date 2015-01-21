@@ -22,16 +22,12 @@ DataConnector::DataConnector(path_finished pfCallback, frame_finished ffCallback
 	id = ++IdCounter;
 }
 //Finish the current path with the latest data
-bool DataConnector::FinishPath(unsigned short depth, float r, float g, float b, float throughput_r, float throughput_g, float throughput_b) {
+bool DataConnector::FinishPath(unsigned short depth, const Color& color, const Color& throughput) {
 	//Find callback
 	if(pathSet) {
-		currentPath.radiance[0] = r;
-		currentPath.radiance[1] = g;
-		currentPath.radiance[2] = b;
-
-		currentPath.throughput[0] = throughput_r;
-		currentPath.throughput[1] = throughput_g;
-		currentPath.throughput[2] = throughput_b;
+		currentPath.radiance = color;
+		currentPath.throughput = throughput;
+		currentPath.depth = depth;
 		
 //		printf("Finishing Path\n");
 		return pfCallback(&currentPath);
@@ -42,20 +38,20 @@ bool DataConnector::FinishPath(unsigned short depth, float r, float g, float b, 
 	}
 }
 
-void DataConnector::StartPath(float x, float y, float lensU, float lensV, float time) {
+void DataConnector::StartPath(const Vec2f& pixel,const Vec2f& lens, float time) {
 	pathSet = true;
 //	printf("Starting Path\n");
-	currentPath = (PathData){x,y,lensU,lensV,time};
+	currentPath = (PathData){pixel,lens,time};
 }
 
-void DataConnector::AddIntersectionData(float x, float y, float z, float r, float g, float b, int primitive_id, ushort type) {
+void DataConnector::AddIntersectionData(const Vec3fa& pos, const Vec3fa& dir, const Color& color, int primitive_id, ushort type) {
 //			printf("Instersection added.\n");
 //	printf("position = [%f,%f,%f]\n",x,y,z);
 //	printf("color = [%f,%f,%f]\n",r,g,b);
 //	printf("primitive ID = %d\n",primitive_id);
 	if(pathSet) {
 //		printf("Add Intersection Data to Path\n");
-		IntersectData isectData = IntersectData(x, y, z, r, g, b, primitive_id, 0, 0, 0);
+		IntersectData isectData = IntersectData(pos, dir, color, primitive_id, 0, 0, 0);
 		currentPath.intersectionData.push_back(isectData);
 	}
 	else throw std::runtime_error("Path is not set.");

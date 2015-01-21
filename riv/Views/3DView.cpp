@@ -322,8 +322,8 @@ void RIV3DView::Draw() {
 
 
 
-bool RIV3DView::isSelectedObject(ushort objectId) {
-	if(pathFilter) {
+//bool RIV3DView::isSelectedObject(ushort objectId) {
+//	if(pathFilter) {
 //		std::vector<riv::Filter*> filters = pathFilter->GetFilters();
 //		for(riv::Filter* f : filters) { //One conjunctive filter at a time
 //			riv::ConjunctiveFilter* conjunctiveF = dynamic_cast<riv::ConjunctiveFilter*>(f);
@@ -336,10 +336,10 @@ bool RIV3DView::isSelectedObject(ushort objectId) {
 //				}
 //			}
 //		}
-	}
+//	}
 
-	return false;
-}
+//	return false;
+//}
 
 void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color) {
 	
@@ -404,9 +404,9 @@ void RIV3DView::drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<
 	float size = sizeProperty->ComputeSize(isectTable, 0);
 //	printf("Point size = %f\n",size);
 	
-	if(sizesAllTheSame) {
+//	if(sizesAllTheSame) {
 		glPointSize(size);
-	}
+//	}
 	size_t row = 0;
 	TableIterator* it = isectTable->GetIterator();
 	
@@ -486,12 +486,11 @@ void RIV3DView::ResetGraphics() {
 
 //(Re)create the paths objects for the datasets being used
 void RIV3DView::createPaths() {
-	pathsOne.clear();
-	pathsTwo.clear();
 	pathsOne = createPaths(*datasetOne);
 	if(datasetTwo) {
 		pathsTwo = createPaths(*datasetTwo);
 	}
+	pathsCreated = true;
 }
 
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
@@ -534,9 +533,8 @@ std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset) {
 		points.push_back(p);
 		oldPathID = *pathID;
     }
-	pathsCreated = true;
 	reporter::stop("Creating paths");
-	reportVectorStatistics("paths", paths);
+//	reportVectorStatistics("paths", paths);
 	
 	return paths;
 }
@@ -749,7 +747,7 @@ Vec3fa RIV3DView::screenToWorldCoordinates(int screenX, int screenY, float zPlan
     return worldPos;
 }
 //Checks if a ray intersects with the mesh group and creates the path filters accordingly and applies them to the dataset
-bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes) {
+bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes, riv::RowFilter* pathFilter, ushort* bounceCount) {
 	ushort selectedObjectID;
 	float distance;
 	
@@ -771,32 +769,69 @@ bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMe
 	if(refilterNeeded) { //Create path filter
 		printf("Path creation filter");
 		dataset->StartFiltering();
-		if(pathFilter == NULL) { //Add to the previous filter
-			riv::SingularFilter<ushort>* objectFilter = new riv::DiscreteFilter<ushort>("primitive ID",selectedObjectID);
-			riv::SingularFilter<ushort>* bounceFilter = new riv::DiscreteFilter<ushort>("bounce_nr",1);
-			std::vector<riv::SingularFilter<ushort>*> fs;
-			fs.push_back(objectFilter);
-			fs.push_back(bounceFilter);
-			
-			pathFilter = new riv::GroupFilter<ushort>(new riv::ConjunctiveFilter<ushort>(fs));
-			dataset->AddFilter(pathFilter);
+		
+		auto pathTable = dataset->GetTable(PATHS_TABLE);
+		auto reference = dynamic_cast<RIVMultiReference*>(pathTable->reference);
+		
+		auto intersectionsTable = dataset->GetTable(INTERSECTIONS_TABLE);
+		auto primitiveIds = intersectionsTable->GetRecord<ushort>(PRIMITIVE_ID);
+		auto bounceNrs = intersectionsTable->GetRecord<ushort>(BOUNCE_NR);
+		
+		std::map<size_t,bool> filteredRows;
+		
+//		intersectionsTable->Print();
+		
+		if(pathFilter != NULL) { //Add to the previous filter
+			delete pathFilter;
 		}
-		else { //There already is a path creation filter, simply add to it
+		
+		TableIterator* iterator = pathTable->GetIterator();
+		size_t row;
+		while(iterator->GetNext(row)) {
+			const auto& mapping = reference->GetReferenceRows(row);
+			ushort nrRows = mapping.second;
+			size_t* refRows = mapping.first;
+			bool filter = true;
+			for(ushort i = 0 ; i < nrRows ; ++i) {
+				size_t refRow = refRows[i];
+				if(primitiveIds->Value(refRow) == selectedObjectID && bounceNrs->Value(refRow) == *bounceCount) {
+					filter = false;
+					break;
+				}
+			}
+			
+			if(filter) {
+				filteredRows[row] = true;
+			}
+		}
+		(*bounceCount)++;
+	
+//			riv::SingularFilter<ushort>* objectFilter = new riv::DiscreteFilter<ushort>("primitive ID",selectedObjectID);
+//			riv::SingularFilter<ushort>* bounceFilter = new riv::DiscreteFilter<ushort>("bounce_nr",1);
+//			std::vector<riv::SingularFilter<ushort>*> fs;
+//			fs.push_back(objectFilter);
+//			fs.push_back(bounceFilter);
+		
+//			pathFilter = new riv::GroupFilter<ushort>(new riv::ConjunctiveFilter<ushort>(fs));
+		pathFilter = new riv::RowFilter(PATHS_TABLE, filteredRows);
+		dataset->AddFilter(pathFilter);
+		
+//		else { //There already is a path creation filter, simply add to it
 			//Find the latest bounce nr filter
-			size_t bounce_nr = pathFilter->Size() + 1;
+//			size_t bounce_nr = pathFilter->Size() + 1;
 			
-			riv::SingularFilter<ushort>* objectFilter = new riv::DiscreteFilter<ushort>("primitive ID",selectedObjectID);
-			riv::SingularFilter<ushort>* bounceFilter = new riv::DiscreteFilter<ushort>("bounce_nr",bounce_nr);
+//			riv::SingularFilter<ushort>* objectFilter = new riv::DiscreteFilter<ushort>("primitive ID",selectedObjectID);
+//			riv::SingularFilter<ushort>* bounceFilter = new riv::DiscreteFilter<ushort>("bounce_nr",bounce_nr);
 			
-			std::vector<riv::SingularFilter<ushort>*> fs;
+//			std::vector<riv::SingularFilter<ushort>*> fs;
 			
-			fs.push_back(objectFilter);
-			fs.push_back(bounceFilter);
+//			fs.push_back(objectFilter);
+//			fs.push_back(bounceFilter);
 //			pathFilter->AddFilter(new riv::ConjunctiveFilter<ushort>(fs));
 //			dataset->UpdateFilter(pathFilter);
 			
-			dataset->AddFilter(new riv::GroupFilter<ushort>(new riv::ConjunctiveFilter<ushort>(fs)));
-		}
+//			dataset->AddFilter(new riv::GroupFilter<ushort>(new riv::ConjunctiveFilter<ushort>(fs)));
+//		}
 
 		printf("\n");
 		dataset->StopFiltering();
@@ -823,8 +858,15 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 		
 		pickRay = Ray(origin, dir);
 		
+		if(!drawDataSetOne && drawDataSetTwo) {
+			pathCreation(*datasetTwo, meshesTwo,pathFilterTwo,&bounceCountTwo);
+		}
+		else if(drawDataSetOne && !drawDataSetTwo) {
+			pathCreation(*datasetOne, meshesOne,pathFilterOne, &bounceCountOne);
+		}
+		
 //		if(!pathCreation(*datasetOne, meshesOne)) {
-			pathCreation(*datasetTwo, meshesTwo);
+
 //		}
 		
 		isDragging = true;

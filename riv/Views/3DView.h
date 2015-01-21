@@ -75,7 +75,10 @@ protected:
 	Ray pickRay;
 	
 	bool meshSelected = false;
-	riv::GroupFilter<ushort>* pathFilter = NULL;
+	riv::RowFilter* pathFilterOne = NULL;
+	ushort bounceCountOne = 1;
+	riv::RowFilter* pathFilterTwo = NULL;
+	ushort bounceCountTwo = 1;
 	
     //Buffered graphics point data, generated from the data, stored here for speed, TODO: Only store indices and a pointer to these records?
 	bool sizesAllTheSame; //Because sizes are often set to the same, we take advantage of this to get a big performance boost
@@ -100,7 +103,7 @@ protected:
 	void drawLeafNodes(OctreeNode* node);
 	void createPaths();
 	
-	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes);
+	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,riv::RowFilter* rowFilter, ushort* bounceCount);
 	//Create graphics buffer from unfiltered data rows
 	std::vector<Path> createPaths(RIVDataSet<float,ushort>*);
     static RIV3DView* instance;

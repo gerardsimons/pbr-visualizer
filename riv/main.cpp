@@ -81,7 +81,7 @@ EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
 const int maxPaths = 5000;
-const int bootstrapRepeat = 100;
+const int bootstrapRepeat = 1;
 const int sliderViewHeight = 50;
 
 void display(void)
@@ -348,7 +348,7 @@ bool processRendererOne(PathData* newPath) {
 }
 
 void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
-	dataControllerTwo->RendererOneFinishedFrame(numPaths,numRays);
+//	dataControllerTwo->RendererOneFinishedFrame(numPaths,numRays);
 }
 
 bool processRendererTwo(PathData* newPath) {
@@ -357,7 +357,7 @@ bool processRendererTwo(PathData* newPath) {
 }
 
 void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
-	dataControllerTwo->RendererTwoFinishedFrame(numPaths,numRays);
+//	dataControllerTwo->RendererTwoFinishedFrame(numPaths,numRays);
 }
 
 void setupDataController(const int argc, char** argv) {
@@ -506,6 +506,7 @@ void createViews() {
 		
 		(*datasetTwo)->AddDataListener(sceneView);
 		(*datasetTwo)->AddDataListener(parallelCoordsView);
+		(*datasetTwo)->AddDataListener(imageView);
 		
 		(*datasetOne)->AddDataListener(sliderView);
 		(*datasetTwo)->AddDataListener(sliderView);
@@ -518,7 +519,7 @@ void createViews() {
 	//        heatMapView = new RIVHeatMapView(&dataset);
 	
 	//Add some filter callbacks
-
+	(*datasetOne)->AddDataListener(imageView);
 	(*datasetOne)->AddDataListener(sceneView);
 	(*datasetOne)->AddDataListener(parallelCoordsView);
 }

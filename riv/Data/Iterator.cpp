@@ -32,10 +32,10 @@ bool TableIterator::GetNext(size_t& row, size_t*& refRow) {
 	else {
 		row = index;
 
-			std::pair<size_t*,ushort> refRows = reference->GetReferenceRows(row);
-			if(refRows.first) {
-				refRow = &refRows.first[0];
-			}
+		const std::pair<size_t*,ushort>& refRows = reference->GetReferenceRows(row);
+		if(refRows.first) {
+			refRow = &refRows.first[0];
+		}
 		
 		index++;
 		return (index - 1) < maxIndex;

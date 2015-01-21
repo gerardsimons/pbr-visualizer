@@ -202,7 +202,7 @@ namespace embree
 						state.sample = &sample;
 						state.pixel = Vec2f(fx,fy);
 						if(dataConnector != NULL) {
-							dataConnector->StartPath(fx,fy,lensSample.x,lensSample.y,primary.time);
+							dataConnector->StartPath(state.pixel,lensSample,primary.time);
 						}
 						L += renderer->integrator->Li(primary, scene, state,dataConnector);
 						

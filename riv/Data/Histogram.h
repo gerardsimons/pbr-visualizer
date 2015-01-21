@@ -305,18 +305,17 @@ public:
 			return hist;
 		}
 		else {
-			void* returnPointer = NULL;
 			auto tHistograms = GetHistograms<T>();
 			
 			for(size_t i = 0 ; i < tHistograms->size() ; ++i) {
 				auto hist = tHistograms->at(i);
-					if(hist.name == name) {
-						histogramRegister[name] = &tHistograms->at(i);
-						return &tHistograms->at(i);
-					}
+				if(hist.name == name) {
+					histogramRegister[name] = &tHistograms->at(i);
+					return &tHistograms->at(i);
 				}
-//				return returnPointer;
+			}
 		}
+		return NULL;
 	}
 	
 	

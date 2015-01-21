@@ -31,6 +31,9 @@ namespace embree
 	
 	class PathTraceIntegrator : public Integrator
 	{
+		
+		
+	public:
 		/*! Tracks the state of the path. */
 		class __align(16) LightPath
 		{
@@ -55,8 +58,6 @@ namespace embree
 										  of geometrical lights to not double count them. */
 			bool unbend;                 /*! True of the ray path is a straight line. */
 		};
-		
-	public:
 		
 		/*! Construction of integrator from parameters. */
 		PathTraceIntegrator(const Parms& parms);
