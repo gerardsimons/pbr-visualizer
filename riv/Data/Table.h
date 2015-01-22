@@ -398,6 +398,25 @@ public:
 		deletePointerVector(rowFilters);
 		rowFilters.clear();
 		ClearFilteredRows();
+		if(reference) {
+			reference->targetTable->ClearFilteredRows();
+		}
+	}
+	bool ClearRowFilter(riv::RowFilter* existingFilter) {
+
+		for(int i = 0 ; i < rowFilters.size() ; ++i) {
+			riv::RowFilter* rFilter = rowFilters[i];
+			if(rFilter == existingFilter) {
+				delete rFilter;
+				rowFilters.erase(rowFilters.begin() + i);
+				ClearFilteredRows();
+				if(reference) {
+					reference->targetTable->ClearFilteredRows();
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 	template<typename T>
 	std::vector<riv::SingularFilter<T>*>* GetFilters() {

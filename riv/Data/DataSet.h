@@ -31,7 +31,7 @@ private:
 	std::vector<RIVTable<Ts...>*> tables;
 	std::map<RIVTable<Ts...>*,bool> staleTables;
 	
-    std::vector<RIVDataSetListener*> dataListeners;
+	std::vector<RIVDataSetListener*> dataListeners;
 	void notifyFilterListeners() {
 		for(RIVDataSetListener *listener : dataListeners) {
 			listener->OnFiltersChanged(this);
@@ -47,7 +47,7 @@ public:
 	}
 	~RIVDataSet() {
 		deletePointerVector(tables);
-//		printf("delete pointer vector\n");
+		//		printf("delete pointer vector\n");
 	}
 	std::string& GetName() {
 		return name;
@@ -87,10 +87,10 @@ public:
 		AddTable(newTable);
 		return newTable;
 	}
-//	template<typename T>
-//	void AddFilter(const std::string& tableName, riv::GroupFilter<T> *filter) {
-//		
-//	}
+	//	template<typename T>
+	//	void AddFilter(const std::string& tableName, riv::GroupFilter<T> *filter) {
+	//
+	//	}
 	template<typename T>
 	void AddFilter(riv::SingularFilter<T>* filter) {
 		//Find the table that contains all of the filter attributes
@@ -143,14 +143,14 @@ public:
 			}
 		}
 	}
-
+	
 	//Automatically find the table this should be filtered on, the one containing all of the filters attributes
-//	void AddFilter(riv::Filter* filter);
-//	void AddFilter(riv::GroupFilter *filter);
+	//	void AddFilter(riv::Filter* filter);
+	//	void AddFilter(riv::GroupFilter *filter);
 	void AddDataListener(RIVDataSetListener* listener) {
 		dataListeners.push_back(listener);
 	}
-//	void UpdateFilter(riv::Filter* filter);
+	//	void UpdateFilter(riv::Filter* filter);
 	
 	void StartFiltering() {
 		if(isFiltering) {
@@ -177,55 +177,31 @@ public:
 		for(auto iter : staleTables) {
 			iter.first->Filter();
 		}
-	
-//		Make sure linked tables are filtered accordingly
+		
+		//		Make sure linked tables are filtered accordingly
 		for(auto iter : staleTables) {
 			iter.first->FilterReferences();
 		}
-	
+		
 		isFiltering = false;
 		//Notify the listeners now
 		notifyFilterListeners();
 	}
-	
-//	void ClearFilters() {
-//		printf("Clearing all filters on the dataset.\n");
-//		for(RIVTable* table : tables) {
-//			if(table->ClearFilters()) {
-//				staleTables[table] = true;
-//				const std::vector<RIVReference*>* refs = table->GetReferences();
-//				for(size_t i = 0 ; i < refs->size() ; ++i) {
-//					RIVReference* ref = refs->at(i);
-//					staleTables[ref->targetTable] = true;
-//				}
-//			}
-//		}
-//	}
-	
-//	void ClearFilter(size_t filterID) {
-//		printf("Clearing filter %zu on all tables\n",filterID);
-//		for(RIVTable *table : tables) {
-//			if(table->ClearFilter(filterID)) {
-//				staleTables[table] = true;
-//				const std::vector<RIVReference*>* refs = table->GetReferences();
-//				for(size_t i = 0 ; i < refs->size() ; ++i) {
-//					RIVReference* ref = refs->at(i);
-//					staleTables[ref->targetTable] = true;
-//				}
-//			}
-//		}
-//	}
-	
 	template<typename T>
 	void ClearFilter(const std::string& filterName) {
-		printf("Clearing filter %s on all tables\n",filterName.c_str());
-		
-		for(RIVTable<Ts...>* table : tables) {
-			if(table->template ClearFilter<T>(filterName)) {
-				staleTables[table] = true;
-				RIVReference* reference = table->reference;
-				staleTables[(RIVTable<Ts...>*)reference->targetTable] = true;
+		//		printf("Clearing filter %s on all tables\n",filterName.c_str());
+		if(isFiltering) {
+			for(RIVTable<Ts...>* table : tables) {
+				if(table->template ClearFilter<T>(filterName)) {
+					staleTables[table] = true;
+					RIVReference* reference = table->reference;
+					if(reference)
+						staleTables[(RIVTable<Ts...>*)reference->targetTable] = true;
+				}
 			}
+		}
+		else {
+			throw std::runtime_error("Need to start filtering first");
 		}
 	}
 	
@@ -234,7 +210,7 @@ public:
 			table->ClearData();
 		}
 	}
-//    RIVRecord* FindRecord(std::string name) const;
+	//    RIVRecord* FindRecord(std::string name) const;
 	size_t TotalNumberOfRecords() const {
 		size_t numRecords = 0;
 		for(auto* table : tables) {
@@ -242,9 +218,9 @@ public:
 		}
 		return numRecords;
 	}
-    size_t NumberOfTables() const;
-//	template<typename U>
-//    std::vector<RIVTable*>* GetTables();
+	size_t NumberOfTables() const;
+	//	template<typename U>
+	//    std::vector<RIVTable*>* GetTables();
 	template<typename T>
 	RIVTable<T>* GetTable(const std::string& tableName) {
 		std::vector<RIVTable<T>>* tables = GetTables<T>();
@@ -257,8 +233,13 @@ public:
 		return NULL;
 	}
 	void ClearAllFilters() {
-		for(auto table : tables) {
-			table->ClearFilters();
+		if(isFiltering) {
+			for(auto table : tables) {
+				table->ClearFilters();
+			}
+		}
+		else {
+			throw std::runtime_error("Need to start filtering first");
 		}
 	}
 	void Print(size_t maxPrint = 0, bool printFiltered = true) {
@@ -280,8 +261,32 @@ public:
 		}
 	}
 	void ClearRowFilters() {
-		for(auto table : tables) {
-			table->ClearRowFilters();
+		if(isFiltering) {
+			for(auto table : tables) {
+				table->ClearRowFilters();
+				staleTables[table] = true;
+			}
+		}
+		else {
+			throw std::runtime_error("Need to start filtering first");
+		}
+	}
+	void ClearRowFilter(riv::RowFilter* existingFilter) {
+		if(isFiltering) {
+			if(existingFilter) {
+				for(auto table : tables) {
+					if(table->ClearRowFilter(existingFilter)) {
+						RIVReference* reference = table->reference;
+						staleTables[table] = true;
+						if(reference) {
+							staleTables[(RIVTable<Ts...>*)reference->targetTable] = true;
+						}
+					}
+				}
+			}
+		}
+		else {
+			throw std::runtime_error("Need to start filtering first");
 		}
 	}
 	RIVDataSet* CloneStructure() {
@@ -304,7 +309,7 @@ public:
 		HistogramSet<Ts...> histograms;
 		for(auto table : tables) {
 			auto histogramset = table->CreateHistogramSet(bins);
-//			histogramset.Print();
+			//			histogramset.Print();
 			histograms.Join(histogramset);
 		}
 		return histograms;
@@ -321,7 +326,7 @@ public:
 		}
 		return histograms;
 	}
-//    void PrintUnfiltered();
+	//    void PrintUnfiltered();
 };
 
 template<typename ...Ts>

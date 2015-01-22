@@ -88,7 +88,7 @@ private:
 	float acceptProbability = .5F;
 	
 	//The number of data points per renderer
-	size_t pathCount = 0;
+//	size_t pathCount = 0;
 	
 	//The first time we will fill both the candidate and current, after which we will bootstrap, keep the best bootstrap as current and only fill up candidate
 	bool firstTime = true;

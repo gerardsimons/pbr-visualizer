@@ -22,8 +22,8 @@ DataController::DataController(const ushort renderers, const size_t maxPaths, co
 RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* dataset,const size_t N) {
 	
 	
-//	const std::string taskName = "Creating bootstrap";
-	reporter::startTask("Creating bootstrap", N);
+	//	const std::string taskName = "Creating bootstrap";
+//	reporter::startTask("Creating bootstrap", N);
 	
 	RIVDataSet<float,ushort>* bootstrap = dataset->CloneStructure(tablesToBootstrap);
 	RIVTable<float,ushort>* bootstrapPaths = bootstrap->GetTable(PATHS_TABLE);
@@ -41,46 +41,55 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 	auto& pathRecords = paths->GetRecords();
 	auto& isectRecords = intersections->GetRecords();
 	
-//	auto& bootstrapRecords = paths->GetRecords();
+	//	auto& bootstrapRecords = paths->GetRecords();
 	
-//	bool includeReference = (rand() % 2) > 0;
-//	if(includeReference)
-//		printf("Include references...\n");
-//	else {
-//		printf("NOT include references...\n");
-//	}
+	//	bool includeReference = (rand() % 2) > 0;
+	//	if(includeReference)
+	//		printf("Include references...\n");
+	//	else {
+	//		printf("NOT include references...\n");
+	//	}
 	//Choose N paths, also add the referencing rows
+	std::vector<size_t> sampledRows;
 	for(size_t i = 0 ; i < N ; ++i) {
-//		reporter::update(taskName);
-		size_t index = rand() % rows;
-//		size_t index = i;
-		
-//		printf("Sampled row %zu\n",index);
-		
-		tuple_for_each(pathRecords, [&](auto tRecords) {
-			for(auto record : tRecords) {
-				typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
-				bootstrapPaths->GetRecord<Type>(record->name)->AddValue(record->Value(index));
+		//		reporter::update(taskName);
+		sampledRows.push_back(rand() % rows);
+	}
+	//		size_t index = i;
+	
+	//		printf("Sampled row %zu\n",index);
+	tuple_for_each(pathRecords, [&](auto tRecords) {
+		for(auto record : tRecords) {
+			typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
+			auto bootRecord = bootstrapPaths->GetRecord<Type>(record->name);
+			
+			for(size_t index : sampledRows) {
+				bootRecord->AddValue(record->Value(index));
 			}
-		});
-		const std::pair<size_t*,ushort>& refRows = ref->GetReferenceRows(index);
-		tuple_for_each(isectRecords, [&](auto tRecords) {
-			for(auto record : tRecords) {
+		}
+	});
+	
+	tuple_for_each(isectRecords, [&](auto tRecords) {
+		for(auto record : tRecords) {
+			typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
+			auto bootRecord = bootstrapIsects->GetRecord<Type>(record->name);
+			for(size_t index : sampledRows) {
+				
+				const std::pair<size_t*,ushort>& refRows = ref->GetReferenceRows(index);
 				for(int i = 0 ; i < refRows.second ; ++i) {
 					
-					typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
-					bootstrapIsects->GetRecord<Type>(record->name)->AddValue(record->Value(refRows.first[i]));
-				
+					bootRecord->AddValue(record->Value(refRows.first[i]));
+					
 				}
+				
 			}
-		});
-
-
-		
-	}
-	//		bootstrap.Print(1000);
+		}
+	});
 	
-	reporter::stop("Creating bootstrap");
+	
+//		bootstrap.Print(1000);
+
+//	reporter::stop("Creating bootstrap");
 	return bootstrap;
 }
 
@@ -93,9 +102,9 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
 	pathTable->CreateRecord<float>(PATH_R,0,1);
 	pathTable->CreateRecord<float>(PATH_G,0,1);
 	pathTable->CreateRecord<float>(PATH_B,0,1);
-	pathTable->CreateRecord<float>(THROUGHPUT_R,0,1);
-	pathTable->CreateRecord<float>(THROUGHPUT_G,0,1);
-	pathTable->CreateRecord<float>(THROUGHPUT_B,0,1);
+	pathTable->CreateRecord<float>(THROUGHPUT_R,0,1,true);
+	pathTable->CreateRecord<float>(THROUGHPUT_G,0,1,true);
+	pathTable->CreateRecord<float>(THROUGHPUT_B,0,1,true);
 	pathTable->CreateRecord<ushort>(DEPTH,0,5,true);
 	
 	RIVTable<float,ushort>* isectsTable = dataset->CreateTable(INTERSECTIONS_TABLE);
@@ -146,10 +155,10 @@ void DataController::createDataStructures() {
 	initDataSet(rendererData);
 	initDataSet(candidateData);
 	
-//	initDataSet(rendererDataTwo);
-//	initDataSet(candidateDataTwo);
+	//	initDataSet(rendererDataTwo);
+	//	initDataSet(candidateDataTwo);
 	
-
+	
 	
 	trueDistributions = rendererData->CreateHistogramSet(bins,tablesToBootstrap);
 	
@@ -222,9 +231,9 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 			trueDistributions.AddToHistogram(POS_X, isect.position[0]);
 			trueDistributions.AddToHistogram(POS_Y, isect.position[1]);
 			trueDistributions.AddToHistogram(POS_Z, isect.position[2]);
-//			trueDistributions.AddToHistogram(DIR_X, isect.dir[0]);
-//			trueDistributions.AddToHistogram(DIR_Y, isect.dir[1]);
-//			trueDistributions.AddToHistogram(DIR_Z, isect.dir[2]);
+//						trueDistributions.AddToHistogram(DIR_X, isect.dir[0]);
+//						trueDistributions.AddToHistogram(DIR_Y, isect.dir[1]);
+//						trueDistributions.AddToHistogram(DIR_Z, isect.dir[2]);
 			trueDistributions.AddToHistogram(INTERSECTION_R, std::min(isect.color.r,1.F));
 			trueDistributions.AddToHistogram(INTERSECTION_G, std::min(isect.color.g,1.F));
 			trueDistributions.AddToHistogram(INTERSECTION_B, std::min(isect.color.b,1.F));
@@ -232,12 +241,12 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 		}
 		//				mutex.lock();
 		//				printf("Adding new path.\n");
-		bool tableFull = pathCount >= maxPaths;
-		if(!tableFull) {
+//		bool tableFull = pathCount >= maxPaths;
+		if(currentPathTable->NumberOfRows() < maxPaths) {
 			float accept = rand() / (float)RAND_MAX;
-//			printf("Accept prob = %f\n",accept);
+			//			printf("Accept prob = %f\n",accept);
 			if(accept <= acceptProbability) {
-				++pathCount;
+//				++pathCount;
 				//			rendererId->AddValue(renderer);
 				xPixels->AddValue(newPath->pixel[0]);
 				yPixels->AddValue(newPath->pixel[1]);
@@ -263,15 +272,15 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 					xs->AddValue(isect.position[0]);
 					ys->AddValue(isect.position[1]);
 					zs->AddValue(isect.position[2]);
-//					dirX->AddValue(isect.dir[0]);
-//					dirY->AddValue(isect.dir[1]);
-//					dirZ->AddValue(isect.dir[2]);
+					//					dirX->AddValue(isect.dir[0]);
+					//					dirY->AddValue(isect.dir[1]);
+					//					dirZ->AddValue(isect.dir[2]);
 					isectColorRs->AddValue(std::min(isect.color.r,1.F));
 					isectColorGs->AddValue(std::min(isect.color.g,1.F));
 					isectColorBs->AddValue(std::min(isect.color.b,1.F));
 					primitiveIds->AddValue(isect.primitiveId);
 					//					shapeIds->AddValue(isect.shapeId);
-					//					interactionTypes->AddValue(isect.interactionType);
+//					interactionTypes->AddValue(isect.interactionType);
 					//					lightIds->AddValue(isect.lightId);
 					
 					isectsToPathsRef->AddReference(xs->Size() - 1, colorRs->Size() - 1);
@@ -282,7 +291,7 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 		}
 		else { //I AM SO FULL, I CANNOT EAT ONE MORE BYTE OF DATA
 			
-
+			
 			
 			//Print the histograms
 			//			trueDistributions.Print();
@@ -296,17 +305,17 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 	}
 	else {
 		if(paused) {
-//			printf("... is paused.\n");
+			//			printf("... is paused.\n");
 		}
 		else if(IsDelayed()) {
-//			printf("... is delayed.\n");
+			//			printf("... is delayed.\n");
 		}
-//		clock_t t = clock() - startPause;
-//		int millipassed = t / (float)CLOCKS_PER_SEC * 1000;
-//		printf ("It took me %d milliseconds).\n",millipassed);
-//		pausedTimer -= millipassed;
-//		printf ("%d milliseconds left.\n",pausedTimer);
-//		printf("DataProcessing is paused (t = %d)\n",pausedTimer);
+		//		clock_t t = clock() - startPause;
+		//		int millipassed = t / (float)CLOCKS_PER_SEC * 1000;
+		//		printf ("It took me %d milliseconds).\n",millipassed);
+		//		pausedTimer -= millipassed;
+		//		printf ("%d milliseconds left.\n",pausedTimer);
+		//		printf("DataProcessing is paused (t = %d)\n",pausedTimer);
 		return false;
 	}
 }
@@ -314,10 +323,10 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 void DataController::Reduce() {
 	//This was the first time we filled up, we already have our data to bootstrap from
 	if(firstTime) {
-//		printf("Current data is full...\n");
-//		printf("Swapping candidate and current data\n");
-//		printf("\nCURRENT DATA = \n");
-//		rendererData->Print(10);
+		//		printf("Current data is full...\n");
+		//		printf("Swapping candidate and current data\n");
+		//		printf("\nCURRENT DATA = \n");
+		//		rendererData->Print(10);
 		
 		//Swap current with candidate
 		candidateData->SetDataListeners(rendererData->GetDataListeners());
@@ -325,60 +334,58 @@ void DataController::Reduce() {
 		rendererData = candidateData;
 		candidateData = temp;
 		
-		pathCount = 0;
-		
 		firstTime = false;
 		
 		resetPointers(rendererData);
 	}
 	else { //Both are full, join the two sets, bootstrap
 		
-//		printf("\nCURRENT DATA = \n");
-//		rendererData->Print(10);
-//		
-//		printf("\nCANDIDATE DATA = \n");
-//		candidateData->Print(10);
+		//		printf("\nCURRENT DATA = \n");
+		//		rendererData->Print(10);
+		//
+		//		printf("\nCANDIDATE DATA = \n");
+		//		candidateData->Print(10);
 		
 		//Join the two datasets
 		rendererData->AddDataSet(candidateData);
 		
 		printHeader("BOOTSTRAPPING",100);
 		
-//		printf("FULL DATA : \n");
-//		rendererData->Print();
+		//		printf("FULL DATA : \n");
+		//		rendererData->Print();
 		
 		const std::string taskName = "bootstrapping";
 		reporter::startTask("bootstrapping");
 		HistogramSet<float,ushort> bootstrapHistograms;
 		
 		bool newBootstrapFound = false;
-
+		
 		for(int i = 0 ; i < bootstrapRepeat ; ++i) {
-//			printf("Round #%d\n",i);
+			//			printf("Round #%d\n",i);
 			auto bootstrap = Bootstrap(rendererData, maxPaths);
 			
 			bootstrapHistograms = bootstrap->CreateHistogramSet(bins);
 			float score = trueDistributions.DistanceTo(bootstrapHistograms);
-//			float score = maxPaths - i;
+			//			float score = maxPaths - i;
 			
 			if(bestBootstrapResult < 0 || score < bestBootstrapResult) {
 				
 				printf("BETTER BOOTSTRAP FOUND! SCORE = %f\n",score);
 				if(bestBootstrap) { //A new and better bootstrap was found, delete the old bestBootstrap
-//					printf("Delete previous best bootstrap\n");
+					//					printf("Delete previous best bootstrap\n");
 					delete bestBootstrap;
 				}
 				
 				bestBootstrap = bootstrap;
 				
-//					printf("\nTRUE HISTOGRAMS = \n");
-//					trueDistributions.Print();
-//				
-//					printf("\nBOOTSTRAP HISTOGRAMS = \n");
-//					bootstrapHistograms.Print();
+				//					printf("\nTRUE HISTOGRAMS = \n");
+				//					trueDistributions.Print();
+				//
+				//					printf("\nBOOTSTRAP HISTOGRAMS = \n");
+				//					bootstrapHistograms.Print();
 				
-//					printf("Bootstrap = \n\n");
-//					bootstrap->Print();
+				//					printf("Bootstrap = \n\n");
+				//					bootstrap->Print();
 				
 				
 				bestBootstrapResult = score;
@@ -393,14 +400,14 @@ void DataController::Reduce() {
 			
 			printf("\n\n***** NEW BOOTSTRAP FOUND! ***** \n\n");
 			
-//			printf("BOOTSTRAP WITHOUT REFERENCES : ");
-//			(bestBootstrap)->Print();
+			//			printf("BOOTSTRAP WITHOUT REFERENCES : ");
+			//			(bestBootstrap)->Print();
 			
-//			printf("\nTRUE HISTOGRAMS = \n");
-//			trueDistributions.Print();
-//			
-//			printf("\nBOOTSTRAP HISTOGRAMS = \n");
-//			bootstrapHistograms.Print();
+			//			printf("\nTRUE HISTOGRAMS = \n");
+			//			trueDistributions.Print();
+			//
+			//			printf("\nBOOTSTRAP HISTOGRAMS = \n");
+			//			bootstrapHistograms.Print();
 			
 			bestBootstrap->SetDataListeners(rendererData->GetDataListeners());
 			auto pathsTable = bestBootstrap->GetTable(PATHS_TABLE);
@@ -434,22 +441,22 @@ void DataController::Reduce() {
 				++pathsCount;
 			}
 			
-//			printf("\nBOOTSTRAP RESULT = \n");
-//			bestBootstrap->Print();
+			//			printf("\nBOOTSTRAP RESULT = \n");
+			//			bestBootstrap->Print();
 			
 			//Delete the old renderer data and replace it with the bootstrap dataset,
 			delete rendererData;
 			rendererData = bestBootstrap;
 			bestBootstrap = NULL;
 			
-			pathCount = 0;
+
 			rendererData->NotifyDataListeners();
 			
 			candidateData->ClearData();
 			resetPointers(candidateData);	//Reset the shortcut pointers to a new empty dataset
-//			++reduceRounds;
-//			if(reduceRounds % 2 == 0) {
-//			}
+			//			++reduceRounds;
+			//			if(reduceRounds % 2 == 0) {
+			//			}
 		}
 		else {
 			printf("\n Could not find a better bootstrap... \n");

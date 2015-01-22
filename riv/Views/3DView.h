@@ -103,7 +103,7 @@ protected:
 	void drawLeafNodes(OctreeNode* node);
 	void createPaths();
 	
-	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,riv::RowFilter* rowFilter, ushort* bounceCount);
+	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,riv::RowFilter*& rowFilter, ushort* bounceCount);
 	//Create graphics buffer from unfiltered data rows
 	std::vector<Path> createPaths(RIVDataSet<float,ushort>*);
     static RIV3DView* instance;

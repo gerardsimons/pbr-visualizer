@@ -53,6 +53,10 @@ private:
 	Histogram<float> membershipHistogramOne;
 	Histogram<float> membershipHistogramTwo;
 	
+	//Filter used last time
+	riv::RowFilter* membershipFilterOne = NULL;
+	riv::RowFilter* membershipFilterTwo = NULL;
+	
 //	//Points to either a path or intersection membership table, depending on the records selected
 //	RIVTable<float,ushort>* membershipTableOne = NULL;
 //	RIVTable<float,ushort>* membershipTableTwo = NULL;
@@ -73,7 +77,7 @@ private:
 	void resetPointers();
 	void filterDataSets();
 	//Filter a dataset according to its uniqueness
-	void filterDataSet(RIVDataSet<float,ushort>* dataset, HistogramSet<float,ushort>* distributions, bool isLeftSet, float minBound, float maxBound,std::map<int,std::vector<size_t>>& rowBinMembership);
+	void filterDataSet(RIVDataSet<float,ushort>* dataset, HistogramSet<float,ushort>* distributions, bool isLeftSet, float minBound, float maxBound,std::map<int,std::vector<size_t>>& rowBinMembership, riv::RowFilter*& existingFilter);
 public:
 	static int windowHandle;
 	

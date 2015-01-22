@@ -183,6 +183,7 @@ int round(float d)
 
 bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 //    ToViewSpaceCoordinates(&x, &y);
+	return false;
     y = height - y;
 	if(isDragging || containsPoint(x,y)) {
 		//If start dragging > init selection

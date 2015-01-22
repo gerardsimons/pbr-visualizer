@@ -21,7 +21,7 @@ void RIVSliderView::resetPointers() {
 }
 
 RIVSliderView::RIVSliderView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, const riv::ColorMap& colorMap) : RIVDataView(datasetOne,datasetTwo), colorMap(colorMap), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo) {
-
+	
 	if(!instance) {
 		instance = this;
 	}
@@ -32,7 +32,7 @@ RIVSliderView::RIVSliderView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<f
 	paddingX = 0;
 	membershipHistogramOne = Histogram<float>("membership_one", -1, 1, histogramBins);
 	membershipHistogramTwo = Histogram<float>("membership_two", -1, 1, histogramBins);
-
+	
 }
 
 void RIVSliderView::Mouse(int state,int button,int x,int y) {
@@ -153,8 +153,8 @@ void RIVSliderView::Draw() {
 		}
 		x = barWidth / 2.F;
 		
-//				printf("RIGHT HISTOGRAM BARS DRAWING : \n\n");
-//				membershipHistogramTwo.Print();
+		//				printf("RIGHT HISTOGRAM BARS DRAWING : \n\n");
+		//				membershipHistogramTwo.Print();
 		
 		for(int i = histogramBins / 2 ; i < histogramBins ; ++i) { //Draw them backwards as the most unique should be to the left
 			std::string nrMembers = std::to_string(rowBinMembershipsTwo[i].size());
@@ -162,8 +162,8 @@ void RIVSliderView::Draw() {
 			
 			float histValue = membershipHistogramTwo.NormalizedValue(i);
 			float barHeight = histValue * maxBarHeight;
-//						printf("bar height (i = %d) = %f\n",i,barHeight);
-//					printf("glRectf(%f,%f,%f,%f)\n",x,bottom,x+binWidth,bottom+barHeight);
+			//						printf("bar height (i = %d) = %f\n",i,barHeight);
+			//					printf("glRectf(%f,%f,%f,%f)\n",x,bottom,x+binWidth,bottom+barHeight);
 			glColor3f(0, 0, 1);
 			glRectf(x, bottom, x+binWidth, bottom + barHeight);
 			
@@ -259,11 +259,11 @@ void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource
 						//						float binValueTwo = histogramTwo->NormalizedValue(bin);
 						//						float binValueDelta;
 						
-//						float diff = binValueTwo - binValueOne;
+						//						float diff = binValueTwo - binValueOne;
 						//					if(diff > maxDifference) {
 						//						maxDifference = diff;
 						//					}
-//						printf("diff = %f\n",diff);
+						//						printf("diff = %f\n",diff);
 						totalDiff += diff;
 					}
 				}
@@ -271,7 +271,7 @@ void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource
 			});
 			//Normalize it
 			totalDiff /= selectedRecords.size();
-//			printf("totalDiff = %f\n",totalDiff);
+			//			printf("totalDiff = %f\n",totalDiff);
 			membershipRecord->AddValue(totalDiff);
 			
 			if(isLeftSet) {
@@ -285,11 +285,11 @@ void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource
 		}
 		
 		//Normalize
-//		float maxValue = membershipRecord->Max();
-//		for(size_t row = 0 ; row < membershipRecord->Size() ; ++row) {
-//			float oldValue = membershipRecord->Value(row);
-//			membershipRecord->SetValue(row, oldValue / maxValue);
-//		}
+		//		float maxValue = membershipRecord->Max();
+		//		for(size_t row = 0 ; row < membershipRecord->Size() ; ++row) {
+		//			float oldValue = membershipRecord->Value(row);
+		//			membershipRecord->SetValue(row, oldValue / maxValue);
+		//		}
 		
 		membershipHistogramOne.Print();
 		membershipHistogramTwo.Print();
@@ -301,13 +301,13 @@ void RIVSliderView::AddSelectedRecord(const std::string& tableName, const std::s
 		selectedTable = tableName;
 		
 		if(tableName == PATHS_TABLE) {
-//			membershipTableOne = pathMembershipOneTable;
-//			membershipTableTwo = pathMembershipTwoTable;
+			//			membershipTableOne = pathMembershipOneTable;
+			//			membershipTableTwo = pathMembershipTwoTable;
 			selectedMembershipTable = PATH_MEMBERSHIP_TABLE;
 		}
 		else if(tableName == INTERSECTIONS_TABLE) {
-//			membershipTableOne = isectMembershipOneTable;
-//			membershipTableTwo = isectMembershipTwoTable;
+			//			membershipTableOne = isectMembershipOneTable;
+			//			membershipTableTwo = isectMembershipTwoTable;
 			selectedMembershipTable = ISECT_MEMBERSHIP_TABLE;
 		}
 	}
@@ -315,11 +315,11 @@ void RIVSliderView::AddSelectedRecord(const std::string& tableName, const std::s
 		selectedRecords.insert(recordName);
 		
 		if(tableName == PATHS_TABLE) {
-
+			
 			selectedMembershipTable = PATH_MEMBERSHIP_TABLE;
 		}
 		else if(tableName == INTERSECTIONS_TABLE) {
-
+			
 			selectedMembershipTable = ISECT_MEMBERSHIP_TABLE;
 		}
 		
@@ -349,75 +349,82 @@ void RIVSliderView::RemoveSelectedRecord(const std::string &recordName) {
 		printf("No such record selected.");
 	}
 }
-void RIVSliderView::filterDataSet(RIVDataSet<float,ushort>* dataset, HistogramSet<float,ushort>* distributions, bool isLeftSet, float minBound, float maxBound, std::map<int,std::vector<size_t>>& rowBinMembership) {
+void RIVSliderView::filterDataSet(RIVDataSet<float,ushort>* dataset, HistogramSet<float,ushort>* distributions, bool isLeftSet, float minBound, float maxBound, std::map<int,std::vector<size_t>>& rowBinMembership, riv::RowFilter*& existingFilter) {
 	
-	dataset->ClearRowFilters();
-	
-	//	printHeader("MEMBERSHIP FILTERING");
-	if(isLeftSet) {
-		//		minBound += 1;
-		//		minBound = std::min(0.F,minBound);
-		//		maxBound = std::min(0.F,maxBound);
-	}
-	else {
-		//		minBound = std::max(0.F,minBound);
-		//		maxBound = std::max(0.F,maxBound);
-	}
-	int rowsFiltered = 0;
-	//	printf("minbound = %f\n",minBound);
-	//	printf("maxBound = %f\n",maxBound);
-	dataset->StartFiltering();
-	
-	minBound = minBound * (histogramBins / 2.F) + (histogramBins / 2.F);
-	maxBound = maxBound * (histogramBins / 2.F) + (histogramBins / 2.F);
-	
-	if(minBound > maxBound) {
-		int temp = minBound;
-		minBound = maxBound;
-		maxBound = temp;
-	}
-	
-	int binLeft = ceil(minBound);
-	int binRight = floor(maxBound);
-	
-	//Make sure bin left really is the left most (smallest) bin
-	
-	
-	
-	//	for(size_t i = 0 ; i < tables->size() ; ++i) {
-	
-	auto table = dataset->GetTable(selectedTable);
-	
-	//How many rows are going be filtered for this table
-	int tableRowsFiltered = 0;
-	
-	//Row filter that manually filters rows according to their row number
-	std::map<size_t,bool> filteredRows;
-	
-	for(int bin = 0 ; bin < histogramBins ; ++bin) {
-		if(bin < binLeft || bin > binRight) {
-			std::vector<size_t>& rows = rowBinMembership[bin];
-			for(size_t row : rows) {
-				filteredRows[row] = true;
-			}
-			tableRowsFiltered += rows.size();
+	if(selectedTable.size()) {
+		//Remove the existing filter for this dataset if there was one
+		dataset->StartFiltering();
+		if(existingFilter) {
+			dataset->ClearRowFilter(existingFilter);
 		}
+		
+		//	printHeader("MEMBERSHIP FILTERING");
+		if(isLeftSet) {
+			//		minBound += 1;
+			//		minBound = std::min(0.F,minBound);
+			//		maxBound = std::min(0.F,maxBound);
+		}
+		else {
+			//		minBound = std::max(0.F,minBound);
+			//		maxBound = std::max(0.F,maxBound);
+		}
+		int rowsFiltered = 0;
+		//	printf("minbound = %f\n",minBound);
+		//	printf("maxBound = %f\n",maxBound);
+
+		
+		minBound = minBound * (histogramBins / 2.F) + (histogramBins / 2.F);
+		maxBound = maxBound * (histogramBins / 2.F) + (histogramBins / 2.F);
+		
+		if(minBound > maxBound) {
+			int temp = minBound;
+			minBound = maxBound;
+			maxBound = temp;
+		}
+		
+		int binLeft = ceil(minBound);
+		int binRight = floor(maxBound);
+		
+		//Make sure bin left really is the left most (smallest) bin
+		
+		
+		//	for(size_t i = 0 ; i < tables->size() ; ++i) {
+		
+		auto table = dataset->GetTable(selectedTable);
+		
+		//How many rows are going be filtered for this table
+		int tableRowsFiltered = 0;
+		
+		//Row filter that manually filters rows according to their row number
+		std::map<size_t,bool> filteredRows;
+		
+		for(int bin = 0 ; bin < histogramBins ; ++bin) {
+			if(bin < binLeft || bin > binRight) {
+				std::vector<size_t>& rows = rowBinMembership[bin];
+				for(size_t row : rows) {
+					filteredRows[row] = true;
+				}
+				tableRowsFiltered += rows.size();
+			}
+		}
+		
+		
+		
+		existingFilter = new riv::RowFilter(table->name,filteredRows);
+		dataset->AddFilter(existingFilter);
+		
+		rowsFiltered += tableRowsFiltered;
+		//	}
+		dataset->StopFiltering();
+		if(rowsFiltered) {
+			printf("%d rows (%d new) filtered : \n\n",rowsFiltered,(rowsFiltered - lastRowsFiltered));
+			//		dataset->PrintFilteredRows();
+		}
+		else {
+			printf("Nothing filtered.\n");
+		}
+		lastRowsFiltered = rowsFiltered;
 	}
-	
-	riv::RowFilter* rowFilter = new riv::RowFilter(table->name,filteredRows);
-	dataset->AddFilter(rowFilter);
-	
-	rowsFiltered += tableRowsFiltered;
-	//	}
-	dataset->StopFiltering();
-	if(rowsFiltered) {
-		printf("%d rows (%d new) filtered : \n\n",rowsFiltered,(rowsFiltered - lastRowsFiltered));
-		//		dataset->PrintFilteredRows();
-	}
-	else {
-		printf("Nothing filtered.\n");
-	}
-	lastRowsFiltered = rowsFiltered;
 	//	printf("\n");
 	//	dataset->Print();
 }
@@ -438,9 +445,9 @@ void RIVSliderView::filterDataSets() {
 	printf("SLIDER MAX BOUND = %f\n",maxBound);
 	
 	printf("LEFT DATASET FILTER BINS:  \n");
-	filterDataSet(*datasetOne, distributionsOne, true, minBound, maxBound,rowBinMembershipsOne);
+	filterDataSet(*datasetOne, distributionsOne, true, minBound, maxBound,rowBinMembershipsOne,membershipFilterOne);
 	printf("RIGHT DATASET FILTER BINS:  \n");
-	filterDataSet(*datasetTwo, distributionsTwo, false, minBound, maxBound,rowBinMembershipsTwo);
+	filterDataSet(*datasetTwo, distributionsTwo, false, minBound, maxBound,rowBinMembershipsTwo,membershipFilterTwo);
 }
 bool RIVSliderView::HandleMouse(int button, int state, int x, int y) {
 	float minDistance = 10;
@@ -547,18 +554,21 @@ void RIVSliderView::redisplayWindow() {
 	glutSetWindow(currentWindow);
 }
 //Dataset listener functions
-void RIVSliderView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
-	//Do nothing...?
+void RIVSliderView::OnFiltersChanged(RIVDataSet<float,ushort>* source) {
+//	if(source == *datasetOne) {
+//		createMembershipData(source,true);
+//	}
+//	else if(source == *datasetTwo) {
+//		createMembershipData(source,false);
+//	}
 }
 void RIVSliderView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 	printf("*** RIVSliderView received a on dataset changed notification!\n" );
 	if(source == *datasetOne) {
 		printHeader("CREATE MEMBERSHIP HISTOGRAM ONE");
-		membershipHistogramOne.Clear();
 		createMembershipData(source,true);
 	}
 	else if(source == *datasetTwo) {
-		membershipHistogramTwo.Clear();
 		printHeader("CREATE MEMBERSHIP HISTOGRAM TWO");
 		createMembershipData(source,false);
 	}

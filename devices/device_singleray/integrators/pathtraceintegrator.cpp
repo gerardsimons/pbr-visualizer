@@ -45,6 +45,8 @@ namespace embree
 	}
 
 	Color throughputCache;
+	Color lastColor;
+	
 	Color PathTraceIntegrator::Li(LightPath& lightPath, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector)
 	{
 		/*! Terminate path if too long or contribution too low. */
@@ -169,6 +171,7 @@ namespace embree
 				if(dataConnector)
 					dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,type);
 		  
+				lastColor = L;
 				Color isectColor = c * Li(scatteredPath, scene, state, dataConnector) * rcp(wi.pdf);
 				L += isectColor;
 			}
@@ -177,6 +180,7 @@ namespace embree
 	}
 	Color PathTraceIntegrator::Li(Ray& ray, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector) {
 		//Start path from camera ray
+		lastColor = Color(0,0,0);
 		LightPath lightPath(ray);
 		Color L = Li(lightPath,scene,state,dataConnector);
 		//We now have the complete path

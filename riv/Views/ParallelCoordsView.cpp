@@ -208,15 +208,29 @@ void ParallelCoordsView::drawAxes() {
 						float redColorValue;
 						float saturation;
 						
-						if(normalizedValueTwo > normalizedValueOne) {
-							blueColorValue = ((normalizedValueTwo - normalizedValueOne) / normalizedValueTwo + 1) / 2.F;
-							redColorValue = 1-blueColorValue;
-							saturation = binValueTwo / maxValueTwo;
+						if(false && binValueOne == nrElementsOne && binValueTwo == nrElementsTwo) {
+							if(binValueTwo > binValueOne) {
+								blueColorValue = ((binValueTwo - binValueOne) / binValueTwo);
+								redColorValue = 1-blueColorValue;
+								saturation = binValueTwo / maxValueTwo;
+							}
+							else {
+								redColorValue = ((binValueOne - binValueTwo) / binValueOne);
+								blueColorValue = 1 - redColorValue;
+								saturation = binValueOne / maxValueOne;
+							}
 						}
 						else {
-							redColorValue = ((normalizedValueOne - normalizedValueTwo) / normalizedValueOne + 1) / 2.F;
-							blueColorValue = 1 - redColorValue;
-							saturation = binValueOne / maxValueOne;
+							if(normalizedValueTwo > normalizedValueOne) {
+								blueColorValue = ((normalizedValueTwo - normalizedValueOne) / normalizedValueTwo + 1) / 2.F;
+								redColorValue = 1-blueColorValue;
+								saturation = binValueTwo / maxValueTwo;
+							}
+							else {
+								redColorValue = ((normalizedValueOne - normalizedValueTwo) / normalizedValueOne + 1) / 2.F;
+								blueColorValue = 1 - redColorValue;
+								saturation = binValueOne / maxValueOne;
+							}
 						}
 						
 						//Convert the values to HSV
@@ -323,7 +337,6 @@ void ParallelCoordsView::createAxisDensities() {
 	}
 }
 void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ushort>* dataset) {
-	printf("CREATE AXIS POINTS %d\n",datasetId);
 	for(auto &axisGroup : axisGroups) {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto axis : tAxes) {
@@ -352,7 +365,7 @@ void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ush
 	}
 }
 void ParallelCoordsView::createAxisPoints(int datasetId, RIVDataSet<float,ushort>* dataset) {
-	printf("CREATE AXIS POINTS %d\n",datasetId);
+//	printf("CREATE AXIS POINTS %d\n",datasetId);
 	for(auto &axisGroup : axisGroups) {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto axis : tAxes) {
@@ -388,28 +401,30 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	bool pathMembershipDataPresent = false;
-	bool isectMembershipDataPresent = false;
 	
-	RIVTable<float,ushort>* pathMembershipTable = dataset->GetTable(PATH_MEMBERSHIP_TABLE);
-	RIVTable<float,ushort>* isectMembershipTable = dataset->GetTable(ISECT_MEMBERSHIP_TABLE);
 	
-	RIVFloatRecord* pathMembershipRecord = NULL;
-	RIVFloatRecord* isectMembershipRecord = NULL;
-	
-	riv::ColorMap colorMap;
-	if(pathMembershipTable && isectMembershipTable) {
-	
-		pathMembershipRecord = pathMembershipTable->GetRecord<float>(MEMBERSHIP);
-		isectMembershipRecord = isectMembershipTable->GetRecord<float>(MEMBERSHIP);
-		
-		colorMap.AddColor(colors::RED);
-		colorMap.AddColor(colors::BLUE);
-		
-		pathMembershipDataPresent = pathMembershipRecord->Size();
-		isectMembershipDataPresent = isectMembershipRecord->Size();
-		
-	}
+//	bool pathMembershipDataPresent = false;
+//	bool isectMembershipDataPresent = false;
+//	
+//	RIVTable<float,ushort>* pathMembershipTable = dataset->GetTable(PATH_MEMBERSHIP_TABLE);
+//	RIVTable<float,ushort>* isectMembershipTable = dataset->GetTable(ISECT_MEMBERSHIP_TABLE);
+//	
+//	RIVFloatRecord* pathMembershipRecord = NULL;
+//	RIVFloatRecord* isectMembershipRecord = NULL;
+//	
+//	riv::ColorMap colorMap;
+//	if(pathMembershipTable && isectMembershipTable) {
+//	
+//		pathMembershipRecord = pathMembershipTable->GetRecord<float>(MEMBERSHIP);
+//		isectMembershipRecord = isectMembershipTable->GetRecord<float>(MEMBERSHIP);
+//		
+//		colorMap.AddColor(colors::RED);
+//		colorMap.AddColor(colors::BLUE);
+//		
+//		pathMembershipDataPresent = pathMembershipRecord->Size();
+//		isectMembershipDataPresent = isectMembershipRecord->Size();
+//		
+//	}
 	
 //	if(pathMembershipRecord->Size()) {
 //		
@@ -436,21 +451,21 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 		
 		//Find what color property to use for this table
 		RIVColorProperty* colorProperty = pathColors;
-		if(table->name == PATHS_TABLE) {
-			if(pathMembershipDataPresent) {
-				colorProperty = new RIVEvaluatedColorProperty<float>(colorMap,table,pathMembershipRecord,-1,1);
-			}
-			else colorProperty = pathColors;
-//			membershipRecord = pathMembershipRecord;
-		}
-		else if(table->name == INTERSECTIONS_TABLE) {
-			if(isectMembershipDataPresent) {
-				colorProperty = new RIVEvaluatedColorProperty<float>(colorMap,table,isectMembershipRecord,-1,1);
-			}
-			else colorProperty = rayColors;
-			
-			
-		}
+//		if(table->name == PATHS_TABLE) {
+//			if(pathMembershipDataPresent) {
+//				colorProperty = new RIVEvaluatedColorProperty<float>(colorMap,table,pathMembershipRecord,-1,1);
+//			}
+//			else colorProperty = pathColors;
+////			membershipRecord = pathMembershipRecord;
+//		}
+//		else if(table->name == INTERSECTIONS_TABLE) {
+//			if(isectMembershipDataPresent) {
+//				colorProperty = new RIVEvaluatedColorProperty<float>(colorMap,table,isectMembershipRecord,-1,1);
+//			}
+//			else colorProperty = rayColors;
+//			
+//			
+//		}
 		
 
 			//You gotta love 'auto'!

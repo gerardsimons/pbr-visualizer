@@ -8,6 +8,7 @@
 #include "Data/Filter.h"
 #include "Views/DataView.h"
 #include "Views/ParallelCoordsView.h"
+#include "Views/UIView.h"
 #include "Data/DataSet.h"
 #include "Views/ImageView.h"
 #include "Views/3DView.h"
@@ -37,7 +38,7 @@
 
 int padding = 10;
 
-int width = 1450;
+int width = 1650;
 int height = 850;
 
 //Resolution of the render
@@ -60,6 +61,7 @@ int sceneViewWindow;
 int parallelViewWindow;
 int heatMapViewWindow;
 int sliderViewWindow;
+int uiViewWindow;
 
 /* For debugging purposes, keep track of mouse location */
 int lastMouseX,lastMouseY = 0;
@@ -69,6 +71,7 @@ RIV3DView *sceneView = NULL;
 ParallelCoordsView *parallelCoordsView = NULL;
 RIVHeatMapView *heatMapView = NULL;
 RIVSliderView* sliderView = NULL;
+RIVUIView* uiView = NULL;
 
 RIVDataSet<float,ushort>** datasetOne = NULL;
 RIVDataSet<float,ushort>** datasetTwo = NULL;
@@ -81,7 +84,8 @@ EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
 const int maxPaths = 5000;
-const int bootstrapRepeat = 1;
+const int bootstrapRepeat = 10;
+
 const int sliderViewHeight = 50;
 
 void display(void)
@@ -96,7 +100,7 @@ void display(void)
 
 void testFunctions() {
 	
-	RIVDataSet<float,ushort> *testData = new RIVDataSet<float,ushort>("test_set");
+	RIVDataSet<float,ushort>* testData = new RIVDataSet<float,ushort>("test_set");
 	
 	RIVTable<float,ushort>* testTable = testData->CreateTable("test_table");
 	
@@ -247,7 +251,7 @@ void keys(int keyCode, int x, int y) {
         case 119: // 'w' key, move camera in Y direction
             sceneView->MoveCamera(0,camSpeed,0);
             break;
-        case 115: // 's' key
+        case 115: // 's' kegy
             sceneView->MoveCamera(0, -camSpeed, 0);
             break;
         case GLUT_KEY_UP:
@@ -302,6 +306,10 @@ void reshape(int w, int h)
     glutSetWindow(imageViewWindow);
     glutPositionWindow(padding, height/2+padding + sliderViewHeight / 2.F);
     glutReshapeWindow(imageViewWidth,squareSize); //Square bottom left corner
+	
+//	glutSetWindow(uiViewWindow);
+//	glutPositionWindow(padding * 3 + squareSize * 3, height/2+padding + sliderViewHeight / 2.F);
+//	glutReshapeWindow(width - squareSize - 2 * padding,squareSize); //Square bottom left corner
     //
 //    //    //3D scene view inspector window
 //    glutSetWindow(sceneViewWindow);
@@ -349,6 +357,8 @@ bool processRendererOne(PathData* newPath) {
 
 void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
 //	dataControllerTwo->RendererOneFinishedFrame(numPaths,numRays);
+//	glutSetWindow(RIVImageView::windowHandle);
+	glutPostRedisplay();
 }
 
 bool processRendererTwo(PathData* newPath) {
@@ -358,6 +368,7 @@ bool processRendererTwo(PathData* newPath) {
 
 void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
 //	dataControllerTwo->RendererTwoFinishedFrame(numPaths,numRays);
+	glutPostRedisplay();
 }
 
 void setupDataController(const int argc, char** argv) {
@@ -453,7 +464,8 @@ void createViews() {
 	glutMotionFunc(RIVImageView::Motion);
 	glutSpecialFunc(keys);
 	
-	sceneViewWindow = glutCreateSubWindow(mainWindow, padding * 3 + imageViewWidth, bottomHalfY, squareSize, squareSize);
+	int sceneViewPosX = padding * 3 + imageViewWidth;
+	sceneViewWindow = glutCreateSubWindow(mainWindow, sceneViewPosX, bottomHalfY, squareSize, squareSize);
 	RIV3DView::windowHandle = sceneViewWindow;
 	glutSetWindow(sceneViewWindow);
 	glutDisplayFunc(RIV3DView::DrawInstance);
@@ -480,6 +492,19 @@ void createViews() {
 	glutMotionFunc(RIVSliderView::Motion);
 	glutSpecialFunc(keys);
 	
+//	int uiViewWidth = width - 3 * squareSize - 2 * padding;
+//	int uiPosX = sceneViewPosX + squareSize + padding;
+//	uiViewWindow = glutCreateSubWindow(mainWindow, uiPosX, bottomHalfY, uiViewWidth, squareSize);
+//	RIVUIView::windowHandle = uiViewWindow;
+//	glutSetWindow(uiViewWindow);
+//	glutDisplayFunc(RIVUIView::DrawInstance);
+//	//	glutDisplayFunc(doNothing);
+//	glutReshapeFunc(RIVUIView::ReshapeInstance);
+//	glutMouseFunc(RIVUIView::Mouse);
+//	glutMotionFunc(RIVUIView::Motion);
+//	glutSpecialFunc(keys);
+//	uiView = new RIVUIView(datasetOne, uiViewWidth, uiPosX, bottomHalfY, squareSize, padding, padding);
+	
 	//Create views for two renderers
 	auto pathColorOne = createPathColorProperty(*datasetOne);
 	auto rayColorOne = createRayColorProperty(*datasetOne);
@@ -495,7 +520,7 @@ void createViews() {
 		
 		auto isectTable = (*datasetTwo)->GetTable(INTERSECTIONS_TABLE);
 		
-		RIVEvaluatedColorProperty<float>* xLinear = new RIVEvaluatedColorProperty<float>(redBlue, isectTable, isectTable->GetRecord<float>(POS_X));
+//		RIVEvaluatedColorProperty<float>* xLinear = new RIVEvaluatedColorProperty<float>(redBlue, isectTable, isectTable->GetRecord<float>(POS_X));
 		
 //		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
 		

@@ -233,7 +233,7 @@ void RIV3DView::Draw() {
 //	reporter::startTask("3D Draw");
 	
     glEnable(GL_DEPTH_TEST);
-	glClearColor (1.0, 1.0, 1.0, 0.0);
+	glClearColor(1.0, 1.0, 1.0, 0.0);
     glClear( GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_BLEND);
     glMatrixMode(GL_MODELVIEW);
@@ -747,7 +747,7 @@ Vec3fa RIV3DView::screenToWorldCoordinates(int screenX, int screenY, float zPlan
     return worldPos;
 }
 //Checks if a ray intersects with the mesh group and creates the path filters accordingly and applies them to the dataset
-bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes, riv::RowFilter* pathFilter, ushort* bounceCount) {
+bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes, riv::RowFilter*& pathFilter, ushort* bounceCount) {
 	ushort selectedObjectID;
 	float distance;
 	
@@ -782,7 +782,7 @@ bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMe
 //		intersectionsTable->Print();
 		
 		if(pathFilter != NULL) { //Add to the previous filter
-			delete pathFilter;
+			dataset->ClearRowFilter(pathFilter);
 		}
 		
 		TableIterator* iterator = pathTable->GetIterator();
@@ -806,33 +806,9 @@ bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMe
 		}
 		(*bounceCount)++;
 	
-//			riv::SingularFilter<ushort>* objectFilter = new riv::DiscreteFilter<ushort>("primitive ID",selectedObjectID);
-//			riv::SingularFilter<ushort>* bounceFilter = new riv::DiscreteFilter<ushort>("bounce_nr",1);
-//			std::vector<riv::SingularFilter<ushort>*> fs;
-//			fs.push_back(objectFilter);
-//			fs.push_back(bounceFilter);
-		
-//			pathFilter = new riv::GroupFilter<ushort>(new riv::ConjunctiveFilter<ushort>(fs));
 		pathFilter = new riv::RowFilter(PATHS_TABLE, filteredRows);
 		dataset->AddFilter(pathFilter);
 		
-//		else { //There already is a path creation filter, simply add to it
-			//Find the latest bounce nr filter
-//			size_t bounce_nr = pathFilter->Size() + 1;
-			
-//			riv::SingularFilter<ushort>* objectFilter = new riv::DiscreteFilter<ushort>("primitive ID",selectedObjectID);
-//			riv::SingularFilter<ushort>* bounceFilter = new riv::DiscreteFilter<ushort>("bounce_nr",bounce_nr);
-			
-//			std::vector<riv::SingularFilter<ushort>*> fs;
-			
-//			fs.push_back(objectFilter);
-//			fs.push_back(bounceFilter);
-//			pathFilter->AddFilter(new riv::ConjunctiveFilter<ushort>(fs));
-//			dataset->UpdateFilter(pathFilter);
-			
-//			dataset->AddFilter(new riv::GroupFilter<ushort>(new riv::ConjunctiveFilter<ushort>(fs)));
-//		}
-
 		printf("\n");
 		dataset->StopFiltering();
 	}
@@ -843,35 +819,52 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
     y = height - y;
 	if(state == GLUT_DOWN) {
 		
-		Vec3fa selectNear = screenToWorldCoordinates(x, y, 0);
-		Vec3fa selectFar = screenToWorldCoordinates(x, y, 1);
-		
-		Vec3fa modelPosition = -center;
-		float reverseScaleModel = 1 / scale;
-		
-		Vec3fa dest = reverseScaleModel * selectNear;
-		dest = dest - modelPosition;
-		Vec3fa origin = reverseScaleModel * selectFar;
-		origin = origin - modelPosition;
-		
-		Vec3fa dir = dest - origin;
-		
-		pickRay = Ray(origin, dir);
-		
-		if(!drawDataSetOne && drawDataSetTwo) {
-			pathCreation(*datasetTwo, meshesTwo,pathFilterTwo,&bounceCountTwo);
+		if(button == GLUT_LEFT_BUTTON) {
+			Vec3fa selectNear = screenToWorldCoordinates(x, y, 0);
+			Vec3fa selectFar = screenToWorldCoordinates(x, y, 1);
+			
+			Vec3fa modelPosition = -center;
+			float reverseScaleModel = 1 / scale;
+			
+			Vec3fa dest = reverseScaleModel * selectNear;
+			dest = dest - modelPosition;
+			Vec3fa origin = reverseScaleModel * selectFar;
+			origin = origin - modelPosition;
+			
+			Vec3fa dir = dest - origin;
+			
+			pickRay = Ray(origin, dir);
+			
+			if(!drawDataSetOne && drawDataSetTwo) {
+				pathCreation(*datasetTwo, meshesTwo,pathFilterTwo,&bounceCountTwo);
+			}
+			else if(drawDataSetOne && !drawDataSetTwo) {
+				pathCreation(*datasetOne, meshesOne,pathFilterOne, &bounceCountOne);
+			}
+			else if(drawDataSetOne && drawDataSetTwo) {
+				pathCreation(*datasetOne, meshesOne,pathFilterOne, &bounceCountOne);
+				pathCreation(*datasetTwo, meshesTwo,pathFilterTwo,&bounceCountTwo);
+			}
+			//TODO: Else just use the one that intersects closest to the view point
+			
+			isDragging = true;
+			tbMouseFunc(button, state, width-x, y);
+			return true;
 		}
-		else if(drawDataSetOne && !drawDataSetTwo) {
-			pathCreation(*datasetOne, meshesOne,pathFilterOne, &bounceCountOne);
+		else if(button == GLUT_RIGHT_BUTTON) { //Clear paths created
+			if(pathFilterOne) {
+				bounceCountOne = 1;
+				(*datasetOne)->StartFiltering();
+				(*datasetOne)->ClearRowFilter(pathFilterOne);
+				(*datasetOne)->StopFiltering();
+			}
+			if(pathFilterTwo) {
+				bounceCountTwo = 1;
+				(*datasetTwo)->StartFiltering();
+				(*datasetTwo)->ClearRowFilter(pathFilterTwo);
+				(*datasetTwo)->StopFiltering();
+			}
 		}
-		
-//		if(!pathCreation(*datasetOne, meshesOne)) {
-
-//		}
-		
-		isDragging = true;
-		tbMouseFunc(button, state, width-x, y);
-		return true;
 	}
 	else {
 		isDragging = false;
