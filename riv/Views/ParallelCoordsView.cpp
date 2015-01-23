@@ -174,6 +174,8 @@ void ParallelCoordsView::drawAxes() {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto axis : tAxes) {
 				
+//				printf("axis %s\n",axis->name.c_str());
+				
 				auto& histogramOne = axis->densityHistogramOne;
 				auto& histogramTwo = axis->densityHistogramTwo;
 				
@@ -186,11 +188,16 @@ void ParallelCoordsView::drawAxes() {
 				float maxValueTwo = histogramTwo.MaximumValue();
 				
 				for(int i = 0 ; i < numBins ; ++i) {
+//					printf("bin = %d\n",i);
+					
 					int startY = i * height + axis->y;
 					int endY = startY + height;
 					
 					float binValueOne = histogramOne.BinValue(i);
 					float binValueTwo = histogramTwo.BinValue(i);
+					
+//					printf("bin value one = %f\n",binValueOne);
+//					printf("bin value two = %f\n",binValueTwo);
 					
 					size_t nrElementsOne = histogramOne.NumberOfElements();
 					size_t nrElementsTwo = histogramTwo.NumberOfElements();
@@ -208,19 +215,19 @@ void ParallelCoordsView::drawAxes() {
 						float redColorValue;
 						float saturation;
 						
-						if(false && binValueOne == nrElementsOne && binValueTwo == nrElementsTwo) {
-							if(binValueTwo > binValueOne) {
-								blueColorValue = ((binValueTwo - binValueOne) / binValueTwo);
-								redColorValue = 1-blueColorValue;
-								saturation = binValueTwo / maxValueTwo;
-							}
-							else {
-								redColorValue = ((binValueOne - binValueTwo) / binValueOne);
-								blueColorValue = 1 - redColorValue;
-								saturation = binValueOne / maxValueOne;
-							}
-						}
-						else {
+//						if(false && binValueOne == nrElementsOne && binValueTwo == nrElementsTwo) {
+//							if(binValueTwo > binValueOne) {
+//								blueColorValue = ((binValueTwo - binValueOne) / binValueTwo);
+//								redColorValue = 1-blueColorValue;
+//								saturation = binValueTwo / maxValueTwo;
+//							}
+//							else {
+//								redColorValue = ((binValueOne - binValueTwo) / binValueOne);
+//								blueColorValue = 1 - redColorValue;
+//								saturation = binValueOne / maxValueOne;
+//							}
+//						}
+//						else {
 							if(normalizedValueTwo > normalizedValueOne) {
 								blueColorValue = ((normalizedValueTwo - normalizedValueOne) / normalizedValueTwo + 1) / 2.F;
 								redColorValue = 1-blueColorValue;
@@ -231,7 +238,7 @@ void ParallelCoordsView::drawAxes() {
 								blueColorValue = 1 - redColorValue;
 								saturation = binValueOne / maxValueOne;
 							}
-						}
+//						}
 						
 						//Convert the values to HSV
 						float h,s,v;
@@ -241,6 +248,7 @@ void ParallelCoordsView::drawAxes() {
 						float r,g,b;
 						HSVtoRGB(&r, &g, &b, h, saturation, v);
 						
+//						printf("glColor3f(%f,%f,%f)\n",r,g,b);
 						glColor3f(r,g,b);
 						glRectf(startX, startY, endX, endY);
 					}
@@ -349,19 +357,22 @@ void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ush
 		size_t row = 0;
 		
 		auto table = dataset->GetTable(axisGroup.tableName);
-		TableIterator* iterator = table->GetIterator();
 		
-		while(iterator->GetNext(row)) {
-			
-			tuple_for_each(axisGroup.axes, [&](auto& tAxes) {
-				for(auto& axis : tAxes) {
+
+		tuple_for_each(axisGroup.axes, [&](auto& tAxes) {
+			for(auto& axis : tAxes) {
+				
+				TableIterator* iterator = table->GetIterator();
+				while(iterator->GetNext(row)) {
+					
 					auto record = table->GetRecord<decltype(axis->minValue)>(axis->name);
 					auto value = record->Value(row);
 					
 					axis->GetHistogram(datasetId)->Add(value);
 				}
-			});
-		}
+			}
+		});
+		
 	}
 }
 void ParallelCoordsView::createAxisPoints(int datasetId, RIVDataSet<float,ushort>* dataset) {
@@ -707,7 +718,6 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 					return true;
 				}
 			}
-			selectedAxis = NULL;
         }
         else if(state == GLUT_UP) { //Finish selection
 			

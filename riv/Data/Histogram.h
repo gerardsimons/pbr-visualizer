@@ -171,10 +171,7 @@ public:
 	int BinForValue(const T& value) {
 		T delta = upperBound - lowerBound;
 		float interpolated = (float)(value - lowerBound) / (delta);
-		unsigned int bin = floor(interpolated * (bins - 1));
-		if(bin == NumberOfBins()) {
-			
-		}
+		unsigned int bin = round(interpolated * (bins - 1));
 		return bin;
 	}
 	float DistanceTo(Histogram* right) {

@@ -78,7 +78,7 @@ private:
 	void createAxes();
 	void createAxisPoints();
 	void createAxisPoints(int datasetId, RIVDataSet<float,ushort>* dataset);
-	void createAxisDensities();
+
 	void createAxisDensities(int datasetId, RIVDataSet<float,ushort>* dataset);
 	//Draw helper functions
 	void drawAxes();
@@ -90,8 +90,9 @@ private:
 	void swapAxes(ParallelCoordsAxisGroup<float,ushort>* axisGroup, const std::string& swapAxisOne, const std::string& swapAxisTwo);
 
 	void filterData();
-	void redisplayWindow();
 public:
+	void redisplayWindow();
+	void createAxisDensities();
     ParallelCoordsView(RIVDataSet<float,ushort>** dataset, HistogramSet<float,ushort>* distributionsOne, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSliderView* sliderView);
     ParallelCoordsView(RIVDataSet<float,ushort>** dataset, HistogramSet<float,ushort>* distributionsOne, RIVColorProperty *pathColor, RIVColorProperty *rayColor,RIVSliderView* sliderView);
 	//Constructors for double renderers

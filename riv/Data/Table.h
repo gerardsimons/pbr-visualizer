@@ -40,15 +40,12 @@ private:
 	std::vector<size_t> selectedRows;
 	
 	bool empty = true;
-	bool filtered = false;
 	bool isClustered = false;
 	
 	std::tuple<std::vector<RIVRecord<Ts>*>...> records;
 	std::tuple<std::map<std::string,RIVRecord<Ts>*>...> recordsRegister;
 	
 	std::tuple<std::vector<riv::SingularFilter<Ts>*>...> filters;
-	std::tuple<std::vector<riv::CompoundFilter<Ts>*>...> compoundFilters;
-	std::tuple<std::vector<riv::GroupFilter<Ts>*>...> groupFilters; //Group filter are treated differently
 	std::vector<riv::RowFilter*> rowFilters; //Custom row filters
 	
 	std::vector<std::string> attributes;
@@ -226,31 +223,10 @@ public:
 	}
 	//Filter this table according to the filters that are applied
 	void Filter() {
-		//		filteredRows.clear();
+//		filteredRows.clear();
 		newlyFilteredRows.clear();
 		std::string task = "Filter " + name;
 		reporter::startTask(task);
-		
-		//		printf("Filtering table %s with filters:\n",name.c_str());
-		//		tuple_for_each(filters, [&](auto tFilters) {
-		//			for(auto filter : tFilters) {
-		//				printf("\t");
-		//				filter->Print();
-		//			}
-		//		});
-		//		printf("\n");
-		bool groupPassed = false;
-		bool groupFiltersPresent = false;
-		tuple_for_each(groupFilters, [&](auto groupTFilters) {
-			if(groupTFilters.size()) {
-				groupFiltersPresent = true;
-			}
-		});
-		if(!groupFiltersPresent) {
-			groupPassed = true;
-		}
-		size_t invalidId = -1;
-		size_t latestRefId = invalidId;
 		size_t rows = NumberOfRows();
 		for(size_t row = 0 ; row < rows ; row++) {
 			size_t refId = reference->GetReferenceRows(row).first[0];
@@ -261,50 +237,6 @@ public:
 				continue; //Already filtered
 			}
 			bool filterSourceRow = false;
-			if(groupFiltersPresent) {
-				if(refId != latestRefId) {
-					groupPassed = false;
-					//					printf("New group...");
-				}
-				if(!groupPassed) {
-					tuple_for_each(groupFilters, [&](auto groupTFilters) {
-						for(auto groupFilter : groupTFilters) { // A group filter of type T
-							groupFilter->Print();
-							auto& compoundFilters = *groupFilter->GetCompoundFilters();
-							int filtersPassed = 0;
-							int filtersToPass = 0;
-							for(auto compoundFilter : compoundFilters) { //All the group filters conjunctive filters
-								auto singleFilters = compoundFilter->GetAllSingularFilters();
-								tuple_for_each(singleFilters, [&](auto singleTFilters) {
-									filtersToPass += singleTFilters.size();
-									for(auto& filter : singleTFilters) {
-										typedef typename get_template_type<typename std::decay<decltype(*filter)>::type>::type templateType;
-										auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
-										//									std::cout << "record " << recordForFilter->name << " : " << recordForFilter->Value(row) << std::endl;
-										//									std::cout << "filter ";
-										//									filter->Print();
-										//									std::cout << std::endl;
-										bool filterThis = !filter->PassesFilter(recordForFilter->name, recordForFilter->Value(row));
-										if(filterThis) {
-											//											printf("Does not pass the filter!\n");
-											groupPassed = false;
-											break;
-										}
-										else {
-											++filtersPassed;
-										}
-									}
-								});
-								if(filtersPassed == filtersToPass) {
-									groupPassed = true;
-								}
-							}
-						}
-					});
-				}
-				latestRefId = refId;
-				filterSourceRow = !groupPassed;
-			}
 			// Process the manual row filters
 			if(!filterSourceRow) {
 				for(auto filter : rowFilters) {
@@ -320,10 +252,6 @@ public:
 			if(!filterSourceRow) {
 				tuple_for_each(filters, [&](auto tFilters) {
 					for(auto filter : tFilters) {
-						//						printf("Considering singular filter ");
-						//						filter->Print();
-						//							If the filter applies to this table, filter according to
-						//							if(filter->AppliesToTable(thisInterface)) {
 						typedef typename get_template_type<typename std::decay<decltype(*filter)>::type>::type templateType;
 						auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
 						filterSourceRow = !filter->PassesFilter(recordForFilter->Value(row));
@@ -335,14 +263,10 @@ public:
 			}
 			
 			//FINISH UP
-			
 			if(filterSourceRow) {
 				//				printf("row = %zu FILTERED\n",row);
 				FilterRow(row);
 				newlyFilteredRows[row] = true;
-			}
-			else {
-				//					printf("row = %zu SELECTED\n",row);
 			}
 		}
 		printf("%zu rows filtered in table %s\n",newlyFilteredRows.size(),name.c_str());
@@ -350,11 +274,8 @@ public:
 		reporter::stop(task);
 	}
 	void FilterReferences() {
-		//This checks its references to create a group that it is referring to and see if ALL of its rows are filtered, only then is the reference row filtered as well
-		//TODO: I have feeling this is really ugly... and its really costly ?
 		reporter::startTask("Filter References");
-		//If this one is filtered
-		//			printf("Filter references for row = %zu\n",row);
+		
 		//This happens to paths table
 		RIVMultiReference* forwardRef = dynamic_cast<RIVMultiReference*>(reference);
 		if(forwardRef) {
@@ -371,19 +292,19 @@ public:
 				for(auto iterator : multiRef->GetIndexMap()) {
 					size_t referenceTableRow = iterator.first;
 					
-					std::pair<size_t*,ushort>& backRows = iterator.second;
+					const std::pair<size_t*,ushort>& backRows = iterator.second;
+					bool filter = true;
 					size_t rowsFound = 0;
-					size_t rowsRequired = backRows.second;
 					//					printMap(filteredRows);
 					for(ushort i = 0 ; i < backRows.second ; ++i) { //Does the filtered map contain ALL of these rows? If so we should filter it in the reference table
 						//						printArray(backRows.first, backRows.second);
 						bool filteredBackRow = filteredRows[backRows.first[i]];
 						if(!filteredBackRow) {
-							break;
+							filter = false;
 						}
 						++rowsFound;
 					}
-					if(rowsFound == rowsRequired) {
+					if(filter) {
 						//							printf("Filter reference row %zu at %s\n",referenceTableRow,reference->targetTable->name.c_str());
 						reference->targetTable->FilterRow(referenceTableRow);
 						
@@ -423,56 +344,21 @@ public:
 		return &std::get<std::vector<riv::SingularFilter<T>*>>(filters);
 	}
 	template<typename T>
-	std::vector<riv::GroupFilter<T>*>* GetGroupFilters() {
-		return &std::get<std::vector<riv::GroupFilter<T>*>>(groupFilters);
-	}
-	template<typename T>
-	std::vector<riv::CompoundFilter<T>*>* GetCompoundFilters() {
-		return &std::get<std::vector<riv::CompoundFilter<T>*>>(compoundFilters);
-	}
-	template<typename T>
 	void AddFilter(riv::SingularFilter<T> *filter) {
 		auto tFilters = GetFilters<T>();
 		tFilters->push_back(filter);
 	}
-	template<typename U>
-	void AddFilter(riv::GroupFilter<U> *groupFilter) {
-		GetGroupFilters<U>()->push_back(groupFilter);
-		//		groupFilters.push_back(groupFilter);
-	}
 	void AddFilter(riv::RowFilter* rowFilter) {
 		rowFilters.push_back(rowFilter);
-	}
-	template<typename U>
-	void AddFilter(riv::CompoundFilter<U>* compoundFilter) {
-		GetCompoundFilters<U>()->push_back(compoundFilter);
-	}
-	template<typename ...Us>
-	bool HasFilter(riv::GroupFilter<Us...> *groupFilter) {
-		bool found = false;
-		tuple_for_each(groupFilters, [&](auto groupTFilters) {
-			for(size_t i = 0 ; i < groupTFilters.size() ; ++i) {
-				//It is not allowed to compare pointers of distinct types (so cast them here to void to circumvent this constraint)
-				if((void*)groupTFilters.at(i) == (void*)groupFilter) {
-					found = true;
-					break;
-				}
-			}
-		});
-		return found;
 	}
 	std::vector<std::string> GetAttributes() const;
 	void FilterRow(size_t row) {
 		filteredRows[row] = true;
-		filtered = true;
 		
 	}
 	//Clears all the filters that may be present, returns true if any filters were actually removed
 	bool ClearFilters() {
 		tuple_for_each(filters, [&](auto filters) {
-			filters.clear();
-		});
-		tuple_for_each(groupFilters, [&](auto filters) {
 			filters.clear();
 		});
 		rowFilters.clear();
@@ -498,9 +384,6 @@ public:
 			printf("Filter found.\n");
 			--filtersPresent;
 			tFilters->erase(tFilters->begin() + i);
-			if(filtersPresent == 0) {
-				filtered = false;
-			}
 			
 			filteredRows.clear();
 			if(reference) {
@@ -513,7 +396,20 @@ public:
 		printf("No such filter found.\n");
 		return false;
 	}
-	bool IsFiltered() { return filtered; }; //Any filters applied?
+	bool IsFiltered() {
+		bool filtered = false;
+//		tuple_for_each(filters, [&](auto tFilters) {
+//			if(tFilters.size()) {
+//				filtered = true;
+//				return;
+//			}
+//		});
+//		if(!filtered) {
+//			return rowFilters.size();
+//		}
+		return filteredRows.size();
+//		return filtered;
+	}; //Any filters applied?
 	bool IsClustered() { return isClustered; };
 	void ClearFilteredRows() {
 		filteredRows.clear();

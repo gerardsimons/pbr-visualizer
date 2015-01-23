@@ -216,37 +216,9 @@ void keys(int keyCode, int x, int y) {
 		}
         case 116: // 't' key, use as temp key for some to-test function
         {
-//			riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",1);
-//			dataset.AddFilter("path",objectFilter);
-			
-//			std::vector<riv::Filter*> allFilters;
-//			std::vector<ushort> selectedObjectIDs;
-//			selectedObjectIDs.push_back(3);
-////			selectedObjectIDs.push_back(1);
-////			selectedObjectIDs.push_back(1);
-////			selectedObjectIDs.push_back(1);
-////			selectedObjectIDs.push_back(1);
-//			
-//			for(int i = 0 ; i < selectedObjectIDs.size() ; ++i) {
-//				riv::Filter* objectFilter = new riv::DiscreteFilter("object ID",selectedObjectIDs[i]);
-//				riv::Filter* bounceFilter = new riv::DiscreteFilter("bounce#",i+1);
-//				std::vector<riv::Filter*> fs;
-//				fs.push_back(objectFilter);
-//				fs.push_back(bounceFilter);
-//				allFilters.push_back(new riv::ConjunctiveFilter(fs));
-//			}
-//			riv::GroupFilter* pathCreationFilter = new riv::GroupFilter(allFilters,dataset->GetTable("path"));
-//			riv::DiscreteFilter* bounceOneFilter = new riv::DiscreteFilter("bounce#",1);
-//			pathCreationFilter->Print();
-//			printf("\n");
-//			dataset->StartFiltering();
-//			dataset->AddFilter("path", pathCreationFilter);
-//			dataset->StopFiltering();
-//			dataset->StartFiltering();
-//			dataset->AddFilter("intersections", bounceOneFilter);
-//			dataset->StopFiltering();
-//			postRedisplay = false;
-//            break;
+			parallelCoordsView->createAxisDensities();
+			parallelCoordsView->redisplayWindow();
+			break;
         }
         case 119: // 'w' key, move camera in Y direction
             sceneView->MoveCamera(0,camSpeed,0);

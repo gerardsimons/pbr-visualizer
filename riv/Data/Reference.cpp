@@ -68,7 +68,7 @@ const std::pair<size_t*,ushort>& RIVMultiReference::GetReferenceRows(size_t row)
 void RIVMultiReference::FilterReferenceRow(size_t row) {
 	std::pair<size_t*,ushort> rows = GetReferenceRows(row);
 	for(ushort i = 0 ; i < rows.second ; ++i) {
-//		printf("Filter row->referenceRow : %zu->%zu in table %s\n",row,rows.first[i],targetTable->GetName().c_str());
+//		printf("Filter row->referenceRow : %zu->%zu in table %s\n",row,rows.first[i],targetTable->name.c_str());
 		targetTable->FilterRow(rows.first[i]);
 	}
 }

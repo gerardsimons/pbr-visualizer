@@ -441,8 +441,8 @@ void DataController::Reduce() {
 				++pathsCount;
 			}
 			
-			//			printf("\nBOOTSTRAP RESULT = \n");
-			//			bestBootstrap->Print();
+//						printf("\nBOOTSTRAP RESULT = \n");
+//						bestBootstrap->Print();
 			
 			//Delete the old renderer data and replace it with the bootstrap dataset,
 			delete rendererData;
