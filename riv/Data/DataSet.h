@@ -112,37 +112,6 @@ public:
 			}
 		}
 	}
-	template<typename... Us>
-	void AddFilter(riv::GroupFilter<Us...>* filter) {
-		//Find the table that contains all of the filter attributes
-		for(auto table : tables) {
-			if(filter->AppliesToTable(table)) {
-				table->AddFilter(filter);
-				staleTables[table] = true;
-				return;
-			}
-		}
-		throw std::runtime_error("Filter applies to no table in this dataset.");
-	}
-	template<typename... Us>
-	void AddFilter(riv::CompoundFilter<Us...>* filter) {
-		for(auto table : tables) {
-			if(filter->AppliesToTable(table)) {
-				table->AddFilter(filter);
-				staleTables[table] = true;
-				return;
-			}
-		}
-		throw std::runtime_error("Filter applies to no table in this dataset.");
-	}
-	template<typename... Us>
-	void UpdateFilter(riv::GroupFilter<Us...>* filter) {
-		for(auto table : tables) {
-			if(table->HasFilter(filter)) {
-				staleTables[table] = true;
-			}
-		}
-	}
 	
 	//Automatically find the table this should be filtered on, the one containing all of the filters attributes
 	//	void AddFilter(riv::Filter* filter);

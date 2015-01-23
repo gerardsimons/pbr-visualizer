@@ -29,7 +29,7 @@ void RIVUIView::setupUI() {
 		delete GluiHandle;
 	}
 	
-	GluiHandle = new Glui2("g2Blue.cfg", NULL, NULL);
+	GluiHandle = new Glui2("g2Blue.cfg", NULL, ReshapeInstance, NULL, NULL, Mouse, Motion);
 	
 	float effectiveWidth = width - 2*paddingX;
 	
