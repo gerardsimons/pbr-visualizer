@@ -1,4 +1,4 @@
- //
+//
 //  DataController.cpp
 //  embree
 //
@@ -198,10 +198,6 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 	
 	//ALWAYS update the histograms
 	ushort nrIntersections = newPath->intersectionData.size();
-	
-	if(newPath->pixel[0] > 0.9F) {
-		
-	}
 	
 	trueDistributions.AddToHistogram(PIXEL_X, newPath->pixel[0]);
 	trueDistributions.AddToHistogram(PIXEL_Y, newPath->pixel[1]);

@@ -300,8 +300,8 @@ void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource
 		//			membershipRecord->SetValue(row, oldValue / maxValue);
 		//		}
 		
-		membershipHistogramOne.Print();
-		membershipHistogramTwo.Print();
+//		membershipHistogramOne.Print();
+//		membershipHistogramTwo.Print();
 	}
 }
 void RIVSliderView::AddSelectedRecord(const std::string& tableName, const std::string &recordName) {
@@ -351,6 +351,8 @@ void RIVSliderView::RemoveSelectedRecord(const std::string &recordName) {
 		redisplayWindow();
 		
 		if(selectedRecords.size() == 0) {
+			(*datasetOne)->DeleteTable(PATH_MEMBERSHIP_TABLE);
+			(*datasetTwo)->DeleteTable(PATH_MEMBERSHIP_TABLE);
 			filterDataSets();
 		}
 	}
@@ -564,6 +566,7 @@ void RIVSliderView::redisplayWindow() {
 }
 //Dataset listener functions
 void RIVSliderView::OnFiltersChanged(RIVDataSet<float,ushort>* source) {
+	//WARNING: This creates erroneous and unstabe results... might be because of a loop created
 //	if(source == *datasetOne) {
 //		createMembershipData(source,true);
 //	}
@@ -574,11 +577,11 @@ void RIVSliderView::OnFiltersChanged(RIVDataSet<float,ushort>* source) {
 void RIVSliderView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 	printf("*** RIVSliderView received a on dataset changed notification!\n" );
 	if(source == *datasetOne) {
-		printHeader("CREATE MEMBERSHIP HISTOGRAM ONE");
+//		printHeader("CREATE MEMBERSHIP HISTOGRAM ONE");
 		createMembershipData(source,true);
 	}
 	else if(source == *datasetTwo) {
-		printHeader("CREATE MEMBERSHIP HISTOGRAM TWO");
+//		printHeader("CREATE MEMBERSHIP HISTOGRAM TWO");
 		createMembershipData(source,false);
 	}
 	else {

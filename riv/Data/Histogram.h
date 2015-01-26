@@ -178,9 +178,10 @@ public:
 			valueClamped = upperBound;
 		}
 		T delta = upperBound - lowerBound;
-		float interpolated = (float)(valueClamped - lowerBound) / (delta);
+		double interpolated = (double)(valueClamped - lowerBound) / (delta);
 		unsigned int bin = floor(interpolated * (bins));
-		if(bin >= bins) {
+		//When the value is exeactly on the upper edge it floors incorrectly to bin = bins
+		if(bin == bins) {
 			bin = bins - 1;
 		}
 		return bin;

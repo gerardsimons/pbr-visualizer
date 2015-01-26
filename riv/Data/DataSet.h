@@ -165,6 +165,15 @@ public:
 		//Notify the listeners now
 		notifyFilterListeners();
 	}
+	void DeleteTable(const std::string& tableName) {
+		for(size_t i = 0 ; i < tables.size() ; ++i) {
+			auto table = tables[i];
+			if(table->name == tableName) {
+				delete table;
+				tables.erase(tables.begin() + i);
+			}
+		}
+	}
 	template<typename T>
 	void ClearFilter(const std::string& filterName) {
 		//		printf("Clearing filter %s on all tables\n",filterName.c_str());
