@@ -85,60 +85,128 @@ EMBREERenderer* rendererTwo = NULL;
 
 const int maxPaths = 5000;
 const int bootstrapRepeat = 10;
-
 const int sliderViewHeight = 50;
+
+void TogglePause();
 
 void display(void)
 {
-    printf("Main display function called.\n");
-    // Clear frame buffer
-    glClearColor(1, 1, 1, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+	printf("Main display function called.\n");
+	// Clear frame buffer
+	glClearColor(1, 1, 1, 1);
+	glClear(GL_COLOR_BUFFER_BIT);
 	
-//	dataController->Unpause();
+	//	dataController->Unpause();
+}
+
+void invalidateAllViews() {
+	sceneView->Invalidate();
+	parallelCoordsView->Invalidate();
+	parallelCoordsView->redisplayWindow();
+	imageView->Invalidate();
+	imageView->redisplayWindow();
+//	uiView->Invalidate();
+	
+	int previousWindow = glutGetWindow();
+	glutSetWindow(mainWindow);
+	glutPostRedisplay();
+	glutSetWindow(previousWindow);
 }
 
 void testFunctions() {
 	
-	RIVDataSet<float,ushort>* testData = new RIVDataSet<float,ushort>("test_set");
+	//	RIVDataSet<float,ushort>* testData = new RIVDataSet<float,ushort>("test_set");
+	//
+	//	RIVTable<float,ushort>* testTable = testData->CreateTable("test_table");
+	//
+	//	RIVRecord<float>* floatRecord = testTable->CreateRecord<float>("floats");
+	//	RIVRecord<ushort>* shortRecord = testTable->CreateRecord<ushort>("shorts");
+	//
+	////	RIVMultiReference* multiRef = new RIVMultiReference();
+	////	RIVSingleReference* singleRef = new RIVSingleReference();
+	//
+	//	const int N = 1000;
+	//	for(int i = 0 ; i < N ; ++i) {
+	//		floatRecord->AddValue(rand());
+	//		shortRecord->AddValue(i);
+	//	}
+	//
+	//	auto histogramset = testData->CreateHistogramSet(10);
+	//
+	//	delete testData;
+	//
+	//Done
 	
-	RIVTable<float,ushort>* testTable = testData->CreateTable("test_table");
+	//Test bootstrap
+	const int upperBound = 100;
+	int bins = 4;
 	
-	RIVRecord<float>* floatRecord = testTable->CreateRecord<float>("floats");
-	RIVRecord<ushort>* shortRecord = testTable->CreateRecord<ushort>("shorts");
+	HistogramSet<int> trueHistograms;
 	
-//	RIVMultiReference* multiRef = new RIVMultiReference();
-//	RIVSingleReference* singleRef = new RIVSingleReference();
+	Histogram<int> trueHistogram("one",0,upperBound,bins);
+	Histogram<int> trueHistogramTwo("two",0,upperBound,bins);
 	
-	const int N = 1000;
-	for(int i = 0 ; i < N ; ++i) {
-		floatRecord->AddValue(rand());
-		shortRecord->AddValue(i);
+	int size = 1;
+	int sizeIncrement = 0;
+	for(int j = 0 ; j < upperBound ; ++j) {
+		for(int i = 0 ; i < 100*size ; ++i) {
+			int bin = trueHistogram.Add(j);
+			trueHistogramTwo.Add(j);
+			//			printf("Added %d to bin %d\n",j,bin);
+		}
+		size += sizeIncrement;
 	}
 	
-	auto histogramset = testData->CreateHistogramSet(10);
+	trueHistograms.AddHistogram(trueHistogram);
+	trueHistograms.AddHistogram(trueHistogramTwo);
+	trueHistograms.Print();
 	
-	delete testData;
-//
-	//Done 
+	HistogramSet<int> bootstrapHistograms;
+	
+	Histogram<int> bootstrapHistogram("one",0,upperBound,bins);
+	Histogram<int> bootstrapHistogramTwo("two",0,upperBound,bins);
+	
+	for(int j = 0 ; j < upperBound ; ++j) {
+		for(int i = 0 ; i < size ; ++i) {
+			bootstrapHistogram.Add(1);
+			bootstrapHistogramTwo.Add(1);
+		}
+		for(int i = 0 ; i < size ; ++i) {
+			bootstrapHistogram.Add(76);
+			//			bootstrapHistogramTwo.Add(1);
+		}
+	}
+	
+	bootstrapHistogram.Print();
+	
+	bootstrapHistograms.AddHistogram(bootstrapHistogram);
+	bootstrapHistograms.AddHistogram(bootstrapHistogramTwo);
+	
+	bootstrapHistogram.Print();
+	//	float score = bootstrapHistogram.DistanceTo(&trueHistogram);
+	float score = bootstrapHistograms.DistanceTo(trueHistograms);
+	
+	printf("test score = %f\n",score);
+	
+	exit(0);
 }
 
 void keys(int keyCode, int x, int y) {
-    //    printf("Pressed %d at (%d,%d)\n",keyCode,x,y);
-    bool postRedisplay = true;
+	//    printf("Pressed %d at (%d,%d)\n",keyCode,x,y);
+	bool postRedisplay = true;
 	
 	char key = (char)keyCode;
 	printf("'%c' key pressed.\n",key);
 	
-    float camSpeed = .1F;
-    switch(keyCode) {
-        case 27: //ESC key
-            printf("Clear filters\n");
-            //            invalidateAllViews();
-//			(*datasetOne)->StartFiltering();
-//            (*datasetOne)->ClearFilters();
-//			datasetOne)->StopFiltering();
-//			
+	float camSpeed = .1F;
+	switch(keyCode) {
+		case 27: //ESC key
+			printf("Clear filters\n");
+			//            invalidateAllViews();
+			//			(*datasetOne)->StartFiltering();
+			//            (*datasetOne)->ClearFilters();
+			//			datasetOne)->StopFiltering();
+			//
 			(*datasetOne)->StartFiltering();
 			(*datasetOne)->ClearAllFilters();
 			(*datasetOne)->StopFiltering();
@@ -146,7 +214,7 @@ void keys(int keyCode, int x, int y) {
 			(*datasetOne)->StartFiltering();
 			(*datasetOne)->ClearAllFilters();
 			(*datasetOne)->StopFiltering();
-            break;
+			break;
 		case 45: // - key
 			parallelCoordsView->DecreaseLineOpacity();
 			break;
@@ -157,8 +225,9 @@ void keys(int keyCode, int x, int y) {
 			parallelCoordsView->IncreaseLineOpacity();
 			break;
 		case 32: //Space bar
-			dataControllerOne->TogglePause();
-			dataControllerTwo->TogglePause();
+//			dataControllerOne->sTogglePause();
+//			dataControllerTwo->TogglePause();
+			TogglePause();
 			break;
 		case 49: //The '1' key, switch to renderer one if not already using it
 			parallelCoordsView->toggleDrawDataSetOne();
@@ -168,86 +237,86 @@ void keys(int keyCode, int x, int y) {
 			parallelCoordsView->toggleDrawDataSetTwo();
 			sceneView->ToggleDrawDataSetTwo();
 			break;
-        case 98: // 'b' key
-            glutSwapBuffers();
-            printf("Manual swap buffers\n");
-            //            copy_buffer();
-            postRedisplay = true;
-            break;
-        case 99: // 'c' key
-            if(sceneView) {
-                sceneView->ToggleDrawIntersectionPoints();
-                postRedisplay = true;
-            }
-            break;
-        case 108 : // 'l' key, toggle lines drawing
-            sceneView->CyclePathSegment();
-            break;
-        case 91: // '[' key, increase path segment
-            sceneView->MovePathSegment(-.01F);
-            break;
-        case 93:
-            sceneView->MovePathSegment(.01F);
-            break;
+		case 98: // 'b' key
+			glutSwapBuffers();
+			printf("Manual swap buffers\n");
+			//            copy_buffer();
+			postRedisplay = true;
+			break;
+		case 99: // 'c' key
+			if(sceneView) {
+				sceneView->ToggleDrawIntersectionPoints();
+				postRedisplay = true;
+			}
+			break;
+		case 108 : // 'l' key, toggle lines drawing
+			sceneView->CyclePathSegment();
+			break;
+		case 91: // '[' key, increase path segment
+			sceneView->MovePathSegment(-.01F);
+			break;
+		case 93:
+			sceneView->MovePathSegment(.01F);
+			break;
 		case 104: // the 'h' from heatmap, toggle drawing the octree heatmap
 			sceneView->ToggleDrawHeatmap();
 			break;
 		case 112: //The 'p' key, toggle drawing paths in 3D view
 			sceneView->ToggleDrawPaths();
 			break;
-        case 114: // 'r' key, force next frame rendering {
-        {
+		case 114: // 'r' key, force next frame rendering {
+		{
 			rendererOne->RenderNextFrame();
 			if(rendererTwo)
 				rendererTwo->RenderNextFrame();
 			postRedisplay = true;
 			break;
-        }
-        case 111: // 'o' key, optimize clusters (debug feature)
-        {
-//            clusters->OptimizeClusters();
-            postRedisplay = true;
-            break;
-        }
+		}
+		case 111: // 'o' key, optimize clusters (debug feature)
+		{
+			//            clusters->OptimizeClusters();
+			postRedisplay = true;
+			break;
+		}
 		case 122: // 'z' key, save the image
 		{
 			printf("Key not set.\n");
 			break;
 		}
-        case 116: // 't' key, use as temp key for some to-test function
-        {
-			parallelCoordsView->createAxisDensities();
-			parallelCoordsView->redisplayWindow();
+		case 116: // 't' key, use as temp key for some to-test function
+		{
+			invalidateAllViews();
+			glutPostRedisplay();
 			break;
-        }
-        case 119: // 'w' key, move camera in Y direction
-            sceneView->MoveCamera(0,camSpeed,0);
-            break;
-        case 115: // 's' kegy
-            sceneView->MoveCamera(0, -camSpeed, 0);
-            break;
-        case GLUT_KEY_UP:
-            sceneView->MoveCamera(0,0,camSpeed);
-//            uiView->MoveMenu(0,-10.F);
-            break;
-        case GLUT_KEY_DOWN:
-            sceneView->MoveCamera(0,0,-camSpeed);
-//            uiView->MoveMenu(0,10);
-            break;
-        case GLUT_KEY_LEFT:
-            sceneView->MoveCamera(-camSpeed,0,0);
-//            uiView->MoveMenu(-10.F,0);
-            break;
-        case GLUT_KEY_RIGHT:
-            sceneView->MoveCamera(camSpeed,0,0);
-//            uiView->MoveMenu(10.F,0);
-            break;
-        default:
-            postRedisplay = false;
-    }
-    if(postRedisplay) {
-        glutPostRedisplay();
-    }
+		}
+		case 119: // 'w' key, move camera in Y direction
+			sceneView->MoveCamera(0,camSpeed,0);
+			break;
+		case 115: // 's' kegy
+			sceneView->MoveCamera(0, -camSpeed, 0);
+			break;
+		case GLUT_KEY_UP:
+			sceneView->MoveCamera(0,0,camSpeed);
+			//            uiView->MoveMenu(0,-10.F);
+			break;
+		case GLUT_KEY_DOWN:
+			sceneView->MoveCamera(0,0,-camSpeed);
+			//            uiView->MoveMenu(0,10);
+			break;
+		case GLUT_KEY_LEFT:
+			sceneView->MoveCamera(-camSpeed,0,0);
+			//            uiView->MoveMenu(-10.F,0);
+			break;
+		case GLUT_KEY_RIGHT:
+			sceneView->MoveCamera(camSpeed,0,0);
+			//            uiView->MoveMenu(10.F,0);
+			break;
+		default:
+			postRedisplay = false;
+	}
+	if(postRedisplay) {
+		glutPostRedisplay();
+	}
 }
 
 /* Called when window is resized,
@@ -255,114 +324,176 @@ void keys(int keyCode, int x, int y) {
  before the first call to display(). */
 void reshape(int w, int h)
 {
-    printf("MAIN reshape called.\n");
-    /* save new screen dimensions */
-    width = w;
-    height = h;
-    
-    //Reshape and reposition all windows according to new dimensions
-    
-    //Parallel view window
-    glutSetWindow(parallelViewWindow);
-    glutPositionWindow(padding,padding);
+	printf("MAIN reshape called.\n");
+	/* save new screen dimensions */
+	width = w;
+	height = h;
+	
+	//Reshape and reposition all windows according to new dimensions
+	
+	//Parallel view window
+	glutSetWindow(parallelViewWindow);
+	glutPositionWindow(padding,padding);
 	int newWidthPC = width-2*padding;
 	int newHeightPC = height/2-2*padding - sliderViewHeight / 2.F;
-    glutReshapeWindow(newWidthPC,newHeightPC); //Upper half and full width of the main window
-    //
-    //    //image view window
+	glutReshapeWindow(newWidthPC,newHeightPC); //Upper half and full width of the main window
+	//
+	//    //image view window
 	float squareSize = height / 2.F - 2 * padding - sliderViewHeight / 2.F;
 	float imageViewWidth = squareSize;
 	if(datasetTwo) {
 		imageViewWidth += imageViewWidth;
 	}
-    glutSetWindow(imageViewWindow);
-    glutPositionWindow(padding, height/2+padding + sliderViewHeight / 2.F);
-    glutReshapeWindow(imageViewWidth,squareSize); //Square bottom left corner
+	glutSetWindow(imageViewWindow);
+	glutPositionWindow(padding, height/2+padding + sliderViewHeight / 2.F);
+	glutReshapeWindow(imageViewWidth,squareSize); //Square bottom left corner
 	
-//	glutSetWindow(uiViewWindow);
-//	glutPositionWindow(padding * 3 + squareSize * 3, height/2+padding + sliderViewHeight / 2.F);
-//	glutReshapeWindow(width - squareSize - 2 * padding,squareSize); //Square bottom left corner
-    //
-//    //    //3D scene view inspector window
-//    glutSetWindow(sceneViewWindow);
-//    glutPositionWindow(padding + height/2, height/2+padding);
-//    glutReshapeWindow(height / 2 - 2 * padding, height /2 - 2 *padding); //Square bottom right next to imageview window
-//
-//    //Heat map view
-//    glutSetWindow(heatMapViewWindow);
-//    glutPositionWindow(padding + height, height / 2 + padding);
-//    glutReshapeWindow(height / 2 - 2 * padding, height /2 - 2 *padding);
+	//	glutSetWindow(uiViewWindow);
+	//	glutPositionWindow(padding * 3 + squareSize * 3, height/2+padding + sliderViewHeight / 2.F);
+	//	glutReshapeWindow(width - squareSize - 2 * padding,squareSize); //Square bottom left corner
+	//
+	//    //    //3D scene view inspector window
+	//    glutSetWindow(sceneViewWindow);
+	//    glutPositionWindow(padding + height/2, height/2+padding);
+	//    glutReshapeWindow(height / 2 - 2 * padding, height /2 - 2 *padding); //Square bottom right next to imageview window
+	//
+	//    //Heat map view
+	//    glutSetWindow(heatMapViewWindow);
+	//    glutPositionWindow(padding + height, height / 2 + padding);
+	//    glutReshapeWindow(height / 2 - 2 * padding, height /2 - 2 *padding);
 }
 
 const int maxFrames = 100;
 int currentFrame = 0;
 
-bool finished = false;
+clock_t startDelay;
+bool isDelayed = false;
 
-void idle() {
-	bool postRedisplay = false;
-	if(currentFrame < maxFrames) {
-		bool currentFrameIncremented = false;
-		if(dataControllerOne->IsActive()) {
-			++currentFrame;
-			currentFrameIncremented = true;
-			rendererOne->RenderNextFrame();
-			postRedisplay = true;
+bool renderingPaused = false;
+int delayTimeLeft = 0;
+int delayTimerInterval = 0;
+
+bool renderOneFinishedFrame = true;
+bool renderTwoFinishedFrame = true;
+
+//Delay rendering
+void delayRendering(size_t delayTimeMs) {
+	printf("Delay rendering....\n");
+	startDelay = clock();
+	delayTimerInterval = delayTimeMs;
+	delayTimeLeft = delayTimeMs;
+}
+void checkIsDelayed() {
+	if(isDelayed) {
+		int currentTime = clock();
+		int timeDelayed = (currentTime - startDelay) / (float)CLOCKS_PER_SEC * 1000;
+		delayTimeLeft -= timeDelayed;
+		if(delayTimeLeft <= 0) {
+			isDelayed = false;
 		}
-		if(dataControllerTwo && dataControllerTwo->IsActive()) {
-			rendererTwo->RenderNextFrame();
-			if(!currentFrameIncremented) {
-				++currentFrame;
-			}
-			postRedisplay = true;
+		else {
+			printf("delayTimeLeft = %d\n",delayTimeLeft);
+			isDelayed = true;
 		}
 	}
+}
+void TogglePause() {
+	printf("Rendering process is now ");
+	if(renderingPaused) {
+		printf("running.\n");
+		renderingPaused = false;
+	}
+	else {
+		printf("paused.\n");
+		renderingPaused = true;
+	}
+}
+void idle() {
+	bool postRedisplay = false;
+	
+	checkIsDelayed();
+	
+	if(!renderingPaused) {
+		if(!isDelayed) {
+			printf("Rendering frame %d\n",currentFrame);
+			++currentFrame;
+			rendererOne->RenderNextFrame();
+			renderOneFinishedFrame = false;
+			postRedisplay = true;
+			if(dataControllerTwo) {
+				rendererTwo->RenderNextFrame();
+				renderTwoFinishedFrame = false;
+			}
+		}
+		else {
+			printf("Rendering is still delayed for %d ms.",delayTimeLeft);
+		}
+	}
+	
 	if(postRedisplay) {
 		glutPostRedisplay();
 	}
 }
 
 bool processRendererOne(PathData* newPath) {
-//	printf("New path from renderer #1 received!\n");
+	//	printf("New path from renderer #1 received!\n");
 	return dataControllerOne->ProcessNewPath(currentFrame,newPath);
 }
 
 void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
-//	dataControllerTwo->RendererOneFinishedFrame(numPaths,numRays);
-//	glutSetWindow(RIVImageView::windowHandle);
-	glutPostRedisplay();
+	//	dataControllerTwo->RendererOneFinishedFrame(numPaths,numRays);
+	printf("Renderer one finished a frame...\n");
+	dataControllerOne->Reduce();
+	
+	renderOneFinishedFrame = true;
+//	if(renderOneFinishedFrame && renderTwoFinishedFrame) {
+//		delayRendering(5000);
+		
+//		renderingPaused = true;
+//	}
 }
 
 bool processRendererTwo(PathData* newPath) {
-//	printf("New path from renderer #2 received!\n");
+	//	printf("New path from renderer #2 received!\n");
 	return dataControllerTwo->ProcessNewPath(currentFrame,newPath);
 }
 
 void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
-//	dataControllerTwo->RendererTwoFinishedFrame(numPaths,numRays);
-	glutPostRedisplay();
+	printf("Renderer two finished a frame...\n");
+	dataControllerTwo->Reduce();
+	renderTwoFinishedFrame = true;
+//	if(renderOneFinishedFrame && renderTwoFinishedFrame) {
+//		delayRendering(5000);
+//		renderingPaused = true;
+//	}
+	//	dataControllerTwo->Unpause();
 }
-
+/* Setup the data controller that manages the rendering data
+ * The data controllers start out with 2 times the given max_paths to make sure there is enough to sample from,
+ * after which a bootstrap is created and only half of the total data is kept, the other half is used to cache
+ * new data. After each frame the new (or candidate) data is joined with the current data and bootstrapping occurs again.
+ * If a new and better bootstrapping sample is found the current data is replaced with this one and the candidate data is cleared.
+ */
 void setupDataController(const int argc, char** argv) {
 	//Create the EMBREE renderer
-	dataControllerOne = new DataController(argc - 1, maxPaths, bootstrapRepeat);
+	dataControllerOne = new DataController(argc - 1,2 * maxPaths, bootstrapRepeat);
 	datasetOne = dataControllerOne->GetDataSet();
 	if(argc == 2) { //Just one renderer
 		DataConnector* connector = new DataConnector(processRendererOne,rendererOneFinishedFrame);
 		rendererOne = new EMBREERenderer(connector, std::string(argv[1]));
-		dataControllerOne->SetAcceptProbability(1.F * maxPaths / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel()));
+		dataControllerOne->SetAcceptProbability(2.F * maxPaths / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel()));
 		printf("1 renderer set up.\n");
 	}
 	else if(argc == 3) {
-		dataControllerTwo = new DataController(argc - 1, maxPaths,bootstrapRepeat);
+		dataControllerTwo = new DataController(argc - 1, 2*maxPaths,bootstrapRepeat);
 		DataConnector* dcOne = new DataConnector(processRendererOne,rendererOneFinishedFrame);
 		DataConnector* dcTwo = new DataConnector(processRendererTwo,rendererTwoFinishedFrame);
 		rendererOne = new EMBREERenderer(dcOne, std::string(argv[1]));
 		rendererTwo = new EMBREERenderer(dcTwo, std::string(argv[2]));
 		datasetTwo = dataControllerTwo->GetDataSet();
-		float acceptProbOne = 1.F * maxPaths / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel());
-		dataControllerOne->SetAcceptProbability(acceptProbOne);
-		dataControllerTwo->SetAcceptProbability(1.F * maxPaths / (rendererTwo->getWidth() * rendererTwo->getHeight() * rendererTwo->getSamplesPerPixel()));
+		float acceptProb = 2.F * maxPaths / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel());
+		dataControllerOne->SetAcceptProbability(acceptProb);
+		dataControllerTwo->SetAcceptProbability(acceptProb);
 		printf("2 renderers set up.\n");
 	}
 	else {
@@ -383,7 +514,7 @@ RIVColorRGBProperty<float>* createPathColorProperty(RIVDataSet<float,ushort>* da
 	RIVRecord<float>* pathGRecord = pathsTable->GetRecord<float>(PATH_G);
 	RIVRecord<float>* pathBRecord = pathsTable->GetRecord<float>(PATH_B);
 	
-//	riv::ColorMap jetColorMap = colors::jetColorMap();
+	//	riv::ColorMap jetColorMap = colors::jetColorMap();
 	return new RIVColorRGBProperty<float>(pathsTable,pathRRecord,pathGRecord,pathBRecord);
 }
 
@@ -394,12 +525,12 @@ RIVColorRGBProperty<float>* createRayColorProperty(RIVDataSet<float,ushort>* dat
 	RIVRecord<float>* isectGRecord = intersectionsTable->GetRecord<float>(INTERSECTION_G);
 	RIVRecord<float>* isectBrRecord = intersectionsTable->GetRecord<float>(INTERSECTION_B);
 	
-//	riv::ColorMap jetColorMap = colors::jetColorMap();
+	//	riv::ColorMap jetColorMap = colors::jetColorMap();
 	return new RIVColorRGBProperty<float>(intersectionsTable,isectRRecord,isectGRecord,isectBrRecord);
 }
 
 void createViews() {
-
+	
 	std::vector<riv::Color> colors;
 	colors.push_back(colors::BLUE);
 	colors.push_back(colors::RED);
@@ -413,7 +544,7 @@ void createViews() {
 	ParallelCoordsView::windowHandle = parallelViewWindow;
 	glutSetWindow(parallelViewWindow);
 	glutDisplayFunc(ParallelCoordsView::DrawInstance);
-//	glutDisplayFunc(doNothing);
+	//	glutDisplayFunc(doNothing);
 	glutReshapeFunc(ParallelCoordsView::ReshapeInstance);
 	glutMouseFunc(ParallelCoordsView::Mouse);
 	glutMotionFunc(ParallelCoordsView::Motion);
@@ -441,7 +572,7 @@ void createViews() {
 	RIV3DView::windowHandle = sceneViewWindow;
 	glutSetWindow(sceneViewWindow);
 	glutDisplayFunc(RIV3DView::DrawInstance);
-//	glutDisplayFunc(doNothing);
+	//	glutDisplayFunc(doNothing);
 	glutReshapeFunc(RIV3DView::ReshapeInstance);
 	glutMouseFunc(RIV3DView::Mouse);
 	glutMotionFunc(RIV3DView::Motion);
@@ -464,18 +595,18 @@ void createViews() {
 	glutMotionFunc(RIVSliderView::Motion);
 	glutSpecialFunc(keys);
 	
-//	int uiViewWidth = width - 3 * squareSize - 2 * padding;
-//	int uiPosX = sceneViewPosX + squareSize + padding;
-//	uiViewWindow = glutCreateSubWindow(mainWindow, uiPosX, bottomHalfY, uiViewWidth, squareSize);
-//	RIVUIView::windowHandle = uiViewWindow;
-//	glutSetWindow(uiViewWindow);
-//	glutDisplayFunc(RIVUIView::DrawInstance);
-//	//	glutDisplayFunc(doNothing);
-//	glutReshapeFunc(RIVUIView::ReshapeInstance);
-//	glutMouseFunc(RIVUIView::Mouse);
-//	glutMotionFunc(RIVUIView::Motion);
-//	glutSpecialFunc(keys);
-//	uiView = new RIVUIView(datasetOne, uiViewWidth, uiPosX, bottomHalfY, squareSize, padding, padding);
+	//	int uiViewWidth = width - 3 * squareSize - 2 * padding;
+	//	int uiPosX = sceneViewPosX + squareSize + padding;
+	//	uiViewWindow = glutCreateSubWindow(mainWindow, uiPosX, bottomHalfY, uiViewWidth, squareSize);
+	//	RIVUIView::windowHandle = uiViewWindow;
+	//	glutSetWindow(uiViewWindow);
+	//	glutDisplayFunc(RIVUIView::DrawInstance);
+	//	//	glutDisplayFunc(doNothing);
+	//	glutReshapeFunc(RIVUIView::ReshapeInstance);
+	//	glutMouseFunc(RIVUIView::Mouse);
+	//	glutMotionFunc(RIVUIView::Motion);
+	//	glutSpecialFunc(keys);
+	//	uiView = new RIVUIView(datasetOne, uiViewWidth, uiPosX, bottomHalfY, squareSize, padding, padding);
 	
 	//Create views for two renderers
 	auto pathColorOne = createPathColorProperty(*datasetOne);
@@ -483,8 +614,8 @@ void createViews() {
 	if(datasetTwo) {
 		
 		//Im so lazy ....
-//		auto pathColorTwo = createPathColorProperty(*datasetTwo);
-//		auto rayColorTwo = createRayColorProperty(*datasetTwo);
+		//		auto pathColorTwo = createPathColorProperty(*datasetTwo);
+		//		auto rayColorTwo = createRayColorProperty(*datasetTwo);
 		
 		//Fixed colors for testing
 		RIVColorProperty* colorOne = new RIVFixedColorProperty(1, 0, 0);
@@ -492,9 +623,9 @@ void createViews() {
 		
 		auto isectTable = (*datasetTwo)->GetTable(INTERSECTIONS_TABLE);
 		
-//		RIVEvaluatedColorProperty<float>* xLinear = new RIVEvaluatedColorProperty<float>(redBlue, isectTable, isectTable->GetRecord<float>(POS_X));
+		//		RIVEvaluatedColorProperty<float>* xLinear = new RIVEvaluatedColorProperty<float>(redBlue, isectTable, isectTable->GetRecord<float>(POS_X));
 		
-//		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
+		//		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
 		
 		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,rayColorOne,sizeProperty);
 		imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo);
@@ -523,58 +654,56 @@ void createViews() {
 
 int main(int argc, char **argv)
 {
-    printf("Initialising Rendering InfoVis...\n");
-
-//	testFunctions();
+	printf("Initialising Rendering InfoVis...\n");
 	
-    srand(time(NULL));
-    /* initialize GLUT, let it extract command-line
-     GLUT options that you may provide */
-    glutInit(&argc, argv);
-    
-    //Use double buffering!
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
-    
-    /* set the initial window size */
-    glutInitWindowSize(width, height);
-    
-    /* set the initial window position */
-    glutInitWindowPosition(posX,posY);
-    
-    /* create the window and store the handle to it */
-    mainWindow = glutCreateWindow("Rendering InfoVis" /* title */ );
+	//	testFunctions();
+	
+	srand(time(NULL));
+	/* initialize GLUT, let it extract command-line
+	 GLUT options that you may provide */
+	glutInit(&argc, argv);
+	
+	//Use double buffering!
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
+	
+	/* set the initial window size */
+	glutInitWindowSize(width, height);
+	
+	/* set the initial window position */
+	glutInitWindowPosition(posX,posY);
+	
+	/* create the window and store the handle to it */
+	mainWindow = glutCreateWindow("Rendering InfoVis" /* title */ );
 	
 	glutIdleFunc(idle);
-    
-    /* register function to handle window resizes */
-    glutReshapeFunc(reshape);
-    
-    // display and idle function
-    glutDisplayFunc(display);
-    
-    /* --- register callbacks with GLUT ---     */
-    
-    /* register function that handles mouse */
 	
-    glutSpecialFunc(keys);
+	/* register function to handle window resizes */
+	glutReshapeFunc(reshape);
+	
+	// display and idle function
+	glutDisplayFunc(display);
+	
+	/* --- register callbacks with GLUT ---     */
+	
+	/* register function that handles mouse */
+	
+	glutSpecialFunc(keys);
 	
 	setupDataController(argc, argv);
 	
-//    loadData();
+	createViews();
 	
-    createViews();
+	/* Transparency stuff */
+	glEnable (GL_BLEND);
 	
-    /* Transparency stuff */
-    glEnable (GL_BLEND);
-    
-    glClearColor(1,1,1, 0.0);
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
-    /* start the GLUT main loop */
-    glutMainLoop();
-    
-    return EXIT_SUCCESS;
+	glClearColor(1,1,1, 0.0);
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	/* start the GLUT main loop */
+	glutMainLoop();
+	
+	return EXIT_SUCCESS;
 }
 

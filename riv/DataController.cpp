@@ -13,9 +13,7 @@
 #include <algorithm>
 
 DataController::DataController(const ushort renderers, const size_t maxPaths, const size_t bootstrapRepeat) : maxPaths(maxPaths), bootstrapRepeat(bootstrapRepeat) {
-	if(updateThrottle == 0) {
-		updateThrottle = maxPaths;
-	}
+	
 	createDataStructures();
 }
 
@@ -23,9 +21,9 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 	
 	
 	//	const std::string taskName = "Creating bootstrap";
-//	reporter::startTask("Creating bootstrap", N);
+	//	reporter::startTask("Creating bootstrap", N);
 	
-	RIVDataSet<float,ushort>* bootstrap = dataset->CloneStructure(tablesToBootstrap);
+	RIVDataSet<float,ushort>* bootstrap = dataset->CloneStructure(dataTables);
 	RIVTable<float,ushort>* bootstrapPaths = bootstrap->GetTable(PATHS_TABLE);
 	RIVTable<float,ushort>* bootstrapIsects = bootstrap->GetTable(INTERSECTIONS_TABLE);
 	
@@ -55,6 +53,8 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 		//		reporter::update(taskName);
 		sampledRows.push_back(rand() % rows);
 	}
+	//	printf("sampled rows = ");
+	//	printVector(sampledRows);
 	//		size_t index = i;
 	
 	//		printf("Sampled row %zu\n",index);
@@ -79,7 +79,6 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 				for(int i = 0 ; i < refRows.second ; ++i) {
 					
 					bootRecord->AddValue(record->Value(refRows.first[i]));
-					
 				}
 				
 			}
@@ -87,9 +86,9 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 	});
 	
 	
-//		bootstrap.Print(1000);
-
-//	reporter::stop("Creating bootstrap");
+	//		bootstrap.Print(1000);
+	
+	//	reporter::stop("Creating bootstrap");
 	return bootstrap;
 }
 
@@ -114,9 +113,9 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
 	isectsTable->CreateRecord<float>(POS_X,0,550,true);
 	isectsTable->CreateRecord<float>(POS_Y,0,550,true);
 	isectsTable->CreateRecord<float>(POS_Z,0,550,true);
-//	isectsTable->CreateRecord<float>(DIR_X,0,1,true);
-//	isectsTable->CreateRecord<float>(DIR_Y,0,1,true);
-//	isectsTable->CreateRecord<float>(DIR_Z,0,1,true);
+	//	isectsTable->CreateRecord<float>(DIR_X,0,1,true);
+	//	isectsTable->CreateRecord<float>(DIR_Y,0,1,true);
+	//	isectsTable->CreateRecord<float>(DIR_Z,0,1,true);
 	
 	isectsTable->CreateRecord<float>(INTERSECTION_R,0,1);
 	isectsTable->CreateRecord<float>(INTERSECTION_G,0,1);
@@ -136,33 +135,23 @@ void DataController::AddMembershipDataStructures(RIVDataSet<float,ushort>* datas
 	auto pathMembershipOneTable = dataset->CreateTable(PATH_MEMBERSHIP_TABLE);
 	auto isectMembershipOneTable = dataset->CreateTable(ISECT_MEMBERSHIP_TABLE);
 	
-	auto pathMembershipTwoTable = dataset->CreateTable(PATH_MEMBERSHIP_TABLE);
-	auto isectMembershipTwoTable = dataset->CreateTable(ISECT_MEMBERSHIP_TABLE);
-	
 	pathMembershipOneTable->CreateRecord<float>(MEMBERSHIP);
 	isectMembershipOneTable->CreateRecord<float>(MEMBERSHIP);
-	pathMembershipTwoTable->CreateRecord<float>(MEMBERSHIP);
-	isectMembershipTwoTable->CreateRecord<float>(MEMBERSHIP);
 }
 
 void DataController::createDataStructures() {
 	
-	rendererData = new RIVDataSet<float,ushort>(DATASET_ONE);
+	currentData = new RIVDataSet<float,ushort>(DATASET_ONE);
 	
 	candidateData = new RIVDataSet<float,ushort>(DATASET_ONE);
 	
 	//Create the records and such for the datasets
-	initDataSet(rendererData);
+	initDataSet(currentData);
 	initDataSet(candidateData);
 	
-	//	initDataSet(rendererDataTwo);
-	//	initDataSet(candidateDataTwo);
+	trueDistributions = currentData->CreateHistogramSet(bins,dataTables);
 	
-	
-	
-	trueDistributions = rendererData->CreateHistogramSet(bins,tablesToBootstrap);
-	
-	resetPointers(rendererData);
+	resetPointers(candidateData);
 }
 
 void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
@@ -191,282 +180,273 @@ void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
 	xs = currentIntersectionsTable->GetRecord<float>(POS_X);
 	ys = currentIntersectionsTable->GetRecord<float>(POS_Y);
 	zs = currentIntersectionsTable->GetRecord<float>(POS_Z);
-//	dirX = currentIntersectionsTable->GetRecord<float>(DIR_X);
-//	dirY = currentIntersectionsTable->GetRecord<float>(DIR_Y);
-//	dirZ = currentIntersectionsTable->GetRecord<float>(DIR_Z);
+	//	dirX = currentIntersectionsTable->GetRecord<float>(DIR_X);
+	//	dirY = currentIntersectionsTable->GetRecord<float>(DIR_Y);
+	//	dirZ = currentIntersectionsTable->GetRecord<float>(DIR_Z);
 	isectColorRs = currentIntersectionsTable->GetRecord<float>(INTERSECTION_R);
 	isectColorGs = currentIntersectionsTable->GetRecord<float>(INTERSECTION_G);
 	isectColorBs = currentIntersectionsTable->GetRecord<float>(INTERSECTION_B);
 	primitiveIds = currentIntersectionsTable->GetRecord<ushort>(PRIMITIVE_ID);
-	//	shapeIds = isectsTable->CreateShortRecord("shape ID");
-	//	interactionTypes = isectsTable->CreateShortRecord("interaction");
-	//	lightIds = isectsTable->CreateShortRecord("light ID");
-	
 }
 RIVDataSet<float,ushort>** DataController::GetDataSet() {
-	return &rendererData;
+	return &currentData;
 }
 //RIVDataSet<float,ushort>** DataController::GetDataSetTwo() {
-//	return &rendererDataTwo;
+//	return &currentDataTwo;
 //}
 bool DataController::ProcessNewPath(int frame, PathData* newPath) {
-	if(IsActive()) {
-		//ALWAYS update the histograms
-		ushort nrIntersections = newPath->intersectionData.size();
+	
+	//ALWAYS update the histograms
+	ushort nrIntersections = newPath->intersectionData.size();
+	
+	trueDistributions.AddToHistogram(PIXEL_X, newPath->pixel[0]);
+	trueDistributions.AddToHistogram(PIXEL_Y, newPath->pixel[0]);
+	trueDistributions.AddToHistogram(PATH_R, std::min(newPath->radiance.r,1.F));
+	trueDistributions.AddToHistogram(PATH_G, std::min(newPath->radiance.g,1.F));
+	trueDistributions.AddToHistogram(PATH_B, std::min(newPath->radiance.r,1.F));
+	trueDistributions.AddToHistogram(THROUGHPUT_R, std::min(newPath->throughput.r,1.F));
+	trueDistributions.AddToHistogram(THROUGHPUT_G, std::min(newPath->throughput.g,1.F));
+	trueDistributions.AddToHistogram(THROUGHPUT_B, std::min(newPath->throughput.b,1.F));
+	trueDistributions.AddToHistogram(DEPTH, nrIntersections);
+	
+	for(ushort i = 0 ; i < nrIntersections ; ++i) {
+		IntersectData& isect = newPath->intersectionData[i];
 		
-		trueDistributions.AddToHistogram(PIXEL_X, newPath->pixel[0]);
-		trueDistributions.AddToHistogram(PIXEL_Y, newPath->pixel[0]);
-		trueDistributions.AddToHistogram(PATH_R, std::min(newPath->radiance.r,1.F));
-		trueDistributions.AddToHistogram(PATH_G, std::min(newPath->radiance.g,1.F));
-		trueDistributions.AddToHistogram(PATH_B, std::min(newPath->radiance.r,1.F));
-		trueDistributions.AddToHistogram(THROUGHPUT_R, std::min(newPath->throughput.r,1.F));
-		trueDistributions.AddToHistogram(THROUGHPUT_G, std::min(newPath->throughput.g,1.F));
-		trueDistributions.AddToHistogram(THROUGHPUT_B, std::min(newPath->throughput.b,1.F));
-		trueDistributions.AddToHistogram(DEPTH, nrIntersections);
-		
-		for(ushort i = 0 ; i < nrIntersections ; ++i) {
-			IntersectData& isect = newPath->intersectionData[i];
-			
-			trueDistributions.AddToHistogram(BOUNCE_NR,(ushort)(i+1));
-			trueDistributions.AddToHistogram(POS_X, isect.position[0]);
-			trueDistributions.AddToHistogram(POS_Y, isect.position[1]);
-			trueDistributions.AddToHistogram(POS_Z, isect.position[2]);
-//						trueDistributions.AddToHistogram(DIR_X, isect.dir[0]);
-//						trueDistributions.AddToHistogram(DIR_Y, isect.dir[1]);
-//						trueDistributions.AddToHistogram(DIR_Z, isect.dir[2]);
-			trueDistributions.AddToHistogram(INTERSECTION_R, std::min(isect.color.r,1.F));
-			trueDistributions.AddToHistogram(INTERSECTION_G, std::min(isect.color.g,1.F));
-			trueDistributions.AddToHistogram(INTERSECTION_B, std::min(isect.color.b,1.F));
-			//			trueDistributions.AddToHistogram("depth", nrIntersections);
-		}
-		//				mutex.lock();
-		//				printf("Adding new path.\n");
-//		bool tableFull = pathCount >= maxPaths;
-		if(currentPathTable->NumberOfRows() < maxPaths) {
-			float accept = rand() / (float)RAND_MAX;
-			//			printf("Accept prob = %f\n",accept);
-			if(accept <= acceptProbability) {
-//				++pathCount;
-				//			rendererId->AddValue(renderer);
-				xPixels->AddValue(newPath->pixel[0]);
-				yPixels->AddValue(newPath->pixel[1]);
-				//				lensUs->AddValue(newPath->lensU);
-				//				lensVs->AddValue(newPath->lensV);
-				//				times->AddValue(newPath->timestamp);
-				
-				colorRs->AddValue(std::min(newPath->radiance.r,1.F));
-				colorGs->AddValue(std::min(newPath->radiance.g,1.F));
-				colorBs->AddValue(std::min(newPath->radiance.b,1.F));
-				throughputRs->AddValue(newPath->throughput.r);
-				throughputGs->AddValue(newPath->throughput.g);
-				throughputBs->AddValue(newPath->throughput.b);
-				depths->AddValue((ushort)newPath->intersectionData.size());
-				size_t* indices = new size_t[nrIntersections];
-				
-				pathsToIsectRef->AddReferences(colorRs->Size() - 1, std::pair<size_t*,ushort>(indices,nrIntersections));
-				
-				for(int i = 0 ; i < nrIntersections ; ++i) {
-					IntersectData& isect = newPath->intersectionData[i];
-					
-					bounceNrs->AddValue(i+1);
-					xs->AddValue(isect.position[0]);
-					ys->AddValue(isect.position[1]);
-					zs->AddValue(isect.position[2]);
-					//					dirX->AddValue(isect.dir[0]);
-					//					dirY->AddValue(isect.dir[1]);
-					//					dirZ->AddValue(isect.dir[2]);
-					isectColorRs->AddValue(std::min(isect.color.r,1.F));
-					isectColorGs->AddValue(std::min(isect.color.g,1.F));
-					isectColorBs->AddValue(std::min(isect.color.b,1.F));
-					primitiveIds->AddValue(isect.primitiveId);
-					//					shapeIds->AddValue(isect.shapeId);
-//					interactionTypes->AddValue(isect.interactionType);
-					//					lightIds->AddValue(isect.lightId);
-					
-					isectsToPathsRef->AddReference(xs->Size() - 1, colorRs->Size() - 1);
-					indices[i] = xs->Size() - 1;
-				}
-				return true;
-			}
-		}
-		else { //I AM SO FULL, I CANNOT EAT ONE MORE BYTE OF DATA
-			
-			
-			
-			//Print the histograms
-			//			trueDistributions.Print();
-			//			currentData->Print(50);
-			
-			Reduce();
-			
-			return false;
-		}
-		
+		trueDistributions.AddToHistogram(BOUNCE_NR,(ushort)(i+1));
+		trueDistributions.AddToHistogram(POS_X, isect.position[0]);
+		trueDistributions.AddToHistogram(POS_Y, isect.position[1]);
+		trueDistributions.AddToHistogram(POS_Z, isect.position[2]);
+		//						trueDistributions.AddToHistogram(DIR_X, isect.dir[0]);
+		//						trueDistributions.AddToHistogram(DIR_Y, isect.dir[1]);
+		//						trueDistributions.AddToHistogram(DIR_Z, isect.dir[2]);
+		trueDistributions.AddToHistogram(INTERSECTION_R, std::min(isect.color.r,1.F));
+		trueDistributions.AddToHistogram(INTERSECTION_G, std::min(isect.color.g,1.F));
+		trueDistributions.AddToHistogram(INTERSECTION_B, std::min(isect.color.b,1.F));
+		trueDistributions.AddToHistogram(PRIMITIVE_ID, isect.primitiveId);
 	}
-	else {
-		if(paused) {
-			//			printf("... is paused.\n");
+	
+	if(currentPathTable->NumberOfRows() < maxPaths) {
+		float accept = rand() / (float)RAND_MAX;
+		//			accept = 0;
+		//			printf("Accept prob = %f\n",accept);
+		if(accept <= acceptProbability) {
+			//				++pathCount;
+			//			rendererId->AddValue(renderer);
+			xPixels->AddValue(newPath->pixel[0]);
+			yPixels->AddValue(newPath->pixel[1]);
+			//				lensUs->AddValue(newPath->lensU);
+			//				lensVs->AddValue(newPath->lensV);
+			//				times->AddValue(newPath->timestamp);
+			
+			colorRs->AddValue(std::min(newPath->radiance.r,1.F));
+			colorGs->AddValue(std::min(newPath->radiance.g,1.F));
+			colorBs->AddValue(std::min(newPath->radiance.b,1.F));
+			throughputRs->AddValue(newPath->throughput.r);
+			throughputGs->AddValue(newPath->throughput.g);
+			throughputBs->AddValue(newPath->throughput.b);
+			depths->AddValue((ushort)newPath->intersectionData.size());
+			size_t* indices = new size_t[nrIntersections];
+			
+			pathsToIsectRef->AddReferences(colorRs->Size() - 1, std::pair<size_t*,ushort>(indices,nrIntersections));
+			
+			for(int i = 0 ; i < nrIntersections ; ++i) {
+				IntersectData& isect = newPath->intersectionData[i];
+				
+				bounceNrs->AddValue(i+1);
+				xs->AddValue(isect.position[0]);
+				ys->AddValue(isect.position[1]);
+				zs->AddValue(isect.position[2]);
+				//					dirX->AddValue(isect.dir[0]);
+				//					dirY->AddValue(isect.dir[1]);
+				//					dirZ->AddValue(isect.dir[2]);
+				isectColorRs->AddValue(std::min(isect.color.r,1.F));
+				isectColorGs->AddValue(std::min(isect.color.g,1.F));
+				isectColorBs->AddValue(std::min(isect.color.b,1.F));
+				primitiveIds->AddValue(isect.primitiveId);
+				//					shapeIds->AddValue(isect.shapeId);
+				//					interactionTypes->AddValue(isect.interactionType);
+				//					lightIds->AddValue(isect.lightId);
+				
+				isectsToPathsRef->AddReference(xs->Size() - 1, colorRs->Size() - 1);
+				indices[i] = xs->Size() - 1;
+			}
+			return true;
 		}
-		else if(IsDelayed()) {
-			//			printf("... is delayed.\n");
-		}
-		//		clock_t t = clock() - startPause;
-		//		int millipassed = t / (float)CLOCKS_PER_SEC * 1000;
-		//		printf ("It took me %d milliseconds).\n",millipassed);
-		//		pausedTimer -= millipassed;
-		//		printf ("%d milliseconds left.\n",pausedTimer);
-		//		printf("DataProcessing is paused (t = %d)\n",pausedTimer);
+	}
+	else { //I AM SO FULL, I CANNOT EAT ONE MORE BYTE OF DATA
 		return false;
 	}
 }
 
 void DataController::Reduce() {
-	//This was the first time we filled up, we already have our data to bootstrap from
+	printHeader("BOOTSTRAPPING",100);
+	const std::string taskName = "bootstrapping";
+	reporter::startTask(taskName);
 	if(firstTime) {
-		//		printf("Current data is full...\n");
-		//		printf("Swapping candidate and current data\n");
-		//		printf("\nCURRENT DATA = \n");
-		//		rendererData->Print(10);
+
+//		printf("\n First time...\n");
 		
 		//Swap current with candidate
-		candidateData->SetDataListeners(rendererData->GetDataListeners());
-		RIVDataSet<float,ushort>* temp = rendererData;
-		rendererData = candidateData;
-		candidateData = temp;
+		candidateData->SetDataListeners(currentData->GetDataListeners());
+		RIVDataSet<float,ushort>* temp = candidateData;
+		candidateData = currentData;
+		currentData = temp;
 		
 		firstTime = false;
 		
-		resetPointers(rendererData);
+		//Divide the max paths and accept_prob by two (the other half is reserved for the bootstrapped dataset)
+		acceptProbability /= 2.F;
+		maxPaths /= 2;
 	}
-	else { //Both are full, join the two sets, bootstrap
+	else {
+		printf("Score to beat = %f\n",bestBootstrapResult);
+	}
+	
+	RIVDataSet<float,ushort>* joinedData = currentData->CloneStructure(dataTables);
+	
+	auto joinedPathsTable = joinedData->GetTable(PATHS_TABLE);
+	auto joinedIsectsTable = joinedData->GetTable(INTERSECTIONS_TABLE);
+	
+	joinedPathsTable->reference = new RIVMultiReference(joinedPathsTable,joinedIsectsTable);
+	joinedIsectsTable->reference = new RIVSingleReference(joinedPathsTable,joinedIsectsTable);
+	
+//	printf("\nCURRENT DATA = \n");
+//	currentData->Print();
+//	
+//	printf("\CANDIDATE DATA = \n");
+//	candidateData->Print();
+	
+	//Join the two datasets
+	joinedData->AddDataSet(candidateData);
+	joinedData->AddDataSet(currentData);
+	
+//	printf("JOINED DATA : \n");
+//	joinedData->Print();
+	
+	HistogramSet<float,ushort> bootstrapHistograms;
+	
+	bool newBootstrapFound = false;
+	float bootstrapScoreAverage = 0;
+	
+	//Bootstrap set
+	RIVDataSet<float,ushort>* bestBootstrap = NULL;
+	
+	for(int i = 0 ; i < bootstrapRepeat ; ++i) {
+		//			printf("Round #%d\n",i);
+		auto bootstrap = Bootstrap(joinedData, maxPaths);
 		
-		//		printf("\nCURRENT DATA = \n");
-		//		rendererData->Print(10);
+		bootstrapHistograms = bootstrap->CreateHistogramSet(bins);
+		float score = trueDistributions.DistanceTo(bootstrapHistograms);
+		
+		//			printf("TRUE DISTRIBUTIONS");
+		//			trueDistributions.Print();
 		//
-		//		printf("\nCANDIDATE DATA = \n");
-		//		candidateData->Print(10);
+		//			printf("BOOTSTRAP HISTOGRAMS");
+		//			bootstrapHistograms.Print();
 		
-		//Join the two datasets
-		rendererData->AddDataSet(candidateData);
+		//			printf("Bootstrap = \n\n");
+		//			bootstrap->Print();
 		
-		printHeader("BOOTSTRAPPING",100);
+		printf("Bootstrap #%d score = %f\n",i,score);
+		bootstrapScoreAverage += score;
 		
-		//		printf("FULL DATA : \n");
-		//		rendererData->Print();
-		
-		const std::string taskName = "bootstrapping";
-		reporter::startTask("bootstrapping");
-		HistogramSet<float,ushort> bootstrapHistograms;
-		
-		bool newBootstrapFound = false;
-		
-		for(int i = 0 ; i < bootstrapRepeat ; ++i) {
-			//			printf("Round #%d\n",i);
-			auto bootstrap = Bootstrap(rendererData, maxPaths);
+		if(bestBootstrapResult < 0 || score < bestBootstrapResult) {
 			
-			bootstrapHistograms = bootstrap->CreateHistogramSet(bins);
-			float score = trueDistributions.DistanceTo(bootstrapHistograms);
-			//			float score = maxPaths - i;
-			
-			if(bestBootstrapResult < 0 || score < bestBootstrapResult) {
-				
-				printf("BETTER BOOTSTRAP FOUND! SCORE = %f\n",score);
-				if(bestBootstrap) { //A new and better bootstrap was found, delete the old bestBootstrap
-					//					printf("Delete previous best bootstrap\n");
-					delete bestBootstrap;
-				}
-				
-				bestBootstrap = bootstrap;
-				
-				//					printf("\nTRUE HISTOGRAMS = \n");
-				//					trueDistributions.Print();
-				//
-				//					printf("\nBOOTSTRAP HISTOGRAMS = \n");
-				//					bootstrapHistograms.Print();
-				
-				//					printf("Bootstrap = \n\n");
-				//					bootstrap->Print();
-				
-				
-				bestBootstrapResult = score;
-				newBootstrapFound = true;
+			printf("BETTER BOOTSTRAP FOUND! SCORE = %f\n",score);
+			if(bestBootstrap) { //A new and better bootstrap was found, delete the old bestBootstrap
+				//					printf("Delete previous best bootstrap\n");
+				delete bestBootstrap;
 			}
-			else { //This bootstrap is not a better fit than the previous one, delete it
-				delete bootstrap;
-			}
-			bootstrap = NULL;
-		}
-		if(newBootstrapFound) {
 			
-			printf("\n\n***** NEW BOOTSTRAP FOUND! ***** \n\n");
+			bestBootstrap = bootstrap;
 			
-			//			printf("BOOTSTRAP WITHOUT REFERENCES : ");
-			//			(bestBootstrap)->Print();
-			
-			//			printf("\nTRUE HISTOGRAMS = \n");
-			//			trueDistributions.Print();
+			//				printf("\nTRUE HISTOGRAMS = \n");
+			//				trueDistributions.Print();
 			//
-			//			printf("\nBOOTSTRAP HISTOGRAMS = \n");
-			//			bootstrapHistograms.Print();
+			//				printf("\nBOOTSTRAP HISTOGRAMS = \n");
+			//				bootstrapHistograms.Print();
 			
-			bestBootstrap->SetDataListeners(rendererData->GetDataListeners());
-			auto pathsTable = bestBootstrap->GetTable(PATHS_TABLE);
-			auto isectsTable = bestBootstrap->GetTable(INTERSECTIONS_TABLE);
-			
-			//Create new references as they are not created by the bootstrapping
-			RIVRecord<ushort>* bootstrapDepth = pathsTable->GetRecord<ushort>(DEPTH);
-			auto bootIsectsToPathsRef = new RIVSingleReference(isectsTable,pathsTable);
-			auto bootPathsToIsectRef = new RIVMultiReference(pathsTable,isectsTable);
-			
-			//Create new references as they are not created by the bootstrapping
-			pathsTable->SetReference(bootPathsToIsectRef);
-			isectsTable->SetReference(bootIsectsToPathsRef);
-			
-			//Fix the new reference paths
-			size_t intersectionsCount = 0;
-			size_t pathsCount = 0;
-			
-			for(size_t i = 0 ; i < bootstrapDepth->Size() ; ++i) {
-				ushort depth = bootstrapDepth->Value(i);
-				std::pair<size_t*,ushort> rowsMapping;
-				size_t* rows = new size_t[depth];
-				for(size_t j = 0 ; j < depth ; ++j) {
-					rows[j] = intersectionsCount;
-					bootIsectsToPathsRef->AddReference(intersectionsCount, pathsCount);
-					++intersectionsCount;
-				}
-				rowsMapping.second = depth;
-				rowsMapping.first = rows;
-				bootPathsToIsectRef->AddReferences(i, rowsMapping);
-				++pathsCount;
-			}
-			
-//						printf("\nBOOTSTRAP RESULT = \n");
-//						bestBootstrap->Print();
-			
-			//Delete the old renderer data and replace it with the bootstrap dataset,
-			delete rendererData;
-			rendererData = bestBootstrap;
-			bestBootstrap = NULL;
-			
-
-			rendererData->NotifyDataListeners();
-			
-			candidateData->ClearData();
-			resetPointers(candidateData);	//Reset the shortcut pointers to a new empty dataset
-			//			++reduceRounds;
-			//			if(reduceRounds % 2 == 0) {
-			//			}
+			bestBootstrapResult = score;
+			newBootstrapFound = true;
 		}
-		else {
-			printf("\n Could not find a better bootstrap... \n");
+		else { //This bootstrap is not a better fit than the previous one, delete it
+			delete bootstrap;
 		}
-		
-		AddMembershipDataStructures(rendererData);
-		
-		reporter::stop("bootstrapping");
-		Pause();
+		bootstrap = NULL;
 	}
+	
+	printf("Average bootstrap score = %f\n",bootstrapScoreAverage/bootstrapRepeat);
+	
+	if(newBootstrapFound) {
+		
+		//			printf("\n\n***** NEW BOOTSTRAP FOUND! ***** \n\n");
+		
+		//						printf("BOOTSTRAP WITHOUT REFERENCES : ");
+		//						(bestBootstrap)->Print();
+		
+		//			printf("\nTRUE HISTOGRAMS = \n");
+		//			trueDistributions.Print();
+		//
+		//			printf("\nBOOTSTRAP HISTOGRAMS = \n");
+		//			bootstrapHistograms.Print();
+		
+		bestBootstrap->SetDataListeners(currentData->GetDataListeners());
+		auto pathsTable = bestBootstrap->GetTable(PATHS_TABLE);
+		auto isectsTable = bestBootstrap->GetTable(INTERSECTIONS_TABLE);
+		
+		//Create new references as they are not created by the bootstrapping
+		RIVRecord<ushort>* bootstrapDepth = pathsTable->GetRecord<ushort>(DEPTH);
+		auto bootIsectsToPathsRef = new RIVSingleReference(isectsTable,pathsTable);
+		auto bootPathsToIsectRef = new RIVMultiReference(pathsTable,isectsTable);
+		
+		//Create new references as they are not created by the bootstrapping
+		pathsTable->SetReference(bootPathsToIsectRef);
+		isectsTable->SetReference(bootIsectsToPathsRef);
+		
+		//Fix the new reference paths
+		size_t intersectionsCount = 0;
+		size_t pathsCount = 0;
+		
+		for(size_t i = 0 ; i < bootstrapDepth->Size() ; ++i) {
+			ushort depth = bootstrapDepth->Value(i);
+			std::pair<size_t*,ushort> rowsMapping;
+			size_t* rows = new size_t[depth];
+			for(size_t j = 0 ; j < depth ; ++j) {
+				rows[j] = intersectionsCount;
+				bootIsectsToPathsRef->AddReference(intersectionsCount, pathsCount);
+				++intersectionsCount;
+			}
+			rowsMapping.second = depth;
+			rowsMapping.first = rows;
+			bootPathsToIsectRef->AddReferences(i, rowsMapping);
+			++pathsCount;
+		}
+		
+		//			printf("\nBOOTSTRAP RESULT = \n");
+		//			bestBootstrap->Print();
+		
+		//Delete the old renderer data and replace it with the bootstrap dataset,
+		delete currentData;
+		currentData = bestBootstrap;
+		bestBootstrap = NULL;
+		
+		candidateData->ClearData();
+		resetPointers(candidateData);	//Reset the shortcut pointers to a new empty dataset
+	}
+	else {
+		printf("\n Could not find a better bootstrap... \n");
+		candidateData->ClearData();
+		//			resetPointers(candidateData);	//Reset the shortcut pointers to a new empty dataset
+		//			printf("EMPTY CANDIDATE DATA: \n");
+		//			candidateData->Print();
+	}
+	
+	joinedData->ClearData();
+	delete joinedData;
+	
+	currentData->NotifyDataListeners();
+	reporter::stop("bootstrapping");
+	
 }
 void DataController::SetAcceptProbability(float newProb) {
 	acceptProbability = newProb;

@@ -28,13 +28,10 @@ private:
 	std::mutex mutex;
 	
 	//The datasets currently being used, this is what the views use to draw
-	RIVDataSet<float,ushort>* rendererData;
+	RIVDataSet<float,ushort>* currentData;
 	
 	//Fresh dataset that is a candidate for becoming the current data set
 	RIVDataSet<float,ushort>* candidateData;
-	
-	//Bootstrap set
-	RIVDataSet<float,ushort>* bestBootstrap = NULL;
 	
 	//The scores of the bootstrap sets for the renderers
 	float bestBootstrapResult = -1;
@@ -78,9 +75,10 @@ private:
 	RIVMultiReference* pathsToIsectRef = NULL;
 	RIVSingleReference* isectsToPathsRef = NULL;
 	
-	const std::set<std::string> tablesToBootstrap = {PATHS_TABLE,INTERSECTIONS_TABLE};
+	const std::set<std::string> dataTables = {PATHS_TABLE,INTERSECTIONS_TABLE};
 	
 	const int bootstrapBeforePause = 3;
+	//The number of bins we use for the histograms that keep track of the true distribution of the data
 	const int bins = 10;
 	int reduceRounds = 0;
 	
@@ -99,9 +97,8 @@ private:
 	clock_t startDelay;
 	int delayTimerInterval = 10000;
 	
-	const size_t maxPaths;
-	size_t updateThrottle = 0;
-	const size_t bootstrapRepeat;
+	size_t maxPaths;
+	size_t bootstrapRepeat;
 	
 	//Generate the datasets; create tables records and the histogramset
 	void createDataStructures();
@@ -112,50 +109,10 @@ private:
 	void resetPointers(RIVDataSet<float,ushort>* dataset);
 public:
 	RIVDataSet<float,ushort>* Bootstrap(RIVDataSet<float, ushort>* dataset, const size_t N);
-	void Unpause() {
-		paused = false;
-	}
-	void Delay() {
-		printf("Delay DataController....\n");
-		startDelay = clock();
-		delayed = true;
-	}
-	void TogglePause() {
-		printf("DataController is now ");
-		if(paused) {
-			printf("running.\n");
-			Unpause();
-		}
-		else {
-			printf("paused.\n");
-			Pause();
-		}
-	}
 	HistogramSet<float,ushort>* GetTrueDistributions() {
 		return &trueDistributions;
 	}
-	void Pause() {
-		paused = true;
-		printf("DataController is now paused..\n");
-	}
-	bool IsActive() { //The data controller is inactive either when it has been manually paused or is still delayed
-		return !(paused || IsDelayed());
-	}
-	bool IsDelayed() {
-		if(delayed) {
-			int timeDelayed = (clock() - startDelay) / (float)CLOCKS_PER_SEC * 1000;
-			if(timeDelayed < delayTimerInterval) {
-				return true;
-			}
-			else {
-				printf("END Delay DataController....\n");
-				delayed = false;
-				return false;
-			}
-		}
-		return false;
-		
-	}
+
 	void AddMembershipDataStructures(RIVDataSet<float,ushort>* dataset);
 	void SetAcceptProbability(float newProb);
 	//The number of renderers to expect data from and the maximum number of paths per renderer before data reduction should kick in

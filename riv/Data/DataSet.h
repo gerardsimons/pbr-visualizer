@@ -82,10 +82,19 @@ public:
 		}
 		return NULL;
 	}
+	bool HasTable(const std::string& tableName) {
+		return GetTable(name) != NULL;
+	}
 	RIVTable<Ts...>* CreateTable(const std::string& tableName) {
-		RIVTable<Ts...>* newTable = new RIVTable<Ts...>(tableName);
-		AddTable(newTable);
-		return newTable;
+		if(HasTable(tableName)) {
+			std::string error = tableName + " already exists";
+			throw std::runtime_error(error);
+		}
+		else {
+			RIVTable<Ts...>* newTable = new RIVTable<Ts...>(tableName);
+			AddTable(newTable);
+			return newTable;
+		}
 	}
 	//	template<typename T>
 	//	void AddFilter(const std::string& tableName, riv::GroupFilter<T> *filter) {

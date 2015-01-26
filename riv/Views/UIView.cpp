@@ -25,25 +25,7 @@ RIVUIView::RIVUIView(RIVDataSet<float,ushort>** dataset, int startX, int startY,
 }
 void RIVUIView::setupUI() {
 	
-	if(GluiHandle) {
-		delete GluiHandle;
-	}
-	
-	GluiHandle = new Glui2("g2Blue.cfg", NULL, ReshapeInstance, NULL, NULL, Mouse, Motion);
-	
 	float effectiveWidth = width - 2*paddingX;
-	
-	// Generate all the example GUI elements
-	// Note that some of these need supporting buttons
-	// to enable / test each individual feature
-	g2Label* ComponentTitle = NULL;
-	
-	/*** g2Label ***/
-	ComponentTitle = GluiHandle->AddLabel(20, 10, "g2Label");
-	ComponentTitle->SetColor(0.0f, 0.0f, 0.0f);
-	
-	opacitySlider = GluiHandle->AddSlider(paddingX, paddingY);
-	opacitySlider->SetWidth(effectiveWidth);
 	
 	printf("Setup UI was succesful...\n");
 }
@@ -74,8 +56,6 @@ void RIVUIView::Draw() {
 	
 	glClearColor(0.92f, 0.94f, 0.97f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	
-	GluiHandle->Render();
 	
 	glFlush();
 	glutSwapBuffers();

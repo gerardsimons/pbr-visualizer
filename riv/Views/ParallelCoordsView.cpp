@@ -1,4 +1,4 @@
-#include "ParallelCoordsView.h"
+ #include "ParallelCoordsView.h"
 #include "SliderView.h"
 #include "DataView.h"
 #include "../Graphics/graphics_helper.h"
@@ -19,8 +19,6 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RI
 	if(instance != NULL) {
 		throw "Only 1 instance allowed.";
 	}
-	linesAreDirty = true;
-	axesAreDirty = true;
 	identifier = "ParallelCoordsView";
 	instance = this;
 }
@@ -30,8 +28,6 @@ RIVDataView(datasetOne,datasetTwo), pathColorOne(pathColorOne), rayColorOne(rayC
 	if(instance != NULL) {
 		throw "Only 1 instance allowed.";
 	}
-	linesAreDirty = true;
-	axesAreDirty = true;
 	identifier = "ParallelCoordsView";
 	instance = this;
 }
@@ -42,8 +38,6 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, Histo
     }
 	this->pathColorOne = pathColor;
 	this->rayColorOne = rayColor;
-    linesAreDirty = true;
-    axesAreDirty = true;
     identifier = "ParallelCoordsView";
     instance = this;
     //Nothing else to do
@@ -55,8 +49,6 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, Histo
     }
 	this->pathColorOne = pathColor;
 	this->rayColorOne = rayColor;
-    linesAreDirty = true;
-    axesAreDirty = true;
     identifier = "ParallelCoordsView";
 	instance = this;
 }
@@ -174,7 +166,7 @@ void ParallelCoordsView::drawAxes() {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto axis : tAxes) {
 				
-//				printf("axis %s\n",axis->name.c_str());
+//				printf("Draw axis %s\n",axis->name.c_str());
 				
 				auto& histogramOne = axis->densityHistogramOne;
 				auto& histogramTwo = axis->densityHistogramTwo;
@@ -327,12 +319,10 @@ void ParallelCoordsView::drawAxesExtras() {
 			}
 		});
 	}
-    axesAreDirty = false;
+	Invalidate();
 }
 void ParallelCoordsView::createAxisPoints() {
-	
 //	printf("CREATE AXIS POINTS!!!\n");
-	
 	createAxisPoints(0, *datasetOne);
 	if(datasetTwo) {
 		createAxisPoints(1, *datasetTwo);
@@ -407,6 +397,8 @@ void ParallelCoordsView::createAxisPoints(int datasetId, RIVDataSet<float,ushort
 void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColors, RIVColorProperty* rayColors) {
 //	linesAreDirty = true;
 
+//	dataset->Print();
+	
 	size_t lineIndex = 0;
 	
 	glEnable(GL_BLEND);
@@ -454,8 +446,9 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 		size_t row = 0;
 		auto table = dataset->GetTable(axisGroup.tableName);
 		TableIterator* iterator = table->GetIterator();
+		size_t numRows = table->NumberOfRows();
 		
-		if(table->NumberOfRows() != axisGroup.axisInterfaces[0]->GetPoints(datasetId).size()) {
+		if(numRows != axisGroup.axisInterfaces[0]->GetPoints(datasetId).size()) {
 			printf("Points not yet present...\n");
 			return;
 		}
@@ -480,10 +473,20 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 		
 
 			//You gotta love 'auto'!
+		size_t lineIndex = 0;
 			riv::Color lineColor;
+		if(dynamic_cast<FilteredTableIterator*>(iterator)) {
+			
+		}
+		else {
+			
+		}
+		
 			while(iterator->GetNext(row)) {
+				
+				
 				float offset = axisWidth / 2.F;
-
+				
 				if(colorProperty->ComputeColor(table, row, lineColor)) {
 					
 //					if(membershipRecord && membershipRecord->Size()) {
@@ -512,15 +515,13 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 						}
 					
 
-	//					++lineIndex;
+						++lineIndex;
 					
 					glEnd();
 				}
 			}
-		
-		linesAreDirty = false;
 	}
-//	printf("Parallel coordinates view drew %zu polylines\n",lineIndex);
+	printf("Parallel coordinates view drew %zu polylines\n",lineIndex);
 //	reporter::stop("drawLines");
 }
 
@@ -567,8 +568,7 @@ void ParallelCoordsView::Reshape(int width, int height) {
     paddingX = 30;
     paddingY = 20;
     
-    axesAreDirty = true;
-    linesAreDirty = true;
+	Invalidate();
 	
 	InitializeGraphics();
 }
@@ -581,36 +581,34 @@ void ParallelCoordsView::InitializeGraphics() {
 size_t drawCount = 0;
 void ParallelCoordsView::Draw() {
 	//    printf("linesAreDirty = %d axesAreDirty = %d\n",linesAreDirty,axesAreDirty);
-//	printHeader("PC VIEW DRAW");
+	printHeader("PARALLEL COORDINATES PLOT VIEW DRAW");
 	
 	std::string taskName = "ParallelCoordsView Draw";
 	reporter::startTask(taskName);
 	printf("\n");
 	
-	if(axesAreDirty && linesAreDirty) {
-//		printf("Clear PCV window\n");
+	if(needsRedraw) {
+		printf("Clear PCV window\n");
         glClearColor(0.9, 0.9, 0.9, 0.0);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	}
         
         //Draw the lines from each axis
-	if(linesAreDirty) {
-		if(drawDataSetOne)
+	if(needsRedraw) {
+		if(drawDataSetOne) {
+			printf("Draw lines for dataset one\n");
 			drawLines(0,*datasetOne,pathColorOne,rayColorOne);
-		if(datasetTwo) {
-			if(drawDataSetTwo)
-				drawLines(1,*datasetTwo,pathColorTwo,rayColorTwo);
 		}
-	}
-	
-	
-	//Draw the axes
-	if(axesAreDirty) {
+		if(datasetTwo) {
+			if(drawDataSetTwo) {
+				printf("Draw lines for dataset two\n");
+				drawLines(1,*datasetTwo,pathColorTwo,rayColorTwo);
+			}
+		}
 		drawAxes();
 		drawAxesExtras();
 		drawSelectionBoxes();
 	}
-	
 	
 	glFlush();
 	glutSwapBuffers();
@@ -621,8 +619,7 @@ void ParallelCoordsView::Draw() {
 void ParallelCoordsView::toggleDrawDataSetOne() {
 	drawDataSetOne = !drawDataSetOne;
 	
-	axesAreDirty = true;
-	linesAreDirty = true;
+	Invalidate();
 	
 	redisplayWindow();
 }
@@ -630,8 +627,7 @@ void ParallelCoordsView::toggleDrawDataSetOne() {
 void ParallelCoordsView::toggleDrawDataSetTwo() {
 	drawDataSetTwo = !drawDataSetTwo;
 	
-	axesAreDirty = true;
-	linesAreDirty = true;
+	Invalidate();
 	
 	redisplayWindow();
 }
@@ -702,8 +698,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 									sliderView->AddSelectedRecord(axisGroup.tableName, axis->name);
 								}
 								
-								axesAreDirty = true;
-								linesAreDirty = true;
+								Invalidate();
 								
 								axisFound = true;
 								
@@ -752,8 +747,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 								selectedAxis->x = axisOriginX;
 								axisGroup.SwapAxes(axisIndex,swapAxisIndex);
 								
-								axesAreDirty = true;
-								linesAreDirty = true;
+								Invalidate();
 								
 								glutPostRedisplay();
 								
@@ -796,6 +790,8 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 						});
 					}
 					break;
+				default:
+					break;
 			}
 			
 			printf("NEW STATE IS IDLE\n");
@@ -834,8 +830,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
 				selection = &selectedAxis->selection;
 				
 				selectionBoxChanged = false;
-				axesAreDirty = true;
-				linesAreDirty = true;
+				Invalidate();
 				
 				axisUpdateY = y;
 				return true;
@@ -845,8 +840,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
 				printf("NEW STATE IS DRAG_AXIS\n");
 				
 				selectionBoxChanged = false;
-				axesAreDirty = true;
-				linesAreDirty = true;
+				Invalidate();
 				
 				axisOriginX = x;
 				axisUpdateX = x;
@@ -876,10 +870,10 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
 			if(std::abs(y - axisUpdateY) > updateSensitivity) {
 				axisUpdateY = y;
 				filterData();
-				linesAreDirty = true;
+				Invalidate();
 				selectionBoxChanged = true;
 			}
-			axesAreDirty = true;
+			Invalidate();
 			glutPostRedisplay();
 			return true;
 		case DRAG_SELECTION: {
@@ -898,7 +892,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
 			if(std::abs(y - axisUpdateY) > updateSensitivity) {
 				axisUpdateY = y;
 				filterData();
-				linesAreDirty = true;
+				Invalidate();
 				selectionBoxChanged = true;
 			}
 			dragBoxLastY = y;
@@ -910,8 +904,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
 				axisUpdateX = x;
 				selectedAxis->x = x;
 				
-				linesAreDirty = true;
-				axesAreDirty = true;
+				Invalidate();
 				
 				glutPostRedisplay();
 			}
@@ -972,19 +965,12 @@ void ParallelCoordsView::filterData() {
 	}
 }
 
-
-//void ParallelCoordsView::swapAxes(ParallelCoordsAxisGroup<float,ushort>* axisGroup, const std::string& swapAxisOne, const std::string& swapAxisTwo) {
-//
-//	
-//	
-//}
-
 void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
-	//Recreate the axes
-	printf("ParallelCoordsView onDataChanged notified.\n");
 	
-	axesAreDirty = true;
-	linesAreDirty = true;
+	//Recreate the axes
+	printf("\n**   ParallelCoordsView onDataChanged notified.\n");
+	
+	Invalidate();
 	
 	//Recreate the color property
 	if(source == (*datasetOne)) {
@@ -1021,12 +1007,12 @@ void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 		throw std::runtime_error("Unknown dataset " + source->GetName());
 	}
 	createAxes();
+	createAxisDensities();
+	createAxisPoints();
 	
 	//Change the ordering to have the bounce_nr to be the first of the second axis group
 //	axisGroups[1].Reorder(6,0);
 	
-	createAxisPoints();
-	createAxisDensities();
 	redisplayWindow();
 }
 
@@ -1047,8 +1033,7 @@ void ParallelCoordsView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
 	else if(dataset == *datasetTwo) {
 		createAxisDensities(1, dataset);
 	}
-    linesAreDirty = true;
-    axesAreDirty = true;
+	Invalidate();
 	
 	redisplayWindow();
 }
@@ -1059,8 +1044,7 @@ bool ParallelCoordsView::DecreaseLineOpacity() {
 		if(lineOpacity < 0.F) {
 			lineOpacity = 0;
 		}
-		linesAreDirty = true;
-		axesAreDirty = true;
+		Invalidate();
 		redisplayWindow();
 		return true;
 	}
@@ -1073,8 +1057,7 @@ bool ParallelCoordsView::IncreaseLineOpacity() {
 		if(lineOpacity > 1.F) {
 			lineOpacity = 1;
 		}
-		linesAreDirty = true;
-		axesAreDirty = true;
+		Invalidate();
 		redisplayWindow();
 		return true;
 	}

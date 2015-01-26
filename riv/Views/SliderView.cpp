@@ -221,8 +221,17 @@ void RIVSliderView::createMembershipData(RIVDataSet<float,ushort>* datasetSource
 		RIVTable<float,ushort>* table = datasetSource->GetTable(selectedTable);
 		RIVTable<float,ushort>* membershipTable = datasetSource->GetTable(selectedMembershipTable);
 		
+		if(!membershipTable) {
+			membershipTable = datasetSource->CreateTable(selectedMembershipTable);
+		}
+		
 		RIVRecord<float>* membershipRecord = membershipTable->GetRecord<float>(MEMBERSHIP);
-		membershipRecord->Clear();
+		if(!membershipRecord) {
+			membershipRecord = membershipTable->CreateRecord<float>(MEMBERSHIP,-1,1);
+		}
+		else {
+			membershipRecord->Clear();
+		}
 		//		auto tables = datasetSource->GetTables();
 		
 		size_t row = 0;

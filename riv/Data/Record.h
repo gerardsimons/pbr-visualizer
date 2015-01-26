@@ -106,7 +106,9 @@ public:
 	}
 	void Clear() {
 		values.clear();
-		minMaxComputed = false;
+		if(!clampOutliers) {
+			minMaxComputed = false;
+		}
 	}
 	std::vector<T>* GetValues() {
 		return &values;

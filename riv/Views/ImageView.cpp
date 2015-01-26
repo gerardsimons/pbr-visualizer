@@ -141,7 +141,13 @@ void RIVImageView::drawRenderedImage(EMBREERenderer *renderer, int startX, int s
 	
 	renderer->UnmapFrameBuffer();
 }
-
+void RIVImageView::redisplayWindow() {
+	int currentWindow = glutGetWindow();
+	glutSetWindow(RIVImageView::windowHandle);
+	glutPostRedisplay();
+	//Return window to given window
+	glutSetWindow(currentWindow);
+}
 size_t drawCounter = 0;
 void RIVImageView::Draw() {
     needsRedraw = true;
@@ -157,16 +163,16 @@ void RIVImageView::Draw() {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		
-		//remember all states of the GPU
-//		glPushAttrib(GL_ALL_ATTRIB_BITS);
-//		glColor3f(1,1,1);
-		if(rendererTwo == NULL) {
-			drawRenderedImage(rendererOne,0,0,width,height);
-		}
-		else {
-			int halfWidth = width/2.F;
-			drawRenderedImage(rendererOne,0,0,halfWidth,height);
-			drawRenderedImage(rendererTwo,halfWidth,0,halfWidth,height);
+		int imagePadding = 5;
+		int halfWidth = width/2.F;
+//		glColor3f(1,0,0);
+//		glRectf(0, 0, halfWidth, height);
+		drawRenderedImage(rendererOne,imagePadding,imagePadding,halfWidth - imagePadding * 2,height - imagePadding * 2);
+		
+		if(rendererTwo != NULL) {
+//			glColor3f(0, 0, 1);
+//			glRectf(halfWidth, 0, width, height);
+			drawRenderedImage(rendererTwo,halfWidth,imagePadding,halfWidth - imagePadding * 2,height - imagePadding * 2);
 		}
 		
 		glFlush();

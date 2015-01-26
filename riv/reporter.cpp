@@ -32,7 +32,7 @@ namespace reporter {
         if(isRunning) {
             throw std::runtime_error("Task already running.");
         }
-        printf("Task \"%s\" started ......... ",name.c_str());
+        printf("Task \"%s\" started .........\n ",name.c_str());
         isRunning = true;
         startTime = clock();
     }

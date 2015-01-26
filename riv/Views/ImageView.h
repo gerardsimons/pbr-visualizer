@@ -50,6 +50,8 @@ public:
 	//Dual renderer constructor
 	RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo);
 	
+	void redisplayWindow();
+	
 	static void DrawInstance();
 	static void ReshapeInstance(int,int);
 	static void Mouse(int state,int button,int x,int y);

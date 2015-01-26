@@ -69,9 +69,6 @@ private:
 	int dragBoxLastY;
 	bool selectionBoxChanged = false;
 	
-	//Determines what graphical primitives should be redrawn
-    bool axesAreDirty = true;
-    bool linesAreDirty = true;
 	
     void clearSelection();
 	//Create functions

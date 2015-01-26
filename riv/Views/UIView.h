@@ -11,18 +11,11 @@
 
 #include "DataView.h"
 
-#include <Glui2/glui2.h>
-
 class RIVUIView : public RIVDataView {
 private:
 	static RIVUIView* instance;
 	void setupUI();
 	
-	// Global Glui2 Handle
-	Glui2* GluiHandle = NULL;
-	
-	//GLUI elements
-	g2Slider* opacitySlider = NULL;
 public:
 	static int windowHandle;
 	
