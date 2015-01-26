@@ -233,7 +233,9 @@ void RIV3DView::Draw() {
 //	reporter::startTask("3D Draw");
 	
     glEnable(GL_DEPTH_TEST);
-	glClearColor(1.0, 1.0, 1.0, 0.0);
+//	glClearColor(1.0, 1.0, 1.0, 0.0); //White
+	glClearColor(0.0, 0.0, 0.0, 0.0); //Black
+	glClearColor(0.2F,1,1,0);
     glClear( GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_BLEND);
     glMatrixMode(GL_MODELVIEW);
@@ -531,19 +533,21 @@ std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset) {
 }
 
 void RIV3DView::MovePathSegment(float ratioIncrement) {
-    segmentStart += ratioIncrement;
-    segmentStop += ratioIncrement;
-    
-    float undershoot = 0 - segmentStart;
-    if(undershoot > 0) {
-        segmentStart += undershoot;
-        segmentStop += undershoot;
-    }
-    float overshoot = segmentStop - 1.F;
-    if(overshoot > 0) {
-        segmentStart -= overshoot;
-        segmentStop -= overshoot;
-    }
+	if(drawLightPaths && (drawDataSetOne || drawDataSetTwo)) {
+		segmentStart += ratioIncrement;
+		segmentStop += ratioIncrement;
+		
+		float undershoot = 0 - segmentStart;
+		if(undershoot > 0) {
+			segmentStart += undershoot;
+			segmentStop += undershoot;
+		}
+		float overshoot = segmentStop - 1.F;
+		if(overshoot > 0) {
+			segmentStart -= overshoot;
+			segmentStop -= overshoot;
+		}
+	}
 }
 
 void RIV3DView::drawPaths(float startSegment, float stopSegment) {
@@ -643,7 +647,14 @@ void RIV3DView::drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<P
 
 void RIV3DView::ToggleDrawPaths() {
 	//Create the paths if necessary (allows for smoother animations)
+	printf("Display light paths is now ");
 	drawLightPaths = !drawLightPaths;
+	if(drawLightPaths) {
+		printf("ON\n");
+	}
+	else {
+		printf("OFF\n");
+	}
 	if(drawLightPaths && !pathsCreated) {
 		createPaths();
 	}
@@ -683,6 +694,9 @@ void RIV3DView::ReshapeInstance(int width, int height) {
 
 void RIV3DView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 	//Nothing
+	
+	//TODO: Paths and points are stale when this happens, but recreation is not necessary unless drawPoints or drawPaths is set to TRUE
+	createPaths();
 }
 
 void RIV3DView::OnFiltersChanged(RIVDataSet<float,ushort>* source) {
@@ -786,6 +800,7 @@ bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMe
 			for(ushort i = 0 ; i < nrRows ; ++i) {
 				size_t refRow = refRows[i];
 				if(primitiveIds->Value(refRow) == selectedObjectID && bounceNrs->Value(refRow) == *bounceCount) {
+					
 					filter = false;
 					break;
 				}
@@ -802,6 +817,8 @@ bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMe
 		
 		printf("\n");
 		dataset->StopFiltering();
+		
+//		dataset->Print();
 	}
 	return refilterNeeded;
 }
@@ -811,6 +828,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 	if(state == GLUT_DOWN) {
 		
 		if(button == GLUT_LEFT_BUTTON) {
+			//Determine the world space cordinates on the near and far plane for the selected pixel
 			Vec3fa selectNear = screenToWorldCoordinates(x, y, 0);
 			Vec3fa selectFar = screenToWorldCoordinates(x, y, 1);
 			
@@ -823,7 +841,6 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 			origin = origin - modelPosition;
 			
 			Vec3fa dir = dest - origin;
-			
 			pickRay = Ray(origin, dir);
 			
 			if(!drawDataSetOne && drawDataSetTwo) {
@@ -836,7 +853,6 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 				pathCreation(*datasetOne, meshesOne,pathFilterOne, &bounceCountOne);
 				pathCreation(*datasetTwo, meshesTwo,pathFilterTwo,&bounceCountTwo);
 			}
-			//TODO: Else just use the one that intersects closest to the view point
 			
 			isDragging = true;
 			tbMouseFunc(button, state, width-x, y);
@@ -849,6 +865,8 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 				(*datasetOne)->ClearRowFilter(pathFilterOne);
 				(*datasetOne)->StopFiltering();
 				
+				pathFilterOne = NULL;
+			
 				createPaths(*datasetOne);
 			}
 			if(pathFilterTwo) {
@@ -857,20 +875,20 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 				(*datasetTwo)->ClearRowFilter(pathFilterTwo);
 				(*datasetTwo)->StopFiltering();
 				
+				pathFilterTwo = NULL;
+				
 				createPaths(*datasetTwo);
 			}
+			return true;
 		}
+		return false;
 	}
 	else {
 		isDragging = false;
 		return true;
 	}
 }
-
 bool RIV3DView::HandleMouseMotion(int x, int y) {
-//    printf("RIV3DView HandleMouseMotion\n");
-//    ToViewSpaceCoordinates(&x, &y);
-//	return true;
     y = height - y;
     if(isDragging) {
         tbMotionFunc(width-x, y);

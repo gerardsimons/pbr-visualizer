@@ -405,6 +405,7 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	
+	/** AD HOC MEMBERSHIP COLORING PROPERTY CREATION **/
 	
 	bool pathMembershipDataPresent = false;
 	bool isectMembershipDataPresent = false;

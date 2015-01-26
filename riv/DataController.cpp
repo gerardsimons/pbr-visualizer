@@ -308,17 +308,17 @@ void DataController::Reduce() {
 	auto joinedIsectsTable = joinedData->GetTable(INTERSECTIONS_TABLE);
 	
 	joinedPathsTable->reference = new RIVMultiReference(joinedPathsTable,joinedIsectsTable);
-	joinedIsectsTable->reference = new RIVSingleReference(joinedPathsTable,joinedIsectsTable);
+	joinedIsectsTable->reference = new RIVSingleReference(joinedIsectsTable,joinedPathsTable);
 	
 //	printf("\nCURRENT DATA = \n");
 //	currentData->Print();
 //	
-//	printf("\CANDIDATE DATA = \n");
+//	printf("\nCANDIDATE DATA = \n");
 //	candidateData->Print();
 	
 	//Join the two datasets
-	joinedData->AddDataSet(candidateData);
 	joinedData->AddDataSet(currentData);
+	joinedData->AddDataSet(candidateData);
 	
 //	printf("JOINED DATA : \n");
 //	joinedData->Print();

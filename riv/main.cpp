@@ -666,6 +666,9 @@ int main(int argc, char **argv)
 	//Use double buffering!
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
 	
+	width = glutGet(GLUT_SCREEN_WIDTH);
+	height = 0.75*glutGet(GLUT_SCREEN_HEIGHT);
+	
 	/* set the initial window size */
 	glutInitWindowSize(width, height);
 	

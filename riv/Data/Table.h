@@ -120,7 +120,9 @@ public:
 			throw std::runtime_error("RIVRecord is of invalid size");
 		}
 	}
+	//TODO: This will probably fail to build a proper reference structure when this table has preexisting rows
 	void JoinTable(RIVTable* otherTable) {
+		size_t currentNrRows = NumberOfRows();
 		if(otherTable != NULL) {
 			tuple_for_each(records, [&](auto tRecords) {
 				for(auto& record : tRecords) {
@@ -132,12 +134,7 @@ public:
 				}
 			});
 			
-			//If there are some rows already present here (with references) we should put the references behind it (+1)
-			size_t currentNrRows = NumberOfRows();
-			short offset = 0;
-			if(currentNrRows) {
-				offset = 1;
-			}
+
 			
 			RIVReference* otherReference = otherTable->reference;
 			RIVSingleReference* otherSingleRef = dynamic_cast<RIVSingleReference*>(otherReference);
@@ -145,38 +142,61 @@ public:
 			RIVSingleReference* singleRef = dynamic_cast<RIVSingleReference*>(reference);
 			RIVMultiReference* multiRef = dynamic_cast<RIVMultiReference*>(reference);
 			
+			//If there are some rows already present here (with references) we should put the references behind it (+1)
+
+//			short thisOffset = 0;
+//			short referenceOffset = 0;
+			
+			
 			if(otherSingleRef) { //Single references
-				auto otherIndices = otherSingleRef->GetIndexMap();
-				auto indices = singleRef->GetIndexMap();
-				size_t lastIndex = indices.rbegin()->first + offset;
-				size_t lastToIndex = indices[lastIndex - 1] + offset;
-				for(auto it : otherIndices) {
+				
+				if(singleRef) {
+//					if(currentNrRows) {
+//						thisOffset = currentNrRows;
+//						referenceOffset = 1;
+//					}
+					auto otherIndices = otherSingleRef->GetIndexMap();
+					auto indices = singleRef->GetIndexMap();
+					size_t lastIndex = currentNrRows;
 					
-					singleRef->AddReference(it.first + lastIndex, it.second + lastToIndex);
+					size_t lastToIndex = 0;
+					if(currentNrRows > 0) {
+						lastToIndex = indices[lastIndex - 1];
+					}
+					for(auto it : otherIndices) {
+						singleRef->AddReference(it.first + lastIndex, it.second + lastToIndex);
+					}
 				}
-				//Increment all by
+				else {
+					throw std::runtime_error("Expected this table to have a single reference.");
+				}
 			}
 			else if(otherMultiRef) { //Multi reference
-				auto otherIndices = otherMultiRef->GetIndexMap();
-				auto indices = multiRef->GetIndexMap();
-				size_t lastIndex = indices.rbegin()->first + offset;
-				auto toRows = indices[lastIndex - 1];
-				size_t lastToIndex = 0;
-				//Find end of this reference
-				for(auto it : indices) {
-					lastToIndex += it.second.second;
-				}
-				if(offset) {
-					lastIndex -= offset;
-				}
-				for(auto it : otherIndices) {
-					ushort size = it.second.second;
-					size_t* newToRows = new size_t[size];
-					for(ushort i = 0 ; i < size ; ++i) {
-						newToRows[i] = lastToIndex++;
+				if(multiRef) {
+					auto otherIndices = otherMultiRef->GetIndexMap();
+					auto indices = multiRef->GetIndexMap();
+					size_t lastIndex = currentNrRows;
+					size_t lastToIndex = 0;
+					if(currentNrRows) {
+						auto toRows = indices[lastIndex - 1];
+						//Find end of this reference
+						for(auto it : indices) {
+							lastToIndex += it.second.second;
+						}
 					}
-					std::pair<size_t*,ushort> mapping(newToRows,size);
-					multiRef->AddReferences(it.first + lastIndex, mapping);
+					
+					for(auto it : otherIndices) {
+						ushort size = it.second.second;
+						size_t* newToRows = new size_t[size];
+						for(ushort i = 0 ; i < size ; ++i) {
+							newToRows[i] = lastToIndex++;
+						}
+						std::pair<size_t*,ushort> mapping(newToRows,size);
+						multiRef->AddReferences(it.first + lastIndex, mapping);
+					}
+				}
+				else {
+					throw std::runtime_error("Expected this table to have a multi reference");
 				}
 			}
 		}
