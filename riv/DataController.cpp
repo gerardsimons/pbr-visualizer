@@ -1,4 +1,4 @@
-//
+ //
 //  DataController.cpp
 //  embree
 //
@@ -199,8 +199,12 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 	//ALWAYS update the histograms
 	ushort nrIntersections = newPath->intersectionData.size();
 	
+	if(newPath->pixel[0] > 0.9F) {
+		
+	}
+	
 	trueDistributions.AddToHistogram(PIXEL_X, newPath->pixel[0]);
-	trueDistributions.AddToHistogram(PIXEL_Y, newPath->pixel[0]);
+	trueDistributions.AddToHistogram(PIXEL_Y, newPath->pixel[1]);
 	trueDistributions.AddToHistogram(PATH_R, std::min(newPath->radiance.r,1.F));
 	trueDistributions.AddToHistogram(PATH_G, std::min(newPath->radiance.g,1.F));
 	trueDistributions.AddToHistogram(PATH_B, std::min(newPath->radiance.r,1.F));
@@ -330,6 +334,9 @@ void DataController::Reduce() {
 	
 	//Bootstrap set
 	RIVDataSet<float,ushort>* bestBootstrap = NULL;
+	
+	printf("\nTRUE HISTOGRAMS = \n");
+	trueDistributions.Print();
 	
 	for(int i = 0 ; i < bootstrapRepeat ; ++i) {
 		//			printf("Round #%d\n",i);

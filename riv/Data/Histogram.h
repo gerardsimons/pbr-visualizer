@@ -179,9 +179,9 @@ public:
 		}
 		T delta = upperBound - lowerBound;
 		float interpolated = (float)(valueClamped - lowerBound) / (delta);
-		unsigned int bin = floor(interpolated * (bins - 1));
+		unsigned int bin = floor(interpolated * (bins));
 		if(bin >= bins) {
-			
+			bin = bins - 1;
 		}
 		return bin;
 	}
@@ -222,13 +222,12 @@ public:
 		int binIndex = BinForValue(lowerBound);
 		
 		float binStart = lowerBound;
-		float binEnd = lowerBound + binWidth;
 		
 		for(auto it : hist) {
-			printf("%.2f - %.2f\t : ",binStart,binEnd);
+			printf("%.2f - %.2f\t : ",binStart,binStart + binWidth);
 			float normalValue = NormalizedValue(it.first);
 			int barSize = normalValue * maxBarSize;
-			int tabs = maxBarSize / 4 - barSize / 4  + 1; //4 is the tabwidth in spaces
+			int tabs = (maxBarSize - barSize) / 4.F; //4 is the tabwidth in spaces
 			for(int i = 0 ; i < barSize ; i++) {
 				std::cout << "#";
 			}
@@ -237,6 +236,9 @@ public:
 			}
 			std::cout << it.second;
 			std::cout << " (" << normalValue << ")" << std::endl;
+			
+			binStart += binWidth;
+			
 			++binIndex;
 		}
 //

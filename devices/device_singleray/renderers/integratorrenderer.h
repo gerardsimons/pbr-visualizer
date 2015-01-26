@@ -48,6 +48,8 @@ namespace embree
 		class RenderJob
 		{
 		public:
+			bool running = true;
+			
 			RenderJob (Ref<IntegratorRenderer> renderer, const Ref<Camera>& camera, const Ref<BackendScene>& scene,
 					   const Ref<ToneMapper>& toneMapper, Ref<SwapChain > swapchain, int accumulate, int iteration);
 			

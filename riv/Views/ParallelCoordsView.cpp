@@ -181,6 +181,9 @@ void ParallelCoordsView::drawAxes() {
 				
 				for(int i = 0 ; i < numBins ; ++i) {
 //					printf("bin = %d\n",i);
+					if(i == 9) {
+						
+					}
 					
 					int startY = i * height + axis->y;
 					int endY = startY + height;
