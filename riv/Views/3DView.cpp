@@ -320,8 +320,6 @@ void RIV3DView::Draw() {
 //	reporter::stop("3D Draw");
 }
 
-
-
 //bool RIV3DView::isSelectedObject(ushort objectId) {
 //	if(pathFilter) {
 //		std::vector<riv::Filter*> filters = pathFilter->GetFilters();
@@ -396,17 +394,10 @@ void RIV3DView::drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<
 	RIVFloatRecord* yRecord = isectTable->GetRecord<float>("y");
 	RIVFloatRecord* zRecord = isectTable->GetRecord<float>("z");
 	
-//	RIVFloatRecord* throughputR = isectTable->GetRecord<RIVFloatRecord>("throughput R");
-//	RIVFloatRecord* throughputG = isectTable->GetRecord<RIVFloatRecord>("throughput G");
-//	RIVFloatRecord* throughputB = isectTable->GetRecord<RIVFloatRecord>("throughput B");
-	
 	//Only use 1 size
 	float size = sizeProperty->ComputeSize(isectTable, 0);
-//	printf("Point size = %f\n",size);
-	
-//	if(sizesAllTheSame) {
-		glPointSize(size);
-//	}
+	glPointSize(size);
+
 	size_t row = 0;
 	TableIterator* it = isectTable->GetIterator();
 	
@@ -857,12 +848,16 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 				(*datasetOne)->StartFiltering();
 				(*datasetOne)->ClearRowFilter(pathFilterOne);
 				(*datasetOne)->StopFiltering();
+				
+				createPaths(*datasetOne);
 			}
 			if(pathFilterTwo) {
 				bounceCountTwo = 1;
 				(*datasetTwo)->StartFiltering();
 				(*datasetTwo)->ClearRowFilter(pathFilterTwo);
 				(*datasetTwo)->StopFiltering();
+				
+				createPaths(*datasetTwo);
 			}
 		}
 	}
