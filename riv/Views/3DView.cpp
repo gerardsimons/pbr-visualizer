@@ -28,8 +28,7 @@
 RIV3DView* RIV3DView::instance = NULL;
 int RIV3DView::windowHandle = -1;
 
-RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer, 	RIVColorRGBProperty<float>* colorProperty, RIVSizeProperty* sizeProperty) : RIVDataView(dataset),
-rendererOne(renderer), sizeProperty(sizeProperty), colorProperty(colorProperty) {
+RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer, RIVColorProperty* colorPropertyOne, RIVSizeProperty* sizeProperty) : RIVDataView(dataset),rendererOne(renderer), sizeProperty(sizeProperty), colorPropertyOne(colorPropertyOne) {
 	
     if(instance != NULL) {
 		throw std::runtime_error("Only 1 instance of RIV3DView allowed.");
@@ -45,8 +44,8 @@ rendererOne(renderer), sizeProperty(sizeProperty), colorProperty(colorProperty) 
 	ResetGraphics();
 };
 
-RIV3DView::RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorRGBProperty<float>* colorProperty, RIVSizeProperty* sizeProperty) :
-RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(rendererTwo), sizeProperty(sizeProperty), colorProperty(colorProperty) {
+RIV3DView::RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty* colorPropertyOne, RIVColorProperty* colorPropertyTwo, RIVSizeProperty* sizeProperty) :
+RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(rendererTwo), sizeProperty(sizeProperty), colorPropertyOne(colorPropertyOne), colorPropertyTwo(colorPropertyTwo) {
 	
 	if(instance != NULL) {
 		throw std::runtime_error("Only 1 instance of RIV3DView allowed.");
@@ -233,9 +232,9 @@ void RIV3DView::Draw() {
 //	reporter::startTask("3D Draw");
 	
     glEnable(GL_DEPTH_TEST);
-//	glClearColor(1.0, 1.0, 1.0, 0.0); //White
-	glClearColor(0.0, 0.0, 0.0, 0.0); //Black
-	glClearColor(0.2F,1,1,0);
+	glClearColor(1.0, 1.0, 1.0, 0.0); //White
+//	glClearColor(0.0, 0.0, 0.0, 0.0); //Black
+//	glClearColor(0.2F,1,1,0);
     glClear( GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_BLEND);
     glMatrixMode(GL_MODELVIEW);
@@ -479,22 +478,22 @@ void RIV3DView::ResetGraphics() {
 
 //(Re)create the paths objects for the datasets being used
 void RIV3DView::createPaths() {
-	pathsOne = createPaths(*datasetOne);
+	pathsOne = createPaths(*datasetOne,colorPropertyOne);
 	if(datasetTwo) {
-		pathsTwo = createPaths(*datasetTwo);
+		pathsTwo = createPaths(*datasetTwo,colorPropertyTwo);
 	}
 	pathsCreated = true;
 }
 
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
-std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset) {
+std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVColorProperty* colorProperty) {
 	
 	reporter::startTask("Creating paths");
 	
 	RIVTable<float,ushort>* isectTable = dataset->GetTable("intersections");
 	RIVShortRecord* bounceRecord = isectTable->GetRecord<ushort>("bounce_nr");
 	
-	colorProperty->SetColorRecords(isectTable->GetRecord<float>(INTERSECTION_R),isectTable->GetRecord<float>(INTERSECTION_G),isectTable->GetRecord<float>(INTERSECTION_B));
+//	colorProperty->SetColorRecords(isectTable->GetRecord<float>(INTERSECTION_R),isectTable->GetRecord<float>(INTERSECTION_G),isectTable->GetRecord<float>(INTERSECTION_B));
 	
 	std::vector<Path> paths;
 	
@@ -694,9 +693,17 @@ void RIV3DView::ReshapeInstance(int width, int height) {
 
 void RIV3DView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 	//Nothing
+	if(source == *datasetOne) {
+		colorPropertyOne->Reset(source);
+		createPaths(source, colorPropertyOne);
+	}
+	else if(source == *datasetTwo) {
+		colorPropertyTwo->Reset(source);
+		createPaths(source, colorPropertyTwo);
+	}
 	
-	//TODO: Paths and points are stale when this happens, but recreation is not necessary unless drawPoints or drawPaths is set to TRUE
-	createPaths();
+//	TODO: Paths and points are stale when this happens, but recreation is not necessary unless drawPoints or drawPaths is set to TRUE
+//	createPaths();
 }
 
 void RIV3DView::OnFiltersChanged(RIVDataSet<float,ushort>* source) {
@@ -867,7 +874,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 				
 				pathFilterOne = NULL;
 			
-				createPaths(*datasetOne);
+				createPaths(*datasetOne,colorPropertyOne);
 			}
 			if(pathFilterTwo) {
 				bounceCountTwo = 1;
@@ -877,7 +884,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
 				
 				pathFilterTwo = NULL;
 				
-				createPaths(*datasetTwo);
+				createPaths(*datasetTwo,colorPropertyTwo);
 			}
 			return true;
 		}

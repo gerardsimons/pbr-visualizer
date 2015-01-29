@@ -16,6 +16,12 @@ protected:
 	RIVDataSet<float,ushort>** datasetOne = NULL;
 	RIVDataSet<float,ushort>** datasetTwo = NULL;
 	
+	//Two separate color properties, one for the entire path and one for a single ray-intersection and for each renderer separate
+	RIVColorProperty* pathColorOne = NULL;
+	RIVColorProperty* rayColorOne = NULL;
+	RIVColorProperty* pathColorTwo = NULL;
+	RIVColorProperty* rayColorTwo = NULL;
+	
 	bool needsRedraw;
 	
 	//Configuration using only one renderer dataset
@@ -43,6 +49,50 @@ protected:
 		
 		this->datasetOne = datasetOne;
 		this->datasetTwo = datasetTwo;
+	}
+	RIVDataView(RIVDataSet<float,ushort>** datasetOne,int startX, int startY, int width, int height, int paddingX, int paddingY,RIVColorProperty* pathColorOne,RIVColorProperty* rayColorOne,RIVColorProperty* pathColorTwo,RIVColorProperty* rayColorTwo) {
+		this->startX = startX;
+		this->startY = startY;
+		
+		this->width = width;
+		this->height = height;
+		
+		this->paddingX = paddingX;
+		this->paddingY = paddingY;
+		
+		this->datasetOne = datasetOne;
+		
+		this->pathColorOne = pathColorOne;
+		this->rayColorOne = rayColorOne;
+		this->pathColorTwo = pathColorTwo;
+		this->rayColorTwo = rayColorTwo;
+	}
+	RIVDataView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, int startX, int startY, int width, int height, int paddingX, int paddingY,RIVColorProperty* pathColorOne,RIVColorProperty* rayColorOne,RIVColorProperty* pathColorTwo,RIVColorProperty* rayColorTwo) {
+		this->startX = startX;
+		this->startY = startY;
+		
+		this->width = width;
+		this->height = height;
+		
+		this->paddingX = paddingX;
+		this->paddingY = paddingY;
+		
+		this->datasetOne = datasetOne;
+		this->datasetTwo = datasetTwo;
+		
+		this->pathColorOne = pathColorOne;
+		this->rayColorOne = rayColorOne;
+		this->pathColorTwo = pathColorTwo;
+		this->rayColorTwo = rayColorTwo;
+	}
+	RIVDataView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, RIVColorProperty* pathColorOne,RIVColorProperty* rayColorOne,RIVColorProperty* pathColorTwo,RIVColorProperty* rayColorTwo) {
+		this->datasetOne = datasetOne;
+		this->datasetTwo = datasetTwo;
+		
+		this->pathColorOne = pathColorOne;
+		this->rayColorOne = rayColorOne;
+		this->pathColorTwo = pathColorTwo;
+		this->rayColorTwo = rayColorTwo;
 	}
 	RIVDataView(RIVDataSet<float,ushort>** datasetOne) {
 		this->datasetOne = datasetOne;
@@ -84,6 +134,30 @@ public:
 	virtual void Draw() = 0;
 	virtual bool HandleMouse(int button, int state, int x, int y) = 0;
 	virtual bool HandleMouseMotion(int x, int y) = 0;
+	RIVColorProperty* GetPathColor(ushort renderer) {
+		if(renderer) {
+			return GetPathColorOne();
+		}
+		else return GetPathColorTwo();
+	}
+	RIVColorProperty* GetRayColor(ushort renderer) {
+		if(renderer) {
+			return GetRayColorOne();
+		}
+		else return GetRayColorTwo();
+	}
+	RIVColorProperty* GetPathColorOne() {
+		return pathColorOne;
+	}
+	RIVColorProperty* GetRayColorOne() {
+		return rayColorOne;
+	}
+	RIVColorProperty* GetPathColorTwo() {
+		return pathColorTwo;
+	}
+	RIVColorProperty* GetRayColorTwo() {
+		return rayColorTwo;
+	}
 };
 
 

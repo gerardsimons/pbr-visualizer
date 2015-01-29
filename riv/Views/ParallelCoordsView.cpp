@@ -15,7 +15,7 @@
 ParallelCoordsView* ParallelCoordsView::instance = NULL;
 int ParallelCoordsView::windowHandle = -1;
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne,RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView) : RIVDataView(datasetOne,datasetTwo,x,y,width,height,paddingX,paddingY), pathColorOne(pathColorOne), rayColorOne(rayColorOne), pathColorTwo(pathColorTwo), rayColorTwo(rayColorTwo), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo), sliderView(sliderView) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne,RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView) : RIVDataView(datasetOne,datasetTwo,x,y,width,height,paddingX,paddingY,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo), sliderView(sliderView) {
 	if(instance != NULL) {
 		throw "Only 1 instance allowed.";
 	}
@@ -23,7 +23,7 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RI
 	instance = this;
 }
 ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne, RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView) :
-RIVDataView(datasetOne,datasetTwo), pathColorOne(pathColorOne), rayColorOne(rayColorOne),pathColorTwo(pathColorTwo), rayColorTwo(rayColorTwo), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo), sliderView(sliderView)
+RIVDataView(datasetOne,datasetTwo,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo), sliderView(sliderView)
 {
 	if(instance != NULL) {
 		throw "Only 1 instance allowed.";
@@ -231,17 +231,26 @@ void ParallelCoordsView::drawAxes() {
 								saturation = binValueOne / maxValueOne;
 							}
 						}
-						
-						//Convert the values to HSV
-						float h,s,v;
-						RGBtoHSV(redColorValue, 0, blueColorValue, &h, &s, &v);
-						
-						//And back again but use the computed saturation instead
-						float r,g,b;
-						HSVtoRGB(&r, &g, &b, h, saturation, v);
+						if(useSaturation) {
+							
+							saturation = std::pow(saturation, 0.25);
+							
+							//Convert the values to HSV
+							float h,s,v;
+							RGBtoHSV(redColorValue, 0, blueColorValue, &h, &s, &v);
+							
+							//And back again but use the computed saturation instead
+							float r,g,b;
+							HSVtoRGB(&r, &g, &b, h, saturation, v);
+							
+							glColor3f(r,g,b);
+						}
+						else {
+							glColor3f(redColorValue, 0, blueColorValue);
+						}
 						
 						//						printf("glColor3f(%f,%f,%f)\n",r,g,b);
-						glColor3f(r,g,b);
+
 						glRectf(startX, startY, endX, endY);
 					}
 				}
@@ -404,7 +413,6 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 	glEnable(GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	
 	/** AD HOC MEMBERSHIP COLORING PROPERTY CREATION **/
 	
 	bool pathMembershipDataPresent = false;
@@ -435,8 +443,6 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 		}
 	}
 	
-	
-	
 	glLineWidth(1);
 	for(auto &axisGroup : axisGroups) {
 		
@@ -464,8 +470,6 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 				colorProperty = new RIVEvaluatedColorProperty<float>(colorMap,table,isectMembershipRecord);
 			}
 			else colorProperty = rayColors;
-			
-			
 		}
 		
 		//You gotta love 'auto'!
@@ -605,7 +609,7 @@ void ParallelCoordsView::Draw() {
 	reporter::stop(taskName);
 }
 
-void ParallelCoordsView::toggleDrawDataSetOne() {
+void ParallelCoordsView::ToggleDrawDataSetOne() {
 	drawDataSetOne = !drawDataSetOne;
 	
 	Invalidate();
@@ -613,7 +617,7 @@ void ParallelCoordsView::toggleDrawDataSetOne() {
 	redisplayWindow();
 }
 
-void ParallelCoordsView::toggleDrawDataSetTwo() {
+void ParallelCoordsView::ToggleDrawDataSetTwo() {
 	drawDataSetTwo = !drawDataSetTwo;
 	
 	Invalidate();
@@ -791,9 +795,13 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 	}
 	return false;
 }
-
-int dragStartSensitivity = 5;
-int updateSensitivity = 7;
+void ParallelCoordsView::ToggleSaturationMode() {
+	useSaturation = !useSaturation;
+	
+	Invalidate();
+	
+	redisplayWindow();
+}
 bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
 	y = height - y;
 	
@@ -1026,7 +1034,6 @@ void ParallelCoordsView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
 	
 	redisplayWindow();
 }
-
 bool ParallelCoordsView::DecreaseLineOpacity() {
 	if(lineOpacity > 0.F) {
 		lineOpacity -= lineOpacityIncrement;
@@ -1039,7 +1046,6 @@ bool ParallelCoordsView::DecreaseLineOpacity() {
 	}
 	else return false;
 }
-
 bool ParallelCoordsView::IncreaseLineOpacity() {
 	if(lineOpacity < 1.F) {
 		lineOpacity += lineOpacityIncrement;

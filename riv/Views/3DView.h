@@ -54,7 +54,8 @@ protected:
 	EMBREERenderer* rendererOne;
 	EMBREERenderer* rendererTwo = NULL;
 	
-	RIVColorRGBProperty<float>* colorProperty;
+	RIVColorProperty* colorPropertyOne;
+	RIVColorProperty* colorPropertyTwo;
 	
 	RIVSizeProperty* sizeProperty;
 	
@@ -105,14 +106,14 @@ protected:
 	
 	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,riv::RowFilter*& rowFilter, ushort* bounceCount);
 	//Create graphics buffer from unfiltered data rows
-	std::vector<Path> createPaths(RIVDataSet<float,ushort>*);
+	std::vector<Path> createPaths(RIVDataSet<float,ushort>*, RIVColorProperty* colorProperty);
     static RIV3DView* instance;
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
 public:
 	//Single renderer constructor
-    RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,	RIVColorRGBProperty<float>*,RIVSizeProperty*);
+    RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,RIVColorProperty* colorProperty,RIVSizeProperty*);
 	//Dual renderer constructor
-	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, 	RIVColorRGBProperty<float>* colorProperty, RIVSizeProperty* sizeProperty);
+	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo,RIVColorProperty* colorPropertyOne,RIVColorProperty* colorPropertyTwo, RIVSizeProperty* sizeProperty);
 	
 	//Extract data about the scene from the embree renderer object
 	void GetSceneData(EMBREERenderer* renderer, TriangleMeshGroup* target);

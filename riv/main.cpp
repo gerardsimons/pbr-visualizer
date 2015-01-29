@@ -83,7 +83,7 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 5000;
+const int maxPaths = 10;
 const int bootstrapRepeat = 10;
 const int sliderViewHeight = 50;
 
@@ -221,21 +221,21 @@ void keys(int keyCode, int x, int y) {
 		case 43: // + key
 			parallelCoordsView->IncreaseLineOpacity();
 			break;
-		case 61: // = key is on the same physical keyboard button as +, so cut the user some slack and
+		case 61: // = key is on the same physical keyboard button as +, so cut the user some slack
 			parallelCoordsView->IncreaseLineOpacity();
 			break;
 		case 32: //Space bar
-//			dataControllerOne->sTogglePause();
-//			dataControllerTwo->TogglePause();
 			TogglePause();
 			break;
 		case 49: //The '1' key, switch to renderer one if not already using it
-			parallelCoordsView->toggleDrawDataSetOne();
+			parallelCoordsView->ToggleDrawDataSetOne();
 			sceneView->ToggleDrawDataSetOne();
 			break;
 		case 50: //The '2' key, switch to renderer two if not already using it
-			parallelCoordsView->toggleDrawDataSetTwo();
+			parallelCoordsView->ToggleDrawDataSetTwo();
 			sceneView->ToggleDrawDataSetTwo();
+			break;
+		case 51: //The '3' key, switch to renderer two if not already using it
 			break;
 		case 98: // 'b' key
 			glutSwapBuffers();
@@ -280,7 +280,7 @@ void keys(int keyCode, int x, int y) {
 		}
 		case 122: // 'z' key, save the image
 		{
-			printf("Key not set.\n");
+			parallelCoordsView->ToggleSaturationMode();
 			break;
 		}
 		case 116: // 't' key, use as temp key for some to-test function
@@ -292,7 +292,7 @@ void keys(int keyCode, int x, int y) {
 		case 119: // 'w' key, move camera in Y direction
 			sceneView->MoveCamera(0,camSpeed,0);
 			break;
-		case 115: // 's' kegy
+		case 115: // 's' key
 			sceneView->MoveCamera(0, -camSpeed, 0);
 			break;
 		case GLUT_KEY_UP:
@@ -363,8 +363,8 @@ void reshape(int w, int h)
 	//    glutReshapeWindow(height / 2 - 2 * padding, height /2 - 2 *padding);
 }
 
-const int maxFrames = 100;
-int currentFrame = 0;
+int currentFrameOne = 0;
+int currentFrameTwo = 0;
 
 clock_t startDelay;
 bool isDelayed = false;
@@ -375,6 +375,8 @@ int delayTimerInterval = 0;
 
 bool renderOneFinishedFrame = true;
 bool renderTwoFinishedFrame = true;
+
+
 
 //Delay rendering
 void delayRendering(size_t delayTimeMs) {
@@ -415,12 +417,13 @@ void idle() {
 	
 	if(!renderingPaused) {
 		if(!isDelayed) {
-			printf("Rendering frame %d\n",currentFrame);
-			++currentFrame;
+			printf("Rendering frame %d\n",currentFrameOne);
+			++currentFrameOne;
 			rendererOne->RenderNextFrame();
 			renderOneFinishedFrame = false;
 			postRedisplay = true;
 			if(dataControllerTwo) {
+				++currentFrameTwo;
 				rendererTwo->RenderNextFrame();
 				renderTwoFinishedFrame = false;
 			}
@@ -437,7 +440,7 @@ void idle() {
 
 bool processRendererOne(PathData* newPath) {
 	//	printf("New path from renderer #1 received!\n");
-	return dataControllerOne->ProcessNewPath(currentFrame,newPath);
+	return dataControllerOne->ProcessNewPath(currentFrameOne,newPath);
 }
 
 void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
@@ -455,14 +458,17 @@ void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
 
 bool processRendererTwo(PathData* newPath) {
 	//	printf("New path from renderer #2 received!\n");
-	return dataControllerTwo->ProcessNewPath(currentFrame,newPath);
+	return dataControllerTwo->ProcessNewPath(currentFrameTwo,newPath);
 }
 
 void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
 	printf("Renderer two finished a frame...\n");
 	dataControllerTwo->Reduce();
 	renderTwoFinishedFrame = true;
-//	if(renderOneFinishedFrame && renderTwoFinishedFrame) {
+	if(currentFrameOne && currentFrameTwo) {
+		TogglePause();
+	}
+ //	if(renderOneFinishedFrame && renderTwoFinishedFrame) {
 //		delayRendering(5000);
 //		renderingPaused = true;
 //	}
@@ -595,18 +601,17 @@ void createViews() {
 	glutMotionFunc(RIVSliderView::Motion);
 	glutSpecialFunc(keys);
 	
-	//	int uiViewWidth = width - 3 * squareSize - 2 * padding;
-	//	int uiPosX = sceneViewPosX + squareSize + padding;
-	//	uiViewWindow = glutCreateSubWindow(mainWindow, uiPosX, bottomHalfY, uiViewWidth, squareSize);
-	//	RIVUIView::windowHandle = uiViewWindow;
-	//	glutSetWindow(uiViewWindow);
-	//	glutDisplayFunc(RIVUIView::DrawInstance);
-	//	//	glutDisplayFunc(doNothing);
-	//	glutReshapeFunc(RIVUIView::ReshapeInstance);
-	//	glutMouseFunc(RIVUIView::Mouse);
-	//	glutMotionFunc(RIVUIView::Motion);
-	//	glutSpecialFunc(keys);
-	//	uiView = new RIVUIView(datasetOne, uiViewWidth, uiPosX, bottomHalfY, squareSize, padding, padding);
+	int uiViewWidth = width - 3 * squareSize - 2 * padding;
+	int uiPosX = sceneViewPosX + squareSize + padding;
+	uiViewWindow = glutCreateSubWindow(mainWindow, uiPosX, bottomHalfY, uiViewWidth, squareSize);
+	RIVUIView::windowHandle = uiViewWindow;
+	glutSetWindow(uiViewWindow);
+	glutDisplayFunc(RIVUIView::DrawInstance);
+	//	glutDisplayFunc(doNothing);
+	glutReshapeFunc(RIVUIView::ReshapeInstance);
+	glutMouseFunc(RIVUIView::Mouse);
+	glutMotionFunc(RIVUIView::Motion);
+	glutSpecialFunc(keys);
 	
 	//Create views for two renderers
 	auto pathColorOne = createPathColorProperty(*datasetOne);
@@ -615,7 +620,7 @@ void createViews() {
 		
 		//Im so lazy ....
 		//		auto pathColorTwo = createPathColorProperty(*datasetTwo);
-		//		auto rayColorTwo = createRayColorProperty(*datasetTwo);
+				auto rayColorTwo = createRayColorProperty(*datasetTwo);
 		
 		//Fixed colors for testing
 		RIVColorProperty* colorOne = new RIVFixedColorProperty(1, 0, 0);
@@ -627,7 +632,8 @@ void createViews() {
 		
 		//		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
 		
-		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,rayColorOne,sizeProperty);
+//		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,rayColorOne,rayColorTwo,sizeProperty);
+		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,colorOne,colorTwo,sizeProperty);
 		imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo);
 		sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),redBlue);
 		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),colorOne,colorOne,colorTwo,colorTwo,sliderView);
@@ -645,6 +651,7 @@ void createViews() {
 		imageView = new RIVImageView(datasetOne,rendererOne);
 	}
 	//        heatMapView = new RIVHeatMapView(&dataset);
+	uiView = new RIVUIView(datasetOne, parallelCoordsView, sceneView, imageView,  uiViewWidth, uiPosX, bottomHalfY, squareSize, padding, padding);
 	
 	//Add some filter callbacks
 	(*datasetOne)->AddDataListener(imageView);
@@ -693,6 +700,8 @@ int main(int argc, char **argv)
 	glutSpecialFunc(keys);
 	
 	setupDataController(argc, argv);
+	
+	renderingPaused = true;
 	
 	createViews();
 	

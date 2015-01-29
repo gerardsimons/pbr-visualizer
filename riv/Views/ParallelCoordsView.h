@@ -32,11 +32,7 @@ private:
 	
 	RIVSliderView* sliderView;
 	
-	//Two separate color properties, one for the entire path and one for a single ray-intersection and for each renderer separate
-	RIVColorProperty* pathColorOne = NULL;
-	RIVColorProperty* rayColorOne = NULL;
-	RIVColorProperty* pathColorTwo = NULL;
-	RIVColorProperty* rayColorTwo = NULL;
+	bool useSaturation = false;
 	
 	bool drawDataSetOne = true;
 	bool drawDataSetTwo = true;
@@ -62,13 +58,15 @@ private:
 	int axisUpdateX;
 	int axisOriginX;
 	
+	int dragStartSensitivity = 5;
+	int updateSensitivity = 7;
+	
 	float lineOpacity = 0.1F;
 	float lineOpacityIncrement = 0.01F;
 	
 	//Declares both where dragging the selection box originated and the last known point
 	int dragBoxLastY;
 	bool selectionBoxChanged = false;
-	
 	
     void clearSelection();
 	//Create functions
@@ -106,8 +104,9 @@ public:
 	bool HandleMouse(int,int,int,int);
 	bool HandleMouseMotion(int,int);
 	
-	void toggleDrawDataSetOne();
-	void toggleDrawDataSetTwo();
+	void ToggleDrawDataSetOne();
+	void ToggleDrawDataSetTwo();
+	void ToggleSaturationMode();
 	
     //implement virtual functions prescribed by DataSetListener
     virtual void OnDataChanged(RIVDataSet<float,ushort>* source);
@@ -115,6 +114,7 @@ public:
 	
 	bool DecreaseLineOpacity();
 	bool IncreaseLineOpacity();
+
 	
 	//Create graphical primitives based on data currently set
 	void InitializeGraphics();
