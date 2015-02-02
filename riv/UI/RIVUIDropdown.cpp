@@ -14,11 +14,13 @@ RIVUIDropdown::RIVUIDropdown(int x, int y, int width, int height, const std::vec
 		selectedElementIndex = 0;
 	}
 	else {
-		throw std::runtime_error("At least one element required.\n");
+		selectedElementIndex = -1;
 	}
 	createDropdownElements(stringElements);
 }
-
+RIVUIDropdown::RIVUIDropdown(int x, int y, int width, int heights) : RIVUIElement(x,y,width,height) {
+	selectedElementIndex = -1;
+}
 void RIVUIDropdown::createDropdownElements(const std::vector<std::string>& texts) {
 	elements.clear();
 	int elementY = y - height;
@@ -34,34 +36,35 @@ void RIVUIDropdown::SetSelectedValue(const std::string& value) {
 	for(int i = 0 ; i < elements.size() ; ++i) {
 		if(elements[i].text == value) {
 			selectedElementIndex = i;
+			notifyListeners();
 			return;
 		}
 	}
 	throw std::runtime_error("No such value exists in this dropdown");
 }
+void RIVUIDropdown::SetSelectedValue(int i) {
+	if(i < elements.size()) {
+		selectedElementIndex = i;
+		notifyListeners();
+	}
+	else {
+		throw std::runtime_error("Not that many elements exist.");
+	}
+}
 void RIVUIDropdown::Draw() {
 	needsRedraw = true;
-	if(needsRedraw) {
-		printf("RIVUIDropdown %s redraw\n",elements[selectedElementIndex].text.c_str());
+	if(needsRedraw && !hidden) {
+		if(selectedElementIndex >= 0) {
+			printf("RIVUIDropdown %s redraw\n",elements[selectedElementIndex].text.c_str());
+		}
 		
 		const int lineWidth = 2;
-//		glEnable(GL_SCISSOR_TEST);
-	
-//		if(!collapsed) {
-//			glScissor(x, y, width, height);
-//		}
-//		else {
-//			glScissor(x, y - elements, width, height * elements.size());
-//		}
 		
-//		glClear(GL_COLOR_BUFFER_BIT);
-//		glClear
-//		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(1, 1, 1, 0);
 		glColor3f(1, 1,1);
 		
 		//Draw a rectangle as background
-	//	glRectf(x, y, width, height);
+		//	glRectf(x, y, width, height);
 		
 		glColor3f(0, 0, 0);
 		glLineWidth(lineWidth);
@@ -74,29 +77,31 @@ void RIVUIDropdown::Draw() {
 		glVertex2f(x, y + height - lineWidth);
 		glEnd();
 		
-//		if(collapsed) {
+		if(selectedElementIndex >= 0) {
+			//		if(collapsed) {
 			const std::string& selectedText = elements[selectedElementIndex].text;
 			drawText(selectedText, x + 5,y + 5, 0.08);
-//		}
-		if(!collapsed) {
-			//Draw all the dropdown elements
-			for(const RIVDropdownElement& element : elements) {
-				glColor3f(1,1,1);
-				glRectf(x, element.y, x+width, element.y + height);
-				glLineWidth(lineWidth);
-				glColor3f(0,0, 0);
-				glBegin(GL_LINE_LOOP);
+			//		}
+			if(!collapsed) {
+				//Draw all the dropdown elements
+				for(const RIVDropdownElement& element : elements) {
+					glColor3f(1,1,1);
+					glRectf(x, element.y, x+width, element.y + height);
+					glLineWidth(lineWidth);
+					glColor3f(0,0, 0);
+					glBegin(GL_LINE_LOOP);
 					glVertex2f(x, element.y);
 					glVertex2f(x + width - lineWidth, element.y);
 					glVertex2f(x + width - lineWidth, element.y + height - lineWidth);
 					glVertex2f(x, element.y + height - lineWidth);
-				glEnd();
-				drawText(element.text, x + 5,element.y + 5, 0.08);
+					glEnd();
+					drawText(element.text, x + 5,element.y + 5, 0.08);
+				}
 			}
 		}
 		needsRedraw = false;
 	}
-
+	
 	
 	//Draw the active text
 	
@@ -120,7 +125,7 @@ bool RIVUIDropdown::Mouse(int x, int y, int button, int state) {
 				}
 			}
 			else {
-
+				
 				printf("Dropdown is now collapsed.\n");
 			}
 			collapsed = !collapsed;
@@ -152,4 +157,7 @@ int RIVUIDropdown::GetSelectedIndex() {
 }
 std::string RIVUIDropdown::GetSelectedValue() {
 	return elements[selectedElementIndex].text;
+}
+void RIVUIDropdown::AddValue(const std::string &value) {
+	
 }

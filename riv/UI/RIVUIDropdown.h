@@ -28,9 +28,6 @@ private:
 			
 		}
 		int y;
-//		int x;
-//		int width;
-//		int height;
 		std::string text;
 	};
 	
@@ -42,9 +39,12 @@ private:
 	bool collapsed = true;
 public:
 	RIVUIDropdown(int x, int y, int width, int height, const std::vector<std::string>& elements);
+	RIVUIDropdown(int x, int y, int width, int height);
 	void AddListener(RIVUIDropdownListener* listener);
+	void AddValue(const std::string& value);
 	void SetValues(const std::vector<std::string>& values);
 	void SetSelectedValue(const std::string& value);
+	void SetSelectedValue(int selectedIndex);
 	int GetSelectedIndex();
 	std::string GetSelectedValue();
 	void Draw();

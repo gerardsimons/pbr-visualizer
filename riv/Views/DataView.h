@@ -134,29 +134,41 @@ public:
 	virtual void Draw() = 0;
 	virtual bool HandleMouse(int button, int state, int x, int y) = 0;
 	virtual bool HandleMouseMotion(int x, int y) = 0;
-	RIVColorProperty* GetPathColor(ushort renderer) {
+	RIVColorProperty** GetPathColor(ushort renderer) {
 		if(renderer) {
 			return GetPathColorOne();
 		}
 		else return GetPathColorTwo();
 	}
-	RIVColorProperty* GetRayColor(ushort renderer) {
+	RIVColorProperty** GetRayColor(ushort renderer) {
 		if(renderer) {
 			return GetRayColorOne();
 		}
 		else return GetRayColorTwo();
 	}
-	RIVColorProperty* GetPathColorOne() {
-		return pathColorOne;
+	RIVColorProperty** GetPathColorOne() {
+		if(pathColorOne) {
+			return &pathColorOne;
+		}
+		else return NULL;
 	}
-	RIVColorProperty* GetRayColorOne() {
-		return rayColorOne;
+	RIVColorProperty** GetRayColorOne() {
+		if(rayColorOne) {
+			return &rayColorOne;
+		}
+		else return NULL;
 	}
-	RIVColorProperty* GetPathColorTwo() {
-		return pathColorTwo;
+	RIVColorProperty** GetPathColorTwo() {
+		if(pathColorTwo) {
+			return &pathColorTwo;
+		}
+		else return NULL;
 	}
-	RIVColorProperty* GetRayColorTwo() {
-		return rayColorTwo;
+	RIVColorProperty** GetRayColorTwo() {
+		if(rayColorTwo) {
+			return &rayColorTwo;
+		}
+		else return NULL;
 	}
 };
 

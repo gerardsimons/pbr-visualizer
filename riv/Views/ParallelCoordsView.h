@@ -59,7 +59,7 @@ private:
 	int axisOriginX;
 	
 	int dragStartSensitivity = 5;
-	int updateSensitivity = 7;
+	int updateSensitivity = 10;
 	
 	float lineOpacity = 0.1F;
 	float lineOpacityIncrement = 0.01F;

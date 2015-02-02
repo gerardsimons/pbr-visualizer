@@ -18,8 +18,6 @@
 #include <vector>
 #include <algorithm>
 
-
-
 class OctreeNode;
 
 class Octree {

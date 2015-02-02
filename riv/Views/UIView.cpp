@@ -8,6 +8,7 @@
 
 #include "UIView.h"
 #include "../helper.h"
+#include "../Configuration.h"
 
 RIVUIView* RIVUIView::instance = NULL;
 int RIVUIView::windowHandle = -1;
@@ -25,12 +26,12 @@ const std::string RIVUIView::fixedColorPropertyText = "Fixed Color";
 const std::string RIVUIView::rgbColorPropertyText = "RGB Color";
 const std::string RIVUIView::linearColorPropertyText = "Linear Color";
 
-const std::string RIVUIView::rgbColorChoiceOne = "Radiance";
-const std::string RIVUIView::rgbColorChoiceTwo = "Position";
+const std::string RIVUIView::rgbColorChoiceRadiance = "Radiance";
+const std::string RIVUIView::rgbColorChoicePosition = "Position";
 
-RIVUIView::RIVUIView(RIVDataSet<float,ushort>** dataset, ParallelCoordsView* pcView, RIV3DView* sceneView, RIVImageView* renderView, int startX, int startY, int width, int height, int paddingX, int paddingY) :
-	RIVDataView(dataset, startX, startY, width, height, paddingX, paddingY),
-	parallelCoordsView(pcView), sceneView(sceneView), renderView(renderView)
+RIVUIView::RIVUIView(RIVDataSet<float,ushort>** datasetOne, ParallelCoordsView* pcView, RIV3DView* sceneView, RIVImageView* renderView, int startX, int startY, int width, int height, int paddingX, int paddingY) :
+RIVDataView(datasetOne, startX, startY, width, height, paddingX, paddingY),
+parallelCoordsView(pcView), sceneView(sceneView), renderView(renderView)
 {
 	if(instance) {
 		throw std::runtime_error("Only 1 instance allowed of RIVUIView");
@@ -38,17 +39,39 @@ RIVUIView::RIVUIView(RIVDataSet<float,ushort>** dataset, ParallelCoordsView* pcV
 	else {
 		instance = this;
 	}
+	selectedDataset = datasetOne;
 	setupUI();
 }
-std::string RIVUIView::stringFromProperty(RIVColorProperty* colorProperty) {
-	if(colorProperty == NULL) {
+RIVUIView::RIVUIView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, ParallelCoordsView* pcView, RIV3DView* sceneView, RIVImageView* renderView, int startX, int startY, int width, int height, int paddingX, int paddingY) :
+RIVDataView(datasetOne, datasetTwo, startX, startY, width, height, paddingX, paddingY),
+parallelCoordsView(pcView), sceneView(sceneView), renderView(renderView)
+{
+	if(instance) {
+		throw std::runtime_error("Only 1 instance allowed of RIVUIView");
+	}
+	else {
+		instance = this;
+	}
+	
+	selectedDataset = datasetOne;
+	
+	setupUI();
+}
+std::string RIVUIView::stringFromProperty(RIVColorProperty** colorProperty) {
+	if(colorProperty == NULL || *colorProperty == NULL) {
 		return "NULL";
 	}
-	if(typeid(colorProperty) == typeid(RIVColorRGBProperty<float>) || typeid(colorProperty) == typeid(RIVColorRGBProperty<ushort>)) {
+	if(typeid(*colorProperty) == typeid(RIVColorRGBProperty<float>) || typeid(*colorProperty) == typeid(RIVColorRGBProperty<ushort>)) {
 		return rgbColorPropertyText;
 	}
-	else if(typeid(colorProperty) == typeid(RIVEvaluatedColorProperty<float>) || typeid(colorProperty) == typeid(RIVEvaluatedColorProperty<ushort>)) {
+	else if(typeid(*colorProperty) == typeid(RIVEvaluatedColorProperty<float>) || typeid(*colorProperty) == typeid(RIVEvaluatedColorProperty<ushort>)) {
 		return linearColorPropertyText;
+	}
+	else if(typeid(**colorProperty) == typeid(RIVFixedColorProperty)) {
+		return fixedColorPropertyText;
+	}
+	else {
+		throw std::runtime_error("Unsupported color property");
 	}
 }
 void RIVUIView::OnValueChanged(RIVUIDropdown* source, int selectedIndex, const std::string& selectedText) {
@@ -60,69 +83,104 @@ void RIVUIView::OnValueChanged(RIVUIDropdown* source, int selectedIndex, const s
 			
 			printf("Selected the parallel coordinates plot view\n");
 			
-			RIVColorProperty* pathColorOne = parallelCoordsView->GetPathColorOne();
-			RIVColorProperty* pathColorTwo = parallelCoordsView->GetPathColorTwo();
-			RIVColorProperty* rayColorOne = parallelCoordsView->GetRayColorOne();
-			RIVColorProperty* rayColorTwo = parallelCoordsView->GetRayColorTwo();
-			
 			tableDropdown->SetValues({pathTableText,rayTableText});
+			selectedView = parallelCoordsView;
 			
-			std::string selectedTable = tableDropdown->GetSelectedValue();
-			std::string selectedColorColor = colorTypeDropdown->GetSelectedValue();
+//			std::string selectedTable = tableDropdown->GetSelectedValue();
+//			std::string selectedColor = colorTypeDropdown->GetSelectedValue();
 		}
 		else if(selectedText == sceneViewText) {
 			printf("Selected the scene view\n");
-			
+			selectedView = sceneView;
 			tableDropdown->SetValues({rayTableText}); //The scene view only supports coloring based on intersection table
 		}
 		else {
 			//Unknown view
 		}
+		rendererDropdown->SetSelectedValue(0);
+		tableDropdown->SetSelectedValue(0);
 	}
 	else if(source == rendererDropdown) {
 		if(selectedText == rendererOneText) {
-			selectedDataset = 0;		}
+			selectedRenderer = 0;
+			printf("Selected renderer #1\n");
+		}
 		else if(selectedText == rendererTwoText) {
-			selectedDataset = 1;
+			selectedRenderer = 1;
+			printf("Selected renderer #2\n");
 		}
 	}
 	else if(source == tableDropdown) {
 		if(selectedText == pathTableText) {
-			RIVColorProperty* pathColorOne = selectedView->GetPathColorOne();
-			RIVColorProperty* pathColorTwo = selectedView->GetPathColorTwo();
-			
-			selectedTable = pathTableText;
+			selectedTable = PATHS_TABLE;
+			selectedColorProperty = selectedView->GetRayColor(selectedRenderer);
 		}
 		else if(selectedText == rayTableText) {
-			RIVColorProperty* rayColorOne = selectedView->GetRayColorOne();
-			RIVColorProperty* rayColorTwo = selectedView->GetRayColorTwo();
-			
-			selectedTable = rayTableText;
-			
-			
-			
-			selectedColorProperty = selectedView->GetRayColor(selectedDataset);
+			selectedTable = INTERSECTIONS_TABLE;
+			selectedColorProperty = selectedView->GetRayColor(selectedRenderer);
 		}
-		colorTypeDropdown->SetSelectedValue(stringFromProperty(selectedColorProperty));
+		std::string colorTypeString = stringFromProperty(selectedColorProperty);
+		colorTypeDropdown->SetSelectedValue(colorTypeString);
 	}
 	else if(source == colorTypeDropdown) {
+		selectedColorType = selectedText;
 		if(selectedText == rgbColorPropertyText) {
-			recordOneDropdown->Show();
-			recordOneText->Show();
-			recordTwoDropdown->Show();
-			recordTwoText->Show();
-			recordThreeDropdown->Show();
-			recordThreeText->Show();
-			
-//			dynamic_cast<RIVColorRGBProperty<<#typename T#>>>(<#expression#>)
+			rgbRecordsDropdown->Show();
+			if(selectedTable == PATHS_TABLE) {
+				rgbRecordsDropdown->SetValues({rgbColorChoiceRadiance});
+			}
+			else if(selectedTable == INTERSECTIONS_TABLE) {
+				rgbRecordsDropdown->SetValues({rgbColorChoiceRadiance,rgbColorChoicePosition});
+			}
 		}
 		else if(selectedText == linearColorPropertyText) {
+			
 			recordOneDropdown->Show();
 			recordOneText->Show();
-			recordTwoDropdown->Hide();
-			recordTwoText->Hide();
-			recordThreeDropdown->Hide();
-			recordThreeText->Hide();
+			std::vector<std::string> values;
+			//Fill the dropdown with the names of the records in
+			auto& records = (*selectedDataset)->GetTable(selectedTable)->GetAllRecords();
+			tuple_for_each(records, [&](auto tRecords) {
+				for(auto record : tRecords) {
+					values.push_back(record->name);
+				}
+			});
+			recordOneDropdown->SetValues(values);
+		}
+		else if(selectedText == fixedColorPropertyText) {
+			recordOneDropdown->Hide();
+			recordOneText->Hide();
+			rgbRecordsDropdown->Hide();
+		}
+	}
+	else if(source == rgbRecordsDropdown) {
+		auto table = (*selectedDataset)->GetTable(selectedTable);
+		if(selectedText == rgbColorChoiceRadiance) {
+			if(selectedTable == PATHS_TABLE) {
+				delete *selectedColorProperty;
+				*selectedColorProperty = new RIVColorRGBProperty<float>(table,table->GetRecord<float>(PATH_R),table->GetRecord<float>(PATH_G),table->GetRecord<float>(PATH_B));
+			}
+			else if(selectedTable == INTERSECTIONS_TABLE) {
+				if(selectedText == rgbColorChoicePosition) {
+					delete *selectedColorProperty;
+					*selectedColorProperty = new RIVColorRGBProperty<float>(table,table->GetRecord<float>(POS_X),table->GetRecord<float>(POS_Y),table->GetRecord<float>(POS_Z));
+				}
+				else if(selectedText == rgbColorChoiceRadiance) {
+					delete *selectedColorProperty;
+					*selectedColorProperty = new RIVColorRGBProperty<float>(table,table->GetRecord<float>(INTERSECTION_R),table->GetRecord<float>(INTERSECTION_G),table->GetRecord<float>(INTERSECTION_B));
+				}
+			}
+		}
+	}
+	else if(source == recordOneDropdown) {
+		if(selectedColorType == fixedColorPropertyText) {
+			delete *selectedColorProperty;
+		}
+		else if(selectedColorType == linearColorPropertyText) {
+			delete *selectedColorProperty;
+		}
+		else {
+			throw std::runtime_error("Unsupported color type\n");
 		}
 	}
 }
@@ -136,17 +194,19 @@ void RIVUIView::setupUI() {
 	
 	int spacingX = 20;
 	int spacingY = 20;
-	int y = height - 20;
+	int y = height - spacingY;
+	
+//	uiElements.reserve(10);
 	
 	viewText = new RIVUILabel("View: ",spacingX,y,textWidth,elementsHeight);
 	uiElements.push_back(viewText);
 	
-	std::vector<std::string> dropdownChoices = {pcViewText,sceneViewText};
+	std::vector<std::string> dropdownChoices = (std::vector<std::string>){pcViewText,sceneViewText};
 	viewDropdown = new RIVUIDropdown(viewText->x + viewText->width, y, dropDownWidth, elementsHeight, dropdownChoices);
 	uiElements.push_back(viewDropdown);
 	
 	y -= 2 * spacingY;
-	
+
 	rendererText = new RIVUILabel("Renderer: ",20,y,textWidth,elementsHeight);
 	uiElements.push_back(rendererText);
 	
@@ -167,15 +227,29 @@ void RIVUIView::setupUI() {
 	
 	colorTypeText = new RIVUILabel("Coloring Scheme: ",20,y,textWidth,elementsHeight);
 	uiElements.push_back(colorTypeText);
-
-	dropdownChoices = {"RGB Color","Linear Color"};
-	colorTypeDropdown = new RIVUIDropdown(colorTypeText->x + colorTypeText->width, y, dropDownWidth, elementsHeight, dropdownChoices);
+	
+	colorTypeDropdown = new RIVUIDropdown(colorTypeText->x + colorTypeText->width, y, dropDownWidth, elementsHeight, {rgbColorPropertyText,fixedColorPropertyText,linearColorPropertyText});
 	uiElements.push_back(colorTypeDropdown);
+	
+	y -= 2 * spacingY;
+	
+	recordOneText = new RIVUILabel("Data Records: ",20,y,textWidth,elementsHeight);
+	uiElements.push_back(recordOneText);
+	
+	recordOneDropdown = new RIVUIDropdown(colorTypeText->x + colorTypeText->width, y, dropDownWidth, elementsHeight);
+	uiElements.push_back(recordOneDropdown);
+	
+	rgbRecordsDropdown = new RIVUIDropdown(colorTypeText->x + colorTypeText->width, y, dropDownWidth, elementsHeight,{rgbColorChoicePosition,rgbColorChoiceRadiance});
+	uiElements.push_back(rgbRecordsDropdown);
+	rgbRecordsDropdown->Hide();
 	
 	viewDropdown->AddListener(this);
 	colorTypeDropdown->AddListener(this);
 	tableDropdown->AddListener(this);
 	rendererDropdown->AddListener(this);
+	rgbRecordsDropdown->AddListener(this);
+	
+	viewDropdown->SetSelectedValue(0);
 	
 	printf("Setup UI was succesful...\n");
 }
@@ -200,7 +274,7 @@ void RIVUIView::Reshape(int newWidth, int newHeight) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	
-//	glEnable(GL_DEPTH_TEST);
+	//	glEnable(GL_DEPTH_TEST);
 }
 
 void RIVUIView::Draw() {
@@ -211,14 +285,9 @@ void RIVUIView::Draw() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	
 	//Draw the UI elements
-	for(RIVUIElement* uiElement : uiElements) {
-		uiElement->Draw();
+	for(int i = 0 ; i < uiElements.size() ; ++i) {
+		uiElements[i]->Draw();
 	}
-//	colorTypeText->Draw();
-//	colorTypeDropdown->Draw();
-//	
-//	viewText->Draw();
-//	viewDropdown->Draw();
 	
 	glFlush();
 	glutSwapBuffers();

@@ -468,7 +468,7 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 
 void RIV3DView::ResetGraphics() {
 	if(heatmap) {
-		delete heatmap;
+//		delete heatmap;
 //		generateOctree(7, 1, .00001F);
 	}
 	if(drawLightPaths || drawIntersectionPoints) {

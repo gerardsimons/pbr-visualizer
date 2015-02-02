@@ -23,6 +23,9 @@ private:
 	static RIVUIView* instance;
 	void setupUI();
 	
+	RIVDataSet<float,ushort>** datasetOne;
+	RIVDataSet<float,ushort>* datasetTwo;
+	
 	static const std::string pcViewText;
 	static const std::string sceneViewText;
 	
@@ -36,14 +39,19 @@ private:
 	static const std::string rgbColorPropertyText;
 	static const std::string linearColorPropertyText;
 	
-	static const std::string rgbColorChoiceOne;
-	static const std::string rgbColorChoiceTwo;
+	static const std::string rgbColorChoiceRadiance;
+	static const std::string rgbColorChoicePosition;
 	
 	RIVDataView* selectedView = NULL;
-//	RIVDataSet<float,ushort>* selectedDataset = NULL;
-	int selectedDataset = -1;
+	int selectedRenderer = -1;
+	RIVDataSet<float,ushort>** selectedDataset = NULL;
 	std::string selectedTable;
-	RIVColorProperty* selectedColorProperty = NULL;
+	std::string selectedColorType;
+	RIVColorProperty** selectedColorProperty = NULL;
+	
+	RIV3DView* sceneView;
+	ParallelCoordsView* parallelCoordsView;
+	RIVImageView* renderView;
 	
 	RIVUILabel* viewText;
 	RIVUIDropdown* viewDropdown;
@@ -57,10 +65,6 @@ private:
 	RIVUILabel* colorTypeText;
 	RIVUIDropdown* colorTypeDropdown;
 	
-	RIV3DView* sceneView;
-	ParallelCoordsView* parallelCoordsView;
-	RIVImageView* renderView;
-	
 	RIVUILabel* rgbRecordsText;
 	RIVUIDropdown* rgbRecordsDropdown;
 	
@@ -72,16 +76,16 @@ private:
 	RIVUIDropdown* recordThreeDropdown;
 	
 	// dropdown choices
-	
 	std::vector<RIVUIElement*> uiElements;
 	
 	void onDropdownChanged(RIVUIDropdown* source, int newSelectedIndex, const std::string& newSelectedValue);
 	void redisplayWindow();
-	std::string stringFromProperty(RIVColorProperty* colorProperty);
+	std::string stringFromProperty(RIVColorProperty** colorProperty);
 public:
 	static int windowHandle;
 	
 	RIVUIView(RIVDataSet<float,ushort>** dataset, ParallelCoordsView* parallelCoordsView, RIV3DView* sceneView, RIVImageView* renderView, int startX, int startY, int width, int height, int paddingX, int paddingY);
+	RIVUIView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, ParallelCoordsView* parallelCoordsView, RIV3DView* sceneView, RIVImageView* renderView, int startX, int startY, int width, int height, int paddingX, int paddingY);
 	
 	void OnValueChanged(RIVUIDropdown* source, int selectedIndex, const std::string& selectedText);
 	

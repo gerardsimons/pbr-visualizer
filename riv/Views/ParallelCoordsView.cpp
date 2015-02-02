@@ -233,7 +233,7 @@ void ParallelCoordsView::drawAxes() {
 						}
 						if(useSaturation) {
 							
-							saturation = std::pow(saturation, 0.25);
+//							saturation = std::pow(saturation, 0.25);
 							
 							//Convert the values to HSV
 							float h,s,v;
@@ -507,10 +507,8 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 					
 				}
 				
-				
-				++lineIndex;
-				
 				glEnd();
+				++lineIndex;
 			}
 		}
 	}

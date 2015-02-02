@@ -13,7 +13,9 @@ RIVUILabel::RIVUILabel(const std::string& text, int x, int y, int width, int hei
 }
 
 void RIVUILabel::Draw() {
-	drawText(displayText, x, y, 0.10);
+	if(needsRedraw && !hidden) {
+		drawText(displayText, x, y, 0.10);
+	}
 }
 
 bool RIVUILabel::Mouse(int x, int y, int button, int state) {

@@ -34,6 +34,10 @@ public:
     virtual bool ComputeColor(RIVTableInterface* table, size_t row, riv::Color& color) = 0;
 	//Recompute the evaulators, this should happen when the reference table changed, leave unimplemented when not needed
 	virtual void Reset(RIVDataSet<float,ushort>* newDataSource) { };
+	
+	virtual ~RIVColorProperty() {
+		
+	}
 };
 
 class RIVFixedColorProperty : public RIVColorProperty{
