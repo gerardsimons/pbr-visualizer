@@ -83,8 +83,8 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 5000;
-const int bootstrapRepeat = 10;
+const int maxPaths = 100000;
+const int bootstrapRepeat = 1;
 const int sliderViewHeight = 50;
 
 void TogglePause();
@@ -221,6 +221,12 @@ void keys(int keyCode, int x, int y) {
 		case 43: // + key
 			parallelCoordsView->IncreaseLineOpacity();
 			break;
+        case 44:
+            sceneView->IncrementHeatmapDepth();
+            break;
+        case 46:
+            sceneView->DecrementHeatmapDepth();
+            break;
 		case 61: // = key is on the same physical keyboard button as +, so cut the user some slack
 			parallelCoordsView->IncreaseLineOpacity();
 			break;
@@ -234,8 +240,6 @@ void keys(int keyCode, int x, int y) {
 		case 50: //The '2' key, switch to renderer two if not already using it
 			parallelCoordsView->ToggleDrawDataSetTwo();
 			sceneView->ToggleDrawDataSetTwo();
-			break;
-		case 51: //The '3' key, switch to renderer two if not already using it
 			break;
 		case 98: // 'b' key
 			glutSwapBuffers();
@@ -674,7 +678,8 @@ int main(int argc, char **argv)
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
 	
 	width = glutGet(GLUT_SCREEN_WIDTH);
-	height = 0.75*glutGet(GLUT_SCREEN_HEIGHT);
+//	height = 0.75*glutGet(GLUT_SCREEN_HEIGHT);
+    height = .9 * glutGet(GLUT_SCREEN_HEIGHT);
 	
 	/* set the initial window size */
 	glutInitWindowSize(width, height);

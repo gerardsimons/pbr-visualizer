@@ -14,6 +14,9 @@
 #include "OctreeNode.h"
 #include "OctreeConfig.h"
 
+#include "../Data/Record.h"
+#include "../Data/DataSet.h"
+
 #include <ostream>
 #include <vector>
 #include <algorithm>
@@ -27,24 +30,45 @@ private:
 	OctreeNode* root;
 	OctreeConfig config; //Contains constants like max capacity and max tree depth, is also passed to nodes for recursion
 	
-	std::vector<float>* xPositions;
-	std::vector<float>* yPositions;
-	std::vector<float>* zPositions;
+    std::vector<size_t> indicesOne;
+    RIVRecord<float>* xsOne;
+    RIVRecord<float>* ysOne;
+    RIVRecord<float>* zsOne;
+    RIVRecord<float>* rsOne;
+    RIVRecord<float>* gsOne;
+    RIVRecord<float>* bsOne;
+
+    std::vector<size_t> indicesTwo;
+    RIVRecord<float>* xsTwo;
+    RIVRecord<float>* ysTwo;
+    RIVRecord<float>* zsTwo;
+    RIVRecord<float>* rsTwo;
+    RIVRecord<float>* gsTwo;
+    RIVRecord<float>* bsTwo;
 	
 	float* cachedMaxDensity = NULL;
 	size_t* cachedDepth = NULL;
 	size_t* cachedMaxCapacity = NULL;
+    float* cachedMaxEnergyOne = NULL;
+    float* cachedMaxEnergyTwo = NULL;
 	
 	float maxDensityHelper(OctreeNode* node);
 	size_t maxCapacityHelper(OctreeNode* node);
+    
+    float maxEnergyHelperOne(OctreeNode* node);
+    float maxEnergyHelperTwo(OctreeNode* node);
 	
 	void init();
 	void checkMinMax(float& currentMin, float& currentMax, float candidate);
 public:
 	~Octree();
-	Octree(std::vector<float>* xPositions, std::vector<float>* yPositions, std::vector<float>* zPositions,OctreeConfig& configuration);
-	Octree(std::vector<float>* xPositions, std::vector<float>* yPositions, std::vector<float>* zPositions, const std::vector<size_t>& indexSubset, OctreeConfig& configuration);
-	//A free wheeling sandbox type test function, includes massive amounts of #YOLO type endeavours
+    Octree();
+	Octree(RIVRecord<float>* xsOne, RIVRecord<float>* ysOne, RIVRecord<float>* zsOne, RIVRecord<float>* rsOne, RIVRecord<float>* gsOne, RIVRecord<float>* bsOne, OctreeConfig& configuration);
+	Octree(RIVRecord<float>* xsOne, RIVRecord<float>* ysOne, RIVRecord<float>* zsOne, RIVRecord<float>* rsOne, RIVRecord<float>* gsOne, RIVRecord<float>* bsOne, const std::vector<size_t>& indexSubset,  OctreeConfig& configuration);
+    
+    Octree(RIVRecord<float>* xsOne, RIVRecord<float>* ysOne, RIVRecord<float>* zsOne, RIVRecord<float>* rsOne, RIVRecord<float>* gsOne, RIVRecord<float>* bsOne, RIVRecord<float>* xsTwo, RIVRecord<float>* ysTwo, RIVRecord<float>* zsTwo, RIVRecord<float>* rsTwo, RIVRecord<float>* gsTwo, RIVRecord<float>* bsTwo, OctreeConfig& configuration);
+    Octree(RIVRecord<float>* xsOne, RIVRecord<float>* ysOne, RIVRecord<float>* zPositions, RIVRecord<float>* rsOne, RIVRecord<float>* gsOne, RIVRecord<float>* bsOne, RIVRecord<float>* xsTwo, RIVRecord<float>* ysTwo, RIVRecord<float>* zsTwo, RIVRecord<float>* rsTwo, RIVRecord<float>* gsTwo, RIVRecord<float>* bsTwo, const std::vector<size_t>& indexSubsetOne, const std::vector<size_t>& indexSubsetTwo, OctreeConfig& configuration);
+
 	static bool Test();
 	friend std::ostream& operator<<(std::ostream& os, const Octree& tree) {
 		os << "Root node : \n" << tree.root;
@@ -54,7 +78,10 @@ public:
 	size_t MaxCapacity();
 	size_t NumberOfPoints();
 	size_t NumberOfNodes();
+    float MaxEnergyOne();
+    float MaxEnergyTwo();
 	size_t Depth();
+    bool IsEmpty();
 	OctreeNode* GetRoot();
 	OctreeConfig* GetConfiguration();
 };

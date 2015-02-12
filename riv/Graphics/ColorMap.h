@@ -18,6 +18,7 @@ typedef struct Color {
 	float R;
 	float G;
 	float B;
+    float A;
 } Color;
 
 //A linearly interpolated color map

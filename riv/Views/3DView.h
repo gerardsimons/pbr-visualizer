@@ -74,6 +74,8 @@ protected:
 	GLUquadric* quadric = gluNewQuadric();
 	Vec3fa Phit; //Supposedly the point of intersection of the ray with the plane supporting the triangle
 	Ray pickRay;
+    
+    int heatmapDepth = 5;
 	
 	bool meshSelected = false;
 	riv::RowFilter* pathFilterOne = NULL;
@@ -124,6 +126,10 @@ public:
     void Draw();
     bool HandleMouse(int button, int state, int x, int y);
     bool HandleMouseMotion(int x, int y);
+    
+    void SetHeatmapDepth(int depth);
+    void IncrementHeatmapDepth();
+    void DecrementHeatmapDepth();
 	
     void OnDataChanged(RIVDataSet<float,ushort>* source);
 	void OnFiltersChanged(RIVDataSet<float,ushort>* source);

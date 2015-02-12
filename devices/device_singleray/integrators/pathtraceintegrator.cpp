@@ -45,7 +45,7 @@ namespace embree
 	}
 
 	Color throughputCache;
-	Color lastColor;
+//	Color lastColor;
 	
 	Color PathTraceIntegrator::Li(LightPath& lightPath, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector)
 	{
@@ -137,15 +137,15 @@ namespace embree
 				/*! Test for shadows. */
 				Ray shadowRay(dg.P, ls.wi, dg.error*epsilon, ls.tMax-dg.error*epsilon, lightPath.lastRay.time,dg.shadowMask);
 				//bool inShadow = scene->intersector->occluded(shadowRay);
+                ++state.numRays;
 				rtcOccluded(scene->scene,(RTCRay&)shadowRay);
-				state.numRays++;
+
 				if (shadowRay) continue;
 				
 				/*! Evaluate BRDF. */
 				L += ls.L * brdf * rcp(ls.wi.pdf);
 			}
 		}
-		
 		if (lightPath.depth < maxDepth)
 		{
 			/*! sample brdf */
@@ -168,10 +168,10 @@ namespace embree
 				Ray newRay(dg.P, wi, dg.error*epsilon, inf, lightPath.lastRay.time);
 				LightPath scatteredPath = lightPath.extended(newRay,nextMedium, c, (type & directLightingBRDFTypes) != NONE);
 				
-				if(dataConnector)
+//				if(dataConnector)
 					dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,type);
 		  
-				lastColor = L;
+//				lastColor = L;
 				Color isectColor = c * Li(scatteredPath, scene, state, dataConnector) * rcp(wi.pdf);
 				L += isectColor;
 			}
@@ -180,7 +180,7 @@ namespace embree
 	}
 	Color PathTraceIntegrator::Li(Ray& ray, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector) {
 		//Start path from camera ray
-		lastColor = Color(0,0,0);
+//		lastColor = Color(0,0,0);
 		LightPath lightPath(ray);
 		Color L = Li(lightPath,scene,state,dataConnector);
 		//We now have the complete path

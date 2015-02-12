@@ -11,6 +11,7 @@ file(GLOB RIV_SRC
     "Graphics/*.cpp"
     "Octree/*.cpp"
     "Views/*.cpp"
+    "UI/*.cpp"	
 
     "*.h"
     "Data/*.h"
@@ -18,6 +19,7 @@ file(GLOB RIV_SRC
     "Graphics/*.h"
     "Octree/*.h"
     "Views/*.h"
+    "UI/*.h"	
 )	
 
 ADD_EXECUTABLE(riv_main ${RIV_SRC})

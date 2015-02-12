@@ -10,13 +10,13 @@
 #define __afstuderen_DO_NOT_DELETE__OctreeNode__
 
 #include <vector>
+
 #include "Octree.h"
+#include "../Data/Record.h"
 #include "../Geometry/Geometry.h"
 #include "OctreeConfig.h"
 
 #define MAX_CHILDREN 8
-
-
 
 class Octree;
 
@@ -34,31 +34,42 @@ private:
 	float x,y,z; //Center of the node
 	float size; //width, height and depth
 	
-	
-	std::vector<float>* xPositions;
-	std::vector<float>* yPositions;
-	std::vector<float>* zPositions;
-	
-	std::vector<size_t> pointIndices;
+    std::vector<size_t> indicesOne;
+    RIVRecord<float>* xsOne;
+    RIVRecord<float>* ysOne;
+    RIVRecord<float>* zsOne;
+    RIVRecord<float>* rsOne;
+    RIVRecord<float>* gsOne;
+    RIVRecord<float>* bsOne;
+    
+    std::vector<size_t> indicesTwo;
+    RIVRecord<float>* xsTwo;
+    RIVRecord<float>* ysTwo;
+    RIVRecord<float>* zsTwo;
+    RIVRecord<float>* rsTwo;
+    RIVRecord<float>* gsTwo;
+    RIVRecord<float>* bsTwo;
 	
 	size_t depth; //The depth of this node in the octree
 	
 	bool rangeCheck(float lowerBound, float upperBound, float value);
 public:
-	OctreeNode(std::vector<float>* xPositions,std::vector<float>* yPositions,std::vector<float>* zPositions, float x, float y, float z, float size, size_t depth, OctreeConfig* config, Octree* tree);
+	OctreeNode(RIVRecord<float>* xsOne,RIVRecord<float>* ysOne,RIVRecord<float>* zsOne, RIVRecord<float>* rsOne,RIVRecord<float>* gsOne,RIVRecord<float>* bsOne, float x, float y, float z, float size, size_t depth, OctreeConfig* config, Octree* tree);
+    OctreeNode(RIVRecord<float>* xsOne,RIVRecord<float>* ysOne,RIVRecord<float>* zsOne, RIVRecord<float>* rsOne,RIVRecord<float>* gsOne,RIVRecord<float>* bsOne, RIVRecord<float>* xsTwo,RIVRecord<float>* ysTwo,RIVRecord<float>* zsTwo, RIVRecord<float>* rsTwo,RIVRecord<float>* gsTwo,RIVRecord<float>* bsTwo, float x, float y, float z, float size, size_t depth, OctreeConfig* config, Octree* tree);
 	~OctreeNode();
 	
 	//Check if according to the octree config parameters, this OctreeNode should be split up further and recursively call this function on the new function until recurson stops
 	void Refine();
 	//Assign a point to this node, the index refers to the point of which its coordinates are given at the index place in the xPositions,yPositions and zPositions
-	void AssignPoint(size_t index);
+	void AssignPointOne(size_t index);
+    void AssignPointTwo(size_t index);
 	Point3D Center();
 	//Treats the node and all of its descendants as a subtree and counts the number of nodes it contains
 	size_t NumberOfNodes();
 	//The number of DIRECT children (no grandchildren etc.) so this is either 8 or 0
 	int NumberOfChildren();
 	//Number of points in this node
-	size_t NumberOfPointsContained();
+	size_t NumberOfPointsContained() const;
 	//Get the child at the given index, a error is thrown when the index is out of bounds
 	OctreeNode* GetChild(int index);
 	//Search children for max depth
@@ -68,6 +79,8 @@ public:
 	//Get a density measure of this node, this is the number of points in the node multiplied by its relative size
 	float Density();
 	size_t GetDepth();
+    float ComputeEnergyOne();
+    float ComputeEnergyTwo();
 	bool IsLeafNode();
 	bool Contains(const Point3D& point);
 	bool ContainsAnyPoints();
@@ -79,10 +92,13 @@ public:
 			tabSequence += "\t";
 		}
 		
-		os << tabSequence << "Node (" << node.x << "," << node.y << "," << node.z << ")" << " contains " << node.pointIndices.size() << " points: ";
-		for(size_t index : node.pointIndices) {
-			os << "(" << node.xPositions->at(index) << "," << node.yPositions->at(index) << "," << node.zPositions->at(index) << ")";
+		os << tabSequence << "Node (" << node.x << "," << node.y << "," << node.z << ")" << " contains " << node.NumberOfPointsContained() << " points: ";
+		for(size_t index : node.indicesOne) {
+			os << "(" << node.xsOne->Value(index) << "," << node.ysOne->Value(index) << "," << node.zsOne->Value(index) << ")";
 		}
+        for(size_t index : node.indicesTwo) {
+			os << "(" << node.xsTwo->Value(index) << "," << node.ysTwo->Value(index) << "," << node.zsTwo->Value(index) << ")";
+        }
 		std::cout << "\n";
 		if(!node.isLeaf) {
 			os << tabSequence << " Has children : \n";

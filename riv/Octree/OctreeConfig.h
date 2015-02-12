@@ -31,6 +31,9 @@ public:
 	OctreeConfig(size_t MAX_DEPTH_, size_t MAX_NODE_CAPACITY_, float MIN_NODE_SIZE_) : MAX_DEPTH(MAX_DEPTH_), MAX_NODE_CAPACITY(MAX_NODE_CAPACITY_), MIN_NODE_SIZE(MIN_NODE_SIZE_) {
 			//Nothing else to do
 	};
+    OctreeConfig() : MAX_DEPTH(0), MAX_NODE_CAPACITY(0), MIN_NODE_SIZE(0) {
+        
+    }
 };
 
 #endif /* defined(__afstuderen_DO_NOT_DELETE__OctreeConfig__) */

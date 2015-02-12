@@ -9,6 +9,10 @@
 #include "Octree.h"
 #include "../helper.h"
 
+bool Octree::IsEmpty() {
+    return root == NULL;
+}
+
 void Octree::init() {
 	//Find width height and depth of the root cube
 	
@@ -20,15 +24,23 @@ void Octree::init() {
 	float maxY = std::numeric_limits<float>::min();
 	float maxZ = std::numeric_limits<float>::min();
 	
-	if(xPositions != NULL && yPositions != NULL && zPositions != NULL) {
-		for(size_t i = 0 ; i < xPositions->size() ; ++i) {
-			checkMinMax(minX, maxX, (*xPositions)[i]);
-			checkMinMax(minY, maxY, (*yPositions)[i]);
-			checkMinMax(minZ, maxZ, (*zPositions)[i]);
+	if(xsOne != NULL && ysOne != NULL && zsOne != NULL) {
+		for(size_t i = 0 ; i < xsOne->Size() ; ++i) {
+			checkMinMax(minX, maxX, xsOne->Value(i));
+			checkMinMax(minY, maxY, ysOne->Value(i));
+			checkMinMax(minZ, maxZ, zsOne->Value(i));
 		}
 	}
 	else throw "Some coordinates vectors are not set.";
-	
+    
+    if(xsTwo != NULL && ysTwo != NULL && zsTwo != NULL) {
+        for(size_t i = 0 ; i < xsTwo->Size() ; ++i) {
+            checkMinMax(minX, maxX, xsTwo->Value(i));
+            checkMinMax(minY, maxY, ysTwo->Value(i));
+            checkMinMax(minZ, maxZ, zsTwo->Value(i));
+        }
+    }
+    
 	float width = maxX - minX;
 	float height = maxY - minY;
 	float depth = maxZ - minZ;
@@ -40,7 +52,12 @@ void Octree::init() {
 	float z = minZ + depth / 2.F;
 	
 	//Declare root node
-	root = new OctreeNode(xPositions,yPositions,zPositions,x,y,z,size,1,&config,this);
+    if(xsTwo) {
+        root = new OctreeNode(xsOne,ysOne,zsOne,rsOne,gsOne,bsOne,xsTwo,ysTwo,zsTwo,rsTwo,gsTwo,bsTwo,x,y,z,size,1,&config,this);
+    }
+    else {
+        root = new OctreeNode(xsOne,ysOne,zsOne,rsOne,gsOne,bsOne,x,y,z,size,1,&config,this);
+    }
 //	nrOfNodes = root->NumberOfNodes();
 	
 //	std::cout << *this;
@@ -88,7 +105,18 @@ size_t Octree::MaxCapacity() {
 	}
 	return *cachedMaxCapacity;
 }
-
+float Octree::MaxEnergyOne() {
+    if(!cachedMaxEnergyOne) {
+        cachedMaxEnergyOne = new float(maxEnergyHelperOne(root));
+    }
+    return *cachedMaxEnergyOne;
+}
+float Octree::MaxEnergyTwo() {
+    if(!cachedMaxEnergyTwo) {
+        cachedMaxEnergyTwo = new float(maxEnergyHelperTwo(root));
+    }
+    return *cachedMaxEnergyTwo;
+}
 //Find the max density present in this tree
 float Octree::maxDensityHelper(OctreeNode *node) {
 	if(node->IsLeafNode()) { //End of the line, return the depth of this node
@@ -115,41 +143,136 @@ size_t Octree::maxCapacityHelper(OctreeNode *node) {
 		return maxInArray(pointsInChildren,8);
 	}
 }
-
-Octree::Octree(std::vector<float>* xPositions, std::vector<float>* yPositions, std::vector<float>* zPositions, OctreeConfig& configuration) :  config(configuration) {
+float Octree::maxEnergyHelperOne(OctreeNode* node) {
+    if(node->IsLeafNode()) { //End of the line, return the depth of this node
+        return node->ComputeEnergyOne();
+    }
+    else {
+        float energyInChildren[8];
+        for(ushort i = 0 ; i < MAX_CHILDREN ; ++i) {
+            energyInChildren[i] = maxEnergyHelperOne(node->GetChild(i));
+        }
+        return maxInArray(energyInChildren,8);
+    }
+}
+float Octree::maxEnergyHelperTwo(OctreeNode* node) {
+    if(node->IsLeafNode()) { //End of the line, return the depth of this node
+        return node->ComputeEnergyTwo();
+    }
+    else {
+        float energyInChildren[8];
+        for(ushort i = 0 ; i < MAX_CHILDREN ; ++i) {
+            energyInChildren[i] = maxEnergyHelperTwo(node->GetChild(i));
+        }
+        return maxInArray(energyInChildren,8);
+    }
+}
+Octree::Octree(RIVRecord<float>* xsOne, RIVRecord<float>* ysOne, RIVRecord<float>* zsOne, RIVRecord<float>* rsOne, RIVRecord<float>* gsOne, RIVRecord<float>* bsOne, OctreeConfig& configuration) :  config(configuration) {
 	
-	this->xPositions = xPositions;
-	this->yPositions = yPositions;
-	this->zPositions = zPositions;
+	this->xsOne = xsOne;
+	this->ysOne = ysOne;
+	this->zsOne = zsOne;
+    
+    this->rsOne = rsOne;
+    this->gsOne = gsOne;
+    this->bsOne = bsOne;
 	
 	init();
 	
 	//Assign all the points to the root node
-	for(size_t i = 0 ; i < xPositions->size() ; ++i) {
-		root->AssignPoint(i);
+	for(size_t i = 0 ; i < xsOne->Size() ; ++i) {
+		root->AssignPointOne(i);
 	}
 	
 	//Assign all children to the node
 	root->Refine();
 };
-Octree::Octree(std::vector<float>* xPositions, std::vector<float>* yPositions, std::vector<float>* zPositions, const std::vector<size_t>& indexSubset, OctreeConfig& configuration) :  config(configuration) {
+Octree::Octree(RIVRecord<float>* xsOne, RIVRecord<float>* ysOne, RIVRecord<float>* zsOne, RIVRecord<float>* rsOne, RIVRecord<float>* gsOne, RIVRecord<float>* bsOne, const std::vector<size_t>& indexSubset, OctreeConfig& configuration) :  config(configuration) {
 	
-	this->xPositions = xPositions;
-	this->yPositions = yPositions;
-	this->zPositions = zPositions;
+	this->xsOne = xsOne;
+	this->ysOne = ysOne;
+	this->zsOne = zsOne;
+    
+    this->rsOne = rsOne;
+    this->gsOne = gsOne;
+    this->bsOne = bsOne;
 	
 	init();
 	
 	//Assign all the points to the root node
 	for(size_t i = 0 ; i < indexSubset.size() ; ++i) {
-		root->AssignPoint(indexSubset[i]);
+		root->AssignPointOne(indexSubset[i]);
 	}
 	
 	root->Refine();
 }
+Octree::Octree(RIVRecord<float>* xsOne, RIVRecord<float>* ysOne, RIVRecord<float>* zsOne, RIVRecord<float>* rsOne, RIVRecord<float>* gsOne, RIVRecord<float>* bsOne, RIVRecord<float>* xsTwo, RIVRecord<float>* ysTwo, RIVRecord<float>* zsTwo, RIVRecord<float>* rsTwo, RIVRecord<float>* gsTwo, RIVRecord<float>* bsTwo, OctreeConfig& configuration) : config(configuration) {
+    
+    this->xsOne = xsOne;
+    this->ysOne = ysOne;
+    this->zsOne = zsOne;
+    
+    this->rsOne = rsOne;
+    this->gsOne = gsOne;
+    this->bsOne = bsOne;
+    
+    this->xsTwo = xsTwo;
+    this->ysTwo = ysTwo;
+    this->zsTwo = zsTwo;
+    
+    this->rsTwo = rsTwo;
+    this->gsTwo = gsTwo;
+    this->bsTwo = bsTwo;
+    
+    init();
+    
+    //Assign all the points to the root node
+    for(size_t i = 0 ; i < xsOne->Size() ; ++i) {
+        root->AssignPointOne(i);
+    }
+    for(size_t i = 0 ; i < xsTwo->Size() ; ++i) {
+        root->AssignPointTwo(i);
+    }
+    
+    root->Refine();
+}
+Octree::Octree(RIVRecord<float>* xsOne, RIVRecord<float>* ysOne, RIVRecord<float>* zsOne, RIVRecord<float>* rsOne, RIVRecord<float>* gsOne, RIVRecord<float>* bsOne, RIVRecord<float>* xsTwo, RIVRecord<float>* ysTwo, RIVRecord<float>* zsTwo, RIVRecord<float>* rsTwo, RIVRecord<float>* gsTwo, RIVRecord<float>* bsTwo, const std::vector<size_t>& indexSubsetOne, const std::vector<size_t>& indexSubsetTwo, OctreeConfig& configuration) : config(configuration) {
+    
+    this->xsOne = xsOne;
+    this->ysOne = ysOne;
+    this->zsOne = zsOne;
+    
+    this->rsOne = rsOne;
+    this->gsOne = gsOne;
+    this->bsOne = bsOne;
+    
+    this->xsTwo = xsTwo;
+    this->ysTwo = ysTwo;
+    this->zsTwo = zsTwo;
+    
+    this->rsTwo = rsTwo;
+    this->gsTwo = gsTwo;
+    this->bsTwo = bsTwo;
+    
+    init();
+    
+    //Assign all the points to the root node
+    for(size_t i = 0 ; i < indexSubsetOne.size() ; ++i) {
+        root->AssignPointOne(indexSubsetOne[i]);
+    }
+    for(size_t i = 0 ; i < indexSubsetTwo.size() ; ++i) {
+        root->AssignPointTwo(indexSubsetTwo[i]);
+    }
+    
+    root->Refine();
+}
+Octree::Octree() {
+    root = NULL;
+}
+//TODO: This ain't right when we use a filtered dataset
 size_t Octree::NumberOfPoints() {
-	if(xPositions != NULL) {
-		return xPositions->size();
+	if(xsOne != NULL) {
+		return xsOne->Size();
 	}
 	return 0;
 }
@@ -208,10 +331,10 @@ bool Octree::Test() {
 	std::vector<size_t> subset = std::vector<size_t>(2);
 	subset[0] = 0;
 	subset[1] = 1;
-	Octree* testTree = new Octree(xPositions,yPositions,zPositions,subset,config);
+//	Octree* testTree = new Octree(xPositions,yPositions,zPositions,subset,config);
 	
-	printf("TestTree has %zu children.\n",testTree->NumberOfNodes());
-	printf("TestTree has depth %zu\n",testTree->Depth());
+//	printf("TestTree has %zu children.\n",testTree->NumberOfNodes());
+//	printf("TestTree has depth %zu\n",testTree->Depth());
 	
 //	std::cout << *testTree;
 	
