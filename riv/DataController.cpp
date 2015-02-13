@@ -331,8 +331,8 @@ void DataController::Reduce() {
 	//Bootstrap set
 	RIVDataSet<float,ushort>* bestBootstrap = NULL;
 	
-	printf("\nTRUE HISTOGRAMS = \n");
-	trueDistributions.Print();
+//	printf("\nTRUE HISTOGRAMS = \n");
+//	trueDistributions.Print();
 	
 	for(int i = 0 ; i < bootstrapRepeat ; ++i) {
 		//			printf("Round #%d\n",i);

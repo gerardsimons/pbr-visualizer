@@ -119,6 +119,15 @@ public:
 		}
 		return max;
 	}
+//    float Mean() {
+//        for(int i = 0 ; i < bins ; i++) {
+//            int thisValue = BinValue(i);
+//            int rightValue = right.BinValue(i);
+//            int diff = (thisValue - rightValue);
+//            result.Set(i,diff);
+//            
+//        }
+//    }
 	int BinValue(unsigned int bin) {
 		return hist[bin];
 	}
@@ -419,6 +428,110 @@ public:
 //	std::vector<T>* GetHistograms() {
 //		return &std::get<T>(histograms);
 //	}
+};
+
+template <typename T>
+class Histogram2D {
+private:
+    std::map<unsigned int,Histogram<T>> histograms;
+    
+    T lowerBound;
+    T upperBound;
+    
+    unsigned int bins = 0;
+    float binWidth = 0;
+    size_t nrElements = 0;
+public:
+    void Add(T valueOne, T valueTwo) {
+        unsigned int bin = BinForValue(valueOne);
+        histograms[bin].Add(valueTwo);
+        ++nrElements;
+    }
+    int BinForValue(const T& value) {
+        T valueClamped = value;
+        if(value < lowerBound) {
+            valueClamped = lowerBound;
+        }
+        else if(value > upperBound) {
+            valueClamped = upperBound;
+        }
+        T delta = upperBound - lowerBound;
+        double interpolated = (double)(valueClamped - lowerBound) / (delta);
+        unsigned int bin = floor(interpolated * (bins));
+        //When the value is exeactly on the upper bound it floors incorrectly to bin = bins
+        if(bin == bins) {
+            bin = bins - 1;
+        }
+        return bin;
+    }
+    Histogram2D() {
+        
+    }
+    Histogram2D(T lowerBound, T upperBound, unsigned int bins) : upperBound(upperBound), lowerBound(lowerBound), bins(bins) {
+        if(upperBound <= lowerBound) {
+            throw std::runtime_error("Lower bound should be < upper bound");
+        }
+        binWidth = (upperBound - lowerBound) / (float)bins;
+        
+        for(int i = 0 ; i < bins ; ++i) {
+            histograms[i] = Histogram<T>("2DHistogram", lowerBound, upperBound, bins);
+        }
+    }
+    void Clear() {
+        nrElements = 0;
+        for(auto it : histograms) {
+            it.second.Clear();
+        }
+    }
+    int MaxBinValue() {
+        int maxValue = 0;
+        for(auto it : histograms) {
+            int localMax = it.second.MaximumValue();
+            if(localMax > maxValue) {
+                maxValue = localMax;
+            }
+        }
+        return maxValue;
+    }
+    int BinValue(unsigned int binOne, unsigned int binTwo) {
+        return histograms[binOne].BinValue(binTwo);
+    }
+    float NormalizedValue(unsigned int binOne, unsigned int binTwo) {
+        if(nrElements) {
+            return BinValue(binOne,binTwo) / (float)nrElements;
+        }
+        return 0;
+    }
+    size_t NumberOfElements() {
+        return nrElements;
+    }
+    float NormalizedMean() {
+        return 1.F / (bins * bins);
+    }
+    float NormalizedVariance() {
+        float var = 0;
+        float mean = NormalizedMean();
+        for(int i = 0 ; i < bins ; i++) {
+            for(int j = 0 ; j < bins ; j++) {
+                var += std::pow(NormalizedValue(i, j) - mean,2);
+            }
+        }
+        return var;
+    }
+    void Print() {
+        printf("2D Histogram : \n");
+        printf("Mean = %f\n",NormalizedMean());
+        printf("Variance = %f\n",NormalizedVariance());
+        if(nrElements) {
+            for(int i = 0 ; i < bins ; i++) {
+                for(int j = 0 ; j < bins ; j++) {
+                    printf("%.2f\t",NormalizedValue(i, j));
+                }
+                printf("\n");
+            }
+        }
+        else printf("<EMPTY>");
+    }
 };
 
 #endif /* defined(__embree__Histogram__) */

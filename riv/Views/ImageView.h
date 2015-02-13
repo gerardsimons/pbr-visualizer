@@ -12,7 +12,7 @@
 #include "DataView.h"
 #include "../Geometry/Geometry.h"
 #include "../Graphics/BMPImage.h"
-
+#include "../Configuration.h"
 #include "devices/device_singleray/embree_renderer.h"
 
 #if defined(__APPLE__)
@@ -20,6 +20,8 @@
 #else
 #include <GL/glut.h>
 #endif
+
+#include <vector>
 
 class RIVImageView : public RIVDataView, public RIVDataSetListener {
 private:
@@ -29,7 +31,7 @@ private:
 	EMBREERenderer* rendererTwo = NULL;
 	
 //	std::vector<EMBREERenderer*> renderers;
-	
+    int imagePadding = 5;
 	float imageMagnificationX,imageMagnificationY;
 
     RIVPoint viewToPixelSpace(int x, int y);
@@ -42,8 +44,14 @@ private:
 	int imageWidth, imageHeight;
     
 	Area selection;
+    
+    const unsigned int bins = 25;
+    Histogram2D<float> heatmapOne;
+    Histogram2D<float> heatmapTwo;
 	
 	void drawRenderedImage(EMBREERenderer* renderer,int startX, int startY, int width, int height);
+    void computeHeatmap(RIVDataSet<float,ushort>*, Histogram2D<float>& heatmap);
+    void drawHeatmap(int startX, Histogram2D<float>& heatmap, Histogram2D<float>& otherHeatmap, float r, float g, float b);
 public:
 	//Single renderer constructor
 	RIVImageView(RIVDataSet<float,ushort>** datasetOne,  EMBREERenderer* rendererOne);

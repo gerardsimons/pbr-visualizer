@@ -83,7 +83,7 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 100000;
+const int maxPaths = 7500;
 const int bootstrapRepeat = 1;
 const int sliderViewHeight = 50;
 
@@ -470,7 +470,7 @@ void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
 	dataControllerTwo->Reduce();
 	renderTwoFinishedFrame = true;
 	if(currentFrameOne && currentFrameTwo) {
-		TogglePause();
+//		TogglePause();
 	}
  //	if(renderOneFinishedFrame && renderTwoFinishedFrame) {
 //		delayRendering(5000);

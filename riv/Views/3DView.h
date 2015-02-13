@@ -103,7 +103,7 @@ protected:
 	//Draw the intersection points
 	void drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths);
 	//draw the leaf nodes starting from the given node
-	void drawLeafNodes(OctreeNode* node);
+	void drawLeafNodes(OctreeNode* node,float maxEnergyOne, float maxEnergyTwo);
 	void createPaths();
 	
 	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,riv::RowFilter*& rowFilter, ushort* bounceCount);

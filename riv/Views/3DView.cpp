@@ -151,14 +151,14 @@ void RIV3DView::drawHeatmap() {
         
         if(root) {
             glPolygonMode(GL_FRONT, GL_FILL);
-            drawLeafNodes(root);
+            drawLeafNodes(root,heatmap->MaxEnergyOne(),heatmap->MaxEnergyTwo());
         }
         printf("%zu / %zu nodes drawn\n",nodesDrawn,heatmap->NumberOfNodes());
         reporter::stop("Heatmap drawing.");
     }
 }
 
-void RIV3DView::drawLeafNodes(OctreeNode* node) {
+void RIV3DView::drawLeafNodes(OctreeNode* node,float maxEnergyOne, float maxEnergyTwo) {
     
     bool membershipColoring = true;
     
@@ -166,28 +166,27 @@ void RIV3DView::drawLeafNodes(OctreeNode* node) {
         
         Point3D nodeCenter = node->Center();
         //		size_t depth = node->GetDepth();
-        size_t pointsInNode = node->NumberOfPointsContained();
+//        size_t pointsInNode = node->NumberOfPointsContained();
         //		float density = node->Density();
         
         //Determine color according to number of children
         //		size_t maxCap = heatmap->MaxCapacity();
         //		float ratio = (pointsInNode) / (float)(maxCap);
-        float maxEnergyOne = heatmap->MaxEnergyOne();
-        float maxEnergyTwo = heatmap->MaxEnergyTwo();
         
         float energyOne = node->ComputeEnergyOne();
         float energyTwo = node->ComputeEnergyTwo();
         
-        printf("Max energy one = %f\n",maxEnergyOne);
-        printf("Max energy two = %f\n",maxEnergyTwo);
-        printf("energy one = %f\n",energyOne);
-        printf("energy two = %f\n",energyTwo);
+//        printf("Max energy one = %f\n",maxEnergyOne);
+//        printf("Max energy two = %f\n",maxEnergyTwo);
+//        printf("energy one = %f\n",energyOne);
+//        printf("energy two = %f\n",energyTwo);
         
-        float maxEnergy = std::max(energyOne,energyTwo);
+//        float maxEnergy = std::max(energyOne,energyTwo);
         
         riv::Color cubeColor;
-        cubeColor.A = 0;
-        
+//        cubeColor.A = 0;
+        float r,b;
+        float a = .5F;
         if(!membershipColoring) {
             if(drawDataSetOne && !drawDataSetTwo) {
                 float ratio = energyOne / maxEnergyOne;
@@ -202,11 +201,10 @@ void RIV3DView::drawLeafNodes(OctreeNode* node) {
         }
         else {
             //red, blue and alpha
-            float r,b,a;
             //Should be blue-ish
             if(energyTwo > energyOne) {
                 
-                printf("Energy two is higher : \n");
+//                printf("Energy two is higher : \n");
 //                b = energyTwo / maxEnergy;
 //                r = energyOne / maxEnergy;
                 
@@ -217,7 +215,7 @@ void RIV3DView::drawLeafNodes(OctreeNode* node) {
                 r = 1 - b;
                 a = energyTwo / maxEnergyTwo;
                 
-                printf("r,b,a = %f,%f,%f\n",r,b,a);
+//                printf("r,b,a = %f,%f,%f\n",r,b,a);
             
 //                return;
 //                b = 1;
@@ -227,7 +225,7 @@ void RIV3DView::drawLeafNodes(OctreeNode* node) {
 //                b = energyTwo / maxEnergy;
 //                r = energyOne / maxEnergy;
                 
-                printf("Energy one is higher : \n");
+//                printf("Energy one is higher : \n");
                 
 //                r = (energyOne - energyTwo) / energyOne;
                 r = ((energyOne - energyTwo) / energyOne + 1) / 2.F;
@@ -235,7 +233,7 @@ void RIV3DView::drawLeafNodes(OctreeNode* node) {
                 b = 1 - r;
                 a = energyOne / maxEnergyOne;
                 
-                printf("r,b,a = %f,%f,%f\n",r,b,a);
+//                printf("r,b,a = %f,%f,%f\n",r,b,a);
                 
 //                b = 0;
 //                r = 1;
@@ -243,15 +241,17 @@ void RIV3DView::drawLeafNodes(OctreeNode* node) {
             else {
                 return;
             }
+            
 //            float ratio = (energyTwo / maxEnergyTwo) - (energyOne / maxEnergyOne);
 //            printf("ratio = %f\n",ratio);
-            cubeColor.R = r;
-            cubeColor.G = 0;
-            cubeColor.B = b;
-            cubeColor.A = a;
+//            cubeColor.R = r;
+//            cubeColor.G = 0;
+//            cubeColor.B = b;
+//            cubeColor.A = a;
             
         }
-        glColor4f(cubeColor.R,cubeColor.G,cubeColor.B,1.F);
+//        a = std::pow(a, .5);
+        glColor4f(r,0,b,a);
         //        if(ratio < 0) {
         //            ratio = -ratio;
         //        }
@@ -294,7 +294,7 @@ void RIV3DView::drawLeafNodes(OctreeNode* node) {
 }
 else { //Recursively call the function on the children
     for(int i = 0 ; i < node->NumberOfChildren() ; ++i) {
-        drawLeafNodes(node->GetChild(i));
+        drawLeafNodes(node->GetChild(i),maxEnergyOne,maxEnergyTwo);
     }
 }
 }

@@ -97,6 +97,8 @@ void RIVImageView::Reshape(int width, int height) {
 //    imageMagnificationX = (width - 2 * paddingX) / (float)renderedImage->sizeX;
 //	imageMagnificationY = (height - 2 * paddingY) / (float)renderedImage->sizeY;
 	
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -107,6 +109,9 @@ void RIVImageView::Reshape(int width, int height) {
 }
 
 void RIVImageView::OnDataChanged(RIVDataSet<float,ushort>* source) {
+    computeHeatmap(*datasetOne, heatmapOne);
+    computeHeatmap(*datasetTwo, heatmapTwo);
+    
 	int currentWindow = glutGetWindow();
 	glutSetWindow(RIVImageView::windowHandle);
 	glutPostRedisplay();
@@ -115,20 +120,108 @@ void RIVImageView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 }
 
 void RIVImageView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
-	//Nothing to do for imageview
+    //Recompute heatmap
+    
+    computeHeatmap(*datasetOne, heatmapOne);
+    computeHeatmap(*datasetTwo, heatmapTwo);
+    
+    int currentWindow = glutGetWindow();
+    glutSetWindow(RIVImageView::windowHandle);
+    glutPostRedisplay();
+    //Return window to given window
+    glutSetWindow(currentWindow);
 }
 
+void RIVImageView::computeHeatmap(RIVDataSet<float,ushort>* dataset, Histogram2D<float>& heatmap) {
+    heatmap = Histogram2D<float>(0, 1, bins);
+    
+    RIVTable<float,ushort>* pathsTable = dataset->GetTable(PATHS_TABLE);
+    TableIterator* iterator = pathsTable->GetIterator();
+    
+    RIVRecord<float>* xPixel = pathsTable->GetRecord<float>(PIXEL_X);
+    RIVRecord<float>* yPixel = pathsTable->GetRecord<float>(PIXEL_Y);
+    
+    size_t row;
+    while(iterator->GetNext(row)) {
+        heatmap.Add(xPixel->Value(row), yPixel->Value(row));
+    }
+    
+    heatmap.Print();
+}
+void RIVImageView::drawHeatmap(int startX, Histogram2D<float>& heatmap, Histogram2D<float>& otherHeatmap, float r, float g, float b) {
+//    glEnable(GL_BLEND);
+    
+    float binWidth = ((width / 2.F) - imagePadding * 2) / (float)bins;
+    float binHeight = ((height) - imagePadding * 2) / (float)bins;
+    
+    float binX = startX;
+    
+    float maxNormalizedValue = heatmap.MaxBinValue() / (float)heatmap.NumberOfElements();
+    float variance = std::pow(heatmap.NormalizedVariance(),1) * bins * bins;
+    
+//    printf("maxNormalizedValue = %f\n",maxNormalizedValue);
+//    printf("Variance = %f\n",variance);
+    
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    float mean = 1.F / (bins * bins);
+    
+    for(int x = 0 ; x < bins ; ++x) {
+        float binY = height - 2 * imagePadding;
+        for(int y = 0 ; y < bins ; ++y) {
+            float normalizedValue = heatmap.NormalizedValue(x, y);
+            float otherNormalizedValue = otherHeatmap.NormalizedValue(x, y);
+            
+//            printf("Normalized value = %f\n",normalizedValue);
+//            printf("Other normalized value = %f\n",otherNormalizedValue);
+            
+//            if(normalizedValue > otherNormalizedValue) {
+//                float alpha = (normalizedValue - otherNormalizedValue) / variance;
+//                float alpha = ((normalizedValue - otherNormalizedValue) / normalizedValue + 1) / 2.F;
+//                float alpha = normalizedValue - mean;
+//                float alpha = std::pow(normalizedValue - otherNormalizedValue,0.5F);
+            float alpha = std::pow(normalizedValue * variance,0.4);
+//                printf("alpha = %f\n",alpha);
+                glColor4f(r,g,b,alpha);
+//                glColor3f(x / (float)bins,0,y / (float)bins);
+
+                glRectf(binX, binY, binX + binWidth, binY - binHeight);
+                printf("glRectf(%f,%f,%f,%f)\n",binX, binY, binX + binWidth, binY + binHeight);
+
+//            }
+
+            binY -= binHeight;
+        }
+        binX += binWidth;
+    }
+//    glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
+}
 void RIVImageView::drawRenderedImage(EMBREERenderer *renderer, int startX, int startY, int imageWidth, int imageHeight) {
+//    glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
 	void* ptr = renderer->MapFrameBuffer();
 	std::string format = renderer->GetFormat();
 	Vec2<size_t> dimensions = renderer->GetDimensions();
+    
 	int g_width = dimensions[0];
 	int g_height = dimensions[1];
+    
+//    glDisable(GL_BLEND);
 	
 	//Make sure it is scaled according to the available space as well flipped vertically
 	glPixelZoom((float)imageWidth / g_width, -((float)imageHeight / g_height));
 	//Because we flip it we have to translate it back to the top
 	glRasterPos2i(1+startX, imageHeight);
+    
+//    char *array;
+//    array = (char*)ptr;
+//    int byteI = 0;
+//    for(int x = 0 ; x < g_width ; ++x) {
+//        for(int y = 0 ; y < g_height ; ++y) {
+//            int c = (int)array[byteI];
+//            printf("%d",c);
+//            byteI += 4;
+//        }
+//    }
+//    printf("%s\n",array);
 	
 	if (format == "RGB_FLOAT32")
 		glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_FLOAT,ptr);
@@ -157,22 +250,25 @@ void RIVImageView::Draw() {
 //		printf("\nImageView Draw #%zu\n",++drawCounter);
 		glDisable(GL_DEPTH_TEST);
 		
-		glClearColor(1,1,1,0);
+		glClearColor(1,1,1,1);
 		glClear( GL_COLOR_BUFFER_BIT );
 		
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		
-		int imagePadding = 5;
 		int halfWidth = width/2.F;
 //		glColor3f(1,0,0);
 //		glRectf(0, 0, halfWidth, height);
+        printf("Draw rendererd image one\n");
 		drawRenderedImage(rendererOne,imagePadding,imagePadding,halfWidth - imagePadding * 2,height - imagePadding * 2);
-		
+        drawHeatmap(imagePadding, heatmapOne, heatmapTwo, 1,0,0);
+        
 		if(rendererTwo != NULL) {
 //			glColor3f(0, 0, 1);
 //			glRectf(halfWidth, 0, width, height);
+            printf("Draw rendererd image two\n");
 			drawRenderedImage(rendererTwo,halfWidth,imagePadding,halfWidth - imagePadding * 2,height - imagePadding * 2);
+            drawHeatmap(width / 2.F, heatmapTwo, heatmapOne, 0,0,1);
 		}
 		
 		glFlush();
@@ -224,14 +320,14 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
 					selection.end.y = tempY;
 				}
 
-				riv::SingularFilter<ushort> *xFilter = new riv::RangeFilter<ushort>("x",selection.start.x,selection.end.x - 1);
+//				riv::SingularFilter<ushort> *xFilter = new riv::RangeFilter<ushort>("x",selection.start.x,selection.end.x - 1);
 				//Be sure to invert the Y coordinates!
 //				riv::SingularFilter<ushort> *yFilter = new riv::RangeFilter<ushort>("y", renderedImage->sizeY - selection.start.y,renderedImage->sizeY - selection.end.y - 1);
 		
-				(*datasetOne)->StartFiltering();
+//				(*datasetOne)->StartFiltering();
 //				(*datasetOne)->AddFilter("path",xFilter);
 //				(*datasetOne)->AddFilter("path",yFilter);
-				(*datasetOne)->StopFiltering();
+//				(*datasetOne)->StopFiltering();
 					
 			}
 			else {

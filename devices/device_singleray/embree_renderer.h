@@ -71,7 +71,7 @@ private:
 	bool g_fullscreen = false;
 	size_t g_width = 256;
 	size_t g_height = 256;
-	std::string g_format = "RGBA8";
+	std::string g_format = "RGB8";
 	std::string g_rtcore_cfg = "";
 	std::string g_outFileName = "";
 	size_t g_num_frames = 1; // number of frames to render in output mode
