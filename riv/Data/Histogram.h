@@ -22,9 +22,14 @@
 //histogram implementation. Counts the values in the given vector and divides by the number of samples to normalize
 template<typename T>
 class Histogram {
+    
 private:
+    
 	//Use ints because we also want to have negative counts when using difference of two histograms
 	std::map<unsigned int,int> hist;
+    
+    bool cdfStale = true;
+    std::map<unsigned int,float> cdf; //Cumulative normalized distribution
 	size_t nrElements;
 	
 	T lowerBound;
@@ -32,6 +37,18 @@ private:
 	
 	T* maxValue = NULL;
 	T* minValue = NULL;
+    
+//    class Bin {
+//    public:
+//        float min;
+//        float max;
+//        
+//        int value;
+//        
+//        Bin(float min, float max) : min(min), max(max) {
+//            value = 0;
+//        }
+//    };
 	
 	unsigned int bins = 0;
 	float binWidth = 0;
@@ -128,6 +145,36 @@ public:
 //            
 //        }
 //    }
+    unsigned int SampleBin() {
+        if(cdfStale)
+            ComputeCDF();
+        
+        float R = random() / (float)RAND_MAX;
+        
+        for(int i = 0 ; i < bins ; ++i) {
+            if(R <= cdf[i]) {
+                return i;
+            }
+        }
+    }
+    float Sample() {
+        unsigned int bin = SampleBin();
+        
+        //Jitter the result within the bin
+        float R = rand() / (float)RAND_MAX;
+        float offset = R * binWidth;
+        float sampledValue = (bin * binWidth + lowerBound) + offset;
+        return sampledValue;
+    }
+    void ComputeCDF() {
+        cdf.clear();
+        float cummulative = 0;
+        for(unsigned int i = 0 ; i < bins ; ++i) {
+            cummulative += NormalizedValue(i);
+            cdf[i] = cummulative;
+        }
+        cdfStale = false;
+    }
 	int BinValue(unsigned int bin) {
 		return hist[bin];
 	}
@@ -143,6 +190,8 @@ public:
 		
 		++hist[bin];
 		++nrElements;
+        
+        cdfStale = true;
 		
 		return bin;
 	}
@@ -222,8 +271,10 @@ public:
 			return 0;
 	}
 	void Clear() {
+        printf("Clear histogram %s\n",name.c_str());
 		hist.clear();
 		nrElements = 0;
+        cdfStale = true;
 	}
 	void Print() {
 		int maxBarSize = 48;
@@ -434,9 +485,11 @@ template <typename T>
 class Histogram2D {
 private:
     std::map<unsigned int,Histogram<T>> histograms;
+    std::map<unsigned int,float> cdf;
     
     T lowerBound;
     T upperBound;
+    bool cdfStale = true;
     
     unsigned int bins = 0;
     float binWidth = 0;
@@ -446,6 +499,9 @@ public:
         unsigned int bin = BinForValue(valueOne);
         histograms[bin].Add(valueTwo);
         ++nrElements;
+    }
+    void Add(const std::pair<T,T>& values) {
+        Add(values.first, values.second);
     }
     int BinForValue(const T& value) {
         T valueClamped = value;
@@ -492,6 +548,67 @@ public:
             }
         }
         return maxValue;
+    }
+    unsigned int SampleBin() {
+        if(cdfStale)
+            ComputeCDF();
+        
+        float R = random() / (float)RAND_MAX;
+        
+        for(int i = 0 ; i < bins ; ++i) {
+            if(R <= cdf[i]) {
+                return i;
+            }
+        }
+    }
+    std::pair<unsigned int, unsigned int> SampleBins() {
+        std::pair<unsigned int, unsigned int> binsPair;
+        
+        if(cdfStale)
+            ComputeCDF();
+        
+        float R = random() / (float)RAND_MAX;
+        
+        for(int i = 0 ; i < bins ; ++i) {
+            if(R <= cdf[i]) {
+                binsPair.first = i;
+                binsPair.second = histograms[i].SampleBin();
+                return binsPair;
+            }
+        }
+    }
+    void ComputeCDF() {
+        cdf.clear();
+        float cummulative = 0;
+        for(unsigned int i = 0 ; i < bins ; ++i) {
+            cummulative += histograms[i].NumberOfElements() / (float)nrElements;
+            cdf[i] = cummulative;
+        }
+        cdfStale = false;
+    }
+    float Sample() {
+        unsigned int bin = SampleBin();
+        
+        //Jitter the result within the bin
+        float R = rand() / (float)RAND_MAX;
+        float offset = R * binWidth;
+        float sampledValue = (bin + lowerBound) + offset;
+        return sampledValue;
+    }
+    std::pair<float,float> Sample2D() {
+        std::pair<float,float> sample;
+        
+        unsigned int bin = SampleBin();
+        
+        //Jitter the result within the bin
+        float R = rand() / (float)RAND_MAX;
+        float offset = R * binWidth;
+        float sampledValue = (bin * binWidth + lowerBound) + offset;
+        
+        sample.first = sampledValue;
+        sample.second = histograms[bin].Sample();
+        
+        return sample;
     }
     int BinValue(unsigned int binOne, unsigned int binTwo) {
         return histograms[binOne].BinValue(binTwo);

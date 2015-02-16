@@ -927,7 +927,7 @@ bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMe
         //		intersectionsTable->Print();
         
         if(pathFilter != NULL) { //Add to the previous filter
-            dataset->ClearRowFilter(pathFilter);
+//            dataset->ClearRowFilter(pathFilter);
         }
         
         TableIterator* iterator = pathTable->GetIterator();

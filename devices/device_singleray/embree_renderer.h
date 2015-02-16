@@ -119,6 +119,7 @@ public:
 	void parsePathTracer(Ref<ParseStream> cin, const FileName& path);
 	void parseCommandLine(Ref<ParseStream> cin, const FileName& path);
 	
+    void RenderNextFrame(Histogram2D<float>* pixelHistogram);
 	void RenderNextFrame();
 	std::string GetFormat() { return g_format; };
 	Vec2<size_t> GetDimensions();

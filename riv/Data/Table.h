@@ -47,7 +47,9 @@ private:
 	
 	std::tuple<std::vector<riv::SingularFilter<Ts>*>...> filters;
 	std::vector<riv::RowFilter*> rowFilters; //Custom row filters
-	
+    std::tuple<std::vector<riv::CompoundFilter<Ts>*>...> disjunctiveFilters;
+    std::tuple<std::vector<riv::CompoundFilter<Ts>*>...> conjunctiveFilters;
+    
 	std::vector<std::string> attributes;
 	
 	//Stored here so I can easily clean them up as they are newly allocated
@@ -285,6 +287,43 @@ public:
 					}
 				});
 			}
+            if(!filterSourceRow) {
+                tuple_for_each(conjunctiveFilters, [&](auto tFilters) {
+                    for(auto conjunctiveFilter : tFilters) {
+                        filterSourceRow = true;
+                        typedef typename get_template_type<typename std::decay<decltype(*conjunctiveFilter)>::type>::type templateType;
+                        
+                        for(auto filter : conjunctiveFilter->filters) {
+                            auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
+                            if(!filter->PassesFilter(recordForFilter->Value(row))) {
+                                filterSourceRow = true;
+                                break;
+                            }
+                        }
+                        if(filterSourceRow) {
+                            break;
+                        }
+                    }
+                    
+                });
+            }
+            if(!filterSourceRow) {
+                tuple_for_each(disjunctiveFilters, [&](auto tFilters) {
+                    for(auto disjunctiveFilter : tFilters) {
+                        filterSourceRow = true;
+                        typedef typename get_template_type<typename std::decay<decltype(*disjunctiveFilter)>::type>::type templateType;
+                        filterSourceRow = true;
+                        for(auto filter : disjunctiveFilter->filters) {
+                            auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
+                            if(filter->PassesFilter(recordForFilter->Value(row))) {
+                                filterSourceRow = false;
+                                break;
+                            }
+                            
+                        }
+                    }
+                });
+            }
 			
 			//FINISH UP
 			if(filterSourceRow) {
@@ -377,6 +416,14 @@ public:
 	void AddFilter(riv::RowFilter* rowFilter) {
 		rowFilters.push_back(rowFilter);
 	}
+    template<typename T>
+    void AddDisjunctiveFilter(riv::CompoundFilter<T>* disjunctiveFilter) {
+        std::get<std::vector<riv::CompoundFilter<T>*>>(disjunctiveFilters).push_back(disjunctiveFilter);
+    }
+    template<typename T>
+    void AddConjunctiveFilter(riv::CompoundFilter<T>* conjunctiveFilter) {
+        std::get<std::vector<riv::CompoundFilter<T>*>>(conjunctiveFilters).push_back(conjunctiveFilter);
+    }
 	std::vector<std::string> GetAttributes() const;
 	void FilterRow(size_t row) {
 		filteredRows[row] = true;
@@ -510,24 +557,6 @@ public:
 	}
 	std::string RowToString(size_t row,size_t columnWidth) {
 		std::string rowText = "|";
-		
-		
-		//		tuple_for_each(records, [&](auto tRecords) {
-		//			for(auto record : tRecords) {
-		//				std::string valueString = std::to_string(record->Value(row));
-		//				size_t textWidth = valueString.size();
-		//				if(textWidth > columnWidth) {
-		//					columnWidth = textWidth;
-		//				}
-		//				int padding = (int)((columnWidth - textWidth) / 2.F);
-		//
-		//				rowText += generateString(' ',padding);
-		//				rowText += record->name.c_str();
-		//				rowText += generateString(' ',padding);
-		//				rowText += "|";
-		//			}
-		//		});
-		//		return rowText;
 		
 		tuple_for_each(records, [&](auto tRecords) {
 			for(auto record : tRecords) {

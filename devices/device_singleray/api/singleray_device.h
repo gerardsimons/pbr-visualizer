@@ -28,6 +28,8 @@
 #include "device_singleray/shapes/sphere.h"
 #include "device_singleray/shapes/disk.h"
 
+#include "../../../riv/Data/Histogram.h"
+
 namespace embree
 {
   class SingleRayDevice : public Device
@@ -95,6 +97,7 @@ namespace embree
                             render calls
     *******************************************************************/
     
+    void rtRenderFrame(RTRenderer renderer, RTCamera camera, RTScene scene, RTToneMapper toneMapper, RTFrameBuffer frameBuffer, int accumulate, Histogram2D<float>* pixelDistributions);
     void rtRenderFrame(RTRenderer renderer, RTCamera camera, RTScene scene, RTToneMapper toneMapper, RTFrameBuffer frameBuffer, int accumulate);
     bool rtPick(RTCamera camera, float x, float y, RTScene scene, float& px, float& py, float& pz);
 	bool rtPick(RTScene scene_i, const Ray& ray, float& px, float& py, float& pz);

@@ -1,4 +1,4 @@
-#include <stdio.h>
+ #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
@@ -83,7 +83,7 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 7500;
+const int maxPaths = 5000;
 const int bootstrapRepeat = 1;
 const int sliderViewHeight = 50;
 
@@ -104,7 +104,7 @@ void invalidateAllViews() {
 	parallelCoordsView->Invalidate();
 	parallelCoordsView->redisplayWindow();
 	imageView->Invalidate();
-	imageView->redisplayWindow();
+//	imageView->redisplayWindow();
 //	uiView->Invalidate();
 	
 	int previousWindow = glutGetWindow();
@@ -113,28 +113,85 @@ void invalidateAllViews() {
 	glutSetWindow(previousWindow);
 }
 
+void testSampling() {
+    RIVDataSet<float,ushort>* testData = new RIVDataSet<float,ushort>("test_set");
+    
+    RIVTable<float,ushort>* testTable = testData->CreateTable("test_table");
+    
+    RIVRecord<float>* floatRecord = testTable->CreateRecord<float>("floats");
+    RIVRecord<float>* floatRecordTwo = testTable->CreateRecord<float>("floats_two");
+    
+    //	RIVMultiReference* multiRef = new RIVMultiReference();
+    //	RIVSingleReference* singleRef = new RIVSingleReference();
+    
+    Histogram<float> testHistogram = Histogram<float>("test",0,10,10);
+    Histogram<int> testHistogramInt = Histogram<int>("test",0,10,10);
+    
+    HistogramSet<float,int> testHistogramSet;
+    Histogram2D<float> floatHist2D(0,10,2);
+    
+    const size_t N = 10;
+    for(int i = 0 ; i < N ; ++i) {
+        size_t M = 10 * (i+1);
+        for(int j = 0 ; j < M ; ++j) {
+            floatRecord->AddValue(rand());
+            floatRecordTwo->AddValue(N-i);
+            testHistogramInt.Add(i);
+            testHistogram.Add(rand() / RAND_MAX);
+        }
+    }
+    testHistogramSet.AddHistogram(testHistogram);
+    testHistogramSet.AddHistogram(testHistogramInt);
+    
+    testHistogramSet.Clear();
+//    floatHist2D.Add(2, 2);
+        floatHist2D.Add(7, 2);
+        floatHist2D.Add(2, 7);
+        floatHist2D.Add(7, 7);
+            floatHist2D.Add(7, 7);
+    
+//    for(int x = 0 ; x < 10 ; x++) {
+//        for(int y = 0 ; y < 10 ; y++) {
+//            size_t M = 10 * ((x+1)*(y+1));
+//            for(int j = 0 ; j < M ; ++j) {
+//                floatHist2D.Add(x, y);
+//            }
+//        }
+//    }
+
+    Histogram<float> floatHist = floatRecord->CreateHistogram(0,10,10);
+    
+    floatHist.Print();
+    
+    //Sample N new values
+    Histogram<float> sampledHist = Histogram<float>("sampled",0,10,10);
+    
+    for(int i = 0 ; i < 450 ; ++i) {
+        sampledHist.Add(floatHist.Sample());
+    }
+    
+    sampledHist.Print();
+    floatHist2D.Print();
+    
+//    sampledHist.Clear();
+    
+    Histogram2D<float> sampledHist2D = Histogram2D<float>(0,10,2);
+    for(int i = 0 ; i < 1000000 ; ++i) {
+        auto sample = floatHist2D.Sample2D();
+        
+//        printf("Sample %f,%f\n",sample.first,sample.second);
+//        sampledHist.Add(sample.first);
+        sampledHist2D.Add(sample);
+    }
+//    auto histogramset = testData->CreateHistogramSet(10);
+    sampledHist2D.Print();
+//    sampledHist.Print();
+    
+    delete testData;
+}
+
 void testFunctions() {
 	
-	//	RIVDataSet<float,ushort>* testData = new RIVDataSet<float,ushort>("test_set");
-	//
-	//	RIVTable<float,ushort>* testTable = testData->CreateTable("test_table");
-	//
-	//	RIVRecord<float>* floatRecord = testTable->CreateRecord<float>("floats");
-	//	RIVRecord<ushort>* shortRecord = testTable->CreateRecord<ushort>("shorts");
-	//
-	////	RIVMultiReference* multiRef = new RIVMultiReference();
-	////	RIVSingleReference* singleRef = new RIVSingleReference();
-	//
-	//	const int N = 1000;
-	//	for(int i = 0 ; i < N ; ++i) {
-	//		floatRecord->AddValue(rand());
-	//		shortRecord->AddValue(i);
-	//	}
-	//
-	//	auto histogramset = testData->CreateHistogramSet(10);
-	//
-	//	delete testData;
-	//
 	//Done
 	
 	//Test bootstrap
@@ -268,6 +325,8 @@ void keys(int keyCode, int x, int y) {
 		case 112: //The 'p' key, toggle drawing paths in 3D view
 			sceneView->ToggleDrawPaths();
 			break;
+        case 113:
+            exit(0);
 		case 114: // 'r' key, force next frame rendering {
 		{
 			rendererOne->RenderNextFrame();
@@ -423,12 +482,22 @@ void idle() {
 		if(!isDelayed) {
 			printf("Rendering frame %d\n",currentFrameOne);
 			++currentFrameOne;
-			rendererOne->RenderNextFrame();
+            if((*datasetOne)->IsFiltered()) {
+                rendererOne->RenderNextFrame(imageView->GetHeatmapOne());
+            }
+            else {
+                rendererOne->RenderNextFrame();
+            }
 			renderOneFinishedFrame = false;
 			postRedisplay = true;
 			if(dataControllerTwo) {
 				++currentFrameTwo;
-				rendererTwo->RenderNextFrame();
+                if((*datasetTwo)->IsFiltered()) {
+                    rendererTwo->RenderNextFrame(imageView->GetHeatmapTwo());
+                }
+                else {
+                    rendererTwo->RenderNextFrame();
+                }
 				renderTwoFinishedFrame = false;
 			}
 		}
@@ -509,11 +578,6 @@ void setupDataController(const int argc, char** argv) {
 	else {
 		throw std::runtime_error("Unsupported number of arguments (1 or 2 expected)");
 	}
-}
-
-//Useful to temporarily disable some drawing
-void doNothing() {
-	//Lalalala
 }
 
 //Helper functions to create color property for a given dataset
@@ -667,7 +731,8 @@ int main(int argc, char **argv)
 {
 	printf("Initialising Rendering InfoVis...\n");
 	
-	//	testFunctions();
+//		testFunctions();
+    testSampling();
 	
 	srand(time(NULL));
 	/* initialize GLUT, let it extract command-line
@@ -697,16 +762,14 @@ int main(int argc, char **argv)
 	
 	// display and idle function
 	glutDisplayFunc(display);
-	
-	/* --- register callbacks with GLUT ---     */
+    
+//    renderingPaused = true;
 	
 	/* register function that handles mouse */
 	
 	glutSpecialFunc(keys);
 	
 	setupDataController(argc, argv);
-	
-//	renderingPaused = true;
 	
 	createViews();
 	

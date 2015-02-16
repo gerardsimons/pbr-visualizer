@@ -23,6 +23,7 @@
 #include "../filters/filter.h"
 #include "../renderers/progress.h"
 #include "common/sys/taskscheduler.h"
+#include "../../../riv/Data/Histogram.h"
 
 namespace embree
 {
@@ -42,6 +43,9 @@ namespace embree
 		
 		/* Render a single frame and report data to data connector */
 		void renderFrame(const Ref<Camera>& camera, const Ref<BackendScene>& scene, const Ref<ToneMapper>& toneMapper, Ref<SwapChain > film, int accumulate,DataConnector* dataConnector);
+        
+        /* Render a single frame using a dataconnector and a custom distribution of pixels from which to draw path origins */
+        void renderFrame(const Ref<Camera>& camera, const Ref<BackendScene>& scene, const Ref<ToneMapper>& toneMapper, Ref<SwapChain > film, int accumulate,DataConnector* dataConnector, Histogram2D<float>* pixelDistributions);
 		
 	private:
 		
@@ -55,9 +59,14 @@ namespace embree
 			
 			RenderJob (Ref<IntegratorRenderer> renderer, const Ref<Camera>& camera, const Ref<BackendScene>& scene,
 					   const Ref<ToneMapper>& toneMapper, Ref<SwapChain > swapchain, int accumulate, int iteration,DataConnector* connector);
+            
+            RenderJob (Ref<IntegratorRenderer> renderer, const Ref<Camera>& camera, const Ref<BackendScene>& scene,
+                       const Ref<ToneMapper>& toneMapper, Ref<SwapChain > swapchain, int accumulate, int iteration,DataConnector* connector, Histogram2D<float>* pixelDistributions);
 			
 		private:
 			
+            void renderTileForPixelDistribution(size_t threadIndex, size_t threadCount, size_t taskIndex, size_t taskCount, TaskScheduler::Event* event);
+            
 			/*! start functon */
 			TASK_RUN_FUNCTION(RenderJob,renderTile);
 			
@@ -77,6 +86,7 @@ namespace embree
 			
 		private:
 			DataConnector* dataConnector = NULL;
+            Histogram2D<float>* pixelDistributions = NULL;
 			
 			/*! Precomputations. */
 		private:

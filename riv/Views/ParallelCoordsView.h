@@ -47,7 +47,7 @@ private:
 	
 	//TODO : template this
 	ParallelCoordsAxisInterface* selectedAxis = NULL;
-	Area* selection = NULL;
+	RIVRectangle* selection = NULL;
 	
 	INTERACTION_STATE interactionState = IDLE;
 	

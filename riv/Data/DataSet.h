@@ -121,7 +121,26 @@ public:
 			}
 		}
 	}
-	
+    template<typename T>
+    void AddDisjunctiveFilter(riv::CompoundFilter<T>* disjunctiveFilter) {
+        for(auto table : tables) {
+            if(disjunctiveFilter->AppliesToTable(table)) {
+                table->AddDisjunctiveFilter(disjunctiveFilter);
+                staleTables[table] = true;
+                return;
+            }
+        }
+    }
+    template<typename T>
+    void AddConjunctiveFilter(riv::CompoundFilter<T>* conjunctiveFilter) {
+        for(auto table : tables) {
+            if(conjunctiveFilter->AppliesToTable(table)) {
+                table->AddConjunctiveFilter(conjunctiveFilter);
+                staleTables[table] = true;
+                return;
+            }
+        }
+    }
 	//Automatically find the table this should be filtered on, the one containing all of the filters attributes
 	//	void AddFilter(riv::Filter* filter);
 	//	void AddFilter(riv::GroupFilter *filter);
@@ -165,6 +184,14 @@ public:
 		//Notify the listeners now
 		notifyFilterListeners();
 	}
+    bool IsFiltered() {
+        for(auto table : tables) {
+            if(table->IsFiltered()) {
+                return true;
+            }
+        }
+        return false;
+    }
 	void DeleteTable(const std::string& tableName) {
 		for(size_t i = 0 ; i < tables.size() ; ++i) {
 			auto table = tables[i];

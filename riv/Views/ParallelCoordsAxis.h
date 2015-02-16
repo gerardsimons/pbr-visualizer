@@ -38,7 +38,7 @@ public:
 	bool isSelected = false;
 	//Does it have a selection box used to filter data according to its dimensions
 	bool HasSelectionBox = false;
-	Area selection;
+	RIVRectangle selection;
 protected:
 	ParallelCoordsAxisInterface(int x, int y, int width, int height, const std::string& name) : x(x), y(y), width(width), height(height), name(name) {
 		

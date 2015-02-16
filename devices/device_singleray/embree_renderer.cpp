@@ -238,7 +238,12 @@ void EMBREERenderer::RenderNextFrame() {
 	g_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1);
 	g_device->rtSwapBuffers(g_frameBuffer);
 }
-
+//Render next frame according to given pixel distribution
+void EMBREERenderer::RenderNextFrame(Histogram2D<float>* pixelDistribution) {
+    g_device = g_single_device;
+    g_single_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1,pixelDistribution);
+    g_single_device->rtSwapBuffers(g_frameBuffer);
+}
 bool EMBREERenderer::RayPick(Ray& ray, float& x, float& y, float& z) {
 	return g_single_device->rtPick(g_render_scene, ray, x, y, z);
 }

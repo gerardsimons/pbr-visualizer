@@ -201,16 +201,16 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 	
 	trueDistributions.AddToHistogram(PIXEL_X, newPath->pixel[0]);
 	trueDistributions.AddToHistogram(PIXEL_Y, newPath->pixel[1]);
-	trueDistributions.AddToHistogram(PATH_R, std::min(newPath->radiance.r,1.F));
-	trueDistributions.AddToHistogram(PATH_G, std::min(newPath->radiance.g,1.F));
-	trueDistributions.AddToHistogram(PATH_B, std::min(newPath->radiance.r,1.F));
-	trueDistributions.AddToHistogram(THROUGHPUT_R, std::min(newPath->throughput.r,1.F));
-	trueDistributions.AddToHistogram(THROUGHPUT_G, std::min(newPath->throughput.g,1.F));
-	trueDistributions.AddToHistogram(THROUGHPUT_B, std::min(newPath->throughput.b,1.F));
+	trueDistributions.AddToHistogram(PATH_R, newPath->radiance.r);
+	trueDistributions.AddToHistogram(PATH_G, newPath->radiance.g);
+	trueDistributions.AddToHistogram(PATH_B, newPath->radiance.b);
+	trueDistributions.AddToHistogram(THROUGHPUT_R, newPath->throughput.r);
+	trueDistributions.AddToHistogram(THROUGHPUT_G, newPath->throughput.g);
+	trueDistributions.AddToHistogram(THROUGHPUT_B, newPath->throughput.b);
 	trueDistributions.AddToHistogram(DEPTH, nrIntersections);
 	
 	for(ushort i = 0 ; i < nrIntersections ; ++i) {
-		IntersectData& isect = newPath->intersectionData[i];
+		const IntersectData& isect = newPath->intersectionData[i];
 		
 		trueDistributions.AddToHistogram(BOUNCE_NR,(ushort)(i+1));
 		trueDistributions.AddToHistogram(POS_X, isect.position[0]);
@@ -219,9 +219,9 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 		//						trueDistributions.AddToHistogram(DIR_X, isect.dir[0]);
 		//						trueDistributions.AddToHistogram(DIR_Y, isect.dir[1]);
 		//						trueDistributions.AddToHistogram(DIR_Z, isect.dir[2]);
-		trueDistributions.AddToHistogram(INTERSECTION_R, std::min(isect.color.r,1.F));
-		trueDistributions.AddToHistogram(INTERSECTION_G, std::min(isect.color.g,1.F));
-		trueDistributions.AddToHistogram(INTERSECTION_B, std::min(isect.color.b,1.F));
+		trueDistributions.AddToHistogram(INTERSECTION_R, isect.color.r);
+		trueDistributions.AddToHistogram(INTERSECTION_G, isect.color.g);
+		trueDistributions.AddToHistogram(INTERSECTION_B, isect.color.b);
 		trueDistributions.AddToHistogram(PRIMITIVE_ID, isect.primitiveId);
 	}
 	
@@ -238,9 +238,9 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 			//				lensVs->AddValue(newPath->lensV);
 			//				times->AddValue(newPath->timestamp);
 			
-			colorRs->AddValue(std::min(newPath->radiance.r,1.F));
-			colorGs->AddValue(std::min(newPath->radiance.g,1.F));
-			colorBs->AddValue(std::min(newPath->radiance.b,1.F));
+			colorRs->AddValue(newPath->radiance.r);
+			colorGs->AddValue(newPath->radiance.g);
+			colorBs->AddValue(newPath->radiance.b);
 			throughputRs->AddValue(newPath->throughput.r);
 			throughputGs->AddValue(newPath->throughput.g);
 			throughputBs->AddValue(newPath->throughput.b);
@@ -259,9 +259,9 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 				//					dirX->AddValue(isect.dir[0]);
 				//					dirY->AddValue(isect.dir[1]);
 				//					dirZ->AddValue(isect.dir[2]);
-				isectColorRs->AddValue(std::min(isect.color.r,1.F));
-				isectColorGs->AddValue(std::min(isect.color.g,1.F));
-				isectColorBs->AddValue(std::min(isect.color.b,1.F));
+				isectColorRs->AddValue(isect.color.r);
+				isectColorGs->AddValue(isect.color.g);
+				isectColorBs->AddValue(isect.color.b);
 				primitiveIds->AddValue(isect.primitiveId);
 				//					shapeIds->AddValue(isect.shapeId);
 				//					interactionTypes->AddValue(isect.interactionType);
@@ -331,8 +331,8 @@ void DataController::Reduce() {
 	//Bootstrap set
 	RIVDataSet<float,ushort>* bestBootstrap = NULL;
 	
-//	printf("\nTRUE HISTOGRAMS = \n");
-//	trueDistributions.Print();
+	printf("\nTRUE HISTOGRAMS = \n");
+	trueDistributions.Print();
 	
 	for(int i = 0 ; i < bootstrapRepeat ; ++i) {
 		//			printf("Round #%d\n",i);
@@ -433,18 +433,17 @@ void DataController::Reduce() {
 		currentData = bestBootstrap;
 		bestBootstrap = NULL;
 		
-		candidateData->ClearData();
-		resetPointers(candidateData);	//Reset the shortcut pointers to a new empty dataset
+        
 	}
 	else {
 		printf("\n Could not find a better bootstrap... \n");
-		candidateData->ClearData();
 		//			resetPointers(candidateData);	//Reset the shortcut pointers to a new empty dataset
 		//			printf("EMPTY CANDIDATE DATA: \n");
 		//			candidateData->Print();
 	}
-	
-	joinedData->ClearData();
+    
+    resetPointers(candidateData);	//Reset the shortcut pointers to a new empty dataset
+    trueDistributions = candidateData->CreateHistogramSet(bins,dataTables);
 	delete joinedData;
 	
 	currentData->NotifyDataListeners();

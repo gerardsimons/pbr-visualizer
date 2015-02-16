@@ -131,6 +131,37 @@ namespace riv {
 			std::cout << "RangeFilter on " << SingularFilter<T>::attributeName << " (" << minValue << " : " << maxValue << ")" << std::endl;
 		}
 	};
+    
+    template<typename T>
+    class CompoundFilter : public Filter{
+    public:
+        std::vector<SingularFilter<T>*> filters;
+        CompoundFilter(const std::vector<SingularFilter<T>>& filters) : filters(filters) {
+            
+        }
+        CompoundFilter() {
+            
+        }
+        void AddFilter(riv::SingularFilter<T>* newFilter) {
+            filters.push_back(newFilter);
+        }
+        virtual bool AppliesToAttribute(const std::string& name) {
+            for(auto filter : filters) {
+                if(filter->AppliesToAttribute(name)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        virtual bool AppliesToTable(const RIVTableInterface* table) {
+            for(auto filter : filters) {
+                if(filter->AppliesToTable(table)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    };
 }
 #endif
 

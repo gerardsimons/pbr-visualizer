@@ -9,10 +9,12 @@
 #ifndef IMAGEVIEW_H
 #define IMAGEVIEW_H
 
+#include "../Grid.h"
 #include "DataView.h"
 #include "../Geometry/Geometry.h"
 #include "../Graphics/BMPImage.h"
 #include "../Configuration.h"
+#include "../Data/Filter.h"
 #include "devices/device_singleray/embree_renderer.h"
 
 #if defined(__APPLE__)
@@ -32,33 +34,40 @@ private:
 	
 //	std::vector<EMBREERenderer*> renderers;
     int imagePadding = 5;
-	float imageMagnificationX,imageMagnificationY;
 
-    RIVPoint viewToPixelSpace(int x, int y);
 	void clearSelection();
-	//In screenspace
-	RIVPoint imageStart;
-	RIVPoint imageEnd;
 	bool isDragging;
 	//image size in pixels
 	int imageWidth, imageHeight;
-    
-	Area selection;
-    
+
+    //TODO: I think these histograms belong in the data controller, or that is where they should originate from
     const unsigned int bins = 25;
-    Histogram2D<float> heatmapOne;
-    Histogram2D<float> heatmapTwo;
+    Histogram2D<float>* heatmapOne = NULL;
+    Histogram2D<float>* heatmapTwo = NULL;
+
+    bool showFillArea = false;
+    unsigned int gridSize = 100;
+    riv::RowFilter* pixelFilterOne = NULL;
+    riv::RowFilter* pixelFilterTwo = NULL;
+    Grid* paintGridOne;
+    Grid* paintGridTwo;
+    Grid* interactingGrid = NULL;
 	
 	void drawRenderedImage(EMBREERenderer* renderer,int startX, int startY, int width, int height);
-    void computeHeatmap(RIVDataSet<float,ushort>*, Histogram2D<float>& heatmap);
-    void drawHeatmap(int startX, Histogram2D<float>& heatmap, Histogram2D<float>& otherHeatmap, float r, float g, float b);
+    void computeHeatmap(RIVDataSet<float,ushort>*, Histogram2D<float>*& heatmap);
+    void drawGrid(float startX, Grid* paintGrid);
+    void drawHeatmap(int startX, Histogram2D<float>* heatmap, float r, float g, float b);
+    void filterImage(RIVDataSet<float,ushort>* dataset, Grid* activeGrid, riv::RowFilter* previousFilter);
+    void toGridSpace(int xIn, int yIn, Grid*& outGrid, int& gridX, int& gridY);
+    void redisplayWindow();
 public:
 	//Single renderer constructor
 	RIVImageView(RIVDataSet<float,ushort>** datasetOne,  EMBREERenderer* rendererOne);
 	//Dual renderer constructor
 	RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo);
 	
-	void redisplayWindow();
+    Histogram2D<float>* GetHeatmapOne();
+    Histogram2D<float>* GetHeatmapTwo();
 	
 	static void DrawInstance();
 	static void ReshapeInstance(int,int);

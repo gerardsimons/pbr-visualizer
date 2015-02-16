@@ -573,6 +573,22 @@ namespace embree
 		/* render the frame */
 		renderer->getInstance()->renderFrame(camera->getInstance(),scene->getInstance(),toneMapper->getInstance(),frameBuffer->getInstance(),accumulate,dataConnector);
 	}
+    void SingleRayDevice::rtRenderFrame(Device::RTRenderer renderer_i, Device::RTCamera camera_i,
+                                        Device::RTScene scene_i, Device::RTToneMapper toneMapper_i,
+                                        Device::RTFrameBuffer frameBuffer_i, int accumulate, Histogram2D<float>* pixelDistributions)
+    {
+        RT_COMMAND_HEADER;
+        
+        /* extract objects from handles */
+        Ref<InstanceHandle<Renderer> >      renderer    = castHandle<InstanceHandle<Renderer     > >(renderer_i   ,"renderer"   );
+        Ref<InstanceHandle<Camera> >        camera      = castHandle<InstanceHandle<Camera       > >(camera_i     ,"camera"     );
+        Ref<BackendScene::Handle >          scene       = castHandle<BackendScene::Handle>          (scene_i      ,"scene"      );
+        Ref<InstanceHandle<ToneMapper> >    toneMapper  = castHandle<InstanceHandle<ToneMapper   > >(toneMapper_i ,"tonemapper" );
+        Ref<ConstHandle<SwapChain> > frameBuffer = castHandle<ConstHandle<SwapChain> >(frameBuffer_i,"framebuffer");
+        
+        /* render the frame */
+        renderer->getInstance()->renderFrame(camera->getInstance(),scene->getInstance(),toneMapper->getInstance(),frameBuffer->getInstance(),accumulate,dataConnector);
+    }
 	
 	bool SingleRayDevice::rtPick(Device::RTCamera camera_i, float x, float y, Device::RTScene scene_i, float& px, float& py, float& pz)
 	{

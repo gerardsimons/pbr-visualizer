@@ -1,4 +1,4 @@
-## ======================================================================== ##
+## ========================================================================  -Wno-reorder##
 ## Copyright 2009-2013 Intel Corporation                                    ##
 ##                                                                          ##
 ## Licensed under the Apache License, Version 2.0 (the "License");          ##
@@ -22,7 +22,7 @@ SET(FLAGS_AVX2  "-mavx2 -mvzeroupper")
 
 SET(CMAKE_CXX_COMPILER "clang++")
 SET(CMAKE_C_COMPILER "clang")
-SET(CMAKE_CXX_FLAGS "-DDEBUG -g -fPIC -fvisibility-inlines-hidden -fvisibility=hidden -stdlib=libc++ -Wno-c++11-narrowing")
+SET(CMAKE_CXX_FLAGS "-DDEBUG -g -fPIC -fvisibility-inlines-hidden -fvisibility=hidden -stdlib=libc++ -Wno-c++11-narrowing -Wno-reorder")
 SET(CMAKE_CXX_FLAGS_DEBUG "-O0")
 SET(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -g -O3 -Wstrict-aliasing=0 -ffast-math ")
 SET(CMAKE_EXE_LINKER_FLAGS "")
