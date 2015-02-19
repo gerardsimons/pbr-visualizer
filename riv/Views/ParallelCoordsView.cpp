@@ -375,7 +375,7 @@ void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ush
 	}
 }
 void ParallelCoordsView::createAxisPoints(int datasetId, RIVDataSet<float,ushort>* dataset) {
-	//	printf("CREATE AXIS POINTS %d\n",datasetId);
+    printf("CREATE AXIS POINTS FOR DATASET  #%d\n",datasetId);
 	for(auto &axisGroup : axisGroups) {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto axis : tAxes) {
@@ -383,25 +383,29 @@ void ParallelCoordsView::createAxisPoints(int datasetId, RIVDataSet<float,ushort
 			}
 		});
 	}
-	
+    size_t pointsCreated = 0;
 	for(auto &axisGroup : axisGroups) {
 		size_t row = 0;
 		
 		auto table = dataset->GetTable(axisGroup.tableName);
-		TableIterator* iterator = table->GetIterator();
-		
+		TableIterator* iterator = table->GetIterator(true);
+        pointsCreated = 0;
 		while(iterator->GetNext(row)) {
-			
+            ++pointsCreated;
 			tuple_for_each(axisGroup.axes, [&](auto& tAxes) {
 				for(auto& axis : tAxes) {
 					auto record = table->GetRecord<decltype(axis->minValue)>(axis->name);
 					auto value = record->Value(row);
 					
 					axis->GetPoints(datasetId).push_back(axis->PositionOnScaleForValue(value));
+
 				}
 			});
 		}
+        
 	}
+    printf("%zu points per axis created.\n",pointsCreated);
+    
 }
 void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColors, RIVColorProperty* rayColors) {
 	//	linesAreDirty = true;
@@ -445,16 +449,22 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
 	
 	glLineWidth(1);
 	for(auto &axisGroup : axisGroups) {
-		
-		size_t row = 0;
-		auto table = dataset->GetTable(axisGroup.tableName);
-		TableIterator* iterator = table->GetIterator();
+        auto table = dataset->GetTable(axisGroup.tableName);
 		size_t numRows = table->NumberOfRows();
+        size_t row = 0;
+        if(numRows != axisGroup.axisInterfaces[0]->GetPoints(datasetId).size()) {
+            printf("ERROR: Points not yet present...\n");
+//            createAxes();
+//            createAxisDensities();
+//            createAxisPoints();
+            return;
+        }
+        
+
+		TableIterator* iterator = table->GetIterator();
 		
-		if(numRows != axisGroup.axisInterfaces[0]->GetPoints(datasetId).size()) {
-			printf("Points not yet present...\n");
-			return;
-		}
+		
+
 		
 		//Find what color property to use for this table
 		RIVColorProperty* colorProperty = pathColors;
@@ -590,11 +600,9 @@ void ParallelCoordsView::Draw() {
 			printf("Draw lines for dataset one\n");
 			drawLines(0,*datasetOne,pathColorOne,rayColorOne);
 		}
-		if(datasetTwo) {
-			if(drawDataSetTwo) {
-				printf("Draw lines for dataset two\n");
-				drawLines(1,*datasetTwo,pathColorTwo,rayColorTwo);
-			}
+		if(datasetTwo && drawDataSetTwo) {
+            printf("Draw lines for dataset two\n");
+            drawLines(1,*datasetTwo,pathColorTwo,rayColorTwo);
 		}
 		drawAxes();
 		drawAxesExtras();
@@ -966,12 +974,15 @@ void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 	printf("\n**   ParallelCoordsView onDataChanged notified.\n");
 	
 	Invalidate();
+    createAxes();
+    createAxisDensities();
 	
 	//Recreate the color property
 	if(source == (*datasetOne)) {
 		printf("Dataset One was changed.\n\n");
 		auto rgbPath = dynamic_cast<RIVColorRGBProperty<float>*>(pathColorOne);
 		auto rgbRay = dynamic_cast<RIVColorRGBProperty<float>*>(rayColorOne);
+//        createAxisPoints(0, *datasetOne);
 		if(rgbPath) {
 			auto pathTable = source->GetTable(PATHS_TABLE);
 			auto isectTable = source->GetTable(INTERSECTIONS_TABLE);
@@ -987,6 +998,7 @@ void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 		printf("Dataset Two was changed.\n\n");
 		auto rgbPath = dynamic_cast<RIVColorRGBProperty<float>*>(pathColorTwo);
 		auto rgbRay = dynamic_cast<RIVColorRGBProperty<float>*>(rayColorTwo);
+//        createAxisPoints(1, *datasetTwo);
 		if(rgbPath) {
 			auto pathTable = source->GetTable(PATHS_TABLE);
 			auto isectTable = source->GetTable(INTERSECTIONS_TABLE);
@@ -1001,9 +1013,8 @@ void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 	else {
 		throw std::runtime_error("Unknown dataset " + source->GetName());
 	}
-	createAxes();
-	createAxisDensities();
-	createAxisPoints();
+
+    createAxisPoints();
 	
 	//Change the ordering to have the bounce_nr to be the first of the second axis group
 	//	axisGroups[1].Reorder(6,0);

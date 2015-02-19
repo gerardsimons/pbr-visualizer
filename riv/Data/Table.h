@@ -68,7 +68,7 @@ public:
 	}
 	~RIVTable() {
 		tuple_for_each(filters, [&](auto tFilters) {
-			deletePointerVector(tFilters);
+//			deletePointerVector(tFilters);
 		});
 		tuple_for_each(records, [&](auto tRecords) {
 			deletePointerVector(tRecords);
@@ -408,6 +408,18 @@ public:
 	std::vector<riv::SingularFilter<T>*>* GetFilters() {
 		return &std::get<std::vector<riv::SingularFilter<T>*>>(filters);
 	}
+	std::tuple<std::vector<riv::SingularFilter<Ts>*>...>* GetAllFilters() {
+        return &filters;
+    }
+    std::vector<riv::RowFilter*>* GetRowFilters() {
+        return &rowFilters;
+    }
+    void SetFilters(std::tuple<std::vector<riv::SingularFilter<Ts>*>...>& filters) {
+        this->filters = filters;
+    }
+    void SetRowFilters(std::vector<riv::RowFilter*>& rowFilters) {
+        this->rowFilters = rowFilters;
+    }
 	template<typename T>
 	void AddFilter(riv::SingularFilter<T> *filter) {
 		auto tFilters = GetFilters<T>();
@@ -471,17 +483,17 @@ public:
 	}
 	bool IsFiltered() {
 		bool filtered = false;
-//		tuple_for_each(filters, [&](auto tFilters) {
-//			if(tFilters.size()) {
-//				filtered = true;
-//				return;
-//			}
-//		});
-//		if(!filtered) {
-//			return rowFilters.size();
-//		}
-		return filteredRows.size();
-//		return filtered;
+		tuple_for_each(filters, [&](auto tFilters) {
+			if(tFilters.size()) {
+				filtered = true;
+				return;
+			}
+		});
+		if(!filtered) {
+			return rowFilters.size() || filtered || filteredRows.size();
+		}
+//		return filteredRows.size();
+        return true;
 	}; //Any filters applied?
 	bool IsClustered() { return isClustered; };
 	void ClearFilteredRows() {
@@ -515,11 +527,11 @@ public:
 		}
 		return iterator;
 	}
-	TableIterator* GetIterator() {
+	TableIterator* GetIterator(bool forceFullIterator = false) {
 		if(iterator) {
 			delete iterator;
 		}
-		if(IsFiltered()) {
+		if(IsFiltered() && !forceFullIterator) {
 			iterator = new FilteredTableIterator(&filteredRows,NumberOfRows(), reference);
 		}
 		else {
@@ -724,6 +736,16 @@ public:
 		});
 		return histograms;
 	}
+    HistogramSet<Ts...> CreateEmptyHistogramSet(int bins) {
+        HistogramSet<Ts...> histograms;
+        
+        tuple_for_each(records, [&](auto tRecords) {
+            for(auto record : tRecords) {
+                histograms.AddHistogram(record->CreateEmptyHistogram(bins));
+            }
+        });
+        return histograms;
+    }
 };
 
 #endif /* defined(__RIVDataSet__Table__) */

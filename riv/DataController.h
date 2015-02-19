@@ -122,5 +122,6 @@ public:
 	bool ProcessNewPath(int frame, PathData* newPath);
 	//Reduce the data, first dataset is the current data being used for a renderer, candidate data is the new dataset, bestBootstrap is the slot used for creating and maintaining the best bootstrap and the best bootstrap results so far...
 	void Reduce();
+    void Reset();
 };
 #endif /* defined(__embree__DataController__) */

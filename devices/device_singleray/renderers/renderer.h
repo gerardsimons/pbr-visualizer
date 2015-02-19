@@ -24,6 +24,8 @@
 #include "../cameras/camera.h"
 #include "../dataconnector.h"
 
+#include "../../../riv/Data/Histogram.h"
+
 namespace embree
 {
   /*! Renderer interface definition. */
@@ -54,6 +56,15 @@ namespace embree
 		  renderFrame(camera, scene, toneMapper, film, accumulate); // If not supported use the regular render frame method
 	  }
 	  
+      virtual void renderFrame(const Ref<Camera>&       camera,   /*!< Camera to render from.      */
+                               const Ref<BackendScene>& scene,    /*!< Scene to render.            */
+                               const Ref<ToneMapper>&   toneMapper, /*!< Tonemapper to use.          */
+                               Ref<SwapChain>           film,  /*!< Framebuffer to render into. */
+                               int accumulate,               /*!< Accumulation mode.          */
+                               DataConnector* dataConnector,
+                               Histogram2D<float>* pixelDistribution) {
+          renderFrame(camera, scene, toneMapper, film, accumulate); // If not supported use the regular render frame method
+      }
   };
 }
 

@@ -41,6 +41,7 @@ private:
 	int imageWidth, imageHeight;
 
     //TODO: I think these histograms belong in the data controller, or that is where they should originate from
+    bool showHeatmap = true;
     const unsigned int bins = 25;
     Histogram2D<float>* heatmapOne = NULL;
     Histogram2D<float>* heatmapTwo = NULL;
@@ -59,8 +60,8 @@ private:
     void drawHeatmap(int startX, Histogram2D<float>* heatmap, float r, float g, float b);
     void filterImage(RIVDataSet<float,ushort>* dataset, Grid* activeGrid, riv::RowFilter* previousFilter);
     void toGridSpace(int xIn, int yIn, Grid*& outGrid, int& gridX, int& gridY);
-    void redisplayWindow();
 public:
+    void redisplayWindow();
 	//Single renderer constructor
 	RIVImageView(RIVDataSet<float,ushort>** datasetOne,  EMBREERenderer* rendererOne);
 	//Dual renderer constructor
@@ -68,6 +69,7 @@ public:
 	
     Histogram2D<float>* GetHeatmapOne();
     Histogram2D<float>* GetHeatmapTwo();
+    void ToggleShowHeatmap();
 	
 	static void DrawInstance();
 	static void ReshapeInstance(int,int);

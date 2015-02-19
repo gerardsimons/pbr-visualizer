@@ -94,10 +94,27 @@ void RIVImageView::Reshape(int width, int height) {
     glLoadIdentity();
     
 }
-
+void RIVImageView::ToggleShowHeatmap() {
+    showHeatmap = !showHeatmap;
+    redisplayWindow();
+    printf("Image heatmap is now ");
+    if(showHeatmap) {
+        printf("ON\n");
+    }
+    else {
+        printf("OFF\n");
+    }
+}
 void RIVImageView::OnDataChanged(RIVDataSet<float,ushort>* source) {
-    computeHeatmap(*datasetOne, heatmapOne);
-    computeHeatmap(*datasetTwo, heatmapTwo);
+    
+    if(source == *datasetOne) {
+        computeHeatmap(*datasetOne, heatmapOne);
+    }
+    
+    if(datasetTwo && *datasetTwo == source) {
+        computeHeatmap(*datasetTwo, heatmapTwo);
+//        heatmapTwo->Print();
+    }
     
     int currentWindow = glutGetWindow();
     glutSetWindow(RIVImageView::windowHandle);
@@ -133,10 +150,22 @@ void RIVImageView::computeHeatmap(RIVDataSet<float,ushort>* dataset, Histogram2D
     
     RIVRecord<float>* xPixel = pathsTable->GetRecord<float>(PIXEL_X);
     RIVRecord<float>* yPixel = pathsTable->GetRecord<float>(PIXEL_Y);
+    RIVRecord<float>* throughputsR = pathsTable->GetRecord<float>(THROUGHPUT_R);
+    RIVRecord<float>* throughputsG = pathsTable->GetRecord<float>(THROUGHPUT_G);
+    RIVRecord<float>* throughputsB = pathsTable->GetRecord<float>(THROUGHPUT_B);
     
     size_t row;
     while(iterator->GetNext(row)) {
-        heatmap->Add(xPixel->Value(row), yPixel->Value(row));
+        float throughputR = throughputsR->Value(row);
+        float throughputG = throughputsG->Value(row);
+        float throughputB = throughputsB->Value(row);
+        
+//        printf("throughput (r,g,b) = (%f,%f,%f)\n",throughputR,throughputG,throughputB);
+        
+//        float averageThroughput = (throughputR + throughputG + throughputB) / 3.F;
+//        printf("averageThroughput = %f\n",averageThroughput);
+//        size_t magnitude = 1000 * averageThroughput;
+        heatmap->Add(xPixel->Value(row), yPixel->Value(row),1);
     }
     
 //    heatmap.Print();
@@ -150,7 +179,7 @@ void RIVImageView::drawHeatmap(int startX, Histogram2D<float>* heatmap, float r,
         
         float binX = startX;
         
-        //    float maxNormalizedValue = heatmap.MaxBinValue() / (float)heatmap.NumberOfElements();
+            float maxNormalizedValue = heatmap->MaxBinValue() / (float)heatmap->NumberOfElements();
         float variance = std::pow(heatmap->NormalizedVariance(),1) * bins * bins; //Normalized for the number of bins
         
         //    printf("maxNormalizedValue = %f\n",maxNormalizedValue);
@@ -158,6 +187,8 @@ void RIVImageView::drawHeatmap(int startX, Histogram2D<float>* heatmap, float r,
         
         //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         //    float mean = 1.F / (bins * bins);
+        
+//        float maxValue = 
         
     //    riv::ColorMap jetColorMap = colors::jetColorMap();
         
@@ -274,15 +305,22 @@ void RIVImageView::Draw() {
         //		glColor3f(1,0,0);
         //		glRectf(0, 0, halfWidth, height);
         printf("Draw rendererd image one\n");
+        
         drawRenderedImage(rendererOne,imagePadding,imagePadding,halfWidth - imagePadding * 2,height - imagePadding * 2);
-        drawHeatmap(imagePadding, heatmapOne, 1,0,0);
+        
+        if(showHeatmap) {
+            drawHeatmap(imagePadding, heatmapOne, 1,0,0);
+        }
         
         if(rendererTwo != NULL) {
             //			glColor3f(0, 0, 1);
             //			glRectf(halfWidth, 0, width, height);
             printf("Draw rendererd image two\n");
             drawRenderedImage(rendererTwo,halfWidth,imagePadding,halfWidth - imagePadding * 2,height - imagePadding * 2);
-            drawHeatmap(width / 2.F, heatmapTwo, 0,0,1);
+            
+            if(showHeatmap) {
+                drawHeatmap(width / 2.F, heatmapTwo, 0,0,1);
+            }
         }
         
         //Draw grid
@@ -334,7 +372,7 @@ void RIVImageView::filterImage(RIVDataSet<float,ushort>* dataset, Grid* activeGr
         float pixelY = pixelYs->Value(row);
         
         int gridX = gridWidth * pixelX;
-        int gridY = gridHeight * pixelY;
+        int gridY = gridHeight - gridHeight * pixelY;
         
         if(gridX == gridWidth)
             --gridX;

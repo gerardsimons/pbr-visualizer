@@ -128,6 +128,12 @@ public:
 		}
 		return CreateHistogram(minMax.first, minMax.second, bins);
 	}
+    Histogram<T> CreateEmptyHistogram(size_t bins) {
+        if(typeid(minMax.first) == typeid(unsigned short)) {
+            return Histogram<T>(name,minMax.first,minMax.second, minMax.second - minMax.first);
+        }
+        return Histogram<T>(name,minMax.first, minMax.second, bins);
+    }
 };
 
 typedef RIVRecord<float> RIVFloatRecord;

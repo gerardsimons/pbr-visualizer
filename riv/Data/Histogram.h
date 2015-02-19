@@ -195,6 +195,17 @@ public:
 		
 		return bin;
 	}
+    unsigned int Add(const T& value, size_t number) {
+        
+        unsigned int bin = BinForValue(value);
+        
+        hist[bin] += number;
+        nrElements += number;
+        
+        cdfStale = true;
+        
+        return bin;
+    }
 	unsigned int NumberOfBins() {
 		return bins;
 	}
@@ -237,7 +248,7 @@ public:
 		}
 		T delta = upperBound - lowerBound;
 		double interpolated = (double)(valueClamped - lowerBound) / (delta);
-		unsigned int bin = floor(interpolated * (bins));
+        unsigned int bin = std::floor(interpolated * (bins));
 		//When the value is exeactly on the upper edge it floors incorrectly to bin = bins
 		if(bin == bins) {
 			bin = bins - 1;
@@ -271,7 +282,7 @@ public:
 			return 0;
 	}
 	void Clear() {
-        printf("Clear histogram %s\n",name.c_str());
+//        printf("Clear histogram %s\n",name.c_str());
 		hist.clear();
 		nrElements = 0;
         cdfStale = true;
@@ -495,10 +506,18 @@ private:
     float binWidth = 0;
     size_t nrElements = 0;
 public:
+    unsigned int NumberOfBins() {
+        return bins;
+    }
     void Add(T valueOne, T valueTwo) {
         unsigned int bin = BinForValue(valueOne);
         histograms[bin].Add(valueTwo);
         ++nrElements;
+    }
+    void Add(T valueOne, T valueTwo, size_t magnitude) {
+        unsigned int bin = BinForValue(valueOne);
+        histograms[bin].Add(valueTwo, magnitude);
+        nrElements += magnitude;
     }
     void Add(const std::pair<T,T>& values) {
         Add(values.first, values.second);
@@ -513,7 +532,7 @@ public:
         }
         T delta = upperBound - lowerBound;
         double interpolated = (double)(valueClamped - lowerBound) / (delta);
-        unsigned int bin = floor(interpolated * (bins));
+        unsigned int bin = std::floor(interpolated * (bins));
         //When the value is exeactly on the upper bound it floors incorrectly to bin = bins
         if(bin == bins) {
             bin = bins - 1;
@@ -619,7 +638,7 @@ public:
         }
         return 0;
     }
-    size_t NumberOfElements() {
+    size_t NumberOfElements() {  
         return nrElements;
     }
     float NormalizedMean() {
@@ -642,7 +661,7 @@ public:
         if(nrElements) {
             for(int i = 0 ; i < bins ; i++) {
                 for(int j = 0 ; j < bins ; j++) {
-                    printf("%.2f\t",NormalizedValue(i, j));
+                    printf("%.2f\t",NormalizedValue(j, i));
                 }
                 printf("\n");
             }

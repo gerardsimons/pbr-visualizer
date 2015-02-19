@@ -83,8 +83,8 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 5000;
-const int bootstrapRepeat = 1;
+const int maxPaths = 10000;
+const int bootstrapRepeat = 10;
 const int sliderViewHeight = 50;
 
 void TogglePause();
@@ -322,6 +322,9 @@ void keys(int keyCode, int x, int y) {
 		case 104: // the 'h' from heatmap, toggle drawing the octree heatmap
 			sceneView->ToggleDrawHeatmap();
 			break;
+        case 106: // the 'j' key, cause the h is taken for the other heatmap
+            imageView->ToggleShowHeatmap();
+            break;
 		case 112: //The 'p' key, toggle drawing paths in 3D view
 			sceneView->ToggleDrawPaths();
 			break;
@@ -467,6 +470,16 @@ void TogglePause() {
 	if(renderingPaused) {
 		printf("running.\n");
 		renderingPaused = false;
+        
+        //If dataset one has some filters the rendering will be guided, which means the true distributions
+        //should be reset in order to speed up convergence
+        if((*datasetOne)->IsFiltered()) {
+            dataControllerOne->Reset();
+        }
+        if((*datasetTwo)->IsFiltered()) {
+            dataControllerTwo->Reset();
+        }
+        
 	}
 	else {
 		printf("paused.\n");
@@ -482,8 +495,10 @@ void idle() {
 		if(!isDelayed) {
 			printf("Rendering frame %d\n",currentFrameOne);
 			++currentFrameOne;
-            if((*datasetOne)->IsFiltered()) {
-                rendererOne->RenderNextFrame(imageView->GetHeatmapOne());
+            Histogram2D<float>* heatmapOne = imageView->GetHeatmapOne();
+            if(heatmapOne && heatmapOne->NumberOfElements() && (*datasetOne)->IsFiltered()) {
+//                heatmapOne->Print();
+                rendererOne->RenderNextFrame(heatmapOne);
             }
             else {
                 rendererOne->RenderNextFrame();
@@ -493,7 +508,9 @@ void idle() {
 			if(dataControllerTwo) {
 				++currentFrameTwo;
                 if((*datasetTwo)->IsFiltered()) {
-                    rendererTwo->RenderNextFrame(imageView->GetHeatmapTwo());
+                    auto heatmapTwo = imageView->GetHeatmapTwo();
+//                    heatmapTwo->Print(); 
+                    rendererTwo->RenderNextFrame(heatmapTwo);
                 }
                 else {
                     rendererTwo->RenderNextFrame();
@@ -520,7 +537,7 @@ void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
 	//	dataControllerTwo->RendererOneFinishedFrame(numPaths,numRays);
 	printf("Renderer one finished a frame...\n");
 	dataControllerOne->Reduce();
-	
+    imageView->redisplayWindow();
 	renderOneFinishedFrame = true;
 //	if(renderOneFinishedFrame && renderTwoFinishedFrame) {
 //		delayRendering(5000);
@@ -533,10 +550,10 @@ bool processRendererTwo(PathData* newPath) {
 	//	printf("New path from renderer #2 received!\n");
 	return dataControllerTwo->ProcessNewPath(currentFrameTwo,newPath);
 }
-
 void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
 	printf("Renderer two finished a frame...\n");
 	dataControllerTwo->Reduce();
+    imageView->redisplayWindow();
 	renderTwoFinishedFrame = true;
 	if(currentFrameOne && currentFrameTwo) {
 //		TogglePause();
@@ -669,31 +686,32 @@ void createViews() {
 	glutMotionFunc(RIVSliderView::Motion);
 	glutSpecialFunc(keys);
 	
-	int uiViewWidth = width - 3 * squareSize - 2 * padding;
-	int uiPosX = sceneViewPosX + squareSize + padding;
-	uiViewWindow = glutCreateSubWindow(mainWindow, uiPosX, bottomHalfY, uiViewWidth, squareSize);
-	RIVUIView::windowHandle = uiViewWindow;
-	glutSetWindow(uiViewWindow);
-	glutDisplayFunc(RIVUIView::DrawInstance);
-	//	glutDisplayFunc(doNothing);
-	glutReshapeFunc(RIVUIView::ReshapeInstance);
-	glutMouseFunc(RIVUIView::Mouse);
-	glutMotionFunc(RIVUIView::Motion);
-	glutSpecialFunc(keys);
+//	int uiViewWidth = width - 3 * squareSize - 2 * padding;
+//	int uiPosX = sceneViewPosX + squareSize + padding;
+//	uiViewWindow = glutCreateSubWindow(mainWindow, uiPosX, bottomHalfY, uiViewWidth, squareSize);
+//	RIVUIView::windowHandle = uiViewWindow;
+//	glutSetWindow(uiViewWindow);
+//	glutDisplayFunc(RIVUIView::DrawInstance);
+//	//	glutDisplayFunc(doNothing);
+//	glutReshapeFunc(RIVUIView::ReshapeInstance);
+//	glutMouseFunc(RIVUIView::Mouse);
+//	glutMotionFunc(RIVUIView::Motion);
+//	glutSpecialFunc(keys);
 	
 	//Create views for two renderers
 	auto pathColorOne = createPathColorProperty(*datasetOne);
 	auto rayColorOne = createRayColorProperty(*datasetOne);
+    RIVColorProperty* colorOne = new RIVFixedColorProperty(1, 0, 0);
+//    
+    
 	if(datasetTwo) {
 		
+        RIVColorProperty* colorTwo = new RIVFixedColorProperty(0, 0, 1);
 		//Im so lazy ....
 		//		auto pathColorTwo = createPathColorProperty(*datasetTwo);
 				auto rayColorTwo = createRayColorProperty(*datasetTwo);
 		
 		//Fixed colors for testing
-		RIVColorProperty* colorOne = new RIVFixedColorProperty(1, 0, 0);
-		RIVColorProperty* colorTwo = new RIVFixedColorProperty(0, 0, 1);
-		
 		auto isectTable = (*datasetTwo)->GetTable(INTERSECTIONS_TABLE);
 		
 		//		RIVEvaluatedColorProperty<float>* xLinear = new RIVEvaluatedColorProperty<float>(redBlue, isectTable, isectTable->GetRecord<float>(POS_X));
@@ -714,12 +732,12 @@ void createViews() {
 		(*datasetTwo)->AddDataListener(sliderView);
 	}
 	else {
-		parallelCoordsView = new ParallelCoordsView(datasetOne,dataControllerOne->GetTrueDistributions(),pathColorOne,rayColorOne,sliderView);
+		parallelCoordsView = new ParallelCoordsView(datasetOne,dataControllerOne->GetTrueDistributions(),colorOne,colorOne,sliderView);
 		sceneView = new RIV3DView(datasetOne,rendererOne,rayColorOne,sizeProperty);
 		imageView = new RIVImageView(datasetOne,rendererOne);
 	}
 	//        heatMapView = new RIVHeatMapView(&dataset);
-	uiView = new RIVUIView(datasetOne, parallelCoordsView, sceneView, imageView,  uiViewWidth, uiPosX, bottomHalfY, squareSize, padding, padding);
+//	uiView = new RIVUIView(datasetOne, parallelCoordsView, sceneView, imageView,  uiViewWidth, uiPosX, bottomHalfY, squareSize, padding, padding);
 	
 	//Add some filter callbacks
 	(*datasetOne)->AddDataListener(imageView);
@@ -732,7 +750,7 @@ int main(int argc, char **argv)
 	printf("Initialising Rendering InfoVis...\n");
 	
 //		testFunctions();
-    testSampling();
+//    testSampling();
 	
 	srand(time(NULL));
 	/* initialize GLUT, let it extract command-line
@@ -744,7 +762,7 @@ int main(int argc, char **argv)
 	
 	width = glutGet(GLUT_SCREEN_WIDTH);
 //	height = 0.75*glutGet(GLUT_SCREEN_HEIGHT);
-    height = .9 * glutGet(GLUT_SCREEN_HEIGHT);
+    height = .85 * glutGet(GLUT_SCREEN_HEIGHT);
 	
 	/* set the initial window size */
 	glutInitWindowSize(width, height);

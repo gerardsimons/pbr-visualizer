@@ -340,7 +340,37 @@ public:
 		}
 		return histograms;
 	}
-	//    void PrintUnfiltered();
+    HistogramSet<Ts...> CreateEmptyHistogramSet(int bins, const std::set<std::string>& tableNamesToUse) {
+        HistogramSet<Ts...> histograms;
+        for(auto table : tables) {
+            if(tableNamesToUse.find(table->name) != tableNamesToUse.end()) {
+                auto histogramset = table->CreateEmptyHistogramSet(bins);
+                //			histogramset.Print();
+                histograms.Join(histogramset);
+            }
+        }
+        return histograms;
+    }
+    void MarkTableAsStale(RIVTable<Ts...>* table) {
+        staleTables[table] = true;
+    }
+    void CopyFiltersTo(RIVDataSet<Ts...>* dataset) {
+        dataset->StartFiltering();
+        for(auto table : tables) {
+//            auto otherTable = dataset->GetTable(table->name);
+//            dataset->MarkTableAsStale(otherTable);
+            auto& allFilters = *table->GetAllFilters();
+            tuple_for_each(allFilters, [&](auto tFilters) {
+                for(auto filter : tFilters) {
+                    dataset->AddFilter(filter);
+                }
+            });
+//            otherTable->SetFilters();
+//            otherTable->SetRowFilters(*table->GetRowFilters()); //Does not make sense to copy row filters
+            
+        }
+        dataset->StopFiltering();
+    }
 };
 
 template<typename ...Ts>

@@ -37,7 +37,7 @@ protected:
 	bool drawHeatmapTree = false;
 	bool drawLightPaths = false;
 	
-	size_t selectedMesh = -1;
+//	size_t selectedMesh = -1;
 	
 	//Mesh model data
 	TriangleMeshGroup meshesOne;
@@ -79,9 +79,11 @@ protected:
 	
 	bool meshSelected = false;
 	riv::RowFilter* pathFilterOne = NULL;
-	ushort bounceCountOne = 1;
+	ushort bounceCountOne = 0;
+    ushort selectedObjectIdOne;
 	riv::RowFilter* pathFilterTwo = NULL;
-	ushort bounceCountTwo = 1;
+	ushort bounceCountTwo = 0;
+    ushort selectedObjectIdTwo;
 	
     //Buffered graphics point data, generated from the data, stored here for speed, TODO: Only store indices and a pointer to these records?
 	bool sizesAllTheSame; //Because sizes are often set to the same, we take advantage of this to get a big performance boost
@@ -94,7 +96,7 @@ protected:
 	//Determines if the objectId is currently selected
 	bool isSelectedObject(ushort objectId);
 	//Draw the mesh model loaded from the PBRT file
-	void drawMeshModel(TriangleMeshGroup* meshGroup, float* color);
+	void drawMeshModel(TriangleMeshGroup* meshGroup, float* color, ushort* selectedObjectId);
 	void drawPaths(float startSegment, float stopSegment);
     void drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths, float startSegment, float stopSegment); //Draw the paths between two consecutive bounces
 	//Draw octree representation of the generated points
@@ -106,7 +108,8 @@ protected:
 	void drawLeafNodes(OctreeNode* node,float maxEnergyOne, float maxEnergyTwo);
 	void createPaths();
 	
-	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,riv::RowFilter*& rowFilter, ushort* bounceCount);
+    void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort selectedObjectID, riv::RowFilter*& pathFilter);
+	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,riv::RowFilter*& rowFilter, ushort* bounceCount, ushort* selectedObjectId);
 	//Create graphics buffer from unfiltered data rows
 	std::vector<Path> createPaths(RIVDataSet<float,ushort>*, RIVColorProperty* colorProperty);
     static RIV3DView* instance;

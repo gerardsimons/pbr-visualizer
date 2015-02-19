@@ -283,20 +283,23 @@ void DataController::Reduce() {
 	const std::string taskName = "bootstrapping";
 	reporter::startTask(taskName);
 	if(firstTime) {
-
 //		printf("\n First time...\n");
 		
 		//Swap current with candidate
 		candidateData->SetDataListeners(currentData->GetDataListeners());
+        currentData->CopyFiltersTo(candidateData);
 		RIVDataSet<float,ushort>* temp = candidateData;
 		candidateData = currentData;
 		currentData = temp;
 		
+
 		firstTime = false;
 		
 		//Divide the max paths and accept_prob by two (the other half is reserved for the bootstrapped dataset)
 		acceptProbability /= 2.F;
 		maxPaths /= 2;
+        
+        currentData->NotifyDataListeners();
 	}
 	else {
 		printf("Score to beat = %f\n",bestBootstrapResult);
@@ -331,8 +334,8 @@ void DataController::Reduce() {
 	//Bootstrap set
 	RIVDataSet<float,ushort>* bestBootstrap = NULL;
 	
-	printf("\nTRUE HISTOGRAMS = \n");
-	trueDistributions.Print();
+//	printf("\nTRUE HISTOGRAMS = \n");
+//	trueDistributions.Print();
 	
 	for(int i = 0 ; i < bootstrapRepeat ; ++i) {
 		//			printf("Round #%d\n",i);
@@ -382,7 +385,7 @@ void DataController::Reduce() {
 	
 	if(newBootstrapFound) {
 		
-		//			printf("\n\n***** NEW BOOTSTRAP FOUND! ***** \n\n");
+					printf("\n\n***** NEW BOOTSTRAP FOUND! ***** \n\n");
 		
 		//						printf("BOOTSTRAP WITHOUT REFERENCES : ");
 		//						(bestBootstrap)->Print();
@@ -390,8 +393,8 @@ void DataController::Reduce() {
 		//			printf("\nTRUE HISTOGRAMS = \n");
 		//			trueDistributions.Print();
 		//
-		//			printf("\nBOOTSTRAP HISTOGRAMS = \n");
-		//			bootstrapHistograms.Print();
+//					printf("\nBOOTSTRAP HISTOGRAMS = \n");
+//					bootstrapHistograms.Print();
 		
 		bestBootstrap->SetDataListeners(currentData->GetDataListeners());
 		auto pathsTable = bestBootstrap->GetTable(PATHS_TABLE);
@@ -429,11 +432,13 @@ void DataController::Reduce() {
 		//			bestBootstrap->Print();
 		
 		//Delete the old renderer data and replace it with the bootstrap dataset,
+        currentData->CopyFiltersTo(bestBootstrap);
 		delete currentData;
 		currentData = bestBootstrap;
 		bestBootstrap = NULL;
-		
-        
+		 
+        resetPointers(candidateData);	//Reset the shortcut pointers to a new empty dataset
+        currentData->NotifyDataListeners();
 	}
 	else {
 		printf("\n Could not find a better bootstrap... \n");
@@ -442,14 +447,23 @@ void DataController::Reduce() {
 		//			candidateData->Print();
 	}
     
-    resetPointers(candidateData);	//Reset the shortcut pointers to a new empty dataset
-    trueDistributions = candidateData->CreateHistogramSet(bins,dataTables);
+
+
 	delete joinedData;
 	
-	currentData->NotifyDataListeners();
 	reporter::stop("bootstrapping");
 	
 }
 void DataController::SetAcceptProbability(float newProb) {
 	acceptProbability = newProb;
+}
+void DataController::Reset() {
+    printf("DataController was reset...\n");
+    trueDistributions = candidateData->CreateEmptyHistogramSet(bins,dataTables);
+    trueDistributions.Print();
+    currentData->ClearData();
+    candidateData->ClearData();
+    resetPointers(candidateData);
+    firstTime = true;
+    bestBootstrapResult = std::numeric_limits<float>::max();
 }

@@ -587,7 +587,7 @@ namespace embree
         Ref<ConstHandle<SwapChain> > frameBuffer = castHandle<ConstHandle<SwapChain> >(frameBuffer_i,"framebuffer");
         
         /* render the frame */
-        renderer->getInstance()->renderFrame(camera->getInstance(),scene->getInstance(),toneMapper->getInstance(),frameBuffer->getInstance(),accumulate,dataConnector);
+        renderer->getInstance()->renderFrame(camera->getInstance(),scene->getInstance(),toneMapper->getInstance(),frameBuffer->getInstance(),accumulate,dataConnector,pixelDistributions);
     }
 	
 	bool SingleRayDevice::rtPick(Device::RTCamera camera_i, float x, float y, Device::RTScene scene_i, float& px, float& py, float& pz)

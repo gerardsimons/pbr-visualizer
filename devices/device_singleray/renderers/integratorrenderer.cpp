@@ -1,4 +1,4 @@
-// ======================================================================== //
+  // ======================================================================== //
 // Copyright 2009-2013 Intel Corporation                                    //
 //                                                                          //
 // Licensed under the Apache License, Version 2.0 (the "License");          //
@@ -145,6 +145,8 @@ namespace embree
     {
         numTilesX = ((int)swapchain->getWidth() +TILE_SIZE-1)/TILE_SIZE;
         numTilesY = ((int)swapchain->getHeight()+TILE_SIZE-1)/TILE_SIZE;
+//        numTilesX = 1;
+//        numTilesY = 1;
         rcpWidth  = rcp(float(swapchain->getWidth()));
         rcpHeight = rcp(float(swapchain->getHeight()));
         this->framebuffer = swapchain->buffer();
@@ -227,6 +229,7 @@ namespace embree
 					if (x >= swapchain->getWidth()) continue;
 					
 					const int set = randomNumberGenerator.getInt(renderer->samplers->sampleSets);
+//                    printf("pixel x,y = %zu,%zu\n",x,y);
 					
 					Color L = zero;
 					size_t spp = renderer->samplers->samplesPerPixel;
@@ -250,7 +253,7 @@ namespace embree
 						
 
 					}
-					const Color L0 = swapchain->update(x, _y, L, spp, accumulate);
+                    const Color L0 = swapchain->update(x, _y, L, spp, accumulate);
 					const Color L1 = toneMapper->eval(L0,x,y,swapchain);
 					framebuffer->set(x, _y, L1);
 				}
@@ -270,6 +273,9 @@ namespace embree
     
     void IntegratorRenderer::RenderJob::renderTileForPixelDistribution(size_t threadIndex, size_t threadCount, size_t taskIndex, size_t taskCount, TaskScheduler::Event* event)
     {
+        
+        Histogram2D<float> testPixelDistro = Histogram2D<float>(0,1,pixelDistributions->NumberOfBins());
+        
         /*! create a new sampler */
         IntegratorState state;
         if (taskIndex == taskCount-1) t0 = getSeconds();
@@ -288,16 +294,33 @@ namespace embree
             
             for (size_t dy=0; dy<TILE_SIZE; dy++)
             {
-                size_t y = tile_y+dy;
-                if (y >= swapchain->getHeight()) continue;
                 
-                if (!swapchain->activeLine(y)) continue;
-                size_t _y = swapchain->raster2buffer(y);
+                
+//                size_t y = tile_y+dy;
+               
                 
                 for (size_t dx=0; dx<TILE_SIZE; dx++)
                 {
-                    size_t x = tile_x+dx;
-                    if (x >= swapchain->getWidth()) continue;
+                    
+                    std::pair<float,float> pixelSample = pixelDistributions->Sample2D();
+//                    printf("pixelSample = %f,%f\n",pixelSample.first,pixelSample.second);
+                    size_t y = pixelSample.second * swapchain->getHeight();
+                    
+//                    testPixelDistro.Add(pixelSample);
+                    
+                    if (y >= swapchain->getHeight()) {
+                        continue;
+                    }
+                    
+                    if (!swapchain->activeLine(y)) continue;
+                    size_t _y = swapchain->raster2buffer(y);
+                    
+//                    size_t x = tile_x+dx;
+                    size_t x = pixelSample.first * swapchain->getWidth();
+//                    printf("pixel x,y = %zu,%zu\n",x,y);
+                    if (x >= swapchain->getWidth()) {
+                        continue;
+                    }
                     
                     const int set = randomNumberGenerator.getInt(renderer->samplers->sampleSets);
                     
@@ -310,14 +333,18 @@ namespace embree
 //                        //                        const float fx = (float(x) + 0);
 //                        const float fy = (float(y) + sample.pixel.y)*rcpHeight;
                         
-                        std::pair<float,float> pixeLSample = pixelDistributions->Sample2D();
+
+                        const float fx = pixelSample.first;
+                        //                        const float fx = (float(x) + 0);
+                        const float fy = pixelSample.second;
                         
                         Vec2f lensSample = sample.getLens();
-                        Ray primary; camera->ray(Vec2f(pixeLSample.first,pixeLSample.second), lensSample, primary);
+                        Ray primary;
+                        camera->ray(Vec2f(fx,fy), lensSample, primary);
                         primary.time = sample.getTime();
                         
                         state.sample = &sample;
-                        state.pixel = Vec2f(pixeLSample.first,pixeLSample.second);
+                        state.pixel = Vec2f(pixelSample.first,pixelSample.second);
                         //						if(dataConnector != NULL) {
                         dataConnector->StartPath(state.pixel,lensSample,primary.time);
                         //						}
@@ -327,6 +354,7 @@ namespace embree
                     }
                     const Color L0 = swapchain->update(x, _y, L, spp, accumulate);
                     const Color L1 = toneMapper->eval(L0,x,y,swapchain);
+//                    const Color L1 = Color(0,1,0);
                     framebuffer->set(x, _y, L1);
                 }
             }
@@ -337,7 +365,8 @@ namespace embree
             /*! mark one more tile as finished */
             framebuffer->finishTile();
         }
-        
+//        printf("Test pixel distro = \n");
+//        testPixelDistro.Print();
         /*! we access the atomic ray counter only once per tile */
         atomicNumRays += state.numRays;
         atomicNumPaths += state.numPaths;

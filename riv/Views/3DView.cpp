@@ -166,7 +166,7 @@ void RIV3DView::drawLeafNodes(OctreeNode* node,float maxEnergyOne, float maxEner
         
         Point3D nodeCenter = node->Center();
         //		size_t depth = node->GetDepth();
-//        size_t pointsInNode = node->NumberOfPointsContained();
+        //        size_t pointsInNode = node->NumberOfPointsContained();
         //		float density = node->Density();
         
         //Determine color according to number of children
@@ -176,15 +176,15 @@ void RIV3DView::drawLeafNodes(OctreeNode* node,float maxEnergyOne, float maxEner
         float energyOne = node->ComputeEnergyOne();
         float energyTwo = node->ComputeEnergyTwo();
         
-//        printf("Max energy one = %f\n",maxEnergyOne);
-//        printf("Max energy two = %f\n",maxEnergyTwo);
-//        printf("energy one = %f\n",energyOne);
-//        printf("energy two = %f\n",energyTwo);
+        //        printf("Max energy one = %f\n",maxEnergyOne);
+        //        printf("Max energy two = %f\n",maxEnergyTwo);
+        //        printf("energy one = %f\n",energyOne);
+        //        printf("energy two = %f\n",energyTwo);
         
-//        float maxEnergy = std::max(energyOne,energyTwo);
+        //        float maxEnergy = std::max(energyOne,energyTwo);
         
         riv::Color cubeColor;
-//        cubeColor.A = 0;
+        //        cubeColor.A = 0;
         float r,b;
         float a = .5F;
         if(!membershipColoring) {
@@ -204,53 +204,53 @@ void RIV3DView::drawLeafNodes(OctreeNode* node,float maxEnergyOne, float maxEner
             //Should be blue-ish
             if(energyTwo > energyOne) {
                 
-//                printf("Energy two is higher : \n");
-//                b = energyTwo / maxEnergy;
-//                r = energyOne / maxEnergy;
+                //                printf("Energy two is higher : \n");
+                //                b = energyTwo / maxEnergy;
+                //                r = energyOne / maxEnergy;
                 
                 b = ((energyTwo - energyOne) / energyTwo + 1) / 2.F;
                 
-//                b = (energyTwo - energyOne) / energyTwo;
-//                b = 1;
+                //                b = (energyTwo - energyOne) / energyTwo;
+                //                b = 1;
                 r = 1 - b;
                 a = energyTwo / maxEnergyTwo;
                 
-//                printf("r,b,a = %f,%f,%f\n",r,b,a);
-            
-//                return;
-//                b = 1;
-//                r = 0;
+                //                printf("r,b,a = %f,%f,%f\n",r,b,a);
+                
+                //                return;
+                //                b = 1;
+                //                r = 0;
             }
             else if(energyOne > energyTwo) {
-//                b = energyTwo / maxEnergy;
-//                r = energyOne / maxEnergy;
+                //                b = energyTwo / maxEnergy;
+                //                r = energyOne / maxEnergy;
                 
-//                printf("Energy one is higher : \n");
+                //                printf("Energy one is higher : \n");
                 
-//                r = (energyOne - energyTwo) / energyOne;
+                //                r = (energyOne - energyTwo) / energyOne;
                 r = ((energyOne - energyTwo) / energyOne + 1) / 2.F;
-//                r = 1;
+                //                r = 1;
                 b = 1 - r;
                 a = energyOne / maxEnergyOne;
                 
-//                printf("r,b,a = %f,%f,%f\n",r,b,a);
+                //                printf("r,b,a = %f,%f,%f\n",r,b,a);
                 
-//                b = 0;
-//                r = 1;
+                //                b = 0;
+                //                r = 1;
             }
             else {
                 return;
             }
             
-//            float ratio = (energyTwo / maxEnergyTwo) - (energyOne / maxEnergyOne);
-//            printf("ratio = %f\n",ratio);
-//            cubeColor.R = r;
-//            cubeColor.G = 0;
-//            cubeColor.B = b;
-//            cubeColor.A = a;
+            //            float ratio = (energyTwo / maxEnergyTwo) - (energyOne / maxEnergyOne);
+            //            printf("ratio = %f\n",ratio);
+            //            cubeColor.R = r;
+            //            cubeColor.G = 0;
+            //            cubeColor.B = b;
+            //            cubeColor.A = a;
             
         }
-//        a = std::pow(a, .5);
+        //        a = std::pow(a, .5);
         glColor4f(r,0,b,a);
         //        if(ratio < 0) {
         //            ratio = -ratio;
@@ -272,31 +272,31 @@ void RIV3DView::drawLeafNodes(OctreeNode* node,float maxEnergyOne, float maxEner
         //		glColor3fv(color);
         
         
-    
-    
-    //		if(almost_equal(ratio,0.05,.1) || almost_equal(ratio,0,.001)) {
-    //		if(pointsInNode > 14) {
-    //			printf("Points in node = %zu\n",pointsInNode);
-    //			printf("Node density = %f\n",density);
-    //			printf("Max density = %f\n",maxDensity);
-    //			printf("MAX_NODE_CAPACITY = %zu\n",maxCap);
-    //			printf("Ratio = %f\n",ratio);
-    //			printf("Color = ");
-    //			printArray(color, 3);
-    //			printf("\n");
-    //		}
-    
-
-    
-    //		printf("child center = ");
-    //		std::cout << childCenter << "\n";
-    //		printf("child size = %f\n",child->GetSize());
-}
-else { //Recursively call the function on the children
-    for(int i = 0 ; i < node->NumberOfChildren() ; ++i) {
-        drawLeafNodes(node->GetChild(i),maxEnergyOne,maxEnergyTwo);
+        
+        
+        //		if(almost_equal(ratio,0.05,.1) || almost_equal(ratio,0,.001)) {
+        //		if(pointsInNode > 14) {
+        //			printf("Points in node = %zu\n",pointsInNode);
+        //			printf("Node density = %f\n",density);
+        //			printf("Max density = %f\n",maxDensity);
+        //			printf("MAX_NODE_CAPACITY = %zu\n",maxCap);
+        //			printf("Ratio = %f\n",ratio);
+        //			printf("Color = ");
+        //			printArray(color, 3);
+        //			printf("\n");
+        //		}
+        
+        
+        
+        //		printf("child center = ");
+        //		std::cout << childCenter << "\n";
+        //		printf("child size = %f\n",child->GetSize());
     }
-}
+    else { //Recursively call the function on the children
+        for(int i = 0 ; i < node->NumberOfChildren() ; ++i) {
+            drawLeafNodes(node->GetChild(i),maxEnergyOne,maxEnergyTwo);
+        }
+    }
 }
 
 size_t drawCounter_ = 1;
@@ -349,11 +349,11 @@ void RIV3DView::Draw() {
     if(drawDataSetOne) {
         //		float purpleColor[3] =  {.5f,.2f,1.0f};
         float redColor[] = {1,0,0};
-        drawMeshModel(&meshesOne,redColor);
+        drawMeshModel(&meshesOne,redColor,&selectedObjectIdOne);
     }
     if(drawDataSetTwo) {
         float blueColor[] = {0,0,1};
-        drawMeshModel(&meshesTwo,blueColor);
+        drawMeshModel(&meshesTwo,blueColor,&selectedObjectIdTwo);
     }
     if(drawIntersectionPoints)
         drawPoints();
@@ -411,26 +411,7 @@ void RIV3DView::Draw() {
     //	reporter::stop("3D Draw");
 }
 
-//bool RIV3DView::isSelectedObject(ushort objectId) {
-//	if(pathFilter) {
-//		std::vector<riv::Filter*> filters = pathFilter->GetFilters();
-//		for(riv::Filter* f : filters) { //One conjunctive filter at a time
-//			riv::ConjunctiveFilter* conjunctiveF = dynamic_cast<riv::ConjunctiveFilter*>(f);
-//			if(conjunctiveF) {
-//				for(riv::Filter* f2 : conjunctiveF->GetFilters()) {
-//					riv::DiscreteFilter* singleF = dynamic_cast<riv::DiscreteFilter*>(f2);
-//					if(singleF && singleF->GetAttribute() == "object ID" && almost_equal(singleF->GetValue(), (float)objectId, 0.001)) {
-//						return true;
-//					}
-//				}
-//			}
-//		}
-//	}
-
-//	return false;
-//}
-
-void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color) {
+void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color, ushort* selectedObjectId) {
     
     //	reporter::startTask("Draw mesh model");
     
@@ -445,7 +426,7 @@ void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color) {
     for(TriangleMeshFull* mesh : meshGroup->GetTriangleMeshes()) {
         vector_t<TriangleMeshFull::Triangle> triangles = mesh->triangles;
         vector_t<Vec3fa>& position = mesh->position;
-        if(meshindex == selectedMesh) {
+        if(selectedObjectId && meshindex == *selectedObjectId) {
             glColor3f(0.8, 0.8, 0.6);
         }
         else {
@@ -828,11 +809,17 @@ void RIV3DView::OnDataChanged(RIVDataSet<float,ushort>* source) {
     //Nothing
     if(source == *datasetOne) {
         colorPropertyOne->Reset(source);
-        createPaths(source, colorPropertyOne);
+        if(bounceCountOne > 0) {
+            filterPaths((*datasetOne), bounceCountOne, selectedObjectIdOne, pathFilterOne);
+        }
+        createPaths((*datasetOne), colorPropertyOne);
     }
     else if(source == *datasetTwo) {
         colorPropertyTwo->Reset(source);
-        createPaths(source, colorPropertyTwo);
+        if(bounceCountTwo > 0) {
+            filterPaths((*datasetTwo), bounceCountTwo, selectedObjectIdTwo, pathFilterTwo);
+        }
+        createPaths((*datasetTwo), colorPropertyTwo);
     }
     
     //	TODO: Paths and points are stale when this happens, but recreation is not necessary unless drawPoints or drawPaths is set to TRUE
@@ -858,7 +845,7 @@ void RIV3DView::MoveCamera(float x, float y, float z) {
     eye.y += y;
     eye.z += z;
     
-    printf("new eye (x,y,z) = (%f,%f,%f)\n",eye.x,eye.y,eye.z);
+    //    printf("new eye (x,y,z) = (%f,%f,%f)\n",eye.x,eye.y,eye.z);
     isDirty = true;
 }
 
@@ -876,14 +863,6 @@ Vec3fa RIV3DView::screenToWorldCoordinates(int screenX, int screenY, float zPlan
     double x,y,z;
     gluUnProject((GLdouble) screenX, (GLdouble) screenY, zPlane, mvmatrix, projmatrix, viewport, &x,&y,&z);
     
-    //    double distanceEyeToPlane = fabs(eye.z - zNear);
-    
-    //    printf("Distance near plane to camera = %f\n",distanceEyeToPlane);
-    //    if(distanceEyeToPlane == 0) {
-    //        distanceEyeToPlane = 1;
-    //    }
-    //    worldPos.x = x * distanceEyeToPlane;
-    //    worldPos.y = y * distanceEyeToPlane
     worldPos[0] = x;
     worldPos[1] = y;
     worldPos[2] = z;
@@ -891,75 +870,83 @@ Vec3fa RIV3DView::screenToWorldCoordinates(int screenX, int screenY, float zPlan
     
     return worldPos;
 }
+void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort selectedObjectID, riv::RowFilter*& pathFilter) {
+    dataset->StartFiltering();
+    
+    auto pathTable = dataset->GetTable(PATHS_TABLE);
+    auto reference = dynamic_cast<RIVMultiReference*>(pathTable->reference);
+    
+    auto intersectionsTable = dataset->GetTable(INTERSECTIONS_TABLE);
+    auto primitiveIds = intersectionsTable->GetRecord<ushort>(PRIMITIVE_ID);
+    auto bounceNrs = intersectionsTable->GetRecord<ushort>(BOUNCE_NR);
+    
+    printf("Path filtering bounce# = %d selectedObjectID = %d\n",bounceNr,selectedObjectID);
+    std::map<size_t,bool> filteredRows;
+//    printf("BEFORE PATH FILTERING : \n");
+//    intersectionsTable->Print();
+    
+    if(pathFilter != NULL) { //Add to the previous filter
+        //            dataset->ClearRowFilter(pathFilter);
+    }
+    
+    TableIterator* iterator = pathTable->GetIterator();
+    size_t row;
+    while(iterator->GetNext(row)) {
+        const auto& mapping = reference->GetReferenceRows(row);
+        ushort nrRows = mapping.second;
+        size_t* refRows = mapping.first;
+        bool filter = true;
+        for(ushort i = 0 ; i < nrRows ; ++i) {
+            size_t refRow = refRows[i];
+            if(primitiveIds->Value(refRow) == selectedObjectID && bounceNrs->Value(refRow) == bounceNr) {
+                
+                filter = false;
+                break;
+            }
+        }
+        
+        if(filter) {
+            filteredRows[row] = true;
+        }
+    }
+    
+
+    
+    pathFilter = new riv::RowFilter(PATHS_TABLE, filteredRows);
+    dataset->AddFilter(pathFilter);
+    
+    printf("\n");
+    dataset->StopFiltering();
+    
+//    printf("AFTER PATH FILTERING : \n");
+//    intersectionsTable->Print();
+    
+    
+}
 //Checks if a ray intersects with the mesh group and creates the path filters accordingly and applies them to the dataset
-bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes, riv::RowFilter*& pathFilter, ushort* bounceCount) {
+bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes, riv::RowFilter*& pathFilter, ushort* bounceCount, ushort* selectedObjectId) {
     ushort selectedObjectID;
     float distance;
-    
     bool intersects = meshes.Intersect(pickRay, selectedObjectID, Phit, distance);
     bool refilterNeeded = false;
     
-    if(intersects && selectRound < maxBounce) {
+    if(intersects && *bounceCount < maxBounce) {
+        ++(*bounceCount);
         printf("new selected object ID = %hu\n",selectedObjectID);
         meshSelected = true;
-        selectedMesh = selectedObjectID;
+        *selectedObjectId = selectedObjectID;
         refilterNeeded = true;
     }
     else {
-        selectedMesh = -1;
-        selectedObjectID = -1;
-        refilterNeeded = false;
+        //        *selectedObjectId = -1;
+        return false;
     }
     //
-    if(refilterNeeded) { //Create path filter
-        printf("Path creation filter");
-        dataset->StartFiltering();
-        
-        auto pathTable = dataset->GetTable(PATHS_TABLE);
-        auto reference = dynamic_cast<RIVMultiReference*>(pathTable->reference);
-        
-        auto intersectionsTable = dataset->GetTable(INTERSECTIONS_TABLE);
-        auto primitiveIds = intersectionsTable->GetRecord<ushort>(PRIMITIVE_ID);
-        auto bounceNrs = intersectionsTable->GetRecord<ushort>(BOUNCE_NR);
-        
-        std::map<size_t,bool> filteredRows;
-        
-        //		intersectionsTable->Print();
-        
-        if(pathFilter != NULL) { //Add to the previous filter
-//            dataset->ClearRowFilter(pathFilter);
-        }
-        
-        TableIterator* iterator = pathTable->GetIterator();
-        size_t row;
-        while(iterator->GetNext(row)) {
-            const auto& mapping = reference->GetReferenceRows(row);
-            ushort nrRows = mapping.second;
-            size_t* refRows = mapping.first;
-            bool filter = true;
-            for(ushort i = 0 ; i < nrRows ; ++i) {
-                size_t refRow = refRows[i];
-                if(primitiveIds->Value(refRow) == selectedObjectID && bounceNrs->Value(refRow) == *bounceCount) {
-                    
-                    filter = false;
-                    break;
-                }
-            }
-            
-            if(filter) {
-                filteredRows[row] = true;
-            }
-        }
-        (*bounceCount)++;
-        
-        pathFilter = new riv::RowFilter(PATHS_TABLE, filteredRows);
-        dataset->AddFilter(pathFilter);
-        
-        printf("\n");
-        dataset->StopFiltering();
-        
-        //		dataset->Print();
-    }
+    printf("Path creation filter");
+    filterPaths(dataset, *bounceCount, selectedObjectID, pathFilter);
+
+    //		dataset->Print();
+    
     return refilterNeeded;
 }
 
@@ -984,14 +971,14 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
             pickRay = Ray(origin, dir);
             
             if(!drawDataSetOne && drawDataSetTwo) {
-                pathCreation(*datasetTwo, meshesTwo,pathFilterTwo,&bounceCountTwo);
+                pathCreation(*datasetTwo, meshesTwo,pathFilterTwo,&bounceCountTwo,&selectedObjectIdTwo);
             }
             else if(drawDataSetOne && !drawDataSetTwo) {
-                pathCreation(*datasetOne, meshesOne,pathFilterOne, &bounceCountOne);
+                pathCreation(*datasetOne, meshesOne,pathFilterOne, &bounceCountOne,&selectedObjectIdOne);
             }
             else if(drawDataSetOne && drawDataSetTwo) {
-                pathCreation(*datasetOne, meshesOne,pathFilterOne, &bounceCountOne);
-                pathCreation(*datasetTwo, meshesTwo,pathFilterTwo,&bounceCountTwo);
+                pathCreation(*datasetOne, meshesOne,pathFilterOne, &bounceCountOne,&selectedObjectIdOne);
+                pathCreation(*datasetTwo, meshesTwo,pathFilterTwo, &bounceCountTwo,&selectedObjectIdTwo);
             }
             
             isDragging = true;
@@ -1000,7 +987,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
         }
         else if(button == GLUT_RIGHT_BUTTON) { //Clear paths created
             if(pathFilterOne) {
-                bounceCountOne = 1;
+                bounceCountOne = 0;
                 (*datasetOne)->StartFiltering();
                 (*datasetOne)->ClearRowFilter(pathFilterOne);
                 (*datasetOne)->StopFiltering();
@@ -1010,7 +997,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
                 createPaths(*datasetOne,colorPropertyOne);
             }
             if(pathFilterTwo) {
-                bounceCountTwo = 1;
+                bounceCountTwo = 0;
                 (*datasetTwo)->StartFiltering();
                 (*datasetTwo)->ClearRowFilter(pathFilterTwo);
                 (*datasetTwo)->StopFiltering();
