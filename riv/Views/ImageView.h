@@ -51,7 +51,7 @@ private:
     riv::RowFilter* pixelFilterOne = NULL;
     riv::RowFilter* pixelFilterTwo = NULL;
     Grid* paintGridOne;
-    Grid* paintGridTwo;
+    Grid* paintGridTwo = NULL;
     Grid* interactingGrid = NULL;
 	
 	void drawRenderedImage(EMBREERenderer* renderer,int startX, int startY, int width, int height);

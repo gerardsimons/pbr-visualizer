@@ -60,7 +60,7 @@ void ParallelCoordsView::createAxes() {
 	//    int y = startY + paddingY;
 	int y = 1.5F * paddingY; //View port takes care of startY
 	int axisHeight = height - 2.5F * paddingY;
-	
+    
 	std::vector<std::string> tablesToDisplay = {PATHS_TABLE,INTERSECTIONS_TABLE};
 	
 	for(const std::string& tableName : tablesToDisplay) {
@@ -134,7 +134,7 @@ void ParallelCoordsView::createAxes() {
 					auto histOne = distributionsOne->GetHistogram<Type>(name);
 					auto dataHistOne = Histogram<Type>(name,histOne->LowerBound(),histOne->UpperBound(),histOne->NumberOfBins());
 					
-					axisGroup.CreateAxis(record, x, y, axisHeight, axisWidth, minMax.first, minMax.second, name, divisionCount, dataHistOne);
+					axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, minMax.first, minMax.second, name, divisionCount, dataHistOne);
 					axisIndex++;
 				}
 			});
@@ -167,6 +167,9 @@ void ParallelCoordsView::drawAxes() {
 			for(auto axis : tAxes) {
 				
 				//				printf("Draw axis %s\n",axis->name.c_str());
+                if(axis->height < 100) {
+                    
+                }
 				
 				auto& histogramOne = axis->densityHistogramOne;
 				auto& histogramTwo = axis->densityHistogramTwo;
@@ -556,10 +559,10 @@ void ParallelCoordsView::Reshape(int width, int height) {
 	this->width = width;
 	this->height = height;
 	
-	//    printf("New width = %d\n",width);
-	//    printf("New height = %d\n",height);
+	    printf("New width = %d\n",width);
+	    printf("New height = %d\n",height);
 	
-	glViewport(0, 0, width, height);
+ 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluOrtho2D(0, width, 0, height);
@@ -1036,7 +1039,7 @@ void ParallelCoordsView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
 	if(dataset == *datasetOne) {
 		createAxisDensities(0, dataset);
 	}
-	else if(dataset == *datasetTwo) {
+	else if(datasetTwo && dataset == *datasetTwo) {
 		createAxisDensities(1, dataset);
 	}
 	Invalidate();

@@ -73,31 +73,35 @@ void RIVSliderView::Draw() {
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		
+        int effectiveHeight = top - bottom;
+        int barBottom = effectiveHeight / 2.F - .1F * effectiveHeight;
+        int barTop = effectiveHeight / 2.F + .1F * effectiveHeight;
 		//Draw the gradient bar
 		glBegin(GL_QUAD_STRIP);
+        
 		//Left
 		glColor3f(1,0,0);
-		glVertex2f(leftBound, bottom);
-		glVertex2f(leftBound, top);
+		glVertex2f(leftBound, barBottom);
+		glVertex2f(leftBound, barTop);
 		//Right
 		glColor3f(0,0,1);
-		glVertex2f(rightBound, bottom);
-		glVertex2f(rightBound, top);
+		glVertex2f(rightBound, barBottom);
+		glVertex2f(rightBound, barTop);
 		glEnd();
 		
 		//Draw pointers
 		glColor3f(0, 0, 0);
 		glBegin(GL_QUADS);
 		
-		glVertex2f(pointerOneX - pointerWidth / 2.F, top);
-		glVertex2f(pointerOneX - pointerWidth / 2.F, bottom);
-		glVertex2f(pointerOneX + pointerWidth / 2.F, bottom);
-		glVertex2f(pointerOneX + pointerWidth / 2.F, top);
+		glVertex2f(pointerOneX - pointerWidth / 2.F, barTop);
+		glVertex2f(pointerOneX - pointerWidth / 2.F, barBottom);
+		glVertex2f(pointerOneX + pointerWidth / 2.F, barBottom);
+		glVertex2f(pointerOneX + pointerWidth / 2.F, barTop);
 		
-		glVertex2f(pointerTwoX - pointerWidth / 2.F, top);
-		glVertex2f(pointerTwoX - pointerWidth / 2.F, bottom);
-		glVertex2f(pointerTwoX + pointerWidth / 2.F, bottom);
-		glVertex2f(pointerTwoX + pointerWidth / 2.F, top);
+		glVertex2f(pointerTwoX - pointerWidth / 2.F, barTop);
+		glVertex2f(pointerTwoX - pointerWidth / 2.F, barBottom);
+		glVertex2f(pointerTwoX + pointerWidth / 2.F, barBottom);
+		glVertex2f(pointerTwoX + pointerWidth / 2.F, barTop);
 		
 		glEnd();
 		
@@ -112,25 +116,25 @@ void RIVSliderView::Draw() {
 		float binWidth = barWidth / (float)histogramBins;
 		float maxBarHeight = top - bottom;
 		float x = leftBound;
-		glLineWidth(1);
-		glBegin(GL_LINES);
-		glColor3f(0, 0, 0);
-		
-		for(int i = 0 ; i < 2*histogramBins ; ++i) {
-			glVertex2f(x, bottom);
-			glVertex2f(x, top);
-			
-			x += binWidth;
-		}
-		glEnd();
-		x = leftBound;
-		for(int i = histogramBins ; i > 0 ; --i) {
-			glVertex2f(x, bottom);
-			glVertex2f(x, top);
-			
-			//			drawText(std::to_string(i/(float)histogramBins), x, top-10, black, .1F);
-			x += binWidth;
-		}
+//		glLineWidth(1);
+//		glBegin(GL_LINES);
+//		glColor3f(0, 0, 0);
+//		
+//		for(int i = 0 ; i < 2*histogramBins ; ++i) {
+//			glVertex2f(x, bottom);
+//			glVertex2f(x, top);
+//			
+//			x += binWidth;
+//		}
+//		glEnd();
+//		x = leftBound;
+//		for(int i = histogramBins ; i > 0 ; --i) {
+//			glVertex2f(x, bottom);
+//			glVertex2f(x, top);
+//			
+//			//			drawText(std::to_string(i/(float)histogramBins), x, top-10, black, .1F);
+//			x += binWidth;
+//		}
 		
 		x = leftBound;
 		int centerBar = height / 2.F;
@@ -139,24 +143,24 @@ void RIVSliderView::Draw() {
 		//		membershipHistogramOne.Print();
 		
 		//TODO: Pray to god histogramBins is divisble by 2?
-		for(int i = 0 ; i < histogramBins / 2 ; ++i) { //Draw them backwards as the most unique should be to the left
+		for(int i = 0 ; i < histogramBins ; ++i) { //Draw them backwards as the most unique should be to the left
 			float histValue = membershipHistogramOne.NormalizedValue(i);
 			float barHeight = histValue * maxBarHeight;
 			
-			glColor3f(1, 0, 0);
-			glRectf(x, bottom, x+binWidth, bottom + barHeight);
+			glColor3f( 1, 0, 0);
+			glRectf(x, barTop, x+binWidth, barTop + barHeight);
 			
 			std::string nrMembers = std::to_string(rowBinMembershipsOne[i].size());
-			drawText(nrMembers, x + binWidth / 2.F, centerBar, .07F);
+//			drawText(nrMembers, x + binWidth / 2.F, centerBar, .07F);
 			
 			x += binWidth;
 		}
-		x = barWidth / 2.F;
+		x = leftBound;
 		
 		//				printf("RIGHT HISTOGRAM BARS DRAWING : \n\n");
 		//				membershipHistogramTwo.Print();
 		
-		for(int i = histogramBins / 2 ; i < histogramBins ; ++i) { //Draw them backwards as the most unique should be to the left
+		for(int i = 0 ; i < histogramBins ; ++i) { //Draw them backwards as the most unique should be to the left
 			std::string nrMembers = std::to_string(rowBinMembershipsTwo[i].size());
 			//			nrMembers = std::to_string(i);
 			
@@ -165,20 +169,20 @@ void RIVSliderView::Draw() {
 			//						printf("bar height (i = %d) = %f\n",i,barHeight);
 			//					printf("glRectf(%f,%f,%f,%f)\n",x,bottom,x+binWidth,bottom+barHeight);
 			glColor3f(0, 0, 1);
-			glRectf(x, bottom, x+binWidth, bottom + barHeight);
+			glRectf(x, barBottom, x+binWidth, barBottom - barHeight);
 			
-			drawText(nrMembers, x + binWidth / 2.F, centerBar, .07F);
+//			drawText(nrMembers, x + binWidth / 2.F, centerBar, .07F);
 			x += binWidth;
 		}
 		
-		glColor3f(0, 0, 0);
-		glLineWidth(2);
-		glBegin(GL_LINES);
-		glVertex2f(leftBound, bottom);
-		glVertex2f(rightBound, bottom);
-		glVertex2f(leftBound, top - 1);
-		glVertex2f(rightBound, top - 1);
-		glEnd();
+//		glColor3f(0, 0, 0);
+//		glLineWidth(2);
+//		glBegin(GL_LINES);
+//		glVertex2f(leftBound, bottom);
+//		glVertex2f(rightBound, bottom);
+//		glVertex2f(leftBound, top - 1);
+//		glVertex2f(rightBound, top - 1);
+//		glEnd();
 		
 		glFlush();
 		glutSwapBuffers();
@@ -587,7 +591,7 @@ void RIVSliderView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 	else {
 		printf("UNKNOWN DATASET\n");
 	}
-	
+    filterDataSets();
 	redisplayWindow();
 	
 }

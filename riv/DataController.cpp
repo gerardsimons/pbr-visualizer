@@ -12,9 +12,8 @@
 #include <set>
 #include <algorithm>
 
-DataController::DataController(const ushort renderers, const size_t maxPaths, const size_t bootstrapRepeat) : maxPaths(maxPaths), bootstrapRepeat(bootstrapRepeat) {
-	
-	createDataStructures();
+DataController::DataController(const ushort renderers, const size_t maxPaths, const size_t bootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives) : maxPaths(maxPaths), bootstrapRepeat(bootstrapRepeat) {
+	createDataStructures(xBounds,yBounds,zBounds,nrPrimitives);
 }
 
 RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* dataset,const size_t N) {
@@ -92,7 +91,7 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 	return bootstrap;
 }
 
-void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
+void DataController::initDataSet(RIVDataSet<float, ushort> *dataset,const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, ushort nrPrimitives) {
 	
 	RIVTable<float,ushort>* pathTable = dataset->CreateTable(PATHS_TABLE);
 	
@@ -110,9 +109,9 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
 	
 	//TODO: Determine this by reading from the renderer settings
 	isectsTable->CreateRecord<ushort>(BOUNCE_NR,1,5,true);
-	isectsTable->CreateRecord<float>(POS_X,0,550,true);
-	isectsTable->CreateRecord<float>(POS_Y,0,550,true);
-	isectsTable->CreateRecord<float>(POS_Z,0,550,true);
+	isectsTable->CreateRecord<float>(POS_X,xBounds[0],xBounds[1],true);
+	isectsTable->CreateRecord<float>(POS_Y,yBounds[0],yBounds[1],true);
+	isectsTable->CreateRecord<float>(POS_Z,zBounds[0],zBounds[1],true);
 	//	isectsTable->CreateRecord<float>(DIR_X,0,1,true);
 	//	isectsTable->CreateRecord<float>(DIR_Y,0,1,true);
 	//	isectsTable->CreateRecord<float>(DIR_Z,0,1,true);
@@ -120,7 +119,7 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset) {
 	isectsTable->CreateRecord<float>(INTERSECTION_R,0,1);
 	isectsTable->CreateRecord<float>(INTERSECTION_G,0,1);
 	isectsTable->CreateRecord<float>(INTERSECTION_B,0,1);
-	isectsTable->CreateRecord<ushort>(PRIMITIVE_ID,0,10,true);
+	isectsTable->CreateRecord<ushort>(PRIMITIVE_ID,0,nrPrimitives,true);
 	//	shapeIds = isectsTable->CreateShortRecord("shape ID");
 	//	interactionTypes = isectsTable->CreateShortRecord("interaction");
 	//	lightIds = isectsTable->CreateShortRecord("light ID");
@@ -139,15 +138,15 @@ void DataController::AddMembershipDataStructures(RIVDataSet<float,ushort>* datas
 	isectMembershipOneTable->CreateRecord<float>(MEMBERSHIP);
 }
 
-void DataController::createDataStructures() {
+void DataController::createDataStructures(const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, ushort nrPrimitives) {
 	
 	currentData = new RIVDataSet<float,ushort>(DATASET_ONE);
 	
 	candidateData = new RIVDataSet<float,ushort>(DATASET_ONE);
 	
 	//Create the records and such for the datasets
-	initDataSet(currentData);
-	initDataSet(candidateData);
+	initDataSet(currentData,xBounds,yBounds,zBounds,nrPrimitives);
+	initDataSet(candidateData,xBounds,yBounds,zBounds,nrPrimitives);
 	
 	trueDistributions = currentData->CreateHistogramSet(bins,dataTables);
 	

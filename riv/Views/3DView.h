@@ -24,8 +24,9 @@
 class RIV3DView : public RIVDataView, public RIVDataSetListener {
 protected:
 
-    float cameraPosition[3] = {278, 273, -500}; //The original
-    Point3D eye;
+    Vector3f cameraPosition;
+    Vector3f eye;
+    
     bool isDirty = true;
 	
 	float scale;
@@ -36,7 +37,7 @@ protected:
 	//Whether the generated octree should be drawn (if any is generated)
 	bool drawHeatmapTree = false;
 	bool drawLightPaths = false;
-	
+    bool showMeshes = true;
 //	size_t selectedMesh = -1;
 	
 	//Mesh model data
@@ -66,7 +67,6 @@ protected:
     //Path drawing variables
     int maxBounce = 5; //TODO: Deduce this value from the bounce record
 	int selectRound = 1;
-    
     const float segmentWidth = .05F; // a tenth of the total path length
     float segmentStart = 0;
     float segmentStop = segmentWidth;
@@ -85,11 +85,7 @@ protected:
 	ushort bounceCountTwo = 0;
     ushort selectedObjectIdTwo;
 	
-    //Buffered graphics point data, generated from the data, stored here for speed, TODO: Only store indices and a pointer to these records?
-	bool sizesAllTheSame; //Because sizes are often set to the same, we take advantage of this to get a big performance boost
-	//Indices of the points to draw
-//	std::vector<Path> paths;
-	bool pathsCreated = false;
+    bool pathsCreated = false;
 
 	//Generate a octree from the unfiltered intersection points
 	void generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize);
@@ -114,17 +110,19 @@ protected:
 	std::vector<Path> createPaths(RIVDataSet<float,ushort>*, RIVColorProperty* colorProperty);
     static RIV3DView* instance;
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
+    void redisplayWindow();
 public:
 	//Single renderer constructor
-    RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,RIVColorProperty* colorProperty,RIVSizeProperty*);
+    RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,const TriangleMeshGroup& sceneDataOne, RIVColorProperty* colorProperty,RIVSizeProperty*);
 	//Dual renderer constructor
-	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo,RIVColorProperty* colorPropertyOne,RIVColorProperty* colorPropertyTwo, RIVSizeProperty* sizeProperty);
+	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, RIVColorProperty* colorPropertyOne,RIVColorProperty* colorPropertyTwo, RIVSizeProperty* sizeProperty);
 	
 	//Extract data about the scene from the embree renderer object
 	void GetSceneData(EMBREERenderer* renderer, TriangleMeshGroup* target);
 	
 	static int windowHandle;
-	
+    
+    void ToggleHideMesh();
     void Reshape(int newWidth, int newHeight);
     void Draw();
     bool HandleMouse(int button, int state, int x, int y);

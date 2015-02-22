@@ -20,6 +20,8 @@
 #include <map>
 #include <iostream>
 
+#define USE_IMAGEMAGICK
+
 namespace embree
 {
   /*! loads an image from a file with auto-detection of format */

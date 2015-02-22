@@ -32,6 +32,8 @@
 #include <GL/glut.h>
 #endif
 
+#define USE_IMAGEMAGICK
+
 /* window width and height */
 //int width = 1650
 //int height = 1000;
@@ -79,12 +81,11 @@ RIVDataSet<float,ushort>** datasetTwo = NULL;
 /* The dataset, views have pointers to this in order to draw their views consistently */
 DataController* dataControllerOne;
 DataController* dataControllerTwo = NULL; //It is possible this one will not be used
-
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
 const int maxPaths = 10000;
-const int bootstrapRepeat = 10;
+const int bootstrapRepeat = 1;
 const int sliderViewHeight = 50;
 
 void TogglePause();
@@ -255,7 +256,7 @@ void keys(int keyCode, int x, int y) {
 	char key = (char)keyCode;
 	printf("'%c' key pressed.\n",key);
 	
-	float camSpeed = .1F;
+	float camSpeed = .05F;
 	switch(keyCode) {
 		case 27: //ESC key
 			printf("Clear filters\n");
@@ -298,6 +299,8 @@ void keys(int keyCode, int x, int y) {
 			parallelCoordsView->ToggleDrawDataSetTwo();
 			sceneView->ToggleDrawDataSetTwo();
 			break;
+        case 97: // 'a' key
+            sceneView->MoveCamera(camSpeed, 0, 0);
 		case 98: // 'b' key
 			glutSwapBuffers();
 			printf("Manual swap buffers\n");
@@ -324,6 +327,9 @@ void keys(int keyCode, int x, int y) {
 			break;
         case 106: // the 'j' key, cause the h is taken for the other heatmap
             imageView->ToggleShowHeatmap();
+            break;
+        case 109:
+            sceneView->ToggleHideMesh();
             break;
 		case 112: //The 'p' key, toggle drawing paths in 3D view
 			sceneView->ToggleDrawPaths();
@@ -476,7 +482,7 @@ void TogglePause() {
         if((*datasetOne)->IsFiltered()) {
             dataControllerOne->Reset();
         }
-        if((*datasetTwo)->IsFiltered()) {
+        if(datasetTwo && (*datasetTwo)->IsFiltered()) {
             dataControllerTwo->Reset();
         }
         
@@ -564,37 +570,17 @@ void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
 //	}
 	//	dataControllerTwo->Unpause();
 }
-/* Setup the data controller that manages the rendering data
- * The data controllers start out with 2 times the given max_paths to make sure there is enough to sample from,
- * after which a bootstrap is created and only half of the total data is kept, the other half is used to cache
- * new data. After each frame the new (or candidate) data is joined with the current data and bootstrapping occurs again.
- * If a new and better bootstrapping sample is found the current data is replaced with this one and the candidate data is cleared.
- */
-void setupDataController(const int argc, char** argv) {
-	//Create the EMBREE renderer
-	dataControllerOne = new DataController(argc - 1,2 * maxPaths, bootstrapRepeat);
-	datasetOne = dataControllerOne->GetDataSet();
-	if(argc == 2) { //Just one renderer
-		DataConnector* connector = new DataConnector(processRendererOne,rendererOneFinishedFrame);
-		rendererOne = new EMBREERenderer(connector, std::string(argv[1]));
-		dataControllerOne->SetAcceptProbability(2.F * maxPaths / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel()));
-		printf("1 renderer set up.\n");
-	}
-	else if(argc == 3) {
-		dataControllerTwo = new DataController(argc - 1, 2*maxPaths,bootstrapRepeat);
-		DataConnector* dcOne = new DataConnector(processRendererOne,rendererOneFinishedFrame);
-		DataConnector* dcTwo = new DataConnector(processRendererTwo,rendererTwoFinishedFrame);
-		rendererOne = new EMBREERenderer(dcOne, std::string(argv[1]));
-		rendererTwo = new EMBREERenderer(dcTwo, std::string(argv[2]));
-		datasetTwo = dataControllerTwo->GetDataSet();
-		float acceptProb = 2.F * maxPaths / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel());
-		dataControllerOne->SetAcceptProbability(acceptProb);
-		dataControllerTwo->SetAcceptProbability(acceptProb);
-		printf("2 renderers set up.\n");
-	}
-	else {
-		throw std::runtime_error("Unsupported number of arguments (1 or 2 expected)");
-	}
+TriangleMeshGroup getSceneData(EMBREERenderer* renderer) {
+    //Get the shapes and see what are trianglemeshes that we can draw
+    std::vector<Shape*>* shapes = renderer->GetShapes();
+    std::vector<TriangleMeshFull*> embreeMeshes;
+    for(size_t i = 0 ; i < shapes->size() ; ++i) {
+        TriangleMeshFull* t = dynamic_cast<TriangleMeshFull*>(shapes->at(i));
+        if(t) {
+            embreeMeshes.push_back(t);
+        }
+    }
+    return TriangleMeshGroup(embreeMeshes);
 }
 
 //Helper functions to create color property for a given dataset
@@ -620,8 +606,39 @@ RIVColorRGBProperty<float>* createRayColorProperty(RIVDataSet<float,ushort>* dat
 	return new RIVColorRGBProperty<float>(intersectionsTable,isectRRecord,isectGRecord,isectBrRecord);
 }
 
-void createViews() {
+void setup(int argc, char** argv) {
 	
+    //Create the EMBREE renderer
+    DataConnector* dcOne = new DataConnector(processRendererOne,rendererOneFinishedFrame);
+    TriangleMeshGroup sceneDataTwo;
+    TriangleMeshGroup sceneDataOne;
+    if(argc == 2) { //Just one renderer
+        DataConnector* connector = new DataConnector(processRendererOne,rendererOneFinishedFrame);
+        rendererOne = new EMBREERenderer(connector, std::string(argv[1]));
+        sceneDataOne = getSceneData(rendererOne);
+        dataControllerOne = new DataController(argc - 1,2 * maxPaths, bootstrapRepeat,sceneDataOne.xBounds,sceneDataOne.yBounds,sceneDataOne.zBounds,sceneDataOne.NumberOfMeshes());
+        dataControllerOne->SetAcceptProbability(2.F * maxPaths / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel()));
+        datasetOne = dataControllerOne->GetDataSet();
+        printf("1 renderer set up.\n");
+    }
+    else if(argc == 3) {
+        DataConnector* dcTwo = new DataConnector(processRendererTwo,rendererTwoFinishedFrame);
+        rendererOne = new EMBREERenderer(dcOne, std::string(argv[1]));
+        rendererTwo = new EMBREERenderer(dcTwo, std::string(argv[2]));
+        sceneDataTwo = getSceneData(rendererTwo);
+        dataControllerOne = new DataController(argc - 1,2 * maxPaths, bootstrapRepeat,sceneDataOne.xBounds,sceneDataOne.yBounds,sceneDataOne.zBounds,sceneDataOne.NumberOfMeshes());
+        dataControllerTwo = new DataController(argc - 1, 2*maxPaths,bootstrapRepeat,sceneDataTwo.xBounds,sceneDataTwo.yBounds,sceneDataTwo.zBounds,sceneDataTwo.NumberOfMeshes());
+        datasetOne = dataControllerOne->GetDataSet();
+        datasetTwo = dataControllerTwo->GetDataSet();
+        float acceptProb = 2.F * maxPaths / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel());
+        dataControllerOne->SetAcceptProbability(acceptProb);
+        dataControllerTwo->SetAcceptProbability(acceptProb);
+        printf("2 renderers set up.\n");
+    }
+    else {
+        throw std::runtime_error("Unsupported number of arguments (1 or 2 expected)");
+    }
+    
 	std::vector<riv::Color> colors;
 	colors.push_back(colors::BLUE);
 	colors.push_back(colors::RED);
@@ -634,6 +651,10 @@ void createViews() {
 	parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding - sliderViewHeight / 2.F);
 	ParallelCoordsView::windowHandle = parallelViewWindow;
 	glutSetWindow(parallelViewWindow);
+    glEnable( GL_LINE_SMOOTH );
+    glEnable( GL_POLYGON_SMOOTH );
+    glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
+    glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
 	glutDisplayFunc(ParallelCoordsView::DrawInstance);
 	//	glutDisplayFunc(doNothing);
 	glutReshapeFunc(ParallelCoordsView::ReshapeInstance);
@@ -658,23 +679,21 @@ void createViews() {
 	glutMotionFunc(RIVImageView::Motion);
 	glutSpecialFunc(keys);
 	
+    
 	int sceneViewPosX = padding * 3 + imageViewWidth;
 	sceneViewWindow = glutCreateSubWindow(mainWindow, sceneViewPosX, bottomHalfY, squareSize, squareSize);
 	RIV3DView::windowHandle = sceneViewWindow;
 	glutSetWindow(sceneViewWindow);
+    glEnable( GL_LINE_SMOOTH );
+//    glEnable( GL_POLYGON_SMOOTH );
+    glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
+//    glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
 	glutDisplayFunc(RIV3DView::DrawInstance);
 	//	glutDisplayFunc(doNothing);
 	glutReshapeFunc(RIV3DView::ReshapeInstance);
 	glutMouseFunc(RIV3DView::Mouse);
 	glutMotionFunc(RIV3DView::Motion);
 	glutSpecialFunc(keys);
-	
-	//        heatMapViewWindow = glutCreateSubWindow(mainWindow, padding * 5 + squareSize * 2, bottomHalfY, squareSize, squareSize);
-	//        glutSetWindow(heatMapViewWindow);
-	//        glutReshapeFunc(RIVHeatMapView::ReshapeInstance);
-	//        glutDisplayFunc(RIVHeatMapView::DrawInstance);
-	//        glutMouseFunc(RIVHeatMapView::Mouse);
-	//        glutMotionFunc(RIVHeatMapView::Motion);
 	
 	sliderViewWindow = glutCreateSubWindow(mainWindow, padding, height/2.F-2*padding, width - 2* padding, sliderViewHeight);
 	RIVSliderView::windowHandle = sliderViewWindow;
@@ -702,8 +721,7 @@ void createViews() {
 	auto pathColorOne = createPathColorProperty(*datasetOne);
 	auto rayColorOne = createRayColorProperty(*datasetOne);
     RIVColorProperty* colorOne = new RIVFixedColorProperty(1, 0, 0);
-//    
-    
+//
 	if(datasetTwo) {
 		
         RIVColorProperty* colorTwo = new RIVFixedColorProperty(0, 0, 1);
@@ -718,7 +736,7 @@ void createViews() {
 		
 		//		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
 		
-		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,rayColorOne,rayColorTwo,sizeProperty);
+		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, rayColorOne,rayColorTwo,sizeProperty);
 //		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,colorOne,colorTwo,sizeProperty);
 		imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo);
 		sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),redBlue);
@@ -733,7 +751,7 @@ void createViews() {
 	}
 	else {
 		parallelCoordsView = new ParallelCoordsView(datasetOne,dataControllerOne->GetTrueDistributions(),colorOne,colorOne,sliderView);
-		sceneView = new RIV3DView(datasetOne,rendererOne,rayColorOne,sizeProperty);
+		sceneView = new RIV3DView(datasetOne,rendererOne,sceneDataOne,rayColorOne,sizeProperty);
 		imageView = new RIVImageView(datasetOne,rendererOne);
 	}
 	//        heatMapView = new RIVHeatMapView(&dataset);
@@ -772,6 +790,11 @@ int main(int argc, char **argv)
 	
 	/* create the window and store the handle to it */
 	mainWindow = glutCreateWindow("Rendering InfoVis" /* title */ );
+    
+    glEnable( GL_LINE_SMOOTH );
+    glEnable( GL_POLYGON_SMOOTH );
+    glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
+    glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
 	
 	glutIdleFunc(idle);
 	
@@ -787,9 +810,7 @@ int main(int argc, char **argv)
 	
 	glutSpecialFunc(keys);
 	
-	setupDataController(argc, argv);
-	
-	createViews();
+    setup(argc,argv);
 	
 	/* Transparency stuff */
 	glEnable (GL_BLEND);

@@ -28,7 +28,7 @@
 RIV3DView* RIV3DView::instance = NULL;
 int RIV3DView::windowHandle = -1;
 
-RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer, RIVColorProperty* colorPropertyOne, RIVSizeProperty* sizeProperty) : RIVDataView(dataset),rendererOne(renderer), sizeProperty(sizeProperty), colorPropertyOne(colorPropertyOne) {
+RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer, const TriangleMeshGroup& sceneDataOne, RIVColorProperty* colorPropertyOne, RIVSizeProperty* sizeProperty) : RIVDataView(dataset),rendererOne(renderer), sizeProperty(sizeProperty), colorPropertyOne(colorPropertyOne) {
     
     if(instance != NULL) {
         throw std::runtime_error("Only 1 instance of RIV3DView allowed.");
@@ -36,15 +36,20 @@ RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer
     instance = this;
     identifier = "3DView";
     
-    GetSceneData(rendererOne, &meshesOne);
+    this->meshesOne = sceneDataOne;
     
+//    scale = 5 * meshesOne.GetScale();
     scale = meshesOne.GetScale();
-    center = meshesTwo.GetCenter();
+    center = meshesOne.GetCenter();
+    drawDataSetTwo = false;
+    
+    cameraPosition = renderer->GetCameraPosition();
+    eye = cameraPosition;
     
     ResetGraphics();
 };
 
-RIV3DView::RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, RIVColorProperty* colorPropertyOne, RIVColorProperty* colorPropertyTwo, RIVSizeProperty* sizeProperty) :
+RIV3DView::RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, RIVColorProperty* colorPropertyOne, RIVColorProperty* colorPropertyTwo, RIVSizeProperty* sizeProperty) :
 RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(rendererTwo), sizeProperty(sizeProperty), colorPropertyOne(colorPropertyOne), colorPropertyTwo(colorPropertyTwo) {
     
     if(instance != NULL) {
@@ -52,14 +57,14 @@ RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(render
     }
     instance = this;
     identifier = "3DView";
-    
-    GetSceneData(rendererOne, &meshesOne);
-    GetSceneData(rendererTwo, &meshesTwo);
+
+    this->meshesOne = sceneDataOne;
+    this->meshesTwo = sceneDataTwo;
     
     Vec3f modelCenterOne = meshesOne.GetCenter();
     
     scale = meshesOne.GetScale();
-    center = meshesTwo.GetCenter();
+    center = meshesOne.GetCenter();
     
     if(datasetTwo && drawDataSetTwo) {
         float scaleTwo = meshesTwo.GetScale();
@@ -73,22 +78,12 @@ RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(render
             center = modelCenterTwo;
         }
     }
-    
+    cameraPosition = rendererOne->GetCameraPosition();
+    eye = cameraPosition;
     ResetGraphics();
 };
 
-void RIV3DView::GetSceneData(EMBREERenderer* renderer, TriangleMeshGroup* target) {
-    //Get the shapes and see what are trianglemeshes that we can draw
-    std::vector<Shape*>* shapes = renderer->GetShapes();
-    std::vector<TriangleMeshFull*> embreeMeshes;
-    for(size_t i = 0 ; i < shapes->size() ; ++i) {
-        TriangleMeshFull* t = dynamic_cast<TriangleMeshFull*>(shapes->at(i));
-        if(t) {
-            embreeMeshes.push_back(t);
-        }
-    }
-    *target = TriangleMeshGroup(embreeMeshes);
-}
+
 void RIV3DView::CyclePathSegment(bool direction) {
     float delta = 1.F / maxBounce;
     direction ? MovePathSegment(delta) : MovePathSegment(-delta);
@@ -96,21 +91,22 @@ void RIV3DView::CyclePathSegment(bool direction) {
 
 void RIV3DView::Reshape(int newWidth, int newHeight) {
     width = newWidth;
-    this->height = newHeight;
+    height = newHeight;
     
-    eye.x = 0;
-    eye.y = 0;
-    eye.z = 2.5;
+//    eye = cameraPosition;
+//    eye[0] = 0;
+//    eye[1] = 0.8;
+//    eye[2] = 3;
     
-    tbInitTransform();
-    tbHelp();
+//    tbInitTransform();
+//    tbHelp();
     
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(55, (double)width/height, 1, 10);
+    gluPerspective(55, (double)width/height, .1, 10);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
@@ -121,8 +117,9 @@ void RIV3DView::ToggleDrawIntersectionPoints() {
         createPaths();
     }
     else if(!drawIntersectionPoints && !drawLightPaths) {
-        //		pathsCreated = false;
-        //		paths.clear();
+        pathsCreated = false;
+        pathsOne.clear();
+        pathsTwo.clear();
     }
     printf("drawIntersectionPoints is now ");
     if(drawIntersectionPoints) printf("ON\n");
@@ -262,35 +259,6 @@ void RIV3DView::drawLeafNodes(OctreeNode* node,float maxEnergyOne, float maxEner
         glPopMatrix();
         
         ++nodesDrawn;
-        
-        
-        //		float maxDensity = heatmap->MaxDensity();
-        //		float ratio = density / maxDensity;
-        //		ratio = 1.F - ratio;
-        //		float ratio = (pointsInNode) / ((float)heatmap->GetConfiguration()->MaxNodeCapacity());
-        
-        //		glColor3fv(color);
-        
-        
-        
-        
-        //		if(almost_equal(ratio,0.05,.1) || almost_equal(ratio,0,.001)) {
-        //		if(pointsInNode > 14) {
-        //			printf("Points in node = %zu\n",pointsInNode);
-        //			printf("Node density = %f\n",density);
-        //			printf("Max density = %f\n",maxDensity);
-        //			printf("MAX_NODE_CAPACITY = %zu\n",maxCap);
-        //			printf("Ratio = %f\n",ratio);
-        //			printf("Color = ");
-        //			printArray(color, 3);
-        //			printf("\n");
-        //		}
-        
-        
-        
-        //		printf("child center = ");
-        //		std::cout << childCenter << "\n";
-        //		printf("child size = %f\n",child->GetSize());
     }
     else { //Recursively call the function on the children
         for(int i = 0 ; i < node->NumberOfChildren() ; ++i) {
@@ -317,43 +285,38 @@ void RIV3DView::ToggleDrawDataSetTwo() {
 //}
 
 void RIV3DView::Draw() {
-    //    printf("3DView Draw #%zu\n",++drawCounter_);
+
     
     //	reporter::startTask("3D Draw");
     
     glEnable(GL_DEPTH_TEST);
     glClearColor(1.0, 1.0, 1.0, 0.0); //White
-    //	glClearColor(0.0, 0.0, 0.0, 0.0); //Black
-    //	glClearColor(0.2F,1,1,0);
     glClear( GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_BLEND);
+    
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     //Somehow it is mirrored so lets mirror it again to match the image
-    glScalef(-1,1,1);
-    glTranslatef(-eye.x,-eye.y,-eye.z);
-    //    glScalef(modelData.GetScale(), modelData.GetScale(), modelData.GetScale());
     
     //    printf("eye (x,y,z) * modelScale = (%f,%f,%f)\n",-eye.x * modelData.GetScale(),-eye.y * modelData.GetScale(),-eye.z * modelData.GetScale());
     
-    tbVisuTransform();
-    
-    drawCoordSystem();
-    
     glPushMatrix();
+//    glScalef(-scale,scale,scale);
+    tbVisuTransform();
+//    glTranslatef(-center[0], -center[1], -center[2]);
+    glTranslatef(-eye.x,-eye.y,-eye.z);
+//    drawCoordSystem();
     
-    glScalef(scale,scale,scale);
-    
-    glTranslatef(-center[0], -center[1], -center[2]);
-    
-    if(drawDataSetOne) {
-        //		float purpleColor[3] =  {.5f,.2f,1.0f};
-        float redColor[] = {1,0,0};
-        drawMeshModel(&meshesOne,redColor,&selectedObjectIdOne);
-    }
-    if(drawDataSetTwo) {
-        float blueColor[] = {0,0,1};
-        drawMeshModel(&meshesTwo,blueColor,&selectedObjectIdTwo);
+    if(showMeshes) {
+        if(drawDataSetOne) {
+            //		float purpleColor[3] =  {.5f,.2f,1.0f};
+            float redColor[] = {1,0,0};
+            drawMeshModel(&meshesOne,redColor,&selectedObjectIdOne);
+        }
+        if(drawDataSetTwo) {
+            float blueColor[] = {0,0,1};
+            drawMeshModel(&meshesTwo,blueColor,&selectedObjectIdTwo);
+        }
     }
     if(drawIntersectionPoints)
         drawPoints();
@@ -361,8 +324,8 @@ void RIV3DView::Draw() {
     //Draw selection ray
     glColor3f(1,1,1);
     glBegin(GL_LINES);
-    //	glVertex3f(selectNear.x, selectNear.y, selectNear.z);
-    //	glVertex3f(selectFar.x, selectFar.y, selectFar.z);
+//    	glVertex3f(selectNear.x, selectNear.y, selectNear.z);
+//    	glVertex3f(selectFar.x, selectFar.y, selectFar.z);
     glVertex3f(pickRay.org[0], pickRay.org[1], pickRay.org[2]);
     Vec3fa dest = pickRay.org + 1.F * pickRay.dir;
     glColor3f(1, 0, 0);
@@ -375,19 +338,18 @@ void RIV3DView::Draw() {
         glPushMatrix();
         glTranslatef(Phit[0], Phit[1], Phit[2]);
         //	std::cout << "Phit = " << Phit << std::endl;
-        glScalef(4, 4, 4);
+        glScalef(.01*scale, .01*scale, .01*scale);
         gluSphere(quadric, 2, 9, 9);
         glPopMatrix();
     }
     
     //Draw
-    glColor3f(1, 1, 1);
-    
-    //    Translate -278.000000 -273.000000 500.000000
+    glColor3f(0, 1, 1);
     //Draw camera position
     glPushMatrix();
-    glTranslatef(278, 273, -500);
-    //    glScalef(0.01, 0.01, 0.01);
+    glTranslatef(cameraPosition[0],cameraPosition[1],cameraPosition[2]);
+        glScalef(0.1F * scale,0.1F * scale, 0.1F * scale);
+    //    glScalef(0.01, 0.01, 0.01);x§
     gluSphere(quadric, 10, 10, 10);
     glPopMatrix();
     
@@ -455,7 +417,10 @@ void RIV3DView::drawPoints() {
         }
     }
 }
-
+void RIV3DView::ToggleHideMesh() {
+    showMeshes = !showMeshes;
+    redisplayWindow();
+}
 void RIV3DView::drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths) {
     //	reporter::startTask("Draw points.");
     //	printf("Drawing intersections points.\n");
@@ -620,7 +585,6 @@ std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVC
     size_t oldPathID = 0;
     ushort bounceNr;
     
-    sizesAllTheSame = true;
     std::vector<PathPoint> points;
     
     while(iterator->GetNext(row,pathID)) {
@@ -825,12 +789,7 @@ void RIV3DView::OnDataChanged(RIVDataSet<float,ushort>* source) {
     //	TODO: Paths and points are stale when this happens, but recreation is not necessary unless drawPoints or drawPaths is set to TRUE
     //	createPaths();
 }
-
-void RIV3DView::OnFiltersChanged(RIVDataSet<float,ushort>* source) {
-    printf("3D View received on filter change.");
-    
-    ResetGraphics();
-    
+void RIV3DView::redisplayWindow() {
     int currentWindow = glutGetWindow();
     glutSetWindow(RIV3DView::windowHandle);
     glutPostRedisplay();
@@ -839,13 +798,20 @@ void RIV3DView::OnFiltersChanged(RIVDataSet<float,ushort>* source) {
     
     isDirty = true;
 }
+void RIV3DView::OnFiltersChanged(RIVDataSet<float,ushort>* source) {
+    printf("3D View received on filter change.");
+    
+    ResetGraphics();
+    
+    redisplayWindow();
+}
 
 void RIV3DView::MoveCamera(float x, float y, float z) {
     eye.x += x;
     eye.y += y;
     eye.z += z;
     
-    //    printf("new eye (x,y,z) = (%f,%f,%f)\n",eye.x,eye.y,eye.z);
+    printf("new eye (x,y,z) = (%f,%f,%f)\n",eye.x,eye.y,eye.z);
     isDirty = true;
 }
 
@@ -953,8 +919,12 @@ bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMe
 bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
     y = height - y;
     if(state == GLUT_DOWN) {
-        
         if(button == GLUT_LEFT_BUTTON) {
+            
+            tbMouseFunc(button, state, width-x, y);
+            isDragging = true;
+            return true;
+            
             //Determine the world space cordinates on the near and far plane for the selected pixel
             Vec3fa selectNear = screenToWorldCoordinates(x, y, 0);
             Vec3fa selectFar = screenToWorldCoordinates(x, y, 1);
@@ -981,8 +951,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
                 pathCreation(*datasetTwo, meshesTwo,pathFilterTwo, &bounceCountTwo,&selectedObjectIdTwo);
             }
             
-            isDragging = true;
-            tbMouseFunc(button, state, width-x, y);
+
             return true;
         }
         else if(button == GLUT_RIGHT_BUTTON) { //Clear paths created

@@ -129,12 +129,10 @@ void RIVImageView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
     if(dataset == *datasetOne) {
             computeHeatmap(*datasetOne, heatmapOne);
     }
-    else if(dataset == *datasetTwo) {
+    else if(datasetTwo && dataset == *datasetTwo) {
             computeHeatmap(*datasetTwo, heatmapTwo);
     }
 
-
-    
     int currentWindow = glutGetWindow();
     glutSetWindow(RIVImageView::windowHandle);
     glutPostRedisplay();
@@ -300,13 +298,16 @@ void RIVImageView::Draw() {
         
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        
-        int halfWidth = width/2.F;
+        int renderImageWidth = width;
+        if(rendererTwo) {
+            renderImageWidth = width/2.F;
+        }
         //		glColor3f(1,0,0);
         //		glRectf(0, 0, halfWidth, height);
         printf("Draw rendererd image one\n");
         
-        drawRenderedImage(rendererOne,imagePadding,imagePadding,halfWidth - imagePadding * 2,height - imagePadding * 2);
+        
+        drawRenderedImage(rendererOne,imagePadding,imagePadding,renderImageWidth - imagePadding * 2,height - imagePadding * 2);
         
         if(showHeatmap) {
             drawHeatmap(imagePadding, heatmapOne, 1,0,0);
@@ -316,7 +317,7 @@ void RIVImageView::Draw() {
             //			glColor3f(0, 0, 1);
             //			glRectf(halfWidth, 0, width, height);
             printf("Draw rendererd image two\n");
-            drawRenderedImage(rendererTwo,halfWidth,imagePadding,halfWidth - imagePadding * 2,height - imagePadding * 2);
+            drawRenderedImage(rendererTwo,renderImageWidth,imagePadding,renderImageWidth - imagePadding * 2,height - imagePadding * 2);
             
             if(showHeatmap) {
                 drawHeatmap(width / 2.F, heatmapTwo, 0,0,1);
@@ -326,7 +327,9 @@ void RIVImageView::Draw() {
         //Draw grid
         if(isDragging) {
             drawGrid(0,paintGridOne);
-            drawGrid(width / 2.F ,paintGridTwo);
+            if(paintGridTwo) {
+                drawGrid(width / 2.F ,paintGridTwo);
+            }
         }
         
         glFlush();

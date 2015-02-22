@@ -101,10 +101,10 @@ private:
 	size_t bootstrapRepeat;
 	
 	//Generate the datasets; create tables records and the histogramset
-	void createDataStructures();
+	void createDataStructures(const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, ushort nrPrimitives);
 	void clearPathCounts();
 	
-	void initDataSet(RIVDataSet<float,ushort> *dataset) ;
+	void initDataSet(RIVDataSet<float,ushort> *dataset,const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, ushort nrPrimitives) ;
 	//Setup the shortcut pointer to the innards of the dataset, tables etc.
 	void resetPointers(RIVDataSet<float,ushort>* dataset);
 public:
@@ -116,7 +116,7 @@ public:
 	void AddMembershipDataStructures(RIVDataSet<float,ushort>* dataset);
 	void SetAcceptProbability(float newProb);
 	//The number of renderers to expect data from and the maximum number of paths per renderer before data reduction should kick in
-	DataController(const ushort renderers, const size_t maxPaths, const size_t bootstrapRepeat);
+	DataController(const ushort renderers, const size_t maxPaths, const size_t bootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives);
 	//Returns a pointer to a pointer of the dataset for renderer one
 	RIVDataSet<float,ushort>** GetDataSet();
 	bool ProcessNewPath(int frame, PathData* newPath);

@@ -10,6 +10,13 @@
 
 void TriangleMeshGroup::init() {
 
+    xBounds[0] = std::numeric_limits<float>::max();
+    xBounds[1] = -std::numeric_limits<float>::max();
+    yBounds[0] = std::numeric_limits<float>::max();
+    yBounds[1] = -std::numeric_limits<float>::max();
+    zBounds[0] = std::numeric_limits<float>::max();
+    zBounds[1] = -std::numeric_limits<float>::max();
+    
 	float cX = 0;
 	float cY = 0;
 	float cZ = 0;
@@ -18,7 +25,15 @@ void TriangleMeshGroup::init() {
 	for(TriangleMeshFull *mesh : triangleMeshes) {
 		vector_t<Vec3fa>& position = mesh->position;
 		for(size_t i = 0 ; i < position.size() ; ++i) {
-			Vec3fa vertex = position[i];
+			Vec3fa& vertex = position[i];
+            
+            xBounds[0] = std::min(xBounds[0],vertex[0]);
+            xBounds[1] = std::max(xBounds[1],vertex[0]);
+            yBounds[0] = std::min(yBounds[0],vertex[1]);
+            yBounds[1] = std::max(yBounds[1],vertex[1]);
+            zBounds[0] = std::min(zBounds[0],vertex[2]);
+            zBounds[1] = std::max(zBounds[1],vertex[2]);
+            
 			cX += vertex[0];
 			cY += vertex[1];
 			cZ += vertex[2];
@@ -32,12 +47,16 @@ void TriangleMeshGroup::init() {
 	center[1] = cY;
 	center[2] = cZ;
 	float maxDistance = 0;
+    
+
+    
 	//Determine the scale we need to scale it to unit
 	//Find the vertex with the most distance to the center
 	for(TriangleMeshFull *mesh : triangleMeshes) {
 		vector_t<Vec3fa>& position = mesh->position;
 		for(size_t i = 0 ; i < position.size() ; ++i) {
 			Vec3fa vertex = position[i];
+            
 			float dX = vertex[0] - cX;
 			float dY = vertex[1] - cY;
 			float dZ = vertex[2] - cZ;
