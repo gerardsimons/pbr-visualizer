@@ -84,7 +84,7 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 10000;
+const int maxPaths = 100000;
 const int bootstrapRepeat = 1;
 const int sliderViewHeight = 50;
 
@@ -256,7 +256,7 @@ void keys(int keyCode, int x, int y) {
 	char key = (char)keyCode;
 	printf("'%c' key pressed.\n",key);
 	
-	float camSpeed = .05F;
+	float camSpeed = .25F;
 	switch(keyCode) {
 		case 27: //ESC key
 			printf("Clear filters\n");
@@ -300,7 +300,8 @@ void keys(int keyCode, int x, int y) {
 			sceneView->ToggleDrawDataSetTwo();
 			break;
         case 97: // 'a' key
-            sceneView->MoveCamera(camSpeed, 0, 0);
+            sceneView->MoveCamera(-camSpeed, 0, 0);
+            break;
 		case 98: // 'b' key
 			glutSwapBuffers();
 			printf("Manual swap buffers\n");
@@ -317,10 +318,10 @@ void keys(int keyCode, int x, int y) {
 			sceneView->CyclePathSegment();
 			break;
 		case 91: // '[' key, increase path segment
-			sceneView->MovePathSegment(-.01F);
+			sceneView->MovePathSegment(-.0025F);
 			break;
 		case 93:
-			sceneView->MovePathSegment(.01F);
+			sceneView->MovePathSegment(.0025F);
 			break;
 		case 104: // the 'h' from heatmap, toggle drawing the octree heatmap
 			sceneView->ToggleDrawHeatmap();
@@ -376,11 +377,11 @@ void keys(int keyCode, int x, int y) {
 			//            uiView->MoveMenu(0,10);
 			break;
 		case GLUT_KEY_LEFT:
-			sceneView->MoveCamera(-camSpeed,0,0);
+			sceneView->MoveCamera( camSpeed,0,0);
 			//            uiView->MoveMenu(-10.F,0);
 			break;
 		case GLUT_KEY_RIGHT:
-			sceneView->MoveCamera(camSpeed,0,0);
+			sceneView->MoveCamera(-camSpeed,0,0);
 			//            uiView->MoveMenu(10.F,0);
 			break;
 		default:
@@ -411,11 +412,13 @@ void reshape(int w, int h)
 	glutReshapeWindow(newWidthPC,newHeightPC); //Upper half and full width of the main window
 	//
 	//    //image view window
-	float squareSize = height / 2.F - 2 * padding - sliderViewHeight / 2.F;
-	float imageViewWidth = squareSize;
-	if(datasetTwo) {
-		imageViewWidth += imageViewWidth;
-	}
+    float bottomHalfY = height / 2.f + padding + sliderViewHeight / 2.F;
+    float squareSize = height / 2.F - 2 * padding - sliderViewHeight / 2.F;
+    float ratio = rendererOne->getWidth() / (float)rendererOne->getHeight();
+    float imageViewWidth = squareSize * ratio;
+    if(datasetTwo) {
+        imageViewWidth += imageViewWidth;
+    }
 	glutSetWindow(imageViewWindow);
 	glutPositionWindow(padding, height/2+padding + sliderViewHeight / 2.F);
 	glutReshapeWindow(imageViewWidth,squareSize); //Square bottom left corner
@@ -625,6 +628,7 @@ void setup(int argc, char** argv) {
         DataConnector* dcTwo = new DataConnector(processRendererTwo,rendererTwoFinishedFrame);
         rendererOne = new EMBREERenderer(dcOne, std::string(argv[1]));
         rendererTwo = new EMBREERenderer(dcTwo, std::string(argv[2]));
+        sceneDataOne = getSceneData(rendererOne);
         sceneDataTwo = getSceneData(rendererTwo);
         dataControllerOne = new DataController(argc - 1,2 * maxPaths, bootstrapRepeat,sceneDataOne.xBounds,sceneDataOne.yBounds,sceneDataOne.zBounds,sceneDataOne.NumberOfMeshes());
         dataControllerTwo = new DataController(argc - 1, 2*maxPaths,bootstrapRepeat,sceneDataTwo.xBounds,sceneDataTwo.yBounds,sceneDataTwo.zBounds,sceneDataTwo.NumberOfMeshes());
@@ -662,14 +666,16 @@ void setup(int argc, char** argv) {
 	glutMotionFunc(ParallelCoordsView::Motion);
 	glutSpecialFunc(keys);
 	
-	//Load image
-	float bottomHalfY = height / 2.f + padding + sliderViewHeight / 2.F;
-	float squareSize = height / 2.F - 2 * padding - sliderViewHeight / 2.F;
-	float imageViewWidth = squareSize;
-	if(datasetTwo) {
-		imageViewWidth += imageViewWidth;
-	}
-	
+    //The imageview should display two rendered images
+
+    float bottomHalfY = height / 2.f + padding + sliderViewHeight / 2.F;
+    float squareSize = height / 2.F - 2 * padding - sliderViewHeight / 2.F;
+    float ratio = rendererOne->getWidth() / (float)rendererOne->getHeight();
+    float imageViewWidth = squareSize * ratio;
+    if(datasetTwo) {
+        imageViewWidth += imageViewWidth;
+    }
+    
 	glutSetWindow(imageViewWindow);
 	imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,imageViewWidth,squareSize);
 	RIVImageView::windowHandle = imageViewWindow;

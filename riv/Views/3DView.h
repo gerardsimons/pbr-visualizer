@@ -24,7 +24,8 @@
 class RIV3DView : public RIVDataView, public RIVDataSetListener {
 protected:
 
-    Vector3f cameraPosition;
+    Vector3f cameraPositionOne;
+    Vector3f cameraPositionTwo;
     Vector3f eye;
     
     bool isDirty = true;
@@ -48,6 +49,7 @@ protected:
 	bool drawDataSetTwo = true;
 	
 	bool isDragging = false;
+    bool didMoveCamera = false;
 	
 	std::vector<Path> pathsOne;
 	std::vector<Path> pathsTwo;
@@ -67,7 +69,7 @@ protected:
     //Path drawing variables
     int maxBounce = 5; //TODO: Deduce this value from the bounce record
 	int selectRound = 1;
-    const float segmentWidth = .05F; // a tenth of the total path length
+    const float segmentWidth = .01F;
     float segmentStart = 0;
     float segmentStop = segmentWidth;
 	
@@ -75,13 +77,13 @@ protected:
 	Vec3fa Phit; //Supposedly the point of intersection of the ray with the plane supporting the triangle
 	Ray pickRay;
     
-    int heatmapDepth = 5;
+    int heatmapDepth = 7;
 	
 	bool meshSelected = false;
-	riv::RowFilter* pathFilterOne = NULL;
+    std::vector<riv::RowFilter*> pathFiltersOne;
 	ushort bounceCountOne = 0;
     ushort selectedObjectIdOne;
-	riv::RowFilter* pathFilterTwo = NULL;
+    std::vector<riv::RowFilter*> pathFiltersTwo;
 	ushort bounceCountTwo = 0;
     ushort selectedObjectIdTwo;
 	
@@ -94,7 +96,7 @@ protected:
 	//Draw the mesh model loaded from the PBRT file
 	void drawMeshModel(TriangleMeshGroup* meshGroup, float* color, ushort* selectedObjectId);
 	void drawPaths(float startSegment, float stopSegment);
-    void drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths, float startSegment, float stopSegment); //Draw the paths between two consecutive bounces
+    void drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths, float startSegment, float stopSegment,const Vector3f& cameraPosition); //Draw the paths between two consecutive bounces
 	//Draw octree representation of the generated points
 	void drawHeatmap();
 	void drawPoints();
@@ -104,8 +106,8 @@ protected:
 	void drawLeafNodes(OctreeNode* node,float maxEnergyOne, float maxEnergyTwo);
 	void createPaths();
 	
-    void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort selectedObjectID, riv::RowFilter*& pathFilter);
-	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,riv::RowFilter*& rowFilter, ushort* bounceCount, ushort* selectedObjectId);
+    void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
+	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, ushort* selectedObjectId);
 	//Create graphics buffer from unfiltered data rows
 	std::vector<Path> createPaths(RIVDataSet<float,ushort>*, RIVColorProperty* colorProperty);
     static RIV3DView* instance;

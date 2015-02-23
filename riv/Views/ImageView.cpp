@@ -172,7 +172,13 @@ void RIVImageView::drawHeatmap(int startX, Histogram2D<float>* heatmap, float r,
     //    glEnable(GL_BLEND);
     
     if(heatmap) {
-        float binWidth = ((width / 2.F) - imagePadding * 2) / (float)bins;
+        float binWidth;
+        if(datasetTwo) {
+            binWidth = ((width / 2.F) - imagePadding * 2) / (float)bins;
+        }
+        else {
+            binWidth = ((width) - imagePadding * 2) / (float)bins;
+        }
         float binHeight = ((height) - imagePadding * 2) / (float)bins;
         
         float binX = startX;
@@ -305,7 +311,6 @@ void RIVImageView::Draw() {
         //		glColor3f(1,0,0);
         //		glRectf(0, 0, halfWidth, height);
         printf("Draw rendererd image one\n");
-        
         
         drawRenderedImage(rendererOne,imagePadding,imagePadding,renderImageWidth - imagePadding * 2,height - imagePadding * 2);
         

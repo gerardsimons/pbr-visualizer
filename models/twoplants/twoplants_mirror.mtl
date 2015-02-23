@@ -1,0 +1,151 @@
+# Blender MTL File: 'twoplants.blend'
+# Material Count: 14
+
+newmtl IDP_Pot
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.200000 0.200000 0.200000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\indoor plant_2_COL.jpg
+map_Bump textures\\indoor plant_2_NOR.jpg
+map_Ks textures\\indoor plant_2_COL.jpg
+
+newmtl IDP_Pot.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.200000 0.200000 0.200000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\indoor plant_2_COL.jpg
+map_Bump textures\\indoor plant_2_NOR.jpg
+map_Ks textures\\indoor plant_2_COL.jpg
+
+newmtl IDP_ground
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd textures\indoor plant_2_COL.jpg
+map_Bump textures\\indoor plant_2_NOR.jpg
+
+newmtl IDP_ground.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd textures\indoor plant_2_COL.jpg
+map_Bump textures\\indoor plant_2_NOR.jpg
+
+newmtl IDP_leaves
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.200000 0.200000 0.200000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\indoor plant_2_COL.jpg
+map_Bump textures\\indoor plant_2_NOR.jpg
+map_Ks textures\\indoor plant_2_COL.jpg
+
+newmtl IDP_leaves.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.200000 0.200000 0.200000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\indoor plant_2_COL.jpg
+map_Bump textures\\indoor plant_2_NOR.jpg
+map_Ks textures\\indoor plant_2_COL.jpg
+
+newmtl IDP_leaves.001_indoor_plant_2_COL.jpg.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.200000 0.200000 0.200000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\indoor plant_2_COL.jpg
+map_Bump textures\\indoor plant_2_NOR.jpg
+map_Ks textures\\indoor plant_2_COL.jpg
+
+newmtl IDP_leaves_indoor_plant_2_COL.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.200000 0.200000 0.200000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\indoor plant_2_COL.jpg
+map_Bump textures\\indoor plant_2_NOR.jpg
+map_Ks textures\\indoor plant_2_COL.jpg
+
+newmtl IDP_root
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.328250 0.328250 0.328250
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\indoor plant_2_COL.jpg
+map_Bump textures\\indoor plant_2_NOR.jpg
+map_Ks textures\\indoor plant_2_COL.jpg
+
+newmtl IDP_root.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.328250 0.328250 0.328250
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\indoor plant_2_COL.jpg
+map_Bump textures\\indoor plant_2_NOR.jpg
+map_Ks textures\\indoor plant_2_COL.jpg
+
+newmtl IDP_root.001_indoor_plant_2_NOR.jpg.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.328250 0.328250 0.328250
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\indoor plant_2_COL.jpg
+map_Bump textures\\indoor plant_2_NOR.jpg
+map_Ks textures\\indoor plant_2_COL.jpg
+
+newmtl IDP_root_indoor_plant_2_NOR.jpg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.328250 0.328250 0.328250
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd textures\indoor plant_2_COL.jpg
+map_Bump textures\\indoor plant_2_NOR.jpg
+map_Ks textures\\indoor plant_2_COL.jpg
+
+newmtl Mirror
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ns 200.0000
+illum 3

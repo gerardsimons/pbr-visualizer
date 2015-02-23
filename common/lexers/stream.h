@@ -154,7 +154,7 @@ namespace embree
       if (file == NULL) throw std::runtime_error("cannot open file " + fileName.str());
     }
     ~FileStream() { fclose(file); }
-
+      
   public:
     ParseLocation location() {
       return ParseLocation(name,lineNumber,colNumber,charNumber);

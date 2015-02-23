@@ -97,9 +97,9 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset,const Vec2f&
 	
 	pathTable->CreateRecord<float>(PIXEL_X,0,1,true);
 	pathTable->CreateRecord<float>(PIXEL_Y,0,1,true);
-	pathTable->CreateRecord<float>(PATH_R,0,1);
-	pathTable->CreateRecord<float>(PATH_G,0,1);
-	pathTable->CreateRecord<float>(PATH_B,0,1);
+	pathTable->CreateRecord<float>(PATH_R,0,1,true);
+	pathTable->CreateRecord<float>(PATH_G,0,1,true);
+	pathTable->CreateRecord<float>(PATH_B,0,1,true);
 	pathTable->CreateRecord<float>(THROUGHPUT_R,0,1,true);
 	pathTable->CreateRecord<float>(THROUGHPUT_G,0,1,true);
 	pathTable->CreateRecord<float>(THROUGHPUT_B,0,1,true);
@@ -116,9 +116,9 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset,const Vec2f&
 	//	isectsTable->CreateRecord<float>(DIR_Y,0,1,true);
 	//	isectsTable->CreateRecord<float>(DIR_Z,0,1,true);
 	
-	isectsTable->CreateRecord<float>(INTERSECTION_R,0,1);
-	isectsTable->CreateRecord<float>(INTERSECTION_G,0,1);
-	isectsTable->CreateRecord<float>(INTERSECTION_B,0,1);
+	isectsTable->CreateRecord<float>(INTERSECTION_R,0,1,true);
+	isectsTable->CreateRecord<float>(INTERSECTION_G,0,1,true);
+	isectsTable->CreateRecord<float>(INTERSECTION_B,0,1,true);
 	isectsTable->CreateRecord<ushort>(PRIMITIVE_ID,0,nrPrimitives,true);
 	//	shapeIds = isectsTable->CreateShortRecord("shape ID");
 	//	interactionTypes = isectsTable->CreateShortRecord("interaction");

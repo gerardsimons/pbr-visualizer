@@ -234,7 +234,7 @@ void ParallelCoordsView::drawAxes() {
 								saturation = binValueOne / maxValueOne;
 							}
 						}
-						if(useSaturation) {
+						if(useSaturation || datasetTwo == NULL) {
 							
 //							saturation = std::pow(saturation, 0.25);
 							
@@ -359,8 +359,6 @@ void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ush
 		size_t row = 0;
 		
 		auto table = dataset->GetTable(axisGroup.tableName);
-		
-		
 		tuple_for_each(axisGroup.axes, [&](auto& tAxes) {
 			for(auto& axis : tAxes) {
 				
@@ -374,7 +372,6 @@ void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ush
 				}
 			}
 		});
-		
 	}
 }
 void ParallelCoordsView::createAxisPoints(int datasetId, RIVDataSet<float,ushort>* dataset) {

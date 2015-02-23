@@ -112,7 +112,12 @@ void EMBREERenderer::clearGlobalObjects() {
 std::vector<Shape*>* EMBREERenderer::GetShapes() {
 	return &rawShapes;
 }
-
+Vector3f EMBREERenderer::GetCameraPosition() {
+    return g_camPos;
+}
+Vector3f EMBREERenderer::GetCameraLookAt() {
+    return g_camLookAt;
+}
 std::string EMBREERenderer::makeFileName(const std::string path, const std::string fileName)
 {
 	if (fileName[0] == '/') return fileName;

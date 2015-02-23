@@ -1,0 +1,13 @@
+-i twoplants_mirror	.obj
+#-quadlight 1.790151 2.794508 0.816237 1.790151 1.135883 0.816236 1.148112 1.135884 0.471385 1.148112 2.794508 0.471385 500 500 500
+-pointlight -3.25 10 0 100 100 100	
+-pointlight 3.25 10 0 100 100 100	
+#-spotlight 213 300 227 -1 -1 1 300000 300000 300000 90 90
+#-ambientlight 1 1 1
+#-directionallight -0.5 -0.4 1 2 2 2
+#-distantlight -0.5 -0.4 1 150 150 150 5
+#-hdrilight 1 1 1 lines.ppm
+#-vp 0 8.5 10.6 -vi 0 0 -10 -vu 0 1 0 -fov 55 # FRONT FACING
+-vp 0 8.5 10.6 -vi 0 0 -10 -vu 0 1 0 -fov 55 # FRONT FACING
+-size 248 186
+-renderer pathtracer { depth = 5 }

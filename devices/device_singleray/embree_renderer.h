@@ -114,6 +114,9 @@ public:
 	std::vector<Handle<Device::RTPrimitive>>* GetPrimitives() { return &g_prims; };
 	std::vector<Shape*>* GetShapes();
 
+    Vector3f GetCameraPosition();
+    Vector3f GetCameraLookAt();
+    
 	//Parser methods
 	void parseDebugRenderer(Ref<ParseStream> cin, const FileName& path);
 	void parsePathTracer(Ref<ParseStream> cin, const FileName& path);
