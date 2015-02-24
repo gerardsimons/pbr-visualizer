@@ -53,6 +53,7 @@ private:
 	size_t depth; //The depth of this node in the octree
 	
 	bool rangeCheck(float lowerBound, float upperBound, float value);
+    float computeEnergy(RIVRecord<float>* rs, RIVRecord<float>* gs,RIVRecord<float>* bs, std::vector<size_t>& indices);
 public:
 	OctreeNode(RIVRecord<float>* xsOne,RIVRecord<float>* ysOne,RIVRecord<float>* zsOne, RIVRecord<float>* rsOne,RIVRecord<float>* gsOne,RIVRecord<float>* bsOne, float x, float y, float z, float size, size_t depth, OctreeConfig* config, Octree* tree);
     OctreeNode(RIVRecord<float>* xsOne,RIVRecord<float>* ysOne,RIVRecord<float>* zsOne, RIVRecord<float>* rsOne,RIVRecord<float>* gsOne,RIVRecord<float>* bsOne, RIVRecord<float>* xsTwo,RIVRecord<float>* ysTwo,RIVRecord<float>* zsTwo, RIVRecord<float>* rsTwo,RIVRecord<float>* gsTwo,RIVRecord<float>* bsTwo, float x, float y, float z, float size, size_t depth, OctreeConfig* config, Octree* tree);

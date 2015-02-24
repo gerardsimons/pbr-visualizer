@@ -12,6 +12,7 @@
 #include <mutex>
 #include <set>
 
+#include "Octree/Octree.h"
 #include "Data/DataSet.h"
 #include "Data/SampleSet.h"
 #include "Data/Histogram.h"
@@ -25,7 +26,7 @@ private:
 	void notifyFilterListeners();
 	void notifyDataListeners();
 	
-	std::mutex mutex;
+    Octree energyDistribution;
 	
 	//The datasets currently being used, this is what the views use to draw
 	RIVDataSet<float,ushort>* currentData;
@@ -42,8 +43,7 @@ private:
 	/* Shortcut pointers for quick access */
 	RIVTable<float,ushort>* currentPathTable;
 	RIVTable<float,ushort>* currentIntersectionsTable;
-//
-//	RIVShortRecord *rendererId = NULL;
+
 	RIVFloatRecord* xPixels = NULL;
 	RIVFloatRecord* yPixels = NULL;
 	RIVFloatRecord* lensUs = NULL;

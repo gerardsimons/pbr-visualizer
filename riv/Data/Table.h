@@ -256,7 +256,7 @@ public:
 	}
 	//Filter this table according to the filters that are applied
 	void Filter() {
-//		filteredRows.clear();
+		filteredRows.clear();
 		newlyFilteredRows.clear();
 //		std::string task = "Filter " + name;
 //		reporter::startTask(task);

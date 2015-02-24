@@ -120,33 +120,25 @@ void OctreeNode::AssignPointTwo(size_t index) {
     indicesTwo.push_back(index);
     //	printf("Point added. Node contains %zu points.\n",pointIndices.size());
 }
-float OctreeNode::ComputeEnergyOne() {
+float OctreeNode::computeEnergy(RIVRecord<float>* rs, RIVRecord<float>* gs,RIVRecord<float>* bs, std::vector<size_t>& indices) {
     float sumEnergy = 0;
     
-    for(size_t index : indicesOne) {
+    for(size_t index : indices) {
         
-        float rgbAverage = (rsOne->Value(index) + gsOne->Value(index) + bsOne->Value(index)) / 3.F;
+        float rgbAverage = (rs->Value(index) + gs->Value(index) + bs->Value(index)) / 3.F;
         sumEnergy += rgbAverage;
     }
     
     if(indicesOne.size()) {
-        return sumEnergy / indicesOne.size();
+        return sumEnergy / indices.size() / (depth * depth);
     }
     else return 0;
 }
+float OctreeNode::ComputeEnergyOne() {
+    return computeEnergy(rsOne, gsOne, bsOne, indicesOne);
+}
 float OctreeNode::ComputeEnergyTwo() {
-    float sumEnergy = 0;
-    
-    for(size_t index : indicesTwo) {
-        
-        float rgbAverage = (rsTwo->Value(index) + gsTwo->Value(index) + bsTwo->Value(index)) / 3.F;
-        sumEnergy += rgbAverage;
-    }
-    
-    if(indicesTwo.size()) {
-        return sumEnergy / indicesTwo.size();
-    }
-    else return 0;
+    return computeEnergy(rsTwo, gsTwo, bsTwo, indicesTwo);
 }
 Point3D OctreeNode::Center() {
     return Point3D(x,y,z);

@@ -84,7 +84,7 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 100000;
+const int maxPaths = 1000;
 const int bootstrapRepeat = 1;
 const int sliderViewHeight = 50;
 

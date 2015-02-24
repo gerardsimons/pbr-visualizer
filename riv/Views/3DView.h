@@ -69,7 +69,7 @@ protected:
     //Path drawing variables
     int maxBounce = 5; //TODO: Deduce this value from the bounce record
 	int selectRound = 1;
-    const float segmentWidth = .01F;
+    const float segmentWidth = .025F;
     float segmentStart = 0;
     float segmentStop = segmentWidth;
 	
