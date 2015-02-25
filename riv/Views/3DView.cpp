@@ -28,7 +28,7 @@
 RIV3DView* RIV3DView::instance = NULL;
 int RIV3DView::windowHandle = -1;
 
-RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer, const TriangleMeshGroup& sceneDataOne, RIVColorProperty* colorPropertyOne, RIVSizeProperty* sizeProperty) : RIVDataView(dataset),rendererOne(renderer), sizeProperty(sizeProperty), colorPropertyOne(colorPropertyOne) {
+RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer, const TriangleMeshGroup& sceneDataOne, Octree* energyDistributionOne, RIVColorProperty* colorPropertyOne) : RIVDataView(dataset),rendererOne(renderer), colorPropertyOne(colorPropertyOne) {
     
     if(instance != NULL) {
         throw std::runtime_error("Only 1 instance of RIV3DView allowed.");
@@ -39,8 +39,8 @@ RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer
     this->meshesOne = sceneDataOne;
     
 //    scale = 5 * meshesOne.GetScale();
-    scale = meshesOne.GetScale();
-    center = meshesOne.GetCenter();
+    modelScale = meshesOne.GetScale();
+    modelCenter = meshesOne.GetCenter();
     drawDataSetTwo = false;
     
     cameraPositionOne = renderer->GetCameraPosition();
@@ -49,8 +49,14 @@ RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer
     ResetGraphics();
 };
 
-RIV3DView::RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, RIVColorProperty* colorPropertyOne, RIVColorProperty* colorPropertyTwo, RIVSizeProperty* sizeProperty) :
-RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(rendererTwo), sizeProperty(sizeProperty), colorPropertyOne(colorPropertyOne), colorPropertyTwo(colorPropertyTwo) {
+RIV3DView::RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, Octree* energyDistributionOne, Octree* energyDistributionTwo, RIVColorProperty* colorPropertyOne, RIVColorProperty* colorPropertyTwo) :
+    RIVDataView(datasetOne,datasetTwo),
+    rendererOne(rendererOne),
+    rendererTwo(rendererTwo),
+    energyDistributionOne(energyDistributionOne),
+    energyDistributionTwo(energyDistributionTwo),
+    colorPropertyOne(colorPropertyOne),
+    colorPropertyTwo(colorPropertyTwo) {
     
     if(instance != NULL) {
         throw std::runtime_error("Only 1 instance of RIV3DView allowed.");
@@ -63,19 +69,19 @@ RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(render
     
     Vec3f modelCenterOne = meshesOne.GetCenter();
     
-    scale = meshesOne.GetScale();
-    center = meshesOne.GetCenter();
+    modelScale = meshesOne.GetScale();
+    modelCenter = meshesOne.GetCenter();
     
     if(datasetTwo && drawDataSetTwo) {
         float scaleTwo = meshesTwo.GetScale();
-        if(scaleTwo > scale) {
-            scale = scaleTwo;
+        if(scaleTwo > modelScale) {
+            modelScale = scaleTwo;
         }
         Vec3fa modelCenterTwo = meshesTwo.GetCenter();
         float lengthOne = length(modelCenterOne);
         float lengthTwo = length(modelCenterTwo);
         if( lengthTwo > lengthOne ) {
-            center = modelCenterTwo;
+            modelCenter = modelCenterTwo;
         }
     }
     cameraPositionOne = rendererOne->GetCameraPosition();
@@ -83,7 +89,6 @@ RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(render
     eye = cameraPositionOne;
     ResetGraphics();
 };
-
 
 void RIV3DView::CyclePathSegment(bool direction) {
     float delta = 1.F / maxBounce;
@@ -94,13 +99,13 @@ void RIV3DView::Reshape(int newWidth, int newHeight) {
     width = newWidth;
     height = newHeight;
     
-    eye = cameraPositionOne;
+//    eye = cameraPositionOne;
     
-//    eye[0] = 0;
-//    eye[1] = 0.8;
-//    eye[2] = 3;
+    eye[0] = 0;
+    eye[1] = 12;
+    eye[2] = 17;
     
-//    tbInitTransform();
+    tbInitTransform();
 //    tbHelp();
     
     glEnable(GL_BLEND);
@@ -112,7 +117,6 @@ void RIV3DView::Reshape(int newWidth, int newHeight) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
-
 void RIV3DView::ToggleDrawIntersectionPoints() {
     drawIntersectionPoints = !drawIntersectionPoints;
     if(drawIntersectionPoints && !pathsCreated) {
@@ -132,38 +136,37 @@ void RIV3DView::ToggleDrawIntersectionPoints() {
 }
 void RIV3DView::ToggleDrawHeatmap() {
     drawHeatmapTree = !drawHeatmapTree;
-    if(drawHeatmapTree && !heatmap) {
-        generateOctree(heatmapDepth, 1, .00001F);
-    }
-    isDirty = true;
+//    if(drawHeatmapTree && !heatmap) {
+//        generateOctree(heatmapDepth, 1, .00001F);
+//    }
+//    isDirty = true;
 }
 size_t nodesDrawn;
 //Test function to draw a simple octree
-void RIV3DView::drawHeatmap() {
-    if(heatmap) {
-        //Draw the tree to the required depth
-        reporter::startTask("Heatmap drawing.");
-        OctreeNode* root = heatmap->GetRoot();
-        nodesDrawn = 0;
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        
-        if(root) {
-            glPolygonMode(GL_FRONT, GL_FILL);
-            drawLeafNodes(root,heatmap->MaxEnergyOne(),heatmap->MaxEnergyTwo());
-        }
-        printf("%zu / %zu nodes drawn\n",nodesDrawn,heatmap->NumberOfNodes());
-        reporter::stop("Heatmap drawing.");
-    }
-}
-
+//void RIV3DView::drawHeatmap() {
+//    if(heatmap) {
+//        //Draw the tree to the required depth
+//        reporter::startTask("Heatmap drawing.");
+//        OctreeNode* root = heatmap->GetRoot();
+//        nodesDrawn = 0;
+//        glEnable(GL_BLEND);
+//        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//        
+//        if(root) {
+//            glPolygonMode(GL_FRONT, GL_FILL);
+////            drawLeafNodes(root,heatmap->MaxEnergyOne(),heatmap->MaxEnergyTwo());
+//        }
+////        printf("%zu / %zu nodes drawn\n",nodesDrawn,heatmap->NumberOfNodes());
+//        reporter::stop("Heatmap drawing.");
+//    }
+//}
 void RIV3DView::drawLeafNodes(OctreeNode* node,float maxEnergyOne, float maxEnergyTwo) {
     
     bool membershipColoring = true;
     
-    if(node->IsLeafNode() && node->ContainsAnyPoints()) { //Draw it
-        
-        Point3D nodeCenter = node->Center();
+//    if(node->IsLeafNode() && node->ContainsAnyPoints()) { //Draw it
+    
+//        Point3D nodeCenter = node->Center();
         //		size_t depth = node->GetDepth();
         //        size_t pointsInNode = node->NumberOfPointsContained();
         //		float density = node->Density();
@@ -172,8 +175,8 @@ void RIV3DView::drawLeafNodes(OctreeNode* node,float maxEnergyOne, float maxEner
         //		size_t maxCap = heatmap->MaxCapacity();
         //		float ratio = (pointsInNode) / (float)(maxCap);
         
-        float energyOne = node->ComputeEnergyOne();
-        float energyTwo = node->ComputeEnergyTwo();
+//        float energyOne = node->ComputeEnergyOne();
+//        float energyTwo = node->ComputeEnergyTwo();
         
         //        printf("Max energy one = %f\n",maxEnergyOne);
         //        printf("Max energy two = %f\n",maxEnergyTwo);
@@ -182,65 +185,65 @@ void RIV3DView::drawLeafNodes(OctreeNode* node,float maxEnergyOne, float maxEner
         
         //        float maxEnergy = std::max(energyOne,energyTwo);
         
-        riv::Color cubeColor;
+//        riv::Color cubeColor;
         //        cubeColor.A = 0;
-        float r,b;
-        float a = .5F;
-        if(!membershipColoring) {
-            if(drawDataSetOne && !drawDataSetTwo) {
-                float ratio = energyOne / maxEnergyOne;
+//        float r,b;
+//        float a = .5F;
+//        if(!membershipColoring) {
+//            if(drawDataSetOne && !drawDataSetTwo) {
+//                float ratio = energyOne / maxEnergyOne;
 //                printf("ratio = %f\n",ratio);
-                cubeColor = treeColorMap.ComputeColor(ratio);
-            }
-            else if(!drawDataSetOne && drawDataSetTwo) {
-                float ratio = energyTwo / maxEnergyTwo;
+//                cubeColor = treeColorMap.ComputeColor(ratio);
+//            }
+//            else if(!drawDataSetOne && drawDataSetTwo) {
+//                float ratio = energyTwo / maxEnergyTwo;
 //                printf("ratio = %f\n",ratio);
-                cubeColor = treeColorMap.ComputeColor(ratio);
-            }
-        }
-        else {
+//                cubeColor = treeColorMap.ComputeColor(ratio);
+//            }
+//        }
+//        else {
             //red, blue and alpha
             //Should be blue-ish
-            if(energyTwo > energyOne) {
-                
+//            if(energyTwo > energyOne) {
+            
                 //                printf("Energy two is higher : \n");
                 //                b = energyTwo / maxEnergy;
                 //                r = energyOne / maxEnergy;
                 
-                b = ((energyTwo - energyOne) / energyTwo + 1) / 2.F;
-                
+//                b = ((energyTwo - energyOne) / energyTwo + 1) / 2.F;
+            
                 //                b = (energyTwo - energyOne) / energyTwo;
                 //                b = 1;
-                r = 1 - b;
-                a = energyTwo / maxEnergyTwo;
-                
+//                r = 1 - b;
+//                a = energyTwo / maxEnergyTwo;
+            
                 //                printf("r,b,a = %f,%f,%f\n",r,b,a);
                 
                 //                return;
                 //                b = 1;
                 //                r = 0;
-            }
-            else if(energyOne > energyTwo) {
+//            }
+//            else if(energyOne > energyTwo) {
                 //                b = energyTwo / maxEnergy;
                 //                r = energyOne / maxEnergy;
                 
                 //                printf("Energy one is higher : \n");
                 
                 //                r = (energyOne - energyTwo) / energyOne;
-                r = ((energyOne - energyTwo) / energyOne + 1) / 2.F;
+//                r = ((energyOne - energyTwo) / energyOne + 1) / 2.F;
                 //                r = 1;
-                b = 1 - r;
-                a = energyOne / maxEnergyOne;
-                
+//                b = 1 - r;
+//                a = energyOne / maxEnergyOne;
+        
                 //                printf("r,b,a = %f,%f,%f\n",r,b,a);
                 
                 //                b = 0;
                 //                r = 1;
-            }
-            else {
-                return;
-            }
-            
+//            }
+//            else {
+//                return;
+//            }
+        
             //            float ratio = (energyTwo / maxEnergyTwo) - (energyOne / maxEnergyOne);
             //            printf("ratio = %f\n",ratio);
             //            cubeColor.R = r;
@@ -248,25 +251,25 @@ void RIV3DView::drawLeafNodes(OctreeNode* node,float maxEnergyOne, float maxEner
             //            cubeColor.B = b;
             //            cubeColor.A = a;
             
-        }
+//        }
         //        a = std::pow(a, .5);
-        glColor4f(r,0,b,a);
+//        glColor4f(r,0,b,a);
         //        if(ratio < 0) {
         //            ratio = -ratio;
         //        }
-        glPushMatrix();
-        glTranslatef(nodeCenter.x, nodeCenter.y, nodeCenter.z);
+//        glPushMatrix();
+//        glTranslatef(nodeCenter.x, nodeCenter.y, nodeCenter.z);
         //		glutWireCube(node->GetSize());
-        glutSolidCube(node->GetSize());
-        glPopMatrix();
-        
-        ++nodesDrawn;
-    }
-    else { //Recursively call the function on the children
-        for(int i = 0 ; i < node->NumberOfChildren() ; ++i) {
-            drawLeafNodes(node->GetChild(i),maxEnergyOne,maxEnergyTwo);
-        }
-    }
+//        glutSolidCube(node->GetSize());
+//        glPopMatrix();
+    
+//        ++nodesDrawn;
+//    }
+//    else { //Recursively call the function on the children
+//        for(int i = 0 ; i < node->NumberOfChildren() ; ++i) {
+//            drawLeafNodes(node->GetChild(i),maxEnergyOne,maxEnergyTwo);
+//        }
+//    }
 }
 
 size_t drawCounter_ = 1;
@@ -274,7 +277,6 @@ size_t drawCounter_ = 1;
 void RIV3DView::ToggleDrawDataSetOne() {
     drawDataSetOne = !drawDataSetOne;
 }
-
 void RIV3DView::ToggleDrawDataSetTwo() {
     if(datasetTwo) {
         drawDataSetTwo = !drawDataSetTwo;
@@ -282,10 +284,71 @@ void RIV3DView::ToggleDrawDataSetTwo() {
     else printf("No second dataset set.");
 }
 
-//void RIV3DView::Draw(RIVDataSet<float,ushort>* dataset) {
-//
-//}
-float angle = 0;
+void drawEnergyHelper(OctreeNode* node, float max,riv::ColorMap& heatmap) {
+    float min = 1;
+    if(node->IsLeafNode()) {
+        if(node->Value() > 1) {
+            float ratio = node->Value() / max;
+            if(ratio > 1) {
+                
+            }
+            riv::Color c = heatmap.ComputeColor(ratio);
+            glColor4f(c.R,c.G,c.B,1);
+            glPushMatrix();
+            glTranslatef(node->cx, node->cy, node->cz);
+            glutSolidCube(node->GetSize());
+            glPopMatrix();
+        }
+    }
+    else {
+        for(int i = 0 ; i < 8 ; ++i) {
+            drawEnergyHelper(node->GetChild(i),max,heatmap);
+        }
+    }
+}
+
+void RIV3DView::DrawEnergyDistribution(Octree* energyDistribution, Vec3fa& color) {
+
+    ushort nDim = energyDistribution->NodesPerDimension();
+    float maxEnergy = 0;
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    for(int x = 0 ; x < nDim ; ++x) {
+        for(int y = 0 ; y < nDim ; ++y) {
+            for(int z = 0 ; z < nDim ; ++z) {
+//                maxEnergy = std::max(maxEnergy,energyDistribution->GetLeafNode(x,y,z)->Value());
+            }
+        }
+    }
+    riv::ColorMap c = colors::jetColorMap();
+    drawEnergyHelper(energyDistribution->GetRoot(),energyDistribution->MaxValue(),c);
+    
+    printf("Max energy = %f\n",maxEnergy);
+    size_t nodesDrawn = 0;
+    
+//    for(int x = 0 ; x < nDim ; ++x) {
+//        for(int y = 0 ; y < nDim ; ++y) {
+//            for(int z = 0 ; z < nDim ; ++z) {
+//                OctreeNode* node = energyDistribution->GetLeafNode(x,y,z);
+//                
+//                if(node->Value() > 0) {
+//                    float ratio = node->Value() / maxEnergy;
+//                    glColor4f(color[0],color[1],color[2],ratio * 0.5);
+//                    glPushMatrix();
+//                    glTranslatef(node->cx, node->cy, node->cz);
+//                    glutSolidCube(node->GetSize());
+//                    glPopMatrix();
+//                    ++nodesDrawn;
+//                }
+//            }
+//        }
+//    }
+    
+    printf("Nodes drawn = %zu / %zu\n",nodesDrawn,(size_t)std::pow(nDim,3));
+}
 
 void RIV3DView::Draw() {
 
@@ -305,12 +368,14 @@ void RIV3DView::Draw() {
     
     glPushMatrix();
     tbVisuTransform();
-//    glTranslatef(-center[0], -center[1], -center[2]);
-    glScalef(-1, 1, 1);
-    glTranslatef(-eye.x,-eye.y,-eye.z);
-//    glRotatef(angle++, 0, 1, 0);
-//    glScalef(-scale,scale,scale);
+    glTranslatef(-modelCenter[0], -modelCenter[1], -modelCenter[2]);
+//    glScalef(-modelScale,modelScale,modelScale);
     drawCoordSystem();
+    glTranslatef(modelCenter[0], modelCenter[1], modelCenter[2]);
+//    glScalef(-1, 1, 1);
+    glTranslatef(-eye.x,-eye.y,-eye.z);
+
+
     
     if(showMeshes) {
         if(drawDataSetOne) {
@@ -326,6 +391,14 @@ void RIV3DView::Draw() {
     if(drawIntersectionPoints)
         drawPoints();
     
+    if(drawDataSetOne && drawHeatmapTree) {
+        Vec3fa red(1,0,0);
+        DrawEnergyDistribution(energyDistributionOne,red);
+    }
+    if(drawDataSetTwo && drawHeatmapTree) {
+        Vec3fa blue(0,0,1);
+        DrawEnergyDistribution(energyDistributionTwo,blue);
+    }
     //Draw selection ray
     glColor3f(1,1,1);
     glBegin(GL_LINES);
@@ -343,13 +416,13 @@ void RIV3DView::Draw() {
         glPushMatrix();
         glTranslatef(Phit[0], Phit[1], Phit[2]);
         //	std::cout << "Phit = " << Phit << std::endl;
-        glScalef(.01*scale, .01*scale, .01*scale);
+        glScalef(.01*modelScale, .01*modelScale, .01*modelScale);
         gluSphere(quadric, 2, 9, 9);
         glPopMatrix();
     }
     
     //Draw
-    float cameraScale = scale * .3;
+    float cameraScale = modelScale * .3;
     glColor3f(1, .2, .2);
     //Draw camera position
     glPushMatrix();
@@ -368,8 +441,8 @@ void RIV3DView::Draw() {
     gluSphere(quadric, 10, 10, 10);
     glPopMatrix();
     
-    if(drawHeatmapTree && heatmap != NULL)
-        drawHeatmap();
+//    if(drawHeatmapTree && heatmap != NULL)
+//        drawHeatmap();
     
     //Draw some lines
     if(drawLightPaths)
@@ -446,12 +519,10 @@ void RIV3DView::drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<
     RIVFloatRecord* yRecord = isectTable->GetRecord<float>("y");
     RIVFloatRecord* zRecord = isectTable->GetRecord<float>("z");
     
-    //Only use 1 size
-    float size = sizeProperty->ComputeSize(isectTable, 0);
-    glPointSize(size);
-    
     size_t row = 0;
     TableIterator* it = isectTable->GetIterator();
+    
+    glPointSize(2);
     
     glBegin(GL_POINTS);
     for(const Path& path : paths) {
@@ -474,34 +545,34 @@ void RIV3DView::drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<
     
     //	reporter::stop("Draw points.");
 }
-void RIV3DView::SetHeatmapDepth(int depth) {
-    heatmapDepth = depth;
-    
-    if(drawHeatmapTree) {
-        delete heatmap;
-        
-        generateOctree(heatmapDepth, 1, 0);
-        
-        Invalidate();
-    }
-}
-void RIV3DView::IncrementHeatmapDepth() {
-    SetHeatmapDepth(heatmapDepth++);
-}
-void RIV3DView::DecrementHeatmapDepth() {
-    if(heatmapDepth > 0) {
-        SetHeatmapDepth(heatmapDepth--);
-    }
-}
+//void RIV3DView::SetHeatmapDepth(int depth) {
+//    heatmapDepth = depth;
+//    
+//    if(drawHeatmapTree) {
+//        delete heatmap;
+//        
+//        generateOctree(heatmapDepth, 1, 0);
+//        
+//        Invalidate();
+//    }
+//}
+//void RIV3DView::IncrementHeatmapDepth() {
+//    SetHeatmapDepth(heatmapDepth++);
+//}
+//void RIV3DView::DecrementHeatmapDepth() {
+//    if(heatmapDepth > 0) {
+//        SetHeatmapDepth(heatmapDepth--);
+//    }
+//}
 //Move this function somewhere else
 void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize) {
     
     std::string taskName = "Generating octree";
     reporter::startTask(taskName);
     
-    if(heatmap) {
+//    if(heatmap) {
         //		delete heatmap;
-    }
+//    }
     
     size_t row;
     
@@ -544,15 +615,15 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
         RIVFloatRecord* gsTwo = isectTableTwo->GetRecord<float>(INTERSECTION_G);
         RIVFloatRecord* bsTwo = isectTableTwo->GetRecord<float>(INTERSECTION_B);
         
-        heatmap = new Octree(xsOne, ysOne, zsOne, rsOne, gsOne, bsOne, xsTwo, ysTwo, zsTwo, rsTwo, gsTwo, bsTwo, indices, indicesTwo, config);
+//        heatmap = new Octree(xsOne, ysOne, zsOne, rsOne, gsOne, bsOne, xsTwo, ysTwo, zsTwo, rsTwo, gsTwo, bsTwo, indices, indicesTwo, config);
     }
     else {
-        heatmap = new Octree(xsOne, ysOne, zsOne, rsOne, gsOne, bsOne, indices, config);
+//        heatmap = new Octree(xsOne, ysOne, zsOne, rsOne, gsOne, bsOne, indices, config);
     }
     
     printf("Tree generated with \n");
-    printf("\tDepth %zu\n",heatmap->Depth());
-    printf("\tNodes = %zu\n",heatmap->NumberOfNodes());
+//    printf("\tDepth %zu\n",heatmap->Depth());
+//    printf("\tNodes = %zu\n",heatmap->NumberOfNodes());
     
     //Generate the color map used by the tree
     treeColorMap = colors::jetColorMap();
@@ -561,10 +632,10 @@ void RIV3DView::generateOctree(size_t maxDepth, size_t maxCapacity, float minNod
 }
 
 void RIV3DView::ResetGraphics() {
-    if(heatmap) {
+//    if(heatmap) {
         //		delete heatmap;
         //		generateOctree(7, 1, .00001F);
-    }
+//    }
     if(drawLightPaths || drawIntersectionPoints) {
         createPaths();
     }
@@ -948,8 +1019,8 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
             Vec3fa selectNear = screenToWorldCoordinates(x, y, 0);
             Vec3fa selectFar = screenToWorldCoordinates(x, y, 1);
             
-            Vec3fa modelPosition = -center;
-            float reverseScaleModel = 1 / scale;
+            Vec3fa modelPosition = -modelCenter;
+            float reverseScaleModel = 1 / modelScale;
             
             Vec3fa dest = reverseScaleModel * selectNear;
             dest = dest - modelPosition;

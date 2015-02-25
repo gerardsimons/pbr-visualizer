@@ -12,5 +12,6 @@
 #-vp -10 8 0 -vi 0 0 0 -vu 0 1 0 -fov 55 # SIDE
 #-size 248 186
 #-size 800 600
--size 160 120
+#-size 160 120
+-size 320 240
 -renderer pathtracer { depth = 5 }

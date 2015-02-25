@@ -26,7 +26,7 @@ private:
 	void notifyFilterListeners();
 	void notifyDataListeners();
 	
-    Octree energyDistribution;
+    Octree* energyDistribution = NULL;
 	
 	//The datasets currently being used, this is what the views use to draw
 	RIVDataSet<float,ushort>* currentData;
@@ -112,7 +112,7 @@ public:
 	HistogramSet<float,ushort>* GetTrueDistributions() {
 		return &trueDistributions;
 	}
-
+    Octree* GetEnergyDistribution();
 	void AddMembershipDataStructures(RIVDataSet<float,ushort>* dataset);
 	void SetAcceptProbability(float newProb);
 	//The number of renderers to expect data from and the maximum number of paths per renderer before data reduction should kick in

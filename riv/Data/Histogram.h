@@ -579,6 +579,7 @@ public:
                 return i;
             }
         }
+        return bins - 1;
     }
     std::pair<unsigned int, unsigned int> SampleBins() {
         std::pair<unsigned int, unsigned int> binsPair;

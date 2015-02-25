@@ -84,7 +84,7 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 1000;
+const int maxPaths = 10000;
 const int bootstrapRepeat = 1;
 const int sliderViewHeight = 50;
 
@@ -113,7 +113,12 @@ void invalidateAllViews() {
 	glutPostRedisplay();
 	glutSetWindow(previousWindow);
 }
-
+void testOctree() {
+    Octree octree(2,0,0,0,1);
+    octree.Add(-0.25F, -0.25F, -0.25F, 1);
+    octree.Add(-0.25F, -0.25F, 0.25F, 1);
+    
+}
 void testSampling() {
     RIVDataSet<float,ushort>* testData = new RIVDataSet<float,ushort>("test_set");
     
@@ -194,6 +199,8 @@ void testSampling() {
 void testFunctions() {
 	
 	//Done
+    testOctree();
+    return;
 	
 	//Test bootstrap
 	const int upperBound = 100;
@@ -280,10 +287,10 @@ void keys(int keyCode, int x, int y) {
 			parallelCoordsView->IncreaseLineOpacity();
 			break;
         case 44:
-            sceneView->IncrementHeatmapDepth();
+//            sceneView->IncrementHeatmapDepth();
             break;
         case 46:
-            sceneView->DecrementHeatmapDepth();
+//            sceneView->DecrementHeatmapDepth();
             break;
 		case 61: // = key is on the same physical keyboard button as +, so cut the user some slack
 			parallelCoordsView->IncreaseLineOpacity();
@@ -742,7 +749,7 @@ void setup(int argc, char** argv) {
 		
 		//		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
 		
-		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, rayColorOne,rayColorTwo,sizeProperty);
+		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution(),dataControllerTwo->GetEnergyDistribution(),rayColorOne,rayColorTwo);
 //		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,colorOne,colorTwo,sizeProperty);
 		imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo);
 		sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),redBlue);
@@ -757,7 +764,7 @@ void setup(int argc, char** argv) {
 	}
 	else {
 		parallelCoordsView = new ParallelCoordsView(datasetOne,dataControllerOne->GetTrueDistributions(),colorOne,colorOne,sliderView);
-		sceneView = new RIV3DView(datasetOne,rendererOne,sceneDataOne,rayColorOne,sizeProperty);
+		sceneView = new RIV3DView(datasetOne,rendererOne,sceneDataOne,dataControllerOne->GetEnergyDistribution(), rayColorOne);
 		imageView = new RIVImageView(datasetOne,rendererOne);
 	}
 	//        heatMapView = new RIVHeatMapView(&dataset);
@@ -773,8 +780,7 @@ int main(int argc, char **argv)
 {
 	printf("Initialising Rendering InfoVis...\n");
 	
-//		testFunctions();
-//    testSampling();
+//    testFunctions();
 	
 	srand(time(NULL));
 	/* initialize GLUT, let it extract command-line

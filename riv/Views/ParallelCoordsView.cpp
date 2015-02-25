@@ -98,13 +98,16 @@ void ParallelCoordsView::createAxes() {
 					//				printf("Record %s has min-max : ",record->name.c_str());
 					//				std::cout << " " << minMax.first << ", " << minMax.second << std::endl;
 					
-					auto histOne = distributionsOne->GetHistogram<Type>(name);
-					auto histTwo = distributionsTwo->GetHistogram<Type>(name);
+//					auto histOne = distributionsOne->GetHistogram<Type>(name);
+//					auto histTwo = distributionsTwo->GetHistogram<Type>(name);
 					
 					//					axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,distributionsOne->GetHistogram<Type>(name),distributionsTwo->GetHistogram<Type>(name));
+                    
+                    float min = std::min(minMax.first,otherMinMax.first);
+                    float max = std::min(minMax.second,otherMinMax.second);
 					
-					auto dataHistOne = Histogram<Type>(name,histOne->LowerBound(),histOne->UpperBound(),histOne->NumberOfBins());
-					auto dataHistTwo = Histogram<Type>(name,histTwo->LowerBound(),histTwo->UpperBound(),histTwo->NumberOfBins());
+					auto dataHistOne = Histogram<Type>(record->name,min,max,10);
+					auto dataHistTwo = Histogram<Type>(record->name,min,max,10);
 					
 					axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,dataHistOne,dataHistTwo);
 					axisIndex++;

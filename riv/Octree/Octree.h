@@ -27,63 +27,78 @@ class Octree {
 private:
 	//The outermost dimensions of this octree, each child with depth N has dimensions of d/2^N where d is either width,height or depth
 	
-	OctreeNode* root;
+    OctreeNode* root = NULL;
 	OctreeConfig config; //Contains constants like max capacity and max tree depth, is also passed to nodes for recursion
-	
-    std::vector<size_t> indicesOne;
-    RIVRecord<float>* xsOne;
-    RIVRecord<float>* ysOne;
-    RIVRecord<float>* zsOne;
-    RIVRecord<float>* rsOne;
-    RIVRecord<float>* gsOne;
-    RIVRecord<float>* bsOne;
-
-    std::vector<size_t> indicesTwo;
-    RIVRecord<float>* xsTwo;
-    RIVRecord<float>* ysTwo;
-    RIVRecord<float>* zsTwo;
-    RIVRecord<float>* rsTwo;
-    RIVRecord<float>* gsTwo;
-    RIVRecord<float>* bsTwo;
-	
-	float* cachedMaxDensity = NULL;
-	size_t* cachedDepth = NULL;
-	size_t* cachedMaxCapacity = NULL;
-    float* cachedMaxEnergyOne = NULL;
-    float* cachedMaxEnergyTwo = NULL;
-	
-	float maxDensityHelper(OctreeNode* node);
-	size_t maxCapacityHelper(OctreeNode* node);
     
-    float maxEnergyHelperOne(OctreeNode* node);
-    float maxEnergyHelperTwo(OctreeNode* node);
+    std::vector<std::vector<std::vector<OctreeNode*>>> leafNodes;
+    
+    size_t addCount = 0;
+    size_t nDim; //How many nodes in 1 dimension, e.g. 2 ^ depth
+    size_t N; //How many nodes in total = 8 ^ depth
+    unsigned short depth;
+    float minX,maxX;
+    float minY,maxY;
+    float minZ,maxZ;
 	
-	void init();
+//	float* cachedMaxDensity = NULL;
+//	size_t* cachedDepth = NULL;
+//	size_t* cachedMaxCapacity = NULL;
+//    float* cachedMaxEnergyOne = NULL;
+//    float* cachedMaxEnergyTwo = NULL;
+	
+//	float maxDensityHelper(OctreeNode* node);
+//	size_t maxCapacityHelper(OctreeNode* node);
+//    
+//    float maxEnergyHelperOne(OctreeNode* node);
+//    float maxEnergyHelperTwo(OctreeNode* node);
+	
+    unsigned short binForValue(float value, float min, float max);
+	void init(float cx, float cy, float cz, float size);
 	void checkMinMax(float& currentMin, float& currentMax, float candidate);
-public:
-	~Octree();
-    Octree();
-	Octree(RIVRecord<float>* xsOne, RIVRecord<float>* ysOne, RIVRecord<float>* zsOne, RIVRecord<float>* rsOne, RIVRecord<float>* gsOne, RIVRecord<float>* bsOne, OctreeConfig& configuration);
-	Octree(RIVRecord<float>* xsOne, RIVRecord<float>* ysOne, RIVRecord<float>* zsOne, RIVRecord<float>* rsOne, RIVRecord<float>* gsOne, RIVRecord<float>* bsOne, const std::vector<size_t>& indexSubset,  OctreeConfig& configuration);
+    void createIndex();
+    void createIndexHelper(OctreeNode* node);
     
-    Octree(RIVRecord<float>* xsOne, RIVRecord<float>* ysOne, RIVRecord<float>* zsOne, RIVRecord<float>* rsOne, RIVRecord<float>* gsOne, RIVRecord<float>* bsOne, RIVRecord<float>* xsTwo, RIVRecord<float>* ysTwo, RIVRecord<float>* zsTwo, RIVRecord<float>* rsTwo, RIVRecord<float>* gsTwo, RIVRecord<float>* bsTwo, OctreeConfig& configuration);
-    Octree(RIVRecord<float>* xsOne, RIVRecord<float>* ysOne, RIVRecord<float>* zPositions, RIVRecord<float>* rsOne, RIVRecord<float>* gsOne, RIVRecord<float>* bsOne, RIVRecord<float>* xsTwo, RIVRecord<float>* ysTwo, RIVRecord<float>* zsTwo, RIVRecord<float>* rsTwo, RIVRecord<float>* gsTwo, RIVRecord<float>* bsTwo, const std::vector<size_t>& indexSubsetOne, const std::vector<size_t>& indexSubsetTwo, OctreeConfig& configuration);
-
-	static bool Test();
-	friend std::ostream& operator<<(std::ostream& os, const Octree& tree) {
-		os << "Root node : \n" << tree.root;
-		return os;
-	}
-	float MaxDensity();
-	size_t MaxCapacity();
-	size_t NumberOfPoints();
-	size_t NumberOfNodes();
-    float MaxEnergyOne();
-    float MaxEnergyTwo();
-	size_t Depth();
+    float maxValueHelper(OctreeNode* node);
+public:
+    ~Octree() { delete root; };
+    Octree() { };
+    //Create a octree of depthxdepthxdepth nodes with center cx,cy,cz and a cubic size of cubicSize
+    Octree(unsigned int depth,float cx, float cy, float cz, float cubicSize);
+    Octree& operator=(Octree&& other) {
+//        std::cout << "copy assignment of A\n";
+        std::swap(root, other.root);
+        std::swap(depth, other.depth);
+        std::swap(minX, other.minX);
+        std::swap(maxX, other.maxX);
+        std::swap(minY, other.minY);
+        std::swap(maxY, other.maxY);
+        std::swap(minZ, other.minZ);
+        std::swap(maxZ, other.maxZ);
+        std::swap(leafNodes, other.leafNodes);
+        return *this;
+    }
+    float MaxValue();
+    size_t NodesPerDimension();
+    //Find the octree node with this value and add the value to it
+    void Add(float x, float y, float z, float value);
+    OctreeNode* GetLeafNode(float x, float y, float z);
+    OctreeNode* LeafNodeForCoordinates(float x, float y, float z);
+//	static bool Test();
+//	friend std::ostream& operator<<(std::ostream& os, const Octree& tree) {
+//		os << "Root node : \n" << tree.root;
+//		return os;
+//	}
+//	float MaxDensity();
+//	size_t MaxCapacity();
+//	size_t NumberOfPoints();
+//	size_t NumberOfNodes();
+//    float MaxEnergyOne();
+//    float MaxEnergyTwo();
+	ushort Depth();
     bool IsEmpty();
 	OctreeNode* GetRoot();
 	OctreeConfig* GetConfiguration();
+    void Clear();
 };
 	
 

@@ -30,8 +30,8 @@ protected:
     
     bool isDirty = true;
 	
-	float scale;
-	Vec3fa center;
+	float modelScale;
+	Vec3fa modelCenter;
 	
     bool drawIntersectionPoints = false;
 	
@@ -53,6 +53,9 @@ protected:
 	
 	std::vector<Path> pathsOne;
 	std::vector<Path> pathsTwo;
+    
+    Octree* energyDistributionOne;
+    Octree* energyDistributionTwo = NULL;
 	
 	EMBREERenderer* rendererOne;
 	EMBREERenderer* rendererTwo = NULL;
@@ -60,10 +63,7 @@ protected:
 	RIVColorProperty* colorPropertyOne;
 	RIVColorProperty* colorPropertyTwo;
 	
-	RIVSizeProperty* sizeProperty;
-	
 	//Octree generated from 3D points (generated in createPoints)
-	Octree* heatmap = NULL;
 	riv::ColorMap treeColorMap;
     
     //Path drawing variables
@@ -76,8 +76,6 @@ protected:
 	GLUquadric* quadric = gluNewQuadric();
 	Vec3fa Phit; //Supposedly the point of intersection of the ray with the plane supporting the triangle
 	Ray pickRay;
-    
-    int heatmapDepth = 7;
 	
 	bool meshSelected = false;
     std::vector<riv::RowFilter*> pathFiltersOne;
@@ -115,14 +113,15 @@ protected:
     void redisplayWindow();
 public:
 	//Single renderer constructor
-    RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,const TriangleMeshGroup& sceneDataOne, RIVColorProperty* colorProperty,RIVSizeProperty*);
+    RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,const TriangleMeshGroup& sceneDataOne, Octree* energyDistribution, RIVColorProperty* colorProperty);
 	//Dual renderer constructor
-	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, RIVColorProperty* colorPropertyOne,RIVColorProperty* colorPropertyTwo, RIVSizeProperty* sizeProperty);
+	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, Octree* energyDistributionOne, Octree* energyDistributionTwo, RIVColorProperty* colorPropertyOne,RIVColorProperty* colorPropertyTwo);
 	
 	//Extract data about the scene from the embree renderer object
 	void GetSceneData(EMBREERenderer* renderer, TriangleMeshGroup* target);
 	
 	static int windowHandle;
+    void DrawEnergyDistribution(Octree* energyDistribution,Vec3fa& color);
     
     void ToggleHideMesh();
     void Reshape(int newWidth, int newHeight);
