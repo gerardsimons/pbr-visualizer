@@ -169,11 +169,6 @@ void ParallelCoordsView::drawAxes() {
 		tuple_for_each(axisGroup.axes, [&](auto tAxes) {
 			for(auto axis : tAxes) {
 				
-				//				printf("Draw axis %s\n",axis->name.c_str());
-                if(axis->height < 100) {
-                    
-                }
-				
 				auto& histogramOne = axis->densityHistogramOne;
 				auto& histogramTwo = axis->densityHistogramTwo;
 				
@@ -593,7 +588,8 @@ void ParallelCoordsView::Draw() {
 	
 	if(needsRedraw) {
 		printf("Clear PCV window\n");
-		glClearColor(0.9, 0.9, 0.9, 0.0);
+//		glClearColor(0.9, 0.9, 0.9, 0.0);
+        glClearColor(1,1,1,0);
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	}
 	

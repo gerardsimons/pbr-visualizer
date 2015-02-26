@@ -54,6 +54,7 @@ protected:
 	std::vector<Path> pathsOne;
 	std::vector<Path> pathsTwo;
     
+    ushort drawHeatmapDepth;
     Octree* energyDistributionOne;
     Octree* energyDistributionTwo = NULL;
 	
@@ -62,9 +63,6 @@ protected:
 	
 	RIVColorProperty* colorPropertyOne;
 	RIVColorProperty* colorPropertyTwo;
-	
-	//Octree generated from 3D points (generated in createPoints)
-	riv::ColorMap treeColorMap;
     
     //Path drawing variables
     int maxBounce = 5; //TODO: Deduce this value from the bounce record
@@ -87,21 +85,22 @@ protected:
 	
     bool pathsCreated = false;
 
-	//Generate a octree from the unfiltered intersection points
-	void generateOctree(size_t maxDepth, size_t maxCapacity, float minNodeSize);
 	//Determines if the objectId is currently selected
 	bool isSelectedObject(ushort objectId);
 	//Draw the mesh model loaded from the PBRT file
 	void drawMeshModel(TriangleMeshGroup* meshGroup, float* color, ushort* selectedObjectId);
 	void drawPaths(float startSegment, float stopSegment);
     void drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths, float startSegment, float stopSegment,const Vector3f& cameraPosition); //Draw the paths between two consecutive bounces
-	//Draw octree representation of the generated points
-	void drawHeatmap();
 	void drawPoints();
 	//Draw the intersection points
 	void drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths);
-	//draw the leaf nodes starting from the given node
-	void drawLeafNodes(OctreeNode* node,float maxEnergyOne, float maxEnergyTwo);
+
+    void drawEnergyHelper(OctreeNode* node, float max,riv::ColorMap& heatmap,ushort maxDepth);
+    void drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* nodeTwo, float max);
+    void drawEnergyDistribution(Octree* energyDistribution,ushort maxDepth);
+    void drawEnergyDistribution(Octree* energyDistribution,ushort maxDepth, float maxEnergy);
+    void drawEnergyDifference(Octree* energyDistributionOne, Octree* energyDistributionTwo,ushort maxDepth);
+
 	void createPaths();
 	
     void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
@@ -111,20 +110,14 @@ protected:
     static RIV3DView* instance;
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
     void redisplayWindow();
-    void drawEnergyDistribution(Octree* energyDistribution,Vec3fa& color);
-    void drawEnergyDifference(Octree* energyDistributionOne, Octree* energyDistributionTwo);
+
 public:
 	//Single renderer constructor
     RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,const TriangleMeshGroup& sceneDataOne, Octree* energyDistribution, RIVColorProperty* colorProperty);
 	//Dual renderer constructor
 	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, Octree* energyDistributionOne, Octree* energyDistributionTwo, RIVColorProperty* colorPropertyOne,RIVColorProperty* colorPropertyTwo);
 	
-	//Extract data about the scene from the embree renderer object
-	void GetSceneData(EMBREERenderer* renderer, TriangleMeshGroup* target);
-	
 	static int windowHandle;
-    
-    
     
     void ToggleHideMesh();
     void Reshape(int newWidth, int newHeight);

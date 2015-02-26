@@ -160,7 +160,7 @@ void DataController::createDataStructures(const Vec2f& xBounds, const Vec2f& yBo
     
     float maxSize = std::max(xSize,std::max(ySize,zSize));
     
-    energyDistribution = new Octree(1,cX,cY,cZ,1.01*maxSize);
+    energyDistribution = new Octree(10,cX,cY,cZ,1.01*maxSize,1);
     
     resetPointers(candidateData);
 }
