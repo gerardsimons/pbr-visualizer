@@ -629,7 +629,28 @@ void ParallelCoordsView::ToggleDrawDataSetTwo() {
 	
 	redisplayWindow();
 }
+//Helper functions to create color property for a given dataset
+RIVColorRGBProperty<float>* ParallelCoordsView::createPathEnergyColorProperty(RIVDataSet<float,ushort>* dataset) {
+    RIVTable<float,ushort> *pathsTable = dataset->GetTable(PATHS_TABLE);
+    
+    RIVRecord<float>* pathRRecord = pathsTable->GetRecord<float>(PATH_R);
+    RIVRecord<float>* pathGRecord = pathsTable->GetRecord<float>(PATH_G);
+    RIVRecord<float>* pathBRecord = pathsTable->GetRecord<float>(PATH_B);
+    
+    //	riv::ColorMap jetColorMap = colors::jetColorMap();
+    return new RIVColorRGBProperty<float>(pathsTable,pathRRecord,pathGRecord,pathBRecord);
+}
 
+RIVColorRGBProperty<float>* ParallelCoordsView::createRayEnergyColorProperty(RIVDataSet<float,ushort>* dataset) {
+    RIVTable<float,ushort> *intersectionsTable = dataset->GetTable(INTERSECTIONS_TABLE);
+    
+    RIVRecord<float>* isectRRecord = intersectionsTable->GetRecord<float>(INTERSECTION_R);
+    RIVRecord<float>* isectGRecord = intersectionsTable->GetRecord<float>(INTERSECTION_G);
+    RIVRecord<float>* isectBrRecord = intersectionsTable->GetRecord<float>(INTERSECTION_B);
+    
+    //	riv::ColorMap jetColorMap = colors::jetColorMap();
+    return new RIVColorRGBProperty<float>(intersectionsTable,isectRRecord,isectGRecord,isectBrRecord);
+}
 bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 	//    printf("PCV HandleMouse\n");
 	//    ToViewSpaceCoordinates(&x, &y);

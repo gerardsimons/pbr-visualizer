@@ -42,6 +42,12 @@ private:
 	HistogramSet<float,ushort>* distributionsOne;
 	HistogramSet<float,ushort>* distributionsTwo = NULL;
     
+    RIVColorProperty* rayColorEnergyOne;
+    RIVColorProperty* pathColorEnergyOne;
+    
+    RIVColorProperty* rayColorEnergyTwo = NULL;
+    RIVColorProperty* pathColorEnergyTwo = NULL;
+    
     //Properties
     std::vector<ParallelCoordsAxisGroup<float,ushort>> axisGroups;
 	
@@ -97,6 +103,10 @@ public:
 	~ParallelCoordsView();
 	
 	static int windowHandle;
+    
+    //Helper functions to create color property for a given dataset
+    RIVColorRGBProperty<float>* createPathEnergyColorProperty(RIVDataSet<float,ushort>* dataset);
+    RIVColorRGBProperty<float>* createRayEnergyColorProperty(RIVDataSet<float,ushort>* dataset);
     
     //Implemented virtual functions prescribed by DataView
     void Draw();
