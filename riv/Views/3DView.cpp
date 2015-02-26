@@ -285,20 +285,20 @@ void RIV3DView::ToggleDrawDataSetTwo() {
 }
 
 void drawEnergyHelper(OctreeNode* node, float max,riv::ColorMap& heatmap) {
-    float min = 1;
+    float min = 0.1;
     if(node->IsLeafNode()) {
-        if(node->Value() > 1) {
+//        if(node->Value() > 0) {
             float ratio = node->Value() / max;
-            if(ratio > 1) {
-                
+            if(ratio > min) {
+                riv::Color c = heatmap.ComputeColor(ratio);
+                glColor4f(c.R,c.G,c.B,1);
+                glPushMatrix();
+                glTranslatef(node->cx, node->cy, node->cz);
+                glutSolidCube(node->GetSize());
+                glPopMatrix();
             }
-            riv::Color c = heatmap.ComputeColor(ratio);
-            glColor4f(c.R,c.G,c.B,1);
-            glPushMatrix();
-            glTranslatef(node->cx, node->cy, node->cz);
-            glutSolidCube(node->GetSize());
-            glPopMatrix();
-        }
+
+//        }
     }
     else {
         for(int i = 0 ; i < 8 ; ++i) {
@@ -306,8 +306,67 @@ void drawEnergyHelper(OctreeNode* node, float max,riv::ColorMap& heatmap) {
         }
     }
 }
+void drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* nodeTwo, float max) {
+    if(nodeOne->IsLeafNode() || nodeTwo->IsLeafNode()) {
 
-void RIV3DView::DrawEnergyDistribution(Octree* energyDistribution, Vec3fa& color) {
+        
+        
+        float valueOne = nodeOne->AggregateValue() / max;
+        float valueTwo = nodeTwo->AggregateValue() / max;
+        
+        float red,blue,saturation;
+        
+        if(valueOne > 0.1 || valueTwo > 0.1) {
+//            float ratio;
+            if(valueTwo > valueOne) {
+                blue = ((valueTwo - valueOne) / valueTwo + 1) / 2.F;
+                red = 1-blue;
+                saturation = valueTwo / max;
+            }
+            else {
+                red = ((valueOne - valueTwo) / valueOne + 1) / 2.F;
+                blue = 1 - red;
+                saturation = valueOne / max;
+            }
+            
+            
+//            if(ratio > 1) {
+            
+//            }
+//            printf("Node drawn!\n");
+//            riv::Color c = heatmap.ComputeColor(ratio);
+            glColor4f(red,0,blue,1);
+            glPushMatrix();
+            glTranslatef(nodeOne->cx, nodeOne->cy, nodeOne->cz);
+            glutSolidCube(nodeOne->GetSize());
+            glPopMatrix();
+            
+        }
+    }
+    else {
+        for(int i = 0 ; i < 8 ; ++i) {
+            drawEnergyDifferenceHelper(nodeOne->GetChild(i),nodeTwo->GetChild(i), max);
+        }
+    }
+}
+
+//Draw energy difference by comparing two octrees
+void RIV3DView::drawEnergyDifference(Octree *energyDistributionOne, Octree *energyDistributionTwo) {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    float max = std::max(energyDistributionOne->MaxValue(),energyDistributionTwo->MaxValue());
+    if(energyDistributionOne && energyDistributionTwo) {
+        riv::ColorMap redBlue;
+//        redBlue.AddColor(colors::RED);
+//        redBlue.AddColor(colors::BLUE);
+        
+        drawEnergyDifferenceHelper(energyDistributionOne->GetRoot(), energyDistributionTwo->GetRoot(), max);
+    }
+    else throw std::runtime_error("One of the energy distributions is not set.");
+}
+
+void RIV3DView::drawEnergyDistribution(Octree* energyDistribution, Vec3fa& color) {
 
     ushort nDim = energyDistribution->NodesPerDimension();
     float maxEnergy = 0;
@@ -316,13 +375,13 @@ void RIV3DView::DrawEnergyDistribution(Octree* energyDistribution, Vec3fa& color
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    for(int x = 0 ; x < nDim ; ++x) {
-        for(int y = 0 ; y < nDim ; ++y) {
-            for(int z = 0 ; z < nDim ; ++z) {
+//    for(int x = 0 ; x < nDim ; ++x) {
+//        for(int y = 0 ; y < nDim ; ++y) {
+//            for(int z = 0 ; z < nDim ; ++z) {
 //                maxEnergy = std::max(maxEnergy,energyDistribution->GetLeafNode(x,y,z)->Value());
-            }
-        }
-    }
+//            }
+//        }
+//    }
     riv::ColorMap c = colors::jetColorMap();
     drawEnergyHelper(energyDistribution->GetRoot(),energyDistribution->MaxValue(),c);
     
@@ -372,11 +431,9 @@ void RIV3DView::Draw() {
 //    glScalef(-modelScale,modelScale,modelScale);
     drawCoordSystem();
     glTranslatef(modelCenter[0], modelCenter[1], modelCenter[2]);
-//    glScalef(-1, 1, 1);
+    glScalef(-1, 1, 1);
     glTranslatef(-eye.x,-eye.y,-eye.z);
 
-
-    
     if(showMeshes) {
         if(drawDataSetOne) {
             //		float purpleColor[3] =  {.5f,.2f,1.0f};
@@ -391,13 +448,16 @@ void RIV3DView::Draw() {
     if(drawIntersectionPoints)
         drawPoints();
     
-    if(drawDataSetOne && drawHeatmapTree) {
+    if(drawDataSetOne && !drawDataSetTwo && drawHeatmapTree) {
         Vec3fa red(1,0,0);
-        DrawEnergyDistribution(energyDistributionOne,red);
+        drawEnergyDistribution(energyDistributionOne,red);
     }
-    if(drawDataSetTwo && drawHeatmapTree) {
+    if(drawDataSetTwo && !drawDataSetOne && drawHeatmapTree) {
         Vec3fa blue(0,0,1);
-        DrawEnergyDistribution(energyDistributionTwo,blue);
+        drawEnergyDistribution(energyDistributionTwo,blue);
+    }
+    else if(drawHeatmapTree && (drawDataSetTwo && drawDataSetOne)) {
+        drawEnergyDifference(energyDistributionOne, energyDistributionTwo);
     }
     //Draw selection ray
     glColor3f(1,1,1);

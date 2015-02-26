@@ -65,6 +65,7 @@ public:
     void Add(float x, float y, float z, float value);
     void Clear();
     float Value();
+    float AggregateValue();
     OctreeNode* ChildForCoordinates(float x, float y, float z);
     
 	~OctreeNode();

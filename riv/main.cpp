@@ -637,8 +637,17 @@ void setup(int argc, char** argv) {
         rendererTwo = new EMBREERenderer(dcTwo, std::string(argv[2]));
         sceneDataOne = getSceneData(rendererOne);
         sceneDataTwo = getSceneData(rendererTwo);
-        dataControllerOne = new DataController(argc - 1,2 * maxPaths, bootstrapRepeat,sceneDataOne.xBounds,sceneDataOne.yBounds,sceneDataOne.zBounds,sceneDataOne.NumberOfMeshes());
-        dataControllerTwo = new DataController(argc - 1, 2*maxPaths,bootstrapRepeat,sceneDataTwo.xBounds,sceneDataTwo.yBounds,sceneDataTwo.zBounds,sceneDataTwo.NumberOfMeshes());
+        
+        //find the largest bounds
+        Vec2f xBounds,yBounds,zBounds;
+        xBounds = Vec2f(std::min(sceneDataOne.xBounds[0],sceneDataTwo.xBounds[0]),std::max(sceneDataOne.xBounds[1],sceneDataTwo.xBounds[1]));
+        yBounds = Vec2f(std::min(sceneDataOne.yBounds[0],sceneDataTwo.yBounds[0]),std::max(sceneDataOne.yBounds[1],sceneDataTwo.yBounds[1]));
+        zBounds = Vec2f(std::min(sceneDataOne.zBounds[0],sceneDataTwo.zBounds[0]),std::max(sceneDataOne.zBounds[1],sceneDataTwo.zBounds[1]));
+        
+        dataControllerOne = new DataController(argc - 1,2 * maxPaths, bootstrapRepeat,xBounds,yBounds,zBounds,sceneDataOne.NumberOfMeshes());
+        dataControllerTwo = new DataController(argc - 1, 2*maxPaths,bootstrapRepeat,xBounds,yBounds,zBounds,sceneDataTwo.NumberOfMeshes());
+        
+        
         datasetOne = dataControllerOne->GetDataSet();
         datasetTwo = dataControllerTwo->GetDataSet();
         float acceptProb = 2.F * maxPaths / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel());

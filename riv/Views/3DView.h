@@ -111,6 +111,8 @@ protected:
     static RIV3DView* instance;
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
     void redisplayWindow();
+    void drawEnergyDistribution(Octree* energyDistribution,Vec3fa& color);
+    void drawEnergyDifference(Octree* energyDistributionOne, Octree* energyDistributionTwo);
 public:
 	//Single renderer constructor
     RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,const TriangleMeshGroup& sceneDataOne, Octree* energyDistribution, RIVColorProperty* colorProperty);
@@ -121,7 +123,8 @@ public:
 	void GetSceneData(EMBREERenderer* renderer, TriangleMeshGroup* target);
 	
 	static int windowHandle;
-    void DrawEnergyDistribution(Octree* energyDistribution,Vec3fa& color);
+    
+    
     
     void ToggleHideMesh();
     void Reshape(int newWidth, int newHeight);

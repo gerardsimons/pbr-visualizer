@@ -48,12 +48,27 @@ OctreeNode* OctreeNode::ChildForCoordinates(float x, float y, float z) {
     return children[xChild + yChild + zChild];
 }
 float OctreeNode::Value() {
-    return value;
+    if(addCount) {
+        return value * (pow(2,depth)) / addCount;
+    }
+    else return 0;
+}
+float OctreeNode::AggregateValue() {
+    if(isLeaf) {
+        return Value();
+    }
+    else {
+        float sum = 0;
+        for(int i = 0 ; i < 8 ; ++i) {
+            sum += children[i]->AggregateValue();
+        }
+        return sum;
+    }
 }
 void OctreeNode::Add(float x, float y, float z, float value) {
     ++addCount;
     if(isLeaf) {
-        if(addCount > 1 && depth < 10) {
+        if(addCount > 0 && depth < 10) {
             value = 0;
             Split();
             OctreeNode* child = ChildForCoordinates(x, y, z);
