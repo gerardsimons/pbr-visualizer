@@ -9,6 +9,7 @@ Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd Textures/apple.jpg
 
 newmtl Background-plane
 Ns 96.078431
@@ -18,7 +19,6 @@ Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
-# map_Kd J:\Dropbox\TU Delft\Reference Images\Window-Backgrounds\snowsheff1a1.jpg
 
 newmtl Black-Raught-Iron
 Ns 96.078431
@@ -77,8 +77,8 @@ illum 2
 newmtl C-Table-box
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
 Ni 1.000000
 d 1.000000
 illum 2
@@ -109,6 +109,8 @@ Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd Textures/carpet-text3b.jpg
+map_Kd Textures/carpet-text3a-bump.jpg
 
 newmtl Ceiling-lampshade
 Ns 96.078431
@@ -122,8 +124,8 @@ illum 2
 newmtl Chair-sofa-leather
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
+Kd 0.507 0.469 0.428
+Ks 0.787 0.751 0.731
 Ni 1.000000
 d 1.000000
 illum 2
@@ -154,6 +156,7 @@ Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd Textures/cushion-green-circles.jpg
 
 newmtl Cushion1
 Ns 96.078431
@@ -163,6 +166,7 @@ Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd Textures/cushion-purple-yellow-stripe.jpg
 
 newmtl Cushion3
 Ns 96.078431
@@ -172,6 +176,7 @@ Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd Textures/cushion-stripe-purple.jpg
 
 newmtl Emitter-Rear
 Ns 96.078431
@@ -198,6 +203,7 @@ Kd 0.640000 0.640000 0.640000
 Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
+map_Kd Textures/wood-floor-texture.jpg
 illum 2
 
 newmtl Glass-Fake-picframe
@@ -283,8 +289,8 @@ illum 2
 newmtl Painted-white-wood
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
+Kd 1 1 1
+Ks 0.8 0.8 0.8
 Ni 1.000000
 d 1.000000
 illum 2
@@ -333,7 +339,6 @@ Ks 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 1
-#map_Kd J:\Dropbox\TU Delft\Reference Images\radio-dial-idea.jpg
 
 newmtl Radio-dialback
 Ns 96.078431
@@ -343,7 +348,6 @@ Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
-#map_Kd J:\Dropbox\TU Delft\Reference Images\radio-dial-idea.jpg
 
 newmtl Radio-edges
 Ns 96.078431
@@ -447,8 +451,8 @@ illum 2
 newmtl White-teapot
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.500000 0.500000 0.500000
+Kd 0.800000 0.139000 0.139000
+Ks 0.800000 0.518000 0.634000
 Ni 1.000000
 d 1.000000
 illum 2
@@ -478,6 +482,7 @@ Kd 0.640000 0.640000 0.640000
 Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
+map_Kd Textures/book-spines.jpg
 illum 2
 
 newmtl bush-logo
@@ -542,6 +547,7 @@ Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd Textures/magazine.jpg
 
 newmtl picframe
 Ns 96.078431

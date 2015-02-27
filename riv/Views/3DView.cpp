@@ -263,8 +263,6 @@ void RIV3DView::drawEnergyDifference(Octree *energyDistributionOne, Octree *ener
 }
 
 void RIV3DView::drawEnergyDistribution(Octree* energyDistribution, ushort maxDepth) {
-    
-
     drawEnergyDistribution(energyDistribution,maxDepth,energyDistribution->MaxValue());
 }
 void RIV3DView::drawEnergyDistribution(Octree* energyDistribution, ushort maxDepth, float maxEnergy) {
@@ -318,13 +316,13 @@ void RIV3DView::Draw() {
     
     if(drawDataSetOne && !drawDataSetTwo && drawHeatmapTree) {
         if(datasetTwo) {
-            float max = std::max(energyDistributionOne->MaxValue(),energyDistributionTwo->MaxValue());
+            float max = std::max(energyDistributionOne->MaxValue(drawHeatmapDepth),energyDistributionTwo->MaxValue(drawHeatmapDepth));
             drawEnergyDistribution(energyDistributionOne,drawHeatmapDepth,max);
         }
         else drawEnergyDistribution(energyDistributionOne,drawHeatmapDepth);
     }
     if(drawDataSetTwo && !drawDataSetOne && drawHeatmapTree) {
-        float max = std::max(energyDistributionOne->MaxValue(),energyDistributionTwo->MaxValue());
+        float max = std::max(energyDistributionOne->MaxValue(drawHeatmapDepth),energyDistributionTwo->MaxValue(drawHeatmapDepth));
         drawEnergyDistribution(energyDistributionTwo,drawHeatmapDepth,max);
     }
     else if(drawHeatmapTree && (drawDataSetTwo && drawDataSetOne)) {
@@ -941,7 +939,7 @@ bool RIV3DView::HandleMouseMotion(int x, int y) {
     return false;
 }
 void RIV3DView::IncrementHeatmapDepth() {
-    if(drawHeatmapDepth < energyDistributionOne->Depth() && drawHeatmapDepth < energyDistributionTwo->Depth()) {
+    if(drawHeatmapDepth < energyDistributionOne->Depth() && (energyDistributionTwo == NULL || drawHeatmapDepth < energyDistributionTwo->Depth())) {
         drawHeatmapDepth++;
         redisplayWindow();
     }

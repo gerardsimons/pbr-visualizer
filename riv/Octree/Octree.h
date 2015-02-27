@@ -46,6 +46,7 @@ private:
     void createIndexHelper(OctreeNode* node);
     
     float maxValueHelper(OctreeNode* node);
+    float maxValueHelper(OctreeNode* node,ushort maxDepth);
 public:
     ~Octree() { delete root; };
     Octree() : depth(0), maxCapacity(0) { };
@@ -64,6 +65,7 @@ public:
         return *this;
     }
     float MaxValue();
+    float MaxValue(ushort maxDepth);
     size_t NodesPerDimension();
     void Add(float x, float y, float z, float value);
     OctreeNode* GetLeafNode(float x, float y, float z);

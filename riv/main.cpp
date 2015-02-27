@@ -114,10 +114,12 @@ void invalidateAllViews() {
     glutSetWindow(previousWindow);
 }
 void testOctree() {
-//    Octree octree(2,0,0,0,1,);
-//    octree.Add(-0.25F, -0.25F, -0.25F, 1);
-//    octree.Add(-0.25F, -0.25F, 0.25F, 1);
+    Octree octree(2,0,0,0,1,1);
+    octree.Add(-0.25F, -0.25F, -0.25F, 1);
+    octree.Add(-0.25F, -0.25F, 0.25F, 1);
     
+    OctreeNode* root = octree.GetRoot();
+    printf("Aggregate value root = %f\n",root->AggregateValue());
 }
 void testSampling() {
     RIVDataSet<float,ushort>* testData = new RIVDataSet<float,ushort>("test_set");
@@ -790,7 +792,7 @@ int main(int argc, char **argv)
 {
     printf("Initialising Rendering InfoVis...\n");
     
-    //    testFunctions();
+        testFunctions();
     
     srand(time(NULL));
     /* initialize GLUT, let it extract command-line

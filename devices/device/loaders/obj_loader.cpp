@@ -274,7 +274,6 @@ namespace embree
       /*! the following are extensions to the standard */
       if (!strncmp(token, "map_Refl", 8)) { parseSepOpt(token += 8);  g_device->rtSetTexture(cur, "map_Refl", rtLoadTexture(path + std::string(token)));  continue; }
       if (!strncmp(token, "map_Bump", 8)) { parseSepOpt(token += 8);  g_device->rtSetTexture(cur, "map_Bump", rtLoadTexture(path + std::string(token)));  continue; }
-
     }
     if (cur) g_device->rtCommit(cur);
     cin.close();
