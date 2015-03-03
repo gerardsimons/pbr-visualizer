@@ -63,7 +63,7 @@ private:
 	int g_spp = 1;                          //!< samples per pixel for ordinary rendering
 	
 	/* output settings */
-	int g_numBuffers = 2;                   //!< number of buffers of the framebuffer
+	int g_numBuffers = 1;                   //!< number of buffers of the framebuffer
 	bool g_rendered = false;                //!< set to true after rendering
 	int g_refine = 1;                       //!< refinement mode
 	float g_gamma = 1.0f;

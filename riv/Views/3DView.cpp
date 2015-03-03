@@ -329,7 +329,7 @@ void RIV3DView::Draw() {
         drawEnergyDifference(energyDistributionOne, energyDistributionTwo,drawHeatmapDepth);
     }
     
-    drawLightCones(lightConesOne);
+//    drawLightCones(lightConesOne);
     
     //Draw selection ray
     glColor3f(1,1,1);
@@ -520,7 +520,7 @@ std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVC
     lightCones.clear();
     LightCone* previousCone = NULL;
     
-    dataset->Print(10);
+//    dataset->Print(10);
     
     while(iterator->GetNext(row,pathID)) {
         ushort primitiveId = primitiveRecord->Value(row);
@@ -574,34 +574,133 @@ std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVC
     
     return paths;
 }
-float angle = 0;
+#define PI 3.141592
+float angleTest = 0;
 void RIV3DView::drawLightCones(const std::map<size_t,LightCone*>& lightCones) {
     GLUquadric* qobj = gluNewQuadric();
-    glColor3f(1, 0, 0);
+    int i = 0;
+    int size = lightCones.size();
     for(auto pair : lightCones) {
-        
+        glColor3f(i/(float)size, 0, 0);
         LightCone* cone = pair.second;
-        glPushMatrix();
-        Vec3fa height = cone->target - cone->origin;
-        float max = std::max(height.x,std::max(height.y,height.z));
-        Vec3fa dir = height / max;
+
+//        cone->origin = 0;
+//        cone->target = 1;
+        Vec3fa diff = cone->target - cone->origin;
+//        float max = std::max(diff.x,std::max(diff.y,diff.z));
+        float diffLength = length(diff);
+        Vec3fa dir = diff / diffLength;
 //        glRotatef(360, dir.x, dir.y, dir.z);
-//        glTranslatef(modelCenter[0],modelCenter[1],modelCenter[2]);
-        
-                glBegin(GL_LINES);
-                    glVertex3f(cone->origin.x, cone->origin.y, cone->origin.z);
-                    glVertex3f(cone->origin.x+dir.x,cone->origin.y+ dir.y,cone->origin.z+ dir.z);
-                glEnd();
+        glPushMatrix();
         glTranslatef(cone->origin.x,cone->origin.y,cone->origin.z);
-        glRotatef(angle, 360*dir.x,360*dir.y,360*dir.z);
-        ++angle;
+//        glTranslatef(modelCenter[0],modelCenter[1],modelCenter[2]);
+        double toDegrees = 180.0 / PI;
+        
+        
+//        float acosX = std::acos(dir.x / toDegrees) / 2;
+//        float angleX = acosX * toDegrees;
+//        float angleY = std::acos(dir.y / toDegrees)/2*toDegrees;
+//        float angleZ = std::acos(dir.z / toDegrees)/2*toDegrees;
+        
+        //DEGREES
+//        float angleX = 360 - std::atan(diff.y / diff.z) * toDegrees;
+        //RAD
+        float angleX = std::atan2(diff.y,diff.z);
+        
+
+//        angle *= toDegrees;
+          
+
+//        
+
+        if(diff.y < 0 || diff.z < 0) {
+            //DEGREES
+//            angleX += 180;
+            //RAD
+//            angleX += PI;
+        }
+        float angleY = std::atan2(diff.x,diff.z);
+        if(diff.x < 0 || diff.z < 0) {
+//            angleY += 180;
+//            angleY += PI;
+        }
+        float angleZ = std::atan2(diff.x,diff.y);
+        if(diff.y < 0 || diff.x < 0) {
+//            angleZ += 180;
+//            angleZ += PI;
+        }
+        Vec3f angle(angleX,angleY,angleZ);
+//        glPushMatrix();
+//        glRotatef(angle.z,0,0,1);
+//        glPopMatrix();
+//        glPushMatrix();
+        
+        GLdouble xRotationMatrix[16] =
+        {1,0,0,0,
+         0,std::cos(angleX),-std::sin(angleX),0,
+         0,std::sin(angleX), std::cos(angleX),0,
+         0,0,0,1};
+        
+//        angleTest += 0.1;
+//        angleY = angleTest;
+        GLdouble yRotationMatrix[16] =
+        {std::cos(angleY),0,-std::sin(angleY),0,
+         0,1,0,0,
+         std::sin(angleY),0,std::cos(angleY),0,
+         0,0,0,1};
+        
+        GLdouble zRotationMatrix[16] =
+        {std::cos(angleZ),-sin(angleZ),0,0,
+         std::sin(angleZ),std::cos(angleZ),0,0,
+         0,0,1,0,
+         0,0,0,1};
+        
+        glPushMatrix();
+//        glRotatef(45,.5,.5,0);
+        glMultMatrixd(xRotationMatrix);
+        glMultMatrixd(yRotationMatrix);
+        glMultMatrixd(zRotationMatrix);
+        
+        
+//        glPopMatrix();
+//        glPushMatrix();
+//        glRotatef(angle.y,0,1,0);
+//        glPopMatrix();
+//        glTranslatef(-cone->origin.x,-cone->origin.y,-cone->origin.z);
+        
+//        glPushMatrix();
+
+//        glRotatef(angleZ,0,0,1);
+//        glRotatef(1, angleX, angleY, angleZ);
+        std::cout << " dir = " << dir << std::endl;
+        std::cout << " origin = " << cone->origin << std::endl;
+        std::cout << " target = " << cone->target << std::endl;
+        printf("angle = %f,%f,%f\n",angle.x*toDegrees,angle.y*toDegrees,angle.z*toDegrees);
+        
+//        float angleY
+//        float angleZ
+        
+
+//        glTranslatef(cone->origin.x,cone->origin.y,cone->origin.z);
+//        glRotatef(angle, 360*dir.x,360*dir.y,360*dir.z);
+//        ++angle;
         
 
         
-        float heightCylinder = length(height);
-        gluCylinder(qobj, 10.0, 10.0, heightCylinder, 8, 16);
+        float heightCylinder = length(diff);
+        gluCylinder(qobj, 10.0, 40.0, heightCylinder, 8, 16);
+//        glPopMatrix();
         glPopMatrix();
+//        glPopMatrix();
+        glColor3f(0, i/(float)size, 0);
+        glBegin(GL_LINES);
+        glVertex3f(cone->origin.x, cone->origin.y, cone->origin.z);
+        glVertex3f(cone->origin.x+diff.x,cone->origin.y+ diff.y,cone->origin.z+ diff.z);
+        //            glVertex3f(cone->target.x, cone->target.y, cone->target.z);
+        glEnd();
+        ++i;
     }
+    gluDeleteQuadric(qobj);
 }
 void RIV3DView::MovePathSegment(float ratioIncrement) {
     if(drawLightPaths && (drawDataSetOne || drawDataSetTwo)) {
@@ -802,7 +901,12 @@ void RIV3DView::redisplayWindow() {
 void RIV3DView::OnFiltersChanged(RIVDataSet<float,ushort>* source) {
     printf("3D View received on filter change.");
     
-    ResetGraphics();
+    if(source == *datasetOne || (datasetTwo != NULL && source == *datasetTwo)) {
+        ResetGraphics();
+    }
+    else {
+        throw std::runtime_error("Unknown dataset");
+    }
     
     redisplayWindow();
 }

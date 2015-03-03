@@ -77,7 +77,7 @@ public:
 	}
 //	void ProcessPath();
 	void FinishFrame(size_t numPaths, size_t numRays);
-	bool FinishPath(unsigned short depth, Color& color, Color& throughput);
+	bool FinishPath(Color& color, Color& throughput);
 	void StartPath(const Vec2f& pixel,const Vec2f& lens, float time);
 //	void set_callback((void) (*newCallBack)(PathData*));
 	void AddIntersectionData(const Vec3fa& pos, const Vec3fa& dir, Color& color, int primitive_id, ushort type);

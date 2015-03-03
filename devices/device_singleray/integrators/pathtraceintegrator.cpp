@@ -165,14 +165,15 @@ namespace embree
         return L;
     }
 
-	Color throughputCache;
+    PathTraceIntegrator::LightPath* returnPath;
 //	Color lastColor;
 	
 	Color PathTraceIntegrator::Li(LightPath& lightPath, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector)
 	{
 		/*! Terminate path if too long or contribution too low. */
 		if (lightPath.depth >= maxDepth || reduce_max(lightPath.throughput) < minContribution) {
-			throughputCache = lightPath.throughput;
+//			throughputCache = lightPath.throughput;
+            returnPath = &lightPath;
 			return zero;
 		}
 		
@@ -207,7 +208,8 @@ namespace embree
 					for (size_t i=0; i<scene->envLights.size(); i++)
 						L += scene->envLights[i]->Le(wo);
 			}
-			throughputCache = lightPath.throughput;
+//			throughputCache = lightPath.throughput;
+            returnPath = &lightPath;
 			return L;
 		}
 //		printf("Something was hit.\n");
@@ -305,7 +307,7 @@ namespace embree
 		LightPath lightPath(ray);
 		Color L = Li(lightPath,scene,state,dataConnector);
 		//We now have the complete path
-		dataConnector->FinishPath(lightPath.depth,L,throughputCache);
+		dataConnector->FinishPath(L,returnPath->throughput);
 		++state.numPaths;
 		return L;
 	}

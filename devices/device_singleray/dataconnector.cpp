@@ -24,7 +24,7 @@ DataConnector::DataConnector(path_finished pfCallback, frame_finished ffCallback
 	id = ++IdCounter;
 }
 //Finish the current path with the latest data
-bool DataConnector::FinishPath(unsigned short depth, Color& color, Color& throughput) {
+bool DataConnector::FinishPath(Color& color, Color& throughput) {
 	//Find callback
 	if(pathSet) {
         
@@ -36,10 +36,6 @@ bool DataConnector::FinishPath(unsigned short depth, Color& color, Color& throug
         currentPath.throughput.r = std::min(throughput.r,1.F);
         currentPath.throughput.g = std::min(throughput.g,1.F);
         currentPath.throughput.b = std::min(throughput.b,1.F);
-        
-//		currentPath.radiance = color;
-//		currentPath.throughput = throughput;
-		currentPath.depth = depth;
 		
 //		printf("Finishing Path\n");
 		return pfCallback(&currentPath);

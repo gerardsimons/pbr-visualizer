@@ -120,17 +120,14 @@ void RIVImageView::OnDataChanged(RIVDataSet<float,ushort>* source) {
     if(source == *datasetOne) {
         computeHeatmap(*datasetOne, heatmapOne);
     }
-    
-    if(datasetTwo && *datasetTwo == source) {
+    else if(datasetTwo && *datasetTwo == source) {
         computeHeatmap(*datasetTwo, heatmapTwo);
 //        heatmapTwo->Print();
     }
-    
-    int currentWindow = glutGetWindow();
-    glutSetWindow(RIVImageView::windowHandle);
-    glutPostRedisplay();
-    //Return window to given window
-    glutSetWindow(currentWindow);
+    else {
+        throw std::runtime_error("No such dataset");
+    }
+    redisplayWindow();
 }
 
 void RIVImageView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {

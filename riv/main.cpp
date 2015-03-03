@@ -97,7 +97,8 @@ int currentFrameTwo = 0;
 clock_t startDelay;
 bool isDelayed = false;
 
-bool renderingPaused = false;
+bool renderingPausedOne = false;
+bool renderingPausedTwo = true;
 int delayTimeLeft = 0;
 int delayTimerInterval = 0;
 
@@ -105,6 +106,8 @@ bool renderOneFinishedFrame = true;
 bool renderTwoFinishedFrame = true;
 
 void TogglePause();
+void TogglePauseOne();
+void TogglePauseTwo();
 
 void display(void)
 {
@@ -294,9 +297,12 @@ void keys(int keyCode, int x, int y) {
             (*datasetOne)->ClearAllFilters();
             (*datasetOne)->StopFiltering();
             
-            (*datasetOne)->StartFiltering();
-            (*datasetOne)->ClearAllFilters();
-            (*datasetOne)->StopFiltering();
+            (*datasetTwo)->StartFiltering();
+            (*datasetTwo)->ClearAllFilters();
+            (*datasetTwo)->StopFiltering();
+            
+            invalidateAllViews();
+            
             break;
         case 45: // - key
             parallelCoordsView->DecreaseLineOpacity();
@@ -324,8 +330,19 @@ void keys(int keyCode, int x, int y) {
             parallelCoordsView->ToggleDrawDataSetTwo();
             sceneView->ToggleDrawDataSetTwo();
             break;
-        case 51: // the '3' key, copy 1 to 2
+        case 51: // the '3' key, pause renderer 1
+            if(datasetOne) {
+                TogglePauseOne();
+            }
+            break;
+        case 52: // the '4' key, pause renderer 2
+            if(datasetTwo) {
+                TogglePauseTwo();
+            }
+            break;
+        case 53: // the '5' key, copy 1 to 2
             if(datasetTwo && datasetOne) {
+                printf("Copying swapchain from renderer 1 to renderer 2!!\n");
                 rendererOne->CopySwapChainTo(rendererTwo);
                 imageView->redisplayWindow();
             }
@@ -334,7 +351,7 @@ void keys(int keyCode, int x, int y) {
             sceneView->MoveCamera(-camSpeed, 0, 0);
             break;
         case 98: // 'b' key
-            glutSwapBuffers();
+//            glutSwapBuffers();
             printf("Manual swap buffers\n");
             imageView->redisplayWindow();
             //            copy_buffer();
@@ -400,25 +417,25 @@ void keys(int keyCode, int x, int y) {
             break;
         }
         case 119: // 'w' key, move camera in Y direction
-//            sceneView->MoveCamera(0,camSpeed,0);
+            //            sceneView->MoveCamera(0,camSpeed,0);
             break;
         case 115: // 's' key
-//            sceneView->MoveCamera(0, -camSpeed, 0);
+            //            sceneView->MoveCamera(0, -camSpeed, 0);
             
             break;
         case GLUT_KEY_UP:
-//            sceneView->MoveCamera(0,0,camSpeed);
+            //            sceneView->MoveCamera(0,0,camSpeed);
             sceneView->ZoomIn(camSpeed);
             break;
         case GLUT_KEY_DOWN:
-//            sceneView->MoveCamera(0,0,-camSpeed);
+            //            sceneView->MoveCamera(0,0,-camSpeed);
             sceneView->ZoomIn(-camSpeed);
             break;
         case GLUT_KEY_LEFT:
-//            sceneView->MoveCamera( camSpeed,0,0);
+            //            sceneView->MoveCamera( camSpeed,0,0);
             break;
         case GLUT_KEY_RIGHT:
-//            sceneView->MoveCamera(-camSpeed,0,0);
+            //            sceneView->MoveCamera(-camSpeed,0,0);
             break;
         default:
             postRedisplay = false;
@@ -457,14 +474,14 @@ void reshape(int w, int h)
             imageViewWidth += imageViewWidth;
         }
         glutSetWindow(imageViewWindow);
-//        glutInitDisplayMode(GLUT_SINGLE);
+        //        glutInitDisplayMode(GLUT_SINGLE);
         glutPositionWindow(padding, height/2+padding + sliderViewHeight / 2.F);
         glutReshapeWindow(imageViewWidth,squareSize); //Square bottom left corner
         
         if(sliderView) {
-//            glutSetWindow(sliderViewWindow);
-//            glut
-//            glutReshapeWindow(<#int width#>, <#int height#>)
+            //            glutSetWindow(sliderViewWindow);
+            //            glut
+            //            glutReshapeWindow(<#int width#>, <#int height#>)
         }
     }
     else {
@@ -502,65 +519,97 @@ void checkIsDelayed() {
         }
     }
 }
-void TogglePause() {
-    printf("Rendering process is now ");
-    if(renderingPaused) {
+void TogglePauseOne() {
+    printf("Rendering process ONE is now ");
+    if(renderingPausedOne) {
+        
         printf("running.\n");
-        renderingPaused = false;
+        renderingPausedOne = false;
         
         //If dataset one has some filters the rendering will be guided, which means the true distributions
         //should be reset in order to speed up convergence
         if(datasetOne && (*datasetOne)->IsFiltered()) {
             dataControllerOne->Reset();
         }
-        if(datasetTwo && (*datasetTwo)->IsFiltered()) {
-            dataControllerTwo->Reset();
-        }
+        
         
     }
     else {
         printf("paused.\n");
-        renderingPaused = true;
+        renderingPausedOne = true;
+    }
+    //    glutPostRedisplay();
+}
+void TogglePauseTwo() {
+    printf("Rendering process TWO is now ");
+    if(renderingPausedTwo) {
+        printf("running.\n");
+        renderingPausedTwo = false;
+        
+        //If dataset one has some filters the rendering will be guided, which means the true distributions
+        //should be reset in order to speed up convergence
+        if(datasetTwo && (*datasetTwo)->IsFiltered()) {
+            dataControllerTwo->Reset();
+        }
+        
+        //        glutPostRedisplay();
+    }
+    else {
+        printf("paused.\n");
+        renderingPausedTwo = true;
     }
 }
-
-
-
+void TogglePause() {
+    if(!renderingPausedOne) {
+        if(!renderingPausedTwo) {
+            renderingPausedOne = true;
+            renderingPausedTwo = true;
+        }
+        else {
+            renderingPausedOne = true;
+        }
+    }
+    else if(renderingPausedTwo) {
+        renderingPausedOne = false;
+        renderingPausedTwo = false;
+    }
+    else {
+        renderingPausedTwo = true;
+    }
+}
 void idle() {
     bool postRedisplay = false;
     
     checkIsDelayed();
     
-    if(!renderingPaused) {
-        if(!isDelayed) {
-            printf("Rendering frame %d\n",currentFrameOne);
-            ++currentFrameOne;
-            Histogram2D<float>* heatmapOne = imageView->GetHeatmapOne();
-            if(heatmapOne && heatmapOne->NumberOfElements() && (*datasetOne)->IsFiltered()) {
-                //                heatmapOne->Print();
-                rendererOne->RenderNextFrame(heatmapOne);
-            }
-            else {
-                rendererOne->RenderNextFrame();
-            }
-            renderOneFinishedFrame = false;
-            postRedisplay = true;
-            if(dataControllerTwo) {
-                ++currentFrameTwo;
-                if((*datasetTwo)->IsFiltered()) {
-                    auto heatmapTwo = imageView->GetHeatmapTwo();
-                    //                    heatmapTwo->Print();
-                    rendererTwo->RenderNextFrame(heatmapTwo);
-                }
-                else {
-                    rendererTwo->RenderNextFrame();
-                }
-                renderTwoFinishedFrame = false;
-            }
+    if(!renderingPausedOne) {
+        printf("Rendering frame %d\n",currentFrameOne);
+        ++currentFrameOne;
+        Histogram2D<float>* heatmapOne = imageView->GetHeatmapOne();
+        if(heatmapOne && heatmapOne->NumberOfElements() && (*datasetOne)->IsFiltered()) {
+            //                heatmapOne->Print();
+            rendererOne->RenderNextFrame(heatmapOne);
         }
         else {
-            printf("Rendering is still delayed for %d ms.",delayTimeLeft);
+            rendererOne->RenderNextFrame();
         }
+        renderOneFinishedFrame = false;
+        postRedisplay = true;
+    }
+    if(!renderingPausedTwo) {
+        if(dataControllerTwo) {
+            ++currentFrameTwo;
+            if((*datasetTwo)->IsFiltered()) {
+                auto heatmapTwo = imageView->GetHeatmapTwo();
+                //                    heatmapTwo->Print();
+                rendererTwo->RenderNextFrame(heatmapTwo);
+            }
+            else {
+                rendererTwo->RenderNextFrame();
+            }
+            renderTwoFinishedFrame = false;
+        }
+        postRedisplay = true;
     }
     
     if(postRedisplay) {
@@ -584,6 +633,7 @@ void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
     
     //		renderingPaused = true;
     //	}
+    //    renderingPausedOne = true;
 }
 
 bool processRendererTwo(PathData* newPath) {
@@ -595,9 +645,7 @@ void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
     dataControllerTwo->Reduce();
     imageView->redisplayWindow();
     renderTwoFinishedFrame = true;
-    if(currentFrameOne && currentFrameTwo) {
-        //		TogglePause();
-    }
+//    renderingPausedTwo = true;
 }
 TriangleMeshGroup getSceneData(EMBREERenderer* renderer) {
     //Get the shapes and see what are trianglemeshes that we can draw
@@ -682,8 +730,8 @@ void setup(int argc, char** argv) {
             connectedTwo = true;
             DataConnector* dcTwo = new DataConnector(processRendererTwo,rendererTwoFinishedFrame);
             rendererTwo = new EMBREERenderer(dcTwo, std::string(argv[4]),1);
-//            float acceptProbTwo = 2.F * maxPaths / (rendererTwo->getWidth() * rendererTwo->getHeight() * rendererTwo->getSamplesPerPixel());
-//            dataControllerOne->SetAcceptProbability(acceptProbTwo);
+            //            float acceptProbTwo = 2.F * maxPaths / (rendererTwo->getWidth() * rendererTwo->getHeight() * rendererTwo->getSamplesPerPixel());
+            //            dataControllerOne->SetAcceptProbability(acceptProbTwo);
             sceneDataTwo = getSceneData(rendererTwo);
         }
         else if(strcmp(argv[3],"-renderonly") == 0) { // No connect, render only
@@ -710,13 +758,13 @@ void setup(int argc, char** argv) {
         dataControllerOne->SetAcceptProbability(acceptProbOne);
         dataControllerTwo->SetAcceptProbability(acceptProbTwo);
         printf("2 renderers set up.\n");
-       
+        
     }
     else {
         throw std::runtime_error("Unsupported number of arguments (1 or 2 expected)");
     }
     
-
+    
     
     //The imageview should display two rendered images
     
@@ -766,8 +814,8 @@ void setup(int argc, char** argv) {
         glutDisplayFunc(RIVImageView::DrawInstance);
         glutReshapeFunc(RIVImageView::ReshapeInstance);
         
-//        glutDisplayFunc(RIVImageView::DrawInstance);
-//        glutReshapeFunc(RIVImageView::ReshapeInstance);
+        //        glutDisplayFunc(RIVImageView::DrawInstance);
+        //        glutReshapeFunc(RIVImageView::ReshapeInstance);
         imageViewWidth = width;
         imageView = new RIVImageView(rendererOne);
         
@@ -791,7 +839,7 @@ void setup(int argc, char** argv) {
         glutMotionFunc(RIV3DView::Motion);
         glutSpecialFunc(keys);
     }
-
+    
     if(datasetTwo && datasetOne) {
         
         sliderViewWindow = glutCreateSubWindow(mainWindow, padding, height/2.F-2*padding, width - 2* padding, sliderViewHeight);
@@ -809,7 +857,7 @@ void setup(int argc, char** argv) {
         auto rayColorOne = createRayColorProperty(*datasetOne);
         RIVColorProperty* colorOne = new RIVFixedColorProperty(1, 0, 0);
         
-    
+        
         auto rayColorTwo = createRayColorProperty(*datasetTwo);
         auto pathColorTwo = createPathColorProperty(*datasetTwo);
         
@@ -861,7 +909,7 @@ int main(int argc, char **argv)
 {
     printf("Initialising Rendering InfoVis...\n");
     
-//        testFunctions();
+    //        testFunctions();
     
     
     srand(time(NULL));

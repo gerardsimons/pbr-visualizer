@@ -283,10 +283,11 @@ void EMBREERenderer::CopySwapChainTo(EMBREERenderer* targetRenderer) {
     SwapChain* thisSwapChain = g_single_device->rtGetSwapChain(g_frameBuffer).ptr;
     SwapChain* thatSwapChain = targetRenderer->GetSwapChain().ptr;
     
+    Ref<FrameBuffer> thisBuffer = thisSwapChain->buffer();
+    Ref<FrameBuffer> thatBuffer = thatSwapChain->buffer();
+    
     float weight = 2;
-    
 
-    
     //TODO: Support varying sizes, especially those with the same aspect ratio
     if(thisSwapChain->getWidth() != thatSwapChain->getWidth() || thisSwapChain->getWidth() != thatSwapChain->getHeight()) {
         printf("Sorry, different swapchain sizes not currently supported\n");
@@ -298,10 +299,11 @@ void EMBREERenderer::CopySwapChainTo(EMBREERenderer* targetRenderer) {
         thatSwapChain->clearAll();
         for(int x = 0 ; x < thisSwapChain->getWidth() ; ++x) {
             for(int y = 0 ; y < thisSwapChain->getHeight() ; ++y) {
-                Vec4f thisPixel = thisAccuBuffer->getRaw(x, y);
+//                Vec4f thisPixel = thisAccuBuffer->getRaw(x, y);
                 Color thisColor = thisAccuBuffer->get(x, y);
 //                thisPixel.z = weight;
                 thatAccuBuffer->update(x, y, thisColor, 1, true);
+                thatBuffer->set(x, y, thisColor);
 //                thatAccuBuffer->set(x, y, thisPixel);
             }
         }

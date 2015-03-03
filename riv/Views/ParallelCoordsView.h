@@ -37,7 +37,7 @@ private:
 	bool drawDataSetOne = true;
 	bool drawDataSetTwo = true;
 	
-	int axisWidth = 20;
+	int axisWidth = 10;
 	
 	HistogramSet<float,ushort>* distributionsOne;
 	HistogramSet<float,ushort>* distributionsTwo = NULL;

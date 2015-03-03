@@ -172,11 +172,13 @@ void ParallelCoordsView::drawSelectionBoxes() {
 }
 void ParallelCoordsView::drawAxes() {
     //Draw the densities
-    float maxBinWidth = 40;
-    float minBinWidth = 10;
+
     for(auto& axisGroup : axisGroups) {
         tuple_for_each(axisGroup.axes, [&](auto tAxes) {
             for(auto axis : tAxes) {
+                
+                float maxBinWidth = 4 * axis->width;
+                float minBinWidth = axis->width;
                 
                 auto& histogramOne = axis->densityHistogramOne;
                 auto& histogramTwo = axis->densityHistogramTwo;
@@ -1026,7 +1028,7 @@ void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
         }
     }
     else {
-        throw std::runtime_error("Unknown dataset " + source->GetName());
+        throw std::runtime_error("Unknown dataset");
     }
     
     createAxisPoints();

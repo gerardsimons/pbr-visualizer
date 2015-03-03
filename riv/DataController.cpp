@@ -466,5 +466,7 @@ void DataController::Reset() {
     
     energyDistribution->Clear();
     firstTime = true;
+//    acceptProbability *= 2;
+    maxPaths *= 2;
     bestBootstrapResult = std::numeric_limits<float>::max();
 }
