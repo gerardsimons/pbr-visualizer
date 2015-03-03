@@ -23,6 +23,28 @@
 
 class RIV3DView : public RIVDataView, public RIVDataSetListener {
 protected:
+    
+    //When path selection mode is used, each clicked object determines the object the next bounce should interact with,
+    //when regular object mode is used, the order of interaction is not important
+    enum SelectionMode {
+        PATH,
+        OBJECT
+    };
+    
+    class LightCone {
+    public:
+        size_t originN = 0; //Number of points in start of cone
+        Vec3fa origin;
+        Vec3fa target;
+        size_t targetN = 0; //Number of points cone pointing to
+        float r,g,b; //Color
+        float size; //
+        float length;
+    };
+    std::map<size_t,LightCone*> lightConesOne;
+    std::map<size_t,LightCone*> lightConesTwo;
+    
+    SelectionMode selectionMode = OBJECT;
 
     Vector3f cameraPositionOne;
     Vector3f cameraPositionTwo;
@@ -94,6 +116,7 @@ protected:
 	void drawPoints();
 	//Draw the intersection points
 	void drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths);
+    void drawLightCones(const std::map<size_t,LightCone*>& lightCones);
 
     void drawEnergyHelper(OctreeNode* node, float max,riv::ColorMap& heatmap,ushort maxDepth);
     void drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* nodeTwo, float max);
@@ -106,7 +129,7 @@ protected:
     void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
 	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, ushort* selectedObjectId);
 	//Create graphics buffer from unfiltered data rows
-	std::vector<Path> createPaths(RIVDataSet<float,ushort>*, RIVColorProperty* colorProperty);
+	std::vector<Path> createPaths(RIVDataSet<float,ushort>*, RIVColorProperty* colorProperty,std::map<size_t,LightCone*>& lightCones);
     static RIV3DView* instance;
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
     void redisplayWindow();
@@ -139,6 +162,7 @@ public:
     static void Mouse(int button, int state, int x, int y);
     static void Motion(int x, int y);
     
+    void CycleSelectionMode();
     void MovePathSegment(float ratioIncrement);
     void CyclePathSegment(bool direction = true); //Cycle the path segment to draw, direction bool indicates direction of cycling, positive meaning incrementing
     void ToggleDrawIntersectionPoints();
@@ -147,6 +171,7 @@ public:
 	void ToggleDrawDataSetOne();
 	void ToggleDrawDataSetTwo();
     void SetModelData(const MeshModel&);
+    void ZoomIn(float zoom);
     void MoveCamera(float,float,float);
 	
 };

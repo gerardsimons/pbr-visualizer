@@ -148,9 +148,9 @@ namespace embree
 		if(!TaskScheduler::instance) {
 			TaskScheduler::create(numThreads);
 		}
-		else {
+//		else {
 //			TaskScheduler::instance->
-		}
+//		}
 	}
 	
 	SingleRayDevice::~SingleRayDevice()
@@ -626,4 +626,8 @@ namespace embree
 		Ref<PrimitiveHandle>      primHandle    = castHandle<PrimitiveHandle>(primitive   ,"primitive");
 		return primHandle->getShapeInstance().ptr;
 	}
+    
+    Ref<SwapChain> SingleRayDevice::rtGetSwapChain(Device::RTFrameBuffer frameBuffer_i) {
+                return castHandle<ConstHandle<SwapChain> >(frameBuffer_i,"framebuffer")->getInstance();
+    }
 }

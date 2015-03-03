@@ -20,7 +20,7 @@ void RIVSliderView::resetPointers() {
 	pointerTwoX = rightBound - pointerWidth;
 }
 
-RIVSliderView::RIVSliderView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, const riv::ColorMap& colorMap) : RIVDataView(datasetOne,datasetTwo), colorMap(colorMap), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo) {
+RIVSliderView::RIVSliderView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo) : RIVDataView(datasetOne,datasetTwo), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo) {
 	
 	if(!instance) {
 		instance = this;

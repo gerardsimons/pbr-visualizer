@@ -1,4 +1,4 @@
-#include "ParallelCoordsView.h"
+  #include "ParallelCoordsView.h"
 #include "SliderView.h"
 #include "DataView.h"
 #include "../Graphics/graphics_helper.h"
@@ -1033,7 +1033,6 @@ void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
     
     //Change the ordering to have the bounce_nr to be the first of the second axis group
     //	axisGroups[1].Reorder(6,0);
-    
     redisplayWindow();
 }
 
@@ -1047,12 +1046,16 @@ void ParallelCoordsView::redisplayWindow() {
 
 void ParallelCoordsView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
     printf("ParallelCoordsView received a on filters changed callback.\n");
-    
     if(dataset == *datasetOne) {
+        printf("Recreate densities for dataset 1\n");
         createAxisDensities(0, dataset);
     }
     else if(datasetTwo && dataset == *datasetTwo) {
+        printf("Recreate densities for dataset 2\n");
         createAxisDensities(1, dataset);
+    }
+    else {
+        throw std::runtime_error("Unknown dataset\n");
     }
     Invalidate();
     

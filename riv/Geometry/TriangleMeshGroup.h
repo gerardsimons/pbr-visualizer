@@ -33,6 +33,7 @@ public:
 	operator bool() const { return triangleMeshes.size() > 0; };
 	
 	bool Intersect(const Ray& r, ushort& resultIndex, Vec3fa& Phit, float& shortestDistance) const ;
+    bool Intersect(const Ray& r, ushort& resultIndex, Vec3fa& Phit, float& shortestDistance, const Vec3fa& distanceCompare) const ;
     size_t NumberOfMeshes() { return triangleMeshes.size(); };
 	//Getters
 	float GetScale() const { return scale; };

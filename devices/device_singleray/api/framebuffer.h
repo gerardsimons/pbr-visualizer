@@ -218,6 +218,9 @@ namespace embree
     /*! write pixel */
     void set(size_t x, size_t y, const Color& c) 
     {
+        if(x < 10) {
+            
+        }
       unsigned char* pixel = (unsigned char*)data+stride*y+3*x;
       pixel[0] = (unsigned char) clamp(c.r*255.0f,0.0f,255.0f);
       pixel[1] = (unsigned char) clamp(c.g*255.0f,0.0f,255.0f);
@@ -290,6 +293,12 @@ namespace embree
       const float norm = rcp(c.w);
       return Color(c.x,c.y,c.z)*norm;
     }
+      
+      /*! read pixel */
+      __forceinline const Vec4f getRaw(size_t x, size_t y) const
+      {
+          return data[y*width+x];
+      }
 
   protected:
     size_t width;              //!< width of the framebuffer in pixels

@@ -84,6 +84,15 @@ namespace embree
         }
       }
     }
+      
+      void clearAll()
+      {
+          for (ssize_t y=0; y<height; y++) {
+              for (ssize_t x=0; x<width; x++) {
+                  _accu->clear(x,y);
+              }
+          }
+      }
 
     /*! accumulate inside accumulation buffer */
     void accumulate(size_t x, size_t y, const Color& color, const float weight) {

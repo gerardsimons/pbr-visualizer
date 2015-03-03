@@ -490,10 +490,18 @@ public:
 			}
 		});
 		if(!filtered) {
-			return rowFilters.size() || filtered || filteredRows.size();
+            if(rowFilters.size()) {
+                return true;
+            }
+            //TODO: Not very good to do it like this
+            for(auto it : filteredRows) {
+                if(it.second) {
+                    return true;
+                }
+            }
+            return false;
 		}
-//		return filteredRows.size();
-        return true;
+        else return true;
 	}; //Any filters applied?
 	bool IsClustered() { return isClustered; };
 	void ClearFilteredRows() {

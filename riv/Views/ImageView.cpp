@@ -17,6 +17,16 @@ typedef unsigned short ushort;
 RIVImageView* RIVImageView::instance = NULL;
 int RIVImageView::windowHandle = -1;
 
+RIVImageView::RIVImageView(EMBREERenderer* renderer) : RIVDataView(datasetOne) {
+    if(instance != NULL) {
+        throw "Only 1 instance of ImageView allowed.";
+    }
+    instance = this;
+    identifier = "ImageView";
+    paintGridOne = new Grid(gridSize);
+    rendererOne = renderer;
+}
+
 RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, EMBREERenderer* renderer) : RIVDataView(datasetOne) {
     if(instance != NULL) {
         throw "Only 1 instance of ImageView allowed.";
@@ -141,6 +151,9 @@ void RIVImageView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
 }
 
 void RIVImageView::computeHeatmap(RIVDataSet<float,ushort>* dataset, Histogram2D<float>*& heatmap) {
+    if(heatmap) {
+        delete heatmap;
+    }
     heatmap = new Histogram2D<float>(0, 1, bins);
     
     RIVTable<float,ushort>* pathsTable = dataset->GetTable(PATHS_TABLE);

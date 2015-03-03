@@ -58,7 +58,47 @@ void tbHelp()
     std::cout<<"Right button to translate,\n";
     std::cout<<"Middle button to zoom.\n";
 }
+void tb_zoom(float zoom) {
+    double dx,dy,nrm, tx,ty,tz;
+    dx = 10;
+    dy = 10;
+//    if( horizontal > vertical )
+//    { // rotation z
+//        
+//        tx = tb_matrix[12];
+//        tb_matrix[12]=0;
+//        ty = tb_matrix[13];
+//        tb_matrix[13]=0;
+//        tz = tb_matrix[14];
+//        tb_matrix[14]=0;
+//        
+//        glLoadIdentity();
+//        glRotatef( dx, 0,0,-1 );/*axe perpendiculaire a l'ecran*/
+//        glMultMatrixd( tb_matrix );
+//        glGetDoublev( GL_MODELVIEW_MATRIX, tb_matrix );
+//        
+//        tb_matrix[12] = tx;
+//        tb_matrix[13] = ty;
+//        tb_matrix[14] = tz;
+//    }
+//    else if( vertical > horizontal )
+//    {
+        tb_matrix[14] -= zoom*speedfact;
+//    }
+//    tb_ancienX = x;
+//    tb_ancienY = y;
+}
+void startZoom(int x, int y) {
+    printf("Start tb zoom\n");
+    tb_bougerZ = 1;
+    tb_ancienX = x;
+    tb_ancienY = y;
+}
 
+void stopZoom() {
+    printf("Stop tb zoom");
+    tb_bougerZ = 0;
+}
 /** Gere les boutons de la souris */
 void tbMouseFunc( int button, int state, int x, int y )
 {
@@ -77,14 +117,12 @@ void tbMouseFunc( int button, int state, int x, int y )
     /* enfoncer milieu */
     if( button==GLUT_MIDDLE_BUTTON && state==GLUT_DOWN )
     {
-        tb_bougerZ = 1;
-        tb_ancienX = x;
-        tb_ancienY = y;
+        startZoom(x, y);
     }
     /* relacher milieu */
     else if( button==GLUT_MIDDLE_BUTTON && state==GLUT_UP )
     {
-        tb_bougerZ = 0;
+        stopZoom();
     }
     /* enfoncer droit */
     else if( button==GLUT_RIGHT_BUTTON && state==GLUT_DOWN )
@@ -105,6 +143,11 @@ void tbMotionFunc( int x, int y )
 {
     double dx,dy,nrm, tx,ty,tz;
 
+//    printf("tb_matrix = \n");
+//    for(int i = 0 ; i < 16 ; i+=4) {
+//        printf("[ %.2f %.2f %.2f %.2f]\n",tb_matrix[i],tb_matrix[i+1],tb_matrix[i+2],tb_matrix[i+3]);
+//    }
+    
     if( tb_tournerXY || tb_translaterXY || tb_bougerZ )
     {
         /* deplacement */
@@ -137,6 +180,7 @@ void tbMotionFunc( int x, int y )
         }
         else if( fabs(dx)>fabs(dy) )
         { // rotation z
+            
             tx = tb_matrix[12];
             tb_matrix[12]=0;
             ty = tb_matrix[13];

@@ -66,6 +66,7 @@ namespace embree
 		private:
 			
             void renderTileForPixelDistribution(size_t threadIndex, size_t threadCount, size_t taskIndex, size_t taskCount, TaskScheduler::Event* event);
+            void renderTileWithDataConnector(size_t threadIndex, size_t threadCount, size_t taskIndex, size_t taskCount, TaskScheduler::Event* event);
             
 			/*! start functon */
 			TASK_RUN_FUNCTION(RenderJob,renderTile);

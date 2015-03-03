@@ -106,6 +106,7 @@ namespace embree
 							custom functons
 	 ******************************************************************/
 	  Shape* rtGetShape(Device::RTPrimitive prim);
+      Ref<SwapChain> rtGetSwapChain(Device::RTFrameBuffer frameBuffer_i);
 
   private:
     MutexSys mutex;

@@ -204,7 +204,7 @@ finish:
 }
 
 /* Constructor */
-EMBREERenderer::EMBREERenderer(DataConnector* dataConnector, const std::string& commandsFile)
+EMBREERenderer::EMBREERenderer(DataConnector* dataConnector, const std::string& commandsFile, ushort numThreads)
 {
 	this->dataConnector = dataConnector;
 	
@@ -213,7 +213,7 @@ EMBREERenderer::EMBREERenderer(DataConnector* dataConnector, const std::string& 
 	//We do not use Device::createDevice because it depends on the dynamic library, which makes things harder
 	//More threads than one does not work
 
-	g_device = new SingleRayDevice(1,g_rtcore_cfg.c_str());
+	g_device = new SingleRayDevice(numThreads,g_rtcore_cfg.c_str());
 	g_device->SetDataConnector(dataConnector);
 	
 	g_single_device = dynamic_cast<SingleRayDevice*>(g_device);
@@ -237,22 +237,76 @@ EMBREERenderer::EMBREERenderer(DataConnector* dataConnector, const std::string& 
 		}
 	}
 }
-
+EMBREERenderer::EMBREERenderer(const std::string& commandsFile)
+{
+    
+    clearGlobalObjects();
+    
+    //We do not use Device::createDevice because it depends on the dynamic library, which makes things harder
+    //More threads than one does not work
+    
+    g_device = new SingleRayDevice(0,g_rtcore_cfg.c_str());
+    g_single_device = dynamic_cast<SingleRayDevice*>(g_device);
+    
+    /*! create stream for parsing */
+    FileName file = FileName() + commandsFile;
+    parseCommandLine(new ParseStream(new LineCommentFilter(file, "#")), file.path());
+    
+    createGlobalObjects();
+    
+    createScene();
+    
+    //Create camera
+    AffineSpace3f g_camSpace = AffineSpace3f::lookAtPoint(g_camPos, g_camLookAt, g_camUp);
+    camera = createCamera(AffineSpace3f(g_camSpace.l,g_camSpace.p));
+}
 void EMBREERenderer::RenderNextFrame() {
 	g_device = g_single_device;
 	g_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1);
-	g_device->rtSwapBuffers(g_frameBuffer);
+//	g_device->rtSwapBuffers(g_frameBuffer);
 }
 //Render next frame according to given pixel distribution
 void EMBREERenderer::RenderNextFrame(Histogram2D<float>* pixelDistribution) {
     g_device = g_single_device;
     g_single_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1,pixelDistribution);
-    g_single_device->rtSwapBuffers(g_frameBuffer);
+    
+    //If you use double buffers,, the user guided rendering (which only effects an area) will cause the other areas to be of two distinct states (e.g. it flips)
+//    g_single_device->rtSwapBuffers(g_frameBuffer);
 }
 bool EMBREERenderer::RayPick(Ray& ray, float& x, float& y, float& z) {
 	return g_single_device->rtPick(g_render_scene, ray, x, y, z);
 }
+Ref<SwapChain> EMBREERenderer::GetSwapChain() {
+    return g_single_device->rtGetSwapChain(g_frameBuffer);
+}
+void EMBREERenderer::CopySwapChainTo(EMBREERenderer* targetRenderer) {
+    SwapChain* thisSwapChain = g_single_device->rtGetSwapChain(g_frameBuffer).ptr;
+    SwapChain* thatSwapChain = targetRenderer->GetSwapChain().ptr;
+    
+    float weight = 2;
+    
 
+    
+    //TODO: Support varying sizes, especially those with the same aspect ratio
+    if(thisSwapChain->getWidth() != thatSwapChain->getWidth() || thisSwapChain->getWidth() != thatSwapChain->getHeight()) {
+        printf("Sorry, different swapchain sizes not currently supported\n");
+    }
+    else {
+        //Get the accumulation buffers
+        AccuBuffer* thisAccuBuffer = thisSwapChain->accu().ptr;
+        AccuBuffer* thatAccuBuffer = thatSwapChain->accu().ptr;
+        thatSwapChain->clearAll();
+        for(int x = 0 ; x < thisSwapChain->getWidth() ; ++x) {
+            for(int y = 0 ; y < thisSwapChain->getHeight() ; ++y) {
+                Vec4f thisPixel = thisAccuBuffer->getRaw(x, y);
+                Color thisColor = thisAccuBuffer->get(x, y);
+//                thisPixel.z = weight;
+                thatAccuBuffer->update(x, y, thisColor, 1, true);
+//                thatAccuBuffer->set(x, y, thisPixel);
+            }
+        }
+    }
+}
 void EMBREERenderer::parseCommandLine(Ref<ParseStream> cin, const FileName& path)
 {
 	// file name to write to -- "" means "display mode"
@@ -665,36 +719,3 @@ int EMBREERenderer::getHeight() {
 int EMBREERenderer::getSamplesPerPixel() {
 	return g_spp;
 }
-
-/******************************************************************************/
-/*                               Main Function                                */
-/******************************************************************************/
-
-// void callback(PathData* newPath) {
-//	 printf("PATH DATA RECEIVED.....");
-// }
-// //
-// int main(int argc, char** argv)
-// {
-// 	EMBREERenderer renderer(new DataConnector(callback), std::string(argv[1]));
-//// 	EMBREERenderer rendererTwo(new DataConnector(callback), std::string(argv[2]));
-//	
-// 	Ref<ParseStream> stream = new ParseStream(new CommandLineStream(argc, argv));
-//	
-// 	/*! create stream for parsing */
-//     renderer.parseCommandLine(stream, FileName());
-// 	renderer.outputMode(FileName("embree_test.tga"));
-//	
-// 	try {
-// //		return embree::main(argc, argv);
-// 	}
-// 	catch (const std::exception& e) {
-// //		embree::clearGlobalObjects();
-// 		std::cout << "Error: " << e.what() << std::endl;
-// 		return 1;
-// 	}
-// 	catch (...) {
-// //		embree::clearGlobalObjects();
-// 		return 1;
-// 	}
-// }

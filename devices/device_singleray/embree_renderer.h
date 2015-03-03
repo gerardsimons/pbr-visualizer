@@ -104,7 +104,8 @@ public:
 	int getHeight();
 	int getSamplesPerPixel();
 	
-	EMBREERenderer(DataConnector* dataConnector, const std::string& commandsFile);
+    EMBREERenderer(DataConnector* dataConnector, const std::string& commandsFile,ushort numThreads);
+    EMBREERenderer(const std::string& commandsFile);
 
 	std::string makeFileName(const std::string path, const std::string fileName);
 	void outputMode(const std::string& fileName);
@@ -135,6 +136,9 @@ public:
 	void UnmapFrameBuffer();
 	
 	bool RayPick(Ray& ray, float& x, float& y, float& z);
+    
+    Ref<SwapChain> GetSwapChain();
+    void CopySwapChainTo(EMBREERenderer* renderer);
 };
 
 #endif

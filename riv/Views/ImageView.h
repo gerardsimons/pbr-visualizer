@@ -37,8 +37,6 @@ private:
 
 	void clearSelection();
 	bool isDragging;
-	//image size in pixels
-	int imageWidth, imageHeight;
 
     //TODO: I think these histograms belong in the data controller, or that is where they should originate from
     bool showHeatmap = true;
@@ -63,6 +61,7 @@ private:
 public:
     void redisplayWindow();
 	//Single renderer constructor
+    RIVImageView(EMBREERenderer* rendererOne);
 	RIVImageView(RIVDataSet<float,ushort>** datasetOne,  EMBREERenderer* rendererOne);
 	//Dual renderer constructor
 	RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo);

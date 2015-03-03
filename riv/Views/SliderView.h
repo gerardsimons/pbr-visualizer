@@ -82,7 +82,7 @@ public:
 	static int windowHandle;
 	
 	RIVSliderView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne,
-				  HistogramSet<float,ushort>* distributionsTwo, const riv::ColorMap& colorMap);
+				  HistogramSet<float,ushort>* distributionsTwo);
 	
 	static void DrawInstance();
 	static void ReshapeInstance(int width, int height);

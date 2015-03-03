@@ -12,7 +12,7 @@
 #include <set>
 #include <algorithm>
 
-DataController::DataController(const ushort renderers, const size_t maxPaths, const size_t bootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives) : maxPaths(maxPaths), bootstrapRepeat(bootstrapRepeat) {
+DataController::DataController(const size_t maxPaths, const size_t bootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives) : maxPaths(maxPaths), bootstrapRepeat(bootstrapRepeat) {
     createDataStructures(xBounds,yBounds,zBounds,nrPrimitives);
 }
 
@@ -37,26 +37,13 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
     
     auto& pathRecords = paths->GetRecords();
     auto& isectRecords = intersections->GetRecords();
-    
-    //	auto& bootstrapRecords = paths->GetRecords();
-    
-    //	bool includeReference = (rand() % 2) > 0;
-    //	if(includeReference)
-    //		printf("Include references...\n");
-    //	else {
-    //		printf("NOT include references...\n");
-    //	}
-    //Choose N paths, also add the referencing rows
+
     std::vector<size_t> sampledRows;
     for(size_t i = 0 ; i < N ; ++i) {
         //		reporter::update(taskName);
         sampledRows.push_back(rand() % rows);
     }
-    //	printf("sampled rows = ");
-    //	printVector(sampledRows);
-    //		size_t index = i;
-    
-    //		printf("Sampled row %zu\n",index);
+
     tuple_for_each(pathRecords, [&](auto tRecords) {
         for(auto record : tRecords) {
             typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
@@ -73,10 +60,8 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
             typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
             auto bootRecord = bootstrapIsects->GetRecord<Type>(record->name);
             for(size_t index : sampledRows) {
-                
                 const std::pair<size_t*,ushort>& refRows = ref->GetReferenceRows(index);
                 for(int i = 0 ; i < refRows.second ; ++i) {
-                    
                     bootRecord->AddValue(record->Value(refRows.first[i]));
                 }
                 
@@ -302,14 +287,10 @@ void DataController::Reduce() {
     reporter::startTask(taskName);
     if(firstTime) {
         //		printf("\n First time...\n");
-        
+        std::swap(currentData, candidateData);
         //Swap current with candidate
-        candidateData->SetDataListeners(currentData->GetDataListeners());
-        currentData->CopyFiltersTo(candidateData);
-        RIVDataSet<float,ushort>* temp = candidateData;
-        candidateData = currentData;
-        currentData = temp;
-        
+        currentData->SetDataListeners(candidateData->GetDataListeners());
+        candidateData->CopyFiltersTo(currentData);
         
         firstTime = false;
         
@@ -450,9 +431,9 @@ void DataController::Reduce() {
         //			bestBootstrap->Print();
         
         //Delete the old renderer data and replace it with the bootstrap dataset,
-        currentData->CopyFiltersTo(bestBootstrap);
-        delete currentData;
-        currentData = bestBootstrap;
+        std::swap(currentData,bestBootstrap);
+        bestBootstrap->CopyFiltersTo(currentData);
+        delete bestBootstrap;
         bestBootstrap = NULL;
         
         resetPointers(candidateData);	//Reset the shortcut pointers to a new empty dataset
