@@ -13,7 +13,7 @@
 -vp 1.58112 2.135884 1.071385 -vi -.75 .55 3.15 -vu 0 1 0 -fov 55 # RIGHT
 
 -renderer pathtracer { depth = 2 }
-#-size 200 150 # 4:3
+#-size 200 150 # 4:3            glutReshapeWindow(<#int width#>, <#int height>)
 #-size 192 108 # 
 -size 384 216  
 #-size 768 432

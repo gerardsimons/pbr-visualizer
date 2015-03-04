@@ -502,12 +502,14 @@ private:
     T upperBound;
     bool cdfStale = true;
     
-    unsigned int bins = 0;
+    unsigned int xBins = 0;
+    unsigned int yBins = 0;
+    
     float binWidth = 0;
     size_t nrElements = 0;
 public:
     unsigned int NumberOfBins() {
-        return bins;
+        return xBins;
     }
     void Add(T valueOne, T valueTwo) {
         unsigned int bin = BinForValue(valueOne);
@@ -532,17 +534,17 @@ public:
         }
         T delta = upperBound - lowerBound;
         double interpolated = (double)(valueClamped - lowerBound) / (delta);
-        unsigned int bin = std::floor(interpolated * (bins));
+        unsigned int bin = std::floor(interpolated * (xBins));
         //When the value is exeactly on the upper bound it floors incorrectly to bin = bins
-        if(bin == bins) {
-            bin = bins - 1;
+        if(bin == xBins) {
+            bin = xBins - 1;
         }
         return bin;
     }
     Histogram2D() {
         
     }
-    Histogram2D(T lowerBound, T upperBound, unsigned int bins) : upperBound(upperBound), lowerBound(lowerBound), bins(bins) {
+    Histogram2D(T lowerBound, T upperBound, unsigned int bins) : upperBound(upperBound), lowerBound(lowerBound), xBins(bins), yBins(bins) {
         if(upperBound <= lowerBound) {
             throw std::runtime_error("Lower bound should be < upper bound");
         }
@@ -550,6 +552,16 @@ public:
         
         for(int i = 0 ; i < bins ; ++i) {
             histograms[i] = Histogram<T>("2DHistogram", lowerBound, upperBound, bins);
+        }
+    }
+    Histogram2D(T lowerBound, T upperBound, unsigned int xBins, unsigned int yBins) : upperBound(upperBound), lowerBound(lowerBound), xBins(xBins), yBins(yBins) {
+        if(upperBound <= lowerBound) {
+            throw std::runtime_error("Lower bound should be < upper bound");
+        }
+        binWidth = (upperBound - lowerBound) / (float)xBins;
+        
+        for(int i = 0 ; i < xBins ; ++i) {
+            histograms[i] = Histogram<T>("2DHistogram", lowerBound, upperBound, yBins);
         }
     }
     void Clear() {
@@ -574,12 +586,12 @@ public:
         
         float R = random() / (float)RAND_MAX;
         
-        for(int i = 0 ; i < bins ; ++i) {
+        for(int i = 0 ; i < xBins ; ++i) {
             if(R <= cdf[i]) {
                 return i;
             }
         }
-        return bins - 1;
+        return xBins - 1;
     }
     std::pair<unsigned int, unsigned int> SampleBins() {
         std::pair<unsigned int, unsigned int> binsPair;
@@ -589,7 +601,7 @@ public:
         
         float R = random() / (float)RAND_MAX;
         
-        for(int i = 0 ; i < bins ; ++i) {
+        for(int i = 0 ; i < xBins ; ++i) {
             if(R <= cdf[i]) {
                 binsPair.first = i;
                 binsPair.second = histograms[i].SampleBin();
@@ -600,7 +612,7 @@ public:
     void ComputeCDF() {
         cdf.clear();
         float cummulative = 0;
-        for(unsigned int i = 0 ; i < bins ; ++i) {
+        for(unsigned int i = 0 ; i < xBins ; ++i) {
             cummulative += histograms[i].NumberOfElements() / (float)nrElements;
             cdf[i] = cummulative;
         }
@@ -643,25 +655,25 @@ public:
         return nrElements;
     }
     float NormalizedMean() {
-        return 1.F / (bins * bins);
+        return 1.F / (xBins * yBins);
     }
     float NormalizedVariance() {
         float var = 0;
         float mean = NormalizedMean();
-        for(int i = 0 ; i < bins ; i++) {
-            for(int j = 0 ; j < bins ; j++) {
+        for(int i = 0 ; i < xBins ; i++) {
+            for(int j = 0 ; j < yBins ; j++) {
                 var += std::pow(NormalizedValue(i, j) - mean,2);
             }
         }
-        return var;
+        return std::pow(var,0.5);
     }
     void Print() {
         printf("2D Histogram : \n");
         printf("Mean = %f\n",NormalizedMean());
         printf("Variance = %f\n",NormalizedVariance());
         if(nrElements) {
-            for(int i = 0 ; i < bins ; i++) {
-                for(int j = 0 ; j < bins ; j++) {
+            for(int i = 0 ; i < xBins ; i++) {
+                for(int j = 0 ; j < yBins ; j++) {
                     printf("%.2f\t",NormalizedValue(j, i));
                 }
                 printf("\n");

@@ -443,10 +443,23 @@ public:
 	}
 	//Clears all the filters that may be present, returns true if any filters were actually removed
 	bool ClearFilters() {
-		tuple_for_each(filters, [&](auto filters) {
-			filters.clear();
+//        std::vector<std::string> filtersToDelete;
+		tuple_for_each(filters, [&](auto tFilters) {
+//            for(auto& filter : tFilters) {
+//                filtersToDelete.push_back(filter->name);
+//                delete filter;
+//            }
+            //TODO: WARNING: MEMORY LEAK
+//            deletePointerVector(tFilters);
+//            tFilters.clear();
 		});
+//        for(auto& filter : filtersToDelete) {
+//            
+//        }
+        filters = std::tuple<std::vector<riv::SingularFilter<Ts>*>...>();
+        deletePointerVector(rowFilters);
 		rowFilters.clear();
+        return true;
 	}
 	//Clears all the filters with the given attribute name, returns true if any filter was actually removed
 	template<typename T>
@@ -461,12 +474,14 @@ public:
 		filtersPresent += tFilters->size();
 		for(i = 0 ; i < tFilters->size() ; ++i) {
 			if(tFilters->at(i)->GetAttribute() == filterName) {
+//                delete tFilters->at(i);
 				filterFound = true;
 				break;
 			}
+
 		}
 		if(filterFound) {
-			printf("Filter found.\n");
+//			printf("Filter found.\n");
 			--filtersPresent;
 			tFilters->erase(tFilters->begin() + i);
 			
@@ -478,7 +493,7 @@ public:
 			return true;
 		}
 		
-		printf("No such filter found.\n");
+//		printf("No such filter found.\n");
 		return false;
 	}
 	bool IsFiltered() {

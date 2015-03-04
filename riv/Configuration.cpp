@@ -13,6 +13,7 @@ const char* DATASET_TWO = "renderer_two";
 
 const char* INTERSECTIONS_TABLE = "intersections";
 const char* PATHS_TABLE = "paths";
+const char* LIGHTS_TABLE = "lights";
 const char* PATH_MEMBERSHIP_TABLE = "path_membership";
 const char* ISECT_MEMBERSHIP_TABLE = "isect_membership";
 
@@ -47,4 +48,6 @@ const char* INTERSECTION_B = "B";
 const char* PRIMITIVE_ID = "primitive ID";
 const char* INTERACTION_TYPE = "interaction_type";
 const char* SHAPE_ID = "shape ID";
+
 const char* LIGHT_ID = "light ID";
+const char* OCCLUDER_ID = "occluder ID";

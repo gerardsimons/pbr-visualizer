@@ -42,6 +42,7 @@ namespace riv {
 			
 		}
 	public:
+//        virtual ~SingularFilter() = 0;
 		std::string GetAttribute() {
 			return attributeName;
 		}

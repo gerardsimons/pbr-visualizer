@@ -259,7 +259,7 @@ namespace embree
 						
 
 					}
-                    const Color L0 = swapchain->update(x, _y, L, spp, accumulate);
+                    const Color L0 = swapchain->update(x, _y, L, 10, accumulate);
 					const Color L1 = toneMapper->eval(L0,x,y,swapchain);
 					framebuffer->set(x, _y, L1);
 				}
@@ -442,6 +442,7 @@ namespace embree
                     }
 //                    printf("x,y = %d,%d\n",x,y);
 //                    L = Color(0,1,0);
+//                    float normalizedValue = pixelDistributions->NormalizedValue(pixelSample.first, pixelSample.second);
                     const Color L0 = swapchain->update(x, _y, L, spp, accumulate);
                     const Color L1 = toneMapper->eval(L0,x,y,swapchain);
 //                    const Color L1 = Color(0,1,0);

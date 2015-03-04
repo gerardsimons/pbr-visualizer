@@ -84,8 +84,12 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPaths = 10000;
-const int bootstrapRepeat = 5;
+const int maxPathsOne = 5000;
+const int maxBootstrapRepeatOne = 10;
+
+const int maxPathsTwo = 5000;
+const int maxBootstrapRepeatTwo = 10;
+
 const int sliderViewHeight = 50;
 
 bool connectedOne = false;
@@ -286,6 +290,10 @@ void keys(int keyCode, int x, int y) {
     
     float camSpeed = .25F;
     switch(keyCode) {
+        case 9: //Tab key
+            sceneView->CycleSelectionMode();
+            
+            break;
         case 27: //ESC key
             printf("Clear filters\n");
             //            invalidateAllViews();
@@ -293,15 +301,22 @@ void keys(int keyCode, int x, int y) {
             //            (*datasetOne)->ClearFilters();
             //			datasetOne)->StopFiltering();
             //
+            
             (*datasetOne)->StartFiltering();
             (*datasetOne)->ClearAllFilters();
             (*datasetOne)->StopFiltering();
+            dataControllerOne->Reset();
+            imageView->ClearPixelDistributionOne();
             
-            (*datasetTwo)->StartFiltering();
-            (*datasetTwo)->ClearAllFilters();
-            (*datasetTwo)->StopFiltering();
+            if(datasetTwo) {
+                (*datasetTwo)->StartFiltering();
+                (*datasetTwo)->ClearAllFilters();
+                (*datasetTwo)->StopFiltering();
+                dataControllerTwo->Reset();
+                imageView->ClearPixelDistributionTwo();
+            }
             
-            invalidateAllViews();
+//            invalidateAllViews();
             
             break;
         case 45: // - key
@@ -345,6 +360,11 @@ void keys(int keyCode, int x, int y) {
                 printf("Copying swapchain from renderer 1 to renderer 2!!\n");
                 rendererOne->CopySwapChainTo(rendererTwo);
                 imageView->redisplayWindow();
+                
+//                int newMaxPaths = 1000;
+//                dataControllerTwo->SetMaxPaths(newMaxPaths);
+//                float acceptProbTwo = 2.F * newMaxPaths / (rendererTwo->getWidth() * rendererTwo->getHeight() * rendererTwo->getSamplesPerPixel());
+//                dataControllerTwo->SetAcceptProbability(acceptProbTwo);
             }
             break;
         case 97: // 'a' key
@@ -400,7 +420,7 @@ void keys(int keyCode, int x, int y) {
                 rendererOne->outputMode("renderer1_output_frame=" + std::to_string(currentFrameOne) + ".bmp");
             }
             if(rendererTwo) {
-                rendererTwo->outputMode("renderer2_output_frame=" + std::to_string(currentFrameOne) + ".bmp");
+                rendererTwo->outputMode("renderer2_output_frame=" + std::to_string(currentFrameTwo) + ".bmp");
             }
             postRedisplay = true;
             break;
@@ -470,13 +490,16 @@ void reshape(int w, int h)
         float squareSize = height / 2.F - 2 * padding - sliderViewHeight / 2.F;
         float ratio = rendererOne->getWidth() / (float)rendererOne->getHeight();
         float imageViewWidth = squareSize * ratio;
+        float imageViewHeight = imageViewWidth / ratio;
         if(datasetTwo) {
             imageViewWidth += imageViewWidth;
         }
         glutSetWindow(imageViewWindow);
         //        glutInitDisplayMode(GLUT_SINGLE);
         glutPositionWindow(padding, height/2+padding + sliderViewHeight / 2.F);
-        glutReshapeWindow(imageViewWidth,squareSize); //Square bottom left corner
+        glutReshapeWindow(imageViewWidth,imageViewHeight); //Square bottom left corner
+        
+        glutSetWindow(sceneViewWindow);
         
         if(sliderView) {
             //            glutSetWindow(sliderViewWindow);
@@ -519,20 +542,29 @@ void checkIsDelayed() {
         }
     }
 }
+
+void UnpauseRendererOne() {
+    renderingPausedOne = false;
+    printf("Rendering process ONE is now running...\n");
+    //If dataset one has some filters the rendering will be guided, which means the true distributions
+    //should be reset in order to speed up convergence
+    if(datasetOne && (*datasetOne)->IsFiltered()) {
+        dataControllerOne->Reset();
+    }
+}
+void UnpauseRendererTwo() {
+    renderingPausedTwo = false;
+    printf("Rendering process TWO is now paused...\n");
+    //If dataset one has some filters the rendering will be guided, which means the true distributions
+    //should be reset in order to speed up convergence
+    if(datasetTwo && (*datasetTwo)->IsFiltered()) {
+        dataControllerTwo->Reset();
+    }
+}
 void TogglePauseOne() {
     printf("Rendering process ONE is now ");
     if(renderingPausedOne) {
-        
-        printf("running.\n");
-        renderingPausedOne = false;
-        
-        //If dataset one has some filters the rendering will be guided, which means the true distributions
-        //should be reset in order to speed up convergence
-        if(datasetOne && (*datasetOne)->IsFiltered()) {
-            dataControllerOne->Reset();
-        }
-        
-        
+        UnpauseRendererOne();
     }
     else {
         printf("paused.\n");
@@ -541,24 +573,16 @@ void TogglePauseOne() {
     //    glutPostRedisplay();
 }
 void TogglePauseTwo() {
-    printf("Rendering process TWO is now ");
+    
     if(renderingPausedTwo) {
-        printf("running.\n");
-        renderingPausedTwo = false;
-        
-        //If dataset one has some filters the rendering will be guided, which means the true distributions
-        //should be reset in order to speed up convergence
-        if(datasetTwo && (*datasetTwo)->IsFiltered()) {
-            dataControllerTwo->Reset();
-        }
-        
-        //        glutPostRedisplay();
+        UnpauseRendererTwo();
     }
     else {
-        printf("paused.\n");
+        printf("Rendering process TWO is now paused...\n");
         renderingPausedTwo = true;
     }
 }
+//When 1 is running it pauses this renderer, when both are in the same state it toggles both
 void TogglePause() {
     if(!renderingPausedOne) {
         if(!renderingPausedTwo) {
@@ -570,8 +594,8 @@ void TogglePause() {
         }
     }
     else if(renderingPausedTwo) {
-        renderingPausedOne = false;
-        renderingPausedTwo = false;
+        UnpauseRendererOne();
+        UnpauseRendererTwo();
     }
     else {
         renderingPausedTwo = true;
@@ -585,10 +609,10 @@ void idle() {
     if(!renderingPausedOne) {
         printf("Rendering frame %d\n",currentFrameOne);
         ++currentFrameOne;
-        Histogram2D<float>* heatmapOne = imageView->GetHeatmapOne();
-        if(heatmapOne && heatmapOne->NumberOfElements() && (*datasetOne)->IsFiltered()) {
+        Histogram2D<float>* pixelDistributionOne = imageView->GetPixelDistributionOne();
+        if(pixelDistributionOne && pixelDistributionOne->NumberOfElements() && (*datasetOne)->IsFiltered()) {
             //                heatmapOne->Print();
-            rendererOne->RenderNextFrame(heatmapOne);
+            rendererOne->RenderNextFrame(pixelDistributionOne);
         }
         else {
             rendererOne->RenderNextFrame();
@@ -599,10 +623,10 @@ void idle() {
     if(!renderingPausedTwo) {
         if(dataControllerTwo) {
             ++currentFrameTwo;
-            if((*datasetTwo)->IsFiltered()) {
-                auto heatmapTwo = imageView->GetHeatmapTwo();
+            auto pixelDistributionTwo = imageView->GetPixelDistributionTwo();
+            if((*datasetTwo)->IsFiltered() && pixelDistributionTwo && pixelDistributionTwo->NumberOfElements()) {
                 //                    heatmapTwo->Print();
-                rendererTwo->RenderNextFrame(heatmapTwo);
+                rendererTwo->RenderNextFrame(pixelDistributionTwo);
             }
             else {
                 rendererTwo->RenderNextFrame();
@@ -624,15 +648,11 @@ bool processRendererOne(PathData* newPath) {
 
 void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
     //	dataControllerTwo->RendererOneFinishedFrame(numPaths,numRays);
-    printf("Renderer one finished a frame...\n");
+    printf("\n*** Renderer one finished frame %d...\n",currentFrameOne);
     dataControllerOne->Reduce();
     imageView->redisplayWindow();
     renderOneFinishedFrame = true;
-    //	if(renderOneFinishedFrame && renderTwoFinishedFrame) {
-    //		delayRendering(5000);
-    
-    //		renderingPaused = true;
-    //	}
+
     //    renderingPausedOne = true;
 }
 
@@ -641,7 +661,7 @@ bool processRendererTwo(PathData* newPath) {
     return dataControllerTwo->ProcessNewPath(currentFrameTwo,newPath);
 }
 void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
-    printf("Renderer two finished a frame...\n");
+    printf("\n*** Renderer two finished frame %d...\n",currentFrameTwo);
     dataControllerTwo->Reduce();
     imageView->redisplayWindow();
     renderTwoFinishedFrame = true;
@@ -694,8 +714,8 @@ void setup(int argc, char** argv) {
         if(strcmp(type,"-connect") == 0) {
             rendererOne = new EMBREERenderer(dcOne, std::string(argv[2]),1);
             sceneDataOne = getSceneData(rendererOne);
-            dataControllerOne = new DataController(2 * maxPaths, bootstrapRepeat,sceneDataOne.xBounds,sceneDataOne.yBounds,sceneDataOne.zBounds,sceneDataOne.NumberOfMeshes());
-            dataControllerOne->SetAcceptProbability(2.F * maxPaths / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel()));
+            dataControllerOne = new DataController(2 * maxPathsOne, maxBootstrapRepeatOne,sceneDataOne.xBounds,sceneDataOne.yBounds,sceneDataOne.zBounds,sceneDataOne.NumberOfMeshes());
+            dataControllerOne->SetAcceptProbability(2.F * maxPathsOne / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel()));
             datasetOne = dataControllerOne->GetDataSet();
             printf("datsetone** = %p --> datasetone* = %p\n",datasetOne,*datasetOne);
             connectedOne = true;
@@ -749,12 +769,12 @@ void setup(int argc, char** argv) {
         yBounds = Vec2f(std::min(sceneDataOne.yBounds[0],sceneDataTwo.yBounds[0]),std::max(sceneDataOne.yBounds[1],sceneDataTwo.yBounds[1]));
         zBounds = Vec2f(std::min(sceneDataOne.zBounds[0],sceneDataTwo.zBounds[0]),std::max(sceneDataOne.zBounds[1],sceneDataTwo.zBounds[1]));
         
-        dataControllerOne = new DataController(2 * maxPaths, bootstrapRepeat,xBounds,yBounds,zBounds,sceneDataOne.NumberOfMeshes());
-        dataControllerTwo = new DataController(2 * maxPaths,bootstrapRepeat,xBounds,yBounds,zBounds,sceneDataTwo.NumberOfMeshes());
+        dataControllerOne = new DataController(2 * maxPathsOne,maxBootstrapRepeatOne,xBounds,yBounds,zBounds,sceneDataOne.NumberOfMeshes());
+        dataControllerTwo = new DataController(2 * maxPathsTwo,maxBootstrapRepeatTwo,xBounds,yBounds,zBounds,sceneDataTwo.NumberOfMeshes());
         datasetOne = dataControllerOne->GetDataSet();
         datasetTwo = dataControllerTwo->GetDataSet();
-        float acceptProbOne = 2.F * maxPaths / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel());
-        float acceptProbTwo = 2.F * maxPaths / (rendererTwo->getWidth() * rendererTwo->getHeight() * rendererTwo->getSamplesPerPixel());
+        float acceptProbOne = 2.F * maxPathsOne / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel());
+        float acceptProbTwo = 2.F * maxPathsTwo / (rendererTwo->getWidth() * rendererTwo->getHeight() * rendererTwo->getSamplesPerPixel());
         dataControllerOne->SetAcceptProbability(acceptProbOne);
         dataControllerTwo->SetAcceptProbability(acceptProbTwo);
         printf("2 renderers set up.\n");
@@ -773,6 +793,7 @@ void setup(int argc, char** argv) {
     float squareSize = height / 2.F - 2 * padding - sliderViewHeight / 2.F;
     float ratio = rendererOne->getWidth() / (float)rendererOne->getHeight();
     float imageViewWidth = squareSize * ratio;
+    float imageViewHeight = imageViewWidth / ratio;
     
     if(nrConnected) {
         std::vector<riv::Color> colors;
@@ -806,7 +827,7 @@ void setup(int argc, char** argv) {
     }
     else { //Take up the full screen
         imageViewWidth = width;
-        float imageViewHeight = ratio * imageViewWidth;
+
         imageViewWindow = glutCreateSubWindow(mainWindow,0,height - (imageViewHeight / 2.F),imageViewWidth,imageViewHeight);
         glutSetWindow(imageViewWindow);
         RIVImageView::windowHandle = imageViewWindow;
@@ -825,7 +846,7 @@ void setup(int argc, char** argv) {
     if(datasetOne || datasetTwo) {
         int sceneViewPosX = padding + imageViewWidth;
         int sceneViewWidth = width - padding * 3 - imageViewWidth;
-        sceneViewWindow = glutCreateSubWindow(mainWindow, sceneViewPosX, bottomHalfY, sceneViewWidth, squareSize);
+        sceneViewWindow = glutCreateSubWindow(mainWindow, sceneViewPosX, bottomHalfY, sceneViewWidth, imageViewHeight);
         RIV3DView::windowHandle = sceneViewWindow;
         glutSetWindow(sceneViewWindow);
         glEnable( GL_LINE_SMOOTH );

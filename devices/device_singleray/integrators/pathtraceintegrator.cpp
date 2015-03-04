@@ -236,6 +236,7 @@ namespace embree
 		for (size_t i=0; i<brdfs.size(); i++)
 			useDirectLighting |= (brdfs[i]->type & directLightingBRDFTypes) != NONE;
 		
+        std::vector<ushort> occluderIds;
 		/*! Direct lighting. Shoot shadow rays to all light sources. */
 		if (useDirectLighting)
 		{
@@ -263,7 +264,13 @@ namespace embree
                 ++state.numRays;
 				rtcOccluded(scene->scene,(RTCRay&)shadowRay);
 
-				if (shadowRay) continue;
+                if (shadowRay) {
+                    occluderIds.push_back(shadowRay.id0);
+                    continue;
+                }
+                else {
+                    occluderIds.push_back(-1);
+                }
 				
 				/*! Evaluate BRDF. */
 				L += ls.L * brdf * rcp(ls.wi.pdf);
@@ -292,7 +299,7 @@ namespace embree
 				LightPath scatteredPath = lightPath.extended(newRay,nextMedium, c, (type & directLightingBRDFTypes) != NONE);
 				
 //				if(dataConnector)
-					dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,type);
+					dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,type,occluderIds);
 		  
 //				lastColor = L;
 				Color isectColor = c * Li(scatteredPath, scene, state, dataConnector) * rcp(wi.pdf);

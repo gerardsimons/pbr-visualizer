@@ -286,7 +286,10 @@ void EMBREERenderer::CopySwapChainTo(EMBREERenderer* targetRenderer) {
     Ref<FrameBuffer> thisBuffer = thisSwapChain->buffer();
     Ref<FrameBuffer> thatBuffer = thatSwapChain->buffer();
     
-    float weight = 2;
+//    thatBuffer.ptr = thisBuffer.ptr;
+//    thatSwapChain.ptr = thisSwapChain.ptr;
+    
+    float weight = 1;
 
     //TODO: Support varying sizes, especially those with the same aspect ratio
     if(thisSwapChain->getWidth() != thatSwapChain->getWidth() || thisSwapChain->getWidth() != thatSwapChain->getHeight()) {
@@ -299,10 +302,18 @@ void EMBREERenderer::CopySwapChainTo(EMBREERenderer* targetRenderer) {
         thatSwapChain->clearAll();
         for(int x = 0 ; x < thisSwapChain->getWidth() ; ++x) {
             for(int y = 0 ; y < thisSwapChain->getHeight() ; ++y) {
-//                Vec4f thisPixel = thisAccuBuffer->getRaw(x, y);
+                Vec4f thisPixel = thisAccuBuffer->getRaw(x, y);
+//                Color thisColor = Color(thisPixel.x,thisPixel.y,thisPixel.z);
                 Color thisColor = thisAccuBuffer->get(x, y);
-//                thisPixel.z = weight;
-                thatAccuBuffer->update(x, y, thisColor, 1, true);
+//                Color thisColor = thisAccuBuffer->get(x, y);
+                float diffWeight = thisPixel.w / weight;
+                thisPixel.x /= diffWeight;
+                thisPixel.y /= diffWeight;
+                thisPixel.z /= diffWeight;
+                thisPixel.w = weight;
+                
+//                thatAccuBuffer->update(x, y, thisColor, weight, true);
+                thatAccuBuffer->set(x, y, thisPixel);
                 thatBuffer->set(x, y, thisColor);
 //                thatAccuBuffer->set(x, y, thisPixel);
             }

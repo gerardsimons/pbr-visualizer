@@ -43,6 +43,7 @@ private:
 	/* Shortcut pointers for quick access */
 	RIVTable<float,ushort>* currentPathTable;
 	RIVTable<float,ushort>* currentIntersectionsTable;
+    RIVTable<float,ushort>* currentLightsTable;
 
 	RIVFloatRecord* xPixels = NULL;
 	RIVFloatRecord* yPixels = NULL;
@@ -67,10 +68,12 @@ private:
 	RIVFloatRecord* isectColorRs = NULL;
 	RIVFloatRecord* isectColorGs = NULL;
 	RIVFloatRecord* isectColorBs = NULL;
-	RIVShortRecord *primitiveIds = NULL;
-	RIVShortRecord *shapeIds = NULL;
-	RIVShortRecord *interactionTypes = NULL;
-	RIVShortRecord *lightIds = NULL;
+	RIVShortRecord* primitiveIds = NULL;
+	RIVShortRecord* shapeIds = NULL;
+	RIVShortRecord* interactionTypes = NULL;
+	RIVShortRecord* lightIds = NULL;
+    
+    RIVShortRecord* occluderIds = NULL;
 	
 	RIVMultiReference* pathsToIsectRef = NULL;
 	RIVSingleReference* isectsToPathsRef = NULL;
@@ -97,8 +100,9 @@ private:
 	clock_t startDelay;
 	int delayTimerInterval = 10000;
 	
-	size_t maxPaths;
-	size_t bootstrapRepeat;
+	int maxPaths;
+	int maxBootstrapRepeat;
+    int bootstrapRepeat;
 	
 	//Generate the datasets; create tables records and the histogramset
 	void createDataStructures(const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, ushort nrPrimitives);
@@ -116,12 +120,13 @@ public:
 	void AddMembershipDataStructures(RIVDataSet<float,ushort>* dataset);
 	void SetAcceptProbability(float newProb);
 	//The number of renderers to expect data from and the maximum number of paths per renderer before data reduction should kick in
-	DataController(const size_t maxPaths, const size_t bootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives);
+	DataController(const int maxPaths, const int bootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives);
 	//Returns a pointer to a pointer of the dataset for renderer one
 	RIVDataSet<float,ushort>** GetDataSet();
 	bool ProcessNewPath(int frame, PathData* newPath);
 	//Reduce the data, first dataset is the current data being used for a renderer, candidate data is the new dataset, bestBootstrap is the slot used for creating and maintaining the best bootstrap and the best bootstrap results so far...
 	void Reduce();
     void Reset();
+    void SetMaxPaths(int maxPaths);
 };
 #endif /* defined(__embree__DataController__) */

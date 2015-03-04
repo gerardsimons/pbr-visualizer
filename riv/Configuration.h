@@ -14,6 +14,7 @@ extern const char* DATASET_TWO;
 
 extern const char* INTERSECTIONS_TABLE;
 extern const char* PATHS_TABLE;
+extern const char* LIGHTS_TABLE;
 extern const char* PATH_MEMBERSHIP_TABLE;
 extern const char* ISECT_MEMBERSHIP_TABLE;
 
@@ -47,7 +48,9 @@ extern const char* INTERSECTION_B;
 extern const char* PRIMITIVE_ID;
 extern const char* INTERACTION_TYPE;
 extern const char* SHAPE_ID;
+
 extern const char* LIGHT_ID;
+extern const char* OCCLUDER_ID;
 
 
 #endif

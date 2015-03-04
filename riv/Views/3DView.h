@@ -44,7 +44,7 @@ protected:
     std::map<size_t,LightCone*> lightConesOne;
     std::map<size_t,LightCone*> lightConesTwo;
     
-    SelectionMode selectionMode = OBJECT;
+    SelectionMode selectionMode = PATH;
 
     Vector3f cameraPositionOne;
     Vector3f cameraPositionTwo;

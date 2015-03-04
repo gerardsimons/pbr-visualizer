@@ -1,4 +1,4 @@
-//
+ //
 //  DataController.cpp
 //  embree
 //
@@ -12,7 +12,7 @@
 #include <set>
 #include <algorithm>
 
-DataController::DataController(const size_t maxPaths, const size_t bootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives) : maxPaths(maxPaths), bootstrapRepeat(bootstrapRepeat) {
+DataController::DataController(const int maxPaths, const int maxBootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives) : maxPaths(maxPaths), maxBootstrapRepeat(maxBootstrapRepeat),bootstrapRepeat(maxBootstrapRepeat) {
     createDataStructures(xBounds,yBounds,zBounds,nrPrimitives);
 }
 
@@ -88,6 +88,9 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset,const Vec2f&
     pathTable->CreateRecord<float>(THROUGHPUT_R,0,1,true);
     pathTable->CreateRecord<float>(THROUGHPUT_G,0,1,true);
     pathTable->CreateRecord<float>(THROUGHPUT_B,0,1,true);
+//    pathTable->CreateRecord<float>(THROUGHPUT_R);
+//    pathTable->CreateRecord<float>(THROUGHPUT_G);
+//    pathTable->CreateRecord<float>(THROUGHPUT_B);
     pathTable->CreateRecord<ushort>(DEPTH,0,5,true);
     
     RIVTable<float,ushort>* isectsTable = dataset->CreateTable(INTERSECTIONS_TABLE);
@@ -108,6 +111,9 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset,const Vec2f&
     //	shapeIds = isectsTable->CreateShortRecord("shape ID");
     //	interactionTypes = isectsTable->CreateShortRecord("interaction");
     //	lightIds = isectsTable->CreateShortRecord("light ID");
+    
+    RIVTable<float,ushort>* lightsTable = dataset->CreateTable(LIGHTS_TABLE);
+    lightsTable->CreateRecord<ushort>(OCCLUDER_ID);
     
     RIVMultiReference* pathsToIsectRef = new RIVMultiReference(pathTable,isectsTable);
     pathTable->SetReference(pathsToIsectRef);
@@ -154,9 +160,8 @@ Octree* DataController::GetEnergyDistribution() {
 }
 void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
     currentPathTable = dataset->GetTable(PATHS_TABLE);
-    //	currentPathTable->ClearFilters();
-    //	currentPathTable->ClearFilter("");
     currentIntersectionsTable = dataset->GetTable(INTERSECTIONS_TABLE);
+    currentLightsTable = dataset->GetTable(LIGHTS_TABLE);
     
     isectsToPathsRef = (RIVSingleReference*)currentIntersectionsTable->GetReference();
     pathsToIsectRef = (RIVMultiReference*)currentPathTable->GetReference();
@@ -185,6 +190,8 @@ void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
     isectColorGs = currentIntersectionsTable->GetRecord<float>(INTERSECTION_G);
     isectColorBs = currentIntersectionsTable->GetRecord<float>(INTERSECTION_B);
     primitiveIds = currentIntersectionsTable->GetRecord<ushort>(PRIMITIVE_ID);
+    
+    occluderIds = currentLightsTable->GetRecord<ushort>(OCCLUDER_ID);
 }
 RIVDataSet<float,ushort>** DataController::GetDataSet() {
     return &currentData;
@@ -270,6 +277,10 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
                 //					interactionTypes->AddValue(isect.interactionType);
                 //					lightIds->AddValue(isect.lightId);
                 
+                for(ushort occluderId : isect.occluderIds) {
+                    occluderIds->AddValue(occluderId);
+                }
+                
                 isectsToPathsRef->AddReference(xs->Size() - 1, colorRs->Size() - 1);
                 indices[i] = xs->Size() - 1;
             }
@@ -279,6 +290,7 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
     else { //I AM SO FULL, I CANNOT EAT ONE MORE BYTE OF DATA
         return false;
     }
+    return true;
 }
 
 void DataController::Reduce() {
@@ -295,7 +307,7 @@ void DataController::Reduce() {
         firstTime = false;
         
         //Divide the max paths and accept_prob by two (the other half is reserved for the bootstrapped dataset)
-        acceptProbability /= 2.F;
+//        acceptProbability /= 2.F;
         maxPaths /= 2;
         
         currentData->NotifyDataListeners();
@@ -426,9 +438,14 @@ void DataController::Reduce() {
             bootPathsToIsectRef->AddReferences(i, rowsMapping);
             ++pathsCount;
         }
-        
         //			printf("\nBOOTSTRAP RESULT = \n");
         //			bestBootstrap->Print();
+        
+        //If we found a better bootstrap, this might mean we need to do more bootstrapping until
+//        bootstrapRepeat *= 2;
+//        if(bootstrapRepeat > maxBootstrapRepeat) {
+//            bootstrapRepeat = maxBootstrapRepeat;
+//        }
         
         //Delete the old renderer data and replace it with the bootstrap dataset,
         std::swap(currentData,bestBootstrap);
@@ -441,6 +458,12 @@ void DataController::Reduce() {
     }
     else {
         printf("\n Could not find a better bootstrap... \n");
+        
+        //Decrease the number of bootstrap repeats, to a minimum of 1
+        bootstrapRepeat /= 2;
+        if(!bootstrapRepeat) {
+            bootstrapRepeat = 1;
+        }
         //			resetPointers(candidateData);	//Reset the shortcut pointers to a new empty dataset
         //			printf("EMPTY CANDIDATE DATA: \n");
         //			candidateData->Print();
@@ -463,10 +486,13 @@ void DataController::Reset() {
     currentData->ClearData();
     candidateData->ClearData();
     resetPointers(candidateData);
-    
+    bootstrapRepeat = maxBootstrapRepeat;
     energyDistribution->Clear();
     firstTime = true;
 //    acceptProbability *= 2;
     maxPaths *= 2;
     bestBootstrapResult = std::numeric_limits<float>::max();
+}
+void DataController::SetMaxPaths(int maxPaths) {
+    this->maxPaths = maxPaths;
 }

@@ -83,7 +83,7 @@ public:
 		return NULL;
 	}
 	bool HasTable(const std::string& tableName) {
-		return GetTable(name) != NULL;
+		return GetTable(tableName) != NULL;
 	}
 	RIVTable<Ts...>* CreateTable(const std::string& tableName) {
 		if(HasTable(tableName)) {
@@ -250,6 +250,7 @@ public:
 		if(isFiltering) {
 			for(auto table : tables) {
 				table->ClearFilters();
+                staleTables[table] = true;
 			}
 		}
 		else {

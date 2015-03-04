@@ -40,9 +40,10 @@ private:
 
     //TODO: I think these histograms belong in the data controller, or that is where they should originate from
     bool showHeatmap = true;
-    const unsigned int bins = 25;
-    Histogram2D<float>* heatmapOne = NULL;
-    Histogram2D<float>* heatmapTwo = NULL;
+    unsigned int xBins = 30;
+    unsigned int yBins = 30;
+    Histogram2D<float>* pixelDistributionOne = NULL;
+    Histogram2D<float>* pixelDistributionTwo = NULL;
 
     bool showFillArea = false;
     unsigned int gridSize = 100;
@@ -53,7 +54,7 @@ private:
     Grid* interactingGrid = NULL;
 	
 	void drawRenderedImage(EMBREERenderer* renderer,int startX, int startY, int width, int height);
-    void computeHeatmap(RIVDataSet<float,ushort>*, Histogram2D<float>*& heatmap);
+    void computePixelDistribution(RIVDataSet<float,ushort>*, Histogram2D<float>*& pixelDistribution);
     void drawGrid(float startX, Grid* paintGrid);
     void drawHeatmap(int startX, Histogram2D<float>* heatmap, float r, float g, float b);
     void filterImage(RIVDataSet<float,ushort>* dataset, Grid* activeGrid, riv::RowFilter* previousFilter);
@@ -66,8 +67,10 @@ public:
 	//Dual renderer constructor
 	RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo);
 	
-    Histogram2D<float>* GetHeatmapOne();
-    Histogram2D<float>* GetHeatmapTwo();
+    Histogram2D<float>* GetPixelDistributionOne();
+    Histogram2D<float>* GetPixelDistributionTwo();
+    void ClearPixelDistributionOne();
+    void ClearPixelDistributionTwo();
     void ToggleShowHeatmap();
 	
 	static void DrawInstance();

@@ -432,11 +432,11 @@ void RIVSliderView::filterDataSet(RIVDataSet<float,ushort>* dataset, HistogramSe
 		//	}
 		dataset->StopFiltering();
 		if(rowsFiltered) {
-			printf("%d rows (%d new) filtered : \n\n",rowsFiltered,(rowsFiltered - lastRowsFiltered));
+//			printf("%d rows (%d new) filtered : \n\n",rowsFiltered,(rowsFiltered - lastRowsFiltered));
 			//		dataset->PrintFilteredRows();
 		}
 		else {
-			printf("Nothing filtered.\n");
+//			printf("Nothing filtered.\n");
 		}
 		lastRowsFiltered = rowsFiltered;
 	}
@@ -456,12 +456,12 @@ void RIVSliderView::filterDataSets() {
 	//	minBound = -1;
 	//	maxBound = 1;
 	
-	printf("SLIDER MIN BOUND = %f\n",minBound);
-	printf("SLIDER MAX BOUND = %f\n",maxBound);
+//	printf("SLIDER MIN BOUND = %f\n",minBound);
+//	printf("SLIDER MAX BOUND = %f\n",maxBound);
 	
-	printf("LEFT DATASET FILTER BINS:  \n");
+//	printf("LEFT DATASET FILTER BINS:  \n");
 	filterDataSet(*datasetOne, distributionsOne, true, minBound, maxBound,rowBinMembershipsOne,membershipFilterOne);
-	printf("RIGHT DATASET FILTER BINS:  \n");
+//	printf("RIGHT DATASET FILTER BINS:  \n");
 	filterDataSet(*datasetTwo, distributionsTwo, false, minBound, maxBound,rowBinMembershipsTwo,membershipFilterTwo);
 }
 bool RIVSliderView::HandleMouse(int button, int state, int x, int y) {

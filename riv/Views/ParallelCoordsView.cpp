@@ -60,6 +60,7 @@ void ParallelCoordsView::createAxes() {
     //    int y = startY + paddingY;
     int y = 1.5F * paddingY; //View port takes care of startY
     int axisHeight = height - 2.5F * paddingY;
+    int bins = 10;
     
     std::vector<std::string> tablesToDisplay = {PATHS_TABLE,INTERSECTIONS_TABLE};
     
@@ -94,7 +95,7 @@ void ParallelCoordsView::createAxes() {
                     //A tuple containing the min and max values of the record
                     auto minMax = record->MinMax();
                     auto otherMinMax = otherRecord->MinMax();
-                    const std::string& name = record->name;
+//                    const std::string& name = record->name;
                     //				printf("Record %s has min-max : ",record->name.c_str());
                     //				std::cout << " " << minMax.first << ", " << minMax.second << std::endl;
                     
@@ -106,15 +107,22 @@ void ParallelCoordsView::createAxes() {
                     float min = std::min(minMax.first,otherMinMax.first);
                     float max = std::min(minMax.second,otherMinMax.second);
                     
+                    //If the type is unsigned short, its a discrete value, if there are not too many, use each discrete value as a bin, otherwise clump them together same as floats
                     if(typeid(Type) == typeid(ushort)) {
-                        auto dataHistOne = Histogram<Type>(record->name,min,max,max-min);
-                        auto dataHistTwo = Histogram<Type>(record->name,min,max,max-min);
+                        
+                        ushort diff = max - min;
+                        if(diff > bins) {
+                            diff = bins;
+                        }
+                        
+                        auto dataHistOne = Histogram<Type>(record->name,min,max,diff);
+                        auto dataHistTwo = Histogram<Type>(record->name,min,max,diff);
                         
                         axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,dataHistOne,dataHistTwo);
                     }
                     else {
-                        auto dataHistOne = Histogram<Type>(record->name,min,max,10);
-                        auto dataHistTwo = Histogram<Type>(record->name,min,max,10);
+                        auto dataHistOne = Histogram<Type>(record->name,min,max,bins);
+                        auto dataHistTwo = Histogram<Type>(record->name,min,max,bins);
                         
                         axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,dataHistOne,dataHistTwo);
                     }
@@ -142,10 +150,29 @@ void ParallelCoordsView::createAxes() {
                     //				printf("Record %s has min-max : ",record->name.c_str());
                     //				std::cout << " " << minMax.first << ", " << minMax.second << std::endl;
                     
-                    auto histOne = distributionsOne->GetHistogram<Type>(name);
-                    auto dataHistOne = Histogram<Type>(name,histOne->LowerBound(),histOne->UpperBound(),histOne->NumberOfBins());
+//                    auto histOne = distributionsOne->GetHistogram<Type>(name);
+
                     
-                    axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, minMax.first, minMax.second, name, divisionCount, dataHistOne);
+                    //If the type is unsigned short, its a discrete value, if there are not too many, use each discrete value as a bin, otherwise clump them together same as floats
+                    if(typeid(Type) == typeid(ushort)) {
+                        
+                        ushort diff = minMax.second - minMax.first;
+                        if(diff > bins) {
+                            diff = bins;
+                        }
+                        
+                        auto dataHistOne = Histogram<Type>(record->name,minMax.first,minMax.second,diff);
+                        
+                        axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, minMax.first, minMax.second, name, divisionCount, dataHistOne);
+                    }
+                    else {
+                        auto dataHistOne = Histogram<Type>(record->name,minMax.first,minMax.second,bins);
+                        
+                        
+                        axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, minMax.first,minMax.second, record->name, divisionCount,dataHistOne);
+                    }
+                    
+
                     axisIndex++;
                 }
             });
@@ -189,6 +216,8 @@ void ParallelCoordsView::drawAxes() {
                 float maxValueOne = histogramOne.MaximumValue();
                 float maxValueTwo = histogramTwo.MaximumValue();
                 
+                float max = std::max(maxValueOne,maxValueTwo);
+                
                 for(int i = 0 ; i < numBins ; ++i) {
                     //					printf("bin = %d\n",i);
                     
@@ -203,14 +232,21 @@ void ParallelCoordsView::drawAxes() {
                     
                     size_t nrElementsOne = histogramOne.NumberOfElements();
                     size_t nrElementsTwo = histogramTwo.NumberOfElements();
+                    size_t maxNrElements = std::max(nrElementsOne,nrElementsTwo);
                     
                     if(nrElementsOne || nrElementsTwo) {
+                        
                         float normalizedValueOne = 0;
                         float normalizedValueTwo = 0;
-                        if(nrElementsOne)
-                            normalizedValueOne = binValueOne / nrElementsOne;
-                        if(nrElementsTwo)
-                            normalizedValueTwo = binValueTwo / nrElementsTwo;
+                        
+                        if(nrElementsOne) {
+//                            normalizedValueOne = binValueOne / nrElementsOne;
+                            normalizedValueOne = binValueOne / maxNrElements;
+                        }
+                        if(nrElementsTwo) {
+//                            normalizedValueTwo = binValueTwo / nrElementsTwo;
+                            normalizedValueTwo = binValueTwo / maxNrElements;
+                        }
                         
                         //					float valueDelta = valueTwo - valueTwo;
                         float blueColorValue;
@@ -1064,26 +1100,33 @@ void ParallelCoordsView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
     redisplayWindow();
 }
 bool ParallelCoordsView::DecreaseLineOpacity() {
-    if(lineOpacity > 0.F) {
-        lineOpacity -= lineOpacityIncrement;
-        if(lineOpacity < 0.F) {
-            lineOpacity = 0;
-        }
-        Invalidate();
-        redisplayWindow();
-        return true;
-    }
-    else return false;
+    
+    lineOpacity /= 1.5;
+    redisplayWindow();
+    return true;
+//    if(lineOpacity > 0.F) {
+//        lineOpacity -= lineOpacityIncrement;
+//        if(lineOpacity < 0.F) {
+//            lineOpacity = 0;
+//        }
+//        Invalidate();
+//        redisplayWindow();
+//        return true;
+//    }
+//    else return false;
 }
 bool ParallelCoordsView::IncreaseLineOpacity() {
-    if(lineOpacity < 1.F) {
-        lineOpacity += lineOpacityIncrement;
-        if(lineOpacity > 1.F) {
-            lineOpacity = 1;
-        }
-        Invalidate();
-        redisplayWindow();
-        return true;
-    }
-    else return false;
+//    if(lineOpacity < 1.F) {
+//        lineOpacity += lineOpacityIncrement;
+//        if(lineOpacity > 1.F) {
+//            lineOpacity = 1;
+//        }
+//        Invalidate();
+//        redisplayWindow();
+//        return true;
+//    }
+//    else return false;
+    lineOpacity *= 1.5;
+    redisplayWindow();
+    return true;
 }
