@@ -499,6 +499,7 @@ std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVC
     reporter::startTask("Creating paths");
     
     RIVTable<float,ushort>* isectTable = dataset->GetTable(INTERSECTIONS_TABLE);
+//    RIVTableInterface* pathsTable = dataset->GetTable(INTERSECTIONS_TABLE);
     RIVShortRecord* bounceRecord = isectTable->GetRecord<ushort>(BOUNCE_NR);
     RIVShortRecord* primitiveRecord = isectTable->GetRecord<ushort>(PRIMITIVE_ID);
     
@@ -510,10 +511,10 @@ std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVC
     
     //Get the records we want;
     //Get the iterator, this iterator is aware of what rows are filtered and not
-    TableIterator* iterator = isectTable->GetIterator();
+    TableIterator* intersectionsIterator = isectTable->GetIterator();
     
     size_t row = 0;
-    size_t *pathID = 0;
+    size_t* pathID = NULL;
     size_t oldPathID = 0;
     ushort bounceNr;
     
@@ -522,8 +523,22 @@ std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVC
     LightCone* previousCone = NULL;
     
 //    dataset->Print(10);
+    std::map<RIVTableInterface*,std::pair<size_t*,ushort>> referenceRowsMap;
     
-    while(iterator->GetNext(row,pathID)) {
+    while(intersectionsIterator->GetNext(row,referenceRowsMap)) {
+        
+        std::pair<size_t*,ushort> refRows;
+        
+        for(auto it : referenceRowsMap) {
+            if(it.first->name == PATHS_TABLE) {
+                refRows = it.second;
+            }
+        }
+        if(refRows.first) {
+            pathID = &refRows.first[0];
+        }
+
+        
         ushort primitiveId = primitiveRecord->Value(row);
         LightCone*& existing = lightCones[primitiveId];
         float x = xRecord->Value(row);
@@ -543,7 +558,7 @@ std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVC
 //        std::cout  << existing->origin << std::endl;
         
         //New path, clear previous stuff
-        if(*pathID != oldPathID) {
+        if(pathID && *pathID != oldPathID) {
             if(points.size() > 0) {
                 paths.push_back(Path(points));
                 points.clear();
@@ -575,6 +590,7 @@ std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVC
     
     return paths;
 }
+
 #define PI 3.141592
 float angleTest = 0;
 void RIV3DView::drawLightCones(const std::map<size_t,LightCone*>& lightCones) {
@@ -953,14 +969,18 @@ Vec3fa RIV3DView::screenToWorldCoordinates(int screenX, int screenY, float zPlan
 void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort selectedObjectID, std::vector<riv::RowFilter*>& pathFilters) {
     dataset->StartFiltering();
     
-    auto pathTable = dataset->GetTable(PATHS_TABLE);
-    auto reference = dynamic_cast<RIVMultiReference*>(pathTable->reference);
+    RIVTable<float,ushort>* pathTable = dataset->GetTable(PATHS_TABLE);
+    RIVTable<float,ushort>* isectsTable = dataset->GetTable(INTERSECTIONS_TABLE);
+    RIVMultiReference* pathIsectReference = dynamic_cast<RIVMultiReference*>(pathTable->GetReferenceTo(INTERSECTIONS_TABLE));
+    RIVMultiReference* isectsToLightsReference = dynamic_cast<RIVMultiReference*>(isectsTable->GetReferenceTo(LIGHTS_TABLE));
+    RIVTable<float,ushort>* lightsTable = dataset->GetTable(LIGHTS_TABLE);
     
     auto intersectionsTable = dataset->GetTable(INTERSECTIONS_TABLE);
     auto primitiveIds = intersectionsTable->GetRecord<ushort>(PRIMITIVE_ID);
     auto bounceNrs = intersectionsTable->GetRecord<ushort>(BOUNCE_NR);
+    auto occluderIds = lightsTable->GetRecord<ushort>(OCCLUDER_ID);
     
-    printf("Path filtering bounce# = %d selectedObjectID = %d\n",bounceNr,selectedObjectID);
+
     std::map<size_t,bool> filteredRows;
 //    printf("BEFORE PATH FILTERING : \n");
 //    intersectionsTable->Print();
@@ -969,22 +989,45 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
         //            dataset->ClearRowFilter(pathFilter);
 //    }
     
+//    dataset->Print(5000);
+    printf("Path filtering bounce# = %d selectedObjectID = %d\n",bounceNr,selectedObjectID);
     TableIterator* iterator = pathTable->GetIterator();
     size_t row;
     while(iterator->GetNext(row)) {
-        const auto& mapping = reference->GetReferenceRows(row);
-        ushort nrRows = mapping.second;
-        size_t* refRows = mapping.first;
+        const auto& mapping = pathIsectReference->GetReferenceRows(row);
+        ushort nrIntersections = mapping.second;
+        size_t* intersectionRows = mapping.first;
         bool filter = true;
-        for(ushort i = 0 ; i < nrRows ; ++i) {
-            size_t refRow = refRows[i];
-            if(primitiveIds->Value(refRow) == selectedObjectID && (selectionMode == OBJECT || bounceNrs->Value(refRow) == bounceNr)) {
-                
+        for(ushort i = 0 ; i < nrIntersections ; ++i) {
+            size_t intersectionRow = intersectionRows[i];
+            
+            //Check if it has occluders and if the selectedObjectID is in them
+            if(selectionMode == OBJECT) {
+                if(primitiveIds->Value(intersectionRow) == selectedObjectID) {
+                    filter = false;
+                    break;
+                }
+                //Only when the first bounce is in the shadow
+                else if(i == 0) {
+                    const auto& lightsMapping = isectsToLightsReference->GetReferenceRows(intersectionRow);
+                    ushort nrLightRows = lightsMapping.second;
+                    size_t* lightRefRows = lightsMapping.first;
+                    for(ushort j = 0 ; j < nrLightRows ; ++j) {
+                        size_t lightRow = lightRefRows[j];
+                        ushort occluderId = occluderIds->Value(lightRow);
+                        if(occluderId == selectedObjectID) {
+                            filter = false;
+                            printf("Path %zu intersection #%zu occluder %zu has occluder id = %d\n",row,intersectionRow,lightRow,occluderId);
+                            break;
+                        }
+                    }
+                }
+            }
+            else if(selectionMode == PATH && primitiveIds->Value(intersectionRow) == selectedObjectID && bounceNrs->Value(intersectionRow) == bounceNr) {
                 filter = false;
                 break;
             }
         }
-        
         if(filter) {
             filteredRows[row] = true;
         }

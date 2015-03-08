@@ -107,6 +107,7 @@ namespace embree
 	 ******************************************************************/
 	  Shape* rtGetShape(Device::RTPrimitive prim);
       Ref<SwapChain> rtGetSwapChain(Device::RTFrameBuffer frameBuffer_i);
+      ushort rtGetNumLights(Device::RTScene scene_i);
 
   private:
     MutexSys mutex;

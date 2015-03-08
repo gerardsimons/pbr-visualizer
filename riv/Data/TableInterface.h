@@ -14,13 +14,17 @@ class RIVReference;
 class RIVTableInterface {
 public:
 	const std::string name;
-	RIVReference* reference = NULL;
+    
+    std::vector<RIVReference*> references;
+
 	//	size_t ID = ++IDCOUNTER;
 	
 	virtual bool HasRecord(const std::string& name) const = 0;
 	virtual void FilterRow(size_t row) = 0;
 	virtual size_t NumberOfRows() const = 0;
 	virtual void ClearFilteredRows() = 0;
+    
+    virtual RIVReference* GetReferenceTo(const std::string& tableName) = 0;
 protected:
 	RIVTableInterface(const std::string& name) : name(name) {
 		

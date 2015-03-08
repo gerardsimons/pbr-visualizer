@@ -9,7 +9,7 @@
 #include "Iterator.h"
 #include "../helper.h"
 
-TableIterator::TableIterator(size_t maxIndex, RIVReference* reference) : maxIndex(maxIndex), reference(reference) {
+TableIterator::TableIterator(size_t maxIndex, const std::vector<RIVReference*>& references) : maxIndex(maxIndex), references(references) {
 	index = 0;
 };
 void TableIterator::BackToStart() {
@@ -25,18 +25,19 @@ bool TableIterator::GetNext(size_t& row) {
 		return (index - 1) < maxIndex;
 	}
 }
-bool TableIterator::GetNext(size_t& row, size_t*& refRow) {
+bool TableIterator::GetNext(size_t& row, std::map<RIVTableInterface*,std::pair<size_t*,ushort>>& refRowsMap) {
 	if(index >= maxIndex) {
 		return false;
 	}
 	else {
 		row = index;
 
-		const std::pair<size_t*,ushort>& refRows = reference->GetReferenceRows(row);
-		if(refRows.first) {
-			refRow = &refRows.first[0];
-		}
-		
+        for(RIVReference* reference : references) {
+            const std::pair<size_t*,ushort>& refRows = reference->GetReferenceRows(row);
+            if(refRows.first) {
+                refRowsMap[reference->targetTable] = refRows;
+            }
+        }
 		index++;
 		return (index - 1) < maxIndex;
 	}
@@ -59,7 +60,7 @@ bool FilteredTableIterator::GetNext(size_t& row) {
 	}
 	return false;
 }
-bool FilteredTableIterator::GetNext(size_t& row, size_t*& refRow) {
+bool FilteredTableIterator::GetNext(size_t& row, std::map<RIVTableInterface*,std::pair<size_t*,ushort>>& refRowsMap) {
 	if(index < maxIndex) {
 		bool filtered = (*indexPointers)[index];
 		while(filtered && index < maxIndex) {
@@ -68,12 +69,15 @@ bool FilteredTableIterator::GetNext(size_t& row, size_t*& refRow) {
 			//                printf("index = %zu\n",index);
 		}
 		row = index;
-//		for(size_t j = 0 ; j < references->size() ; ++j) {
+		for(size_t j = 0 ; j < references.size() ; ++j) {
+            RIVReference* reference = references[j];
 			std::pair<size_t*,ushort> refRows = reference->GetReferenceRows(row);
-			if(refRows.first) {
-				refRow = &refRows.first[0];
-			}
-//		}
+            //TODO: Not sure what this check is for
+//			if(refRows.first) {
+//				refRow = &refRows.first[0];
+//			}
+            refRowsMap[reference->targetTable] = refRows;
+		}
 		index++;
 		return !filtered && index <= maxIndex;
 	}

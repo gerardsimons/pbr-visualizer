@@ -168,6 +168,10 @@ void RIVImageView::ClearPixelDistributionTwo() {
         pixelDistributionTwo = NULL;
     }
 }
+void RIVImageView::smoothPixelDistribution(Histogram2D<float>* pixeLDistribution) {
+    pixeLDistribution->SmoothRectangular(3, 3);
+    redisplayWindow();
+}
 void RIVImageView::computePixelDistribution(RIVDataSet<float,ushort>* dataset, Histogram2D<float>*& pixelDistribution) {
     if(pixelDistribution) {
         delete pixelDistribution;
@@ -179,23 +183,25 @@ void RIVImageView::computePixelDistribution(RIVDataSet<float,ushort>* dataset, H
     
     RIVRecord<float>* xPixel = pathsTable->GetRecord<float>(PIXEL_X);
     RIVRecord<float>* yPixel = pathsTable->GetRecord<float>(PIXEL_Y);
-    RIVRecord<float>* throughputsR = pathsTable->GetRecord<float>(THROUGHPUT_R);
-    RIVRecord<float>* throughputsG = pathsTable->GetRecord<float>(THROUGHPUT_G);
-    RIVRecord<float>* throughputsB = pathsTable->GetRecord<float>(THROUGHPUT_B);
+//    RIVRecord<float>* throughputsR = pathsTable->GetRecord<float>(THROUGHPUT_R);
+//    RIVRecord<float>* throughputsG = pathsTable->GetRecord<float>(THROUGHPUT_G);
+//    RIVRecord<float>* throughputsB = pathsTable->GetRecord<float>(THROUGHPUT_B);
     
     size_t row;
     while(iterator->GetNext(row)) {
-        float throughputR = throughputsR->Value(row);
-        float throughputG = throughputsG->Value(row);
-        float throughputB = throughputsB->Value(row);
+//        float throughputR = throughputsR->Value(row);
+//        float throughputG = throughputsG->Value(row);
+//        float throughputB = throughputsB->Value(row);
         
 //        printf("throughput (r,g,b) = (%f,%f,%f)\n",throughputR,throughputG,throughputB);
         
-        float averageThroughput = (throughputR + throughputG + throughputB) / 3.F;
+//        float averageThroughput = (throughputR + throughputG + throughputB) / 3.F;
 //        printf("averageThroughput = %f\n",averageThroughput);
 //        size_t magnitude = 1000 * averageThroughput;
         pixelDistribution->Add(xPixel->Value(row), yPixel->Value(row),1);
     }
+    
+//    pixelDistribution->Add(0.5F, 0.5F,90);
     
 //    heatmap.Print();
 }
@@ -215,9 +221,9 @@ void RIVImageView::drawHeatmap(int startX, Histogram2D<float>* heatmap, float r,
         float binX = startX;
         
         float maxNormalizedValue = heatmap->MaxBinValue() / (float)heatmap->NumberOfElements();
-        float variance = std::pow(heatmap->NormalizedVariance(),1) * xBins * yBins; //Normalized for the number of bins
+        float variance = std::pow(heatmap->NormalizedVariance(),1);//Normalized for the number of bins
         float mean = heatmap->NormalizedMean();
-        
+//        heatmap->Print();
         for(int x = 0 ; x < xBins ; ++x) {
             float binY = height - 2 * imagePadding;
             for(int y = 0 ; y < yBins ; ++y) {
@@ -539,4 +545,14 @@ void RIVImageView::clearSelection() {
     (*datasetOne)->ClearFilter<ushort>("x");
     (*datasetOne)->ClearFilter<ushort>("y");
     
+}
+void RIVImageView::SmoothPixelDistributionOne() {
+    if(datasetOne && pixelDistributionOne && pixelDistributionOne->NumberOfElements()) {
+        smoothPixelDistribution(pixelDistributionOne);
+    }
+}
+void RIVImageView::SmoothPixelDistributionTwo() {
+    if(datasetTwo && pixelDistributionTwo && pixelDistributionTwo->NumberOfElements()) {
+        smoothPixelDistribution(pixelDistributionTwo);
+    }
 }

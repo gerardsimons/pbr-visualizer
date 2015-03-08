@@ -260,6 +260,9 @@ EMBREERenderer::EMBREERenderer(const std::string& commandsFile)
     AffineSpace3f g_camSpace = AffineSpace3f::lookAtPoint(g_camPos, g_camLookAt, g_camUp);
     camera = createCamera(AffineSpace3f(g_camSpace.l,g_camSpace.p));
 }
+ushort EMBREERenderer::GetNumLights() {
+    return g_single_device->rtGetNumLights(g_render_scene);
+}
 void EMBREERenderer::RenderNextFrame() {
 	g_device = g_single_device;
 	g_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1);
@@ -279,7 +282,7 @@ bool EMBREERenderer::RayPick(Ray& ray, float& x, float& y, float& z) {
 Ref<SwapChain> EMBREERenderer::GetSwapChain() {
     return g_single_device->rtGetSwapChain(g_frameBuffer);
 }
-void EMBREERenderer::CopySwapChainTo(EMBREERenderer* targetRenderer) {
+void EMBREERenderer::CopySwapChainTo(EMBREERenderer* targetRenderer, float weight) {
     SwapChain* thisSwapChain = g_single_device->rtGetSwapChain(g_frameBuffer).ptr;
     SwapChain* thatSwapChain = targetRenderer->GetSwapChain().ptr;
     
@@ -288,8 +291,6 @@ void EMBREERenderer::CopySwapChainTo(EMBREERenderer* targetRenderer) {
     
 //    thatBuffer.ptr = thisBuffer.ptr;
 //    thatSwapChain.ptr = thisSwapChain.ptr;
-    
-    float weight = 1;
 
     //TODO: Support varying sizes, especially those with the same aspect ratio
     if(thisSwapChain->getWidth() != thatSwapChain->getWidth() || thisSwapChain->getWidth() != thatSwapChain->getHeight()) {

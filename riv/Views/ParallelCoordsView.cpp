@@ -216,7 +216,7 @@ void ParallelCoordsView::drawAxes() {
                 float maxValueOne = histogramOne.MaximumValue();
                 float maxValueTwo = histogramTwo.MaximumValue();
                 
-                float max = std::max(maxValueOne,maxValueTwo);
+//                float max = std::min(maxValueOne,maxValueTwo);
                 
                 for(int i = 0 ; i < numBins ; ++i) {
                     //					printf("bin = %d\n",i);
@@ -232,7 +232,7 @@ void ParallelCoordsView::drawAxes() {
                     
                     size_t nrElementsOne = histogramOne.NumberOfElements();
                     size_t nrElementsTwo = histogramTwo.NumberOfElements();
-                    size_t maxNrElements = std::max(nrElementsOne,nrElementsTwo);
+//                    size_t maxNrElements = std::max(nrElementsOne,nrElementsTwo);
                     
                     if(nrElementsOne || nrElementsTwo) {
                         
@@ -241,11 +241,11 @@ void ParallelCoordsView::drawAxes() {
                         
                         if(nrElementsOne) {
 //                            normalizedValueOne = binValueOne / nrElementsOne;
-                            normalizedValueOne = binValueOne / maxNrElements;
+                            normalizedValueOne = binValueOne / nrElementsOne;
                         }
                         if(nrElementsTwo) {
 //                            normalizedValueTwo = binValueTwo / nrElementsTwo;
-                            normalizedValueTwo = binValueTwo / maxNrElements;
+                            normalizedValueTwo = binValueTwo / nrElementsTwo;
                         }
                         
                         //					float valueDelta = valueTwo - valueTwo;

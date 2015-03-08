@@ -181,7 +181,8 @@ public:
 	float GetBinWidth() {
 		return binWidth;
 	}
-	void Set(int bin, int count) {
+	void Set(int bin, size_t count) {
+        nrElements += count - hist[bin];
 		hist[bin] = count;
 	}
 	unsigned int Add(const T& value) {
@@ -511,6 +512,17 @@ public:
     unsigned int NumberOfBins() {
         return xBins;
     }
+    void SetBinValue(unsigned int binOne, unsigned int binTwo, T newValue) {
+        Histogram<T>& histogram = histograms[binOne];
+        size_t oldNrElements = histogram.NumberOfElements();
+        
+        histogram.Set(binTwo,newValue);
+        size_t newNrElements = histogram.NumberOfElements();
+        
+        nrElements += (newNrElements - oldNrElements);
+        
+        printf("newNrElements = %zu\n",nrElements);
+    }
     void Add(T valueOne, T valueTwo) {
         unsigned int bin = BinForValue(valueOne);
         histograms[bin].Add(valueTwo);
@@ -680,6 +692,35 @@ public:
             }
         }
         else printf("<EMPTY>");
+    }
+    void SmoothRectangular(unsigned int width, unsigned int height) {
+
+        if(width <= xBins && height <= yBins) {
+            Histogram2D<T> result = Histogram2D<T>(lowerBound,upperBound,xBins,yBins);
+            for(unsigned int x = 0 ; x < xBins ; ++x) {
+                for(unsigned int y = 0 ; y < yBins ; ++y) {
+                    int upperX = std::min(x + (width - 1) / 2,xBins - 1);
+                    int lowerX = std::max((int)(x - (width - 1) / 2),0);
+                    float filterResult = 0;
+                    int binsSummed = 0;
+                    for(int xFilter = lowerX ; xFilter <= upperX ; ++xFilter) {
+                        unsigned int upperY = std::min(y + (height - 1) / 2,yBins - 1);
+                        unsigned int lowerY = std::max((int)(y - (height - 1) / 2),0);
+                        for(int yFilter = lowerY ; yFilter <= upperY ; ++yFilter) {
+                            size_t value = BinValue(xFilter, yFilter);
+//                            printf("Value at filter %d,%d = %zu\n",xFilter,yFilter,value);
+                            filterResult += value;
+                            ++binsSummed;
+                        }
+                    }
+                    size_t newValue = (size_t)(filterResult / binsSummed);
+//                    printf("new value (%d,%d) = %zu\n",x,y,newValue);
+                    result.SetBinValue(x,y,newValue);
+                }
+            }
+            *this = result;
+        }
+        else throw std::runtime_error("Smoothing kernel size too big");
     }
 };
 

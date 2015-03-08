@@ -103,15 +103,17 @@ public:
 		}
 		else {
 			//If found
-			if(sourceTable->reference->targetTable->name == propertyReference->name) {
-				//Find target index
-				std::pair<size_t*,ushort> rows = sourceTable->reference->GetReferenceRows(row);
-				if(rows.second > 0){
-//						size_t propertyIndex = (targetRange)[0]; //Very arbitrary, pass all and average?
-					//Repeat using the new row and table
-					return Value(propertyReference,rows,computedValue);
-				}
-			}
+            for(RIVReference* reference : sourceTable->references) {
+                if(reference->targetTable->name == propertyReference->name) {
+                    //Find target index
+                    std::pair<size_t*,ushort> rows = reference->GetReferenceRows(row);
+                    if(rows.second > 0){
+    //						size_t propertyIndex = (targetRange)[0]; //Very arbitrary, pass all and average?
+                        //Repeat using the new row and table
+                        return Value(propertyReference,rows,computedValue);
+                    }
+                }
+            }
 		}
 		return false;
 	}

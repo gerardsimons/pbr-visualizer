@@ -84,10 +84,10 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPathsOne = 5000;
+const int maxPathsOne = 3000;
 const int maxBootstrapRepeatOne = 10;
 
-const int maxPathsTwo = 5000;
+const int maxPathsTwo = 6000;
 const int maxBootstrapRepeatTwo = 10;
 
 const int sliderViewHeight = 50;
@@ -358,7 +358,7 @@ void keys(int keyCode, int x, int y) {
         case 53: // the '5' key, copy 1 to 2
             if(datasetTwo && datasetOne) {
                 printf("Copying swapchain from renderer 1 to renderer 2!!\n");
-                rendererOne->CopySwapChainTo(rendererTwo);
+                rendererOne->CopySwapChainTo(rendererTwo,1);
                 imageView->redisplayWindow();
                 
 //                int newMaxPaths = 1000;
@@ -366,6 +366,18 @@ void keys(int keyCode, int x, int y) {
 //                float acceptProbTwo = 2.F * newMaxPaths / (rendererTwo->getWidth() * rendererTwo->getHeight() * rendererTwo->getSamplesPerPixel());
 //                dataControllerTwo->SetAcceptProbability(acceptProbTwo);
             }
+            break;
+        case 55: // the '7' key, average pixel distro 1
+
+//                printf("Copying swapchain from renderer 1 to renderer 2!!\n");
+                imageView->SmoothPixelDistributionOne();
+            
+            break;
+        case 56: // the '8' key, average pixel distro 2
+
+                //                printf("Copying swapchain from renderer 1 to renderer 2!!\n");
+                imageView->SmoothPixelDistributionTwo();
+            
             break;
         case 97: // 'a' key
             sceneView->MoveCamera(-camSpeed, 0, 0);
@@ -489,7 +501,7 @@ void reshape(int w, int h)
         float bottomHalfY = height / 2.f + padding + sliderViewHeight / 2.F;
         float squareSize = height / 2.F - 2 * padding - sliderViewHeight / 2.F;
         float ratio = rendererOne->getWidth() / (float)rendererOne->getHeight();
-        float imageViewWidth = squareSize * ratio;
+        float imageViewWidth = std::min(squareSize * ratio,.3333F*width);
         float imageViewHeight = imageViewWidth / ratio;
         if(datasetTwo) {
             imageViewWidth += imageViewWidth;
@@ -714,7 +726,7 @@ void setup(int argc, char** argv) {
         if(strcmp(type,"-connect") == 0) {
             rendererOne = new EMBREERenderer(dcOne, std::string(argv[2]),1);
             sceneDataOne = getSceneData(rendererOne);
-            dataControllerOne = new DataController(2 * maxPathsOne, maxBootstrapRepeatOne,sceneDataOne.xBounds,sceneDataOne.yBounds,sceneDataOne.zBounds,sceneDataOne.NumberOfMeshes());
+            dataControllerOne = new DataController(2 * maxPathsOne, maxBootstrapRepeatOne,sceneDataOne.xBounds,sceneDataOne.yBounds,sceneDataOne.zBounds,sceneDataOne.NumberOfMeshes(),rendererOne->GetNumLights());
             dataControllerOne->SetAcceptProbability(2.F * maxPathsOne / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel()));
             datasetOne = dataControllerOne->GetDataSet();
             printf("datsetone** = %p --> datasetone* = %p\n",datasetOne,*datasetOne);
@@ -769,8 +781,8 @@ void setup(int argc, char** argv) {
         yBounds = Vec2f(std::min(sceneDataOne.yBounds[0],sceneDataTwo.yBounds[0]),std::max(sceneDataOne.yBounds[1],sceneDataTwo.yBounds[1]));
         zBounds = Vec2f(std::min(sceneDataOne.zBounds[0],sceneDataTwo.zBounds[0]),std::max(sceneDataOne.zBounds[1],sceneDataTwo.zBounds[1]));
         
-        dataControllerOne = new DataController(2 * maxPathsOne,maxBootstrapRepeatOne,xBounds,yBounds,zBounds,sceneDataOne.NumberOfMeshes());
-        dataControllerTwo = new DataController(2 * maxPathsTwo,maxBootstrapRepeatTwo,xBounds,yBounds,zBounds,sceneDataTwo.NumberOfMeshes());
+        dataControllerOne = new DataController(2 * maxPathsOne,maxBootstrapRepeatOne,xBounds,yBounds,zBounds,sceneDataOne.NumberOfMeshes(),rendererOne->GetNumLights());
+        dataControllerTwo = new DataController(2 * maxPathsTwo,maxBootstrapRepeatTwo,xBounds,yBounds,zBounds,sceneDataTwo.NumberOfMeshes(),rendererTwo->GetNumLights());
         datasetOne = dataControllerOne->GetDataSet();
         datasetTwo = dataControllerTwo->GetDataSet();
         float acceptProbOne = 2.F * maxPathsOne / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel());
@@ -781,7 +793,7 @@ void setup(int argc, char** argv) {
         
     }
     else {
-        throw std::runtime_error("Unsupported number of arguments (1 or 2 expected)");
+        throw std::runtime_error("Unsupported number of arguments (2 or 4 expected)");
     }
     
     
@@ -792,7 +804,8 @@ void setup(int argc, char** argv) {
     float bottomHalfY = height / 2.f + padding + sliderViewHeight / 2.F;
     float squareSize = height / 2.F - 2 * padding - sliderViewHeight / 2.F;
     float ratio = rendererOne->getWidth() / (float)rendererOne->getHeight();
-    float imageViewWidth = squareSize * ratio;
+//    float imageViewWidth = squareSize * ratio;
+    float imageViewWidth = std::min(squareSize * ratio,.333F*width);
     float imageViewHeight = imageViewWidth / ratio;
     
     if(nrConnected) {

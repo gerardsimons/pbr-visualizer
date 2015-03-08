@@ -48,6 +48,7 @@ const char* INTERSECTION_B = "B";
 const char* PRIMITIVE_ID = "primitive ID";
 const char* INTERACTION_TYPE = "interaction_type";
 const char* SHAPE_ID = "shape ID";
+const char* OCCLUDER_COUNT = "occluder_count";
 
 const char* LIGHT_ID = "light ID";
 const char* OCCLUDER_ID = "occluder ID";

@@ -242,8 +242,9 @@ namespace embree
 		{
 			for (size_t i=0; i<scene->allLights.size(); i++)
 			{
-				if ((scene->allLights[i]->illumMask & dg.illumMask) == 0)
+                if ((scene->allLights[i]->illumMask & dg.illumMask) == 0) {
 					continue;
+                }
 				
 				/*! Either use precomputed samples for the light or sample light now. */
 				LightSample ls;
@@ -262,14 +263,14 @@ namespace embree
 				Ray shadowRay(dg.P, ls.wi, dg.error*epsilon, ls.tMax-dg.error*epsilon, lightPath.lastRay.time,dg.shadowMask);
 				//bool inShadow = scene->intersector->occluded(shadowRay);
                 ++state.numRays;
-				rtcOccluded(scene->scene,(RTCRay&)shadowRay);
-
+//				rtcOccluded(scene->scene,(RTCRay&)shadowRay);
+                rtcIntersect(scene->scene,(RTCRay&)shadowRay);
                 if (shadowRay) {
                     occluderIds.push_back(shadowRay.id0);
                     continue;
                 }
                 else {
-                    occluderIds.push_back(-1);
+//                    occluderIds.push_back(-1);
                 }
 				
 				/*! Evaluate BRDF. */
@@ -298,10 +299,9 @@ namespace embree
 				Ray newRay(dg.P, wi, dg.error*epsilon, inf, lightPath.lastRay.time);
 				LightPath scatteredPath = lightPath.extended(newRay,nextMedium, c, (type & directLightingBRDFTypes) != NONE);
 				
-//				if(dataConnector)
-					dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,type,occluderIds);
+
+                dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,type,occluderIds);
 		  
-//				lastColor = L;
 				Color isectColor = c * Li(scatteredPath, scene, state, dataConnector) * rcp(wi.pdf);
 				L += isectColor;
 			}

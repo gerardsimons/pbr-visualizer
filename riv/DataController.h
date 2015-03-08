@@ -72,19 +72,22 @@ private:
 	RIVShortRecord* shapeIds = NULL;
 	RIVShortRecord* interactionTypes = NULL;
 	RIVShortRecord* lightIds = NULL;
+    RIVShortRecord* occluderCounts = NULL;
     
     RIVShortRecord* occluderIds = NULL;
 	
 	RIVMultiReference* pathsToIsectRef = NULL;
 	RIVSingleReference* isectsToPathsRef = NULL;
+    RIVMultiReference* isectsToLightsRef = NULL;
 	
-	const std::set<std::string> dataTables = {PATHS_TABLE,INTERSECTIONS_TABLE};
+    const std::set<std::string> histogramTables = {PATHS_TABLE,INTERSECTIONS_TABLE};
+	const std::set<std::string> dataTables = {PATHS_TABLE,INTERSECTIONS_TABLE,LIGHTS_TABLE};
 	
 	const int bootstrapBeforePause = 3;
 	//The number of bins we use for the histograms that keep track of the true distribution of the data
 	const int bins = 10;
 	int reduceRounds = 0;
-	
+    ushort maxNrLights = 0;
 	int lastFrame = 0;
 	float acceptProbability = .5F;
 	
@@ -100,6 +103,7 @@ private:
 	clock_t startDelay;
 	int delayTimerInterval = 10000;
 	
+    ushort maxDepth = 5;
 	int maxPaths;
 	int maxBootstrapRepeat;
     int bootstrapRepeat;
@@ -120,7 +124,7 @@ public:
 	void AddMembershipDataStructures(RIVDataSet<float,ushort>* dataset);
 	void SetAcceptProbability(float newProb);
 	//The number of renderers to expect data from and the maximum number of paths per renderer before data reduction should kick in
-	DataController(const int maxPaths, const int bootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives);
+	DataController(const int maxPaths, const int bootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives, ushort nrLights);
 	//Returns a pointer to a pointer of the dataset for renderer one
 	RIVDataSet<float,ushort>** GetDataSet();
 	bool ProcessNewPath(int frame, PathData* newPath);

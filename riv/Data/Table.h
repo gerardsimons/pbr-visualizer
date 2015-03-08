@@ -73,9 +73,8 @@ public:
 		tuple_for_each(records, [&](auto tRecords) {
 			deletePointerVector(tRecords);
 		});
-		if(reference) {
-			delete reference;
-		}
+        
+        deletePointerVector(references);
 	}
 	RIVTable* CloneStructure() {
 		RIVTable* clone = new RIVTable(name);
@@ -136,13 +135,71 @@ public:
 				}
 			});
 			
-
+            
+            std::vector<RIVReference*>& otherReferences = otherTable->references;
+            for(RIVReference* otherReference : otherReferences) {
+                RIVReference* reference = GetReferenceTo(otherReference->targetTable);
+                
+                RIVSingleReference* otherSingleRef = dynamic_cast<RIVSingleReference*>(otherReference);
+                RIVMultiReference* otherMultiRef = dynamic_cast<RIVMultiReference*>(otherReference);
+                RIVSingleReference* singleRef = dynamic_cast<RIVSingleReference*>(reference);
+                RIVMultiReference* multiRef = dynamic_cast<RIVMultiReference*>(reference);
+                
+                if(otherSingleRef) { //Single references
+                    if(singleRef) {
+                        //					if(currentNrRows) {
+                        //						thisOffset = currentNrRows;
+                        //						referenceOffset = 1;
+                        //					}
+                        auto otherIndices = otherSingleRef->GetIndexMap();
+                        auto indices = singleRef->GetIndexMap();
+                        size_t lastIndex = currentNrRows;
+                        
+                        size_t lastToIndex = 0;
+                        if(currentNrRows > 0) {
+                            lastToIndex = indices[lastIndex - 1];
+                        }
+                        for(auto it : otherIndices) {
+                            singleRef->AddReference(it.first + lastIndex, it.second + lastToIndex);
+                        }
+                    }
+                    else {
+                        throw std::runtime_error("Expected this table to have a single reference.");
+                    }
+                }
+                else if(otherMultiRef) { //Multi reference
+                    if(multiRef) {
+                        auto otherIndices = otherMultiRef->GetIndexMap();
+                        auto indices = multiRef->GetIndexMap();
+                        size_t lastIndex = currentNrRows;
+                        size_t lastToIndex = 0;
+                        if(currentNrRows) {
+                            auto toRows = indices[lastIndex - 1];
+                            //Find end of this reference
+                            for(auto it : indices) {
+                                lastToIndex += it.second.second;
+                            }
+                        }
+                        
+                        for(auto it : otherIndices) {
+                            ushort size = it.second.second;
+                            size_t* newToRows = new size_t[size];
+                            for(ushort i = 0 ; i < size ; ++i) {
+                                newToRows[i] = lastToIndex++;
+                            }
+                            std::pair<size_t*,ushort> mapping(newToRows,size);
+                            multiRef->AddReferences(it.first + lastIndex, mapping);
+                        }
+                    }
+                    else {
+                        throw std::runtime_error("Expected this table to have a multi reference");
+                    }
+                }
+            }
 			
-			RIVReference* otherReference = otherTable->reference;
-			RIVSingleReference* otherSingleRef = dynamic_cast<RIVSingleReference*>(otherReference);
-			RIVMultiReference* otherMultiRef = dynamic_cast<RIVMultiReference*>(otherReference);
-			RIVSingleReference* singleRef = dynamic_cast<RIVSingleReference*>(reference);
-			RIVMultiReference* multiRef = dynamic_cast<RIVMultiReference*>(reference);
+
+            
+
 			
 			//If there are some rows already present here (with references) we should put the references behind it (+1)
 
@@ -150,57 +207,8 @@ public:
 //			short referenceOffset = 0;
 			
 			
-			if(otherSingleRef) { //Single references
-				
-				if(singleRef) {
-//					if(currentNrRows) {
-//						thisOffset = currentNrRows;
-//						referenceOffset = 1;
-//					}
-					auto otherIndices = otherSingleRef->GetIndexMap();
-					auto indices = singleRef->GetIndexMap();
-					size_t lastIndex = currentNrRows;
-					
-					size_t lastToIndex = 0;
-					if(currentNrRows > 0) {
-						lastToIndex = indices[lastIndex - 1];
-					}
-					for(auto it : otherIndices) {
-						singleRef->AddReference(it.first + lastIndex, it.second + lastToIndex);
-					}
-				}
-				else {
-					throw std::runtime_error("Expected this table to have a single reference.");
-				}
-			}
-			else if(otherMultiRef) { //Multi reference
-				if(multiRef) {
-					auto otherIndices = otherMultiRef->GetIndexMap();
-					auto indices = multiRef->GetIndexMap();
-					size_t lastIndex = currentNrRows;
-					size_t lastToIndex = 0;
-					if(currentNrRows) {
-						auto toRows = indices[lastIndex - 1];
-						//Find end of this reference
-						for(auto it : indices) {
-							lastToIndex += it.second.second;
-						}
-					}
-					
-					for(auto it : otherIndices) {
-						ushort size = it.second.second;
-						size_t* newToRows = new size_t[size];
-						for(ushort i = 0 ; i < size ; ++i) {
-							newToRows[i] = lastToIndex++;
-						}
-						std::pair<size_t*,ushort> mapping(newToRows,size);
-						multiRef->AddReferences(it.first + lastIndex, mapping);
-					}
-				}
-				else {
-					throw std::runtime_error("Expected this table to have a multi reference");
-				}
-			}
+	
+			
 		}
 	}
 	template<typename T>
@@ -275,8 +283,9 @@ public:
 				}
 			}
 			//Process the regular filters such as range filters discrete filters etc.
-			if(!filterSourceRow) {
+//			if(!filterSourceRow) {
 				tuple_for_each(filters, [&](auto tFilters) {
+                    if(!filterSourceRow) {
 					for(auto filter : tFilters) {
 						typedef typename get_template_type<typename std::decay<decltype(*filter)>::type>::type templateType;
 						auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
@@ -285,44 +294,45 @@ public:
 							break;
 						}
 					}
-				});
-			}
-            if(!filterSourceRow) {
-                tuple_for_each(conjunctiveFilters, [&](auto tFilters) {
-                    for(auto conjunctiveFilter : tFilters) {
-                        filterSourceRow = true;
-                        typedef typename get_template_type<typename std::decay<decltype(*conjunctiveFilter)>::type>::type templateType;
-                        
-                        for(auto filter : conjunctiveFilter->filters) {
-                            auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
-                            if(!filter->PassesFilter(recordForFilter->Value(row))) {
-                                filterSourceRow = true;
-                                break;
-                            }
-                        }
-                        if(filterSourceRow) {
-                            break;
-                        }
                     }
-                    
-                });
+				});
+//			}
+            if(!filterSourceRow) {
+//                tuple_for_each(conjunctiveFilters, [&](auto tFilters) {
+//                    for(auto conjunctiveFilter : tFilters) {
+//                        filterSourceRow = true;
+//                        typedef typename get_template_type<typename std::decay<decltype(*conjunctiveFilter)>::type>::type templateType;
+//                        
+//                        for(auto filter : conjunctiveFilter->filters) {
+//                            auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
+//                            if(!filter->PassesFilter(recordForFilter->Value(row))) {
+//                                filterSourceRow = true;
+//                                break;
+//                            }
+//                        }
+//                        if(filterSourceRow) {
+//                            break;
+//                        }
+//                    }
+//                    
+//                });
             }
             if(!filterSourceRow) {
-                tuple_for_each(disjunctiveFilters, [&](auto tFilters) {
-                    for(auto disjunctiveFilter : tFilters) {
-                        filterSourceRow = true;
-                        typedef typename get_template_type<typename std::decay<decltype(*disjunctiveFilter)>::type>::type templateType;
-                        filterSourceRow = true;
-                        for(auto filter : disjunctiveFilter->filters) {
-                            auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
-                            if(filter->PassesFilter(recordForFilter->Value(row))) {
-                                filterSourceRow = false;
-                                break;
-                            }
-                            
-                        }
-                    }
-                });
+//                tuple_for_each(disjunctiveFilters, [&](auto tFilters) {
+//                    for(auto disjunctiveFilter : tFilters) {
+//                        filterSourceRow = true;
+//                        typedef typename get_template_type<typename std::decay<decltype(*disjunctiveFilter)>::type>::type templateType;
+//                        filterSourceRow = true;
+//                        for(auto filter : disjunctiveFilter->filters) {
+//                            auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
+//                            if(filter->PassesFilter(recordForFilter->Value(row))) {
+//                                filterSourceRow = false;
+//                                break;
+//                            }
+//                            
+//                        }
+//                    }
+//                });
             }
 			
 			//FINISH UP
@@ -340,6 +350,9 @@ public:
 		reporter::startTask("Filter References");
 		
 		if(newlyFilteredRows.size()) {
+            
+            for(RIVReference* reference : references) {
+            
 			//This happens to paths table
 			RIVMultiReference* forwardRef = dynamic_cast<RIVMultiReference*>(reference);
 			if(forwardRef) {
@@ -350,7 +363,7 @@ public:
 				}
 			}
 			else { //This happens to intersections table
-				RIVReference* backReference = reference->targetTable->reference;
+				RIVReference* backReference = reference->targetTable->GetReferenceTo(name);
 				RIVMultiReference* multiRef = dynamic_cast<RIVMultiReference*>(backReference);
 				if(multiRef) {
 					for(auto iterator : multiRef->GetIndexMap()) {
@@ -376,6 +389,7 @@ public:
 					}
 				}
 			}
+            }
 			newlyFilteredRows.clear();
 		}
 		reporter::stop("Filter References");
@@ -384,9 +398,9 @@ public:
 		deletePointerVector(rowFilters);
 		rowFilters.clear();
 		ClearFilteredRows();
-		if(reference) {
+        for(RIVReference* reference : references) {
 			reference->targetTable->ClearFilteredRows();
-		}
+        }
 	}
 	bool ClearRowFilter(riv::RowFilter* existingFilter) {
 
@@ -396,7 +410,8 @@ public:
 				delete rFilter;
 				rowFilters.erase(rowFilters.begin() + i);
 				ClearFilteredRows();
-				if(reference) {
+                        for(RIVReference* reference : references) {
+
 					reference->targetTable->ClearFilteredRows();
 				}
 				return true;
@@ -486,10 +501,12 @@ public:
 			tFilters->erase(tFilters->begin() + i);
 			
 			filteredRows.clear();
-			if(reference) {
-				reference->targetTable->ClearFilteredRows();
-			}
-			
+            
+            for(RIVReference* reference : references) {
+                if(reference) {
+                    reference->targetTable->ClearFilteredRows();
+                }
+            }
 			return true;
 		}
 		
@@ -546,7 +563,7 @@ public:
 			delete iterator;
 		}
 		else {
-			iterator = new TableIterator(NumberOfRows(), reference);
+			iterator = new TableIterator(NumberOfRows(), references);
 		}
 		return iterator;
 	}
@@ -555,23 +572,30 @@ public:
 			delete iterator;
 		}
 		if(IsFiltered() && !forceFullIterator) {
-			iterator = new FilteredTableIterator(&filteredRows,NumberOfRows(), reference);
+			iterator = new FilteredTableIterator(&filteredRows,NumberOfRows(), references);
 		}
 		else {
-			iterator = new TableIterator(NumberOfRows(), reference);
+			iterator = new TableIterator(NumberOfRows(), references);
 		}
 		return iterator;
 	}
+    void AddReference(RIVReference* reference) {
+        references.push_back(reference);
+    }
+    RIVReference* GetReferenceTo(const std::string& targetName) {
+        for(RIVReference* ref : references) {
+            if(ref->targetTable->name == targetName) {
+                return ref;
+            }
+        }
+        return NULL;
+    }
+    RIVReference* GetReferenceTo(const RIVTableInterface* table) {
+        return GetReferenceTo(table->name);
+    }
 	//		TableIterator* GetPIterator();
 	std::string GetName() const { return name; };
-	
-	void SetReference(RIVReference* newReference) {
-		reference = newReference;
-	}
-	RIVReference* GetReference() {
-		return reference;
-	}
-	
+
 	size_t NumberOfRecords() const {
 		size_t total = 0;
 		tuple_for_each(records, [&](auto tRecords) {
@@ -582,17 +606,31 @@ public:
 	//TODO: This does not work if the table does not use  its first template types (i.e. if no float records exists for example)
 	size_t NumberOfRows() const {
 		//If the tuple is not empty
+        size_t rows = 0;
 		if(tupleSize > 0) {
 			//And the record
-			auto& t = std::get<0>(records);
-			if(t.size())
-				return t[0]->Size();
+            tuple_for_each(records, [&](auto tRecords) {
+                if(tRecords.size()) {
+                    rows = tRecords[0]->Size();
+                    return;
+                }
+            });
 		}
-		return 0;
+        return rows;
 	}
 	std::string RowToString(size_t row,size_t columnWidth) {
 		std::string rowText = "|";
-		
+        std::string valueString = std::to_string(row);
+        size_t textWidth = std::min(valueString.size(),columnWidth);
+        int padding = (int)((columnWidth - textWidth) / 2.F);
+        rowText += generateString(' ',padding);
+        rowText += valueString;
+        rowText += generateString(' ',padding);
+        
+        int remainder = columnWidth - textWidth - 2 * padding;
+        //
+        rowText += generateString(' ', remainder);
+        rowText += "|";
 		tuple_for_each(records, [&](auto tRecords) {
 			for(auto record : tRecords) {
 				
@@ -630,7 +668,10 @@ public:
 		std::string headerText = "|";
 		std::string headerOrnament;
 		
-		int columnWidth = 17;
+		int columnWidth = 14;
+        
+        headerText += generateString(' ',columnWidth);
+        headerText += "|";
 		
 		tuple_for_each(records, [&](auto tRecords) {
 			for(auto record : tRecords) {
@@ -663,7 +704,7 @@ public:
 			}
 			std::string rowText = RowToString(j,columnWidth);
 			if(printFiltered || !filteredRows[j]) {
-				if(reference) {
+                for(RIVReference* reference : references) {
 					std::pair<size_t*,ushort> referenceIndexRange = reference->GetReferenceRows(j);
 					//				printArray(referenceIndexRange.first,referenceIndexRange.second);
 					if(referenceIndexRange.first) {
@@ -725,7 +766,8 @@ public:
 		for(size_t j = 0 ; j < maxPrint ; j++) {
 			if(filteredRows[j]) {
 				std::string rowText = RowToString(j,columnWidth);
-				if(reference) {
+                
+                for(RIVReference* reference : references) {
 					std::pair<size_t*,ushort> referenceIndexRange = reference->GetReferenceRows(j);
 					//				printArray(referenceIndexRange.first,referenceIndexRange.second);
 					if(referenceIndexRange.first) {

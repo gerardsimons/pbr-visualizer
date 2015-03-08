@@ -589,7 +589,6 @@ namespace embree
         /* render the frame */
         renderer->getInstance()->renderFrame(camera->getInstance(),scene->getInstance(),toneMapper->getInstance(),frameBuffer->getInstance(),accumulate,dataConnector,pixelDistributions);
     }
-	
 	bool SingleRayDevice::rtPick(Device::RTCamera camera_i, float x, float y, Device::RTScene scene_i, float& px, float& py, float& pz)
 	{
 		RT_COMMAND_HEADER;
@@ -612,7 +611,7 @@ namespace embree
 		RT_COMMAND_HEADER;
 		
 		/* extract objects from handles */
-		Ref<BackendScene::Handle >   scene  = castHandle<BackendScene::Handle>   (scene_i ,"scene" );
+		Ref<BackendScene::Handle> scene  = castHandle<BackendScene::Handle>   (scene_i ,"scene" );
 		
 		//scene->getInstance()->intersector->intersect(ray);
 		rtcIntersect(scene->getInstance()->scene,(RTCRay&)ray);
@@ -629,5 +628,10 @@ namespace embree
     
     Ref<SwapChain> SingleRayDevice::rtGetSwapChain(Device::RTFrameBuffer frameBuffer_i) {
                 return castHandle<ConstHandle<SwapChain> >(frameBuffer_i,"framebuffer")->getInstance();
+    }
+    
+    ushort SingleRayDevice::rtGetNumLights(Device::RTScene scene_i) {
+        Ref<BackendScene::Handle >   scene  = castHandle<BackendScene::Handle>   (scene_i ,"scene" );
+        return scene->getInstance().ptr->allLights.size();
     }
 }

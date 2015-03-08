@@ -1,4 +1,4 @@
--i The_White_Room-Jay-Hardy.obj
+-i The_White_Room-Jay-Hardy-diffuse.obj
 
 #-quadlight 1.148112 1.135884 0.471385  0.65 0 0.34 0 1.66 0 25 25 25 # RIGHT
 -quadlight 1.148112 1.135884 0.471385  0.65 0 0.34 0 0.66 0 200 200 200 # RIGHT

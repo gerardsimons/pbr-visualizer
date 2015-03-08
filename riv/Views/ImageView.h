@@ -41,7 +41,7 @@ private:
     //TODO: I think these histograms belong in the data controller, or that is where they should originate from
     bool showHeatmap = true;
     unsigned int xBins = 30;
-    unsigned int yBins = 30;
+    unsigned int yBins; //Deduced according to image aspect ratio
     Histogram2D<float>* pixelDistributionOne = NULL;
     Histogram2D<float>* pixelDistributionTwo = NULL;
 
@@ -59,6 +59,8 @@ private:
     void drawHeatmap(int startX, Histogram2D<float>* heatmap, float r, float g, float b);
     void filterImage(RIVDataSet<float,ushort>* dataset, Grid* activeGrid, riv::RowFilter* previousFilter);
     void toGridSpace(int xIn, int yIn, Grid*& outGrid, int& gridX, int& gridY);
+    
+    void smoothPixelDistribution(Histogram2D<float>* pixelDistribution);
 public:
     void redisplayWindow();
 	//Single renderer constructor
@@ -88,6 +90,9 @@ public:
 	
 	void OnFiltersChanged(RIVDataSet<float,ushort>* dataset);
 	void OnDataChanged(RIVDataSet<float,ushort>* dataset);
+    
+    void SmoothPixelDistributionOne();
+    void SmoothPixelDistributionTwo();
 	
 	static int windowHandle;
 };

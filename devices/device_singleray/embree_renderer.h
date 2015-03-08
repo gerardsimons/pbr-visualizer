@@ -138,7 +138,8 @@ public:
 	bool RayPick(Ray& ray, float& x, float& y, float& z);
     
     Ref<SwapChain> GetSwapChain();
-    void CopySwapChainTo(EMBREERenderer* renderer);
+    void CopySwapChainTo(EMBREERenderer* renderer,float copyWeight);
+    ushort GetNumLights();
 };
 
 #endif
