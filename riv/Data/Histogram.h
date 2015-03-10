@@ -89,6 +89,29 @@ private:
 	}
 public:
 	std::string name;
+//    Histogram& operator= (const Histogram& other) {
+//        hist = other.hist;
+//        
+//        upperBound = other.upperBound;
+//        lowerBound = other.lowerBound;
+//
+    //    bins = other.bins;
+    
+//        nrElements = other.nrElements;
+//        cdf = other.cdf;
+//        cdfStale = other.cdfStale;
+//        
+//        if(other.maxValue) {
+//            maxValue = new T(*other.maxValue);
+//            delete other.maxValue;
+//        }
+//        if(other.minValue) {
+//            minValue = new T(*other.minValue);
+//            delete other.minValue;
+//        }
+//        
+//        return *this;
+//    }
 	~Histogram() {
 		
 	}
@@ -224,7 +247,8 @@ public:
 		
 		T lowerBound = std::min(LowerBound(),right.LowerBound());
 		T upperBound = std::max(UpperBound(),right.UpperBound());
-		Histogram result(name,lowerBound,upperBound,bins,nrElements + right.NumberOfElements());
+
+		Histogram result(name,lowerBound,upperBound,bins,nrElements - right.NumberOfElements());
 		
 		//Use normalized values!
 		for(int i = 0 ; i < bins ; i++) {
@@ -238,22 +262,42 @@ public:
 //		result.Print();
 		return result;
 	}
-	
+    Histogram operator+(Histogram& right) {
+        if(right.bins != bins) {
+            throw std::runtime_error("The histograms should have the same number of bins");
+        }
+        
+        T lowerBound = std::min(LowerBound(),right.LowerBound());
+        T upperBound = std::max(UpperBound(),right.UpperBound());
+        size_t sumElements = nrElements + right.NumberOfElements();
+        Histogram result(name,lowerBound,upperBound,bins,0);
+        
+        //Use normalized values!
+        for(int i = 0 ; i < bins ; i++) {
+            int thisValue = BinValue(i);
+            int rightValue = right.BinValue(i);
+            int diff = (thisValue + rightValue);
+            result.Set(i,diff);
+            
+        }
+
+        return result;
+    }
 	int BinForValue(const T& value) {
-		T valueClamped = value;
-		if(value < lowerBound) {
-			valueClamped = lowerBound;
+//		T valueClamped = value;
+		if(value <= lowerBound) {
+            return 0;
 		}
-		else if(value > upperBound) {
-			valueClamped = upperBound;
+		else if(value >= upperBound) {
+            return bins - 1;
 		}
 		T delta = upperBound - lowerBound;
-		double interpolated = (double)(valueClamped - lowerBound) / (delta);
+		double interpolated = (double)(value - lowerBound) / (delta);
         unsigned int bin = std::floor(interpolated * (bins));
-		//When the value is exeactly on the upper edge it floors incorrectly to bin = bins
-		if(bin == bins) {
-			bin = bins - 1;
-		}
+//		//When the value is exeactly on the upper edge it floors incorrectly to bin = bins
+//		if(bin == bins) {
+//			bin = bins - 1;
+//		}
 		return bin;
 	}
 	float DistanceTo(Histogram* right) {
@@ -333,7 +377,7 @@ public:
 //		}
 		std::cout << std::endl;
 	}
-	size_t NumberOfElements() {
+	size_t NumberOfElements() const {
 		return nrElements;
 	}
 };
@@ -509,8 +553,35 @@ private:
     float binWidth = 0;
     size_t nrElements = 0;
 public:
+//    Histogram2D& operator= (const Histogram2D& other)
+//    {
+//        if (this != &other) // protect against invalid self-assignment
+//        {
+//            lowerBound = other.lowerBound;
+//            upperBound = other.upperBound;
+//            
+//            histograms = other.histograms;
+//            
+//            cdf = other.cdf;
+//            cdfStale = other.cdfStale;
+//            binWidth = other.binWidth;
+//            nrElements = other.nrElements;
+//        }
+//        // by convention, always return *this
+//        return *this;
+//    }
     unsigned int NumberOfBins() {
         return xBins;
+    }
+    T LowerBound() {
+        return lowerBound;
+    }
+    T UpperBound() {
+        return upperBound;
+    }
+    void Set(unsigned int binX, const Histogram<T>& newHistogram) {
+        histograms[binX] = newHistogram;
+        nrElements += newHistogram.NumberOfElements();
     }
     void SetBinValue(unsigned int binOne, unsigned int binTwo, T newValue) {
         Histogram<T>& histogram = histograms[binOne];
@@ -537,20 +608,15 @@ public:
         Add(values.first, values.second);
     }
     int BinForValue(const T& value) {
-        T valueClamped = value;
-        if(value < lowerBound) {
-            valueClamped = lowerBound;
+        if(value <= lowerBound) {
+            return 0;
         }
-        else if(value > upperBound) {
-            valueClamped = upperBound;
+        else if(value >= upperBound) {
+            return xBins - 1;
         }
         T delta = upperBound - lowerBound;
-        double interpolated = (double)(valueClamped - lowerBound) / (delta);
+        double interpolated = (double)(value - lowerBound) / (delta);
         unsigned int bin = std::floor(interpolated * (xBins));
-        //When the value is exeactly on the upper bound it floors incorrectly to bin = bins
-        if(bin == xBins) {
-            bin = xBins - 1;
-        }
         return bin;
     }
     Histogram2D() {
@@ -560,10 +626,11 @@ public:
         if(upperBound <= lowerBound) {
             throw std::runtime_error("Lower bound should be < upper bound");
         }
-        binWidth = (upperBound - lowerBound) / (float)bins;
+        binWidth = (upperBound - lowerBound) / (float)xBins;
         
-        for(int i = 0 ; i < bins ; ++i) {
-            histograms[i] = Histogram<T>("2DHistogram", lowerBound, upperBound, bins);
+        for(int i = 0 ; i < xBins ; ++i) {
+            Histogram<T> newHistogram("2DHistogram x="+std::to_string(i), lowerBound, upperBound, yBins);
+            histograms[i] = newHistogram;
         }
     }
     Histogram2D(T lowerBound, T upperBound, unsigned int xBins, unsigned int yBins) : upperBound(upperBound), lowerBound(lowerBound), xBins(xBins), yBins(yBins) {
@@ -654,8 +721,11 @@ public:
         
         return sample;
     }
-    int BinValue(unsigned int binOne, unsigned int binTwo) {
-        return histograms[binOne].BinValue(binTwo);
+    int BinValue(unsigned int binX, unsigned int binY) {
+        return histograms[binX].BinValue(binY);
+    }
+    Histogram<T>* BinValue(unsigned int binX) {
+        return &histograms[binX];
     }
     float NormalizedValue(unsigned int binOne, unsigned int binTwo) {
         if(nrElements) {
@@ -681,12 +751,14 @@ public:
     }
     void Print() {
         printf("2D Histogram : \n");
+        printf("Number of Elements = %zu\n",nrElements);
         printf("Mean = %f\n",NormalizedMean());
         printf("Variance = %f\n",NormalizedVariance());
         if(nrElements) {
-            for(int i = 0 ; i < xBins ; i++) {
-                for(int j = 0 ; j < yBins ; j++) {
-                    printf("%.2f\t",NormalizedValue(j, i));
+            for(int j = 0 ; j < yBins ; j++) {
+                for(int i = 0 ; i < xBins ; i++) {
+                    float normValue = NormalizedValue(i, j);
+                    printf("%.2f\t",normValue);
                 }
                 printf("\n");
             }
@@ -694,7 +766,6 @@ public:
         else printf("<EMPTY>");
     }
     void SmoothRectangular(unsigned int width, unsigned int height) {
-
         if(width <= xBins && height <= yBins) {
             Histogram2D<T> result = Histogram2D<T>(lowerBound,upperBound,xBins,yBins);
             for(unsigned int x = 0 ; x < xBins ; ++x) {
@@ -721,6 +792,20 @@ public:
             *this = result;
         }
         else throw std::runtime_error("Smoothing kernel size too big");
+    }
+    Histogram2D<T> operator+(Histogram2D<T>& right) {
+        
+        T lowerBound = std::min(LowerBound(),right.LowerBound());
+        T upperBound = std::max(UpperBound(),right.UpperBound());
+        
+        Histogram2D<T> result = Histogram2D<T>(lowerBound,upperBound,xBins,yBins);
+        
+        for(int x = 0 ; x < xBins ; ++x) {
+            auto sum = histograms[x] + *right.BinValue(x);
+            result.Set(x,sum);
+        }
+        
+        return result;
     }
 };
 

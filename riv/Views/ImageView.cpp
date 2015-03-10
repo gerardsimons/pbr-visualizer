@@ -120,26 +120,28 @@ void RIVImageView::ToggleShowHeatmap() {
 }
 void RIVImageView::OnDataChanged(RIVDataSet<float,ushort>* source) {
     
-    if(source == *datasetOne) {
-        computePixelDistribution(*datasetOne, pixelDistributionOne);
+    if(source->IsFiltered()) {
+        if(source == *datasetOne) {
+            computePixelDistribution(*datasetOne, pixelDistributionOne);
+            printf("Pixel distribution one = \n");
+            pixelDistributionOne->Print();
+        }
+        else if(datasetTwo && *datasetTwo == source) {
+            computePixelDistribution(*datasetTwo, pixelDistributionTwo);
+
+        }
+        else {
+            throw std::runtime_error("No such dataset");
+        }
+        redisplayWindow();
     }
-    else if(datasetTwo && *datasetTwo == source) {
-        computePixelDistribution(*datasetTwo, pixelDistributionTwo);
-//        heatmapTwo->Print();
-    }
-    else {
-        throw std::runtime_error("No such dataset");
-    }
-    redisplayWindow();
 }
 
 void RIVImageView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
-
-    
     if(dataset == *datasetOne) {
         computePixelDistribution(*datasetOne, pixelDistributionOne);
 //        printf("Heatmap one result = \n");
-//        heatmapOne->Print();
+//        pixelDistributionOne->Print();
     }
     else if(datasetTwo && dataset == *datasetTwo) {
         computePixelDistribution(*datasetTwo, pixelDistributionTwo);
@@ -181,8 +183,8 @@ void RIVImageView::computePixelDistribution(RIVDataSet<float,ushort>* dataset, H
     RIVTable<float,ushort>* pathsTable = dataset->GetTable(PATHS_TABLE);
     TableIterator* iterator = pathsTable->GetIterator();
     
-    RIVRecord<float>* xPixel = pathsTable->GetRecord<float>(PIXEL_X);
-    RIVRecord<float>* yPixel = pathsTable->GetRecord<float>(PIXEL_Y);
+    RIVRecord<float>* xPixels = pathsTable->GetRecord<float>(PIXEL_X);
+    RIVRecord<float>* yPixels = pathsTable->GetRecord<float>(PIXEL_Y);
 //    RIVRecord<float>* throughputsR = pathsTable->GetRecord<float>(THROUGHPUT_R);
 //    RIVRecord<float>* throughputsG = pathsTable->GetRecord<float>(THROUGHPUT_G);
 //    RIVRecord<float>* throughputsB = pathsTable->GetRecord<float>(THROUGHPUT_B);
@@ -198,7 +200,9 @@ void RIVImageView::computePixelDistribution(RIVDataSet<float,ushort>* dataset, H
 //        float averageThroughput = (throughputR + throughputG + throughputB) / 3.F;
 //        printf("averageThroughput = %f\n",averageThroughput);
 //        size_t magnitude = 1000 * averageThroughput;
-        pixelDistribution->Add(xPixel->Value(row), yPixel->Value(row),1);
+        float xPixel = xPixels->Value(row);
+        float yPixel = yPixels->Value(row);
+        pixelDistribution->Add(xPixel,yPixel,1);
     }
     
 //    pixelDistribution->Add(0.5F, 0.5F,90);

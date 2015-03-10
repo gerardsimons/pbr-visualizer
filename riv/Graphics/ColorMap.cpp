@@ -10,23 +10,17 @@
 #include <cstdlib>
 
 namespace riv {
-	
+    ColorMap::ColorMap(std::vector<Color>& colors) : colorTable(colors){
+
+    }
+    ColorMap::ColorMap(std::vector<Color>& colors, float minRange, float maxRange) : colorTable(colors), min(minRange), max(maxRange) {
+    }
+    ColorMap::ColorMap(float minRange, float maxRange) : min(minRange), max(maxRange){
+
+    }
 	Color ColorMap::ComputeColor(float value) {
-		//	for(size_t colorIndex = 0 ; colorIndex < colorTable.size() - 1; ++colorIndex) {
-		//
-		//		float colorIndexRatioLeft  = colorIndex / (float)(colorTable.size() - 1);
-		//		float colorIndexRatioRight = (colorIndex + 1) / (float)(colorTable.size() - 1);
-		//		static float color[3];
-		//		if(colorIndexRatioLeft <= ratio && colorIndexRatioRight >= ratio) {
-		//			//Its in between these two indices, use these to interpolate
-		//			//                    return linearInterpolateColor(value, colorMap[colorIndex], colorMap[colorIndex+1]);
-		//			ratio = 1.F - ratio;
-		//			color[0] = colorTable[colorIndex][0] * ratio + (1.F - ratio) * colorTable[colorIndex + 1][0];
-		//			color[1] = colorTable[colorIndex][1] * ratio + (1.F - ratio) * colorTable[colorIndex + 1][1],
-		//			color[2] = colorTable[colorIndex][2] * ratio + (1.F - ratio) * colorTable[colorIndex + 1][2];
-		//			return color;
-		//		}
-		//	}
+        value -= min;
+        value /= (max - min);
 		if(value < 0) {
 			return colorTable[0];
 		}
@@ -62,9 +56,5 @@ namespace riv {
 	
 	void ColorMap::AddColor(const Color& newColor) {
 		colorTable.push_back(newColor);
-	}
-	
-	void ColorMap::SetRange(float minRange, float maxRange) {
-		
 	}
 }

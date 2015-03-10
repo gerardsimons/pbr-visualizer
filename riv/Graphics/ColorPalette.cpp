@@ -21,7 +21,31 @@
 			
 			return jetColorMap;
 		}
-		
+        
+        riv::ColorMap greenGrayPurpleColorMap() {
+            riv::ColorMap greenGrayPurpleColorMap;
+            
+//            greenGrayPurpleColorMap.AddColor(riv::Color(0.498F,0.749F,0.765F));
+//            greenGrayPurpleColorMap.AddColor(riv::Color(0.969F,0.969F,0.969F));
+//            greenGrayPurpleColorMap.AddColor(riv::Color(.686F,.552F,.765F)); //PURPLE
+            
+            greenGrayPurpleColorMap.AddColor(riv::Color(0.F,1.F,0.F));
+            greenGrayPurpleColorMap.AddColor(riv::Color(0.969F,0.969F,0.969F));
+            greenGrayPurpleColorMap.AddColor(riv::Color(1.F,0.F,1.F)); //PURPLE
+            
+            return greenGrayPurpleColorMap;
+        }
+        
+        riv::ColorMap brownColorMap() {
+            
+            riv::ColorMap browns;
+            
+            browns.AddColor(riv::Color(1,0.968,0.737));
+                        browns.AddColor(riv::Color(0.999,0.768,0.31));
+                        browns.AddColor(riv::Color(0.851,0.373,0.0054));
+            return browns;
+        }
+        
 		std::vector<riv::Color> allColors() {
 			std::vector<riv::Color> allColors;
 			

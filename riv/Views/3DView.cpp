@@ -28,7 +28,11 @@
 RIV3DView* RIV3DView::instance = NULL;
 int RIV3DView::windowHandle = -1;
 
-RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer, const TriangleMeshGroup& sceneDataOne, Octree* energyDistributionOne, RIVColorProperty* colorPropertyOne) : RIVDataView(dataset),rendererOne(renderer), colorPropertyOne(colorPropertyOne), energyDistributionOne(energyDistributionOne) {
+RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,const TriangleMeshGroup& sceneDataOne, Octree* energyDistribution, RIVColorProperty* pathColor, RIVColorProperty* rayColor) : RIVDataView(dataset),
+    rendererOne(renderer),
+    energyDistributionOne(energyDistribution),
+    pathColorOne(pathColor),
+    rayColorOne(rayColor) {
     
     if(instance != NULL) {
         throw std::runtime_error("Only 1 instance of RIV3DView allowed.");
@@ -51,14 +55,16 @@ RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer
     ResetGraphics();
 };
 
-RIV3DView::RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, Octree* energyDistributionOne, Octree* energyDistributionTwo, RIVColorProperty* colorPropertyOne, RIVColorProperty* colorPropertyTwo) :
+RIV3DView::RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, Octree* energyDistributionOne, Octree* energyDistributionTwo, RIVColorProperty* pathColorOne, RIVColorProperty* rayColorOne, RIVColorProperty* pathColorTwo, RIVColorProperty* rayColorTwo) :
     RIVDataView(datasetOne,datasetTwo),
     rendererOne(rendererOne),
     rendererTwo(rendererTwo),
     energyDistributionOne(energyDistributionOne),
     energyDistributionTwo(energyDistributionTwo),
-    colorPropertyOne(colorPropertyOne),
-    colorPropertyTwo(colorPropertyTwo) {
+    pathColorOne(pathColorOne),
+    rayColorOne(rayColorOne),
+    pathColorTwo(pathColorTwo),
+    rayColorTwo(rayColorTwo){
     
     if(instance != NULL) {
         throw std::runtime_error("Only 1 instance of RIV3DView allowed.");
@@ -174,17 +180,22 @@ void RIV3DView::ToggleDrawDataSetTwo() {
 
 void RIV3DView::drawEnergyHelper(OctreeNode* node, float max,riv::ColorMap& heatmap, ushort maxDepth) {
     bool nodeMaxReached = (node->IsLeafNode() || node->GetDepth() >= maxDepth);
-    float min = 0.1;
+    float min = 0;
     float alpha = 0.8;
     if(nodeMaxReached) {
         float ratio = node->AggregateValue() / max;
         if(ratio > min) {
+//            printf("Ratio = %f\n",ratio);
             riv::Color c = heatmap.ComputeColor(ratio);
+//            glColor4f(c.R,c.G,c.B,alpha);
             glColor4f(c.R,c.G,c.B,alpha);
             glPushMatrix();
             glTranslatef(node->cx, node->cy, node->cz);
             glutSolidCube(node->GetSize());
             glPopMatrix();
+        }
+        else if(ratio > 1) {
+            
         }
     }
     else {
@@ -212,17 +223,27 @@ void RIV3DView::drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* node
         }
         else if(maxDepthReachedOne && maxDepthReachedTwo) { //
             
-            float valueOne = nodeOne->AggregateValue() / max;
-            float valueTwo = nodeTwo->AggregateValue() / max;
+
             
             OctreeNode* smallestNode = nodeTwo;
             if(nodeOne->GetDepth() > nodeTwo->GetDepth()) {
                 smallestNode = nodeOne;
             }
             
+            float multiplier = smallestNode->GetDepth() / nodeOne->GetDepth();
+            float multiplierTwo = smallestNode->GetDepth() / nodeTwo->GetDepth();
+            
+//            float valueOne = nodeOne->AggregateValue() / max;
+//            float valueTwo = nodeTwo->AggregateValue() / max;
+            
+            float valueOne = nodeOne->AggregateValue() * multiplier / max;
+            float valueTwo = nodeTwo->AggregateValue() * multiplierTwo / max;
+            
             float red,blue,saturation;
             
-            if(valueOne > 0.1 || valueTwo > 0.1) {
+            float min = 0;
+            
+            if(valueOne > min || valueTwo > min) {
                 if(valueTwo > valueOne) {
                     blue = ((valueTwo - valueOne) / valueTwo + 1) / 2.F;
                     red = 1-blue;
@@ -255,7 +276,9 @@ void RIV3DView::drawEnergyDifference(Octree *energyDistributionOne, Octree *ener
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    float max = std::max(energyDistributionOne->MaxValue(),energyDistributionTwo->MaxValue());
+    float maxOne = energyDistributionOne->MaxValue(maxDepth);
+    float maxTwo = energyDistributionTwo->MaxValue(maxDepth);
+    float max = std::max(maxOne,maxTwo);
     if(energyDistributionOne && energyDistributionTwo) {
         drawEnergyDifferenceHelper(energyDistributionOne->GetRoot(), energyDistributionTwo->GetRoot(), max);
     }
@@ -266,12 +289,14 @@ void RIV3DView::drawEnergyDistribution(Octree* energyDistribution, ushort maxDep
     drawEnergyDistribution(energyDistribution,maxDepth,energyDistribution->MaxValue());
 }
 void RIV3DView::drawEnergyDistribution(Octree* energyDistribution, ushort maxDepth, float maxEnergy) {
+//    riv::ColorMap colors = colors::brownColorMap();
     riv::ColorMap colors = colors::jetColorMap();
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    drawEnergyHelper(energyDistribution->GetRoot(),energyDistribution->MaxValue(),colors,maxDepth);
+//    float maxValue = energyDistribution->MaxValue(maxDepth);
+    drawEnergyHelper(energyDistribution->GetRoot(),maxEnergy,colors,maxDepth);
 }
 void RIV3DView::Draw() {
 
@@ -317,7 +342,11 @@ void RIV3DView::Draw() {
     
     if(drawDataSetOne && !drawDataSetTwo && drawHeatmapTree) {
         if(datasetTwo) {
-            float max = std::max(energyDistributionOne->MaxValue(drawHeatmapDepth),energyDistributionTwo->MaxValue(drawHeatmapDepth));
+            float maxOne = energyDistributionOne->MaxValue(drawHeatmapDepth);
+            float maxTwo = energyDistributionTwo->MaxValue(drawHeatmapDepth);
+            printf("maxOne = %f\n",maxOne);
+            printf("maxTwo = %f\n",maxTwo);
+            float max = std::max(maxOne,maxTwo);
             drawEnergyDistribution(energyDistributionOne,drawHeatmapDepth,max);
         }
         else drawEnergyDistribution(energyDistributionOne,drawHeatmapDepth);
@@ -487,19 +516,20 @@ void RIV3DView::ResetGraphics() {
 }
 //(Re)create the paths objects for the datasets being used
 void RIV3DView::createPaths() {
-    pathsOne = createPaths(*datasetOne,colorPropertyOne,lightConesOne);
+    pathsOne = createPaths(*datasetOne,pathColorOne,rayColorOne,lightConesOne);
     if(datasetTwo) {
-        pathsTwo = createPaths(*datasetTwo,colorPropertyTwo,lightConesTwo);
+        pathsTwo = createPaths(*datasetTwo,pathColorTwo,rayColorTwo,lightConesTwo);
     }
     pathsCreated = true;
 }
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
-std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVColorProperty* colorProperty, std::map<size_t,LightCone*>& lightCones) {
+std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColor, RIVColorProperty* rayColor, std::map<size_t,LightCone*>& lightCones) {
     
     reporter::startTask("Creating paths");
     
     RIVTable<float,ushort>* isectTable = dataset->GetTable(INTERSECTIONS_TABLE);
-//    RIVTableInterface* pathsTable = dataset->GetTable(INTERSECTIONS_TABLE);
+    
+    RIVTable<float,ushort>* pathsTable = dataset->GetTable(PATHS_TABLE);
     RIVShortRecord* bounceRecord = isectTable->GetRecord<ushort>(BOUNCE_NR);
     RIVShortRecord* primitiveRecord = isectTable->GetRecord<ushort>(PRIMITIVE_ID);
     
@@ -559,11 +589,14 @@ std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVC
         
         //New path, clear previous stuff
         if(pathID && *pathID != oldPathID) {
+            riv::Color pColor;
+            pathColor->ComputeColor(pathsTable, *pathID, pColor);
             if(points.size() > 0) {
-                paths.push_back(Path(points));
+                paths.push_back(Path(points,pColor));
                 points.clear();
             }
             previousCone = NULL;
+            
             oldPathID = *pathID;
         }
         //If still the same path, the previous cone should point more towards this point
@@ -577,7 +610,7 @@ std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVC
         }
         bounceNr = bounceRecord->Value(row);
         riv::Color pointColor;
-        colorProperty->ComputeColor(isectTable, row, pointColor); //Check if any color can be computed for the given row
+        rayColor->ComputeColor(isectTable, row, pointColor); //Check if any color can be computed for the given row
         PathPoint p;
         p.rowIndex = row;
         p.bounceNr = bounceNr;
@@ -773,6 +806,8 @@ void RIV3DView::drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<P
     if(startBounce == 0) {
         for(const Path& path : paths) {
             PathPoint *p = path.GetPointWithBounce(1);
+            const riv::Color& pathColor = path.pathColor;
+            glColor3f(pathColor.R,pathColor.G,pathColor.B);
             if(p != NULL) {
                 
                 float deltaX = xRecord->Value(p->rowIndex) - cameraPosition[0];
@@ -783,19 +818,19 @@ void RIV3DView::drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<P
                 float endY = cameraPosition[1] + deltaY * stopSegment * maxBounce;
                 float endZ = cameraPosition[2] + deltaZ * stopSegment * maxBounce;
                 
-                glColor3f(1,1,1);
-                riv::Color& c = p->color;
+//                glColor3f(1,1,1);
+
                 glBegin(GL_LINES);
                     glVertex3f(cameraPosition[0] + deltaX * startSegment * maxBounce,cameraPosition[1] + deltaY * startSegment * maxBounce,cameraPosition[2] + deltaZ * startSegment * maxBounce);
-                    glColor3f(c.R,c.G,c.B);
                     glVertex3f(endX,endY,endZ);
                 glEnd();
 
-                glPushMatrix();
-                glScalef(modelScale, modelScale, modelScale);
-                glTranslatef(endX, endY, endZ);
-                gluSphere(quadric, 1, 4, 4);
-                glPopMatrix();
+                //TODO: Trying to draw a pointer at the end of the path
+//                glPushMatrix();
+//                glScalef(modelScale, modelScale, modelScale);
+//                glTranslatef(endX, endY, endZ);
+//                gluSphere(quadric, 1, 4, 4);
+//                glPopMatrix();
             }
         }
     }
@@ -804,10 +839,9 @@ void RIV3DView::drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<P
             if(path.Size() >= 2) {
                 PathPoint* startPoint = path.GetPointWithBounce(startBounce);
                 PathPoint* endPoint = path.GetPointWithBounce(endBounce);
-                
+                const riv::Color& pathColor = path.pathColor;
+                glColor3f(pathColor.R,pathColor.G,pathColor.B);
                 if(startPoint != NULL && endPoint != NULL) {
-                    riv::Color startColor = startPoint->color;
-                    riv::Color endColor = endPoint->color;
                     
                     float Cstart = startSegment * maxBounce - startBounce;
                     float Cend = stopSegment * maxBounce - startBounce;
@@ -825,9 +859,8 @@ void RIV3DView::drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<P
                     float deltaZ = endZ - startZ;
                     
                     glBegin(GL_LINES);
-                        glColor3f(startColor.R,startColor.G,startColor.B);
+
                         glVertex3f(startX + deltaX * Cstart, startY + deltaY * Cstart, startZ + deltaZ * Cstart);
-                        glColor3f(endColor.R,endColor.G,endColor.B);
                         glVertex3f(startX + deltaX * Cend, startY + deltaY * Cend, startZ + deltaZ * Cend);
                     glEnd();
                 }
@@ -889,18 +922,20 @@ void RIV3DView::ReshapeInstance(int width, int height) {
 void RIV3DView::OnDataChanged(RIVDataSet<float,ushort>* source) {
     //Nothing
     if(source == *datasetOne) {
-        colorPropertyOne->Reset(source);
+        pathColorOne->Reset(source);
+        rayColorOne->Reset(source);
         if(bounceCountOne > 0) {
             filterPaths((*datasetOne), bounceCountOne, selectedObjectIdOne, pathFiltersOne);
         }
-        createPaths((*datasetOne), colorPropertyOne,lightConesOne);
+        createPaths((*datasetOne), pathColorOne,rayColorOne,lightConesOne);
     }
     else if(source == *datasetTwo) {
-        colorPropertyTwo->Reset(source);
+        pathColorTwo->Reset(source);
+        rayColorTwo->Reset(source);
         if(bounceCountTwo > 0) {
             filterPaths((*datasetTwo), bounceCountTwo, selectedObjectIdTwo, pathFiltersTwo);
         }
-        createPaths((*datasetTwo), colorPropertyTwo,lightConesTwo);
+        createPaths((*datasetTwo), pathColorTwo,rayColorTwo,lightConesTwo);
     }
     
     //	TODO: Paths and points are stale when this happens, but recreation is not necessary unless drawPoints or drawPaths is set to TRUE
@@ -971,7 +1006,8 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
     
     RIVTable<float,ushort>* pathTable = dataset->GetTable(PATHS_TABLE);
     RIVTable<float,ushort>* isectsTable = dataset->GetTable(INTERSECTIONS_TABLE);
-    RIVMultiReference* pathIsectReference = dynamic_cast<RIVMultiReference*>(pathTable->GetReferenceTo(INTERSECTIONS_TABLE));
+    auto ref = pathTable->GetReferenceTo(INTERSECTIONS_TABLE);
+    RIVMultiReference* pathIsectReference = dynamic_cast<RIVMultiReference*>(ref);
     RIVMultiReference* isectsToLightsReference = dynamic_cast<RIVMultiReference*>(isectsTable->GetReferenceTo(LIGHTS_TABLE));
     RIVTable<float,ushort>* lightsTable = dataset->GetTable(LIGHTS_TABLE);
     
@@ -1114,7 +1150,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
                 (*datasetOne)->StopFiltering();
                 
                 pathFiltersOne.clear();
-                createPaths(*datasetOne,colorPropertyOne,lightConesOne);
+                createPaths(*datasetOne,pathColorOne,rayColorOne,lightConesOne);
                 selectedObjectIdOne = -1;
             }
             if(pathFiltersTwo.size() && datasetTwo) {
@@ -1127,7 +1163,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
                 
                 pathFiltersTwo.clear();
                 selectedObjectIdTwo = -1;
-                createPaths(*datasetTwo,colorPropertyTwo,lightConesTwo);
+                createPaths(*datasetTwo,pathColorTwo,rayColorTwo,lightConesTwo);
             }
             return true;
         }

@@ -129,7 +129,7 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset,const Vec2f&
     isectsTable->CreateRecord<float>(INTERSECTION_G,0,1,true);
     isectsTable->CreateRecord<float>(INTERSECTION_B,0,1,true);
     isectsTable->CreateRecord<ushort>(PRIMITIVE_ID,0,nrPrimitives,true);
-    isectsTable->CreateRecord<ushort>(OCCLUDER_COUNT,0,maxNrLights,true);
+    isectsTable->CreateRecord<ushort>(OCCLUDER_COUNT,0,maxNrLights+1,true);
     //	shapeIds = isectsTable->CreateShortRecord("shape ID");
     //	interactionTypes = isectsTable->CreateShortRecord("interaction");
     //	lightIds = isectsTable->CreateShortRecord("light ID");
@@ -175,7 +175,9 @@ void DataController::createDataStructures(const Vec2f& xBounds, const Vec2f& yBo
     float maxSize = std::max(xSize,std::max(ySize,zSize));
     
     //Because floats are annoying with equality, make sure you over-extend a bit the size of the octree
-    energyDistribution = new Octree(10,cX,cY,cZ,1.01*maxSize,1);
+    int maxDepth = 8;
+    int maxCapacity = 1;
+    energyDistribution = new Octree(maxDepth,cX,cY,cZ,1.01*maxSize,maxCapacity);
     
     resetPointers(candidateData);
 }
@@ -381,8 +383,8 @@ void DataController::Reduce() {
     //Bootstrap set
     RIVDataSet<float,ushort>* bestBootstrap = NULL;
     
-    //	printf("\nTRUE HISTOGRAMS = \n");
-    //	trueDistributions.Print();
+//    	printf("\nTRUE HISTOGRAMS = \n");
+//    	trueDistributions.Print();
     
     for(int i = 0 ; i < bootstrapRepeat ; ++i) {
         //			printf("Round #%d\n",i);
@@ -413,11 +415,11 @@ void DataController::Reduce() {
             
             bestBootstrap = bootstrap;
             
-            //				printf("\nTRUE HISTOGRAMS = \n");
-            //				trueDistributions.Print();
-            //
-            //				printf("\nBOOTSTRAP HISTOGRAMS = \n");
-            //				bootstrapHistograms.Print();
+//            				printf("\nTRUE HISTOGRAMS = \n");
+//            				trueDistributions.Print();
+//            
+//            				printf("\nBOOTSTRAP HISTOGRAMS = \n");
+//            				bootstrapHistograms.Print();
             
             bestBootstrapResult = score;
             newBootstrapFound = true;

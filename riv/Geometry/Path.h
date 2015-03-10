@@ -23,12 +23,13 @@ typedef struct PathPoint {
 
 class Path {
 private:
-	PathPoint* points = NULL;
-	ushort size;
 	Path() {
 		
 	}
 public:
+    PathPoint* points = NULL;
+    riv::Color pathColor;
+    ushort size;
 	~Path() {
 		if(points) {
 			delete[] points;
@@ -40,6 +41,7 @@ public:
 		for(int i = 0 ; i < newPath.size ; ++i) {
 			points[i] = newPath.points[i];
 		}
+        pathColor = newPath.pathColor;
 		return *this;
 	}
 	Path(const Path& copy) {
@@ -48,8 +50,9 @@ public:
 			points[i] = copy.points[i];
 		}
 		size = copy.size;
+        pathColor = copy.pathColor;
 	}
-	Path(const std::vector<PathPoint>& points_) {
+    Path(const std::vector<PathPoint>& points_, riv::Color pathColor) : pathColor(pathColor) {
 		size = points_.size();
 		points = new PathPoint[size];
 		int i = 0;

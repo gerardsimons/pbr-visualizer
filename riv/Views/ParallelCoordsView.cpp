@@ -15,15 +15,15 @@
 ParallelCoordsView* ParallelCoordsView::instance = NULL;
 int ParallelCoordsView::windowHandle = -1;
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne,RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView) : RIVDataView(datasetOne,datasetTwo,x,y,width,height,paddingX,paddingY,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo), sliderView(sliderView) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, int x, int y, int width, int height, int paddingX, int paddingY, riv::ColorMap& membershipColors, RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne,RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView) : RIVDataView(datasetOne,datasetTwo,x,y,width,height,paddingX,paddingY,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo), sliderView(sliderView), membershipColors(membershipColors) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
     identifier = "ParallelCoordsView";
     instance = this;
 }
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne, RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView) :
-RIVDataView(datasetOne,datasetTwo,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo), distributionsOne(distributionsOne), distributionsTwo(distributionsTwo), sliderView(sliderView)
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, riv::ColorMap& membershipColors, RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne, RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView) :
+RIVDataView(datasetOne,datasetTwo,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo), sliderView(sliderView),membershipColors(membershipColors)
 {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
@@ -32,7 +32,8 @@ RIVDataView(datasetOne,datasetTwo,pathColorOne,rayColorOne,pathColorTwo,rayColor
     instance = this;
 }
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, HistogramSet<float,ushort>* distributionsOne, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty* pathColor, RIVColorProperty *rayColor,RIVSliderView* sliderView) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY), distributionsOne(distributionsOne),sliderView(sliderView) {
+/** SINGLE DATASET CONSTRUCTORS **/
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, int x, int y, int width, int height, int paddingX, int paddingY,riv::ColorMap& membershipColors, RIVColorProperty* pathColor, RIVColorProperty *rayColor,RIVSliderView* sliderView) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY),sliderView(sliderView),membershipColors(membershipColors) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
@@ -43,7 +44,7 @@ ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, Histo
     //Nothing else to do
 }
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, HistogramSet<float,ushort>* distributionsOne, RIVColorProperty *pathColor, RIVColorProperty* rayColor,RIVSliderView* sliderView) : RIVDataView(dataset), distributionsOne(distributionsOne), sliderView(sliderView) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, riv::ColorMap& membershipColors, RIVColorProperty *pathColor, RIVColorProperty* rayColor,RIVSliderView* sliderView) : RIVDataView(dataset), sliderView(sliderView),membershipColors(membershipColors) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
@@ -198,26 +199,34 @@ void ParallelCoordsView::drawSelectionBoxes() {
     
 }
 void ParallelCoordsView::drawAxes() {
-    //Draw the densities
-
     for(auto& axisGroup : axisGroups) {
-        tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+        size_t rowsOne = (*datasetOne)->GetTable(axisGroup.tableName)->NumberOfRows();
+        size_t rowsTwo = 0;
+        float sizeDIff = 1;
+        if(datasetTwo) {
+            rowsTwo = (*datasetTwo)->GetTable(axisGroup.tableName)->NumberOfRows();
+            if(rowsOne && rowsTwo) {
+                sizeDIff = rowsTwo / rowsOne;
+            }
+        }
+//        printf("Size diff = %f\n",sizeDIff);
+        tuple_for_each(axisGroup.axes, [&](auto tAxes) { 
             for(auto axis : tAxes) {
                 
-                float maxBinWidth = 4 * axis->width;
+                float maxBinWidth = 3.5 * axis->width;
                 float minBinWidth = axis->width;
                 
                 auto& histogramOne = axis->densityHistogramOne;
                 auto& histogramTwo = axis->densityHistogramTwo;
                 
                 int numBins = histogramOne.NumberOfBins();
-                int height = axis->height / (float)numBins;
+                float height = axis->height / (float)numBins;
                 
                 float maxValueOne = histogramOne.MaximumValue();
                 float maxValueTwo = histogramTwo.MaximumValue();
                 
 //                float max = std::min(maxValueOne,maxValueTwo);
-                
+//                
                 for(int i = 0 ; i < numBins ; ++i) {
                     //					printf("bin = %d\n",i);
                     
@@ -251,50 +260,30 @@ void ParallelCoordsView::drawAxes() {
                         //					float valueDelta = valueTwo - valueTwo;
                         float blueColorValue;
                         float redColorValue;
-                        float ratio;
+                        float ratio = 0;
                         
-                        if(binValueOne == nrElementsOne && binValueTwo == nrElementsTwo) {
-                            if(binValueTwo > binValueOne) {
-                                blueColorValue = ((binValueTwo - binValueOne) / binValueTwo);
-                                redColorValue = 1-blueColorValue;
-                                ratio = binValueTwo / maxValueTwo;
-                            }
-                            else {
-                                redColorValue = ((binValueOne - binValueTwo) / binValueOne);
-                                blueColorValue = 1 - redColorValue;
-                                ratio = binValueOne / maxValueOne;
-                            }
+                        if(binValueTwo > binValueOne) {
+                            blueColorValue = ((binValueTwo - binValueOne) / binValueTwo + 1) / 2.F;
+                            redColorValue = 1-blueColorValue;
+                            ratio = binValueTwo / maxValueTwo;
+                            
+                            riv::Color testColor = membershipColors.ComputeColor(blueColorValue);
+                            glColor3f(testColor.R, testColor.G, std::pow(testColor.B,.5F));
+                        }
+                        else if(binValueOne > binValueTwo) {
+                            redColorValue = ((binValueOne - binValueTwo) / binValueOne + 1) / 2.F;
+                            blueColorValue = 1 - redColorValue;
+                            ratio = binValueOne / maxValueOne;
+                            
+                            riv::Color testColor = membershipColors.ComputeColor(blueColorValue);
+                            glColor3f(std::pow(testColor.R,.5F), testColor.G, testColor.B);
                         }
                         else {
-                            if(normalizedValueTwo > normalizedValueOne) {
-                                blueColorValue = ((normalizedValueTwo - normalizedValueOne) / normalizedValueTwo + 1) / 2.F;
-                                redColorValue = 1-blueColorValue;
-                                ratio = binValueTwo / maxValueTwo;
-                            }
-                            else {
-                                redColorValue = ((normalizedValueOne - normalizedValueTwo) / normalizedValueOne + 1) / 2.F;
-                                blueColorValue = 1 - redColorValue;
-                                ratio = binValueOne / maxValueOne;
-                            }
+//                            riv::Color testColor = redWhiteBlue.ComputeColor(0.5);
+                            ratio = binValueOne / maxValueOne;
+                            glColor3f(1,1,1);
                         }
-                        if(useSaturation || datasetTwo == NULL) {
-                            
-                            //							saturation = std::pow(saturation, 0.25);
-                            
-                            //Convert the values to HSV
-                            float h,s,v;
-                            RGBtoHSV(redColorValue, 0, blueColorValue, &h, &s, &v);
-                            
-                            //And back again but use the computed saturation instead
-                            float r,g,b;
-                            HSVtoRGB(&r, &g, &b, h, ratio, v);
-                            
-                            glColor3f(r,g,b);
-                        }
-                        else {
-                            glColor3f(redColorValue, 0, blueColorValue);
-                        }
-                        
+
                         //						printf("glColor3f(%f,%f,%f)\n",r,g,b);
                         float width = ratio * (maxBinWidth - minBinWidth) + minBinWidth;
                         float startX = axis->x - width / 2.F;
@@ -315,6 +304,7 @@ void ParallelCoordsView::drawAxes() {
                 }
             }
         });
+            
     }
 }
 
@@ -330,7 +320,15 @@ void ParallelCoordsView::drawAxesExtras() {
     
     //Draw texts and extras
     for(auto& axisGroup : axisGroups) {
+        //Draw name of table in middle
+        int textWidth = 53 * axisGroup.tableName.size(); //estimated text width
+        auto firstAxis = axisGroup.axisInterfaces[0];
+        auto lastAxis = axisGroup.axisInterfaces[axisGroup.axisInterfaces.size() - 1];
+        int xCenter = (lastAxis->x - firstAxis->x) / 2.F + firstAxis->x;
+        printf("xCenter = %d\n",xCenter);
+        drawText(axisGroup.tableName,xCenter - .5F*textWidth,firstAxis->y - 30,.15);
         tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+            
             for(auto& axis : tAxes) {
                 
                 //Draw the name of the data dimension at the bottom of the axis
@@ -598,7 +596,7 @@ void ParallelCoordsView::Reshape(int width, int height) {
     glLoadIdentity();
     
     paddingX = 30;
-    paddingY = 20;
+    paddingY = 30;
     
     Invalidate();
     

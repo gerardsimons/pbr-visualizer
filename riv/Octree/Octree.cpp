@@ -70,12 +70,12 @@ float Octree::maxValueHelper(OctreeNode* node) {
 }
 float Octree::maxValueHelper(OctreeNode* node,ushort maxDepth) {
     if(node->IsLeafNode() || node->GetDepth() >= maxDepth) {
-        return node->Value();
+        return node->AggregateValue();
     }
     else {
         float maxValues[8];
         for(ushort i = 0 ; i < 8 ; ++i) {
-            maxValues[i] = maxValueHelper(node->GetChild(i));
+            maxValues[i] = maxValueHelper(node->GetChild(i),maxDepth);
         }
         return maxInArray(maxValues, 8);
     }
@@ -87,10 +87,7 @@ float Octree::MaxValue() {
     return *cachedMax;
 }
 float Octree::MaxValue(ushort maxDepth) {
-
-        return maxValueHelper(root,maxDepth);
-
-
+    return maxValueHelper(root,maxDepth);
 }
 void Octree::checkMinMax(float& currentMin, float& currentMax, float candidate) {
 	if(currentMax < candidate) {

@@ -20,6 +20,9 @@ OctreeNode::OctreeNode(float cx,float cy, float cz, float cubicSize, unsigned sh
 }
 void OctreeNode::Split(unsigned short splitDepth) {
     if(splitDepth) {
+        
+//        printf("Node -- Split!\n");
+        
         isLeaf = false;
         unsigned short childIndex = 0;
         
@@ -33,6 +36,8 @@ void OctreeNode::Split(unsigned short splitDepth) {
                 for(int zOffset = -1 ; zOffset <= 1 ; zOffset += 2) {
                     OctreeNode* newChildNode = new OctreeNode(cx + xOffset * quarterSize, cy + yOffset  * quarterSize, cz + zOffset  * quarterSize,newChildSize,depth + 1,maxDepth,maxCapacity);
                     children[childIndex++] = newChildNode;
+//                    newChildNode->value = value / 8.F;
+//                    newChildNode->addCount = 1;
                     newChildNode->Split(splitDepth - 1);
                 }
             }
@@ -44,38 +49,65 @@ OctreeNode* OctreeNode::ChildForCoordinates(float x, float y, float z) {
     int xChild = ((x - cx) > 0) * 4;
     int yChild = ((y - cy) > 0) * 2;
     int zChild = ((z - cz) > 0) * 1;
+    int index = xChild + yChild + zChild;
+    OctreeNode* child = children[index];
     
-    return children[xChild + yChild + zChild];
+//    float childDistance = std::sqrt(std::pow(child->cx - x,2) + std::pow(child->cy - y,2) + std::pow(child->cz - z,2));
+//    //Check
+//    for(int i = 0 ; i < 8 ; i++) {
+//        if(i != index) {
+//            float distance = std::sqrt(std::pow(children[i]->cx - x,2) + std::pow(children[i]->cy - y,2) + std::pow(children[i]->cz - z,2));
+//            if(distance < childDistance - 0.0001) {
+//                
+//            }
+//        }
+//    }
+    
+    return child;
 }
 float OctreeNode::Value() {
     if(addCount) {
-        return value * (pow(8,depth)) / addCount;
+        return value / addCount * 8 * depth;
     }
     else return 0;
+}
+float OctreeNode::aggregateHelper(ushort originalDepth) {
+    if(isLeaf) {
+        if(addCount) {
+            return value / addCount * (8*(depth - originalDepth));
+        }
+        else return 0;
+    }
+    else {
+        float sum = 0;
+        for(int i = 0 ; i < 8 ; ++i) {
+            sum += children[i]->aggregateHelper(originalDepth);
+        }
+        return sum;
+    }
 }
 float OctreeNode::AggregateValue() {
     if(isLeaf) {
         return Value();
     }
     else {
-        float sum = 0;
-        for(int i = 0 ; i < 8 ; ++i) {
-            sum += children[i]->AggregateValue();
-        }
-        return sum;
+        return aggregateHelper(depth);
     }
 }
 void OctreeNode::Add(float x, float y, float z, float value) {
     ++addCount;
     if(isLeaf) {
         //Does it contain enough values and is it not too deep already?
-        if(addCount > maxCapacity && depth < maxDepth) {
-            value = 0;
+        if(addCount >= maxCapacity && depth < maxDepth) {
             Split();
             OctreeNode* child = ChildForCoordinates(x, y, z);
+//            printf("Add part of old value = %f\n",this->value / 8.F + value);
             child->Add(x, y, z, value + this->value / 8.F);
+//            this->value = 0;
+//            ++addCount;
         }
         else {
+//            ++addCount;
             this->value += value;
         }
     }

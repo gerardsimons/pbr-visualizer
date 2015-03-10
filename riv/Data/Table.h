@@ -121,6 +121,7 @@ public:
 			throw std::runtime_error("RIVRecord is of invalid size");
 		}
 	}
+    
 	//TODO: This will probably fail to build a proper reference structure when this table has preexisting rows
 	void JoinTable(RIVTable* otherTable) {
 		size_t currentNrRows = NumberOfRows();
@@ -618,6 +619,16 @@ public:
 		}
         return rows;
 	}
+    size_t NumberOfUnfilteredRows() const {
+        size_t rows = NumberOfRows();
+        
+        for(auto it : filteredRows) {
+            if(it.second) {
+                --rows;
+            }
+        }
+        return rows;
+    }
 	std::string RowToString(size_t row,size_t columnWidth) {
 		std::string rowText = "|";
         std::string valueString = std::to_string(row);

@@ -169,20 +169,22 @@ public:
         if(!isFiltering) {
             throw "Invalid state, StartFiltering was never called.";
         }
-        //TODO: Fix this
-        //Finalize, do the actual filtering operations
-        for(auto iter : staleTables) {
-            iter.first->Filter();
+        if(staleTables.size()) {
+            //TODO: Fix this
+            //Finalize, do the actual filtering operations
+            for(auto iter : staleTables) {
+                iter.first->Filter();
+            }
+            
+            //		Make sure linked tables are filtered accordingly
+            for(auto iter : staleTables) {
+                iter.first->FilterReferences();
+            }
+            
+            //Notify the listeners now
+            notifyFilterListeners();
         }
-        
-        //		Make sure linked tables are filtered accordingly
-        for(auto iter : staleTables) {
-            iter.first->FilterReferences();
-        }
-        
         isFiltering = false;
-        //Notify the listeners now
-        notifyFilterListeners();
     }
     bool IsFiltered() {
         for(auto table : tables) {
@@ -368,9 +370,6 @@ public:
                     dataset->AddFilter(filter);
                 }
             });
-            //            otherTable->SetFilters();
-            //            otherTable->SetRowFilters(*table->GetRowFilters()); //Does not make sense to copy row filters
-            
         }
         dataset->StopFiltering();
     }

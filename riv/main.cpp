@@ -84,13 +84,13 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
-const int maxPathsOne = 3000;
+const int maxPathsOne = 5000;
 const int maxBootstrapRepeatOne = 10;
 
-const int maxPathsTwo = 6000;
+const int maxPathsTwo = 5000;
 const int maxBootstrapRepeatTwo = 10;
 
-const int sliderViewHeight = 50;
+const int sliderViewHeight = 40;
 
 bool connectedOne = false;
 bool connectedTwo = false;
@@ -102,7 +102,7 @@ clock_t startDelay;
 bool isDelayed = false;
 
 bool renderingPausedOne = false;
-bool renderingPausedTwo = true;
+bool renderingPausedTwo = false;
 int delayTimeLeft = 0;
 int delayTimerInterval = 0;
 
@@ -137,12 +137,17 @@ void invalidateAllViews() {
     glutSetWindow(previousWindow);
 }
 void testOctree() {
-    Octree octree(2,0,0,0,1,1);
+    Octree octree(2,0,0,0,1,2);
     octree.Add(-0.25F, -0.25F, -0.25F, 1);
-    octree.Add(-0.25F, -0.25F, 0.25F, 1);
+    octree.Add(-0.25F, -0.25F, -0.25F, 1);
+    octree.Add(-0.25F, -0.25F, -0.25F, 1);
+//    octree.Add(-0.25F, -0.25F, 0.25F, 1);
     
     OctreeNode* root = octree.GetRoot();
     printf("Aggregate value root = %f\n",root->AggregateValue());
+    printf("Max value = %f\n",octree.MaxValue());
+    
+    
 }
 void testSampling() {
     RIVDataSet<float,ushort>* testData = new RIVDataSet<float,ushort>("test_set");
@@ -160,7 +165,7 @@ void testSampling() {
     
     HistogramSet<float,int> testHistogramSet;
     Histogram2D<float> floatHist2D(0,10,2);
-    
+
     const size_t N = 10;
     for(int i = 0 ; i < N ; ++i) {
         size_t M = 10 * (i+1);
@@ -168,9 +173,32 @@ void testSampling() {
             floatRecord->AddValue(rand());
             floatRecordTwo->AddValue(N-i);
             testHistogramInt.Add(i);
-            testHistogram.Add(rand() / RAND_MAX);
+            testHistogram.Add(rand() / RAND_MAX % 10);
         }
     }
+    
+    ///TEST PLUS
+    Histogram<float> one("one",0,10,2);
+    Histogram<float> two("two",0,10,2);
+    
+//    one.Add(3);
+    one.Add(7);
+    
+    two.Add(3);
+    
+    one.Print();
+    two.Print();
+    
+    Histogram<float> result = one + two;
+    
+    result.Print();
+    
+    Histogram<float> copy = testHistogram;
+    printf("Original = \n");
+    testHistogram.Print();
+    printf("Copy = \n");
+    copy.Print();
+    
     testHistogramSet.AddHistogram(testHistogram);
     testHistogramSet.AddHistogram(testHistogramInt);
     
@@ -181,14 +209,28 @@ void testSampling() {
     floatHist2D.Add(7, 7);
     floatHist2D.Add(7, 7);
     
-    //    for(int x = 0 ; x < 10 ; x++) {
-    //        for(int y = 0 ; y < 10 ; y++) {
-    //            size_t M = 10 * ((x+1)*(y+1));
-    //            for(int j = 0 ; j < M ; ++j) {
-    //                floatHist2D.Add(x, y);
-    //            }
-    //        }
-    //    }
+    Histogram2D<float> floatHist2Dright = floatHist2D;
+    floatHist2Dright.Clear();
+    floatHist2Dright.Add(7,2);
+    
+//        for(int x = 0 ; x < 10 ; x++) {
+//            for(int y = 0 ; y < 10 ; y++) {
+//                size_t M = 10 * ((x+1)*(y+1));
+//                for(int j = 0 ; j < M ; ++j) {
+//                    floatHist2D.Add(x, y);
+//                }
+//            }
+//        }
+    
+    Histogram2D<float> copy2D = floatHist2D;
+    Histogram2D<float> sum2D = floatHist2D + floatHist2Dright;
+    
+    printf("Original = \n");
+    floatHist2D.Print();
+    printf("Copy = \n");
+    copy2D.Print();
+    printf("Sum = \n");
+    sum2D.Print();
     
     Histogram<float> floatHist = floatRecord->CreateHistogram(0,10,10);
     
@@ -223,9 +265,13 @@ void testSampling() {
 
 void testFunctions() {
     
-    //Done
     testOctree();
     return;
+    
+    testSampling();
+
+    //Done
+
     
     //Test bootstrap
     const int upperBound = 100;
@@ -378,6 +424,28 @@ void keys(int keyCode, int x, int y) {
                 //                printf("Copying swapchain from renderer 1 to renderer 2!!\n");
                 imageView->SmoothPixelDistributionTwo();
             
+            break;
+        case 48: // the '0' key, average the two heatmaps with eachother
+            if(datasetOne && datasetTwo) {
+                Histogram2D<float>* pixelDistributionOne = imageView->GetPixelDistributionOne();
+                Histogram2D<float>* pixelDistributionTwo = imageView->GetPixelDistributionTwo();
+                
+                Histogram2D<float> sum = *pixelDistributionOne + *pixelDistributionTwo;
+                
+                printf("pixelDistributionOne = \n");
+                pixelDistributionOne->Print();
+                printf("pixelDistributionTwo = \n");
+                pixelDistributionTwo->Print();
+                printf("sum = \n");
+                sum.Print();
+                
+                *pixelDistributionOne = sum;
+                *pixelDistributionTwo = sum;
+                
+                imageView->redisplayWindow();
+                
+                printf("\nMerged pixel distributions...\n");
+            }
             break;
         case 97: // 'a' key
             sceneView->MoveCamera(-camSpeed, 0, 0);
@@ -808,11 +876,13 @@ void setup(int argc, char** argv) {
     float imageViewWidth = std::min(squareSize * ratio,.333F*width);
     float imageViewHeight = imageViewWidth / ratio;
     
+    std::vector<riv::Color> colors;
+    colors.push_back(colors::BLUE);
+    colors.push_back(colors::RED);
+    riv::ColorMap redBlue(colors);
+    
     if(nrConnected) {
-        std::vector<riv::Color> colors;
-        colors.push_back(colors::BLUE);
-        colors.push_back(colors::RED);
-        riv::ColorMap redBlue(colors);
+
         
         parallelViewWindow = glutCreateSubWindow(mainWindow,padding,padding,width-2*padding,height/2.F-2*padding - sliderViewHeight / 2.F);
         ParallelCoordsView::windowHandle = parallelViewWindow;
@@ -829,7 +899,7 @@ void setup(int argc, char** argv) {
         if(nrConnected == 2) {
             imageViewWidth += imageViewWidth;
         }
-        imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,imageViewWidth,squareSize);
+        imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,imageViewWidth,imageViewHeight);
         glutSetWindow(imageViewWindow);
         RIVImageView::windowHandle = imageViewWindow;
         glutSpecialFunc(keys);
@@ -901,13 +971,22 @@ void setup(int argc, char** argv) {
         //		RIVEvaluatedColorProperty<float>* xLinear = new RIVEvaluatedColorProperty<float>(redBlue, isectTable, isectTable->GetRecord<float>(POS_X));
         
         //		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
+        riv::Color red(1,0,0);
+        riv::Color white(0.9,0.9,0.9);
+        riv::Color purple(0.5,0,0.5);
+        riv::Color blue(0,0,1);
         
-        sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution(),dataControllerTwo->GetEnergyDistribution(),pathColorOne,pathColorTwo);
+        std::vector<riv::Color> colors = {red,white,blue};
+        
+        riv::ColorMap binColorMap(colors,0,1);
+        
+        sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution(),dataControllerTwo->GetEnergyDistribution(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
         //		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,colorOne,colorTwo,sizeProperty);
         imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo);
         
         sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions());
-        parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),colorOne,colorOne,colorTwo,colorTwo,sliderView);
+//        parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,binColorMap,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo,sliderView);
+        parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,binColorMap,colorOne,colorOne,colorTwo,colorTwo,sliderView);
         
         
         (*datasetTwo)->AddDataListener(sceneView);
@@ -921,12 +1000,12 @@ void setup(int argc, char** argv) {
         (*datasetTwo)->AddDataListener(sliderView);
     }
     else if(datasetOne) {
-        RIVColorProperty* colorTwo = new RIVFixedColorProperty(0, 0, 1);
-        RIVColorProperty* colorOne = new RIVFixedColorProperty(1, 0, 0);
+//        RIVColorProperty* colorTwo = new RIVFixedColorProperty(0, 0, 1);
+//        RIVColorProperty* colorOne = new RIVFixedColorProperty(1, 0, 0);
         auto pathColorOne = createPathColorProperty(*datasetOne);
         auto rayColorOne = createRayColorProperty(*datasetOne);
-        parallelCoordsView = new ParallelCoordsView(datasetOne,dataControllerOne->GetTrueDistributions(),colorOne,colorOne,sliderView);
-        sceneView = new RIV3DView(datasetOne,rendererOne,sceneDataOne,dataControllerOne->GetEnergyDistribution(), pathColorOne);
+        parallelCoordsView = new ParallelCoordsView(datasetOne,redBlue, pathColorOne,rayColorOne,sliderView);
+        sceneView = new RIV3DView(datasetOne,rendererOne,sceneDataOne,dataControllerOne->GetEnergyDistribution(), pathColorOne, rayColorOne);
         imageView = new RIVImageView(datasetOne,rendererOne);
         (*datasetOne)->AddDataListener(imageView);
         (*datasetOne)->AddDataListener(sceneView);
@@ -943,7 +1022,7 @@ int main(int argc, char **argv)
 {
     printf("Initialising Rendering InfoVis...\n");
     
-    //        testFunctions();
+            testFunctions();
     
     
     srand(time(NULL));

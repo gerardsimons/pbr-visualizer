@@ -39,8 +39,10 @@ private:
 	
 	int axisWidth = 10;
 	
-	HistogramSet<float,ushort>* distributionsOne;
-	HistogramSet<float,ushort>* distributionsTwo = NULL;
+//	HistogramSet<float,ushort>* distributionsOne;
+//	HistogramSet<float,ushort>* distributionsTwo = NULL;
+    
+    riv::ColorMap membershipColors;
     
     RIVColorProperty* rayColorEnergyOne;
     RIVColorProperty* pathColorEnergyOne;
@@ -94,11 +96,13 @@ private:
 public:
 	void redisplayWindow();
 	void createAxisDensities();
-    ParallelCoordsView(RIVDataSet<float,ushort>** dataset, HistogramSet<float,ushort>* distributionsOne, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSliderView* sliderView);
-    ParallelCoordsView(RIVDataSet<float,ushort>** dataset, HistogramSet<float,ushort>* distributionsOne, RIVColorProperty *pathColor, RIVColorProperty *rayColor,RIVSliderView* sliderView);
+    //Single dataset constructors
+    ParallelCoordsView(RIVDataSet<float,ushort>** dataset, int x, int y, int width, int height, int paddingX, int paddingY,riv::ColorMap& membershipColors, RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSliderView* sliderView);
+    ParallelCoordsView(RIVDataSet<float,ushort>** dataset, riv::ColorMap& membershipColors, RIVColorProperty *pathColor, RIVColorProperty *rayColor,RIVSliderView* sliderView);
+    
 	//Constructors for double renderers
-	ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, int x, int y, int width, int height, int paddingX, int paddingY,RIVColorProperty *pathColor, RIVColorProperty *rayColor,RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView);
-	ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, HistogramSet<float,ushort>* distributionsOne, HistogramSet<float,ushort>* distributionsTwo, RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView);
+	ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,int x, int y, int width, int height, int paddingX, int paddingY,riv::ColorMap& membershipColors, RIVColorProperty *pathColor, RIVColorProperty *rayColor,RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView);
+	ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,riv::ColorMap& membershipColors, RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView);
 
 	~ParallelCoordsView();
 	

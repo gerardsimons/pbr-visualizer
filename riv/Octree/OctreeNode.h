@@ -32,6 +32,7 @@ private:
 	
 	unsigned short depth; //The depth of this node in the octree
 	
+    float aggregateHelper(ushort orginalDepth);
 	bool rangeCheck(float lowerBound, float upperBound, float value);
     float computeEnergy(RIVRecord<float>* rs, RIVRecord<float>* gs,RIVRecord<float>* bs, std::vector<size_t>& indices);
 public:

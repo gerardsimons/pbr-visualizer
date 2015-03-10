@@ -83,8 +83,10 @@ protected:
 	EMBREERenderer* rendererOne;
 	EMBREERenderer* rendererTwo = NULL;
 	
-	RIVColorProperty* colorPropertyOne;
-	RIVColorProperty* colorPropertyTwo;
+	RIVColorProperty* pathColorOne;
+	RIVColorProperty* rayColorOne;
+    RIVColorProperty* pathColorTwo;
+    RIVColorProperty* rayColorTwo;
     
     //Path drawing variables
     int maxBounce = 5; //TODO: Deduce this value from the bounce record
@@ -129,16 +131,16 @@ protected:
     void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
 	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, ushort* selectedObjectId);
 	//Create graphics buffer from unfiltered data rows
-	std::vector<Path> createPaths(RIVDataSet<float,ushort>*, RIVColorProperty* colorProperty,std::map<size_t,LightCone*>& lightCones);
+	std::vector<Path> createPaths(RIVDataSet<float,ushort>*, RIVColorProperty* pathColor, RIVColorProperty* rayColor, std::map<size_t,LightCone*>& lightCones);
     static RIV3DView* instance;
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
     void redisplayWindow();
 
 public:
 	//Single renderer constructor
-    RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,const TriangleMeshGroup& sceneDataOne, Octree* energyDistribution, RIVColorProperty* colorProperty);
+    RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,const TriangleMeshGroup& sceneDataOne, Octree* energyDistribution, RIVColorProperty* pathColor, RIVColorProperty* rayColor);
 	//Dual renderer constructor
-	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, Octree* energyDistributionOne, Octree* energyDistributionTwo, RIVColorProperty* colorPropertyOne,RIVColorProperty* colorPropertyTwo);
+	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, Octree* energyDistributionOne, Octree* energyDistributionTwo, RIVColorProperty* pathColorOne, RIVColorProperty* rayColorOne, RIVColorProperty* pathColorTwo, RIVColorProperty* rayColorTwo);
 	
 	static int windowHandle;
     

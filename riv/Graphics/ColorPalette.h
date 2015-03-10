@@ -27,6 +27,8 @@
 		
 		std::vector<riv::Color> allColors();
 		riv::ColorMap jetColorMap();
+        riv::ColorMap greenGrayPurpleColorMap();
+        riv::ColorMap brownColorMap();
 	}
 
 #endif
