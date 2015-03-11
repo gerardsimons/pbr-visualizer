@@ -179,6 +179,7 @@ public:
                 return i;
             }
         }
+        throw std::runtime_error("Error sampling bin");
     }
     float Sample() {
         unsigned int bin = SampleBin();
@@ -334,15 +335,17 @@ public:
 	}
 	void Print() {
 		int maxBarSize = 48;
-		printf("Histogram %s has %zu elements :\n",name.c_str(),nrElements);
+		printf("Histogram %s has %zu elements in %zu bins :\n",name.c_str(),nrElements,bins);
 		
 		int binIndex = BinForValue(lowerBound);
 		
 		float binStart = lowerBound;
 		
-		for(auto it : hist) {
+        for(int bin = 0 ; bin < bins ; ++bin) {
+//		for(auto it : hist) {
+            
 			printf("%.2f - %.2f\t : ",binStart,binStart + binWidth);
-			float normalValue = NormalizedValue(it.first);
+			float normalValue = NormalizedValue(bin);
 			int barSize = normalValue * maxBarSize;
 			int tabs = (maxBarSize - barSize) / 4.F; //4 is the tabwidth in spaces
 			for(int i = 0 ; i < barSize ; i++) {
@@ -351,7 +354,7 @@ public:
 			for(int i = 0 ; i < tabs ; ++i) {
 				std::cout << "\t";
 			}
-			std::cout << it.second;
+			std::cout << hist[bin];
 			std::cout << " (" << normalValue << ")" << std::endl;
 			
 			binStart += binWidth;

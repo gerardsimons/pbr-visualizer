@@ -812,6 +812,25 @@ public:
 		});
 		return histograms;
 	}
+    HistogramSet<Ts...> CreateHistogramSetFromFiltered(int bins) {
+        HistogramSet<Ts...> histograms;
+
+        tuple_for_each(records, [&](auto tRecords) {
+            for(auto record : tRecords) {
+                auto minMax = record->MinMax();
+                typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
+                Histogram<Type> filteredHistogram(record->name,minMax.first,minMax.second,bins);
+                TableIterator* iterator = GetIterator();
+                size_t row;
+                while(iterator->GetNext(row)) {
+                    filteredHistogram.Add(record->Value(row));
+                }
+                histograms.AddHistogram(filteredHistogram);
+            }
+            
+        });
+        return histograms;
+    }
     HistogramSet<Ts...> CreateEmptyHistogramSet(int bins) {
         HistogramSet<Ts...> histograms;
         

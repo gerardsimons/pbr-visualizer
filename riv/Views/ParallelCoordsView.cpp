@@ -268,7 +268,7 @@ void ParallelCoordsView::drawAxes() {
                             ratio = binValueTwo / maxValueTwo;
                             
                             riv::Color testColor = membershipColors.ComputeColor(blueColorValue);
-                            glColor3f(testColor.R, testColor.G, std::pow(testColor.B,.5F));
+                            glColor3f(testColor.R, testColor.G, testColor.B);
                         }
                         else if(binValueOne > binValueTwo) {
                             redColorValue = ((binValueOne - binValueTwo) / binValueOne + 1) / 2.F;
@@ -276,7 +276,7 @@ void ParallelCoordsView::drawAxes() {
                             ratio = binValueOne / maxValueOne;
                             
                             riv::Color testColor = membershipColors.ComputeColor(blueColorValue);
-                            glColor3f(std::pow(testColor.R,.5F), testColor.G, testColor.B);
+                            glColor3f(testColor.R, testColor.G, testColor.B);
                         }
                         else {
 //                            riv::Color testColor = redWhiteBlue.ComputeColor(0.5);

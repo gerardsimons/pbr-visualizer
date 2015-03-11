@@ -117,15 +117,18 @@ public:
 		return new RIVRecord<T>(name,Min(),Max(),clampOutliers);
 	}
 	Histogram<T> CreateHistogram(const T& lowerBound, const T& upperBound, int bins) {
-		return Histogram<T>(name, values, lowerBound,upperBound,bins);
+        if(typeid(lowerBound) == typeid(unsigned short)) {
+            return Histogram<T>(name,lowerBound,upperBound,upperBound - lowerBound);
+        }
+        return Histogram<T>(name,lowerBound,upperBound,bins);
 	}
 	Histogram<T> CreateHistogram(size_t bins) {
 		const std::pair<T,T>& minMax = MinMax();
 		
 //		return Histogram<T>(name, values, minMax.first,minMax.second,bins);
-		if(typeid(minMax.first) == typeid(unsigned short)) {
-			return CreateHistogram(minMax.first, minMax.second, minMax.second - minMax.first);
-		}
+//		if(typeid(minMax.first) == typeid(unsigned short)) {
+//			return CreateHistogram(minMax.first, minMax.second, minMax.second - minMax.first);
+//		}
 		return CreateHistogram(minMax.first, minMax.second, bins);
 	}
     Histogram<T> CreateEmptyHistogram(size_t bins) {

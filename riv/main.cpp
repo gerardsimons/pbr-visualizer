@@ -84,6 +84,8 @@ DataController* dataControllerTwo = NULL; //It is possible this one will not be 
 EMBREERenderer* rendererOne = NULL;
 EMBREERenderer* rendererTwo = NULL;
 
+bool linkPixelDistros = false;
+
 const int maxPathsOne = 5000;
 const int maxBootstrapRepeatOne = 10;
 
@@ -97,6 +99,8 @@ bool connectedTwo = false;
 
 int currentFrameOne = 0;
 int currentFrameTwo = 0;
+
+float swapchainWeight = 10;
 
 clock_t startDelay;
 bool isDelayed = false;
@@ -423,39 +427,19 @@ void keys(int keyCode, int x, int y) {
 
                 //                printf("Copying swapchain from renderer 1 to renderer 2!!\n");
                 imageView->SmoothPixelDistributionTwo();
-            
             break;
-        case 48: // the '0' key, average the two heatmaps with eachother
+        case 48: // the '0' key, link average the two heatmaps with eachother
             if(datasetOne && datasetTwo) {
-                Histogram2D<float>* pixelDistributionOne = imageView->GetPixelDistributionOne();
-                Histogram2D<float>* pixelDistributionTwo = imageView->GetPixelDistributionTwo();
-                
-                Histogram2D<float> sum = *pixelDistributionOne + *pixelDistributionTwo;
-                
-                printf("pixelDistributionOne = \n");
-                pixelDistributionOne->Print();
-                printf("pixelDistributionTwo = \n");
-                pixelDistributionTwo->Print();
-                printf("sum = \n");
-                sum.Print();
-                
-                *pixelDistributionOne = sum;
-                *pixelDistributionTwo = sum;
-                
-                imageView->redisplayWindow();
-                
-                printf("\nMerged pixel distributions...\n");
+                linkPixelDistros = true;
+                imageView->AveragePixelDistributions();
             }
             break;
         case 97: // 'a' key
             sceneView->MoveCamera(-camSpeed, 0, 0);
             break;
-        case 98: // 'b' key
+        case 98: // 'b' key, bootstrap
 //            glutSwapBuffers();
-            printf("Manual swap buffers\n");
-            imageView->redisplayWindow();
-            //            copy_buffer();
-            postRedisplay = true;
+            dataControllerOne->Reduce();
             break;
         case 99: // 'c' key
             if(sceneView) {
@@ -464,8 +448,20 @@ void keys(int keyCode, int x, int y) {
             }
             break;
         case 108 : // 'l' key, toggle lines drawing
-            sceneView->CyclePathSegment();
+            ++swapchainWeight;
+            printf("Swapchain weight is now %f\n",swapchainWeight);
+            postRedisplay = false;
             break;
+        case 107 : // 'k' key, toggle lines drawing
+            if(swapchainWeight > 0) {
+                --swapchainWeight;
+                printf("Swapchain weight is now %f\n",swapchainWeight);
+                postRedisplay = false;
+            }
+            break;
+//        case 108 : // 'l' key, toggle lines drawing
+//            sceneView->CyclePathSegment();
+//            break;
         case 91: // '[' key, increase path segment
             sceneView->MovePathSegment(-.01F);
             break;
@@ -685,6 +681,9 @@ void idle() {
     bool postRedisplay = false;
     
     checkIsDelayed();
+//    if(linkPixelDistros) {
+//        imageView->AveragePixelDistributions();
+//    }
     
     if(!renderingPausedOne) {
         printf("Rendering frame %d\n",currentFrameOne);
@@ -1022,7 +1021,7 @@ int main(int argc, char **argv)
 {
     printf("Initialising Rendering InfoVis...\n");
     
-            testFunctions();
+//            testFunctions();
     
     
     srand(time(NULL));

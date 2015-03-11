@@ -36,6 +36,20 @@
             return greenGrayPurpleColorMap;
         }
         
+        riv::ColorMap redGrayBlueColorMap() {
+            riv::ColorMap redGrayBlueColorMap;
+            
+            //            greenGrayPurpleColorMap.AddColor(riv::Color(0.498F,0.749F,0.765F));
+            //            greenGrayPurpleColorMap.AddColor(riv::Color(0.969F,0.969F,0.969F));
+            //            greenGrayPurpleColorMap.AddColor(riv::Color(.686F,.552F,.765F)); //PURPLE
+            
+            redGrayBlueColorMap.AddColor(riv::Color(0.F,0.F,1.F));
+            redGrayBlueColorMap.AddColor(riv::Color(0.969F,0.969F,0.969F));
+            redGrayBlueColorMap.AddColor(riv::Color(1.F,0.F,0.F)); //PURPLE
+            
+            return redGrayBlueColorMap;
+        }
+        
         riv::ColorMap brownColorMap() {
             
             riv::ColorMap browns;

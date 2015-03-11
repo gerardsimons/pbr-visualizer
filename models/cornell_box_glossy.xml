@@ -93,8 +93,8 @@
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
                     <float3 name="Kd"> 1.0000  1.0000  1.0000</float3>
-                    <float3 name="Ks"> 0.0000  0.0000  0.0000</float3>
-                    <float  name="Ns"> 0.0000</float>
+                    <float3 name="Ks"> 1.0000  1.0000  1.0000</float3>
+                    <float  name="Ns"> 50.0000</float>
                 </parameters>
             </material>
             <positions ofs="504" size="20"/>
@@ -125,8 +125,8 @@
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
                     <float3 name="Kd"> 1.0000  1.0000  1.0000</float3>
-                    <float3 name="Ks"> 0.0000  0.0000  0.0000</float3>
-                    <float  name="Ns"> 0.0000</float>
+                    <float3 name="Ks"> 1.0000  1.0000  1.0000</float3>
+                    <float  name="Ns"> 50.0000</float>
                 </parameters>
             </material>
             <positions ofs="936" size="16"/>

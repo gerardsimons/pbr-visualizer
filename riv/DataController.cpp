@@ -163,6 +163,7 @@ void DataController::createDataStructures(const Vec2f& xBounds, const Vec2f& yBo
     initDataSet(candidateData,xBounds,yBounds,zBounds,nrPrimitives);
     
     trueDistributions = currentData->CreateHistogramSet(bins,histogramTables);
+    trueDistributions.Print();
     
     float xSize = xBounds[1] - xBounds[0];
     float ySize = yBounds[1] - yBounds[0];
@@ -175,7 +176,7 @@ void DataController::createDataStructures(const Vec2f& xBounds, const Vec2f& yBo
     float maxSize = std::max(xSize,std::max(ySize,zSize));
     
     //Because floats are annoying with equality, make sure you over-extend a bit the size of the octree
-    int maxDepth = 8;
+    int maxDepth = 10;
     int maxCapacity = 1;
     energyDistribution = new Octree(maxDepth,cX,cY,cZ,1.01*maxSize,maxCapacity);
     
@@ -390,14 +391,14 @@ void DataController::Reduce() {
         //			printf("Round #%d\n",i);
         auto bootstrap = Bootstrap(joinedData, maxPaths);
         
+//        printf("TRUE DISTRIBUTIONS");
+//        trueDistributions.Print();
+        
+//        printf("BOOTSTRAP HISTOGRAMS");
+//        bootstrapHistograms.Print();
+        
         bootstrapHistograms = bootstrap->CreateHistogramSet(bins);
         float score = trueDistributions.DistanceTo(bootstrapHistograms);
-        
-        //			printf("TRUE DISTRIBUTIONS");
-        //			trueDistributions.Print();
-        //
-        //			printf("BOOTSTRAP HISTOGRAMS");
-        //			bootstrapHistograms.Print();
         
 //        printf("Bootstrap = \n\n");
 //        bootstrap->Print(100);
@@ -542,13 +543,17 @@ void DataController::SetAcceptProbability(float newProb) {
 }
 void DataController::Reset() {
     printf("DataController was reset...\n");
+    trueDistributions = currentData->CreateHistogramSetFromFiltered(bins,histogramTables);
+    printf("Filtered true distributions:\n");
+    trueDistributions.Print();
+    
     trueDistributions = candidateData->CreateEmptyHistogramSet(bins,histogramTables);
     //    trueDistributions.Print();
     currentData->ClearData();
     candidateData->ClearData();
     resetPointers(candidateData);
     bootstrapRepeat = maxBootstrapRepeat;
-    energyDistribution->Clear();
+    
     firstTime = true;
     acceptProbability *= 2;
     maxPaths *= 2;

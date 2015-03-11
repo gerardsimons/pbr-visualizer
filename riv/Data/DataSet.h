@@ -333,7 +333,17 @@ public:
         }
         return histograms;
     }
-    
+    HistogramSet<Ts...> CreateHistogramSetFromFiltered(int bins, const std::set<std::string>& tableNamesToUse) {
+        HistogramSet<Ts...> histograms;
+        for(auto table : tables) {
+            if(tableNamesToUse.find(table->name) != tableNamesToUse.end()) {
+                auto histogramset = table->CreateHistogramSetFromFiltered(bins);
+                //			histogramset.Print();
+                histograms.Join(histogramset);
+            }
+        }
+        return histograms;
+    }
     HistogramSet<Ts...> CreateHistogramSet(int bins, const std::set<std::string>& tableNamesToUse) {
         HistogramSet<Ts...> histograms;
         for(auto table : tables) {

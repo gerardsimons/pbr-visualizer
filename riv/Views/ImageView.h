@@ -59,10 +59,10 @@ private:
     void drawHeatmap(int startX, Histogram2D<float>* heatmap, float r, float g, float b);
     void filterImage(RIVDataSet<float,ushort>* dataset, Grid* activeGrid, riv::RowFilter* previousFilter);
     void toGridSpace(int xIn, int yIn, Grid*& outGrid, int& gridX, int& gridY);
-    
     void smoothPixelDistribution(Histogram2D<float>* pixelDistribution);
 public:
     void redisplayWindow();
+    void AveragePixelDistributions();
 	//Single renderer constructor
     RIVImageView(EMBREERenderer* rendererOne);
 	RIVImageView(RIVDataSet<float,ushort>** datasetOne,  EMBREERenderer* rendererOne);

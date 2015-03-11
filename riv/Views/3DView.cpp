@@ -185,6 +185,7 @@ void RIV3DView::drawEnergyHelper(OctreeNode* node, float max,riv::ColorMap& heat
     if(nodeMaxReached) {
         float ratio = node->AggregateValue() / max;
         if(ratio > min) {
+//            ratio = node->cx / 500; //TO TEST THE COLOR INTERPOLATION
 //            printf("Ratio = %f\n",ratio);
             riv::Color c = heatmap.ComputeColor(ratio);
 //            glColor4f(c.R,c.G,c.B,alpha);
@@ -194,9 +195,6 @@ void RIV3DView::drawEnergyHelper(OctreeNode* node, float max,riv::ColorMap& heat
             glutSolidCube(node->GetSize());
             glPopMatrix();
         }
-        else if(ratio > 1) {
-            
-        }
     }
     else {
         for(int i = 0 ; i < 8 ; ++i) {
@@ -204,7 +202,7 @@ void RIV3DView::drawEnergyHelper(OctreeNode* node, float max,riv::ColorMap& heat
         }
     }
 }
-void RIV3DView::drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* nodeTwo, float max) {
+void RIV3DView::drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* nodeTwo, float max, riv::ColorMap& colorMap) {
     
     bool maxDepthReachedOne = nodeOne->GetDepth() >= drawHeatmapDepth || nodeOne->IsLeafNode();
     bool maxDepthReachedTwo = nodeTwo->GetDepth() >= drawHeatmapDepth || nodeTwo->IsLeafNode();
@@ -213,12 +211,12 @@ void RIV3DView::drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* node
         
         if(maxDepthReachedOne && !maxDepthReachedTwo) {
             for(int i = 0 ; i < 8 ; ++i) {
-                drawEnergyDifferenceHelper(nodeOne,nodeTwo->GetChild(i),max);
+                drawEnergyDifferenceHelper(nodeOne,nodeTwo->GetChild(i),max,colorMap);
             }
         }
         else if(maxDepthReachedTwo && !maxDepthReachedOne) {
             for(int i = 0 ; i < 8 ; ++i) {
-                drawEnergyDifferenceHelper(nodeOne->GetChild(i),nodeTwo,max);
+                drawEnergyDifferenceHelper(nodeOne->GetChild(i),nodeTwo,max,colorMap);
             }
         }
         else if(maxDepthReachedOne && maxDepthReachedTwo) { //
@@ -239,24 +237,26 @@ void RIV3DView::drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* node
             float valueOne = nodeOne->AggregateValue() * multiplier / max;
             float valueTwo = nodeTwo->AggregateValue() * multiplierTwo / max;
             
-            float red,blue,saturation;
+
             
             float min = 0;
             
             if(valueOne > min || valueTwo > min) {
+                float red,blue;
                 if(valueTwo > valueOne) {
                     blue = ((valueTwo - valueOne) / valueTwo + 1) / 2.F;
                     red = 1-blue;
-                    saturation = valueTwo / max;
+//                    saturation = valueTwo / max;
                 }
                 else {
                     red = ((valueOne - valueTwo) / valueOne + 1) / 2.F;
                     blue = 1 - red;
-                    saturation = valueOne / max;
+//                    saturation = valueOne / max;
                 }
                 
 //                glColor4f(red,0,blue,std::pow(saturation,.33));
-                glColor4f(red,0,blue,1);
+                riv::Color c = colorMap.ComputeColor(red);
+                glColor4f(c.R,c.G,c.B,1);
                 glPushMatrix();
                 glTranslatef(smallestNode->cx, smallestNode->cy, smallestNode->cz);
                 glutSolidCube(smallestNode->GetSize());
@@ -266,7 +266,7 @@ void RIV3DView::drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* node
     }
     else {
         for(int i = 0 ; i < 8 ; ++i) {
-            drawEnergyDifferenceHelper(nodeOne->GetChild(i),nodeTwo->GetChild(i), max);
+            drawEnergyDifferenceHelper(nodeOne->GetChild(i),nodeTwo->GetChild(i), max,colorMap);
         }
     }
 }
@@ -276,11 +276,12 @@ void RIV3DView::drawEnergyDifference(Octree *energyDistributionOne, Octree *ener
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    riv::ColorMap colors = colors::redGrayBlueColorMap();
     float maxOne = energyDistributionOne->MaxValue(maxDepth);
     float maxTwo = energyDistributionTwo->MaxValue(maxDepth);
     float max = std::max(maxOne,maxTwo);
     if(energyDistributionOne && energyDistributionTwo) {
-        drawEnergyDifferenceHelper(energyDistributionOne->GetRoot(), energyDistributionTwo->GetRoot(), max);
+        drawEnergyDifferenceHelper(energyDistributionOne->GetRoot(), energyDistributionTwo->GetRoot(), max, colors);
     }
     else throw std::runtime_error("One of the energy distributions is not set.");
 }
@@ -290,7 +291,8 @@ void RIV3DView::drawEnergyDistribution(Octree* energyDistribution, ushort maxDep
 }
 void RIV3DView::drawEnergyDistribution(Octree* energyDistribution, ushort maxDepth, float maxEnergy) {
 //    riv::ColorMap colors = colors::brownColorMap();
-    riv::ColorMap colors = colors::jetColorMap();
+//    riv::ColorMap colors = colors::jetColorMap();
+        riv::ColorMap colors = colors::redGrayBlueColorMap();
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -318,7 +320,7 @@ void RIV3DView::Draw() {
     glTranslatef(-eye.x,-eye.y,-eye.z);
     tbVisuTransform();
     
-    drawCoordSystem();
+//    drawCoordSystem();
     
     glPushMatrix();
     
@@ -360,17 +362,19 @@ void RIV3DView::Draw() {
     }
     
 //    drawLightCones(lightConesOne);
-    
+    bool drawSelectionRay = false;
     //Draw selection ray
-    glColor3f(1,1,1);
-    glBegin(GL_LINES);
-//    	glVertex3f(selectNear.x, selectNear.y, selectNear.z);
-//    	glVertex3f(selectFar.x, selectFar.y, selectFar.z);
-    glVertex3f(pickRay.org[0], pickRay.org[1], pickRay.org[2]);
-    Vec3fa dest = pickRay.org + 1.F * pickRay.dir;
-    glColor3f(1, 0, 0);
-    glVertex3f(dest[0],dest[1],dest[2]);
-    glEnd();
+    if(drawSelectionRay) {
+        glColor3f(1,1,1);
+        glBegin(GL_LINES);
+    //    	glVertex3f(selectNear.x, selectNear.y, selectNear.z);
+    //    	glVertex3f(selectFar.x, selectFar.y, selectFar.z);
+        glVertex3f(pickRay.org[0], pickRay.org[1], pickRay.org[2]);
+        Vec3fa dest = pickRay.org + 1.F * pickRay.dir;
+        glColor3f(1, 0, 0);
+        glVertex3f(dest[0],dest[1],dest[2]);
+        glEnd();
+    }
     
     //Draw Phit
     if(meshSelected) {
@@ -1026,58 +1030,69 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
 //    }
     
 //    dataset->Print(5000);
+    
+    if(selectionMode == OBJECT) {
+        //TODO: HOW TO REMOVE THIS AGAIN?
+        dataset->AddFilter(new riv::DiscreteFilter<ushort>(PRIMITIVE_ID,selectedObjectID));
+    }
+    else {
     printf("Path filtering bounce# = %d selectedObjectID = %d\n",bounceNr,selectedObjectID);
     TableIterator* iterator = pathTable->GetIterator();
     size_t row;
     while(iterator->GetNext(row)) {
-        const auto& mapping = pathIsectReference->GetReferenceRows(row);
-        ushort nrIntersections = mapping.second;
-        size_t* intersectionRows = mapping.first;
-        bool filter = true;
-        for(ushort i = 0 ; i < nrIntersections ; ++i) {
-            size_t intersectionRow = intersectionRows[i];
-            
-            //Check if it has occluders and if the selectedObjectID is in them
-            if(selectionMode == OBJECT) {
-                if(primitiveIds->Value(intersectionRow) == selectedObjectID) {
-                    filter = false;
-                    break;
-                }
-                //Only when the first bounce is in the shadow
-                else if(i == 0) {
-                    const auto& lightsMapping = isectsToLightsReference->GetReferenceRows(intersectionRow);
-                    ushort nrLightRows = lightsMapping.second;
-                    size_t* lightRefRows = lightsMapping.first;
-                    for(ushort j = 0 ; j < nrLightRows ; ++j) {
-                        size_t lightRow = lightRefRows[j];
-                        ushort occluderId = occluderIds->Value(lightRow);
-                        if(occluderId == selectedObjectID) {
-                            filter = false;
-                            printf("Path %zu intersection #%zu occluder %zu has occluder id = %d\n",row,intersectionRow,lightRow,occluderId);
-                            break;
+            const auto& mapping = pathIsectReference->GetReferenceRows(row);
+            ushort nrIntersections = mapping.second;
+            size_t* intersectionRows = mapping.first;
+            bool filter = true;
+            for(ushort i = 0 ; i < nrIntersections ; ++i) {
+                size_t intersectionRow = intersectionRows[i];
+                
+                //Check if it has occluders and if the selectedObjectID is in them
+                if(selectionMode == INTERACTION) {
+                    if(primitiveIds->Value(intersectionRow) == selectedObjectID) {
+                        filter = false;
+                        break;
+                    }
+                    //Only when the first bounce is in the shadow
+                    else if(i == 0) {
+                        const auto& lightsMapping = isectsToLightsReference->GetReferenceRows(intersectionRow);
+                        ushort nrLightRows = lightsMapping.second;
+                        size_t* lightRefRows = lightsMapping.first;
+                        for(ushort j = 0 ; j < nrLightRows ; ++j) {
+                            size_t lightRow = lightRefRows[j];
+                            ushort occluderId = occluderIds->Value(lightRow);
+                            if(occluderId == selectedObjectID) {
+                                filter = false;
+    //                            printf("Path %zu intersection #%zu occluder %zu has occluder id = %d\n",row,intersectionRow,lightRow,occluderId);
+                                break;
+                            }
                         }
                     }
                 }
+                else if(selectionMode == PATH && primitiveIds->Value(intersectionRow) == selectedObjectID && bounceNrs->Value(intersectionRow) == bounceNr) {
+                    filter = false;
+                    break;
+                }
             }
-            else if(selectionMode == PATH && primitiveIds->Value(intersectionRow) == selectedObjectID && bounceNrs->Value(intersectionRow) == bounceNr) {
-                filter = false;
-                break;
+            if(filter) {
+                filteredRows[row] = true;
             }
         }
-        if(filter) {
-            filteredRows[row] = true;
-        }
+        
+        riv::RowFilter* pathFilter = new riv::RowFilter(PATHS_TABLE, filteredRows);
+        dataset->AddFilter(pathFilter);
+        pathFilters.push_back(pathFilter);
     }
-    
-    riv::RowFilter* pathFilter = new riv::RowFilter(PATHS_TABLE, filteredRows);
-    dataset->AddFilter(pathFilter);
-    pathFilters.push_back(pathFilter);
     
     dataset->StopFiltering();
 }
 void RIV3DView::CycleSelectionMode() {
     switch (selectionMode) {
         case PATH:
+            selectionMode = INTERACTION;
+            printf("Selection mode is now set to 'INTERACTION'\n");
+            break;
+        case INTERACTION:
             selectionMode = OBJECT;
             printf("Selection mode is now set to 'OBJECT'\n");
             break;

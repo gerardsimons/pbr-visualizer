@@ -212,6 +212,12 @@ void RIVImageView::computePixelDistribution(RIVDataSet<float,ushort>* dataset, H
 void RIVImageView::drawHeatmap(int startX, Histogram2D<float>* heatmap, float r, float g, float b) {
     //    glEnable(GL_BLEND);
     
+//    bool useRealheatmap = true;
+//    riv::ColorMap heatmapColors;
+//    if(useRealheatmap) {
+//        heatmapColors = colors::redGrayBlueColorMap();
+//    }
+    
     if(heatmap) {
         float binWidth;
         if(datasetTwo) {
@@ -243,7 +249,7 @@ void RIVImageView::drawHeatmap(int startX, Histogram2D<float>* heatmap, float r,
                 //                float alpha = std::pow(normalizedValue - otherNormalizedValue,0.5F);
 //                float alpha = std::pow(normalizedValue - mean,0.4);
 //                float alpha = std::pow(normalizedValue * variance,1);
-                                float alpha = normalizedValue / maxNormalizedValue;
+                float ratio = normalizedValue / maxNormalizedValue;
                 
                 //                printf("alpha = %f\n",alpha);
     //            jetColorMap.ComputeColor(alpha);
@@ -259,8 +265,18 @@ void RIVImageView::drawHeatmap(int startX, Histogram2D<float>* heatmap, float r,
                     glEnd();
                 }
                 
-                glColor4f(r,g,b,alpha);
-                glRectf(binX, binY, binX + binWidth, binY - binHeight);
+                
+//                if(useRealheatmap) {
+//                    if(ratio > 0.05) {
+//                        riv::Color c = heatmapColors.ComputeColor(ratio);
+//                        glColor3f(c.R,c.G,c.B);
+//                        glRectf(binX, binY, binX + binWidth, binY - binHeight);
+//                    }
+//                }
+//                else {
+                    glColor4f(r,g,b,ratio);
+                    glRectf(binX, binY, binX + binWidth, binY - binHeight);
+//                }s
                 //                printf("glRectf(%f,%f,%f,%f)\n",binX, binY, binX + binWidth, binY + binHeight);
                 
                 //            }
@@ -540,7 +556,27 @@ bool RIVImageView::HandleMouseMotion(int x, int y) {
     }
     else return false;
 }
-
+void RIVImageView::AveragePixelDistributions() {
+    
+    if(datasetOne && datasetTwo) {
+    
+        Histogram2D<float> sum = *pixelDistributionOne + *pixelDistributionTwo;
+        
+        printf("pixelDistributionOne = \n");
+        pixelDistributionOne->Print();
+        printf("pixelDistributionTwo = \n");
+        pixelDistributionTwo->Print();
+        printf("sum = \n");
+        sum.Print();
+        
+        *pixelDistributionOne = sum;
+        *pixelDistributionTwo = sum;
+        
+        redisplayWindow();
+        
+        printf("\nMerged pixel distributions...\n");
+    }
+}
 void RIVImageView::clearSelection() {
     //Set the selection to off
     

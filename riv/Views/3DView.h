@@ -28,6 +28,7 @@ protected:
     //when regular object mode is used, the order of interaction is not important
     enum SelectionMode {
         PATH,
+        INTERACTION,
         OBJECT
     };
     
@@ -121,7 +122,7 @@ protected:
     void drawLightCones(const std::map<size_t,LightCone*>& lightCones);
 
     void drawEnergyHelper(OctreeNode* node, float max,riv::ColorMap& heatmap,ushort maxDepth);
-    void drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* nodeTwo, float max);
+    void drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* nodeTwo, float max, riv::ColorMap& colors);
     void drawEnergyDistribution(Octree* energyDistribution,ushort maxDepth);
     void drawEnergyDistribution(Octree* energyDistribution,ushort maxDepth, float maxEnergy);
     void drawEnergyDifference(Octree* energyDistributionOne, Octree* energyDistributionTwo,ushort maxDepth);
