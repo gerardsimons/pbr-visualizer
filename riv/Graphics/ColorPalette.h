@@ -13,7 +13,7 @@
 #include "ColorMap.h"
 
 	namespace colors {
-
+		const riv::Color WHITE = {1,1,1};
 		const riv::Color BLACK = {0,0,0};
 		const riv::Color RED = {1.F,0.F,0.F};
 		const riv::Color GREEN = {0.F,1.F,0.F};
@@ -30,6 +30,7 @@
         riv::ColorMap redGrayBlueColorMap();
         riv::ColorMap greenGrayPurpleColorMap();
         riv::ColorMap brownColorMap();
+        riv::ColorMap hotBodyColorMap();
 	}
 
 #endif

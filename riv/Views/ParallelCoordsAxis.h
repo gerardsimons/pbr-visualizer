@@ -53,10 +53,6 @@ public:
 	Histogram<T> densityHistogramOne;
 	Histogram<T> densityHistogramTwo;
 	
-	//Ease of access using index
-//	std::vector<Histogram<T>*> histograms;
-	
-	Histogram<T> differenceDensity;
 	bool differenceDensityComputed = false;
 	
 	T minValue;
@@ -66,23 +62,13 @@ public:
 	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision, const Histogram<T>& histogramOne)
 	: ParallelCoordsAxisInterface(x,y,width,height,name),minValue(minValue),maxValue(maxValue),recordPointer(recordPointer), densityHistogramOne(histogramOne) {
 		ComputeScale(scaleDivision);
-		
-//		densityHistogramOne = Histogram<T>(name,minValue,maxValue,bins);
-//		densityHistogramTwo = Histogram<T>(name,minValue,maxValue,bins);
-//		
-//		histograms.push_back(&densityHistogramOne);
-//		histograms.push_back(&densityHistogramTwo);
+
 	}
 	
 	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision,const Histogram<T>& histogramOne, const Histogram<T>& histogramTwo)
 	: ParallelCoordsAxisInterface(x,y,width,height,name),minValue(minValue),maxValue(maxValue),recordPointer(recordPointer),densityHistogramOne(histogramOne), densityHistogramTwo(histogramTwo) {
 		ComputeScale(scaleDivision);
-		
-		//		densityHistogramOne = Histogram<T>(name,minValue,maxValue,bins);
-		//		densityHistogramTwo = Histogram<T>(name,minValue,maxValue,bins);
-		//
-		//		histograms.push_back(&densityHistogramOne);
-		//		histograms.push_back(&densityHistogramTwo);
+
 	}
 	
 	ParallelCoordsAxis() {
@@ -90,8 +76,6 @@ public:
 	}
 	
 	void ResetDensities() {
-//		densityHistogramOne->Clear();
-//		densityHistogramTwo->Clear();
 		differenceDensityComputed = false;
 	}
 	
@@ -121,6 +105,7 @@ public:
 		return value;
 	}
 	
+    //Given raw Y value, return scalar value for this axis
 	float PositionOnScaleForViewY(int viewY) {
 		
 		//Bound the viewY to axes boundaries
@@ -128,7 +113,6 @@ public:
 		
 		return PositionOnScaleForScalar(ScaleValueForY(viewY));
 	}
-	
 	//Returns the Y position of a value along the scale indicated by a ratio of low and high
 	float PositionOnScaleForScalar(float scalar) {
 		if(scalar >= 0.F && scalar <= 1.F) {

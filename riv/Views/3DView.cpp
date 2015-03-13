@@ -292,7 +292,8 @@ void RIV3DView::drawEnergyDistribution(Octree* energyDistribution, ushort maxDep
 void RIV3DView::drawEnergyDistribution(Octree* energyDistribution, ushort maxDepth, float maxEnergy) {
 //    riv::ColorMap colors = colors::brownColorMap();
 //    riv::ColorMap colors = colors::jetColorMap();
-        riv::ColorMap colors = colors::redGrayBlueColorMap();
+//        riv::ColorMap colors = colors::redGrayBlueColorMap();
+    riv::ColorMap colors = colors::hotBodyColorMap();
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -308,6 +309,7 @@ void RIV3DView::Draw() {
     glEnable(GL_DEPTH_TEST);
 //    glClearColor(1.0, 1.0, 1.0, 0.0); //White
     glClearColor(0.0, 0.0, 0.0, 0.0); //black
+//        glClearColor(0.8, 0.8, 0.8 , 0.0); //gray
     glClear( GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_BLEND);
     
@@ -432,7 +434,7 @@ void RIV3DView::Draw() {
 void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color, ushort* selectedObjectId) {
     
     //	reporter::startTask("Draw mesh model");
-    
+    glEnable(GL_BLEND);
     glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     //    glColor3f(.5f,.2f,1.0f); //Purple
     glColor3f(color[0],color[1],color[2]);
@@ -448,7 +450,7 @@ void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color, ushort
             glColor3f(0.8, 0.8, 0.6);
         }
         else {
-            glColor3f(color[0], color[1], color[2]);
+            glColor4f(color[0], color[1], color[2],0.3F);
         }
         for(size_t i = 0 ; i < triangles.size() ; ++i) {
             Vec3fa& v0 = position[triangles[i].v0];

@@ -86,11 +86,11 @@ EMBREERenderer* rendererTwo = NULL;
 
 bool linkPixelDistros = false;
 
-const int maxPathsOne = 5000;
-const int maxBootstrapRepeatOne = 10;
+const int maxPathsOne = 6000;
+const int maxBootstrapRepeatOne = 20;
 
-const int maxPathsTwo = 5000;
-const int maxBootstrapRepeatTwo = 10;
+const int maxPathsTwo = 6000;
+const int maxBootstrapRepeatTwo = 20;
 
 const int sliderViewHeight = 40;
 
@@ -342,7 +342,6 @@ void keys(int keyCode, int x, int y) {
     switch(keyCode) {
         case 9: //Tab key
             sceneView->CycleSelectionMode();
-            
             break;
         case 27: //ESC key
             printf("Clear filters\n");
@@ -351,20 +350,21 @@ void keys(int keyCode, int x, int y) {
             //            (*datasetOne)->ClearFilters();
             //			datasetOne)->StopFiltering();
             //
+            imageView->ClearPixelDistributionOne();
+            imageView->ClearPixelDistributionTwo();
             
             (*datasetOne)->StartFiltering();
             (*datasetOne)->ClearAllFilters();
             (*datasetOne)->StopFiltering();
             dataControllerOne->Reset();
-            imageView->ClearPixelDistributionOne();
             
             if(datasetTwo) {
                 (*datasetTwo)->StartFiltering();
                 (*datasetTwo)->ClearAllFilters();
                 (*datasetTwo)->StopFiltering();
                 dataControllerTwo->Reset();
-                imageView->ClearPixelDistributionTwo();
             }
+
             
 //            invalidateAllViews();
             
@@ -408,7 +408,7 @@ void keys(int keyCode, int x, int y) {
         case 53: // the '5' key, copy 1 to 2
             if(datasetTwo && datasetOne) {
                 printf("Copying swapchain from renderer 1 to renderer 2!!\n");
-                rendererOne->CopySwapChainTo(rendererTwo,1);
+                rendererOne->CopySwapChainTo(rendererTwo,swapchainWeight);
                 imageView->redisplayWindow();
                 
 //                int newMaxPaths = 1000;
@@ -630,7 +630,7 @@ void UnpauseRendererOne() {
 }
 void UnpauseRendererTwo() {
     renderingPausedTwo = false;
-    printf("Rendering process TWO is now paused...\n");
+    printf("Rendering process TWO is now running...\n");
     //If dataset one has some filters the rendering will be guided, which means the true distributions
     //should be reset in order to speed up convergence
     if(datasetTwo && (*datasetTwo)->IsFiltered()) {
@@ -684,10 +684,10 @@ void idle() {
 //    if(linkPixelDistros) {
 //        imageView->AveragePixelDistributions();
 //    }
-    
-    if(!renderingPausedOne) {
-        printf("Rendering frame %d\n",currentFrameOne);
+    int maxFrameOne = 100;
+    if(!renderingPausedOne && currentFrameOne < maxFrameOne) {
         ++currentFrameOne;
+        printf("Rendering renderer #1 frame %d\n",currentFrameOne);
         Histogram2D<float>* pixelDistributionOne = imageView->GetPixelDistributionOne();
         if(pixelDistributionOne && pixelDistributionOne->NumberOfElements() && (*datasetOne)->IsFiltered()) {
             //                heatmapOne->Print();
@@ -701,8 +701,16 @@ void idle() {
     }
     if(!renderingPausedTwo) {
         if(dataControllerTwo) {
+            int maxFrameTwo = 1;
+//            if(currentFrameTwo == maxFrameTwo) {
+//                dataControllerTwo->SetMaxPaths(5000);
+//                renderingPausedTwo = true;
+//                connectedTwo = false;
+//                return;
+//            }
             ++currentFrameTwo;
             auto pixelDistributionTwo = imageView->GetPixelDistributionTwo();
+            printf("Rendering renderer #2 frame %d\n",currentFrameTwo);
             if((*datasetTwo)->IsFiltered() && pixelDistributionTwo && pixelDistributionTwo->NumberOfElements()) {
                 //                    heatmapTwo->Print();
                 rendererTwo->RenderNextFrame(pixelDistributionTwo);
@@ -722,26 +730,36 @@ void idle() {
 
 bool processRendererOne(PathData* newPath) {
     //	printf("New path from renderer #1 received!\n");
-    return dataControllerOne->ProcessNewPath(currentFrameOne,newPath);
+    if(connectedOne) {
+        return dataControllerOne->ProcessNewPath(currentFrameOne,newPath);
+    }
+    return false;
 }
 
 void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
     //	dataControllerTwo->RendererOneFinishedFrame(numPaths,numRays);
     printf("\n*** Renderer one finished frame %d...\n",currentFrameOne);
-    dataControllerOne->Reduce();
+    
+    if(connectedOne) {
+        dataControllerOne->Reduce();
+        renderOneFinishedFrame = true;
+    }
     imageView->redisplayWindow();
-    renderOneFinishedFrame = true;
 
     //    renderingPausedOne = true;
 }
 
 bool processRendererTwo(PathData* newPath) {
     //	printf("New path from renderer #2 received!\n");
-    return dataControllerTwo->ProcessNewPath(currentFrameTwo,newPath);
+    if(connectedTwo) {
+        return dataControllerTwo->ProcessNewPath(currentFrameTwo,newPath);
+    }
 }
 void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
     printf("\n*** Renderer two finished frame %d...\n",currentFrameTwo);
-    dataControllerTwo->Reduce();
+    if(connectedTwo) {
+        dataControllerTwo->Reduce();
+    }
     imageView->redisplayWindow();
     renderTwoFinishedFrame = true;
 //    renderingPausedTwo = true;

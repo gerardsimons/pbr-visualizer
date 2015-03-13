@@ -1,4 +1,4 @@
- //
+//
 //  DataController.cpp
 //  embree
 //
@@ -162,8 +162,8 @@ void DataController::createDataStructures(const Vec2f& xBounds, const Vec2f& yBo
     initDataSet(currentData,xBounds,yBounds,zBounds,nrPrimitives);
     initDataSet(candidateData,xBounds,yBounds,zBounds,nrPrimitives);
     
-    trueDistributions = currentData->CreateHistogramSet(bins,histogramTables);
-    trueDistributions.Print();
+    trueDistributions = currentData->CreateEmptyHistogramSet(bins,histogramTables);
+//    trueDistributions.Print();
     
     float xSize = xBounds[1] - xBounds[0];
     float ySize = yBounds[1] - yBounds[0];
@@ -390,14 +390,15 @@ void DataController::Reduce() {
     for(int i = 0 ; i < bootstrapRepeat ; ++i) {
         //			printf("Round #%d\n",i);
         auto bootstrap = Bootstrap(joinedData, maxPaths);
+        bootstrapHistograms = bootstrap->CreateHistogramSet(bins);
         
-//        printf("TRUE DISTRIBUTIONS");
+//        printf("TRUE DISTRIBUTIONS:\n");
 //        trueDistributions.Print();
-        
-//        printf("BOOTSTRAP HISTOGRAMS");
+//        
+//        printf("BOOTSTRAP HISTOGRAMS:\n");
 //        bootstrapHistograms.Print();
         
-        bootstrapHistograms = bootstrap->CreateHistogramSet(bins);
+
         float score = trueDistributions.DistanceTo(bootstrapHistograms);
         
 //        printf("Bootstrap = \n\n");
@@ -542,10 +543,10 @@ void DataController::SetAcceptProbability(float newProb) {
     acceptProbability = newProb;
 }
 void DataController::Reset() {
-    printf("DataController was reset...\n");
-    trueDistributions = currentData->CreateHistogramSetFromFiltered(bins,histogramTables);
-    printf("Filtered true distributions:\n");
-    trueDistributions.Print();
+//    printf("DataController was reset...\n");
+//    trueDistributions = currentData->CreateHistogramSetFromFiltered(bins,histogramTables);
+//    printf("Filtered true distributions:\n");
+//    trueDistributions.Print();
     
     trueDistributions = candidateData->CreateEmptyHistogramSet(bins,histogramTables);
     //    trueDistributions.Print();

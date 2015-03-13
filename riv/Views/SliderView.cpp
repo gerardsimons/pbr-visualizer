@@ -76,18 +76,68 @@ void RIVSliderView::Draw() {
         int effectiveHeight = top - bottom;
         int barBottom = effectiveHeight / 2.F - .1F * effectiveHeight;
         int barTop = effectiveHeight / 2.F + .1F * effectiveHeight;
+        
+        riv::ColorMap membershipColors = colors::redGrayBlueColorMap();
+        int barMiddle = (rightBound - leftBound) / 2;
+        int barWidth = rightBound - leftBound;
+        float barHeight = barTop - barBottom;
 		//Draw the gradient bar
 		glBegin(GL_QUAD_STRIP);
         
 		//Left
-		glColor3f(1,0,0);
+        riv::Color red = membershipColors.ComputeColor(0);
+		glColor3f(red.R,red.G,red.B);
 		glVertex2f(leftBound, barBottom);
 		glVertex2f(leftBound, barTop);
+        
+        //Middle
+        riv::Color gray = membershipColors.ComputeColor(0.5);
+        glColor3f(gray.R,gray.G,gray.B);
+        glVertex2f(barMiddle, barBottom);
+        glVertex2f(barMiddle, barTop);
+        
 		//Right
-		glColor3f(0,0,1);
+                  riv::Color blue = membershipColors.ComputeColor(1);
+		glColor3f(blue.R,blue.G,blue.B);
 		glVertex2f(rightBound, barBottom);
 		glVertex2f(rightBound, barTop);
 		glEnd();
+        
+        float binWidth = barWidth / (float)histogramBins;
+        glColor3f(0, 0, 0);
+        int xDivider = leftBound;
+        
+        float maxValueHistogramOne = membershipHistogramOne.MaximumNormalizedValue();
+        float maxValueHistogramTwo = membershipHistogramTwo.MaximumNormalizedValue();
+        
+        float max = std::max(maxValueHistogramOne,maxValueHistogramTwo);
+
+        float maxBarHeight = top - barTop;
+        for(int i = 0 ; i < histogramBins ; ++i) {
+
+            
+            float histValue;
+            if(i < histogramBins / 2) {
+                histValue = membershipHistogramTwo.NormalizedValue(i);
+            }
+            else histValue = membershipHistogramOne.NormalizedValue(i);
+            float binHeight = (histValue / max) * maxBarHeight;
+            float bottom = barTop - barHeight - binHeight;
+            float top = barTop + binHeight;
+//            printf("Draw bin with height %f\n",binHeight);
+            riv::Color color = membershipColors.ComputeColor(i / (float)histogramBins);
+            glColor3f(color.R, color.G, color.B);
+            glRectf(xDivider, bottom, xDivider + binWidth, top);
+            glColor3f(0, 0, 0);
+            glBegin(GL_LINE_LOOP);
+            glVertex2f(xDivider, bottom);
+            glVertex2f(xDivider, top);
+            glVertex2f(xDivider + binWidth, top);
+            glVertex2f(xDivider + binWidth, bottom);
+            glEnd();
+            xDivider += binWidth;
+        }
+
 		
 		//Draw pointers
 		glColor3f(0, 0, 0);
@@ -105,7 +155,7 @@ void RIVSliderView::Draw() {
 		
 		glEnd();
 		
-		int barWidth = rightBound - leftBound;
+
 		
 		//Draw uniqueness histogram one
 		//		int bins = membershipHistogramOne.NumberOfBins();
@@ -113,75 +163,58 @@ void RIVSliderView::Draw() {
 		//	float minHeight = bottom;
 		
 		//Draw scale
-		float binWidth = barWidth / (float)histogramBins;
-		float maxBarHeight = top - bottom;
+
+
 		float x = leftBound;
-//		glLineWidth(1);
-//		glBegin(GL_LINES);
-//		glColor3f(0, 0, 0);
-//		
-//		for(int i = 0 ; i < 2*histogramBins ; ++i) {
-//			glVertex2f(x, bottom);
-//			glVertex2f(x, top);
-//			
-//			x += binWidth;
-//		}
-//		glEnd();
-//		x = leftBound;
-//		for(int i = histogramBins ; i > 0 ; --i) {
-//			glVertex2f(x, bottom);
-//			glVertex2f(x, top);
-//			
-//			//			drawText(std::to_string(i/(float)histogramBins), x, top-10, black, .1F);
-//			x += binWidth;
-//		}
 		
 		x = leftBound;
 		int centerBar = height / 2.F;
 		
 		//		printf("LEFT HISTOGRAM BARS DRAWING : \n\n");
 		//		membershipHistogramOne.Print();
+
 		
 		//TODO: Pray to god histogramBins is divisble by 2?
-		for(int i = 0 ; i < histogramBins ; ++i) { //Draw them backwards as the most unique should be to the left
-			float histValue = membershipHistogramOne.NormalizedValue(i);
-			float barHeight = histValue * maxBarHeight;
-			
-			glColor3f( 1, 0, 0);
-			glRectf(x, barTop, x+binWidth, barTop + barHeight);
-			
-			std::string nrMembers = std::to_string(rowBinMembershipsOne[i].size());
-//			drawText(nrMembers, x + binWidth / 2.F, centerBar, .07F);
-			
-			x += binWidth;
-		}
-		x = leftBound;
+//		for(int i = 0 ; i < histogramBins ; ++i) { //Draw them backwards as the most unique should be to the left
+//			float histValue = membershipHistogramOne.NormalizedValue(i);
+//			float barHeight = histValue * maxBarHeight;
+//			
+//			glColor3f( 1, 0, 0);
+//			glRectf(x, barTop, x+binWidth, barTop + barHeight);
+//			
+//			std::string nrMembers = std::to_string(rowBinMembershipsOne[i].size());
+////			drawText(nrMembers, x + binWidth / 2.F, centerBar, .07F);
+//			
+//			x += binWidth;
+//		}
+//		x = leftBound;
+//		
+//		//				printf("RIGHT HISTOGRAM BARS DRAWING : \n\n");
+//		//				membershipHistogramTwo.Print();
+//		
+//		for(int i = 0 ; i < histogramBins ; ++i) { //Draw them backwards as the most unique should be to the left
+//			std::string nrMembers = std::to_string(rowBinMembershipsTwo[i].size());
+//			//			nrMembers = std::to_string(i);
+//			
+//			float histValue = membershipHistogramTwo.NormalizedValue(i);
+//			float barHeight = histValue * maxBarHeight;
+//			//						printf("bar height (i = %d) = %f\n",i,barHeight);
+//			//					printf("glRectf(%f,%f,%f,%f)\n",x,bottom,x+binWidth,bottom+barHeight);
+//			glColor3f(0, 0, 1);
+//			glRectf(x, barBottom, x+binWidth, barBottom - barHeight);
+//			
+////			drawText(nrMembers, x + binWidth / 2.F, centerBar, .07F);
+//			x += binWidth;
+//		}
 		
-		//				printf("RIGHT HISTOGRAM BARS DRAWING : \n\n");
-		//				membershipHistogramTwo.Print();
-		
-		for(int i = 0 ; i < histogramBins ; ++i) { //Draw them backwards as the most unique should be to the left
-			std::string nrMembers = std::to_string(rowBinMembershipsTwo[i].size());
-			//			nrMembers = std::to_string(i);
-			
-			float histValue = membershipHistogramTwo.NormalizedValue(i);
-			float barHeight = histValue * maxBarHeight;
-			//						printf("bar height (i = %d) = %f\n",i,barHeight);
-			//					printf("glRectf(%f,%f,%f,%f)\n",x,bottom,x+binWidth,bottom+barHeight);
-			glColor3f(0, 0, 1);
-			glRectf(x, barBottom, x+binWidth, barBottom - barHeight);
-			
-//			drawText(nrMembers, x + binWidth / 2.F, centerBar, .07F);
-			x += binWidth;
-		}
-		
+        //Draw contour around the entire bar
 //		glColor3f(0, 0, 0);
 //		glLineWidth(2);
 //		glBegin(GL_LINES);
-//		glVertex2f(leftBound, bottom);
-//		glVertex2f(rightBound, bottom);
-//		glVertex2f(leftBound, top - 1);
-//		glVertex2f(rightBound, top - 1);
+//		glVertex2f(leftBound, barBottom);
+//		glVertex2f(rightBound, barBottom);
+//		glVertex2f(leftBound, barTop - 1);
+//		glVertex2f(rightBound, barTop - 1);
 //		glEnd();
 		
 		glFlush();

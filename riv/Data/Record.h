@@ -116,12 +116,24 @@ public:
 	RIVRecord* CloneStructure() {
 		return new RIVRecord<T>(name,Min(),Max(),clampOutliers);
 	}
-	Histogram<T> CreateHistogram(const T& lowerBound, const T& upperBound, int bins) {
+    Histogram<T> CreateEmptyHistogram(size_t bins) {
+        if(typeid(minMax.first) == typeid(unsigned short)) {
+            return Histogram<T>(name,minMax.first,minMax.second, minMax.second - minMax.first);
+        }
+        return Histogram<T>(name,minMax.first, minMax.second, bins);
+    }
+	Histogram<T> CreateEmptyHistogram(const T& lowerBound, const T& upperBound, int bins) {
         if(typeid(lowerBound) == typeid(unsigned short)) {
             return Histogram<T>(name,lowerBound,upperBound,upperBound - lowerBound);
         }
         return Histogram<T>(name,lowerBound,upperBound,bins);
 	}
+    Histogram<T> CreateHistogram(const T& lowerBound, const T& upperBound, int bins) {
+        if(typeid(lowerBound) == typeid(unsigned short)) {
+            return Histogram<T>(name,values,lowerBound,upperBound,upperBound - lowerBound);
+        }
+        return Histogram<T>(name,values,lowerBound,upperBound,bins);
+    }
 	Histogram<T> CreateHistogram(size_t bins) {
 		const std::pair<T,T>& minMax = MinMax();
 		
@@ -131,12 +143,6 @@ public:
 //		}
 		return CreateHistogram(minMax.first, minMax.second, bins);
 	}
-    Histogram<T> CreateEmptyHistogram(size_t bins) {
-        if(typeid(minMax.first) == typeid(unsigned short)) {
-            return Histogram<T>(name,minMax.first,minMax.second, minMax.second - minMax.first);
-        }
-        return Histogram<T>(name,minMax.first, minMax.second, bins);
-    }
 };
 
 typedef RIVRecord<float> RIVFloatRecord;

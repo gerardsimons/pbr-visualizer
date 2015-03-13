@@ -1,4 +1,4 @@
-  #include "ParallelCoordsView.h"
+#include "ParallelCoordsView.h"
 #include "SliderView.h"
 #include "DataView.h"
 #include "../Graphics/graphics_helper.h"
@@ -74,7 +74,7 @@ void ParallelCoordsView::createAxes() {
     
     size_t axisIndex = 0;
     //		std::vector<std::string> pathTableRecordNames = {"pixel x","pixel y","R","G","B","throughput R","throughput G","throughput B","renderer","depth"};
-    const int divisionCount = 4;
+    const int divisionCount = 2;
     if(datasetTwo) {
         for(const std::string& tableName : tablesToDisplay) {
             //			std::vector<RIVTable<float,ushort>*>* otherTablePointers = (*datasetTwo)->GetTables();
@@ -96,7 +96,7 @@ void ParallelCoordsView::createAxes() {
                     //A tuple containing the min and max values of the record
                     auto minMax = record->MinMax();
                     auto otherMinMax = otherRecord->MinMax();
-//                    const std::string& name = record->name;
+                    //                    const std::string& name = record->name;
                     //				printf("Record %s has min-max : ",record->name.c_str());
                     //				std::cout << " " << minMax.first << ", " << minMax.second << std::endl;
                     
@@ -151,8 +151,8 @@ void ParallelCoordsView::createAxes() {
                     //				printf("Record %s has min-max : ",record->name.c_str());
                     //				std::cout << " " << minMax.first << ", " << minMax.second << std::endl;
                     
-//                    auto histOne = distributionsOne->GetHistogram<Type>(name);
-
+                    //                    auto histOne = distributionsOne->GetHistogram<Type>(name);
+                    
                     
                     //If the type is unsigned short, its a discrete value, if there are not too many, use each discrete value as a bin, otherwise clump them together same as floats
                     if(typeid(Type) == typeid(ushort)) {
@@ -173,7 +173,7 @@ void ParallelCoordsView::createAxes() {
                         axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, minMax.first,minMax.second, record->name, divisionCount,dataHistOne);
                     }
                     
-
+                    
                     axisIndex++;
                 }
             });
@@ -187,34 +187,46 @@ void ParallelCoordsView::drawSelectionBoxes() {
         tuple_for_each(axisGroup.axes, [&](auto tAxes) {
             for(auto& axis : tAxes) {
                 if(axis->HasSelectionBox) {
+                    
+                    //Find startbin
+                    
+                    
+                    
+                    
                     printf("Drawing selection box on axis %s\n",selectedAxis->name.c_str());
                     
-                    glColor4f(1, 1, 1,.3F);
-                    glRectf(axis->selection.start.x - 1, axis->selection.start.y, axis->selection.end.x, axis->selection.end.y);
-                    
+//                    glColor4f(1, 1, 1,.5F);
+//                    glRectf(axis->selection.start.x - 1, axis->selection.start.y, axis->selection.end.x, axis->selection.end.y);
                 }
             }
         });
     }
-    
 }
 void ParallelCoordsView::drawAxes() {
     for(auto& axisGroup : axisGroups) {
         size_t rowsOne = (*datasetOne)->GetTable(axisGroup.tableName)->NumberOfRows();
         size_t rowsTwo = 0;
-        float sizeDIff = 1;
+        float sizeDiff = 1;
+        
         if(datasetTwo) {
             rowsTwo = (*datasetTwo)->GetTable(axisGroup.tableName)->NumberOfRows();
             if(rowsOne && rowsTwo) {
-                sizeDIff = rowsTwo / rowsOne;
+                sizeDiff = rowsTwo / rowsOne;
             }
         }
-//        printf("Size diff = %f\n",sizeDIff);
-        tuple_for_each(axisGroup.axes, [&](auto tAxes) { 
+        //        printf("Size diff = %f\n",sizeDIff);
+        tuple_for_each(axisGroup.axes, [&](auto tAxes) {
             for(auto axis : tAxes) {
                 
+//                printf("Draw axis %s\n",axis->name.c_str());
+                
+                bool hasSelectionBox = axis->HasSelectionBox;
+                
+                int startSelectionBin = -1;
+                int endSelectionBin = -1;
+                
                 float maxBinWidth = 3.5 * axis->width;
-                float minBinWidth = axis->width;
+                
                 
                 auto& histogramOne = axis->densityHistogramOne;
                 auto& histogramTwo = axis->densityHistogramTwo;
@@ -222,26 +234,44 @@ void ParallelCoordsView::drawAxes() {
                 int numBins = histogramOne.NumberOfBins();
                 float height = axis->height / (float)numBins;
                 
-                float maxValueOne = histogramOne.MaximumValue();
+                if(hasSelectionBox) {
+                    float selectionStartY = axis->ScaleValueForY(axis->selection.start.y);
+                    float selectionEndY = axis->ScaleValueForY(axis->selection.end.y);
+                    
+//                    printf("selectionStartY,selectionEndY = %f,%f\n",selectionStartY,selectionEndY);
+                    
+                    startSelectionBin = std::floor(selectionStartY * numBins);
+                    endSelectionBin = std::floor(selectionEndY * numBins);
+                    
+                    if(endSelectionBin < startSelectionBin) {
+                        std::swap(startSelectionBin,endSelectionBin);
+                    }
+//                    glColor4f(0,0,0,0.3);
+//                    glRectf(axis->selection.start.x - 10, axis->selection.start.y, axis->selection.end.x + 10, axis->selection.end.y);
+//                    printf("Start,end selection bin = %d,%d\n",startSelectionBin,endSelectionBin);
+                }
+                
+                
+                float maxValueOne = histogramOne.MaximumValue() * sizeDiff;
                 float maxValueTwo = histogramTwo.MaximumValue();
                 
-//                float max = std::min(maxValueOne,maxValueTwo);
-//                
-                for(int i = 0 ; i < numBins ; ++i) {
-                    //					printf("bin = %d\n",i);
+                //                float max = std::min(maxValueOne,maxValueTwo);
+                //
+                for(int bin = 0 ; bin < numBins ; ++bin) {
+                    //                    printf("bin = %d\n",i);
                     
-                    int startY = i * height + axis->y;
-                    int endY = startY + height;
+                    int startBinY = bin * height + axis->y;
+                    int endBinY = startBinY + height;
                     
-                    float binValueOne = histogramOne.BinValue(i);
-                    float binValueTwo = histogramTwo.BinValue(i);
+                    float binValueOne = histogramOne.BinValue(bin) * sizeDiff;
+                    float binValueTwo = histogramTwo.BinValue(bin);
                     
                     //					printf("bin value one = %f\n",binValueOne);
                     //					printf("bin value two = %f\n",binValueTwo);
                     
                     size_t nrElementsOne = histogramOne.NumberOfElements();
                     size_t nrElementsTwo = histogramTwo.NumberOfElements();
-//                    size_t maxNrElements = std::max(nrElementsOne,nrElementsTwo);
+                    //                    size_t maxNrElements = std::max(nrElementsOne,nrElementsTwo);
                     
                     if(nrElementsOne || nrElementsTwo) {
                         
@@ -249,11 +279,11 @@ void ParallelCoordsView::drawAxes() {
                         float normalizedValueTwo = 0;
                         
                         if(nrElementsOne) {
-//                            normalizedValueOne = binValueOne / nrElementsOne;
+                            //                            normalizedValueOne = binValueOne / nrElementsOne;
                             normalizedValueOne = binValueOne / nrElementsOne;
                         }
                         if(nrElementsTwo) {
-//                            normalizedValueTwo = binValueTwo / nrElementsTwo;
+                            //                            normalizedValueTwo = binValueTwo / nrElementsTwo;
                             normalizedValueTwo = binValueTwo / nrElementsTwo;
                         }
                         
@@ -279,32 +309,86 @@ void ParallelCoordsView::drawAxes() {
                             glColor3f(testColor.R, testColor.G, testColor.B);
                         }
                         else {
-//                            riv::Color testColor = redWhiteBlue.ComputeColor(0.5);
+                            //                            riv::Color testColor = redWhiteBlue.ComputeColor(0.5);
                             ratio = binValueOne / maxValueOne;
                             glColor3f(1,1,1);
                         }
-
+                        
                         //						printf("glColor3f(%f,%f,%f)\n",r,g,b);
-                        float width = ratio * (maxBinWidth - minBinWidth) + minBinWidth;
-                        float startX = axis->x - width / 2.F;
-                        float endX = axis->x + width / 2.F;
-                        glRectf(startX, startY, endX, endY);
+                        float width = ratio * (maxBinWidth - axis->width) + axis->width;
+                        float startBinX = axis->x - width / 2.F;
+                        float endBinX = axis->x + width / 2.F;
+                        glRectf(startBinX, startBinY, endBinX, endBinY);
                         
                         glColor3f(0,0,0);
                         glLineWidth(2);
                         glBegin(GL_LINE_LOOP);
                         
-                        glVertex2f(startX, startY);
-                        glVertex2f(endX, startY);
-                        glVertex2f(endX, endY);
-                        glVertex2f(startX, endY);
+                        glVertex2f(startBinX, startBinY);
+                        glVertex2f(endBinX, startBinY);
+                        glVertex2f(endBinX, endBinY);
+                        glVertex2f(startBinX, endBinY);
                         
                         glEnd();
+                        
+                        if(axis->HasSelectionBox) {
+                            //Draw a thicker black line around the edges of the bin when it is brushed/selected
+                            const int selectionLineWidth = 8;
+                            glLineWidth(selectionLineWidth);
+                            
+                
+                            if(bin >= startSelectionBin && bin <= endSelectionBin) {
+                                //The points of the selection rectangle for this particular bin
+                                int selectionBinStartX = startBinX - selectionLineWidth / 2;
+                                int selectionBinEndX = endBinX + selectionLineWidth / 2;
+                                int selectionBinStartY;
+                                int selectionBinEndY;
+                                if(endSelectionBin == bin) {
+                                    //Left line
+                                    printf("bin %d is the end selection bin\n",bin);
+                                    selectionBinStartY = axis->selection.start.y;
+                                    if(bin == startSelectionBin) {
+                                        printf(" AND selection bin\n");
+                                        selectionBinEndY = axis->selection.end.y;
+                                        
+                                    }
+                                    else {
+                                        selectionBinEndY = startBinY;
+                                    }
+                                    
+//                                    glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
+                                    
+
+                                }
+                                else if(bin == startSelectionBin) {
+                                    printf("bin %d is the start selection bin",bin);
+                                    selectionBinStartY = endBinY;
+                                    selectionBinEndY = axis->selection.end.y;
+//                                                                        glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
+                                }
+                                else {
+                                    printf("bin %d is a middle selection bin\n",bin);
+                                    selectionBinStartY = startBinY;
+                                    selectionBinEndY = endBinY;
+//                                                                        glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
+//
+                                }
+//                                printf("glRectf(%d,%d,%d,%d)\n",selectionBinStartX,selectionBinStartY,selectionBinEndX,selectionBinEndY);
+//                                glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
+                                glColor4f(0,0,0,0.4);
+                                glBegin(GL_LINES);
+                                glVertex2f(selectionBinStartX,selectionBinStartY);
+                                glVertex2f(selectionBinStartX,selectionBinEndY);
+                                glVertex2f(selectionBinEndX,selectionBinEndY);
+                                glVertex2f(selectionBinEndX,selectionBinStartY);
+                                glEnd();
+                            }
+                        }
                     }
                 }
             }
         });
-            
+        
     }
 }
 
@@ -321,12 +405,11 @@ void ParallelCoordsView::drawAxesExtras() {
     //Draw texts and extras
     for(auto& axisGroup : axisGroups) {
         //Draw name of table in middle
-        int textWidth = 53 * axisGroup.tableName.size(); //estimated text width
         auto firstAxis = axisGroup.axisInterfaces[0];
         auto lastAxis = axisGroup.axisInterfaces[axisGroup.axisInterfaces.size() - 1];
         int xCenter = (lastAxis->x - firstAxis->x) / 2.F + firstAxis->x;
-        printf("xCenter = %d\n",xCenter);
-        drawText(axisGroup.tableName,xCenter - .5F*textWidth,firstAxis->y - 30,.15);
+        //        printf("xCenter = %d\n",xCenter);
+        drawText(axisGroup.tableName,xCenter,firstAxis->y - 30,.15);
         tuple_for_each(axisGroup.axes, [&](auto tAxes) {
             
             for(auto& axis : tAxes) {
@@ -360,7 +443,7 @@ void ParallelCoordsView::drawAxesExtras() {
                         char buffer[4];
                         sprintf(buffer,"%.2f",value);
                         
-                        drawText(buffer,4,axis->x + axis->width + 2,height,textColor,.08F);
+                        //                        drawText(buffer,4,axis->x + axis->width + 16,height,textColor,.08F);
                     }
                 }
             }
@@ -471,14 +554,14 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
         pathMembershipRecord = pathMembershipTable->GetRecord<float>(MEMBERSHIP);
         
         if(pathMembershipRecord != NULL && pathMembershipRecord->Size()) {
-            pathMembershipDataPresent = true;
+//            pathMembershipDataPresent = true;
         }
     }
     
     if(isectMembershipTable) {
         isectMembershipRecord = isectMembershipTable->GetRecord<float>(MEMBERSHIP);
         if(isectMembershipRecord) {
-            isectMembershipDataPresent = isectMembershipRecord->Size();
+//            isectMembershipDataPresent = isectMembershipRecord->Size();
         }
     }
     
@@ -881,7 +964,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
                 selectedAxis->selection.end.x = selectedAxis->x + 10;
                 selectedAxis->selection.start.y = y;
                 selectedAxis->selection.end.y = y;
-                selection = &selectedAxis->selection;
+//                selection = &selectedAxis->selection;
                 
                 selectionBoxChanged = false;
                 Invalidate();
@@ -915,8 +998,13 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
             for(auto& axisGroup : axisGroups) {
                 tuple_for_each(axisGroup.axes, [&](auto tAxes) {
                     for(auto& axis : tAxes) {
-                        if(axis->name == selectedAxis->name) {
-                            selection->end.y = axis->PositionOnScaleForViewY(y);
+                        if(selectedAxis && axis->name == selectedAxis->name) {
+                            if(y < axis->selection.start.y) {
+                             axis->selection.end.y = axis->PositionOnScaleForViewY(y);
+                            }
+                            else {
+                                axis->selection.start.y = axis->PositionOnScaleForViewY(y);
+                            }
                         }
                     }
                 });
@@ -937,8 +1025,8 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
                 tuple_for_each(axisGroup.axes, [&](auto tAxes) {
                     for(auto& axis : tAxes) {
                         if(axis->name == selectedAxis->name) {
-                            selection->start.y += deltaY;
-                            selection->end.y += deltaY;
+                            axis->selection.start.y += deltaY;
+                            axis->selection.end.y += deltaY;
                         }
                     }
                 });
@@ -998,7 +1086,7 @@ void ParallelCoordsView::filterData() {
                             (*datasetTwo)->AddFilter(rangeFilter);
                         }
                         
-                        selection = &axis->selection;
+//                        latestSelectionBox = &axis->selection;
                     }
                     else {
                         (*datasetOne)->ClearFilter<Type>(axis->name);
@@ -1102,28 +1190,28 @@ bool ParallelCoordsView::DecreaseLineOpacity() {
     lineOpacity /= 1.5;
     redisplayWindow();
     return true;
-//    if(lineOpacity > 0.F) {
-//        lineOpacity -= lineOpacityIncrement;
-//        if(lineOpacity < 0.F) {
-//            lineOpacity = 0;
-//        }
-//        Invalidate();
-//        redisplayWindow();
-//        return true;
-//    }
-//    else return false;
+    //    if(lineOpacity > 0.F) {
+    //        lineOpacity -= lineOpacityIncrement;
+    //        if(lineOpacity < 0.F) {
+    //            lineOpacity = 0;
+    //        }
+    //        Invalidate();
+    //        redisplayWindow();
+    //        return true;
+    //    }
+    //    else return false;
 }
 bool ParallelCoordsView::IncreaseLineOpacity() {
-//    if(lineOpacity < 1.F) {
-//        lineOpacity += lineOpacityIncrement;
-//        if(lineOpacity > 1.F) {
-//            lineOpacity = 1;
-//        }
-//        Invalidate();
-//        redisplayWindow();
-//        return true;
-//    }
-//    else return false;
+    //    if(lineOpacity < 1.F) {
+    //        lineOpacity += lineOpacityIncrement;
+    //        if(lineOpacity > 1.F) {
+    //            lineOpacity = 1;
+    //        }
+    //        Invalidate();
+    //        redisplayWindow();
+    //        return true;
+    //    }
+    //    else return false;
     lineOpacity *= 1.5;
     redisplayWindow();
     return true;

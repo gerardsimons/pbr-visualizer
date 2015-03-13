@@ -159,6 +159,9 @@ public:
 		}
 		return max;
 	}
+    T MaximumNormalizedValue() {
+        return MaximumValue() / nrElements;
+    }
 //    float Mean() {
 //        for(int i = 0 ; i < bins ; i++) {
 //            int thisValue = BinValue(i);
@@ -498,13 +501,13 @@ public:
 		int nrHistograms = 0;
 		
 		tuple_for_each(histograms, [&](auto tHistograms) {
-			nrHistograms += tHistograms.size();
+
 			for(auto& histogram : tHistograms) {
 				auto otherHistogram = other.GetHistogram<decltype(histogram.LowerBound())>(histogram.name);
 				if(!otherHistogram) {
 					throw std::runtime_error("Histogram " + histogram.name + " not found in right hand operand");
 				}
-				
+                ++nrHistograms;
 				total += histogram.DistanceTo(otherHistogram);
 			}
 		});
@@ -595,7 +598,7 @@ public:
         
         nrElements += (newNrElements - oldNrElements);
         
-        printf("newNrElements = %zu\n",nrElements);
+//        printf("newNrElements = %zu\n",nrElements);
     }
     void Add(T valueOne, T valueTwo) {
         unsigned int bin = BinForValue(valueOne);

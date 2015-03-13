@@ -373,7 +373,7 @@ void RIVImageView::Draw() {
         //		glRectf(0, 0, halfWidth, height);
         printf("Draw rendererd image one\n");
         
-        drawRenderedImage(rendererOne,imagePadding,imagePadding,renderImageWidth - imagePadding * 2,height - imagePadding * 2);
+        drawRenderedImage(rendererOne,imagePadding,0,renderImageWidth,height);
         
         if(showHeatmap && (*datasetOne)->IsFiltered()) {
             drawHeatmap(imagePadding, pixelDistributionOne, 1,0,0);
@@ -383,7 +383,7 @@ void RIVImageView::Draw() {
             //			glColor3f(0, 0, 1);
             //			glRectf(halfWidth, 0, width, height);
             printf("Draw rendererd image two\n");
-            drawRenderedImage(rendererTwo,renderImageWidth,imagePadding,renderImageWidth - imagePadding * 2,height - imagePadding * 2);
+            drawRenderedImage(rendererTwo,renderImageWidth,0,renderImageWidth - imagePadding * 2,height);
 
             if(showHeatmap && (*datasetTwo)->IsFiltered()) {
                 drawHeatmap(width / 2.F, pixelDistributionTwo, 0,0,1);

@@ -36,6 +36,19 @@
             return greenGrayPurpleColorMap;
         }
         
+        riv::ColorMap redGrayGreenColorMap() {
+            riv::ColorMap redGrayGreenColorMap;
+            
+            //            greenGrayPurpleColorMap.AddColor(riv::Color(0.498F,0.749F,0.765F));
+            //            greenGrayPurpleColorMap.AddColor(riv::Color(0.969F,0.969F,0.969F));
+            //            greenGrayPurpleColorMap.AddColor(riv::Color(.686F,.552F,.765F)); //PURPLE
+            
+            redGrayGreenColorMap.AddColor(riv::Color(0.F,1.F,0.F));
+            redGrayGreenColorMap.AddColor(riv::Color(0.969F,0.969F,0.969F));
+            redGrayGreenColorMap.AddColor(riv::Color(1.F,0.F,0.F));
+            
+            return redGrayGreenColorMap;
+        }
         riv::ColorMap redGrayBlueColorMap() {
             riv::ColorMap redGrayBlueColorMap;
             
@@ -45,9 +58,20 @@
             
             redGrayBlueColorMap.AddColor(riv::Color(0.F,0.F,1.F));
             redGrayBlueColorMap.AddColor(riv::Color(0.969F,0.969F,0.969F));
-            redGrayBlueColorMap.AddColor(riv::Color(1.F,0.F,0.F)); //PURPLE
+            redGrayBlueColorMap.AddColor(riv::Color(1.F,0.F,0.F));
             
             return redGrayBlueColorMap;
+        }
+        
+        riv::ColorMap hotBodyColorMap() {
+            riv::ColorMap hotbodyColorMap;
+            
+            hotbodyColorMap.AddColor(BLACK);
+            hotbodyColorMap.AddColor(RED);
+            hotbodyColorMap.AddColor(YELLOW);
+            hotbodyColorMap.AddColor(WHITE);
+            
+            return hotbodyColorMap;
         }
         
         riv::ColorMap brownColorMap() {
