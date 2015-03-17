@@ -105,8 +105,10 @@ float swapchainWeight = 10;
 clock_t startDelay;
 bool isDelayed = false;
 
-bool renderingPausedOne = false;
-bool renderingPausedTwo = false;
+bool renderingPausedOne = true;
+bool renderingPausedTwo = true;
+//bool renderingPausedOne = false;
+//bool renderingPausedTwo = false;
 int delayTimeLeft = 0;
 int delayTimerInterval = 0;
 
@@ -1076,8 +1078,6 @@ int main(int argc, char **argv)
     
     // display and idle function
     glutDisplayFunc(display);
-    
-    //    renderingPaused = true;
     
     /* register function that handles mouse */
     

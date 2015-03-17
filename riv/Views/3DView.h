@@ -131,6 +131,8 @@ protected:
     void drawEnergyDifference(Octree* energyDistributionOne, Octree* energyDistributionTwo,ushort maxDepth);
     void drawTriangleMeshFull(TriangleMeshFull* mesh, const riv::Color& color);
     
+    void drawLights(const std::vector<Ref<Light>>& lights, const riv::Color& membershipColor);
+    
 	void createPaths();
 	
     void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);

@@ -14,8 +14,10 @@
 #include "../Graphics/ColorPalette.h"
 #include "../Graphics/graphics_helper.h"
 #include "../Configuration.h"
+
 #include "devices/device_singleray/embree_renderer.h"
 #include "devices/device_singleray/shapes/shape.h"
+#include "devices/device_singleray/lights/pointlight.h"
 //#include "devices/device_singleray/api/instance.h"
 
 #if __APPLE__
@@ -300,6 +302,34 @@ void RIV3DView::drawEnergyDistribution(Octree* energyDistribution, ushort maxDep
 //    float maxValue = energyDistribution->MaxValue(maxDepth);
     drawEnergyHelper(energyDistribution->GetRoot(),maxEnergy,colors,maxDepth);
 }
+void RIV3DView::drawLights(const std::vector<Ref<Light>>& lights, const riv::Color &membershipColor) {
+    for(Ref<Light> light : lights) {
+        TriangleMeshFull* t = dynamic_cast<TriangleMeshFull*>(light.ptr->shape().ptr);
+        if(t) {
+            drawTriangleMeshFull(t, membershipColor);
+        }
+        else { //Point lights don't have any shape with them associated with them, draw a sphere to indicate them
+            float size = .25F;
+            PointLight* pointLight = dynamic_cast<PointLight*>(light.ptr);
+            if(pointLight) {
+                
+//                glColor3f(1, 1, 0);
+                glColor3f(pointLight->I.r,pointLight->I.g,pointLight->I.b);
+                glPushMatrix();
+                
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                glTranslatef(pointLight->P.x,pointLight->P.y,pointLight->P.z);
+                glutSolidSphere(size, 10, 10);
+                
+                glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+                glColor3f(membershipColor.R,membershipColor.G,membershipColor.B);
+                //                glScalef(0.1, 0.1, 0.1);
+                gluSphere(quadric, size * 1.05F, 10, 10);
+                glPopMatrix();
+            }
+        }
+    }
+}
 void RIV3DView::Draw() {
 
     
@@ -399,18 +429,11 @@ void RIV3DView::Draw() {
     gluSphere(quadric, 10, 10, 10);
     glPopMatrix();
     
-    
+
     //Draw lights of renderer one
     //Draw a solid yellow sphere with a red wireframe on it
-    for(Ref<Light> light : lightsOne) {
-        glColor3f(1, 1, 0);
-        glPushMatrix();
-        TriangleMeshFull* t = dynamic_cast<TriangleMeshFull*>(light.ptr->shape().ptr);
-        
-        if(t) {
-            drawTriangleMeshFull(t, riv::Color(1,0,0));
-        }
-    }
+    drawLights(lightsOne, riv::Color(1,0,0));
+    drawLights(lightsTwo, riv::Color(0,0,1));
     
     if(datasetTwo) {
         glColor3f(.2, .2, 1);

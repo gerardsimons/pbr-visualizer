@@ -58,10 +58,10 @@ namespace embree
     float pdf(const DifferentialGeometry& dg, const Vector3f& wi) const {
       return zero;
     }
-    
+      Vector3f P;       //!< Position of the point light
+      Color I;       //!< Radiant intensity (W/sr)
   private:
-    Vector3f P;       //!< Position of the point light
-    Color I;       //!< Radiant intensity (W/sr)
+
   };
 }
 
