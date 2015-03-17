@@ -125,7 +125,7 @@ void RIVSliderView::Draw() {
             float bottom = barTop - barHeight - binHeight;
             float top = barTop + binHeight;
 //            printf("Draw bin with height %f\n",binHeight);
-            riv::Color color = membershipColors.ComputeColor(i / (float)histogramBins);
+            riv::Color color = membershipColors.ComputeColor((histogramBins - i) / (float)histogramBins);
             glColor3f(color.R, color.G, color.B);
             glRectf(xDivider, bottom, xDivider + binWidth, top);
             glColor3f(0, 0, 0);

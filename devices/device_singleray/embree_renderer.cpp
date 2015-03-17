@@ -261,7 +261,10 @@ EMBREERenderer::EMBREERenderer(const std::string& commandsFile)
     camera = createCamera(AffineSpace3f(g_camSpace.l,g_camSpace.p));
 }
 ushort EMBREERenderer::GetNumLights() {
-    return g_single_device->rtGetNumLights(g_render_scene);
+    return g_single_device->rtGetLights(g_render_scene).size();
+}
+std::vector<Ref<embree::Light>> EMBREERenderer::GetLights() {
+    return g_single_device->rtGetLights(g_render_scene);
 }
 void EMBREERenderer::RenderNextFrame() {
 	g_device = g_single_device;

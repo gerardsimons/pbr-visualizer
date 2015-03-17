@@ -131,7 +131,7 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset,const Vec2f&
     isectsTable->CreateRecord<ushort>(PRIMITIVE_ID,0,nrPrimitives,true);
     isectsTable->CreateRecord<ushort>(OCCLUDER_COUNT,0,maxNrLights+1,true);
     //	shapeIds = isectsTable->CreateShortRecord("shape ID");
-    //	interactionTypes = isectsTable->CreateShortRecord("interaction");
+    interactionTypes = isectsTable->CreateRecord<ushort>(INTERACTION_TYPE,0,17,true);
     //	lightIds = isectsTable->CreateShortRecord("light ID");
     
     RIVTable<float,ushort>* lightsTable = dataset->CreateTable(LIGHTS_TABLE);
@@ -206,7 +206,7 @@ void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
     throughputGs = currentPathTable->GetRecord<float>(THROUGHPUT_G);
     throughputBs = currentPathTable->GetRecord<float>(THROUGHPUT_B);
     depths = currentPathTable->GetRecord<ushort>(DEPTH);
-    
+//    
     bounceNrs = currentIntersectionsTable->GetRecord<ushort>(BOUNCE_NR);
     xs = currentIntersectionsTable->GetRecord<float>(POS_X);
     ys = currentIntersectionsTable->GetRecord<float>(POS_Y);
@@ -217,6 +217,7 @@ void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
     isectColorRs = currentIntersectionsTable->GetRecord<float>(INTERSECTION_R);
     isectColorGs = currentIntersectionsTable->GetRecord<float>(INTERSECTION_G);
     isectColorBs = currentIntersectionsTable->GetRecord<float>(INTERSECTION_B);
+    interactionTypes = currentIntersectionsTable->GetRecord<ushort>(INTERACTION_TYPE);
     primitiveIds = currentIntersectionsTable->GetRecord<ushort>(PRIMITIVE_ID);
     occluderCounts = currentIntersectionsTable->GetRecord<ushort>(OCCLUDER_COUNT);
     
@@ -225,9 +226,6 @@ void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
 RIVDataSet<float,ushort>** DataController::GetDataSet() {
     return &currentData;
 }
-//RIVDataSet<float,ushort>** DataController::GetDataSetTwo() {
-//	return &currentDataTwo;
-//}
 bool DataController::ProcessNewPath(int frame, PathData* newPath) {
     
     //ALWAYS update the histograms
@@ -260,8 +258,9 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
         trueDistributions.AddToHistogram(INTERSECTION_B, isect.color.b);
         trueDistributions.AddToHistogram(PRIMITIVE_ID, isect.primitiveId);
         
-        //Add energy data
+        //Add energy data to octree
         energyDistribution->Add(isect.position[0],isect.position[1], isect.position[2], (isect.color.r + isect.color.g + isect.color.b) / 3.F);
+//        energyDistribution->Add(isect.position[0],isect.position[1], isect.position[2], (i+1));
     }
     
     if(currentPathTable->NumberOfRows() < maxPaths) {
@@ -303,7 +302,7 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
                 isectColorBs->AddValue(isect.color.b);
                 primitiveIds->AddValue(isect.primitiveId);
                 //					shapeIds->AddValue(isect.shapeId);
-                //					interactionTypes->AddValue(isect.interactionType);
+                interactionTypes->AddValue(isect.interactionType);
                 //					lightIds->AddValue(isect.lightId);
                 
                 size_t isectIndex = bounceNrs->Size() - 1;

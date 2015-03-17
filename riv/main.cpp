@@ -754,6 +754,7 @@ bool processRendererTwo(PathData* newPath) {
     if(connectedTwo) {
         return dataControllerTwo->ProcessNewPath(currentFrameTwo,newPath);
     }
+    return true;
 }
 void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
     printf("\n*** Renderer two finished frame %d...\n",currentFrameTwo);

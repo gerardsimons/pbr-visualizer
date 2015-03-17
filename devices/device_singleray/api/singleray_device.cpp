@@ -629,9 +629,14 @@ namespace embree
     Ref<SwapChain> SingleRayDevice::rtGetSwapChain(Device::RTFrameBuffer frameBuffer_i) {
                 return castHandle<ConstHandle<SwapChain> >(frameBuffer_i,"framebuffer")->getInstance();
     }
-    
-    ushort SingleRayDevice::rtGetNumLights(Device::RTScene scene_i) {
+    std::vector<Ref<embree::Light>> SingleRayDevice::rtGetLights(Device::RTScene scene_i) {
         Ref<BackendScene::Handle >   scene  = castHandle<BackendScene::Handle>   (scene_i ,"scene" );
-        return scene->getInstance().ptr->allLights.size();
+        auto lights = scene->getInstance().ptr->allLights;
+        return lights;
     }
+//    ushort SingleRayDevice::rtGetNumLights(Device::RTScene scene_i) {
+//        Ref<BackendScene::Handle >   scene  = castHandle<BackendScene::Handle>   (scene_i ,"scene" );
+//        auto lights = scene->getInstance().ptr->allLights;
+//        return lights.size();
+//    }
 }

@@ -51,10 +51,9 @@ RIV3DView::RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer
     
     cameraPositionOne = renderer->GetCameraPosition();
 //    eye = cameraPositionOne;
-    
+    lightsOne = rendererOne->GetLights();
     ResetGraphics();
 };
-
 RIV3DView::RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, Octree* energyDistributionOne, Octree* energyDistributionTwo, RIVColorProperty* pathColorOne, RIVColorProperty* rayColorOne, RIVColorProperty* pathColorTwo, RIVColorProperty* rayColorTwo) :
     RIVDataView(datasetOne,datasetTwo),
     rendererOne(rendererOne),
@@ -96,10 +95,12 @@ RIV3DView::RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ush
     }
     cameraPositionOne = rendererOne->GetCameraPosition();
     cameraPositionTwo = rendererTwo->GetCameraPosition();
+    
+        lightsOne = rendererOne->GetLights();
+        lightsTwo = rendererTwo->GetLights();
 //    eye = cameraPositionOne;
     ResetGraphics();
 };
-
 void RIV3DView::CyclePathSegment(bool direction) {
     float delta = 1.F / maxBounce;
     direction ? MovePathSegment(delta) : MovePathSegment(-delta);
@@ -237,8 +238,6 @@ void RIV3DView::drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* node
             float valueOne = nodeOne->AggregateValue() * multiplier / max;
             float valueTwo = nodeTwo->AggregateValue() * multiplierTwo / max;
             
-
-            
             float min = 0;
             
             if(valueOne > min || valueTwo > min) {
@@ -348,8 +347,8 @@ void RIV3DView::Draw() {
         if(datasetTwo) {
             float maxOne = energyDistributionOne->MaxValue(drawHeatmapDepth);
             float maxTwo = energyDistributionTwo->MaxValue(drawHeatmapDepth);
-            printf("maxOne = %f\n",maxOne);
-            printf("maxTwo = %f\n",maxTwo);
+//            printf("maxOne = %f\n",maxOne);
+//            printf("maxTwo = %f\n",maxTwo);
             float max = std::max(maxOne,maxTwo);
             drawEnergyDistribution(energyDistributionOne,drawHeatmapDepth,max);
         }
@@ -400,6 +399,19 @@ void RIV3DView::Draw() {
     gluSphere(quadric, 10, 10, 10);
     glPopMatrix();
     
+    
+    //Draw lights of renderer one
+    //Draw a solid yellow sphere with a red wireframe on it
+    for(Ref<Light> light : lightsOne) {
+        glColor3f(1, 1, 0);
+        glPushMatrix();
+        TriangleMeshFull* t = dynamic_cast<TriangleMeshFull*>(light.ptr->shape().ptr);
+        
+        if(t) {
+            drawTriangleMeshFull(t, riv::Color(1,0,0));
+        }
+    }
+    
     if(datasetTwo) {
         glColor3f(.2, .2, 1);
         //Draw camera position
@@ -409,6 +421,8 @@ void RIV3DView::Draw() {
         //    glScalef(0.01, 0.01, 0.01);x§
         gluSphere(quadric, 10, 10, 10);
         glPopMatrix();
+        
+        
     }
     
 //    if(drawHeatmapTree && heatmap != NULL)
@@ -430,7 +444,20 @@ void RIV3DView::Draw() {
     
     //	reporter::stop("3D Draw");
 }
+void RIV3DView::drawTriangleMeshFull(TriangleMeshFull* mesh, const riv::Color& color) {
+    vector_t<TriangleMeshFull::Triangle> triangles = mesh->triangles;
+    vector_t<Vec3fa>& position = mesh->position;
 
+    for(size_t i = 0 ; i < triangles.size() ; ++i) {
+        Vec3fa& v0 = position[triangles[i].v0];
+        Vec3fa& v1 = position[triangles[i].v1];
+        Vec3fa& v2 = position[triangles[i].v2];
+        glVertex3f(v0[0],v0[1],v0[2]);
+        glVertex3f(v1[0],v1[1],v1[2]);
+        glVertex3f(v2[0],v2[1],v2[2]);
+    }
+
+}
 void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color, ushort* selectedObjectId) {
     
     //	reporter::startTask("Draw mesh model");
@@ -444,22 +471,15 @@ void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color, ushort
     size_t meshindex = 0;
     
     for(TriangleMeshFull* mesh : meshGroup->GetTriangleMeshes()) {
-        vector_t<TriangleMeshFull::Triangle> triangles = mesh->triangles;
-        vector_t<Vec3fa>& position = mesh->position;
+        riv::Color meshColor;
         if(selectedObjectId && meshindex == *selectedObjectId) {
-            glColor3f(0.8, 0.8, 0.6);
+//            glColor3f(0.8, 0.8, 0.6);
+            meshColor = riv::Color(0.8,0.8,0.6);
         }
         else {
-            glColor4f(color[0], color[1], color[2],0.3F);
+            meshColor = riv::Color(color[0],color[1],color[2]);
         }
-        for(size_t i = 0 ; i < triangles.size() ; ++i) {
-            Vec3fa& v0 = position[triangles[i].v0];
-            Vec3fa& v1 = position[triangles[i].v1];
-            Vec3fa& v2 = position[triangles[i].v2];
-            glVertex3f(v0[0],v0[1],v0[2]);
-            glVertex3f(v1[0],v1[1],v1[2]);
-            glVertex3f(v2[0],v2[1],v2[2]);
-        }
+        drawTriangleMeshFull(mesh, meshColor);
         meshindex++;
     }
     //	reporter::stop("Draw mesh model");

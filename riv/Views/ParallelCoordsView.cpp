@@ -211,14 +211,22 @@ void ParallelCoordsView::drawAxes() {
         if(datasetTwo) {
             rowsTwo = (*datasetTwo)->GetTable(axisGroup.tableName)->NumberOfRows();
             if(rowsOne && rowsTwo) {
-                sizeDiff = rowsTwo / rowsOne;
+                sizeDiff = rowsTwo / (float)rowsOne;
             }
         }
-        //        printf("Size diff = %f\n",sizeDIff);
+        printf("Size diff = %f\n",sizeDiff);
         tuple_for_each(axisGroup.axes, [&](auto tAxes) {
             for(auto axis : tAxes) {
+
+                printf("Draw axis %s\n",axis->name.c_str());
                 
-//                printf("Draw axis %s\n",axis->name.c_str());
+                //Draw basic black backdrop for each axis
+                glColor3f(0,0,0);
+                
+                float halfWidth = axis->width / 2.F;
+                glRectf(axis->x - halfWidth, axis->y, axis->x + halfWidth, axis->y + axis->height);
+                
+                glEnd();
                 
                 bool hasSelectionBox = axis->HasSelectionBox;
                 
@@ -226,7 +234,6 @@ void ParallelCoordsView::drawAxes() {
                 int endSelectionBin = -1;
                 
                 float maxBinWidth = 3.5 * axis->width;
-                
                 
                 auto& histogramOne = axis->densityHistogramOne;
                 auto& histogramTwo = axis->densityHistogramTwo;
@@ -345,10 +352,10 @@ void ParallelCoordsView::drawAxes() {
                                 int selectionBinEndY;
                                 if(endSelectionBin == bin) {
                                     //Left line
-                                    printf("bin %d is the end selection bin\n",bin);
+//                                    printf("bin %d is the end selection bin\n",bin);
                                     selectionBinStartY = axis->selection.start.y;
                                     if(bin == startSelectionBin) {
-                                        printf(" AND selection bin\n");
+//                                        printf(" AND selection bin\n");
                                         selectionBinEndY = axis->selection.end.y;
                                         
                                     }
@@ -361,13 +368,13 @@ void ParallelCoordsView::drawAxes() {
 
                                 }
                                 else if(bin == startSelectionBin) {
-                                    printf("bin %d is the start selection bin",bin);
+//                                    printf("bin %d is the start selection bin",bin);
                                     selectionBinStartY = endBinY;
                                     selectionBinEndY = axis->selection.end.y;
 //                                                                        glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
                                 }
                                 else {
-                                    printf("bin %d is a middle selection bin\n",bin);
+//                                    printf("bin %d is a middle selection bin\n",bin);
                                     selectionBinStartY = startBinY;
                                     selectionBinEndY = endBinY;
 //                                                                        glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);

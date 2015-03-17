@@ -77,6 +77,9 @@ protected:
 	std::vector<Path> pathsOne;
 	std::vector<Path> pathsTwo;
     
+    std::vector<Ref<Light>> lightsOne;
+    std::vector<Ref<Light>> lightsTwo;
+    
     ushort drawHeatmapDepth;
     Octree* energyDistributionOne;
     Octree* energyDistributionTwo = NULL;
@@ -126,7 +129,8 @@ protected:
     void drawEnergyDistribution(Octree* energyDistribution,ushort maxDepth);
     void drawEnergyDistribution(Octree* energyDistribution,ushort maxDepth, float maxEnergy);
     void drawEnergyDifference(Octree* energyDistributionOne, Octree* energyDistributionTwo,ushort maxDepth);
-
+    void drawTriangleMeshFull(TriangleMeshFull* mesh, const riv::Color& color);
+    
 	void createPaths();
 	
     void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);

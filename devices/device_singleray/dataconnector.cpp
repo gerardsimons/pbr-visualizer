@@ -35,10 +35,10 @@ bool DataConnector::FinishPath(Color& color, Color& throughput) {
         currentPath.throughput.r = std::min(throughput.r,1.F);
         currentPath.throughput.g = std::min(throughput.g,1.F);
         currentPath.throughput.b = std::min(throughput.b,1.F);
+        
+        
 		
-//		printf("Finishing Path\n");
 		return pfCallback(&currentPath);
-		pathSet = false;
 	}
 	else {
 		throw std::runtime_error("INVALID STATE: There is no path in the buffer.");

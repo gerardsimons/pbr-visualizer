@@ -139,6 +139,8 @@ public:
     
     Ref<SwapChain> GetSwapChain();
     void CopySwapChainTo(EMBREERenderer* renderer,float copyWeight);
+    
+    std::vector<Ref<embree::Light>> GetLights();
     ushort GetNumLights();
 };
 

@@ -308,7 +308,7 @@ void RIVImageView::drawRenderedImage(EMBREERenderer *renderer, int startX, int s
     //Make sure it is scaled according to the available space as well flipped vertically
     glPixelZoom((float)imageWidth / g_width, -((float)imageHeight / g_height));
     //Because we flip it we have to translate it back to the top
-    glRasterPos2i(1+startX, imageHeight);
+    glRasterPos2i(1+startX, imageHeight+startY);
     
     if (format == "RGB_FLOAT32")
         glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_FLOAT,ptr);
@@ -360,7 +360,7 @@ void RIVImageView::Draw() {
         //		printf("\nImageView Draw #%zu\n",++drawCounter);
         glDisable(GL_DEPTH_TEST);
         
-        glClearColor(1,1,1,1);
+        glClearColor(0,1,1,1);
         glClear( GL_COLOR_BUFFER_BIT );
         
         glMatrixMode(GL_MODELVIEW);
@@ -373,7 +373,12 @@ void RIVImageView::Draw() {
         //		glRectf(0, 0, halfWidth, height);
         printf("Draw rendererd image one\n");
         
-        drawRenderedImage(rendererOne,imagePadding,0,renderImageWidth,height);
+        glColor3f(1,0,0);
+        glRectf(0, 0, renderImageWidth, height);
+        
+        glColor3f(0,0,0);
+        glRectf(imagePadding, imagePadding, renderImageWidth - imagePadding, height - imagePadding);
+        drawRenderedImage(rendererOne,imagePadding,imagePadding,renderImageWidth - 2 * imagePadding,height - 2 * imagePadding);
         
         if(showHeatmap && (*datasetOne)->IsFiltered()) {
             drawHeatmap(imagePadding, pixelDistributionOne, 1,0,0);
@@ -383,7 +388,10 @@ void RIVImageView::Draw() {
             //			glColor3f(0, 0, 1);
             //			glRectf(halfWidth, 0, width, height);
             printf("Draw rendererd image two\n");
-            drawRenderedImage(rendererTwo,renderImageWidth,0,renderImageWidth - imagePadding * 2,height);
+            
+            glColor3f(0,0,1);
+            glRectf(renderImageWidth, 0, 2 * renderImageWidth, height);
+            drawRenderedImage(rendererTwo,renderImageWidth+imagePadding,imagePadding,renderImageWidth - imagePadding * 2,height - imagePadding * 2);
 
             if(showHeatmap && (*datasetTwo)->IsFiltered()) {
                 drawHeatmap(width / 2.F, pixelDistributionTwo, 0,0,1);

@@ -18,6 +18,7 @@
 #define __EMBREE_RENDER_DEVICE_H__
 
 #include "../default.h"
+#include "device_singleray/lights/light.h"
 #include "device/device.h"
 #include "../api/swapchain.h"
 #include "common/sys/sync/mutex.h"
@@ -107,7 +108,8 @@ namespace embree
 	 ******************************************************************/
 	  Shape* rtGetShape(Device::RTPrimitive prim);
       Ref<SwapChain> rtGetSwapChain(Device::RTFrameBuffer frameBuffer_i);
-      ushort rtGetNumLights(Device::RTScene scene_i);
+      std::vector<Ref<embree::Light>> rtGetLights(Device::RTScene scene_i);
+//      ushort rtGetNumLights(Device::RTScene scene_i);
 
   private:
     MutexSys mutex;

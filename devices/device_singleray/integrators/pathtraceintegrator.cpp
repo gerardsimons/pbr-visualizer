@@ -298,7 +298,6 @@ namespace embree
 				/*! Continue the path. */
 				Ray newRay(dg.P, wi, dg.error*epsilon, inf, lightPath.lastRay.time);
 				LightPath scatteredPath = lightPath.extended(newRay,nextMedium, c, (type & directLightingBRDFTypes) != NONE);
-				
 
                 dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,type,occluderIds);
 		  

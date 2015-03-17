@@ -1,9 +1,9 @@
--i 5_plants.xml
+-i 5_plants.obj
 #-quadlight 1.790151 2.794508 0.816237 1.790151 1.135883 0.816236 1.148112 1.135884 0.471385 1.148112 2.794508 0.471385 500 500 500
--pointlight 5 10 0 50 50 50 50
--pointlight 10 10 0 50 50 50 50	
--pointlight -5 10 0 50 50 50	
--pointlight -10 10 0 50 50 50	
+-pointlight 2.5 10 0  50 50 50
+-pointlight 7.5 10 0  50 50 50
+-pointlight -2.5 10 0 50 50 50	
+-pointlight -7.5 10 0 50 50 50	
 #-spotlight 213 300 227 -1 -1 1 300000 300000 300000 90 90
 #-ambientlight 1 1 1
 #-directionallight -0.5 -0.4 1 2 2 2
@@ -12,7 +12,7 @@
 #-vp 0 8.5 10.6 -vi 0 0 -10 -vu 0 1 0 -fov 55 # FRONT FACING
 #-vp -5.25 8.5 10.6 -vi 0 0 -10 -vu 0 1 0 -fov 55 # OBLIQUE
 #-vp -10 8 0 -vi 0 0 0 -vu 0 1 0 -fov 55 # SIDE
--vp 0 5 0 -vi 0 0 0 -vu 0 1 0 -fov 55 #TOP
+-vp 0 30 -1 -vi 0 0 0 -vu 0 1 0 -fov 55 #TOP
 #-size 248 186
 -size 320 240
 -renderer pathtracer { depth = 5 }

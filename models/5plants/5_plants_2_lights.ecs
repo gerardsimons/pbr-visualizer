@@ -10,7 +10,8 @@
 #-vp 0 8.5 10.6 -vi 0 0 -10 -vu 0 1 0 -fov 55 # FRONT FACING
 #-vp -5.25 8.5 10.6 -vi 0 0 -10 -vu 0 1 0 -fov 55 # OBLIQUE
 #-vp -10 8 0 -vi 0 0 0 -vu 0 1 0 -fov 55 # SIDE
--vp 0 10 0 -vi 0 0 0 -vu 0 1 0 -fov 55 #TOP
+#-vp 0 1 1 -vi 0 0 0 -vu 0 1 0 -fov 55 #TOP
+-vp 0 30 -1 -vi 0 0 0 -vu 0 1 0 -fov 55 # SIDE
 #-size 248 186
 -size 320 240
--renderer pathtracer { depth = 5 }
+-renderer pathtracer { depth = 3 }
