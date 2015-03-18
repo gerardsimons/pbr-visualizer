@@ -52,6 +52,9 @@ extern const char* OCCLUDER_COUNT;
 
 extern const char* LIGHT_ID;
 extern const char* OCCLUDER_ID;
+extern const char* LIGHT_R;
+extern const char* LIGHT_G;
+extern const char* LIGHT_B;
 
 
 #endif

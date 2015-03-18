@@ -25,16 +25,15 @@ bool TableIterator::GetNext(size_t& row) {
 		return (index - 1) < maxIndex;
 	}
 }
-bool TableIterator::GetNext(size_t& row, std::map<RIVTableInterface*,std::pair<size_t*,ushort>>& refRowsMap) {
+bool TableIterator::GetNext(size_t& row, std::map<RIVTableInterface*,std::vector<size_t>>& refRowsMap) {
 	if(index >= maxIndex) {
 		return false;
 	}
 	else {
 		row = index;
-
         for(RIVReference* reference : references) {
-            const std::pair<size_t*,ushort>& refRows = reference->GetReferenceRows(row);
-            if(refRows.first) {
+            std::vector<size_t> refRows = reference->GetReferenceRows(row);
+            if(refRows.size()) {
                 refRowsMap[reference->targetTable] = refRows;
             }
         }
@@ -60,7 +59,7 @@ bool FilteredTableIterator::GetNext(size_t& row) {
 	}
 	return false;
 }
-bool FilteredTableIterator::GetNext(size_t& row, std::map<RIVTableInterface*,std::pair<size_t*,ushort>>& refRowsMap) {
+bool FilteredTableIterator::GetNext(size_t& row, std::map<RIVTableInterface*,std::vector<size_t>>& refRowsMap) {
 	if(index < maxIndex) {
 		bool filtered = (*indexPointers)[index];
 		while(filtered && index < maxIndex) {
@@ -71,7 +70,7 @@ bool FilteredTableIterator::GetNext(size_t& row, std::map<RIVTableInterface*,std
 		row = index;
 		for(size_t j = 0 ; j < references.size() ; ++j) {
             RIVReference* reference = references[j];
-			std::pair<size_t*,ushort> refRows = reference->GetReferenceRows(row);
+            std::vector<size_t> refRows = reference->GetReferenceRows(row);
             //TODO: Not sure what this check is for
 //			if(refRows.first) {
 //				refRow = &refRows.first[0];

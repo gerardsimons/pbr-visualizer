@@ -13,6 +13,7 @@
 #include <map>
 #include <stdio.h>
 #include <tuple>
+#include <set>
 
 #include <math.h>
 
@@ -178,18 +179,18 @@ public:
                             auto toRows = indices[lastIndex - 1];
                             //Find end of this reference
                             for(auto it : indices) {
-                                lastToIndex += it.second.second;
+                                lastToIndex += it.second.size();
                             }
                         }
                         
                         for(auto it : otherIndices) {
-                            ushort size = it.second.second;
-                            size_t* newToRows = new size_t[size];
+                            ushort size = it.second.size();
+                            std::vector<size_t> newToRows(size);
                             for(ushort i = 0 ; i < size ; ++i) {
                                 newToRows[i] = lastToIndex++;
                             }
-                            std::pair<size_t*,ushort> mapping(newToRows,size);
-                            multiRef->AddReferences(it.first + lastIndex, mapping);
+                            
+                            multiRef->AddReferences(it.first + lastIndex, newToRows);
                         }
                     }
                     else {
@@ -370,13 +371,13 @@ public:
 					for(auto iterator : multiRef->GetIndexMap()) {
 						size_t referenceTableRow = iterator.first;
 						
-						const std::pair<size_t*,ushort>& backRows = iterator.second;
+						std::vector<size_t> backRows = iterator.second;
 						bool filter = true;
 						size_t rowsFound = 0;
 						//					printMap(filteredRows);
-						for(ushort i = 0 ; i < backRows.second ; ++i) { //Does the filtered map contain ALL of these rows? If so we should filter it in the reference table
+						for(ushort i = 0 ; i < backRows.size() ; ++i) { //Does the filtered map contain ALL of these rows? If so we should filter it in the reference table
 							//						printArray(backRows.first, backRows.second);
-							bool filteredBackRow = filteredRows[backRows.first[i]];
+							bool filteredBackRow = filteredRows[backRows[i]];
 							if(!filteredBackRow) {
 								filter = false;
 							}
@@ -389,6 +390,15 @@ public:
 						}
 					}
 				}
+                else {
+                    RIVFixedReference* fixedRef = dynamic_cast<RIVFixedReference*>(reference);
+                    for(auto row : newlyFilteredRows) {
+                        if(row.second) {
+                            fixedRef->FilterReferenceRow(row.first);
+//                            printf("Filter reference row %zu at %s\n",row.first,reference->targetTable->name.c_str());
+                        }
+                    }
+                }
 			}
             }
 			newlyFilteredRows.clear();
@@ -455,8 +465,32 @@ public:
 	std::vector<std::string> GetAttributes() const;
 	void FilterRow(size_t row) {
 		filteredRows[row] = true;
-		
 	}
+    void FilterRowFromReference(size_t row, std::set<RIVReference*>& referencesVisited) {
+        filteredRows[row] = true;
+        
+        for(RIVReference* reference : references) {
+            //If not yet v
+            if(referencesVisited.find(reference) == referencesVisited.end()) {
+                RIVSingleReference* singleRef = dynamic_cast<RIVSingleReference*>(reference);
+                referencesVisited.insert(reference);
+                if(singleRef) {
+                    singleRef->FilterReferenceRow(row,referencesVisited);
+                }
+                else {
+                    RIVFixedReference* fixedRef = dynamic_cast<RIVFixedReference*>(reference);
+                    if(fixedRef) {
+                        fixedRef->FilterReferenceRow(row,referencesVisited);
+                    }
+                }
+            }
+        }
+    }
+    void FilterRowFromReference(size_t row, RIVReference* sourceReference) {
+        std::set<RIVReference*> visited;
+        visited.insert(sourceReference);
+        FilterRowFromReference(row, visited);
+    }
 	//Clears all the filters that may be present, returns true if any filters were actually removed
 	bool ClearFilters() {
 //        std::vector<std::string> filtersToDelete;
@@ -716,14 +750,14 @@ public:
 			std::string rowText = RowToString(j,columnWidth);
 			if(printFiltered || !filteredRows[j]) {
                 for(RIVReference* reference : references) {
-					std::pair<size_t*,ushort> referenceIndexRange = reference->GetReferenceRows(j);
+					std::vector<size_t> referenceIndexRange = reference->GetReferenceRows(j);
 					//				printArray(referenceIndexRange.first,referenceIndexRange.second);
-					if(referenceIndexRange.first) {
+					if(referenceIndexRange.size()) {
 						rowText += "---> " + reference->targetTable->name + "{";
-						for(size_t i = 0 ; i < referenceIndexRange.second ; ++i) {
+						for(size_t i = 0 ; i < referenceIndexRange.size() ; ++i) {
 							
-							rowText += std::to_string(referenceIndexRange.first[i]);
-							if(i < referenceIndexRange.second - 1) {
+							rowText += std::to_string(referenceIndexRange[i]);
+							if(i < referenceIndexRange.size() - 1) {
 								rowText +=  ",";
 							}
 						}
@@ -779,14 +813,14 @@ public:
 				std::string rowText = RowToString(j,columnWidth);
                 
                 for(RIVReference* reference : references) {
-					std::pair<size_t*,ushort> referenceIndexRange = reference->GetReferenceRows(j);
+					std::vector<size_t> referenceIndexRange = reference->GetReferenceRows(j);
 					//				printArray(referenceIndexRange.first,referenceIndexRange.second);
-					if(referenceIndexRange.first) {
+					if(referenceIndexRange.size()) {
 						rowText += "---> " + reference->targetTable->name + "{";
-						for(size_t i = 0 ; i < referenceIndexRange.second ; ++i) {
+						for(size_t i = 0 ; i < referenceIndexRange.size() ; ++i) {
 							
-							rowText += std::to_string(referenceIndexRange.first[i]);
-							if(i < referenceIndexRange.second - 1) {
+							rowText += std::to_string(referenceIndexRange[i]);
+							if(i < referenceIndexRange.size() - 1) {
 								rowText +=  ",";
 							}
 						}

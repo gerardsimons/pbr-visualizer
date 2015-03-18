@@ -36,7 +36,7 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
     bootstrapPaths->ReserveRows(N);
     
     RIVMultiReference* refToIntersections = static_cast<RIVMultiReference*>(paths->GetReferenceTo(INTERSECTIONS_TABLE));
-    RIVMultiReference* refToLights = static_cast<RIVMultiReference*>(intersections->GetReferenceTo(LIGHTS_TABLE));
+    RIVFixedReference* refToLights = static_cast<RIVFixedReference*>(intersections->GetReferenceTo(LIGHTS_TABLE));
     
     auto& pathRecords = paths->GetRecords();
     auto& isectRecords = intersections->GetRecords();
@@ -61,9 +61,9 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
     
     std::vector<size_t> sampledIntersections;
     for(size_t index : sampledRows) {
-        const std::pair<size_t*,ushort>& refRows = refToIntersections->GetReferenceRows(index);
-        for(int i = 0 ; i < refRows.second ; ++i) {
-            size_t intersectionRow = refRows.first[i];
+        std::vector<size_t> refRows = refToIntersections->GetReferenceRows(index);
+        for(int i = 0 ; i < refRows.size() ; ++i) {
+            size_t intersectionRow = refRows[i];
             sampledIntersections.push_back(intersectionRow);
         
             tuple_for_each(isectRecords, [&](auto tRecords) {
@@ -83,9 +83,10 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
             typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
             auto bootRecord = bootstrapLights->GetRecord<Type>(record->name);
             for(size_t index : sampledIntersections) {
-                const std::pair<size_t*,ushort>& refRows = refToLights->GetReferenceRows(index);
-                for(int i = 0 ; i < refRows.second ; ++i) {
-                    bootRecord->AddValue(record->Value(refRows.first[i]));
+                std::vector<size_t> refRows = refToLights->GetReferenceRows(index);
+//                printArray(refRows.rows,refRows.size);
+                for(int i = 0 ; i < refRows.size() ; ++i) {
+                    bootRecord->AddValue(record->Value(refRows[i]));
                 }
                 
             }
@@ -132,17 +133,18 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset,const Vec2f&
     isectsTable->CreateRecord<ushort>(OCCLUDER_COUNT,0,maxNrLights+1,true);
     //	shapeIds = isectsTable->CreateShortRecord("shape ID");
     interactionTypes = isectsTable->CreateRecord<ushort>(INTERACTION_TYPE,0,17,true);
-    //	lightIds = isectsTable->CreateShortRecord("light ID");
     
     RIVTable<float,ushort>* lightsTable = dataset->CreateTable(LIGHTS_TABLE);
-    lightsTable->CreateRecord<ushort>(OCCLUDER_ID,0,nrPrimitives);
+    lightsTable->CreateRecord<ushort>(LIGHT_ID,0,maxNrLights,true);
+    lightsTable->CreateRecord<ushort>(OCCLUDER_ID,0,(ushort)-1,true);
+    lightsTable->CreateRecord<float>(LIGHT_R,0,1,true);
+    lightsTable->CreateRecord<float>(LIGHT_G,0,1,true);
+    lightsTable->CreateRecord<float>(LIGHT_B,0,1,true);
     
-    RIVMultiReference* pathsToIsectRef = new RIVMultiReference(pathTable,isectsTable);
-    pathTable->AddReference(pathsToIsectRef);
-    RIVSingleReference* isectToPathsRef = new RIVSingleReference(isectsTable,pathTable);
-    isectsTable->AddReference(isectToPathsRef);
-    RIVMultiReference* isectsToLightsRef = new RIVMultiReference(isectsTable,lightsTable);
-    isectsTable->AddReference(isectsToLightsRef);
+    pathTable->AddReference(new RIVMultiReference(pathTable,isectsTable));
+    isectsTable->AddReference(new RIVSingleReference(isectsTable,pathTable));
+    isectsTable->AddReference(new RIVFixedReference(isectsTable,lightsTable,maxNrLights));
+    lightsTable->AddReference(new RIVSingleReference(lightsTable,isectsTable));
 }
 
 void DataController::AddMembershipDataStructures(RIVDataSet<float,ushort>* dataset) {
@@ -160,6 +162,7 @@ void DataController::createDataStructures(const Vec2f& xBounds, const Vec2f& yBo
     
     //Create the records and such for the datasets
     initDataSet(currentData,xBounds,yBounds,zBounds,nrPrimitives);
+    currentData->Print(100);
     initDataSet(candidateData,xBounds,yBounds,zBounds,nrPrimitives);
     
     trueDistributions = currentData->CreateEmptyHistogramSet(bins,histogramTables);
@@ -176,7 +179,7 @@ void DataController::createDataStructures(const Vec2f& xBounds, const Vec2f& yBo
     float maxSize = std::max(xSize,std::max(ySize,zSize));
     
     //Because floats are annoying with equality, make sure you over-extend a bit the size of the octree
-    int maxDepth = 10;
+    int maxDepth = 1;
     int maxCapacity = 1;
     energyDistribution = new Octree(maxDepth,cX,cY,cZ,1.01*maxSize,maxCapacity);
     
@@ -192,7 +195,8 @@ void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
     
     isectsToPathsRef = (RIVSingleReference*)currentIntersectionsTable->GetReferenceTo(PATHS_TABLE);
     pathsToIsectRef = (RIVMultiReference*)currentPathTable->GetReferenceTo(INTERSECTIONS_TABLE);
-    isectsToLightsRef = (RIVMultiReference*)currentIntersectionsTable->GetReferenceTo(LIGHTS_TABLE);
+    isectsToLightsRef = (RIVFixedReference*)currentIntersectionsTable->GetReferenceTo(LIGHTS_TABLE);
+    lightsToIsectsRef = (RIVSingleReference*)currentLightsTable->GetReferenceTo(INTERSECTIONS_TABLE);
     
     xPixels = currentPathTable->GetRecord<float>(PIXEL_X);
     yPixels = currentPathTable->GetRecord<float>(PIXEL_Y);
@@ -221,7 +225,11 @@ void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
     primitiveIds = currentIntersectionsTable->GetRecord<ushort>(PRIMITIVE_ID);
     occluderCounts = currentIntersectionsTable->GetRecord<ushort>(OCCLUDER_COUNT);
     
+    lightIds = currentLightsTable->GetRecord<ushort>(LIGHT_ID);
     occluderIds = currentLightsTable->GetRecord<ushort>(OCCLUDER_ID);
+    lightRs = currentLightsTable->GetRecord<float>(LIGHT_R);
+    lightGs = currentLightsTable->GetRecord<float>(LIGHT_G);
+    lightBs = currentLightsTable->GetRecord<float>(LIGHT_B);
 }
 RIVDataSet<float,ushort>** DataController::GetDataSet() {
     return &currentData;
@@ -283,9 +291,9 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
             throughputGs->AddValue(newPath->throughput.g);
             throughputBs->AddValue(newPath->throughput.b);
             depths->AddValue((ushort)newPath->intersectionData.size());
-            size_t* indices = new size_t[nrIntersections];
+            std::vector<size_t> indices(nrIntersections);
             
-            pathsToIsectRef->AddReferences(colorRs->Size() - 1, std::pair<size_t*,ushort>(indices,nrIntersections));
+
             
             for(int i = 0 ; i < nrIntersections ; ++i) {
                 IntersectData& isect = newPath->intersectionData[i];
@@ -306,18 +314,26 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
                 //					lightIds->AddValue(isect.lightId);
                 
                 size_t isectIndex = bounceNrs->Size() - 1;
-                size_t nrLights = isect.occluderIds.size();
-                size_t* lightsReferenceRows = new size_t[nrLights];
+                size_t nrLights = isect.lightData.size();
+//                size_t* lightsReferenceRows = new size_t[nrLights];
                 occluderCounts->AddValue(nrLights);
                 for(int j = 0 ; j < nrLights ; ++j) {
 //                    printf("isect to occluder : %zu --> %zu\n",j,)
-                    occluderIds->AddValue(isect.occluderIds[j]);
-                    lightsReferenceRows[j] = occluderIds->Size() - 1;
+                    const LightData& lightD = isect.lightData[j];
+                    occluderIds->AddValue(lightD.occluderId);
+                    lightIds->AddValue(lightD.lightId);
+                    lightRs->AddValue(lightD.radiance.r);
+                    lightGs->AddValue(lightD.radiance.g);
+                    lightBs->AddValue(lightD.radiance.b);
+                    
+                    lightsToIsectsRef->AddReference(lightRs->Size() - 1, isectColorBs->Size() - 1);
+//                    lightsReferenceRows[j] = occluderIds->Size() - 1;
                 }
-                isectsToLightsRef->AddReferences(isectIndex, std::pair<size_t*,ushort>(lightsReferenceRows,nrLights));
+//                isectsToLightsRef->AddReferences(isectIndex, std::pair<size_t*,ushort>(lightsReferenceRows,nrLights));
                 isectsToPathsRef->AddReference(isectIndex, colorRs->Size() - 1);
                 indices[i] = isectIndex;
             }
+            pathsToIsectRef->AddReferences(colorRs->Size() - 1, indices);
             return true;
         }
     }
@@ -334,7 +350,7 @@ void DataController::Reduce() {
     if(firstTime) {
         //		printf("\n First time...\n");
         
-//        candidateData->Print();
+//        candidateData->Print(100);
         std::swap(currentData, candidateData);
         //Swap current with candidate
         currentData->SetDataListeners(candidateData->GetDataListeners());
@@ -360,10 +376,11 @@ void DataController::Reduce() {
     //TODO: Move this reference stuff to clone structure?
     joinedPathsTable->AddReference(new RIVMultiReference(joinedPathsTable,joinedIsectsTable));
     joinedIsectsTable->AddReference(new RIVSingleReference(joinedIsectsTable,joinedPathsTable));
-    joinedIsectsTable->AddReference(new RIVMultiReference(joinedIsectsTable,joinedLightsTable));
+    joinedIsectsTable->AddReference(new RIVFixedReference(joinedIsectsTable,joinedLightsTable,maxNrLights));
+    joinedLightsTable->AddReference(new RIVSingleReference(joinedLightsTable,joinedIsectsTable));
     
-    //	printf("\nCURRENT DATA = \n");
-    //	currentData->Print();
+//    	printf("\nCURRENT DATA = \n");
+//    	currentData->Print();
     //
     //	printf("\nCANDIDATE DATA = \n");
     //	candidateData->Print();
@@ -372,8 +389,8 @@ void DataController::Reduce() {
     joinedData->AddDataSet(currentData);
     joinedData->AddDataSet(candidateData);
     
-//    	printf("JOINED DATA : \n");
-//    	joinedData->Print();
+//    printf("JOINED DATA : \n");
+//    joinedData->Print();
     
     HistogramSet<float,ushort> bootstrapHistograms;
     
@@ -397,7 +414,6 @@ void DataController::Reduce() {
 //        printf("BOOTSTRAP HISTOGRAMS:\n");
 //        bootstrapHistograms.Print();
         
-
         float score = trueDistributions.DistanceTo(bootstrapHistograms);
         
 //        printf("Bootstrap = \n\n");
@@ -453,10 +469,10 @@ void DataController::Reduce() {
         
         //Create new references as they are not created by the bootstrapping
         RIVRecord<ushort>* bootstrapDepth = pathsTable->GetRecord<ushort>(DEPTH);
-        RIVRecord<ushort>* bootstrapOccluderCounts = isectsTable->GetRecord<ushort>(OCCLUDER_COUNT);
+//        RIVRecord<ushort>* bootstrapOccluderCounts = isectsTable->GetRecord<ushort>(OCCLUDER_COUNT);
         auto bootIsectsToPathsRef = new RIVSingleReference(isectsTable,pathsTable);
         auto bootPathsToIsectRef = new RIVMultiReference(pathsTable,isectsTable);
-        auto bootIsectsToLightsRef = new RIVMultiReference(isectsTable,lightsTable);
+        auto bootIsectsToLightsRef = new RIVFixedReference(isectsTable,lightsTable,maxNrLights);
         
         //Create new references as they are not created by the bootstrapping
         pathsTable->AddReference(bootPathsToIsectRef);
@@ -466,23 +482,23 @@ void DataController::Reduce() {
         //Fix the new reference paths
         size_t intersectionsCount = 0;
         size_t pathsCount = 0;
-        size_t occluderCount = 0;
+        size_t lightsCount = 0;
         
         size_t pathRows = pathsTable->NumberOfRows();
         for(size_t i = 0 ; i < pathRows ; ++i) {
             ushort depth = bootstrapDepth->Value(i);
-            std::pair<size_t*,ushort> rowsMapping;
-            size_t* rows = new size_t[depth];
+            std::vector<size_t> rows(depth);
             for(size_t j = 0 ; j < depth ; ++j) {
                 rows[j] = intersectionsCount;
                 bootIsectsToPathsRef->AddReference(intersectionsCount, pathsCount);
                 ++intersectionsCount;
             }
-            rowsMapping.second = depth;
-            rowsMapping.first = rows;
-            bootPathsToIsectRef->AddReferences(i, rowsMapping);
+            bootPathsToIsectRef->AddReferences(i,rows);
             ++pathsCount;
         }
+        
+        
+        /*
         intersectionsCount = 0;
         size_t intersectionRows = isectsTable->NumberOfRows();
         for(size_t i = 0 ; i < intersectionRows ; ++i) {
@@ -498,16 +514,12 @@ void DataController::Reduce() {
             bootIsectsToLightsRef->AddReferences(i, rowsMapping);
             ++intersectionsCount;
         }
+        */
 //
         
-//        printf("\nBOOTSTRAP RESULT = \n");
-//        bestBootstrap->Print();
+        printf("\nBOOTSTRAP RESULT = \n");
+        bestBootstrap->Print(200);
         
-        //If we found a better bootstrap, this might mean we need to do more bootstrapping until
-//        bootstrapRepeat *= 2;
-//        if(bootstrapRepeat > maxBootstrapRepeat) {
-//            bootstrapRepeat = maxBootstrapRepeat;
-//        }
         
         //Delete the old renderer data and replace it with the bootstrap dataset,
         std::swap(currentData,bestBootstrap);

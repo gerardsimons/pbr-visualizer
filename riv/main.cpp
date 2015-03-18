@@ -269,7 +269,46 @@ void testSampling() {
     delete testData;
 }
 
+void testReferenceMemoryLeaks() {
+    
+//    const int M = 3;
+//    const int N = 1;
+    
+    const int M = 10;
+    const int N = 100;
+    
+    RIVTable<float>* testTable = new RIVTable<float>("test_1");
+    RIVTable<float>* testTable2 = new RIVTable<float>("test_2");
+    
+    RIVSingleReference* singleRef = new RIVSingleReference(testTable,testTable2);
+    RIVMultiReference* multiRef = new RIVMultiReference(testTable2,testTable2);
+    
+    for(int i = 0 ; i < M ; ++i) {
+        singleRef->AddReference(i, i);
+    
+        std::vector<size_t> rows(N);
+        for(int j = 0 ; j < N ; ++j) {
+            rows[j] = j+i;
+        }
+        multiRef->AddReferences(i, rows);
+    }
+    
+//    delete singleRef;
+    printf("DELETE\n\n");
+    
+    singleRef->GetReferenceRows(1);
+    multiRef->GetReferenceRows(1);
+    
+    delete multiRef;
+    
+    printf("Testing reference memory leaks finished...\n");
+}
+
 void testFunctions() {
+    
+    testReferenceMemoryLeaks();
+    return;
+    
     
     testOctree();
     return;

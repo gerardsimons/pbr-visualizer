@@ -87,15 +87,18 @@ float OctreeNode::aggregateHelper(ushort originalDepth) {
     }
 }
 float OctreeNode::AggregateValue() {
-    if(isLeaf) {
-        return Value();
-    }
-    else {
-        return aggregateHelper(depth);
-    }
+    
+    return Value();
+//    if(isLeaf) {
+//        return Value();
+//    }
+//    else {
+//        return aggregateHelper(depth);
+//    }
 }
 void OctreeNode::Add(float x, float y, float z, float value) {
     ++addCount;
+    this->value += value;
     if(isLeaf) {
         //Does it contain enough values and is it not too deep already?
         if(addCount >= maxCapacity && depth < maxDepth) {
@@ -108,7 +111,7 @@ void OctreeNode::Add(float x, float y, float z, float value) {
         }
         else {
 //            ++addCount;
-            this->value += value;
+//            this->value += value;
         }
     }
     else {

@@ -265,16 +265,18 @@ namespace embree
                 ++state.numRays;
 //				rtcOccluded(scene->scene,(RTCRay&)shadowRay);
                 rtcIntersect(scene->scene,(RTCRay&)shadowRay);
+                Color lightRadiance = ls.L * brdf * rcp(ls.wi.pdf);
                 if (shadowRay) {
-                    occluderIds.push_back(shadowRay.id0);
+                    dataConnector->AddLightData(i,shadowRay.id0,lightRadiance);
                     continue;
                 }
                 else {
+                    dataConnector->AddLightData(i,-1,lightRadiance);
 //                    occluderIds.push_back(-1);
                 }
 				
 				/*! Evaluate BRDF. */
-				L += ls.L * brdf * rcp(ls.wi.pdf);
+                L += lightRadiance;
 			}
 		}
 		if (lightPath.depth < maxDepth)
@@ -299,7 +301,7 @@ namespace embree
 				Ray newRay(dg.P, wi, dg.error*epsilon, inf, lightPath.lastRay.time);
 				LightPath scatteredPath = lightPath.extended(newRay,nextMedium, c, (type & directLightingBRDFTypes) != NONE);
 
-                dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,type,occluderIds);
+                dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,type);
 		  
 				Color isectColor = c * Li(scatteredPath, scene, state, dataConnector) * rcp(wi.pdf);
 				L += isectColor;

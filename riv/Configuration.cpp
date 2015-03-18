@@ -50,5 +50,9 @@ const char* INTERACTION_TYPE = "interaction_type";
 const char* SHAPE_ID = "shape ID";
 const char* OCCLUDER_COUNT = "occlusions";
 
+//* RECORD NAMES OF THE LIGHTS TABLE *//
 const char* LIGHT_ID = "light ID";
 const char* OCCLUDER_ID = "occluder ID";
+const char* LIGHT_R = "light R";
+const char* LIGHT_G = "light G";
+const char* LIGHT_B = "light B";

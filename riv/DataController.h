@@ -71,14 +71,18 @@ private:
 	RIVShortRecord* primitiveIds = NULL;
 	RIVShortRecord* shapeIds = NULL;
 	RIVShortRecord* interactionTypes = NULL;
-	RIVShortRecord* lightIds = NULL;
     RIVShortRecord* occluderCounts = NULL;
     
+    RIVShortRecord* lightIds = NULL;
     RIVShortRecord* occluderIds = NULL;
+    RIVFloatRecord* lightRs = NULL;
+    RIVFloatRecord* lightGs = NULL;
+    RIVFloatRecord* lightBs = NULL;
 	
 	RIVMultiReference* pathsToIsectRef = NULL;
 	RIVSingleReference* isectsToPathsRef = NULL;
-    RIVMultiReference* isectsToLightsRef = NULL;
+    RIVFixedReference* isectsToLightsRef = NULL;
+    RIVSingleReference* lightsToIsectsRef = NULL;
 	
     const std::set<std::string> histogramTables = {PATHS_TABLE,INTERSECTIONS_TABLE};
 	const std::set<std::string> dataTables = {PATHS_TABLE,INTERSECTIONS_TABLE,LIGHTS_TABLE};

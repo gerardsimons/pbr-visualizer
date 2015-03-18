@@ -36,8 +36,6 @@ bool DataConnector::FinishPath(Color& color, Color& throughput) {
         currentPath.throughput.g = std::min(throughput.g,1.F);
         currentPath.throughput.b = std::min(throughput.b,1.F);
         
-        
-		
 		return pfCallback(&currentPath);
 	}
 	else {
@@ -50,8 +48,7 @@ void DataConnector::StartPath(const Vec2f& pixel,const Vec2f& lens, float time) 
 //	printf("Starting Path\n");
 	currentPath = (PathData){pixel,lens,time};
 }
-
-void DataConnector::AddIntersectionData(const Vec3fa& pos, const Vec3fa& dir, Color& color, int primitive_id, ushort type, const std::vector<ushort>& occluderIds) {
+void DataConnector::AddIntersectionData(const Vec3fa& pos, const Vec3fa& dir, Color& color, int primitive_id, ushort type) {
 //			printf("Instersection added.\n");
 //	printf("position = [%f,%f,%f]\n",x,y,z);
 //	printf("color = [%f,%f,%f]\n",r,g,b);
@@ -62,8 +59,13 @@ void DataConnector::AddIntersectionData(const Vec3fa& pos, const Vec3fa& dir, Co
         color.g = std::min(color.g,1.F);
         color.b = std::min(color.b,1.F);
 		IntersectData isectData = IntersectData(pos, dir, color, primitive_id, 0, 0, 0);
-        isectData.occluderIds = occluderIds;
+        isectData.lightData = currentLightData;
 		currentPath.intersectionData.push_back(isectData);
+        currentLightData.clear();
 	}
 	else throw std::runtime_error("Path is not set.");
+}
+void DataConnector::AddLightData(ushort lightId, ushort occluderId, const embree::Color &color) {
+//    currentPath.intersectionData.back().lightData.push_back((LightData){lightId,occluderId,color});
+    currentLightData.push_back((LightData){lightId,occluderId,color});
 }

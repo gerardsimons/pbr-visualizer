@@ -19,6 +19,12 @@ typedef unsigned short ushort;
 
 using namespace embree;
 
+typedef struct LightData {
+    ushort lightId;
+    ushort occluderId;
+    Color radiance;
+} LightData;
+
 //Struct wrapper for all intersection related data
 typedef struct IntersectData {
 	Vec3fa position; //world position
@@ -30,7 +36,7 @@ typedef struct IntersectData {
 	ushort lightId;
 	ushort interactionType;
     
-    std::vector<ushort> occluderIds;
+    std::vector<LightData> lightData;
 	
 	IntersectData(const Vec3fa& position, const Vec3fa& dir,const Color& color, ushort primitiveId, ushort shapeId, ushort lightId, ushort interactionType) :
 		position(position), dir(dir), color(color), primitiveId(primitiveId), shapeId(shapeId), lightId(lightId), interactionType(interactionType) {
@@ -60,6 +66,7 @@ class DataConnector {
 private:
 	bool pathSet = false;
 	PathData currentPath;
+    std::vector<LightData> currentLightData;
 	
 	typedef bool (*path_finished)(PathData* newPath); // type for conciseness
 	typedef void (*frame_finished)(size_t numPaths, size_t numRays);
@@ -80,8 +87,8 @@ public:
 	bool FinishPath(Color& color, Color& throughput);
 	void StartPath(const Vec2f& pixel,const Vec2f& lens, float time);
 //	void set_callback((void) (*newCallBack)(PathData*));
-	void AddIntersectionData(const Vec3fa& pos, const Vec3fa& dir, Color& color, int primitive_id, ushort type,const std::vector<ushort>& occluderIds);
-//	void IJustAddedThisStrangeFunction();
+	void AddIntersectionData(const Vec3fa& pos, const Vec3fa& dir, Color& color, int primitive_id, ushort type);
+    void AddLightData(ushort lightId, ushort occluderId, const Color& color);
 };
 
 #endif

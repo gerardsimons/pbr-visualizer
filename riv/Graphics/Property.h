@@ -106,8 +106,8 @@ public:
             for(RIVReference* reference : sourceTable->references) {
                 if(reference->targetTable->name == propertyReference->name) {
                     //Find target index
-                    std::pair<size_t*,ushort> rows = reference->GetReferenceRows(row);
-                    if(rows.second > 0){
+                    std::vector<size_t> rows = reference->GetReferenceRows(row);
+                    if(rows.size()){
     //						size_t propertyIndex = (targetRange)[0]; //Very arbitrary, pass all and average?
                         //Repeat using the new row and table
                         return Value(propertyReference,rows,computedValue);
@@ -117,13 +117,13 @@ public:
 		}
 		return false;
 	}
-	bool Value(RIVTableInterface* sourceTable, const std::pair<size_t*,ushort>& rows,float& computedValue) {
+	bool Value(RIVTableInterface* sourceTable, const std::vector<size_t>& rows,float& computedValue) {
 		//    float const* overallColor = NULL;
 		Evaluator<T,float>* specificEvaluator = NULL;
 		Evaluator<T,float>* evaluator = defaultEvaluator;
 		size_t rowFound = 0;
-		for(size_t i = 0 ; i < rows.second ; ++i) {
-			rowFound = rows.first[i];
+		for(size_t i = 0 ; i < rows.size() ; ++i) {
+			rowFound = rows[i];
 			//Give preference to special interpolators
 			specificEvaluator = evaluatorRegister[rowFound];
 			if(specificEvaluator != NULL) {

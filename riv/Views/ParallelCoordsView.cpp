@@ -63,12 +63,14 @@ void ParallelCoordsView::createAxes() {
     int axisHeight = height - 2.5F * paddingY;
     int bins = 10;
     
-    std::vector<std::string> tablesToDisplay = {PATHS_TABLE,INTERSECTIONS_TABLE};
+    std::vector<std::string> tablesToDisplay = {PATHS_TABLE,INTERSECTIONS_TABLE,LIGHTS_TABLE};
+    std::set<std::string> recordsToIgnore = {PRIMITIVE_ID,INTERACTION_TYPE,LIGHT_ID,OCCLUDER_ID};
     
     for(const std::string& tableName : tablesToDisplay) {
         RIVTable<float,ushort> *table = (*datasetOne)->GetTable(tableName);
         total_nr_of_records += table->NumberOfRecords();
     }
+    total_nr_of_records -= recordsToIgnore.size();
     
     float delta = 1.F / (total_nr_of_records - 1) * (width - 2 * paddingX);
     
@@ -88,46 +90,49 @@ void ParallelCoordsView::createAxes() {
                 for(size_t i = 0 ; i < tRecords.size() ; ++i) {
                     auto& record = tRecords.at(i);
                     
-                    typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
-                    auto otherRecord = otherTable->GetRecord<Type>(record->name);
-                    
-                    int x = delta * (axisIndex) + paddingX;
-                    
-                    //A tuple containing the min and max values of the record
-                    auto minMax = record->MinMax();
-                    auto otherMinMax = otherRecord->MinMax();
-                    //                    const std::string& name = record->name;
-                    //				printf("Record %s has min-max : ",record->name.c_str());
-                    //				std::cout << " " << minMax.first << ", " << minMax.second << std::endl;
-                    
-                    //					auto histOne = distributionsOne->GetHistogram<Type>(name);
-                    //					auto histTwo = distributionsTwo->GetHistogram<Type>(name);
-                    
-                    //					axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,distributionsOne->GetHistogram<Type>(name),distributionsTwo->GetHistogram<Type>(name));
-                    
-                    float min = std::min(minMax.first,otherMinMax.first);
-                    float max = std::min(minMax.second,otherMinMax.second);
-                    
-                    //If the type is unsigned short, its a discrete value, if there are not too many, use each discrete value as a bin, otherwise clump them together same as floats
-                    if(typeid(Type) == typeid(ushort)) {
+                    if(recordsToIgnore.find(record->name) == recordsToIgnore.end()) {
                         
-                        ushort diff = max - min;
-                        if(diff > bins) {
-                            diff = bins;
+                        typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
+                        auto otherRecord = otherTable->GetRecord<Type>(record->name);
+                        
+                        int x = delta * (axisIndex) + paddingX;
+                        
+                        //A tuple containing the min and max values of the record
+                        auto minMax = record->MinMax();
+                        auto otherMinMax = otherRecord->MinMax();
+                        //                    const std::string& name = record->name;
+                        //				printf("Record %s has min-max : ",record->name.c_str());
+                        //				std::cout << " " << minMax.first << ", " << minMax.second << std::endl;
+                        
+                        //					auto histOne = distributionsOne->GetHistogram<Type>(name);
+                        //					auto histTwo = distributionsTwo->GetHistogram<Type>(name);
+                        
+                        //					axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,distributionsOne->GetHistogram<Type>(name),distributionsTwo->GetHistogram<Type>(name));
+                        
+                        float min = std::min(minMax.first,otherMinMax.first);
+                        float max = std::min(minMax.second,otherMinMax.second);
+                        
+                        //If the type is unsigned short, its a discrete value, if there are not too many, use each discrete value as a bin, otherwise clump them together same as floats
+                        if(typeid(Type) == typeid(ushort)) {
+                            
+                            ushort diff = max - min;
+                            if(diff > bins) {
+                                diff = bins;
+                            }
+                            
+                            auto dataHistOne = Histogram<Type>(record->name,min,max,diff);
+                            auto dataHistTwo = Histogram<Type>(record->name,min,max,diff);
+                            
+                            axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,dataHistOne,dataHistTwo);
                         }
-                        
-                        auto dataHistOne = Histogram<Type>(record->name,min,max,diff);
-                        auto dataHistTwo = Histogram<Type>(record->name,min,max,diff);
-                        
-                        axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,dataHistOne,dataHistTwo);
+                        else {
+                            auto dataHistOne = Histogram<Type>(record->name,min,max,bins);
+                            auto dataHistTwo = Histogram<Type>(record->name,min,max,bins);
+                            
+                            axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,dataHistOne,dataHistTwo);
+                        }
+                        axisIndex++;
                     }
-                    else {
-                        auto dataHistOne = Histogram<Type>(record->name,min,max,bins);
-                        auto dataHistTwo = Histogram<Type>(record->name,min,max,bins);
-                        
-                        axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,dataHistOne,dataHistTwo);
-                    }
-                    axisIndex++;
                 }
             });
             axisGroups.push_back(axisGroup);
@@ -195,8 +200,8 @@ void ParallelCoordsView::drawSelectionBoxes() {
                     
                     printf("Drawing selection box on axis %s\n",selectedAxis->name.c_str());
                     
-//                    glColor4f(1, 1, 1,.5F);
-//                    glRectf(axis->selection.start.x - 1, axis->selection.start.y, axis->selection.end.x, axis->selection.end.y);
+                    //                    glColor4f(1, 1, 1,.5F);
+                    //                    glRectf(axis->selection.start.x - 1, axis->selection.start.y, axis->selection.end.x, axis->selection.end.y);
                 }
             }
         });
@@ -214,11 +219,11 @@ void ParallelCoordsView::drawAxes() {
                 sizeDiff = rowsTwo / (float)rowsOne;
             }
         }
-        printf("Size diff = %f\n",sizeDiff);
+        //        printf("Size diff = %f\n",sizeDiff);
         tuple_for_each(axisGroup.axes, [&](auto tAxes) {
             for(auto axis : tAxes) {
-
-                printf("Draw axis %s\n",axis->name.c_str());
+                
+                //                printf("Draw axis %s\n",axis->name.c_str());
                 
                 //Draw basic black backdrop for each axis
                 glColor3f(0,0,0);
@@ -245,7 +250,7 @@ void ParallelCoordsView::drawAxes() {
                     float selectionStartY = axis->ScaleValueForY(axis->selection.start.y);
                     float selectionEndY = axis->ScaleValueForY(axis->selection.end.y);
                     
-//                    printf("selectionStartY,selectionEndY = %f,%f\n",selectionStartY,selectionEndY);
+                    //                    printf("selectionStartY,selectionEndY = %f,%f\n",selectionStartY,selectionEndY);
                     
                     startSelectionBin = std::floor(selectionStartY * numBins);
                     endSelectionBin = std::floor(selectionEndY * numBins);
@@ -253,9 +258,9 @@ void ParallelCoordsView::drawAxes() {
                     if(endSelectionBin < startSelectionBin) {
                         std::swap(startSelectionBin,endSelectionBin);
                     }
-//                    glColor4f(0,0,0,0.3);
-//                    glRectf(axis->selection.start.x - 10, axis->selection.start.y, axis->selection.end.x + 10, axis->selection.end.y);
-//                    printf("Start,end selection bin = %d,%d\n",startSelectionBin,endSelectionBin);
+                    //                    glColor4f(0,0,0,0.3);
+                    //                    glRectf(axis->selection.start.x - 10, axis->selection.start.y, axis->selection.end.x + 10, axis->selection.end.y);
+                    //                    printf("Start,end selection bin = %d,%d\n",startSelectionBin,endSelectionBin);
                 }
                 
                 
@@ -343,7 +348,7 @@ void ParallelCoordsView::drawAxes() {
                             const int selectionLineWidth = 8;
                             glLineWidth(selectionLineWidth);
                             
-                
+                            
                             if(bin >= startSelectionBin && bin <= endSelectionBin) {
                                 //The points of the selection rectangle for this particular bin
                                 int selectionBinStartX = startBinX - selectionLineWidth / 2;
@@ -352,10 +357,10 @@ void ParallelCoordsView::drawAxes() {
                                 int selectionBinEndY;
                                 if(endSelectionBin == bin) {
                                     //Left line
-//                                    printf("bin %d is the end selection bin\n",bin);
+                                    //                                    printf("bin %d is the end selection bin\n",bin);
                                     selectionBinStartY = axis->selection.start.y;
                                     if(bin == startSelectionBin) {
-//                                        printf(" AND selection bin\n");
+                                        //                                        printf(" AND selection bin\n");
                                         selectionBinEndY = axis->selection.end.y;
                                         
                                     }
@@ -363,25 +368,25 @@ void ParallelCoordsView::drawAxes() {
                                         selectionBinEndY = startBinY;
                                     }
                                     
-//                                    glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
+                                    //                                    glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
                                     
-
+                                    
                                 }
                                 else if(bin == startSelectionBin) {
-//                                    printf("bin %d is the start selection bin",bin);
+                                    //                                    printf("bin %d is the start selection bin",bin);
                                     selectionBinStartY = endBinY;
                                     selectionBinEndY = axis->selection.end.y;
-//                                                                        glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
+                                    //                                                                        glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
                                 }
                                 else {
-//                                    printf("bin %d is a middle selection bin\n",bin);
+                                    //                                    printf("bin %d is a middle selection bin\n",bin);
                                     selectionBinStartY = startBinY;
                                     selectionBinEndY = endBinY;
-//                                                                        glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
-//
+                                    //                                                                        glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
+                                    //
                                 }
-//                                printf("glRectf(%d,%d,%d,%d)\n",selectionBinStartX,selectionBinStartY,selectionBinEndX,selectionBinEndY);
-//                                glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
+                                //                                printf("glRectf(%d,%d,%d,%d)\n",selectionBinStartX,selectionBinStartY,selectionBinEndX,selectionBinEndY);
+                                //                                glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
                                 glColor4f(0,0,0,0.4);
                                 glBegin(GL_LINES);
                                 glVertex2f(selectionBinStartX,selectionBinStartY);
@@ -486,7 +491,6 @@ void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ush
         auto table = dataset->GetTable(axisGroup.tableName);
         tuple_for_each(axisGroup.axes, [&](auto& tAxes) {
             for(auto& axis : tAxes) {
-                
                 TableIterator* iterator = table->GetIterator();
                 while(iterator->GetNext(row)) {
                     
@@ -561,14 +565,14 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
         pathMembershipRecord = pathMembershipTable->GetRecord<float>(MEMBERSHIP);
         
         if(pathMembershipRecord != NULL && pathMembershipRecord->Size()) {
-//            pathMembershipDataPresent = true;
+            //            pathMembershipDataPresent = true;
         }
     }
     
     if(isectMembershipTable) {
         isectMembershipRecord = isectMembershipTable->GetRecord<float>(MEMBERSHIP);
         if(isectMembershipRecord) {
-//            isectMembershipDataPresent = isectMembershipRecord->Size();
+            //            isectMembershipDataPresent = isectMembershipRecord->Size();
         }
     }
     
@@ -593,19 +597,19 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
         
         //Find what color property to use for this table
         RIVColorProperty* colorProperty = pathColors;
-        if(table->name == PATHS_TABLE) {
-            if(pathMembershipDataPresent) {
-                colorProperty = new RIVEvaluatedColorProperty<float>(colorMap,table,pathMembershipRecord);
-            }
-            else colorProperty = pathColors;
-            //			membershipRecord = pathMembershipRecord;
-        }
-        else if(table->name == INTERSECTIONS_TABLE) {
-            if(isectMembershipDataPresent) {
-                colorProperty = new RIVEvaluatedColorProperty<float>(colorMap,table,isectMembershipRecord);
-            }
-            else colorProperty = rayColors;
-        }
+        //        if(table->name == PATHS_TABLE) {
+        //            if(pathMembershipDataPresent) {
+        //                colorProperty = new RIVEvaluatedColorProperty<float>(colorMap,table,pathMembershipRecord);
+        //            }
+        //            else colorProperty = pathColors;
+        //            //			membershipRecord = pathMembershipRecord;
+        //        }
+        //        else if(table->name == INTERSECTIONS_TABLE) {
+        //            if(isectMembershipDataPresent) {
+        //                colorProperty = new RIVEvaluatedColorProperty<float>(colorMap,table,isectMembershipRecord);
+        //            }
+        //            else colorProperty = rayColors;
+        //        }
         
         //You gotta love 'auto'!
         size_t lineIndex = 0;
@@ -971,7 +975,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
                 selectedAxis->selection.end.x = selectedAxis->x + 10;
                 selectedAxis->selection.start.y = y;
                 selectedAxis->selection.end.y = y;
-//                selection = &selectedAxis->selection;
+                //                selection = &selectedAxis->selection;
                 
                 selectionBoxChanged = false;
                 Invalidate();
@@ -1007,7 +1011,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
                     for(auto& axis : tAxes) {
                         if(selectedAxis && axis->name == selectedAxis->name) {
                             if(y < axis->selection.start.y) {
-                             axis->selection.end.y = axis->PositionOnScaleForViewY(y);
+                                axis->selection.end.y = axis->PositionOnScaleForViewY(y);
                             }
                             else {
                                 axis->selection.start.y = axis->PositionOnScaleForViewY(y);
@@ -1093,7 +1097,7 @@ void ParallelCoordsView::filterData() {
                             (*datasetTwo)->AddFilter(rangeFilter);
                         }
                         
-//                        latestSelectionBox = &axis->selection;
+                        //                        latestSelectionBox = &axis->selection;
                     }
                     else {
                         (*datasetOne)->ClearFilter<Type>(axis->name);
