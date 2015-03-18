@@ -26,6 +26,7 @@ public:
 	virtual size_t NumberOfRows() const = 0;
     virtual size_t NumberOfUnfilteredRows() const = 0;
 	virtual void ClearFilteredRows() = 0;
+    virtual void ClearFilteredRows(RIVTableInterface* sourceTable) = 0; //What table tells it to clear its rows, important to avoid cyclic behaviour in updating references
     
     virtual RIVReference* GetReferenceTo(const std::string& tableName) = 0;
 protected:

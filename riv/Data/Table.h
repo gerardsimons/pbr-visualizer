@@ -392,10 +392,21 @@ public:
 				}
                 else {
                     RIVFixedReference* fixedRef = dynamic_cast<RIVFixedReference*>(reference);
-                    for(auto row : newlyFilteredRows) {
-                        if(row.second) {
-                            fixedRef->FilterReferenceRow(row.first);
-//                            printf("Filter reference row %zu at %s\n",row.first,reference->targetTable->name.c_str());
+                    if(fixedRef) {
+                        for(auto row : newlyFilteredRows) {
+                            if(row.second) {
+                                fixedRef->FilterReferenceRow(row.first);
+    //                            printf("Filter reference row %zu at %s\n",row.first,reference->targetTable->name.c_str());
+                            }
+                        }
+                    }
+                    else {
+                        RIVSingleReference* singleRef = dynamic_cast<RIVSingleReference*>(reference);
+                        for(auto row : newlyFilteredRows) {
+                            if(row.second) {
+                                singleRef->FilterReferenceRow(row.first);
+                                //                            printf("Filter reference row %zu at %s\n",row.first,reference->targetTable->name.c_str());
+                            }
                         }
                     }
                 }
@@ -572,8 +583,16 @@ public:
 	}; //Any filters applied?
 	bool IsClustered() { return isClustered; };
 	void ClearFilteredRows() {
-		filteredRows.clear();
+        ClearFilteredRows(this);
 	}
+    void ClearFilteredRows(RIVTableInterface* sourceTable) {
+        filteredRows.clear();
+        for(RIVReference* ref : references) {
+            if(ref->targetTable != sourceTable) {
+                ref->targetTable->ClearFilteredRows(this);
+            }
+        }
+    }
 	bool HasRecord(const std::string& name) const {
 		bool found = false;
 		tuple_for_each(records,[&](auto tRecords) {

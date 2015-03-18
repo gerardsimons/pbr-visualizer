@@ -473,11 +473,13 @@ void DataController::Reduce() {
         auto bootIsectsToPathsRef = new RIVSingleReference(isectsTable,pathsTable);
         auto bootPathsToIsectRef = new RIVMultiReference(pathsTable,isectsTable);
         auto bootIsectsToLightsRef = new RIVFixedReference(isectsTable,lightsTable,maxNrLights);
+        auto bootLightsToIsectsRef = new RIVSingleReference(lightsTable,isectsTable);
         
         //Create new references as they are not created by the bootstrapping
         pathsTable->AddReference(bootPathsToIsectRef);
         isectsTable->AddReference(bootIsectsToPathsRef);
         isectsTable->AddReference(bootIsectsToLightsRef);
+        lightsTable->AddReference(bootLightsToIsectsRef);
         
         //Fix the new reference paths
         size_t intersectionsCount = 0;
@@ -497,6 +499,16 @@ void DataController::Reduce() {
             ++pathsCount;
         }
         
+        intersectionsCount = 0;
+        size_t lightRows = lightsTable->NumberOfRows();
+        for(size_t i = 0 ; i < lightRows ; ++i) {
+//            for(int j = 0 ; j < maxNrLights ; ++j) {
+                bootLightsToIsectsRef->AddReference(i, intersectionsCount);
+            if(i % maxNrLights == (maxNrLights - 1)) {
+                ++intersectionsCount;
+            }
+//            }
+        }
         
         /*
         intersectionsCount = 0;
@@ -517,8 +529,8 @@ void DataController::Reduce() {
         */
 //
         
-        printf("\nBOOTSTRAP RESULT = \n");
-        bestBootstrap->Print(200);
+//        printf("\nBOOTSTRAP RESULT = \n");
+//        bestBootstrap->Print();
         
         
         //Delete the old renderer data and replace it with the bootstrap dataset,
