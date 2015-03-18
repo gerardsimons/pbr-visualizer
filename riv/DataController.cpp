@@ -162,7 +162,7 @@ void DataController::createDataStructures(const Vec2f& xBounds, const Vec2f& yBo
     
     //Create the records and such for the datasets
     initDataSet(currentData,xBounds,yBounds,zBounds,nrPrimitives);
-    currentData->Print(100);
+//    currentData->Print(100);
     initDataSet(candidateData,xBounds,yBounds,zBounds,nrPrimitives);
     
     trueDistributions = currentData->CreateEmptyHistogramSet(bins,histogramTables);
@@ -179,7 +179,7 @@ void DataController::createDataStructures(const Vec2f& xBounds, const Vec2f& yBo
     float maxSize = std::max(xSize,std::max(ySize,zSize));
     
     //Because floats are annoying with equality, make sure you over-extend a bit the size of the octree
-    int maxDepth = 1;
+    int maxDepth = 8;
     int maxCapacity = 1;
     energyDistribution = new Octree(maxDepth,cX,cY,cZ,1.01*maxSize,maxCapacity);
     
@@ -320,6 +320,7 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
                 for(int j = 0 ; j < nrLights ; ++j) {
 //                    printf("isect to occluder : %zu --> %zu\n",j,)
                     const LightData& lightD = isect.lightData[j];
+//                    printf("occluder id = %d\n",lightD.occluderId);
                     occluderIds->AddValue(lightD.occluderId);
                     lightIds->AddValue(lightD.lightId);
                     lightRs->AddValue(lightD.radiance.r);

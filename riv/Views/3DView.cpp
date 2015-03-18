@@ -153,7 +153,7 @@ void RIV3DView::Reshape(int newWidth, int newHeight) {
 void RIV3DView::ToggleDrawIntersectionPoints() {
     drawIntersectionPoints = !drawIntersectionPoints;
     if(drawIntersectionPoints && !pathsCreated) {
-        createPaths();
+        createCameraPaths();
     }
     else if(!drawIntersectionPoints && !drawLightPaths) {
         pathsCreated = false;
@@ -188,8 +188,8 @@ void RIV3DView::drawEnergyHelper(OctreeNode* node, float max,riv::ColorMap& heat
     if(nodeMaxReached) {
         float ratio = node->AggregateValue() / max;
         if(ratio > min) {
-            //            ratio = node->cx / 500; //TO TEST THE COLOR INTERPOLATION
-            //            printf("Ratio = %f\n",ratio);
+//                        ratio = node->cx / 500; //TO TEST THE COLOR INTERPOLATION
+//                        printf("Ratio = %f\n",ratio);
             riv::Color c = heatmap.ComputeColor(ratio);
             //            glColor4f(c.R,c.G,c.B,alpha);
             glColor4f(c.R,c.G,c.B,alpha);
@@ -336,7 +336,7 @@ void RIV3DView::Draw() {
     //	reporter::startTask("3D Draw");
     
     glEnable(GL_DEPTH_TEST);
-    //    glClearColor(1.0, 1.0, 1.0, 0.0); //White
+//        glClearColor(1.0, 1.0, 1.0, 0.0); //White
     glClearColor(0.0, 0.0, 0.0, 0.0); //black
     //        glClearColor(0.8, 0.8, 0.8 , 0.0); //gray
     glClear( GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT);
@@ -377,8 +377,8 @@ void RIV3DView::Draw() {
         if(datasetTwo) {
             float maxOne = energyDistributionOne->MaxValue(drawHeatmapDepth);
             float maxTwo = energyDistributionTwo->MaxValue(drawHeatmapDepth);
-            //            printf("maxOne = %f\n",maxOne);
-            //            printf("maxTwo = %f\n",maxTwo);
+            printf("maxOne = %f\n",maxOne);
+            printf("maxTwo = %f\n",maxTwo);
             float max = std::max(maxOne,maxTwo);
             drawEnergyDistribution(energyDistributionOne,drawHeatmapDepth,max);
         }
@@ -432,8 +432,12 @@ void RIV3DView::Draw() {
     
     //Draw lights of renderer one
     //Draw a solid yellow sphere with a red wireframe on it
-    drawLights(lightsOne, riv::Color(1,0,0));
-    drawLights(lightsTwo, riv::Color(0,0,1));
+    if(drawDataSetOne) {
+        drawLights(lightsOne, riv::Color(1,0,0));
+    }
+    if(drawDataSetTwo) {
+        drawLights(lightsTwo, riv::Color(0,0,1));
+    }
     
     if(datasetTwo) {
         glColor3f(.2, .2, 1);
@@ -560,21 +564,95 @@ void RIV3DView::drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<
 }
 void RIV3DView::ResetGraphics() {
     if(drawLightPaths || drawIntersectionPoints) {
-        createPaths();
+        createCameraPaths();
     }
 }
+
+std::vector<Path> RIV3DView::createLightPaths(ushort lightID, RIVDataSet<float,ushort>* dataset,RIVColorProperty* pathColor, RIVColorProperty* pointColor) {
+    reporter::startTask("Creating camera paths");
+    
+    RIVTable<float,ushort>* isectTable = dataset->GetTable(INTERSECTIONS_TABLE);
+    
+    RIVTable<float,ushort>* pathsTable = dataset->GetTable(PATHS_TABLE);
+    RIVShortRecord* bounceRecord = isectTable->GetRecord<ushort>(BOUNCE_NR);
+    RIVShortRecord* primitiveRecord = isectTable->GetRecord<ushort>(PRIMITIVE_ID);
+    
+    RIVFloatRecord* xRecord = isectTable->GetRecord<float>(POS_X);
+    RIVFloatRecord* yRecord = isectTable->GetRecord<float>(POS_Y);
+    RIVFloatRecord* zRecord = isectTable->GetRecord<float>(POS_Z);
+    
+    std::vector<Path> paths;
+    
+    //Get the records we want;
+    //Get the iterator, this iterator is aware of what rows are filtered and not
+    TableIterator* intersectionsIterator = isectTable->GetIterator();
+    
+    size_t row = 0;
+    size_t* pathID = NULL;
+    size_t oldPathID = 0;
+    ushort bounceNr;
+    
+    std::vector<PathPoint> points;
+    //    lightCones.clear();
+    //    LightCone* previousCone = NULL;
+    
+    //    dataset->Print(10);
+    std::map<RIVTableInterface*,std::vector<size_t>> referenceRowsMap;
+    
+    while(intersectionsIterator->GetNext(row,referenceRowsMap)) {
+        
+        //Get the path ID that belongs to this intersection
+        std::vector<size_t> refRows;
+        for(auto it : referenceRowsMap) {
+            if(it.first->name == PATHS_TABLE) {
+                refRows = it.second;
+            }
+        }
+        if(refRows.size()) {
+            pathID = &refRows[0];
+        }
+        
+        //If the path ID is different from the previous one, we can finish the past path
+        if(pathID && *pathID != oldPathID) {
+            riv::Color pColor;
+            pathColor->ComputeColor(pathsTable, *pathID, pColor);
+            if(points.size() > 0) {
+                paths.push_back(Path(points,pColor));
+                points.clear();
+            }
+            //            previousCone = NULL;
+            
+            oldPathID = *pathID;
+        }
+
+        bounceNr = bounceRecord->Value(row);
+        riv::Color pointC;
+        pointColor->ComputeColor(isectTable, row, pointC); //Check if any color can be computed for the given row
+        PathPoint p;
+        p.rowIndex = row;
+        p.bounceNr = bounceNr;
+        p.color = pointC;
+        points.push_back(p);
+        oldPathID = *pathID;
+        //        previousCone = existing;
+    }
+    reporter::stop("Creating camera paths");
+    
+    return paths;
+}
+
 //(Re)create the paths objects for the datasets being used
-void RIV3DView::createPaths() {
-    pathsOne = createPaths(*datasetOne,pathColorOne,rayColorOne,lightConesOne);
+void RIV3DView::createCameraPaths() {
+    pathsOne = createCameraPaths(*datasetOne,pathColorOne,rayColorOne);
     if(datasetTwo) {
-        pathsTwo = createPaths(*datasetTwo,pathColorTwo,rayColorTwo,lightConesTwo);
+        pathsTwo = createCameraPaths(*datasetTwo,pathColorTwo,rayColorTwo);
     }
     pathsCreated = true;
 }
 //Create buffered data for points, not working anymore, colors seem to be red all the time.
-std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColor, RIVColorProperty* rayColor, std::map<size_t,LightCone*>& lightCones) {
+std::vector<Path> RIV3DView::createCameraPaths(RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColor, RIVColorProperty* pointColor) {
     
-    reporter::startTask("Creating paths");
+    reporter::startTask("Creating camera paths");
     
     RIVTable<float,ushort>* isectTable = dataset->GetTable(INTERSECTIONS_TABLE);
     
@@ -657,17 +735,17 @@ std::vector<Path> RIV3DView::createPaths(RIVDataSet<float,ushort>* dataset, RIVC
         //            ++previousCone->targetN;
         //        }
         bounceNr = bounceRecord->Value(row);
-        riv::Color pointColor;
-        rayColor->ComputeColor(isectTable, row, pointColor); //Check if any color can be computed for the given row
+        riv::Color pointC;
+        rayColor->ComputeColor(isectTable, row, pointC); //Check if any color can be computed for the given row
         PathPoint p;
         p.rowIndex = row;
         p.bounceNr = bounceNr;
-        p.color = pointColor;
+        p.color = pointC;
         points.push_back(p);
         oldPathID = *pathID;
         //        previousCone = existing;
     }
-    reporter::stop("Creating paths");
+    reporter::stop("Creating camera paths");
     
     return paths;
 }
@@ -930,7 +1008,7 @@ void RIV3DView::ToggleDrawPaths() {
         printf("OFF\n");
     }
     if(drawLightPaths && !pathsCreated) {
-        createPaths();
+        createCameraPaths();
     }
     else if(!drawLightPaths && !drawIntersectionPoints) {
         //		paths.clear();
@@ -975,7 +1053,7 @@ void RIV3DView::OnDataChanged(RIVDataSet<float,ushort>* source) {
         if(bounceCountOne > 0) {
             filterPaths((*datasetOne), bounceCountOne, selectedObjectIdOne, pathFiltersOne);
         }
-        createPaths((*datasetOne), pathColorOne,rayColorOne,lightConesOne);
+        createCameraPaths((*datasetOne), pathColorOne,rayColorOne);
     }
     else if(source == *datasetTwo) {
         pathColorTwo->Reset(source);
@@ -983,7 +1061,7 @@ void RIV3DView::OnDataChanged(RIVDataSet<float,ushort>* source) {
         if(bounceCountTwo > 0) {
             filterPaths((*datasetTwo), bounceCountTwo, selectedObjectIdTwo, pathFiltersTwo);
         }
-        createPaths((*datasetTwo), pathColorTwo,rayColorTwo,lightConesTwo);
+        createCameraPaths((*datasetTwo), pathColorTwo,rayColorTwo);
     }
     
     //	TODO: Paths and points are stale when this happens, but recreation is not necessary unless drawPoints or drawPaths is set to TRUE
@@ -1056,7 +1134,7 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
     RIVTable<float,ushort>* isectsTable = dataset->GetTable(INTERSECTIONS_TABLE);
     auto ref = pathTable->GetReferenceTo(INTERSECTIONS_TABLE);
     RIVMultiReference* pathIsectReference = dynamic_cast<RIVMultiReference*>(ref);
-    RIVMultiReference* isectsToLightsReference = dynamic_cast<RIVMultiReference*>(isectsTable->GetReferenceTo(LIGHTS_TABLE));
+    RIVFixedReference* isectsToLightsReference = dynamic_cast<RIVFixedReference*>(isectsTable->GetReferenceTo(LIGHTS_TABLE));
     RIVTable<float,ushort>* lightsTable = dataset->GetTable(LIGHTS_TABLE);
     
     auto intersectionsTable = dataset->GetTable(INTERSECTIONS_TABLE);
@@ -1105,7 +1183,7 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
                             ushort occluderId = occluderIds->Value(lightRow);
                             if(occluderId == selectedObjectID) {
                                 filter = false;
-                                //                            printf("Path %zu intersection #%zu occluder %zu has occluder id = %d\n",row,intersectionRow,lightRow,occluderId);
+//                                                            printf("Path %zu intersection #%zu occluder %zu has occluder id = %d\n",row,intersectionRow,lightRow,occluderId);
                                 break;
                             }
                         }
@@ -1127,6 +1205,7 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
     }
     
     dataset->StopFiltering();
+//    dataset->Print();
 }
 void RIV3DView::CycleSelectionMode() {
     switch (selectionMode) {
@@ -1207,7 +1286,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
                 (*datasetOne)->StopFiltering();
                 
                 pathFiltersOne.clear();
-                createPaths(*datasetOne,pathColorOne,rayColorOne,lightConesOne);
+//                createCameraPaths(*datasetOne,pathColorOne,rayColorOne,lightConesOne);
                 selectedObjectIdOne = -1;
             }
             if(pathFiltersTwo.size() && datasetTwo) {
@@ -1220,7 +1299,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
                 
                 pathFiltersTwo.clear();
                 selectedObjectIdTwo = -1;
-                createPaths(*datasetTwo,pathColorTwo,rayColorTwo,lightConesTwo);
+//                createCameraPaths(*datasetTwo,pathColorTwo,rayColorTwo,lightConesTwo);
             }
             return true;
         }

@@ -67,7 +67,8 @@ OctreeNode* OctreeNode::ChildForCoordinates(float x, float y, float z) {
 }
 float OctreeNode::Value() {
     if(addCount) {
-        return value / addCount * 8 * depth;
+//        return value / addCount * 8 * depth;
+        return value / addCount * std::pow(depth,8);
     }
     else return 0;
 }
@@ -98,20 +99,21 @@ float OctreeNode::AggregateValue() {
 }
 void OctreeNode::Add(float x, float y, float z, float value) {
     ++addCount;
-    this->value += value;
+//    this->value += value;
     if(isLeaf) {
-        //Does it contain enough values and is it not too deep already?
+
+        //Split if necessary
         if(addCount >= maxCapacity && depth < maxDepth) {
             Split();
             OctreeNode* child = ChildForCoordinates(x, y, z);
 //            printf("Add part of old value = %f\n",this->value / 8.F + value);
-            child->Add(x, y, z, value + this->value / 8.F);
+            child->Add(x, y, z, value);
 //            this->value = 0;
 //            ++addCount;
         }
         else {
 //            ++addCount;
-//            this->value += value;
+            this->value += value;
         }
     }
     else {

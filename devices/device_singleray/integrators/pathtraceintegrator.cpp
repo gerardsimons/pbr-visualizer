@@ -253,11 +253,17 @@ namespace embree
 				
 				/*! Ignore zero radiance or illumination from the back. */
 				//if (ls.L == Color(zero) || ls.wi.pdf == 0.0f || dot(dg.Ns,Vector3f(ls.wi)) <= 0.0f) continue;
-				if (ls.L == Color(zero) || ls.wi.pdf == 0.0f) continue;
-				
+                if (ls.L == Color(zero) || ls.wi.pdf == 0.0f) {
+                    dataConnector->AddLightData(i,-1,Color(zero));
+                    continue;
+                }
+                
 				/*! Evaluate BRDF */
 				Color brdf = brdfs.eval(wo, dg, ls.wi, directLightingBRDFTypes);
-				if (brdf == Color(zero)) continue;
+                if (brdf == Color(zero)) {
+                    dataConnector->AddLightData(i,-1,Color(zero));
+                    continue;
+                }
 				
 				/*! Test for shadows. */
 				Ray shadowRay(dg.P, ls.wi, dg.error*epsilon, ls.tMax-dg.error*epsilon, lightPath.lastRay.time,dg.shadowMask);
@@ -267,6 +273,7 @@ namespace embree
                 rtcIntersect(scene->scene,(RTCRay&)shadowRay);
                 Color lightRadiance = ls.L * brdf * rcp(ls.wi.pdf);
                 if (shadowRay) {
+//                    printf("OCCLUDED BY %d\n",shadowRay.id0);
                     dataConnector->AddLightData(i,shadowRay.id0,lightRadiance);
                     continue;
                 }

@@ -133,12 +133,13 @@ protected:
     
     void drawLights(const std::vector<Ref<Light>>& lights, const riv::Color& membershipColor);
     
-	void createPaths();
+
 	
     void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
 	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, ushort* selectedObjectId);
 	//Create graphics buffer from unfiltered data rows
-	std::vector<Path> createPaths(RIVDataSet<float,ushort>*, RIVColorProperty* pathColor, RIVColorProperty* rayColor, std::map<size_t,LightCone*>& lightCones);
+    void createCameraPaths();
+	std::vector<Path> createCameraPaths(RIVDataSet<float,ushort>*, RIVColorProperty* pathColor, RIVColorProperty* rayColor);
     static RIV3DView* instance;
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
     void redisplayWindow();
