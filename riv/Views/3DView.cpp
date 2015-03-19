@@ -155,10 +155,10 @@ void RIV3DView::ToggleDrawIntersectionPoints() {
     if(drawIntersectionPoints && !pathsCreated) {
         createCameraPaths();
     }
-    else if(!drawIntersectionPoints && !drawLightPaths) {
+    else if(!drawIntersectionPoints && pathsMode != CAMERA) {
         pathsCreated = false;
-        pathsOne.clear();
-        pathsTwo.clear();
+        cameraPathsOne.clear();
+        cameraPathsTwo.clear();
     }
     printf("drawIntersectionPoints is now ");
     if(drawIntersectionPoints) printf("ON\n");
@@ -456,7 +456,7 @@ void RIV3DView::Draw() {
     //        drawHeatmap();
     
     //Draw some lines
-    if(drawLightPaths)
+    if(pathsMode != NONE)
         drawPaths(segmentStart,segmentStop);
     
     glPopMatrix();
@@ -516,9 +516,9 @@ void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color, ushort
 void RIV3DView::drawPoints() {
     if(drawIntersectionPoints) {
         if(drawDataSetOne)
-            drawPoints(*datasetOne,pathsOne);
+            drawPoints(*datasetOne,cameraPathsOne);
         if(datasetTwo && drawDataSetTwo) {
-            drawPoints(*datasetTwo, pathsTwo);
+            drawPoints(*datasetTwo, cameraPathsTwo);
         }
     }
 }
@@ -563,28 +563,35 @@ void RIV3DView::drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<
     //	reporter::stop("Draw points.");
 }
 void RIV3DView::ResetGraphics() {
-    if(drawLightPaths || drawIntersectionPoints) {
+    if(pathsMode == CAMERA || drawIntersectionPoints) {
         createCameraPaths();
     }
+    else if(pathsMode == LIGHTS || drawIntersectionPoints) {
+        createLightPaths();
+    }
 }
-
-std::vector<Path> RIV3DView::createLightPaths(ushort lightID, RIVDataSet<float,ushort>* dataset,RIVColorProperty* pathColor, RIVColorProperty* pointColor) {
-    reporter::startTask("Creating camera paths");
+void RIV3DView::createLightPaths() {
+    lightPathsOne = createLightPaths(selectedLightIdOne,*datasetOne,pathColorOne,rayColorOne);
+    if(datasetTwo) {
+        lightPathsTwo = createLightPaths(selectedLightIdTwo,*datasetTwo,pathColorOne,rayColorOne);
+    }
+}
+std::vector<Path> RIV3DView::createLightPaths(ushort selectedLightID, RIVDataSet<float,ushort>* dataset,RIVColorProperty* pathColor, RIVColorProperty* pointColor) {
+    reporter::startTask("Creating light paths");
     
     RIVTable<float,ushort>* isectTable = dataset->GetTable(INTERSECTIONS_TABLE);
+    RIVTable<float,ushort>* lightsTable = dataset->GetTable(LIGHTS_TABLE);
     
     RIVTable<float,ushort>* pathsTable = dataset->GetTable(PATHS_TABLE);
     RIVShortRecord* bounceRecord = isectTable->GetRecord<ushort>(BOUNCE_NR);
-    RIVShortRecord* primitiveRecord = isectTable->GetRecord<ushort>(PRIMITIVE_ID);
+//    RIVShortRecord* primitiveRecord = isectTable->GetRecord<ushort>(PRIMITIVE_ID);
     
-    RIVFloatRecord* xRecord = isectTable->GetRecord<float>(POS_X);
-    RIVFloatRecord* yRecord = isectTable->GetRecord<float>(POS_Y);
-    RIVFloatRecord* zRecord = isectTable->GetRecord<float>(POS_Z);
+    RIVShortRecord* occluders = lightsTable->GetRecord<ushort>(OCCLUDER_ID);
+    RIVShortRecord* lightIds = lightsTable->GetRecord<ushort>(LIGHT_ID);
+    ushort invalidID = -1;
     
     std::vector<Path> paths;
     
-    //Get the records we want;
-    //Get the iterator, this iterator is aware of what rows are filtered and not
     TableIterator* intersectionsIterator = isectTable->GetIterator();
     
     size_t row = 0;
@@ -602,29 +609,34 @@ std::vector<Path> RIV3DView::createLightPaths(ushort lightID, RIVDataSet<float,u
     while(intersectionsIterator->GetNext(row,referenceRowsMap)) {
         
         //Get the path ID that belongs to this intersection
-        std::vector<size_t> refRows;
+        std::vector<size_t> pathRows;
+        std::vector<size_t> lightRows;
         for(auto it : referenceRowsMap) {
             if(it.first->name == PATHS_TABLE) {
-                refRows = it.second;
+                pathRows = it.second;
+            }
+            if(it.first->name == LIGHTS_TABLE) {
+                lightRows = it.second;
             }
         }
-        if(refRows.size()) {
-            pathID = &refRows[0];
+        if(pathRows.size()) {
+            pathID = &pathRows[0];
         }
         
-        //If the path ID is different from the previous one, we can finish the past path
+        //If the path ID is different from the previous one, we can finish the last path
         if(pathID && *pathID != oldPathID) {
             riv::Color pColor;
             pathColor->ComputeColor(pathsTable, *pathID, pColor);
             if(points.size() > 0) {
-                paths.push_back(Path(points,pColor));
-                points.clear();
+//                paths.push_back(Path(points,pColor));
+                points.clear(); //Start from scratch for a new path
             }
             //            previousCone = NULL;
             
             oldPathID = *pathID;
         }
 
+        
         bounceNr = bounceRecord->Value(row);
         riv::Color pointC;
         pointColor->ComputeColor(isectTable, row, pointC); //Check if any color can be computed for the given row
@@ -634,22 +646,34 @@ std::vector<Path> RIV3DView::createLightPaths(ushort lightID, RIVDataSet<float,u
         p.color = pointC;
         points.push_back(p);
         oldPathID = *pathID;
+        
+        if(points.size() > 0) {
+            //Check if the point is lit by the selected light ID
+            for(size_t lightRow : lightRows) {
+//                ushort occluder = occluders->Value(lightRow);
+                //If not occluded
+//                if(occluder == invalidID) {
+                if(lightIds->Value(lightRow) == selectedLightID) {
+                    paths.push_back(Path(points,pointC));
+                }
+            }
+        }
+        
         //        previousCone = existing;
     }
-    reporter::stop("Creating camera paths");
-    
+    reporter::stop("Creating light paths");
+    printf("%zu light paths for light (ID = %d) created.\n",paths.size(),selectedLightID);
     return paths;
 }
 
 //(Re)create the paths objects for the datasets being used
 void RIV3DView::createCameraPaths() {
-    pathsOne = createCameraPaths(*datasetOne,pathColorOne,rayColorOne);
+    cameraPathsOne = createCameraPaths(*datasetOne,pathColorOne,rayColorOne);
     if(datasetTwo) {
-        pathsTwo = createCameraPaths(*datasetTwo,pathColorTwo,rayColorTwo);
+        cameraPathsTwo = createCameraPaths(*datasetTwo,pathColorTwo,rayColorTwo);
     }
     pathsCreated = true;
 }
-//Create buffered data for points, not working anymore, colors seem to be red all the time.
 std::vector<Path> RIV3DView::createCameraPaths(RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColor, RIVColorProperty* pointColor) {
     
     reporter::startTask("Creating camera paths");
@@ -659,10 +683,6 @@ std::vector<Path> RIV3DView::createCameraPaths(RIVDataSet<float,ushort>* dataset
     RIVTable<float,ushort>* pathsTable = dataset->GetTable(PATHS_TABLE);
     RIVShortRecord* bounceRecord = isectTable->GetRecord<ushort>(BOUNCE_NR);
     RIVShortRecord* primitiveRecord = isectTable->GetRecord<ushort>(PRIMITIVE_ID);
-    
-    RIVFloatRecord* xRecord = isectTable->GetRecord<float>(POS_X);
-    RIVFloatRecord* yRecord = isectTable->GetRecord<float>(POS_Y);
-    RIVFloatRecord* zRecord = isectTable->GetRecord<float>(POS_Z);
     
     std::vector<Path> paths;
     
@@ -736,7 +756,7 @@ std::vector<Path> RIV3DView::createCameraPaths(RIVDataSet<float,ushort>* dataset
         //        }
         bounceNr = bounceRecord->Value(row);
         riv::Color pointC;
-        rayColor->ComputeColor(isectTable, row, pointC); //Check if any color can be computed for the given row
+        pointColor->ComputeColor(isectTable, row, pointC); //Check if any color can be computed for the given row
         PathPoint p;
         p.rowIndex = row;
         p.bounceNr = bounceNr;
@@ -879,7 +899,7 @@ void RIV3DView::drawLightCones(const std::map<size_t,LightCone*>& lightCones) {
     gluDeleteQuadric(qobj);
 }
 void RIV3DView::MovePathSegment(float ratioIncrement) {
-    if(drawLightPaths && (drawDataSetOne || drawDataSetTwo)) {
+    if(pathsMode != NONE && (drawDataSetOne || drawDataSetTwo)) {
         segmentStart += ratioIncrement;
         segmentStop += ratioIncrement;
         
@@ -900,10 +920,65 @@ void RIV3DView::MovePathSegment(float ratioIncrement) {
 
 void RIV3DView::drawPaths(float startSegment, float stopSegment) {
     if(drawDataSetOne) {
-        drawPaths((*datasetOne),pathsOne, startSegment, stopSegment,cameraPositionOne);
+        
+        if(pathsMode == CAMERA) {
+            drawPaths((*datasetOne),cameraPathsOne, startSegment, stopSegment,cameraPositionOne);
+        }
+        else if(pathsMode == LIGHTS && selectedLightIdOne != (ushort)-1) {
+            
+            Ref<Light> light = lightsOne[selectedLightIdOne];
+            
+            //Try to cast to point light
+            PointLight* pointLight = dynamic_cast<PointLight*>(light.ptr);
+            if(pointLight) {
+                drawPaths((*datasetOne),lightPathsOne, startSegment, stopSegment,pointLight->P);
+            }
+            else { //Determine the position according to the shape
+                Shape* rawShape = light.ptr->shape().ptr;
+
+                Triangle* t = dynamic_cast<Triangle*>(rawShape);
+                if(t) {
+                    
+                    float cx = (t->v0.x + t->v1.x + t->v2.x) / 3.F;
+                    float cy = (t->v0.y + t->v1.y + t->v2.y) / 3.F;
+                    float cz = (t->v0.z + t->v1.z + t->v2.z) / 3.F;
+                
+                    drawPaths((*datasetOne),lightPathsOne, startSegment, stopSegment,Vec3fa(cx,cy,cz));
+                }
+            }
+        }
     }
     if(datasetTwo && drawDataSetTwo) {
-        drawPaths((*datasetTwo),pathsTwo, startSegment, stopSegment,cameraPositionTwo);
+        if(pathsMode == CAMERA) {
+            drawPaths((*datasetTwo),cameraPathsTwo, startSegment, stopSegment,cameraPositionTwo);
+        }
+        else if(pathsMode == LIGHTS && selectedLightIdTwo != (ushort)-1) {
+            
+            
+            
+            Ref<Light> light = lightsTwo[selectedLightIdOne];
+            
+            //Try to cast to point light
+            PointLight* pointLight = dynamic_cast<PointLight*>(light.ptr);
+            
+            
+            if(pointLight) {
+                drawPaths((*datasetTwo),lightPathsTwo, startSegment, stopSegment,pointLight->P);
+            }
+            else { //Determine the position according to the shape
+                Shape* rawShape = light.ptr->shape().ptr;
+                
+                Triangle* t = dynamic_cast<Triangle*>(rawShape);
+                if(t) {
+                    
+                    float cx = (t->v0.x + t->v1.x + t->v2.x) / 3.F;
+                    float cy = (t->v0.y + t->v1.y + t->v2.y) / 3.F;
+                    float cz = (t->v0.z + t->v1.z + t->v2.z) / 3.F;
+                    
+                    drawPaths((*datasetTwo),lightPathsTwo, startSegment, stopSegment,Vec3fa(cx,cy,cz));
+                }
+            }
+        }
     }
 }
 
@@ -999,21 +1074,26 @@ void RIV3DView::drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<P
 
 void RIV3DView::ToggleDrawPaths() {
     //Create the paths if necessary (allows for smoother animations)
-    printf("Display light paths is now ");
-    drawLightPaths = !drawLightPaths;
-    if(drawLightPaths) {
-        printf("ON\n");
+    printf("Display paths mode is now set to '");
+    
+    switch (pathsMode) {
+        case NONE:
+            pathsMode = CAMERA;
+            printf("CAMERA'\n");
+            if(!pathsCreated) {
+                createCameraPaths();
+            }
+            break;
+        case CAMERA:
+            pathsMode = LIGHTS;
+            printf("LIGHTS'\n");
+            createLightPaths();
+            break;
+        case LIGHTS:
+            pathsMode = NONE;
+            printf("NONE'\n");
     }
-    else {
-        printf("OFF\n");
-    }
-    if(drawLightPaths && !pathsCreated) {
-        createCameraPaths();
-    }
-    else if(!drawLightPaths && !drawIntersectionPoints) {
-        //		paths.clear();
-        //		pathsCreated = false;
-    }
+    
     redisplayWindow();
     isDirty = true;
 }
@@ -1206,6 +1286,20 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
     
     dataset->StopFiltering();
 //    dataset->Print();
+}
+void RIV3DView::CycleSelectedLights() {
+    if(drawDataSetOne) {
+        selectedLightIdOne++;
+        if(selectedLightIdOne >= lightsOne.size()) {
+            selectedLightIdOne = 0;
+        }
+    }
+    else if(drawDataSetTwo && datasetTwo) {
+        selectedLightIdTwo++;
+        if(selectedLightIdTwo >= lightsTwo.size()) {
+            selectedLightIdTwo = 0;
+        }
+    }
 }
 void RIV3DView::CycleSelectionMode() {
     switch (selectionMode) {

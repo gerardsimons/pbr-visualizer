@@ -377,7 +377,7 @@ void keys(int keyCode, int x, int y) {
     bool postRedisplay = true;
     
     char key = (char)keyCode;
-    printf("'%c' key pressed.\n",key);
+    printf("'%c' key (code = %d) pressed.\n",keyCode,key);
     
     float camSpeed = .25F;
     switch(keyCode) {
@@ -409,6 +409,12 @@ void keys(int keyCode, int x, int y) {
             
 //            invalidateAllViews();
             
+            break;
+        case 39:// ' key
+            sceneView->CycleSelectedLights();
+            break;
+        case 92: // \ key
+            sceneView->CycleSelectedLights();
             break;
         case 45: // - key
             parallelCoordsView->DecreaseLineOpacity();
@@ -811,7 +817,8 @@ TriangleMeshGroup getSceneData(EMBREERenderer* renderer) {
     std::vector<Shape*>* shapes = renderer->GetShapes();
     std::vector<TriangleMeshFull*> embreeMeshes;
     for(size_t i = 0 ; i < shapes->size() ; ++i) {
-        TriangleMeshFull* t = dynamic_cast<TriangleMeshFull*>(shapes->at(i));
+        Shape* rawShape = shapes->at(i);
+        TriangleMeshFull* t = dynamic_cast<TriangleMeshFull*>(rawShape);
         if(t) {
             embreeMeshes.push_back(t);
         }

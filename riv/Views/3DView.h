@@ -22,7 +22,9 @@
 #include <limits>
 
 class RIV3DView : public RIVDataView, public RIVDataSetListener {
-protected:
+private:
+    
+    static RIV3DView* instance;
     
     //When path selection mode is used, each clicked object determines the object the next bounce should interact with,
     //when regular object mode is used, the order of interaction is not important
@@ -31,6 +33,13 @@ protected:
         INTERACTION,
         OBJECT
     };
+    enum DrawPathsMode {
+        CAMERA,
+        LIGHTS,
+        NONE
+    };
+    
+    DrawPathsMode pathsMode = NONE;
     
     class LightCone {
     public:
@@ -60,7 +69,7 @@ protected:
 	
 	//Whether the generated octree should be drawn (if any is generated)
 	bool drawHeatmapTree = false;
-	bool drawLightPaths = false;
+    
     bool showMeshes = true;
 //	size_t selectedMesh = -1;
 	
@@ -74,8 +83,11 @@ protected:
 	bool isDragging = false;
     bool didMoveCamera = false;
 	
-	std::vector<Path> pathsOne;
-	std::vector<Path> pathsTwo;
+	std::vector<Path> cameraPathsOne;
+	std::vector<Path> cameraPathsTwo;
+    
+    std::vector<Path> lightPathsOne;
+    std::vector<Path> lightPathsTwo;
     
     std::vector<Ref<Light>> lightsOne;
     std::vector<Ref<Light>> lightsTwo;
@@ -102,6 +114,9 @@ protected:
 	GLUquadric* quadric = gluNewQuadric();
 	Vec3fa Phit; //Supposedly the point of intersection of the ray with the plane supporting the triangle
 	Ray pickRay;
+    
+    ushort selectedLightIdOne = 0;
+    ushort selectedLightIdTwo = 0;
 	
 	bool meshSelected = false;
     std::vector<riv::RowFilter*> pathFiltersOne;
@@ -134,13 +149,16 @@ protected:
     void drawLights(const std::vector<Ref<Light>>& lights, const riv::Color& membershipColor);
     
 
-	
     void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
 	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, ushort* selectedObjectId);
+    
+    void createLightPaths();
+    std::vector<Path> createLightPaths(ushort lightID, RIVDataSet<float,ushort>* dataset,RIVColorProperty* pathColor, RIVColorProperty* pointColor);
+    
 	//Create graphics buffer from unfiltered data rows
     void createCameraPaths();
 	std::vector<Path> createCameraPaths(RIVDataSet<float,ushort>*, RIVColorProperty* pathColor, RIVColorProperty* rayColor);
-    static RIV3DView* instance;
+    
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
     void redisplayWindow();
 
@@ -172,6 +190,7 @@ public:
     static void Mouse(int button, int state, int x, int y);
     static void Motion(int x, int y);
     
+    void CycleSelectedLights();
     void CycleSelectionMode();
     void MovePathSegment(float ratioIncrement);
     void CyclePathSegment(bool direction = true); //Cycle the path segment to draw, direction bool indicates direction of cycling, positive meaning incrementing

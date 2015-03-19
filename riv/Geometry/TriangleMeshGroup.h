@@ -28,6 +28,10 @@ public:
 	TriangleMeshGroup(const std::vector<embree::TriangleMeshFull*>& triangleMeshes) : triangleMeshes(triangleMeshes) {
 		init();
 	}
+    TriangleMeshGroup(embree::TriangleMeshFull* triangleMesh) {
+        triangleMeshes.push_back(triangleMesh);
+        init();
+    }
 	TriangleMeshGroup() { };
 	void init();
 	operator bool() const { return triangleMeshes.size() > 0; };
