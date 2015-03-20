@@ -370,8 +370,9 @@ void RIV3DView::Draw() {
             drawMeshModel(&meshesTwo,blueColor,&selectedObjectIdTwo);
         }
     }
-    if(drawIntersectionPoints)
+    if(drawIntersectionPoints) {
         drawPoints();
+    }
     
     if(drawDataSetOne && !drawDataSetTwo && drawHeatmapTree) {
         if(datasetTwo) {
@@ -515,10 +516,19 @@ void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color, ushort
 
 void RIV3DView::drawPoints() {
     if(drawIntersectionPoints) {
-        if(drawDataSetOne)
-            drawPoints(*datasetOne,cameraPathsOne);
-        if(datasetTwo && drawDataSetTwo) {
-            drawPoints(*datasetTwo, cameraPathsTwo);
+        if(pathsMode == LIGHTS) {
+            if(drawDataSetOne)
+                drawPoints(*datasetOne,lightPathsOne);
+            if(datasetTwo && drawDataSetTwo) {
+                drawPoints(*datasetTwo,lightPathsTwo);
+            }
+        }
+        else {
+            if(drawDataSetOne)
+                drawPoints(*datasetOne,cameraPathsOne);
+            if(datasetTwo && drawDataSetTwo) {
+                drawPoints(*datasetTwo, cameraPathsTwo);
+            }
         }
     }
 }
@@ -566,7 +576,7 @@ void RIV3DView::ResetGraphics() {
     if(pathsMode == CAMERA || drawIntersectionPoints) {
         createCameraPaths();
     }
-    else if(pathsMode == LIGHTS || drawIntersectionPoints) {
+    if(pathsMode == LIGHTS || drawIntersectionPoints) {
         createLightPaths();
     }
 }
@@ -584,7 +594,10 @@ std::vector<Path> RIV3DView::createLightPaths(ushort selectedLightID, RIVDataSet
     
     RIVTable<float,ushort>* pathsTable = dataset->GetTable(PATHS_TABLE);
     RIVShortRecord* bounceRecord = isectTable->GetRecord<ushort>(BOUNCE_NR);
-//    RIVShortRecord* primitiveRecord = isectTable->GetRecord<ushort>(PRIMITIVE_ID);
+    
+    RIVFloatRecord* lightRs = lightsTable->GetRecord<float>(LIGHT_R);
+    RIVFloatRecord* lightGs = lightsTable->GetRecord<float>(LIGHT_G);
+    RIVFloatRecord* lightBs = lightsTable->GetRecord<float>(LIGHT_B);
     
     RIVShortRecord* occluders = lightsTable->GetRecord<ushort>(OCCLUDER_ID);
     RIVShortRecord* lightIds = lightsTable->GetRecord<ushort>(LIGHT_ID);
@@ -598,13 +611,19 @@ std::vector<Path> RIV3DView::createLightPaths(ushort selectedLightID, RIVDataSet
     size_t* pathID = NULL;
     size_t oldPathID = 0;
     ushort bounceNr;
-    
+        
     std::vector<PathPoint> points;
     //    lightCones.clear();
     //    LightCone* previousCone = NULL;
     
-    //    dataset->Print(10);
+//    dataset->Print(100);
     std::map<RIVTableInterface*,std::vector<size_t>> referenceRowsMap;
+    riv::ColorMap hotbody = colors::hotBodyColorMap();
+    
+    std::vector<size_t> occludedLightRows;
+    std::vector<size_t> occludedIsectRows;
+    
+    bool addIntermittentPaths = false;
     
     while(intersectionsIterator->GetNext(row,referenceRowsMap)) {
         
@@ -627,35 +646,67 @@ std::vector<Path> RIV3DView::createLightPaths(ushort selectedLightID, RIVDataSet
         if(pathID && *pathID != oldPathID) {
             riv::Color pColor;
             pathColor->ComputeColor(pathsTable, *pathID, pColor);
-            if(points.size() > 0) {
+//            if(points.size() > 0) {
 //                paths.push_back(Path(points,pColor));
-                points.clear(); //Start from scratch for a new path
-            }
+                 //Start from scratch for a new path
+//            }
             //            previousCone = NULL;
-            
             oldPathID = *pathID;
+            if(!addIntermittentPaths && points.size()) {
+                std::vector<PathPoint> reversedPoints = points;
+                //            points.push_back(p);
+                
+                ushort maxBounce = reversedPoints.size();
+                //Reverse the points and bounceNrs
+                for(int i = 0 ; i < maxBounce ; ++i) {
+                    reversedPoints[i].bounceNr = maxBounce - reversedPoints[i].bounceNr + 1;
+                }
+                riv::Color pointC = hotbody.ComputeColor(points[0].bounceNr / (float)this->maxBounce);
+                paths.push_back(Path(reversedPoints,pointC));
+            }
+            points.clear();
         }
 
         
         bounceNr = bounceRecord->Value(row);
-        riv::Color pointC;
-        pointColor->ComputeColor(isectTable, row, pointC); //Check if any color can be computed for the given row
+        riv::Color pointC = hotbody.ComputeColor(bounceNr / 5.F);
+//        pointColor->ComputeColor(isectTable, row, pointC); //Check if any color can be computed for the given row
         PathPoint p;
         p.rowIndex = row;
-        p.bounceNr = bounceNr;
+        p.bounceNr = points.size() + 1;
         p.color = pointC;
-        points.push_back(p);
         oldPathID = *pathID;
         
-        if(points.size() > 0) {
-            //Check if the point is lit by the selected light ID
-            for(size_t lightRow : lightRows) {
-//                ushort occluder = occluders->Value(lightRow);
-                //If not occluded
-//                if(occluder == invalidID) {
-                if(lightIds->Value(lightRow) == selectedLightID) {
-                    paths.push_back(Path(points,pointC));
+        bool addPoint = true;
+
+        //Check if the point is lit by the selected light ID
+        for(size_t lightRow : lightRows) {
+            ushort occluder = occluders->Value(lightRow);
+            //If not occluded
+            if(occluder != invalidID && lightIds->Value(lightRow) == selectedLightID) {
+                //                    if(lightIds->Value(lightRow) == selectedLightID) {
+//                occludedLightRows.push_back(lightRow);
+//                occludedIsectRows.push_back(row);
+                addPoint = false;
+                break;
+                //                    }
+            }
+        }
+
+        if(addPoint) {
+            points.insert(points.begin(),p);
+            
+            if(addIntermittentPaths) {
+                std::vector<PathPoint> reversedPoints = points;
+                //            points.push_back(p);
+                
+                ushort maxBounce = reversedPoints.size();
+                //Reverse the points and bounceNrs
+                for(int i = 0 ; i < maxBounce ; ++i) {
+                    reversedPoints[i].bounceNr = maxBounce - reversedPoints[i].bounceNr + 1;
                 }
+                
+                paths.push_back(Path(reversedPoints,pointC));
             }
         }
         
@@ -663,6 +714,18 @@ std::vector<Path> RIV3DView::createLightPaths(ushort selectedLightID, RIVDataSet
     }
     reporter::stop("Creating light paths");
     printf("%zu light paths for light (ID = %d) created.\n",paths.size(),selectedLightID);
+//    printf("light rows occluded by light : ");
+//    printVector(occludedLightRows);
+//    printf("isect rows occluded by light : ");
+//    printVector(occludedIsectRows);
+//    for(Path& path : paths) {
+//        printf("Path ( ");
+//        for(size_t i = 0 ; i < path.Size() ; ++i) {
+//            printf("%zu (%d)",path.points[i].rowIndex,path.points[i].bounceNr);
+//        }
+//        printf(")\n");
+//    }
+    
     return paths;
 }
 
@@ -956,7 +1019,7 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
             
             
             
-            Ref<Light> light = lightsTwo[selectedLightIdOne];
+            Ref<Light> light = lightsTwo[selectedLightIdTwo];
             
             //Try to cast to point light
             PointLight* pointLight = dynamic_cast<PointLight*>(light.ptr);
@@ -1090,7 +1153,7 @@ void RIV3DView::ToggleDrawPaths() {
             createLightPaths();
             break;
         case LIGHTS:
-            pathsMode = NONE;
+            pathsMode = CAMERA;
             printf("NONE'\n");
     }
     
@@ -1222,7 +1285,6 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
     auto bounceNrs = intersectionsTable->GetRecord<ushort>(BOUNCE_NR);
     auto occluderIds = lightsTable->GetRecord<ushort>(OCCLUDER_ID);
     
-    
     std::map<size_t,bool> filteredRows;
     //    printf("BEFORE PATH FILTERING : \n");
     //    intersectionsTable->Print();
@@ -1249,13 +1311,13 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
                 size_t intersectionRow = mapping[i];
                 
                 //Check if it has occluders and if the selectedObjectID is in them
-                if(selectionMode == INTERACTION) {
+                if(selectionMode == INTERACTION || selectionMode == INTERACTION_AND_SHADOW) {
                     if(primitiveIds->Value(intersectionRow) == selectedObjectID) {
                         filter = false;
                         break;
                     }
                     //Only when the first bounce is in the shadow
-                    else if(i == 0) {
+                    else if(selectionMode == INTERACTION_AND_SHADOW) {
                         const auto& lightsMapping = isectsToLightsReference->GetReferenceRows(intersectionRow);
                         ushort nrLightRows = lightsMapping.size();
                         for(ushort j = 0 ; j < nrLightRows ; ++j) {
@@ -1288,17 +1350,33 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
 //    dataset->Print();
 }
 void RIV3DView::CycleSelectedLights() {
+    ushort oldLightIdOne = selectedLightIdOne;
+    ushort oldLightIdTwo = selectedLightIdTwo;
+    bool changed = false;
     if(drawDataSetOne) {
         selectedLightIdOne++;
         if(selectedLightIdOne >= lightsOne.size()) {
             selectedLightIdOne = 0;
         }
+        if(selectedLightIdOne != oldLightIdOne) {
+            changed = true;
+            lightPathsOne = createLightPaths(selectedLightIdOne, *datasetOne, pathColorOne, rayColorOne);
+        }
+        printf("Selected light one is now %d\n",selectedLightIdOne);
     }
-    else if(drawDataSetTwo && datasetTwo) {
+    if(drawDataSetTwo && datasetTwo) {
         selectedLightIdTwo++;
         if(selectedLightIdTwo >= lightsTwo.size()) {
             selectedLightIdTwo = 0;
         }
+        if(selectedLightIdTwo != oldLightIdTwo) {
+            changed = true;
+            lightPathsTwo = createLightPaths(selectedLightIdTwo, *datasetTwo, pathColorTwo, rayColorTwo);
+        }
+        printf("Selected light two is now %d\n",selectedLightIdTwo);
+    }
+    if(changed) {
+        redisplayWindow();
     }
 }
 void RIV3DView::CycleSelectionMode() {
@@ -1308,6 +1386,10 @@ void RIV3DView::CycleSelectionMode() {
             printf("Selection mode is now set to 'INTERACTION'\n");
             break;
         case INTERACTION:
+            selectionMode = INTERACTION_AND_SHADOW;
+            printf("Selection mode is now set to 'INTERACTION_AND_SHADOW'\n");
+            break;
+        case INTERACTION_AND_SHADOW:
             selectionMode = OBJECT;
             printf("Selection mode is now set to 'OBJECT'\n");
             break;

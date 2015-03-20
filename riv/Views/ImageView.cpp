@@ -566,7 +566,7 @@ bool RIVImageView::HandleMouseMotion(int x, int y) {
 }
 void RIVImageView::AveragePixelDistributions() {
     
-    if(datasetOne && datasetTwo) {
+    if(pixelDistributionOne && pixelDistributionTwo) {
     
         Histogram2D<float> sum = *pixelDistributionOne + *pixelDistributionTwo;
         

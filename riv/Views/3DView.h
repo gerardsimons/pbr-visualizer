@@ -31,6 +31,7 @@ private:
     enum SelectionMode {
         PATH,
         INTERACTION,
+        INTERACTION_AND_SHADOW,
         OBJECT
     };
     enum DrawPathsMode {
@@ -121,10 +122,10 @@ private:
 	bool meshSelected = false;
     std::vector<riv::RowFilter*> pathFiltersOne;
 	ushort bounceCountOne = 0;
-    ushort selectedObjectIdOne;
+    ushort selectedObjectIdOne = -1;
     std::vector<riv::RowFilter*> pathFiltersTwo;
 	ushort bounceCountTwo = 0;
-    ushort selectedObjectIdTwo;
+    ushort selectedObjectIdTwo = -1;
 	
     bool pathsCreated = false;
 

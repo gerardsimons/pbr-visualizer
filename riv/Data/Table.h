@@ -735,7 +735,7 @@ public:
         std::string headerText = "|";
         std::string headerOrnament;
         
-        int columnWidth = 14;
+        int columnWidth = 16;
         
         headerText += generateString(' ',columnWidth);
         headerText += "|";
