@@ -434,6 +434,9 @@ void keys(int keyCode, int x, int y) {
         case 32: //Space bar
             TogglePause();
             break;
+        case 47: // '/' key, increment bounce count 3d view
+            sceneView->IncrementBounceNrPath(1);
+            break;
         case 49: //The '1' key, switch to renderer one if not already using it
             parallelCoordsView->ToggleDrawDataSetOne();
             sceneView->ToggleDrawDataSetOne();
@@ -1037,10 +1040,10 @@ void setup(int argc, char** argv) {
         //		RIVEvaluatedColorProperty<float>* xLinear = new RIVEvaluatedColorProperty<float>(redBlue, isectTable, isectTable->GetRecord<float>(POS_X));
         
         //		parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
-        riv::Color red(1,0,0);
-        riv::Color white(0.9,0.9,0.9);
-        riv::Color purple(0.5,0,0.5);
-        riv::Color blue(0,0,1);
+        riv::Color red(1.F,0.F,0.F);
+        riv::Color white(0.9F,0.9F,0.9F);
+        riv::Color purple(0.5F,0.F,0.5F);
+        riv::Color blue(0.F,0.F,1.F);
         
         std::vector<riv::Color> colors = {red,white,blue};
         

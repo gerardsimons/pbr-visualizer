@@ -40,7 +40,7 @@ private:
         NONE
     };
     
-    DrawPathsMode pathsMode = NONE;
+    DrawPathsMode pathsMode = LIGHTS;
     
     class LightCone {
     public:
@@ -191,6 +191,7 @@ public:
     static void Mouse(int button, int state, int x, int y);
     static void Motion(int x, int y);
     
+    void IncrementBounceNrPath(int delta);
     void CycleSelectedLights();
     void CycleSelectionMode();
     void MovePathSegment(float ratioIncrement);

@@ -12,42 +12,58 @@
 //#include <stdio.h>
 #include <vector>
 
+typedef unsigned short ushort;
+
 namespace riv {
-
-class Color {
-public:
-	float R;
-	float G;
-	float B;
-    float A;
     
-    Color() {};
-    Color(float R, float G, float B) : R(R), G(G), B(B), A(1) {
-    }
-    Color(float R, float G, float B, float A) : R(R), G(G), B(B), A(A) {
-    }
-};
-
-//A linearly interpolated color map
-class ColorMap {
-private:
-	std::vector<Color> colorTable;
+    class Color {
+    public:
+        float R;
+        float G;
+        float B;
+        float A;
+        
+        Color() {};
+        Color(float R, float G, float B) : R(R), G(G), B(B), A(1) {
+        }
+        Color(float R, float G, float B, float A) : R(R), G(G), B(B), A(A) {
+        }
+        //0 to 256
+        Color(unsigned short R, unsigned short G, unsigned short B) : R(R / 255.F),G(G / 255.F),B(B / 255.F),A(1){
+            
+        }
+    };
     
-    float min = 0;
-    float max = 1;
-public:
-	ColorMap() {
-		
-	}
-    ColorMap(std::vector<Color>& colors);
-    ColorMap(std::vector<Color>& colors, float minRange, float maxRange);
-    ColorMap(float minRange, float maxRange);
-	
-	//Methods
-	void SetRange(float minRange,float maxRange);
-	Color ComputeColor(float ratio);
-	void AddColor(const Color& newColor);
-};
+    //A linearly interpolated color map
+    class ColorMap {
+    private:
+        std::vector<Color> colorTable;
+        
+        float min = 0;
+        float max = 1;
+    public:
+        ColorMap() {
+            
+        }
+        ColorMap(std::vector<Color>& colors);
+        ColorMap(std::vector<Color>& colors, float minRange, float maxRange);
+        ColorMap(float minRange, float maxRange);
+        
+        //Methods
+        void SetRange(float minRange,float maxRange);
+        Color ComputeColor(float ratio);
+        void AddColor(const Color& newColor);
+    };
+    
+    class DiscreteColorMap {
+    private:
+//        std::map<ushort,
+        std::vector<Color> colorTable;
+    public:
+        Color ComputeColor(ushort value);
+        void AddColor(const Color& newColor);
+    };
+    
 }
 
 #endif /* defined(__afstuderen_DO_NOT_DELETE__ColorMap__) */

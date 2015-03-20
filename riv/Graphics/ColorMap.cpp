@@ -24,6 +24,7 @@ namespace riv {
 		if(value < 0) {
 			return colorTable[0];
 		}
+
 		for(size_t colorIndex = 0 ; colorIndex < colorTable.size() - 1; ++colorIndex) {
 			
 			float colorIndexRatioLeft  = colorIndex / (float)(colorTable.size() - 1);
@@ -53,8 +54,10 @@ namespace riv {
 		}
 		return colorTable[colorTable.size() - 1];
 	}
-	
 	void ColorMap::AddColor(const Color& newColor) {
 		colorTable.push_back(newColor);
 	}
+//    Color DiscreteColorMap::ComputeColor(ushort value) {
+//        
+//    }
 }
