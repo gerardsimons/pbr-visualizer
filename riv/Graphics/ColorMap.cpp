@@ -18,7 +18,7 @@ namespace riv {
     ColorMap::ColorMap(float minRange, float maxRange) : min(minRange), max(maxRange){
 
     }
-	Color ColorMap::ComputeColor(float value) {
+	Color ColorMap::ComputeColor(float value){
         value -= min;
         value /= (max - min);
 		if(value < 0) {
@@ -46,6 +46,7 @@ namespace riv {
 				color.R = colorTable[colorIndex].R * ratio + (1.F - ratio) * colorTable[colorIndex + 1].R;
 				color.G = colorTable[colorIndex].G * ratio + (1.F - ratio) * colorTable[colorIndex + 1].G,
 				color.B = colorTable[colorIndex].B * ratio + (1.F - ratio) * colorTable[colorIndex + 1].B;
+                color.A = colorTable[colorIndex].A * ratio + (1.F - ratio) * colorTable[colorIndex + 1].A;
 				
 				return color;
 				

@@ -31,6 +31,10 @@ private:
 	
 	EMBREERenderer* rendererOne;
 	EMBREERenderer* rendererTwo = NULL;
+    
+//    bool showThroughputDistribution = true;
+    Histogram2D<float>* throughputDistroOne = NULL;
+    Histogram2D<float>* throughputDistroTwo = NULL;
 	
 //	std::vector<EMBREERenderer*> renderers;
     int imagePadding = 5;
@@ -39,11 +43,36 @@ private:
 	bool isDragging;
 
     //TODO: I think these histograms belong in the data controller, or that is where they should originate from
-    bool showHeatmap = true;
+    enum HeatmapDisplayMode {
+        OPAQUE,
+        HEAT,
+        NONE
+    };
+    enum HeatmapDisplay {
+        DISTRIBUTION,
+        THROUGHPUT,
+        RADIANCE,
+        RADIANCE_DIFFERENCE
+    };
+    
+    HeatmapDisplayMode displayMode = OPAQUE;
+    HeatmapDisplay heatmapToDisplay = DISTRIBUTION;
+    
     unsigned int xBins = 30;
     unsigned int yBins; //Deduced according to image aspect ratio
     Histogram2D<float>* pixelDistributionOne = NULL;
     Histogram2D<float>* pixelDistributionTwo = NULL;
+    
+    Histogram2D<float>** activeHeatmapOne = &pixelDistributionOne;
+    Histogram2D<float>** activeHeatmapTwo = &pixelDistributionTwo;
+    
+    Histogram2D<float>* trueEnergyDistributionOne;
+    Histogram2D<float>* trueEnergyDistributionTwo;
+    
+    //Sampled radiance distributions
+    Histogram2D<float>* radianceDistributionOne = NULL;
+    Histogram2D<float>* radianceDistributionTwo = NULL;
+    Histogram2D<float>* radianceDiffDistribution = NULL;
 
     bool showFillArea = false;
     unsigned int gridSize = 100;
@@ -53,27 +82,39 @@ private:
     Grid* paintGridTwo = NULL;
     Grid* interactingGrid = NULL;
 	
+    std::string enumToString(HeatmapDisplayMode displayMode);
+    std::string enumToString(HeatmapDisplay displayMode);
+    
 	void drawRenderedImage(EMBREERenderer* renderer,int startX, int startY, int width, int height);
     void computePixelDistribution(RIVDataSet<float,ushort>*, Histogram2D<float>*& pixelDistribution);
+    void computeRadianceDistributions();
+    void drawHeatmap(bool leftSet,Histogram2D<float>** heatmap);
+    void drawRadianceDifference();
     void drawGrid(float startX, Grid* paintGrid);
-    void drawHeatmap(int startX, Histogram2D<float>* heatmap, float r, float g, float b);
+    void drawRegularHeatmap(int startX, Histogram2D<float>* heatmap, riv::ColorMap& colors);
+    void drawNormalizedHeatmap(int startX, Histogram2D<float>* heatmap, riv::ColorMap& colors);
     void filterImage(RIVDataSet<float,ushort>* dataset, Grid* activeGrid, riv::RowFilter* previousFilter);
     void toGridSpace(int xIn, int yIn, Grid*& outGrid, int& gridX, int& gridY);
     void smoothPixelDistribution(Histogram2D<float>* pixelDistribution);
+    Histogram2D<float> computeRadianceDistribution(RIVDataSet<float,ushort>* dataset,int xBins, int yBins);
 public:
     void redisplayWindow();
-    void AveragePixelDistributions();
+    void WeightPixelDistributionByThroughput();
+    void CombinePixelDistributions();
 	//Single renderer constructor
     RIVImageView(EMBREERenderer* rendererOne);
 	RIVImageView(RIVDataSet<float,ushort>** datasetOne,  EMBREERenderer* rendererOne);
 	//Dual renderer constructor
-	RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo);
-	
+	RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo,Histogram2D<float>* throughputDistroOne,Histogram2D<float>* throughputDistroTwo,Histogram2D<float>* energyDistributionOne,Histogram2D<float>* energyDistributionTwo);
+    Histogram2D<float>* GetActiveDistributionOne();
+    Histogram2D<float>* GetActiveDistributionTwo();
     Histogram2D<float>* GetPixelDistributionOne();
     Histogram2D<float>* GetPixelDistributionTwo();
     void ClearPixelDistributionOne();
     void ClearPixelDistributionTwo();
-    void ToggleShowHeatmap();
+    
+    void ToggleHeatmapToDisplay();
+    void ToggleHeatmapDisplayMode();
 	
 	static void DrawInstance();
 	static void ReshapeInstance(int,int);

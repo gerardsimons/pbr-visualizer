@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+
+<scene>
+    <Group id="0" name="">
+
+        <TriangleMesh id="1" name="mesh1">
+            <material name="Mirror">
+                <code>"Mirror"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 1.0000  1.0000  1.0000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns">200.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="0" size="8"/>
+            <normals   ofs="96" size="0"/>
+            <texcoords ofs="96" size="0"/>
+            <triangles ofs="96" size="12"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="2" name="mesh2">
+            <material name="">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.5000  0.5000  0.5000</float3>
+                    <float3 name="Kd"> 0.5000  0.5000  0.5000</float3>
+                    <float3 name="Ks"> 0.0000  0.0000  0.0000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="240" size="4"/>
+            <normals   ofs="288" size="0"/>
+            <texcoords ofs="288" size="0"/>
+            <triangles ofs="288" size="2"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="3" name="mesh3">
+            <material name="IDP_root">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
+                    <float3 name="Ks"> 0.3282  0.3282  0.3282</float3>
+                    <float  name="Ns">96.0784</float>
+                    <texture name="map_Kd">"textures\indoor plant_2_COL.jpg"</texture>
+                    <texture name="map_Ks">"textures\\indoor plant_2_COL.jpg"</texture>
+                    <texture name="map_Bump">"textures//indoor plant_2_NORump.jpg"</texture>
+                </parameters>
+            </material>
+            <positions ofs="312" size="7648"/>
+            <normals   ofs="92088" size="0"/>
+            <texcoords ofs="92088" size="7648"/>
+            <triangles ofs="153272" size="13344"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="4" name="mesh4">
+            <material name="IDP_ground">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
+                    <float3 name="Ks"> 0.0000  0.0000  0.0000</float3>
+                    <float  name="Ns">96.0784</float>
+                    <texture name="map_Kd">"textures\indoor plant_2_COL.jpg"</texture>
+                    <texture name="map_Bump">"textures//indoor plant_2_NORump.jpg"</texture>
+                </parameters>
+            </material>
+            <positions ofs="313400" size="5697"/>
+            <normals   ofs="381764" size="0"/>
+            <texcoords ofs="381764" size="5697"/>
+            <triangles ofs="427340" size="11264"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="5" name="mesh5">
+            <material name="IDP_leaves">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
+                    <float3 name="Ks"> 0.2000  0.2000  0.2000</float3>
+                    <float  name="Ns">96.0784</float>
+                    <texture name="map_Kd">"textures\indoor plant_2_COL.jpg"</texture>
+                    <texture name="map_Ks">"textures\\indoor plant_2_COL.jpg"</texture>
+                    <texture name="map_Bump">"textures//indoor plant_2_NORump.jpg"</texture>
+                </parameters>
+            </material>
+            <positions ofs="562508" size="9382"/>
+            <normals   ofs="675092" size="0"/>
+            <texcoords ofs="675092" size="9382"/>
+            <triangles ofs="750148" size="16352"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="6" name="mesh6">
+            <material name="IDP_Pot">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
+                    <float3 name="Ks"> 0.2000  0.2000  0.2000</float3>
+                    <float  name="Ns">96.0784</float>
+                    <texture name="map_Kd">"textures\indoor plant_2_COL.jpg"</texture>
+                    <texture name="map_Ks">"textures\\indoor plant_2_COL.jpg"</texture>
+                    <texture name="map_Bump">"textures//indoor plant_2_NORump.jpg"</texture>
+                </parameters>
+            </material>
+            <positions ofs="946372" size="2602"/>
+            <normals   ofs="977596" size="0"/>
+            <texcoords ofs="977596" size="2602"/>
+            <triangles ofs="998412" size="4864"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="7" name="mesh7">
+            <material name="IDP_root.001">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
+                    <float3 name="Ks"> 0.3282  0.3282  0.3282</float3>
+                    <float  name="Ns">96.0784</float>
+                    <texture name="map_Kd">"textures\indoor plant_2_COL.jpg"</texture>
+                    <texture name="map_Ks">"textures\\indoor plant_2_COL.jpg"</texture>
+                    <texture name="map_Bump">"textures//indoor plant_2_NORump.jpg"</texture>
+                </parameters>
+            </material>
+            <positions ofs="1056780" size="7648"/>
+            <normals   ofs="1148556" size="0"/>
+            <texcoords ofs="1148556" size="7648"/>
+            <triangles ofs="1209740" size="13344"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="8" name="mesh8">
+            <material name="IDP_ground.001">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
+                    <float3 name="Ks"> 0.0000  0.0000  0.0000</float3>
+                    <float  name="Ns">96.0784</float>
+                    <texture name="map_Kd">"textures\indoor plant_2_COL.jpg"</texture>
+                    <texture name="map_Bump">"textures//indoor plant_2_NORump.jpg"</texture>
+                </parameters>
+            </material>
+            <positions ofs="1369868" size="5697"/>
+            <normals   ofs="1438232" size="0"/>
+            <texcoords ofs="1438232" size="5697"/>
+            <triangles ofs="1483808" size="11264"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="9" name="mesh9">
+            <material name="IDP_leaves.001">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
+                    <float3 name="Ks"> 0.2000  0.2000  0.2000</float3>
+                    <float  name="Ns">96.0784</float>
+                    <texture name="map_Kd">"textures\indoor plant_2_COL.jpg"</texture>
+                    <texture name="map_Ks">"textures\\indoor plant_2_COL.jpg"</texture>
+                    <texture name="map_Bump">"textures//indoor plant_2_NORump.jpg"</texture>
+                </parameters>
+            </material>
+            <positions ofs="1618976" size="9382"/>
+            <normals   ofs="1731560" size="0"/>
+            <texcoords ofs="1731560" size="9382"/>
+            <triangles ofs="1806616" size="16352"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="10" name="mesh10">
+            <material name="IDP_Pot.001">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
+                    <float3 name="Ks"> 0.2000  0.2000  0.2000</float3>
+                    <float  name="Ns">96.0784</float>
+                    <texture name="map_Kd">"textures\indoor plant_2_COL.jpg"</texture>
+                    <texture name="map_Ks">"textures\\indoor plant_2_COL.jpg"</texture>
+                    <texture name="map_Bump">"textures//indoor plant_2_NORump.jpg"</texture>
+                </parameters>
+            </material>
+            <positions ofs="2002840" size="2602"/>
+            <normals   ofs="2034064" size="0"/>
+            <texcoords ofs="2034064" size="2602"/>
+            <triangles ofs="2054880" size="4864"/>
+        </TriangleMesh>
+
+    </Group>
+</scene>

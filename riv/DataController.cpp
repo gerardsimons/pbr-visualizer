@@ -12,7 +12,7 @@
 #include <set>
 #include <algorithm>
 
-DataController::DataController(const int maxPaths, const int maxBootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives, ushort nrLights) : maxPaths(maxPaths), maxBootstrapRepeat(maxBootstrapRepeat),bootstrapRepeat(maxBootstrapRepeat),maxNrLights(nrLights) {
+DataController::DataController(const int maxPaths, const int maxBootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives, ushort nrLights,ushort imageWidth, ushort imageHeight) : maxPaths(maxPaths), maxBootstrapRepeat(maxBootstrapRepeat),bootstrapRepeat(maxBootstrapRepeat),maxNrLights(nrLights), imageWidth(imageWidth),imageHeight(imageHeight) {
     createDataStructures(xBounds,yBounds,zBounds,nrPrimitives);
 }
 
@@ -179,14 +179,21 @@ void DataController::createDataStructures(const Vec2f& xBounds, const Vec2f& yBo
     float maxSize = std::max(xSize,std::max(ySize,zSize));
     
     //Because floats are annoying with equality, make sure you over-extend a bit the size of the octree
-    int maxDepth = 8;
+    int maxDepth = 9;
     int maxCapacity = 1;
-    energyDistribution = new Octree(maxDepth,cX,cY,cZ,1.01*maxSize,maxCapacity);
+    energyDistribution3D = new Octree(maxDepth,cX,cY,cZ,1.01*maxSize,maxCapacity);
+    int xBins = imageWidth / 2.F;
+    int yBins = imageHeight / (float)imageWidth * xBins;
+    pixelThroughput = Histogram2D<float>(0,1,xBins,yBins);
+    energyDistribution2D = Histogram2D<float>(0,1,xBins,yBins);
     
     resetPointers(candidateData);
 }
-Octree* DataController::GetEnergyDistribution() {
-    return energyDistribution;
+Octree* DataController::GetEnergyDistribution3D() {
+    return energyDistribution3D;
+}
+Histogram2D<float>* DataController::GetEnergyDistribution2D() {
+    return &energyDistribution2D;
 }
 void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
     currentPathTable = dataset->GetTable(PATHS_TABLE);
@@ -267,9 +274,15 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
         trueDistributions.AddToHistogram(PRIMITIVE_ID, isect.primitiveId);
         
         //Add energy data to octree
-        energyDistribution->Add(isect.position[0],isect.position[1], isect.position[2], (isect.color.r + isect.color.g + isect.color.b) / 3.F);
+        energyDistribution3D->Add(isect.position[0],isect.position[1], isect.position[2], (isect.color.r + isect.color.g + isect.color.b) / 3.F);
 //        energyDistribution->Add(isect.position[0],isect.position[1], isect.position[2], (i+1));
     }
+//    unsigned int averageThroughput = (newPath->throughput.r + newPath->throughput.g + newPath->throughput.b) / 3.F * 100 * newPath->intersectionData.size();
+    unsigned int averageThroughput = (newPath->throughput.r + newPath->throughput.g + newPath->throughput.b) / 3.F * 100;
+    unsigned int averageEnergy = (newPath->radiance.r + newPath->radiance.g + newPath->radiance.b) / 3.F * 100;
+//    unsigned int averageEnergy = (newPath->radiance.r * newPath->throughput.r + newPath->radiance.g * newPath->throughput.g + newPath->radiance.b * newPath->throughput.b) / 3.F * 100;
+    pixelThroughput.Add(newPath->pixel[0], newPath->pixel[1], averageThroughput);
+    energyDistribution2D.Add(newPath->pixel[0], newPath->pixel[1],averageEnergy);
     
     if(currentPathTable->NumberOfRows() < maxPaths) {
         float accept = rand() / (float)RAND_MAX;
@@ -292,8 +305,6 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
             throughputBs->AddValue(newPath->throughput.b);
             depths->AddValue((ushort)newPath->intersectionData.size());
             std::vector<size_t> indices(nrIntersections);
-            
-
             
             for(int i = 0 ; i < nrIntersections ; ++i) {
                 IntersectData& isect = newPath->intersectionData[i];
@@ -556,12 +567,13 @@ void DataController::Reduce() {
         //			candidateData->Print();
     }
     
-    
-    
     delete joinedData;
     
     reporter::stop(taskName);
     
+}
+Histogram2D<float>* DataController::GetPixelThroughputDistribution() {
+    return &pixelThroughput;
 }
 void DataController::SetAcceptProbability(float newProb) {
     acceptProbability = newProb;

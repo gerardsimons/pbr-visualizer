@@ -40,7 +40,7 @@ private:
         NONE
     };
     
-    DrawPathsMode pathsMode = LIGHTS;
+    DrawPathsMode pathsMode = CAMERA;
     
     class LightCone {
     public:
@@ -56,6 +56,8 @@ private:
     std::map<size_t,LightCone*> lightConesTwo;
     
     SelectionMode selectionMode = PATH;
+    
+    riv::Color backgroundColor = colors::WHITE;
 
     Vector3f cameraPositionOne;
     Vector3f cameraPositionTwo;
@@ -191,6 +193,7 @@ public:
     static void Mouse(int button, int state, int x, int y);
     static void Motion(int x, int y);
     
+    void ToggleBackgroundColor();
     void IncrementBounceNrPath(int delta);
     void CycleSelectedLights();
     void CycleSelectionMode();

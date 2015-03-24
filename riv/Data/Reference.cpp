@@ -103,7 +103,7 @@ std::vector<size_t> RIVMultiReference::GetReferenceRows(size_t row) {
 void RIVMultiReference::FilterReferenceRow(size_t row) {
     std::vector<size_t> rows = GetReferenceRows(row);
     for(ushort i = 0 ; i < rows.size() ; ++i) {
-        //		printf("Filter row->referenceRow : %zu->%zu in table %s\n",row,rows.first[i],targetTable->name.c_str());
+        //		printf("Filter row->referenceRow : %zu->%   zu in table %s\n",row,rows.first[i],targetTable->name.c_str());
         targetTable->FilterRowFromReference(rows[i],this);
     }
 }
@@ -127,9 +127,9 @@ void RIVMultiReference::Print() {
     }
 }
 RIVFixedReference::RIVFixedReference(RIVTableInterface* sourceTable, RIVTableInterface* targetTable, const ushort size) : RIVReference(sourceTable,targetTable), size(size) {
-    if(size == 0) {
-        throw std::runtime_error("Minimum of 1 references expected.");
-    }
+//    if(size == 0) {
+//        throw std::runtime_error("Minimum of 1 references expected.");
+//    }
 };
 //Because the fixed reference requires that each source row has a fixed mapping
 bool RIVFixedReference::HasReference(size_t row) {

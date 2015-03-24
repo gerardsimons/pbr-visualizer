@@ -222,7 +222,7 @@ void RIV3DView::drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* node
                 drawEnergyDifferenceHelper(nodeOne->GetChild(i),nodeTwo,max,colorMap);
             }
         }
-        else if(maxDepthReachedOne && maxDepthReachedTwo) { //
+        else if(maxDepthReachedOne || maxDepthReachedTwo) { //
             
             
             
@@ -240,7 +240,7 @@ void RIV3DView::drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* node
             float valueOne = nodeOne->AggregateValue() * multiplier / max;
             float valueTwo = nodeTwo->AggregateValue() * multiplierTwo / max;
             
-            float min = 0;
+            float min = 0.1;
             
             if(valueOne > min || valueTwo > min) {
                 float red,blue;
@@ -337,7 +337,7 @@ void RIV3DView::Draw() {
     
     glEnable(GL_DEPTH_TEST);
 //        glClearColor(1.0, 1.0, 1.0, 0.0); //White
-    glClearColor(0.0, 0.0, 0.0, 0.0); //black
+    glClearColor(backgroundColor.R,backgroundColor.G,backgroundColor.B,0); //black
     //        glClearColor(0.8, 0.8, 0.8 , 0.0); //gray
     glClear( GL_COLOR_BUFFER_BIT  | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_BLEND);
@@ -474,7 +474,7 @@ void RIV3DView::Draw() {
 void RIV3DView::drawTriangleMeshFull(TriangleMeshFull* mesh, const riv::Color& color) {
     vector_t<TriangleMeshFull::Triangle> triangles = mesh->triangles;
     vector_t<Vec3fa>& position = mesh->position;
-    
+    glColor3f(color.R,color.G,color.B);
     for(size_t i = 0 ; i < triangles.size() ; ++i) {
         Vec3fa& v0 = position[triangles[i].v0];
         Vec3fa& v1 = position[triangles[i].v1];
@@ -491,7 +491,7 @@ void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color, ushort
     glEnable(GL_BLEND);
     glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     //    glColor3f(.5f,.2f,1.0f); //Purple
-    glColor3f(color[0],color[1],color[2]);
+
     /** Draw the model **/
     glBegin(GL_TRIANGLES);
     
@@ -566,7 +566,7 @@ void RIV3DView::drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<
             glColor3f(pointColor.R,pointColor.G,pointColor.B);
             glPushMatrix();
             glTranslatef(x, y, z);
-            gluSphere(quadric, .004/modelScsale, 5, 5);
+            gluSphere(quadric, .004/modelScale, 5, 5);
 //            glutSolidSphere(1, 5, 5);
             glPopMatrix();
         }
@@ -607,7 +607,7 @@ void RIV3DView::ResetGraphics() {
 void RIV3DView::createLightPaths() {
     lightPathsOne = createLightPaths(selectedLightIdOne,*datasetOne,pathColorOne,rayColorOne);
     if(datasetTwo) {
-        lightPathsTwo = createLightPaths(selectedLightIdTwo,*datasetTwo,pathColorOne,rayColorOne);
+        lightPathsTwo = createLightPaths(selectedLightIdTwo,*datasetTwo,pathColorTwo,rayColorTwo);
     }
 }
 std::vector<Path> RIV3DView::createLightPaths(ushort selectedLightID, RIVDataSet<float,ushort>* dataset,RIVColorProperty* pathColor, RIVColorProperty* pointColor) {
@@ -768,13 +768,13 @@ std::vector<Path> RIV3DView::createLightPaths(ushort selectedLightID, RIVDataSet
 //    printVector(occludedLightRows);
 //    printf("isect rows occluded by light : ");
 //    printVector(occludedIsectRows);
-    for(Path& path : paths) {
-        printf("Path ( ");
-        for(size_t i = 0 ; i < path.Size() ; ++i) {
-            printf("%zu (%d)",path.points[i].rowIndex,path.points[i].bounceNr);
-        }
-        printf(")\n");
-    }
+//    for(Path& path : paths) {
+//        printf("Path ( ");
+//        for(size_t i = 0 ; i < path.Size() ; ++i) {
+//            printf("%zu (%d)",path.points[i].rowIndex,path.points[i].bounceNr);
+//        }
+//        printf(")\n");
+//    }
     
     return paths;
 }
@@ -1094,7 +1094,15 @@ void RIV3DView::drawPaths(float startSegment, float stopSegment) {
         }
     }
 }
-
+void RIV3DView::ToggleBackgroundColor() {
+    if(backgroundColor == colors::WHITE) {
+        backgroundColor = colors::BLACK;
+    }
+    else if(backgroundColor == colors::BLACK) {
+        backgroundColor = colors::WHITE;
+    }
+    redisplayWindow();
+}
 void RIV3DView::drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths, float startSegment, float stopSegment, const Vector3f& startPosition) {
     //See if it should consist of two partial segments
     for(float i = 1 ; i < maxBounce ; i++) {
@@ -1219,8 +1227,8 @@ void RIV3DView::ToggleDrawPaths() {
             createLightPaths();
             break;
         case LIGHTS:
-            pathsMode = CAMERA;
-            printf("CAMERA'\n");
+            pathsMode = NONE;
+            printf("NONE'\n");
             break;
     }
     
@@ -1384,7 +1392,7 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
                         break;
                     }
                     //Only when the first bounce is in the shadow
-                    else if(selectionMode == INTERACTION_AND_SHADOW) {
+                    else if(selectionMode == INTERACTION_AND_SHADOW && i == 0) {
                         const auto& lightsMapping = isectsToLightsReference->GetReferenceRows(intersectionRow);
                         ushort nrLightRows = lightsMapping.size();
                         for(ushort j = 0 ; j < nrLightRows ; ++j) {

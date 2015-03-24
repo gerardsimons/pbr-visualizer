@@ -21,12 +21,14 @@
 
 class DataController {
 private:
-	
+    ushort imageWidth;
+    ushort imageHeight;
 	std::vector<RIVDataSetListener*> dataListeners;
 	void notifyFilterListeners();
 	void notifyDataListeners();
 	
-    Octree* energyDistribution = NULL;
+    Octree* energyDistribution3D = NULL;
+    Histogram2D<float> energyDistribution2D;
 	
 	//The datasets currently being used, this is what the views use to draw
 	RIVDataSet<float,ushort>* currentData;
@@ -44,6 +46,8 @@ private:
 	RIVTable<float,ushort>* currentPathTable;
 	RIVTable<float,ushort>* currentIntersectionsTable;
     RIVTable<float,ushort>* currentLightsTable;
+    
+    Histogram2D<float> pixelThroughput;
 
 	RIVFloatRecord* xPixels = NULL;
 	RIVFloatRecord* yPixels = NULL;
@@ -100,12 +104,7 @@ private:
 	
 	//The first time we will fill both the candidate and current, after which we will bootstrap, keep the best bootstrap as current and only fill up candidate
 	bool firstTime = true;
-	
 	bool paused = false;
-	
-	bool delayed = false;
-	clock_t startDelay;
-	int delayTimerInterval = 10000;
 	
     ushort maxDepth = 5;
 	int maxPaths;
@@ -124,11 +123,13 @@ public:
 	HistogramSet<float,ushort>* GetTrueDistributions() {
 		return &trueDistributions;
 	}
-    Octree* GetEnergyDistribution();
+    Histogram2D<float>* GetPixelThroughputDistribution();
+    Octree* GetEnergyDistribution3D();
+    Histogram2D<float>* GetEnergyDistribution2D();
 	void AddMembershipDataStructures(RIVDataSet<float,ushort>* dataset);
 	void SetAcceptProbability(float newProb);
 	//The number of renderers to expect data from and the maximum number of paths per renderer before data reduction should kick in
-	DataController(const int maxPaths, const int bootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives, ushort nrLights);
+	DataController(const int maxPaths, const int bootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives, ushort nrLights, ushort imageWidth, ushort imageHeight);
 	//Returns a pointer to a pointer of the dataset for renderer one
 	RIVDataSet<float,ushort>** GetDataSet();
 	bool ProcessNewPath(int frame, PathData* newPath);

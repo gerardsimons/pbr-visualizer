@@ -32,6 +32,9 @@ namespace riv {
         Color(unsigned short R, unsigned short G, unsigned short B) : R(R / 255.F),G(G / 255.F),B(B / 255.F),A(1){
             
         }
+        bool operator==(const Color& rightHand) {
+            return R == rightHand.R && G == rightHand.G && B == rightHand.B && A == rightHand.A;
+        }
     };
     
     //A linearly interpolated color map

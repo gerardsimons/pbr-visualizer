@@ -296,7 +296,7 @@ void EMBREERenderer::CopySwapChainTo(EMBREERenderer* targetRenderer, float weigh
 //    thatSwapChain.ptr = thisSwapChain.ptr;
 
     //TODO: Support varying sizes, especially those with the same aspect ratio
-    if(thisSwapChain->getWidth() != thatSwapChain->getWidth() || thisSwapChain->getWidth() != thatSwapChain->getHeight()) {
+    if(thisSwapChain->getWidth() != thatSwapChain->getWidth() || thisSwapChain->getHeight() != thatSwapChain->getHeight()) {
         printf("Sorry, different swapchain sizes not currently supported\n");
     }
     else {

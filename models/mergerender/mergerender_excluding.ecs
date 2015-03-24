@@ -1,0 +1,7 @@
+-i mergerenderv2_excl.xml
+-pointlight 3 6 0 200 200 200	
+#-pointlight 3.25 10 0 200 200 200	
+-vp 6 9 16 -vi 0 0 0 -vu 0 1 0 -fov 55
+#-size 248 186
+-size 320 240
+-renderer pathtracer { depth = 5 }

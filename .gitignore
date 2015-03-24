@@ -4,6 +4,9 @@
 *.o
 *.obj
 
+#Stupid ass DS_Store
+.DS_Store
+
 # Compiled Dynamic libraries
 *.so
 *.dylib

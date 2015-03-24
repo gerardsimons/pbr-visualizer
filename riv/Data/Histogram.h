@@ -150,8 +150,8 @@ public:
 	T UpperBound() {
 		return upperBound;
 	}
-	T MaximumValue() {
-		T max = std::numeric_limits<T>::min();
+	unsigned int MaximumValue() {
+        unsigned int max = 0;
 		for(auto iter : hist) {
 			if(iter.second > max) {
 				max = iter.second;
@@ -159,6 +159,15 @@ public:
 		}
 		return max;
 	}
+    unsigned int MinimumValue() {
+        unsigned int min = -1;
+        for(auto iter : hist) {
+            if(iter.second < min) {
+                min = iter.second;
+            }
+        }
+        return min;
+    }
     T MaximumNormalizedValue() {
         return MaximumValue() / nrElements;
     }
@@ -258,7 +267,7 @@ public:
 		for(int i = 0 ; i < bins ; i++) {
 			int thisValue = BinValue(i);
 			int rightValue = right.BinValue(i);
-			int diff = (thisValue - rightValue);
+            int diff = std::abs(thisValue - rightValue);
 			result.Set(i,diff);
 
 		}
@@ -536,11 +545,6 @@ public:
 			}
 		});
 	}
-//
-//	template<typename T>
-//	std::vector<T>* GetHistograms() {
-//		return &std::get<T>(histograms);
-//	}
 };
 
 template <typename T>
@@ -576,8 +580,8 @@ public:
 //        // by convention, always return *this
 //        return *this;
 //    }
-    unsigned int NumberOfBins() {
-        return xBins;
+    std::pair<unsigned int,unsigned int> NumberOfBins() {
+        return std::pair<unsigned int, unsigned int>(xBins,yBins);
     }
     T LowerBound() {
         return lowerBound;
@@ -632,6 +636,9 @@ public:
         if(upperBound <= lowerBound) {
             throw std::runtime_error("Lower bound should be < upper bound");
         }
+        if(bins) {
+            throw std::runtime_error("Number of bins must be positive (> 0)\n");
+        }
         binWidth = (upperBound - lowerBound) / (float)xBins;
         
         for(int i = 0 ; i < xBins ; ++i) {
@@ -640,6 +647,12 @@ public:
         }
     }
     Histogram2D(T lowerBound, T upperBound, unsigned int xBins, unsigned int yBins) : upperBound(upperBound), lowerBound(lowerBound), xBins(xBins), yBins(yBins) {
+        if(!xBins) {
+            throw std::runtime_error("Number of x bins must be positive (> 0)\n");
+        }
+        if(!yBins) {
+            throw std::runtime_error("Number of y bins must be positive (> 0)\n");
+        }
         if(upperBound <= lowerBound) {
             throw std::runtime_error("Lower bound should be < upper bound");
         }
@@ -664,6 +677,16 @@ public:
             }
         }
         return maxValue;
+    }
+    int MinBinValue() {
+        int minValue = std::numeric_limits<int>::max();
+        for(auto it : histograms) {
+            int localMin = it.second.MinimumValue();
+            if(localMin < minValue) {
+                minValue = localMin;
+            }
+        }
+        return minValue;
     }
     unsigned int SampleBin() {
         if(cdfStale)
@@ -778,7 +801,7 @@ public:
                 for(unsigned int y = 0 ; y < yBins ; ++y) {
                     int upperX = std::min(x + (width - 1) / 2,xBins - 1);
                     int lowerX = std::max((int)(x - (width - 1) / 2),0);
-                    float filterResult = 0;
+                    float sum = 0;
                     int binsSummed = 0;
                     for(int xFilter = lowerX ; xFilter <= upperX ; ++xFilter) {
                         unsigned int upperY = std::min(y + (height - 1) / 2,yBins - 1);
@@ -786,13 +809,14 @@ public:
                         for(int yFilter = lowerY ; yFilter <= upperY ; ++yFilter) {
                             size_t value = BinValue(xFilter, yFilter);
 //                            printf("Value at filter %d,%d = %zu\n",xFilter,yFilter,value);
-                            filterResult += value;
+                            sum += value;
                             ++binsSummed;
                         }
                     }
-                    size_t newValue = (size_t)(filterResult / binsSummed);
+                    size_t average = std::round(sum / binsSummed);
+//                    size_t newValue = (size_t)
 //                    printf("new value (%d,%d) = %zu\n",x,y,newValue);
-                    result.SetBinValue(x,y,newValue);
+                    result.SetBinValue(x,y,average);
                 }
             }
             *this = result;
@@ -808,6 +832,20 @@ public:
         
         for(int x = 0 ; x < xBins ; ++x) {
             auto sum = histograms[x] + *right.BinValue(x);
+            result.Set(x,sum);
+        }
+        
+        return result;
+    }
+    Histogram2D<T> operator-(Histogram2D<T>& right) {
+        
+        T lowerBound = std::min(LowerBound(),right.LowerBound());
+        T upperBound = std::max(UpperBound(),right.UpperBound());
+        
+        Histogram2D<T> result = Histogram2D<T>(lowerBound,upperBound,xBins,yBins);
+        
+        for(int x = 0 ; x < xBins ; ++x) {
+            auto sum = histograms[x] - *right.BinValue(x);
             result.Set(x,sum);
         }
         

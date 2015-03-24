@@ -330,6 +330,9 @@ void ParallelCoordsView::drawAxes() {
                         
                         //						printf("glColor3f(%f,%f,%f)\n",r,g,b);
                         float width = ratio * (maxBinWidth - axis->width) + axis->width;
+                        if(width > maxBinWidth) {
+                            size_t maxTest = histogramTwo.MaximumValue();
+                        }
                         float startBinX = axis->x - width / 2.F;
                         float endBinX = axis->x + width / 2.F;
                         glRectf(startBinX, startBinY, endBinX, endBinY);

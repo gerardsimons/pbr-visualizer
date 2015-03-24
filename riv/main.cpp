@@ -34,6 +34,8 @@
 
 #define USE_IMAGEMAGICK
 
+#define BIN_X 30
+
 /* window width and height */
 //int width = 1650
 //int height = 1000;
@@ -86,11 +88,11 @@ EMBREERenderer* rendererTwo = NULL;
 
 bool linkPixelDistros = false;
 
-const int maxPathsOne = 6000;
-const int maxBootstrapRepeatOne = 20;
+const int maxPathsOne = 5000;
+const int maxBootstrapRepeatOne = 5;
 
-const int maxPathsTwo = 6000;
-const int maxBootstrapRepeatTwo = 20;
+const int maxPathsTwo = 5000;
+const int maxBootstrapRepeatTwo = 5;
 
 const int sliderViewHeight = 40;
 
@@ -467,13 +469,25 @@ void keys(int keyCode, int x, int y) {
 //                dataControllerTwo->SetAcceptProbability(acceptProbTwo);
             }
             break;
-        case 55: // the '7' key, average pixel distro 1
+        case 54: // 6 key, discconnect data processing for renderer 1
+            connectedOne = !connectedOne;
+            printf("Renderer one is now ");
+            if(!connectedOne) printf("NOT ");
+            printf("connected to data processing\n");
+            break;
+        case 55: // 7 key, discconnect data processing for renderer 2
+            connectedTwo = !connectedTwo;
+            printf("Renderer two is now ");
+            if(!connectedTwo) printf("NOT ");
+            printf("connected to data processing\n");
+            break;
+        case 56: // the '8' key, average pixel distro 1
 
 //                printf("Copying swapchain from renderer 1 to renderer 2!!\n");
                 imageView->SmoothPixelDistributionOne();
             
             break;
-        case 56: // the '8' key, average pixel distro 2
+        case 57: // the '9' key, average pixel distro 2
 
                 //                printf("Copying swapchain from renderer 1 to renderer 2!!\n");
                 imageView->SmoothPixelDistributionTwo();
@@ -481,7 +495,7 @@ void keys(int keyCode, int x, int y) {
         case 48: // the '0' key, link average the two heatmaps with eachother
             if(datasetOne && datasetTwo) {
                 linkPixelDistros = true;
-                imageView->AveragePixelDistributions();
+                imageView->CombinePixelDistributions();
             }
             break;
         case 97: // 'a' key
@@ -518,11 +532,19 @@ void keys(int keyCode, int x, int y) {
         case 93:
             sceneView->MovePathSegment(.01F);
             break;
+        case 96: // '`' key, change background color of 3D view
+            sceneView->ToggleBackgroundColor();
+            break;
         case 104: // the 'h' from heatmap, toggle drawing the octree heatmap
             sceneView->ToggleDrawHeatmap();
             break;
         case 106: // the 'j' key, cause the h is taken for the other heatmap
-            imageView->ToggleShowHeatmap();
+            imageView->ToggleHeatmapDisplayMode();
+            postRedisplay = false;
+            break;
+        case 110: // the 'n' key
+            imageView->ToggleHeatmapToDisplay();
+            postRedisplay = false;
             break;
         case 109:
             sceneView->ToggleHideMesh();
@@ -568,6 +590,9 @@ void keys(int keyCode, int x, int y) {
         case 115: // 's' key
             //            sceneView->MoveCamera(0, -camSpeed, 0);
             
+            break;
+        case 120: // 'x' key
+            imageView->WeightPixelDistributionByThroughput();
             break;
         case GLUT_KEY_UP:
             //            sceneView->MoveCamera(0,0,camSpeed);
@@ -734,12 +759,13 @@ void idle() {
 //    if(linkPixelDistros) {
 //        imageView->AveragePixelDistributions();
 //    }
-    int maxFrameOne = 100;
+    int maxFrameOne = 52;
     if(!renderingPausedOne && currentFrameOne < maxFrameOne) {
         ++currentFrameOne;
         printf("Rendering renderer #1 frame %d\n",currentFrameOne);
-        Histogram2D<float>* pixelDistributionOne = imageView->GetPixelDistributionOne();
-        if(pixelDistributionOne && pixelDistributionOne->NumberOfElements() && (*datasetOne)->IsFiltered()) {
+//        Histogram2D<float>* pixelDistributionOne = imageView->GetPixelDistributionOne();
+        Histogram2D<float>* pixelDistributionOne = imageView->GetActiveDistributionOne();
+        if(pixelDistributionOne && pixelDistributionOne->NumberOfElements()) {
             //                heatmapOne->Print();
             rendererOne->RenderNextFrame(pixelDistributionOne);
         }
@@ -749,9 +775,9 @@ void idle() {
         renderOneFinishedFrame = false;
         postRedisplay = true;
     }
-    if(!renderingPausedTwo) {
+    int maxFrameTwo = 52;
+    if(!renderingPausedTwo && currentFrameTwo < maxFrameTwo) {
         if(dataControllerTwo) {
-            int maxFrameTwo = 1;
 //            if(currentFrameTwo == maxFrameTwo) {
 //                dataControllerTwo->SetMaxPaths(5000);
 //                renderingPausedTwo = true;
@@ -759,10 +785,11 @@ void idle() {
 //                return;
 //            }
             ++currentFrameTwo;
-            auto pixelDistributionTwo = imageView->GetPixelDistributionTwo();
+            auto pixelDistributionTwo = imageView->GetActiveDistributionTwo();
             printf("Rendering renderer #2 frame %d\n",currentFrameTwo);
-            if((*datasetTwo)->IsFiltered() && pixelDistributionTwo && pixelDistributionTwo->NumberOfElements()) {
-                //                    heatmapTwo->Print();
+            if(pixelDistributionTwo && pixelDistributionTwo->NumberOfElements()) {
+//                printf("Active distribution = \n");
+//                pixelDistributionTwo->Print();
                 rendererTwo->RenderNextFrame(pixelDistributionTwo);
             }
             else {
@@ -863,7 +890,7 @@ void setup(int argc, char** argv) {
         if(strcmp(type,"-connect") == 0) {
             rendererOne = new EMBREERenderer(dcOne, std::string(argv[2]),1);
             sceneDataOne = getSceneData(rendererOne);
-            dataControllerOne = new DataController(2 * maxPathsOne, maxBootstrapRepeatOne,sceneDataOne.xBounds,sceneDataOne.yBounds,sceneDataOne.zBounds,sceneDataOne.NumberOfMeshes(),rendererOne->GetNumLights());
+            dataControllerOne = new DataController(2 * maxPathsOne, maxBootstrapRepeatOne,sceneDataOne.xBounds,sceneDataOne.yBounds,sceneDataOne.zBounds,sceneDataOne.NumberOfMeshes(),rendererOne->GetNumLights(),rendererOne->getWidth(),rendererOne->getHeight());
             dataControllerOne->SetAcceptProbability(2.F * maxPathsOne / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel()));
             datasetOne = dataControllerOne->GetDataSet();
             printf("datsetone** = %p --> datasetone* = %p\n",datasetOne,*datasetOne);
@@ -918,8 +945,8 @@ void setup(int argc, char** argv) {
         yBounds = Vec2f(std::min(sceneDataOne.yBounds[0],sceneDataTwo.yBounds[0]),std::max(sceneDataOne.yBounds[1],sceneDataTwo.yBounds[1]));
         zBounds = Vec2f(std::min(sceneDataOne.zBounds[0],sceneDataTwo.zBounds[0]),std::max(sceneDataOne.zBounds[1],sceneDataTwo.zBounds[1]));
         
-        dataControllerOne = new DataController(2 * maxPathsOne,maxBootstrapRepeatOne,xBounds,yBounds,zBounds,sceneDataOne.NumberOfMeshes(),rendererOne->GetNumLights());
-        dataControllerTwo = new DataController(2 * maxPathsTwo,maxBootstrapRepeatTwo,xBounds,yBounds,zBounds,sceneDataTwo.NumberOfMeshes(),rendererTwo->GetNumLights());
+        dataControllerOne = new DataController(2 * maxPathsOne,maxBootstrapRepeatOne,xBounds,yBounds,zBounds,sceneDataOne.NumberOfMeshes(),rendererOne->GetNumLights(),rendererOne->getWidth(),rendererOne->getHeight());
+        dataControllerTwo = new DataController(2 * maxPathsTwo,maxBootstrapRepeatTwo,xBounds,yBounds,zBounds,sceneDataTwo.NumberOfMeshes(),rendererTwo->GetNumLights(),rendererOne->getWidth(),rendererOne->getHeight());
         datasetOne = dataControllerOne->GetDataSet();
         datasetTwo = dataControllerTwo->GetDataSet();
         float acceptProbOne = 2.F * maxPathsOne / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel());
@@ -933,8 +960,7 @@ void setup(int argc, char** argv) {
         throw std::runtime_error("Unsupported number of arguments (2 or 4 expected)");
     }
     
-    
-    
+
     //The imageview should display two rendered images
     
     int nrConnected = (int)connectedOne + (int)connectedTwo;
@@ -1049,9 +1075,9 @@ void setup(int argc, char** argv) {
         
         riv::ColorMap binColorMap(colors,0,1);
         
-        sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution(),dataControllerTwo->GetEnergyDistribution(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
+        sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
         //		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,colorOne,colorTwo,sizeProperty);
-        imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo);
+        imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo,dataControllerOne->GetPixelThroughputDistribution(),dataControllerTwo->GetPixelThroughputDistribution(),dataControllerOne->GetEnergyDistribution2D(),dataControllerTwo->GetEnergyDistribution2D());
         
         sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions());
 //        parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,binColorMap,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo,sliderView);
@@ -1074,7 +1100,7 @@ void setup(int argc, char** argv) {
         auto pathColorOne = createPathColorProperty(*datasetOne);
         auto rayColorOne = createRayColorProperty(*datasetOne);
         parallelCoordsView = new ParallelCoordsView(datasetOne,redBlue, pathColorOne,rayColorOne,sliderView);
-        sceneView = new RIV3DView(datasetOne,rendererOne,sceneDataOne,dataControllerOne->GetEnergyDistribution(), pathColorOne, rayColorOne);
+        sceneView = new RIV3DView(datasetOne,rendererOne,sceneDataOne,dataControllerOne->GetEnergyDistribution3D(), pathColorOne, rayColorOne);
         imageView = new RIVImageView(datasetOne,rendererOne);
         (*datasetOne)->AddDataListener(imageView);
         (*datasetOne)->AddDataListener(sceneView);
