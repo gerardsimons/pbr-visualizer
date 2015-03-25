@@ -25,8 +25,8 @@
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
                     <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
+                    <!-- <float3 name="Ks"> 0.5000  0.5000  0.5000</float3> -->
+                    <!-- <float  name="Ns">96.0784</float> -->
                 </parameters>
             </material>
             <positions ofs="240" size="4"/>
@@ -204,7 +204,7 @@
 
         <TriangleMesh id="12" name="RightWall">
             <material name="None">
-                <code>"Mirror"</code>
+                <code>"OBJ"</code>
                 <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>

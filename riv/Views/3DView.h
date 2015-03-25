@@ -19,8 +19,8 @@
 
 #include "devices/device_singleray/embree_renderer.h"
 
-#include <set>
 #include <limits>
+#include <set>
 
 class RIV3DView : public RIVDataView, public RIVDataSetListener {
 private:
@@ -35,16 +35,12 @@ private:
         INTERACTION_AND_SHADOW,
         OBJECT
     };
-    enum SelectionOperator {
-        NORMAL,
-        ADDITIVE //Shift click
-    };
     enum DrawPathsMode {
         CAMERA,
         LIGHTS,
         NONE
     };
-    SelectionOperator selectOperator = NORMAL;
+    
     DrawPathsMode pathsMode = CAMERA;
     
     class LightCone {
@@ -62,37 +58,37 @@ private:
     
     SelectionMode selectionMode = PATH;
     
-    riv::Color backgroundColor = colors::WHITE;
-
+    riv::Color backgroundColor = colors::BLACK;
+    
     Vector3f cameraPositionOne;
     Vector3f cameraPositionTwo;
     Vector3f eye;
     
     bool isDirty = true;
-	
-	float modelScale;
-	Vec3fa modelCenter;
-	
+    
+    float modelScale;
+    Vec3fa modelCenter;
+    
     bool drawIntersectionPoints = false;
-	
-	//Whether the generated octree should be drawn (if any is generated)
-	bool drawHeatmapTree = false;
+    
+    //Whether the generated octree should be drawn (if any is generated)
+    bool drawHeatmapTree = false;
     
     bool showMeshes = true;
-//	size_t selectedMesh = -1;
-	
-	//Mesh model data
-	TriangleMeshGroup meshesOne;
-	TriangleMeshGroup meshesTwo;
-	
-	bool drawDataSetOne = true;
-	bool drawDataSetTwo = true;
-	
-	bool isDragging = false;
+    //	size_t selectedMesh = -1;
+    
+    //Mesh model data
+    TriangleMeshGroup meshesOne;
+    TriangleMeshGroup meshesTwo;
+    
+    bool drawDataSetOne = true;
+    bool drawDataSetTwo = true;
+    
+    bool isDragging = false;
     bool didMoveCamera = false;
-	
-	std::vector<Path> cameraPathsOne;
-	std::vector<Path> cameraPathsTwo;
+    
+    std::vector<Path> cameraPathsOne;
+    std::vector<Path> cameraPathsTwo;
     
     std::vector<Path> lightPathsOne;
     std::vector<Path> lightPathsTwo;
@@ -103,48 +99,51 @@ private:
     ushort drawHeatmapDepth;
     Octree* energyDistributionOne;
     Octree* energyDistributionTwo = NULL;
-	
-	EMBREERenderer* rendererOne;
-	EMBREERenderer* rendererTwo = NULL;
-	
-	RIVColorProperty* pathColorOne;
-	RIVColorProperty* rayColorOne;
+    
+    EMBREERenderer* rendererOne;
+    EMBREERenderer* rendererTwo = NULL;
+    
+    RIVColorProperty* pathColorOne;
+    RIVColorProperty* rayColorOne;
     RIVColorProperty* pathColorTwo;
     RIVColorProperty* rayColorTwo;
     
     //Path drawing variables
     int maxBounce = 5; //TODO: Deduce this value from the bounce record
-	int selectRound = 1;
+    int selectRound = 1;
     const float segmentWidth = .025F;
     float segmentStart = 0;
     float segmentStop = segmentWidth;
-	
-	GLUquadric* quadric = gluNewQuadric();
-	Vec3fa Phit; //Supposedly the point of intersection of the ray with the plane supporting the triangle
-	Ray pickRay;
+    
+    GLUquadric* quadric = gluNewQuadric();
+    Vec3fa Phit; //Supposedly the point of intersection of the ray with the plane supporting the triangle
+    Ray pickRay;
     
     ushort selectedLightIdOne = 0;
     ushort selectedLightIdTwo = 0;
-	
-	bool meshSelected = false;
+    
+    bool meshSelected = false;
     std::vector<riv::RowFilter*> pathFiltersOne;
-	ushort bounceCountOne = 0;
-    std::map<ushort,std::set<ushort>> selectedObjectIdsOne; //Maps a bounce nr to the object ids a path should interact with
+    ushort bounceCountOne = 0;
+//    std::set<ushort> selectedObjectIdsOne;
+    ushort selectedObjectIdOne = -1;
     std::vector<riv::RowFilter*> pathFiltersTwo;
-	ushort bounceCountTwo = 0;
-    std::map<ushort,std::set<ushort>> selectedObjectIdsTwo;
-	
+//    std::set<ushort> selectedObjectIdsTwo;
+    ushort bounceCountTwo = 0;
+    ushort selectedObjectIdTwo = -1;
+    
     bool pathsCreated = false;
-
-	//Determines if the objectId is currently selected
-	bool isSelectedObject(ushort objectId);
-	//Draw the mesh model loaded from the PBRT file
-	void drawMeshModel(TriangleMeshGroup* meshGroup, float* color, const std::map<ushort,std::set<ushort>>& selectedObjectIds);
-	void drawPaths(float startSegment, float stopSegment);
+    
+    //Determines if the objectId is currently selected
+    bool isSelectedObject(std::set<ushort>& objectIds, ushort objectId);
+    //Draw the mesh model loaded from the PBRT file
+//    void drawMeshModel(TriangleMeshGroup* meshGroup, float* color, std::set<ushort> selectedObjectId);
+    void drawMeshModel(TriangleMeshGroup* meshGroup, float* color,ushort* selectedObjectID);
+    void drawPaths(float startSegment, float stopSegment);
     void drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths, float startSegment, float stopSegment,const Vector3f& cameraPosition); //Draw the paths between two consecutive bounces
-	void drawPoints();
-	//Draw the intersection points
-	void drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths);
+    void drawPoints();
+    //Draw the intersection points
+    void drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths);
     void drawLightCones(const std::map<size_t,LightCone*>& lightCones);
     void drawCamera(const Vec3fa& cameraPosition);
     void drawEnergyHelper(OctreeNode* node, float max,riv::ColorMap& heatmap,ushort maxDepth);
@@ -156,29 +155,27 @@ private:
     
     void drawLights(const std::vector<Ref<Light>>& lights, const riv::Color& membershipColor);
     
-
-//    void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, const std::map<ushort,std::set<ushort>>& selectedObjectIds, std::vector<riv::RowFilter*>& pathFilters);
-    void filterPaths(RIVDataSet<float,ushort>* dataset, std::map<ushort,std::set<ushort>>& selectedObjectIds, std::vector<riv::RowFilter*>& pathFilters);
-	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, std::map<ushort,std::set<ushort>>& selectedObjectIds);
+    void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort* selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
+    bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, ushort* selectedObjectId);
     
     void createLightPaths();
     std::vector<Path> createLightPaths(ushort lightID, RIVDataSet<float,ushort>* dataset,RIVColorProperty* pathColor, RIVColorProperty* pointColor);
     
-	//Create graphics buffer from unfiltered data rows
+    //Create graphics buffer from unfiltered data rows
     void createCameraPaths();
-	std::vector<Path> createCameraPaths(RIVDataSet<float,ushort>*, RIVColorProperty* pathColor, RIVColorProperty* rayColor);
+    std::vector<Path> createCameraPaths(RIVDataSet<float,ushort>*, RIVColorProperty* pathColor, RIVColorProperty* rayColor);
     
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
     void redisplayWindow();
-
+    
 public:
-	//Single renderer constructor
+    //Single renderer constructor
     RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,const TriangleMeshGroup& sceneDataOne, Octree* energyDistribution, RIVColorProperty* pathColor, RIVColorProperty* rayColor);
-	//Dual renderer constructor
-	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, Octree* energyDistributionOne, Octree* energyDistributionTwo, RIVColorProperty* pathColorOne, RIVColorProperty* rayColorOne, RIVColorProperty* pathColorTwo, RIVColorProperty* rayColorTwo);
-	
-	static int windowHandle;
-    std::set<ushort> getAllObjectIds(const std::map<ushort,std::set<ushort>>& objectIds);
+    //Dual renderer constructor
+    RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, Octree* energyDistributionOne, Octree* energyDistributionTwo, RIVColorProperty* pathColorOne, RIVColorProperty* rayColorOne, RIVColorProperty* pathColorTwo, RIVColorProperty* rayColorTwo);
+    
+    static int windowHandle;
+    
     void ToggleHideMesh();
     void Reshape(int newWidth, int newHeight);
     void Draw();
@@ -188,12 +185,12 @@ public:
     void SetHeatmapDepth(int depth);
     void IncrementHeatmapDepth();
     void DecrementHeatmapDepth();
-	
+    
     void OnDataChanged(RIVDataSet<float,ushort>* source);
-	void OnFiltersChanged(RIVDataSet<float,ushort>* source);
-	
-	void ResetGraphics();
-	
+    void OnFiltersChanged(RIVDataSet<float,ushort>* source);
+    
+    void ResetGraphics();
+    
     static void DrawInstance(); //Override
     static void ReshapeInstance(int,int);
     static void Mouse(int button, int state, int x, int y);
@@ -206,14 +203,14 @@ public:
     void MovePathSegment(float ratioIncrement);
     void CyclePathSegment(bool direction = true); //Cycle the path segment to draw, direction bool indicates direction of cycling, positive meaning incrementing
     void ToggleDrawIntersectionPoints();
-	void ToggleDrawHeatmap();
-	void ToggleDrawPaths();
-	void ToggleDrawDataSetOne();
-	void ToggleDrawDataSetTwo();
+    void ToggleDrawHeatmap();
+    void ToggleDrawPaths();
+    void ToggleDrawDataSetOne();
+    void ToggleDrawDataSetTwo();
     void SetModelData(const MeshModel&);
     void ZoomIn(float zoom);
     void MoveCamera(float,float,float);
-	
+    
 };
 
 #endif /* defined(__Afstuderen___DView__) */

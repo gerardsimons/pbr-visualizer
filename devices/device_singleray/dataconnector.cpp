@@ -60,7 +60,7 @@ void DataConnector::AddIntersectionData(const Vec3fa& pos, const Vec3fa& dir, Co
         color.b = std::min(color.b,1.F);
 		IntersectData isectData = IntersectData(pos, dir, color, primitive_id, 0, 0, 0);
         isectData.lightData = currentLightData;
-		currentPath.intersectionData.push_back(isectData);
+		currentPath.intersectionData.insert(currentPath.intersectionData.begin(),isectData);
         currentLightData.clear();
 	}
 	else throw std::runtime_error("Path is not set.");

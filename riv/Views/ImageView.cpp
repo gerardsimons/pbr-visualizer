@@ -586,7 +586,22 @@ void RIVImageView::drawHeatmap(bool leftSet, Histogram2D<float>** heatmap) {
             drawRegularHeatmap(startX, *heatmap, colors);
         }
         else {
-            drawNormalizedHeatmap(startX, *heatmap, colors);
+            //Only draw distribution when filtered
+            if(heatmapToDisplay == DISTRIBUTION) {
+                RIVDataSet<float,ushort>* activeSet;
+                if(leftSet) {
+                    activeSet = *datasetOne;
+                }
+                else {
+                    activeSet = *datasetTwo;
+                }
+                if(activeSet->IsFiltered()) {
+                    drawNormalizedHeatmap(startX, *heatmap, colors);
+                }
+            }
+            else {
+                drawNormalizedHeatmap(startX, *heatmap, colors);
+            }
         }
     }
     else {

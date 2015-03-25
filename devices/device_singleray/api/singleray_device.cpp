@@ -249,7 +249,9 @@ namespace embree
 		else if (!strcasecmp(type,"Glass")         ) return (Device::RTMaterial) new ConstructorHandle<Dielectric,Material>;
 		else if (!strcasecmp(type,"ThinDielectric")) return (Device::RTMaterial) new ConstructorHandle<ThinDielectric,Material>;
 		else if (!strcasecmp(type,"ThinGlass")     ) return (Device::RTMaterial) new ConstructorHandle<ThinDielectric,Material>;
-        else if (!strcasecmp(type,"Mirror")        ) return (Device::RTMaterial) new ConstructorHandle<Mirror,Material>;
+        else if (!strcasecmp(type,"Mirror")        ) {
+            return (Device::RTMaterial) new ConstructorHandle<Mirror,Material>;
+        }
 		else if (!strcasecmp(type,"Metal")         ) return (Device::RTMaterial) new ConstructorHandle<Metal,Material>;
 		else if (!strcasecmp(type,"BrushedMetal")  ) return (Device::RTMaterial) new ConstructorHandle<BrushedMetal,Material>;
 		else if (!strcasecmp(type,"MetallicPaint") ) return (Device::RTMaterial) new ConstructorHandle<MetallicPaint,Material>;
