@@ -166,7 +166,7 @@ namespace embree
     }
 
     PathTraceIntegrator::LightPath* returnPath;
-//	Color lastColor;
+    size_t callCount = 0;
 	
 	Color PathTraceIntegrator::Li(LightPath& lightPath, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector)
 	{
@@ -236,7 +236,7 @@ namespace embree
 		for (size_t i=0; i<brdfs.size(); i++)
 			useDirectLighting |= (brdfs[i]->type & directLightingBRDFTypes) != NONE;
 		
-        std::vector<ushort> occluderIds;
+//        std::vector<ushort> occluderIds;
 		/*! Direct lighting. Shoot shadow rays to all light sources. */
 		if (useDirectLighting)
 		{
@@ -261,10 +261,14 @@ namespace embree
                 
 				/*! Evaluate BRDF */
 				Color brdf = brdfs.eval(wo, dg, ls.wi, directLightingBRDFTypes);
-//                if (brdf == Color(zero)) {
+                Color directLight = Color(zero);
+                if (brdf == Color(zero)) {
 //                    dataConnector->AddLightData(i,-1,Color(zero));
 //                    continue;
-//                }
+                }
+                else {
+                    directLight = ls.L * brdf * rcp(ls.wi.pdf);
+                }
 				
 				/*! Test for shadows. */
 				Ray shadowRay(dg.P, ls.wi, dg.error*epsilon, ls.tMax-dg.error*epsilon, lightPath.lastRay.time,dg.shadowMask);
@@ -272,19 +276,19 @@ namespace embree
                 ++state.numRays;
 //				rtcOccluded(scene->scene,(RTCRay&)shadowRay);
                 rtcIntersect(scene->scene,(RTCRay&)shadowRay);
-                Color lightRadiance = ls.L * brdf * rcp(ls.wi.pdf);
+
                 if (shadowRay) {
 //                    printf("OCCLUDED BY %d\n",shadowRay.id0);
-                    dataConnector->AddLightData(i,shadowRay.id0,lightRadiance);
+                    dataConnector->AddLightData(i,shadowRay.id0,directLight);
                     continue;
                 }
                 else {
-                    dataConnector->AddLightData(i,-1,lightRadiance);
+                    dataConnector->AddLightData(i,-1,directLight);
 //                    occluderIds.push_back(-1);
                 }
 				
 				/*! Evaluate BRDF. */
-                L += lightRadiance;
+                L += directLight;
 			}
 		}
 		if (lightPath.depth < maxDepth)
@@ -309,18 +313,30 @@ namespace embree
 				Ray newRay(dg.P, wi, dg.error*epsilon, inf, lightPath.lastRay.time);
 				LightPath scatteredPath = lightPath.extended(newRay,nextMedium, c, (type & directLightingBRDFTypes) != NONE);
 
-                dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,type);
-		  
+//                pathColors.push_back(L);
+                
+                //Recursion!
 				Color isectColor = c * Li(scatteredPath, scene, state, dataConnector) * rcp(wi.pdf);
-				L += isectColor;
+                
+//                Color addedColor(L.r - lastColor.r,L.g - lastColor.g, L.b - lastColor.b);
+                
+//                color sum;
+//                for
+//                printf("Add %d L (%f,%f,%f)\n",callCount++,L.r,L.g,L.b);
+                L += isectColor;
+                dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,type);
 			}
 		}
+        if(L != Color(zero)) {
+            
+        }
 		return L;
 	}
 	Color PathTraceIntegrator::Li(Ray& ray, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector) {
 		//Start path from camera ray
 //		lastColor = Color(0,0,0);
 		LightPath lightPath(ray);
+//        pathColors.clear();
 		Color L = Li(lightPath,scene,state,dataConnector);
 		//We now have the complete path
 		dataConnector->FinishPath(L,returnPath->throughput);

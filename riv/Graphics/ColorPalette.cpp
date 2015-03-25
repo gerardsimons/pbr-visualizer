@@ -75,7 +75,7 @@
         }
         
         riv::ColorMap qualitativeColorMap() {
-            
+                
             riv::ColorMap qualitativeColors;
             
 //            qualitativeColors.AddColor(riv::Color(127,201,127));

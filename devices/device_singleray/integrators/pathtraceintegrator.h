@@ -81,6 +81,8 @@ namespace embree
 		float minContribution;         //!< Minimal contribution of a path to the pixel.
 		float epsilon;                 //!< Epsilon to avoid self intersections.
 		Ref<Image> backplate;          //!< High resolution background.
+        
+//        std::vector<Color> pathColors;
 		
 		/*! Random variables. */
 	private:

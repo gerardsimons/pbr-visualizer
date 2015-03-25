@@ -1,0 +1,100 @@
+# Blender MTL File: 'twoplants.blend'
+# Material Count: 9
+
+newmtl IDP_Pot.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.200000 0.200000 0.200000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_NOR.jpg
+map_Bump /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_NOR.jpg
+map_Ks /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_COL.jpg
+
+newmtl IDP_ground.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_NOR.jpg
+map_Bump /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_NOR.jpg
+
+newmtl IDP_leaves.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.200000 0.200000 0.200000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_COL.jpg
+map_Bump /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_NOR.jpg
+map_Ks /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_COL.jpg
+
+newmtl IDP_leaves.001_indoor_plant_2_NOR.jpg.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.200000 0.200000 0.200000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_NOR.jpg
+map_Bump /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_NOR.jpg
+map_Ks /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_COL.jpg
+
+newmtl IDP_root.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.328250 0.328250 0.328250
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_COL.jpg
+map_Bump /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_NOR.jpg
+map_Ks /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_COL.jpg
+
+newmtl IDP_root.001_indoor_plant_2_NOR.jpg.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.328250 0.328250 0.328250
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_NOR.jpg
+map_Bump /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_NOR.jpg
+map_Ks /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/indoor plant_2_COL.jpg
+
+newmtl Material.003
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Material.006
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd /Users/gerard/OneDrive/TU Delft/Master/Afstuderen/Scenes/indoor plant_02/textures/p2.png
+
+newmtl None
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2

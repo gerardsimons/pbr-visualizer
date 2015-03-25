@@ -19,6 +19,7 @@
 
 #include "devices/device_singleray/embree_renderer.h"
 
+#include <set>
 #include <limits>
 
 class RIV3DView : public RIVDataView, public RIVDataSetListener {
@@ -34,12 +35,16 @@ private:
         INTERACTION_AND_SHADOW,
         OBJECT
     };
+    enum SelectionOperator {
+        NORMAL,
+        ADDITIVE //Shift click
+    };
     enum DrawPathsMode {
         CAMERA,
         LIGHTS,
         NONE
     };
-    
+    SelectionOperator selectOperator = NORMAL;
     DrawPathsMode pathsMode = CAMERA;
     
     class LightCone {
@@ -124,24 +129,24 @@ private:
 	bool meshSelected = false;
     std::vector<riv::RowFilter*> pathFiltersOne;
 	ushort bounceCountOne = 0;
-    ushort selectedObjectIdOne = -1;
+    std::map<ushort,std::set<ushort>> selectedObjectIdsOne; //Maps a bounce nr to the object ids a path should interact with
     std::vector<riv::RowFilter*> pathFiltersTwo;
 	ushort bounceCountTwo = 0;
-    ushort selectedObjectIdTwo = -1;
+    std::map<ushort,std::set<ushort>> selectedObjectIdsTwo;
 	
     bool pathsCreated = false;
 
 	//Determines if the objectId is currently selected
 	bool isSelectedObject(ushort objectId);
 	//Draw the mesh model loaded from the PBRT file
-	void drawMeshModel(TriangleMeshGroup* meshGroup, float* color, ushort* selectedObjectId);
+	void drawMeshModel(TriangleMeshGroup* meshGroup, float* color, const std::map<ushort,std::set<ushort>>& selectedObjectIds);
 	void drawPaths(float startSegment, float stopSegment);
     void drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths, float startSegment, float stopSegment,const Vector3f& cameraPosition); //Draw the paths between two consecutive bounces
 	void drawPoints();
 	//Draw the intersection points
 	void drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths);
     void drawLightCones(const std::map<size_t,LightCone*>& lightCones);
-
+    void drawCamera(const Vec3fa& cameraPosition);
     void drawEnergyHelper(OctreeNode* node, float max,riv::ColorMap& heatmap,ushort maxDepth);
     void drawEnergyDifferenceHelper(OctreeNode* nodeOne, OctreeNode* nodeTwo, float max, riv::ColorMap& colors);
     void drawEnergyDistribution(Octree* energyDistribution,ushort maxDepth);
@@ -152,8 +157,9 @@ private:
     void drawLights(const std::vector<Ref<Light>>& lights, const riv::Color& membershipColor);
     
 
-    void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
-	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, ushort* selectedObjectId);
+//    void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, const std::map<ushort,std::set<ushort>>& selectedObjectIds, std::vector<riv::RowFilter*>& pathFilters);
+    void filterPaths(RIVDataSet<float,ushort>* dataset, std::map<ushort,std::set<ushort>>& selectedObjectIds, std::vector<riv::RowFilter*>& pathFilters);
+	bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, std::map<ushort,std::set<ushort>>& selectedObjectIds);
     
     void createLightPaths();
     std::vector<Path> createLightPaths(ushort lightID, RIVDataSet<float,ushort>* dataset,RIVColorProperty* pathColor, RIVColorProperty* pointColor);
@@ -172,7 +178,7 @@ public:
 	RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, Octree* energyDistributionOne, Octree* energyDistributionTwo, RIVColorProperty* pathColorOne, RIVColorProperty* rayColorOne, RIVColorProperty* pathColorTwo, RIVColorProperty* rayColorTwo);
 	
 	static int windowHandle;
-    
+    std::set<ushort> getAllObjectIds(const std::map<ushort,std::set<ushort>>& objectIds);
     void ToggleHideMesh();
     void Reshape(int newWidth, int newHeight);
     void Draw();

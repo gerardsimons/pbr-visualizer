@@ -320,7 +320,7 @@ void RIVImageView::computePixelDistribution(RIVDataSet<float,ushort>* dataset, H
 //    heatmap.Print();
 }
 void RIVImageView::drawRegularHeatmap(int startX, Histogram2D<float>* heatmap, riv::ColorMap& colors) {
-    if(heatmap) {
+    if(heatmap && heatmap->NumberOfElements()) {
         
         std::pair<unsigned int, unsigned int> binBounds = heatmap->NumberOfBins();
         unsigned int xBins = binBounds.first;
@@ -371,7 +371,7 @@ void RIVImageView::drawRegularHeatmap(int startX, Histogram2D<float>* heatmap, r
     //    glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
 }
 void RIVImageView::drawNormalizedHeatmap(int startX, Histogram2D<float>* heatmap, riv::ColorMap& colors) {
-    if(heatmap) {
+    if(heatmap && heatmap->NumberOfElements()) {
         
         bool scale = false;
         
@@ -389,7 +389,13 @@ void RIVImageView::drawNormalizedHeatmap(int startX, Histogram2D<float>* heatmap
         
         float binX = startX;
         
-        float maxNormalizedValue = heatmap->MaxBinValue() / (float)heatmap->NumberOfElements();
+        size_t nrElements = heatmap->NumberOfElements();
+        float maxNormalizedValue = 0;
+        
+        if(nrElements) {
+            maxNormalizedValue = heatmap->MaxBinValue() / (float)nrElements;
+        }
+
         float variance = std::pow(heatmap->NormalizedVariance(),1);//Normalized for the number of bins
         float mean = heatmap->NormalizedMean();
         
@@ -617,7 +623,10 @@ void RIVImageView::Draw() {
         glColor3f(0,0,0);
         glRectf(imagePadding, imagePadding, renderImageWidth - imagePadding, height - imagePadding);
         drawRenderedImage(rendererOne,imagePadding,imagePadding,renderImageWidth - 2 * imagePadding,height - 2 * imagePadding);
-        drawHeatmap(true, activeHeatmapOne);
+        
+        if(datasetOne && *datasetOne && !(*datasetOne)->IsEmpty()) {
+            drawHeatmap(true, activeHeatmapOne);
+        }
         
         if(rendererTwo != NULL) {
             //			glColor3f(0, 0, 1);
@@ -626,8 +635,9 @@ void RIVImageView::Draw() {
             glColor3f(0,0,1);
             glRectf(renderImageWidth, 0, 2 * renderImageWidth, height);
             drawRenderedImage(rendererTwo,renderImageWidth+imagePadding,imagePadding,renderImageWidth - imagePadding * 2,height - imagePadding * 2);
-            
-            drawHeatmap(false, activeHeatmapTwo);
+            if(datasetTwo && *datasetTwo && !(*datasetTwo)->IsEmpty()) {
+                drawHeatmap(false, activeHeatmapTwo);
+            }
         }
         
         //Draw grid
@@ -864,7 +874,7 @@ void RIVImageView::SmoothPixelDistributionOne() {
 //    if(datasetOne && pixelDistributionOne && pixelDistributionOne->NumberOfElements()) {
 //        smoothPixelDistribution(pixelDistributionOne);
 //    }
-    if(datasetOne && activeHeatmapOne && (*activeHeatmapOne)->NumberOfElements()) {
+    if(datasetOne && activeHeatmapOne && *activeHeatmapOne && (*activeHeatmapOne)->NumberOfElements()) {
         smoothPixelDistribution(*activeHeatmapOne);
     }
 }
@@ -872,7 +882,7 @@ void RIVImageView::SmoothPixelDistributionTwo() {
 //    if(datasetTwo && pixelDistributionTwo && pixelDistributionTwo->NumberOfElements()) {
 //        smoothPixelDistribution(pixelDistributionTwo);
 //    }
-    if(datasetOne && activeHeatmapTwo && (*activeHeatmapTwo)->NumberOfElements()) {
+    if(datasetOne && activeHeatmapTwo && *activeHeatmapTwo && (*activeHeatmapTwo)->NumberOfElements()) {
         smoothPixelDistribution(*activeHeatmapTwo);
     }
 }

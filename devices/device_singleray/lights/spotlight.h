@@ -70,12 +70,12 @@ namespace embree
     float pdf (const DifferentialGeometry& dg, const Vector3f& wi) const {
       return zero;
     }
-
+      
+      Vector3f P;                        //!< Position of the spot light
+      Vector3f _D;                       //!< Negative light direction of the spot light
+      Color I;                        //!< Radiant intensity (W/sr)
+      float cosAngleMin, cosAngleMax; //!< Linear falloff region
   private:
-    Vector3f P;                        //!< Position of the spot light
-    Vector3f _D;                       //!< Negative light direction of the spot light
-    Color I;                        //!< Radiant intensity (W/sr)
-    float cosAngleMin, cosAngleMax; //!< Linear falloff region
   };
 }
 
