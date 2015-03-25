@@ -42,7 +42,6 @@ bool DataConnector::FinishPath(Color& color, Color& throughput) {
 		throw std::runtime_error("INVALID STATE: There is no path in the buffer.");
 	}
 }
-
 void DataConnector::StartPath(const Vec2f& pixel,const Vec2f& lens, float time) {
 	pathSet = true;
 //	printf("Starting Path\n");

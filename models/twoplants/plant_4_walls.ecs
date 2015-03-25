@@ -10,8 +10,8 @@
 #-vp 0 8.5 10.6 -vi 0 0 -10 -vu 0 1 0 -fov 55 # FRONT FACING
 #-vp -5.25 8.5 10.6 -vi 0 0 -10 -vu 0 1 0 -fov 55 # OBLIQUE
 #-vp -10 12 0 -vi 0 0 0 -vu 0 1 0 -fov 55 # SIDE
--vp -14 12 0 -vi 0 0 0 -vu 0 1 0 -fov 55 # SIDE
-#-vp -7.5 15 0 -vi -7.6 0 0 -vu 0 1 0 -fov 55 # TOP
+#-vp -14 12 0 -vi 0 0 0 -vu 0 1 0 -fov 55 # SIDE
+-vp -7.5 15 0 -vi -7.6 0 0 -vu 0 1 0 -fov 55 # TOP
 #-size 248 186
 #-size 800 600
 #-size 160 120

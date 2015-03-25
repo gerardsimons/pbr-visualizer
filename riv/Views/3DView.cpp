@@ -417,6 +417,7 @@ void RIV3DView::Draw() {
         }
     }
     if(drawIntersectionPoints) {
+        printf("Draw intersection points\n");
         drawPoints();
     }
     
@@ -515,9 +516,12 @@ void RIV3DView::drawTriangleMeshFull(TriangleMeshFull* mesh, const riv::Color& c
     vector_t<Vec3fa>& position = mesh->position;
     glColor3f(color.R,color.G,color.B);
     for(size_t i = 0 ; i < triangles.size() ; ++i) {
-        Vec3fa& v0 = position[triangles[i].v0];
-        Vec3fa& v1 = position[triangles[i].v1];
-        Vec3fa& v2 = position[triangles[i].v2];
+        size_t t0 = triangles[i].v0;
+        size_t t1 = triangles[i].v1;
+        size_t t2 = triangles[i].v2;
+        Vec3fa& v0 = position[t0];
+        Vec3fa& v1 = position[t1];
+        Vec3fa& v2 = position[t2];
         glVertex3f(v0[0],v0[1],v0[2]);
         glVertex3f(v1[0],v1[1],v1[2]);
         glVertex3f(v2[0],v2[1],v2[2]);
@@ -1337,7 +1341,8 @@ void RIV3DView::OnDataChanged(RIVDataSet<float,ushort>* source) {
         pathColorOne->Reset(source);
         rayColorOne->Reset(source);
         if(bounceCountOne > 0) {
-            filterPaths((*datasetOne), bounceCountOne, &selectedObjectIdOne, pathFiltersOne);
+            std::set<ushort> selectedObjectIds = {selectedObjectIdOne};
+            filterPaths((*datasetOne), bounceCountOne, selectedObjectIds, pathFiltersOne);
         }
         createCameraPaths((*datasetOne), pathColorOne,rayColorOne);
     }
@@ -1345,7 +1350,8 @@ void RIV3DView::OnDataChanged(RIVDataSet<float,ushort>* source) {
         pathColorTwo->Reset(source);
         rayColorTwo->Reset(source);
         if(bounceCountTwo > 0) {
-            filterPaths((*datasetTwo), bounceCountTwo, &selectedObjectIdTwo, pathFiltersTwo);
+            std::set<ushort> selectedObjectIds = {selectedObjectIdTwo};
+            filterPaths((*datasetTwo), bounceCountTwo, selectedObjectIds, pathFiltersTwo);
         }
         createCameraPaths((*datasetTwo), pathColorTwo,rayColorTwo);
     }
@@ -1416,7 +1422,8 @@ Vec3fa RIV3DView::screenToWorldCoordinates(int screenX, int screenY, float zPlan
 bool RIV3DView::isSelectedObject(std::set<ushort>& selectedObjectIds, ushort objectId) {
     return selectedObjectIds.find(objectId) != selectedObjectIds.end();
 }
-void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort* selectedObjectIDs, std::vector<riv::RowFilter*>& pathFilters) {
+//void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort* selectedObjectIDs, std::vector<riv::RowFilter*>& pathFilters) {
+void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, std::set<ushort>& selectedObjectIDs, std::vector<riv::RowFilter*>& pathFilters) {
     dataset->StartFiltering();
     
     RIVTable<float,ushort>* pathTable = dataset->GetTable(PATHS_TABLE);
@@ -1455,10 +1462,11 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
             bool filter = true;
             for(ushort i = 0 ; i < nrIntersections ; ++i) {
                 size_t intersectionRow = mapping[i];
-                
+                ushort objectID = primitiveIds->Value(intersectionRow);
                 //Check if it has occluders and if the selectedObjectID is in them
                 if(selectionMode == INTERACTION || selectionMode == INTERACTION_AND_SHADOW) {
-                    if( primitiveIds->Value(intersectionRow) == *selectedObjectIDs) {
+//                    if( primitiveIds->Value(intersectionRow) == *selectedObjectIDs) {
+                    if(selectedObjectIDs.find(objectID) != selectedObjectIDs.end()) {
                         filter = false;
                         break;
                     }
@@ -1470,7 +1478,7 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
                         for(ushort j = 0 ; j < nrLightRows ; ++j) {
                             size_t lightRow = lightsMapping[j];
                             ushort occluderId = occluderIds->Value(lightRow);
-                            if(*selectedObjectIDs == occluderId) {
+                            if(selectedObjectIDs.find(occluderId) != selectedObjectIDs.end()) {
                                 filter = false;
                                 //                                                            printf("Path %zu intersection #%zu occluder %zu has occluder id = %d\n",row,intersectionRow,lightRow,occluderId);
                                 break;
@@ -1488,10 +1496,11 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
                     //                    filter = true;
                     
 //                    if(objectIdsAtBounce.size()) {
-                        ushort objectID = primitiveIds->Value(intersectionRow);
+//                        ushort objectID = primitiveIds->Value(intersectionRow);
                         if(pathsMode == CAMERA) {
 //                            bool selected = objectIdsAtBounce.find(objectID) != objectIdsAtBounce.end();
-                            if(bounceNr == objectBounceNr && *selectedObjectIDs == objectID) {
+//                            if(bounceNr == objectBounceNr && *selectedObjectIDs == objectID) {
+                            if(bounceNr == objectBounceNr && selectedObjectIDs.find(objectID) != selectedObjectIDs.end()) {
                                 filter = false;
                                 break;
                             }
@@ -1500,7 +1509,7 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
                         else if(pathsMode == LIGHTS) {
                             //Select the last in the path
                             ushort lightBounceNr = nrIntersections - bounceNr + 1;
-                            if(objectBounceNr == lightBounceNr && *selectedObjectIDs == objectID) {
+                            if(objectBounceNr == lightBounceNr && selectedObjectIDs.find(objectID) != selectedObjectIDs.end()) {
                                 filter = false;
                                 break;
                             }
@@ -1577,25 +1586,27 @@ void RIV3DView::CycleSelectionMode() {
     }
 }
 //Checks if a ray intersects with the mesh group and creates the path filters accordingly and applies them to the dataset
-bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes, std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, ushort* selectedObjectIds) {
+bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes, std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, ushort* selectedObjectId) {
+//bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes, std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, std::set<ushort>& selectedObjectIds) {
     ushort selectedObjectID;
     float distance;
     bool intersects = meshes.Intersect(pickRay, selectedObjectID, Phit, distance, eye);
     
     bool refilterNeeded = false;
+    bool shiftActive = glutGetModifiers() == GLUT_ACTIVE_SHIFT;
     
     if(intersects && *bounceCount < maxBounce) {
         ++(*bounceCount);
         printf("new selected object ID = %hu\n",selectedObjectID);
         meshSelected = true;
-//        bool shiftActive = glutGetModifiers() == GLUT_ACTIVE_SHIFT;
+
 //        if(shiftActive) {
-//            selectedObjectIds.clear();
 //            selectedObjectIds.insert(selectedObjectID);
 //            return false;
 //        }
+//        selectedObjectIds.clear();
 //        selectedObjectIds.insert(selectedObjectID);
-        *selectedObjectIds = selectedObjectID;
+        *selectedObjectId = selectedObjectID;
         refilterNeeded = true;
     }
     else {
@@ -1604,6 +1615,10 @@ bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMe
     }
     //
     printf("Path creation filter");
+    std::set<ushort> selectedObjectIds = {selectedObjectID};
+    if(selectedObjectID == 5) {
+        selectedObjectIds.insert(6);
+    }
     filterPaths(dataset, *bounceCount, selectedObjectIds, pathFilters);
     
     //		dataset->Print();
@@ -1678,6 +1693,7 @@ bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
             }
             else if(drawDataSetOne && !drawDataSetTwo) {
                 pathCreation(*datasetOne, meshesOne,pathFiltersOne, &bounceCountOne,&selectedObjectIdOne);
+//                pathCreation(*datasetOne, meshesOne,pathFiltersOne, &bounceCountOne,selectedObjectIdsOne);
             }
             else if(drawDataSetOne && drawDataSetTwo) {
                 pathCreation(*datasetOne, meshesOne,pathFiltersOne, &bounceCountOne,&selectedObjectIdOne);

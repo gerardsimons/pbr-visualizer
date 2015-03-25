@@ -78,7 +78,8 @@ bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& P
 
 bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& Phit, float& shortestDistance, const Vec3fa& distanceCompare) const {
     bool intersects = false;
-    shortestDistance = std::numeric_limits<float>::max();
+//    shortestDistance = std::numeric_limits<float>::max();
+    shortestDistance = -std::numeric_limits<float>::max();
     Vec3fa bestPhit = Phit;
     for(size_t i = 0 ; i < triangleMeshes.size() ; ++i) {
         //			float d;
@@ -144,7 +145,8 @@ bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& P
             float distance = embree::length((distanceCompare - Phit));
             printf("Intersects with %zu\n",i);
             printf("distance = %f\n",distance);
-            if(distance < shortestDistance ) {
+//            if(distance < shortestDistance ) {
+            if(distance > shortestDistance ) {
                 
                 printf("New shortest distance!\n");
                 resultIndex = i;

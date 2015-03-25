@@ -123,6 +123,10 @@
                     <texture name="map_Bump">"textures/indoor plant_2_NORump.jpg"</texture>
                 </parameters>
             </material>
+            <!-- <positions ofs="563000" size="9382"/>
+            <normals   ofs="619328" size="0"/>
+            <texcoords ofs="619328" size="9382"/>
+            <triangles ofs="656880" size="16352"/> -->
             <positions ofs="563000" size="4694"/>
             <normals   ofs="619328" size="0"/>
             <texcoords ofs="619328" size="4694"/>

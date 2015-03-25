@@ -155,8 +155,10 @@ private:
     
     void drawLights(const std::vector<Ref<Light>>& lights, const riv::Color& membershipColor);
     
-    void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort* selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
+//    void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort* selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
+    void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, std::set<ushort>& selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
     bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, ushort* selectedObjectId);
+//    bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, std::set<ushort>& selectedObjectId);
     
     void createLightPaths();
     std::vector<Path> createLightPaths(ushort lightID, RIVDataSet<float,ushort>* dataset,RIVColorProperty* pathColor, RIVColorProperty* pointColor);
