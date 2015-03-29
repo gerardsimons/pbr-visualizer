@@ -19,6 +19,7 @@
 #include "devices/device_singleray/shapes/shape.h"
 #include "devices/device_singleray/lights/pointlight.h"
 #include "devices/device_singleray/lights/spotlight.h"
+#include "devices/device_singleray/lights/trianglelight.h"
 //#include "devices/device_singleray/api/instance.h"
 
 #if __APPLE__
@@ -42,6 +43,7 @@ rayColorOne(rayColor) {
     }
     instance = this;
     identifier = "3DView";
+    maxDepth = (*datasetOne)->GetTable(PATHS_TABLE)->GetRecord<ushort>(DEPTH)->Max();
     
     this->meshesOne = sceneDataOne;
     
@@ -76,6 +78,8 @@ rayColorTwo(rayColorTwo){
     
     drawHeatmapDepth = std::min(energyDistributionOne->Depth(),energyDistributionTwo->Depth());
     
+    maxDepth = std::max((*datasetOne)->GetTable(PATHS_TABLE)->GetRecord<ushort>(DEPTH)->Max(),(*datasetTwo)->GetTable(PATHS_TABLE)->GetRecord<ushort>(DEPTH)->Max());
+    
     this->meshesOne = sceneDataOne;
     this->meshesTwo = sceneDataTwo;
     
@@ -105,7 +109,7 @@ rayColorTwo(rayColorTwo){
     ResetGraphics();
 };
 void RIV3DView::CyclePathSegment(bool direction) {
-    float delta = 1.F / maxBounce;
+    float delta = 1.F / maxDepth;
     direction ? MovePathSegment(delta) : MovePathSegment(-delta);
 }
 
@@ -134,14 +138,15 @@ void RIV3DView::Reshape(int newWidth, int newHeight) {
     width = newWidth;
     this->height = newHeight;
     
-    eye.x = 0;
-    eye.y = 0;
-    eye.z = 1;
+//    eye.x = 0;
+//    eye.y = 0;
+//    eye.z = 1;
     
     //    selectionBox = Box3D(0,0,0,1.F,1.F,1.F);
     
     tbInitTransform();
     tbHelp();
+    setZoom(-1.5);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glViewport(0, 0, width, height);
@@ -310,7 +315,7 @@ void RIV3DView::drawLights(const std::vector<Ref<Light>>& lights, const riv::Col
             drawTriangleMeshFull(t, membershipColor);
         }
         else { //Point lights don't have any shape associated with them, draw a sphere to indicate them
-            float size = 5*modelScale;
+            float size = .01/modelScale;
             PointLight* pointLight = dynamic_cast<PointLight*>(light.ptr);
             if(pointLight) {
                 
@@ -346,19 +351,44 @@ void RIV3DView::drawLights(const std::vector<Ref<Light>>& lights, const riv::Col
                     //                gluSphere(quadric, size * 1.05F, 10, 10);
                     glPopMatrix();
                 }
+                else {
+                    TriangleLight* triangleLight = dynamic_cast<TriangleLight*>(light.ptr);
+                    if(triangleLight) {
+                        glColor3f(triangleLight->L.r,triangleLight->L.g,triangleLight->L.b);
+//                        glPushMatrix();
+                        
+                        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                        
+                        glBegin(GL_TRIANGLES);
+                            glVertex3f(triangleLight->tri.ptr->v0.x, triangleLight->tri.ptr->v0.y, triangleLight->tri.ptr->v0.z);
+                            glVertex3f(triangleLight->tri.ptr->v1.x, triangleLight->tri.ptr->v1.y, triangleLight->tri.ptr->v1.z);
+                            glVertex3f(triangleLight->tri.ptr->v2.x, triangleLight->tri.ptr->v2.y, triangleLight->tri.ptr->v2.z);
+                        glEnd();
+                        
+                        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+                        glColor3f(membershipColor.R,membershipColor.G,membershipColor.B);
+                        glVertex3f(triangleLight->tri.ptr->v0.x, triangleLight->tri.ptr->v0.y, triangleLight->tri.ptr->v0.z);
+                        glVertex3f(triangleLight->tri.ptr->v1.x, triangleLight->tri.ptr->v1.y, triangleLight->tri.ptr->v1.z);
+                        glVertex3f(triangleLight->tri.ptr->v2.x, triangleLight->tri.ptr->v2.y, triangleLight->tri.ptr->v2.z);
+                        //                glScalef(0.1, 0.1, 0.1);
+//                        glutSolidCone(size*1.05, size*1.05, 10, 10);
+                        //                gluSphere(quadric, size * 1.05F, 10, 10);
+//                        glPopMatrix();
+                    }
+                }
             }
         }
     }
 }
 void RIV3DView::drawCamera(const Vec3fa& position) {
     //Draw
-    float cameraScale = .025/modelScale;
+    float cameraScale = .01/modelScale;
     
     if(backgroundColor == colors::WHITE) {
         glColor3f(0, 0, 0);
     }
     else {
-        glColor3f(1, 1, 1);
+        glColor3f(0.8, 0.8, 0.8);
     }
     //Draw camera position
     
@@ -396,7 +426,8 @@ void RIV3DView::Draw() {
     //    printf("eye (x,y,z) * modelScale = (%f,%f,%f)\n",-eye.x * modelData.GetScale(),-eye.y * modelData.GetScale(),-eye.z * modelData.GetScale());
     //    glScalef(modelScale,modelScale,modelScale);
     glScalef(-1,1,1);
-    glTranslatef(-eye.x,-eye.y,-eye.z);
+    Vec3fa realEye(tb_matrix[12],tb_matrix[13],tb_matrix[14]);
+//    glTranslatef(-eye.x,-eye.y,-eye.z);
     tbVisuTransform();
     
     //    drawCoordSystem();
@@ -417,7 +448,7 @@ void RIV3DView::Draw() {
         }
     }
     if(drawIntersectionPoints) {
-        printf("Draw intersection points\n");
+//        printf("Draw intersection points\n");
         drawPoints();
     }
     
@@ -441,13 +472,13 @@ void RIV3DView::Draw() {
     }
     
     //    drawLightCones(lightConesOne);
-    bool drawSelectionRay = false;
+    bool drawSelectionRay = true;
     //Draw selection ray
     if(drawSelectionRay) {
         glColor3f(1,1,1);
         glBegin(GL_LINES);
-        //    	glVertex3f(selectNear.x, selectNear.y, selectNear.z);
-        //    	glVertex3f(selectFar.x, selectFar.y, selectFar.z);
+//            	glVertex3f(selectNear.x, selectNear.y, selectNear.z);
+//            	glVertex3f(selectFar.x, selectFar.y, selectFar.z);
         glVertex3f(pickRay.org[0], pickRay.org[1], pickRay.org[2]);
         Vec3fa dest = pickRay.org + 1.F * pickRay.dir;
         glColor3f(1, 0, 0);
@@ -700,6 +731,8 @@ std::vector<Path> RIV3DView::createLightPaths(ushort selectedLightID, RIVDataSet
     
     std::vector<Path> paths;
     
+//    dataset->Print();
+    
     TableIterator* intersectionsIterator = isectTable->GetIterator();
     
     size_t row = 0;
@@ -721,7 +754,7 @@ std::vector<Path> RIV3DView::createLightPaths(ushort selectedLightID, RIVDataSet
     bool addIntermittentPaths = false;
     bool pathPassed = false;
     
-    ushort bounceWithObject;
+//    ushort bounceWithObject;
     
     while(intersectionsIterator->GetNext(row,referenceRowsMap)) {
         
@@ -760,13 +793,13 @@ std::vector<Path> RIV3DView::createLightPaths(ushort selectedLightID, RIVDataSet
                     PathPoint& point = reversedPoints[i];
                     ushort invertedBounce = numberOfBounces - points[i].bounceNr + 1;
                     point.bounceNr = invertedBounce;
-                    float ratio = (this->maxBounce - point.bounceNr + 1) / (float)this->maxBounce;
+                    float ratio = (maxDepth - point.bounceNr + 1) / (float)this->maxDepth;
                     riv::Color pointC = hotbody.ComputeColor(ratio);
                     point.color = pointC;
                 }
-                //                riv::Color pathC = hotbody.ComputeColor( (this->maxBounce - points[0].bounceNr + 1) / (float)this->maxBounce);
+                //                riv::Color pathC = hotbody.ComputeColor( (this->maxDepth - points[0].bounceNr + 1) / (float)this->maxDepth);
                 
-                //                riv::Color pathC = hotbody.ComputeColor( (this->maxBounce - bounceWithObject + 1) / (float)this->maxBounce);
+                //                riv::Color pathC = hotbody.ComputeColor( (this->maxDepth - bounceWithObject + 1) / (float)this->maxDepth);
                 paths.push_back(Path(reversedPoints,reversedPoints[reversedPoints.size()-1].color));
             }
             points.clear();
@@ -812,8 +845,8 @@ std::vector<Path> RIV3DView::createLightPaths(ushort selectedLightID, RIVDataSet
             
             //Connect EVERY path to light source?
             if(addIntermittentPaths) {
-                //        riv::Color pointC = hotbody.ComputeColor((this->maxBounce - bounceNr + 1) / (float)this->maxBounce);
-                float ratio = (this->maxBounce - p.bounceNr + 1) / (float)this->maxBounce;
+                //        riv::Color pointC = hotbody.ComputeColor((this->maxDepth - bounceNr + 1) / (float)this->maxDepth);
+                float ratio = (maxDepth - p.bounceNr + 1) / (float)this->maxDepth;
                 riv::Color pointC = hotbody.ComputeColor(ratio);
                 p.color = pointC;
                 
@@ -1175,11 +1208,11 @@ void RIV3DView::ToggleBackgroundColor() {
 }
 void RIV3DView::drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths, float startSegment, float stopSegment, const Vector3f& startPosition) {
     //See if it should consist of two partial segments
-    for(float i = 1 ; i < maxBounce ; i++) {
-        if(startSegment < i / maxBounce && stopSegment > i / maxBounce) {
+    for(float i = 1 ; i < maxDepth ; i++) {
+        if(startSegment < i / maxDepth && stopSegment > i / maxDepth) {
             //                printf("(%f,%f) segment split in (%f,%f) and (%f,%f)\n",startSegment,stopSegment,startSegment,i/maxBounce,i/maxBounce,stopSegment);
-            drawPaths(dataset,paths,startSegment, i / maxBounce,startPosition);
-            drawPaths(dataset,paths,i / maxBounce, stopSegment,startPosition);
+            drawPaths(dataset,paths,startSegment, i / maxDepth,startPosition);
+            drawPaths(dataset,paths,i / maxDepth, stopSegment,startPosition);
             return;
         }
     }
@@ -1187,7 +1220,7 @@ void RIV3DView::drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<P
     bool usePathSpecificColors = false;
     
     //Start and end vertex index
-    int startBounce = floor(startSegment * maxBounce);
+    int startBounce = floor(startSegment * maxDepth);
     int endBounce = startBounce + 1;
     
     RIVTable<float,ushort>* intersectionsTable = dataset->GetTable("intersections");
@@ -1213,14 +1246,14 @@ void RIV3DView::drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<P
                 float deltaY = yRecord->Value(p->rowIndex) - startPosition[1];
                 float deltaZ = zRecord->Value(p->rowIndex) - startPosition[2];
                 
-                float endX = startPosition[0] + deltaX * stopSegment * maxBounce;
-                float endY = startPosition[1] + deltaY * stopSegment * maxBounce;
-                float endZ = startPosition[2] + deltaZ * stopSegment * maxBounce;
+                float endX = startPosition[0] + deltaX * stopSegment * maxDepth;
+                float endY = startPosition[1] + deltaY * stopSegment * maxDepth;
+                float endZ = startPosition[2] + deltaZ * stopSegment * maxDepth;
                 
                 //                glColor3f(1,1,1);
                 
                 glBegin(GL_LINES);
-                glVertex3f(startPosition[0] + deltaX * startSegment * maxBounce,startPosition[1] + deltaY * startSegment * maxBounce,startPosition[2] + deltaZ * startSegment * maxBounce);
+                glVertex3f(startPosition[0] + deltaX * startSegment * maxDepth,startPosition[1] + deltaY * startSegment * maxDepth,startPosition[2] + deltaZ * startSegment * maxDepth);
                 glVertex3f(endX,endY,endZ);
                 glEnd();
                 
@@ -1249,8 +1282,8 @@ void RIV3DView::drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<P
                         glColor3f(startPoint->color.R, startPoint->color.G, startPoint->color.B);
                     }
                     
-                    float Cstart = startSegment * maxBounce - startBounce;
-                    float Cend = stopSegment * maxBounce - startBounce;
+                    float Cstart = startSegment * maxDepth - startBounce;
+                    float Cend = stopSegment * maxDepth - startBounce;
                     
                     float startX = xRecord->Value(startPoint->rowIndex);
                     float startY = yRecord->Value(startPoint->rowIndex);
@@ -1382,7 +1415,7 @@ void RIV3DView::OnFiltersChanged(RIVDataSet<float,ushort>* source) {
 }
 void RIV3DView::ZoomIn(float zoom) {
     tb_zoom(zoom);
-    
+    printf("Zoom %f\n",zoom);
     redisplayWindow();
 }
 void RIV3DView::MoveCamera(float x, float y, float z) {
@@ -1408,6 +1441,12 @@ Vec3fa RIV3DView::screenToWorldCoordinates(int screenX, int screenY, float zPlan
     glGetIntegerv(GL_VIEWPORT, viewport);
     glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
     glGetDoublev(GL_PROJECTION_MATRIX, projmatrix);
+    
+//    printf("mvmatrix :\n");
+//    printMatrix(4, 4, mvmatrix);
+//    
+//    printf("projmatrix :\n");
+//    printMatrix(4, 4, projmatrix);
     
     double x,y,z;
     gluUnProject((GLdouble) screenX, (GLdouble) screenY, zPlane, mvmatrix, projmatrix, viewport, &x,&y,&z);
@@ -1590,12 +1629,15 @@ bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMe
 //bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes, std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, std::set<ushort>& selectedObjectIds) {
     ushort selectedObjectID;
     float distance;
-    bool intersects = meshes.Intersect(pickRay, selectedObjectID, Phit, distance, eye);
+    
+    Vec3fa realEye(tb_matrix[12],tb_matrix[13],tb_matrix[14]);
+    
+    bool intersects = meshes.Intersect(pickRay, selectedObjectID, Phit, distance, realEye);
     
     bool refilterNeeded = false;
-    bool shiftActive = glutGetModifiers() == GLUT_ACTIVE_SHIFT;
+//    bool shiftActive = glutGetModifiers() == GLUT_ACTIVE_SHIFT;
     
-    if(intersects && *bounceCount < maxBounce) {
+    if(intersects && *bounceCount < maxDepth) {
         ++(*bounceCount);
         printf("new selected object ID = %hu\n",selectedObjectID);
         meshSelected = true;
@@ -1709,9 +1751,9 @@ void RIV3DView::IncrementBounceNrPath(int delta) {
     if(drawDataSetOne) {
         bounceCountOne += delta;
         if(bounceCountOne < 0) {
-            bounceCountOne = maxBounce - 1;
+            bounceCountOne = maxDepth - 1;
         }
-        else if(bounceCountOne >= maxBounce - 1) {
+        else if(bounceCountOne >= maxDepth - 1) {
             bounceCountOne = 0;
         }
         printf("Bounce count one is now %d\n",bounceCountOne);
@@ -1719,9 +1761,9 @@ void RIV3DView::IncrementBounceNrPath(int delta) {
     if(datasetTwo && drawDataSetTwo) {
         bounceCountTwo += delta;
         if(bounceCountTwo < 0) {
-            bounceCountTwo = maxBounce - 1;
+            bounceCountTwo = maxDepth - 1;
         }
-        else if(bounceCountTwo >= maxBounce - 1) {
+        else if(bounceCountTwo >= maxDepth - 1) {
             bounceCountTwo = 0;
         }
         printf("Bounce count two is now %d\n",bounceCountTwo);

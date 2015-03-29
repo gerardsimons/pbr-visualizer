@@ -117,6 +117,7 @@ public:
 
     Vector3f GetCameraPosition();
     Vector3f GetCameraLookAt();
+    int GetDepth();
     
 	//Parser methods
 	void parseDebugRenderer(Ref<ParseStream> cin, const FileName& path);

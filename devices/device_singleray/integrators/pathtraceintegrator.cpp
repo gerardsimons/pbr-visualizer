@@ -165,15 +165,18 @@ namespace embree
         return L;
     }
 
-    PathTraceIntegrator::LightPath* returnPath;
+//    PathTraceIntegrator::LightPath returnPath;
+    Color throughputCache;
     size_t callCount = 0;
 	
 	Color PathTraceIntegrator::Li(LightPath& lightPath, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector)
 	{
+        throughputCache = lightPath.throughput;
 		/*! Terminate path if too long or contribution too low. */
 		if (lightPath.depth >= maxDepth || reduce_max(lightPath.throughput) < minContribution) {
 //			throughputCache = lightPath.throughput;
-            returnPath = &lightPath;
+//            returnPath = &lightPath;
+//            printf("natural LightPath termination\n");
 			return zero;
 		}
 		
@@ -209,7 +212,8 @@ namespace embree
 						L += scene->envLights[i]->Le(wo);
 			}
 //			throughputCache = lightPath.throughput;
-            returnPath = &lightPath;
+//            returnPath = &lightPath;
+//            printf("Return nothing hit\n");
 			return L;
 		}
 //		printf("Something was hit.\n");
@@ -232,11 +236,13 @@ namespace embree
 		BRDFType type;
 		/*! Global illumination. Pick one BRDF component and sample it. */
 		/*! Check if any BRDF component uses direct lighting. */
-		bool useDirectLighting = false;
-		for (size_t i=0; i<brdfs.size(); i++)
-			useDirectLighting |= (brdfs[i]->type & directLightingBRDFTypes) != NONE;
+        bool useDirectLighting = true;
+//		bool useDirectLighting = false;
+//		for (size_t i=0; i<brdfs.size(); i++)
+//			useDirectLighting |= (brdfs[i]->type & directLightingBRDFTypes) != NONE;
 		
 //        std::vector<ushort> occluderIds;
+//        printf("Use direct lighting = %d\n",(int)useDirectLighting);
 		/*! Direct lighting. Shoot shadow rays to all light sources. */
 		if (useDirectLighting)
 		{
@@ -327,9 +333,11 @@ namespace embree
                 dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,type);
 			}
 		}
-        if(L != Color(zero)) {
-            
-        }
+//        if(L != Color(zero)) {
+//            
+//        }
+//        returnPath = &lightPath;
+//        printf("Return L\n");
 		return L;
 	}
 	Color PathTraceIntegrator::Li(Ray& ray, const Ref<BackendScene>& scene, IntegratorState& state, DataConnector* dataConnector) {
@@ -339,7 +347,7 @@ namespace embree
 //        pathColors.clear();
 		Color L = Li(lightPath,scene,state,dataConnector);
 		//We now have the complete path
-		dataConnector->FinishPath(L,returnPath->throughput);
+		dataConnector->FinishPath(L,throughputCache);
 		++state.numPaths;
 		return L;
 	}

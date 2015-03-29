@@ -109,13 +109,14 @@ namespace embree
     Vector3f v0;                //!< First vertex of the triangle
     Vector3f v1;                //!< Second vertex of the triangle
     Vector3f v2;                //!< Third vertex of the triangle
-
+    Color L;                //!< Radiance (W/(m^2*sr))
+      Ref<Triangle> tri;      //!< Triangle shape
   protected:
     Vector3f e1;               //!< First edge of the tringle (v0-v1)
     Vector3f e2;               //!< Second edge of the triangle (v2-v0)
     Vector3f Ng;               //!< Normal of triangle light
-    Color L;                //!< Radiance (W/(m^2*sr))
-    Ref<Triangle> tri;      //!< Triangle shape
+
+
   };
 }
 

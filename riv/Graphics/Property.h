@@ -79,13 +79,16 @@ public:
 		auto newTable = newDataSource->GetTable(tableName);
 		propertyReference = newTable;
 		referenceRecord = newTable->template GetRecord<T>(recordName);
-//		if(referenceRecord) {
+		if(referenceRecord) {
 			std::pair<T,T> minMax = referenceRecord->MinMax();
 			std::vector<T> interpolationValues;
 			interpolationValues.push_back(minMax.first);
 			interpolationValues.push_back(minMax.second);
 			init(interpolationValues);
-//		}
+        } else {
+            std::string error = "Could not find " + recordName + " in " + tableName;
+            throw std::runtime_error(error);
+        }
 	}
 	bool Value(RIVTableInterface* sourceTable, const size_t& row, float& computedValue) {
 		//Determine what interpolator we should use to compute the color

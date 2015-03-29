@@ -21,6 +21,15 @@
 
 class DataController {
 private:
+    
+    enum DataCollectionMode {
+        ALL,
+        DISTRIBUTIONS,
+        NONE
+    };
+    
+    DataCollectionMode mode = ALL;
+    
     ushort imageWidth;
     ushort imageHeight;
 	std::vector<RIVDataSetListener*> dataListeners;
@@ -28,7 +37,10 @@ private:
 	void notifyDataListeners();
 	
     Octree* energyDistribution3D = NULL;
-    Histogram2D<float> energyDistribution2D;
+    
+    Histogram2DSet<float,ushort> imageDistributions;
+//    Histogram2D<float> pixelThroughput;
+//    Histogram2D<float> energyDistribution2D;
 	
 	//The datasets currently being used, this is what the views use to draw
 	RIVDataSet<float,ushort>* currentData;
@@ -39,15 +51,13 @@ private:
 	//The scores of the bootstrap sets for the renderers
 	float bestBootstrapResult = -1;
 	
-	/* Histograms to approximate the true distribution */
+	/* 1D Histograms to approximate the true distribution of each data dimension */
 	HistogramSet<float,ushort> trueDistributions;
 	
 	/* Shortcut pointers for quick access */
 	RIVTable<float,ushort>* currentPathTable;
 	RIVTable<float,ushort>* currentIntersectionsTable;
     RIVTable<float,ushort>* currentLightsTable;
-    
-    Histogram2D<float> pixelThroughput;
 
 	RIVFloatRecord* xPixels = NULL;
 	RIVFloatRecord* yPixels = NULL;
@@ -123,13 +133,17 @@ public:
 	HistogramSet<float,ushort>* GetTrueDistributions() {
 		return &trueDistributions;
 	}
-    Histogram2D<float>* GetPixelThroughputDistribution();
+    Histogram2DSet<float,ushort>* GetImageDistributions() {
+        return &imageDistributions;
+    }
+    
+//    Histogram2D<float>* GetPixelThroughputDistribution();
     Octree* GetEnergyDistribution3D();
     Histogram2D<float>* GetEnergyDistribution2D();
 	void AddMembershipDataStructures(RIVDataSet<float,ushort>* dataset);
 	void SetAcceptProbability(float newProb);
 	//The number of renderers to expect data from and the maximum number of paths per renderer before data reduction should kick in
-	DataController(const int maxPaths, const int bootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives, ushort nrLights, ushort imageWidth, ushort imageHeight);
+	DataController(const int maxPaths, const int bootstrapRepeat, const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, size_t nrPrimitives, ushort nrLights, ushort imageWidth, ushort imageHeight,ushort maxDepth);
 	//Returns a pointer to a pointer of the dataset for renderer one
 	RIVDataSet<float,ushort>** GetDataSet();
 	bool ProcessNewPath(int frame, PathData* newPath);
@@ -137,5 +151,6 @@ public:
 	void Reduce();
     void Reset();
     void SetMaxPaths(int maxPaths);
+    void CycleDataCollectionMode();
 };
 #endif /* defined(__embree__DataController__) */

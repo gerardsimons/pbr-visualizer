@@ -592,7 +592,7 @@ void keys(int keyCode, int x, int y) {
             
             break;
         case 120: // 'x' key
-            imageView->WeightPixelDistributionByThroughput();
+            imageView->WeightDistributionByThroughput();
             break;
         case GLUT_KEY_UP:
             //            sceneView->MoveCamera(0,0,camSpeed);
@@ -608,6 +608,11 @@ void keys(int keyCode, int x, int y) {
         case GLUT_KEY_RIGHT:
             //            sceneView->MoveCamera(-camSpeed,0,0);
             break;
+        case GLUT_KEY_F1:
+            dataControllerOne->CycleDataCollectionMode();
+            if(dataControllerTwo) {
+                dataControllerTwo->CycleDataCollectionMode();
+            }
         default:
             postRedisplay = false;
     }
@@ -640,10 +645,11 @@ void reshape(int w, int h)
         float bottomHalfY = height / 2.f + padding + sliderViewHeight / 2.F;
         float squareSize = height / 2.F - 2 * padding - sliderViewHeight / 2.F;
         float ratio = rendererOne->getWidth() / (float)rendererOne->getHeight();
-        float imageViewWidth = std::min(squareSize * ratio,.3333F*width);
+        float imageViewWidth = std::min(squareSize * ratio,.5F*width);
         float imageViewHeight = imageViewWidth / ratio;
         if(datasetTwo) {
-            imageViewWidth += imageViewWidth;
+//            imageViewWidth += imageViewWidth;
+            imageViewWidth = std::min(2 * squareSize * ratio,.66667F*width);
         }
         glutSetWindow(imageViewWindow);
         //        glutInitDisplayMode(GLUT_SINGLE);
@@ -807,10 +813,10 @@ void idle() {
 
 bool processRendererOne(PathData* newPath) {
     //	printf("New path from renderer #1 received!\n");
-    if(connectedOne) {
+//    if(connectedOne) {
         return dataControllerOne->ProcessNewPath(currentFrameOne,newPath);
-    }
-    return false;
+//    }
+//    return false;
 }
 
 void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
@@ -828,10 +834,10 @@ void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
 
 bool processRendererTwo(PathData* newPath) {
     //	printf("New path from renderer #2 received!\n");
-    if(connectedTwo) {
+//    if(connectedTwo) {
         return dataControllerTwo->ProcessNewPath(currentFrameTwo,newPath);
-    }
-    return true;
+//    }
+//    return true;
 }
 void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
     printf("\n*** Renderer two finished frame %d...\n",currentFrameTwo);
@@ -890,12 +896,13 @@ void setup(int argc, char** argv) {
         if(strcmp(type,"-connect") == 0) {
             rendererOne = new EMBREERenderer(dcOne, std::string(argv[2]),1);
             sceneDataOne = getSceneData(rendererOne);
-            dataControllerOne = new DataController(2 * maxPathsOne, maxBootstrapRepeatOne,sceneDataOne.xBounds,sceneDataOne.yBounds,sceneDataOne.zBounds,sceneDataOne.NumberOfMeshes(),rendererOne->GetNumLights(),rendererOne->getWidth(),rendererOne->getHeight());
+            dataControllerOne = new DataController(2 * maxPathsOne, maxBootstrapRepeatOne,sceneDataOne.xBounds,sceneDataOne.yBounds,sceneDataOne.zBounds,sceneDataOne.NumberOfMeshes(),rendererOne->GetNumLights(), rendererOne->getWidth(),rendererOne->getHeight(),rendererOne->GetDepth());
             dataControllerOne->SetAcceptProbability(2.F * maxPathsOne / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel()));
             datasetOne = dataControllerOne->GetDataSet();
             printf("datsetone** = %p --> datasetone* = %p\n",datasetOne,*datasetOne);
             connectedOne = true;
             printf("1 renderer set up.\n");
+            dcOne->SetNrLights(rendererOne->GetNumLights());
         }
         else if(strcmp(argv[1],"-renderonly") == 0) { // No connect, render only
             rendererOne = new EMBREERenderer(std::string(argv[2]));
@@ -926,6 +933,7 @@ void setup(int argc, char** argv) {
             connectedTwo = true;
             DataConnector* dcTwo = new DataConnector(processRendererTwo,rendererTwoFinishedFrame);
             rendererTwo = new EMBREERenderer(dcTwo, std::string(argv[4]),1);
+            dcTwo->SetNrLights(rendererTwo->GetNumLights());
             //            float acceptProbTwo = 2.F * maxPaths / (rendererTwo->getWidth() * rendererTwo->getHeight() * rendererTwo->getSamplesPerPixel());
             //            dataControllerOne->SetAcceptProbability(acceptProbTwo);
             sceneDataTwo = getSceneData(rendererTwo);
@@ -939,14 +947,18 @@ void setup(int argc, char** argv) {
             sprintf(buffer,"Unknown command option %s\n",argv[1]);
             throw std::runtime_error(buffer);
         }
+        
+        //Set the nr lights to the dataconnector,
+        dcOne->SetNrLights(rendererOne->GetNumLights());
+        
         //find the largest bounds
         Vec2f xBounds,yBounds,zBounds;
         xBounds = Vec2f(std::min(sceneDataOne.xBounds[0],sceneDataTwo.xBounds[0]),std::max(sceneDataOne.xBounds[1],sceneDataTwo.xBounds[1]));
         yBounds = Vec2f(std::min(sceneDataOne.yBounds[0],sceneDataTwo.yBounds[0]),std::max(sceneDataOne.yBounds[1],sceneDataTwo.yBounds[1]));
         zBounds = Vec2f(std::min(sceneDataOne.zBounds[0],sceneDataTwo.zBounds[0]),std::max(sceneDataOne.zBounds[1],sceneDataTwo.zBounds[1]));
         
-        dataControllerOne = new DataController(2 * maxPathsOne,maxBootstrapRepeatOne,xBounds,yBounds,zBounds,sceneDataOne.NumberOfMeshes(),rendererOne->GetNumLights(),rendererOne->getWidth(),rendererOne->getHeight());
-        dataControllerTwo = new DataController(2 * maxPathsTwo,maxBootstrapRepeatTwo,xBounds,yBounds,zBounds,sceneDataTwo.NumberOfMeshes(),rendererTwo->GetNumLights(),rendererOne->getWidth(),rendererOne->getHeight());
+        dataControllerOne = new DataController(2 * maxPathsOne,maxBootstrapRepeatOne,xBounds,yBounds,zBounds,sceneDataOne.NumberOfMeshes(),rendererOne->GetNumLights(),rendererOne->getWidth(),rendererOne->getHeight(),rendererOne->GetDepth());
+        dataControllerTwo = new DataController(2 * maxPathsTwo,maxBootstrapRepeatTwo,xBounds,yBounds,zBounds,sceneDataTwo.NumberOfMeshes(),rendererTwo->GetNumLights(),rendererOne->getWidth(),rendererOne->getHeight(),rendererTwo->GetDepth());
         datasetOne = dataControllerOne->GetDataSet();
         datasetTwo = dataControllerTwo->GetDataSet();
         float acceptProbOne = 2.F * maxPathsOne / (rendererOne->getWidth() * rendererOne->getHeight() * rendererOne->getSamplesPerPixel());
@@ -968,7 +980,8 @@ void setup(int argc, char** argv) {
     float squareSize = height / 2.F - 2 * padding - sliderViewHeight / 2.F;
     float ratio = rendererOne->getWidth() / (float)rendererOne->getHeight();
 //    float imageViewWidth = squareSize * ratio;
-    float imageViewWidth = std::min(squareSize * ratio,.333F*width);
+    float imageViewWidth = std::min(squareSize * ratio,.5F*width);
+//    float imageViewWidth = std::min(squareSize * ratio,.333F*width);
     float imageViewHeight = imageViewWidth / ratio;
     
     std::vector<riv::Color> colors;
@@ -992,7 +1005,8 @@ void setup(int argc, char** argv) {
         glutMotionFunc(ParallelCoordsView::Motion);
         glutSpecialFunc(keys);
         if(nrConnected == 2) {
-            imageViewWidth += imageViewWidth;
+//            imageViewWidth += imageViewWidth;
+            imageViewWidth = std::min(2 * squareSize * ratio,.6667F*width);
         }
         imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,imageViewWidth,imageViewHeight);
         glutSetWindow(imageViewWindow);
@@ -1077,7 +1091,7 @@ void setup(int argc, char** argv) {
         
         sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
         //		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,colorOne,colorTwo,sizeProperty);
-        imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo,dataControllerOne->GetPixelThroughputDistribution(),dataControllerTwo->GetPixelThroughputDistribution(),dataControllerOne->GetEnergyDistribution2D(),dataControllerTwo->GetEnergyDistribution2D());
+        imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo,dataControllerOne->GetImageDistributions(),dataControllerTwo->GetImageDistributions());
         
         sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions());
 //        parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,binColorMap,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo,sliderView);
@@ -1095,13 +1109,21 @@ void setup(int argc, char** argv) {
         (*datasetTwo)->AddDataListener(sliderView);
     }
     else if(datasetOne) {
-//        RIVColorProperty* colorTwo = new RIVFixedColorProperty(0, 0, 1);
-//        RIVColorProperty* colorOne = new RIVFixedColorProperty(1, 0, 0);
+//        RIVColorProperty* pathColorTwo = new RIVFixedColorProperty(0, 0, 1);
+        RIVColorProperty* redPathColorOne = new RIVFixedColorProperty(1, 0, 0);
+        RIVColorProperty* redRayColorOne = redPathColorOne;
+//        RIVColorProperty* rayColorTwo = pathColorTwo;
         auto pathColorOne = createPathColorProperty(*datasetOne);
         auto rayColorOne = createRayColorProperty(*datasetOne);
-        parallelCoordsView = new ParallelCoordsView(datasetOne,redBlue, pathColorOne,rayColorOne,sliderView);
+//        auto pathsTable = (*datasetOne)->GetTable(PATHS_TABLE);
+//        auto intersectionsTable = (*datasetOne)->GetTable(INTERSECTIONS_TABLE);
+        
+//        RIVColorProperty* pathColorOne = new RIVEvaluatedColorProperty<ushort>(colors::jetColorMap(),pathsTable,pathsTable->GetRecord<ushort>(DEPTH));
+//        RIVColorProperty* rayColorOne = new RIVEvaluatedColorProperty<ushort>(colors::jetColorMap(),intersectionsTable,intersectionsTable->GetRecord<ushort>(BOUNCE_NR));
+        redBlue.Invert();
+        parallelCoordsView = new ParallelCoordsView(datasetOne, redBlue, redPathColorOne,redRayColorOne,sliderView);
         sceneView = new RIV3DView(datasetOne,rendererOne,sceneDataOne,dataControllerOne->GetEnergyDistribution3D(), pathColorOne, rayColorOne);
-        imageView = new RIVImageView(datasetOne,rendererOne);
+        imageView = new RIVImageView(datasetOne,rendererOne,dataControllerOne->GetImageDistributions());
         (*datasetOne)->AddDataListener(imageView);
         (*datasetOne)->AddDataListener(sceneView);
         (*datasetOne)->AddDataListener(parallelCoordsView);

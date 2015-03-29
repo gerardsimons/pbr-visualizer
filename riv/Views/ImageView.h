@@ -32,9 +32,7 @@ private:
 	EMBREERenderer* rendererOne;
 	EMBREERenderer* rendererTwo = NULL;
     
-//    bool showThroughputDistribution = true;
-    Histogram2D<float>* throughputDistroOne = NULL;
-    Histogram2D<float>* throughputDistroTwo = NULL;
+
 	
 //	std::vector<EMBREERenderer*> renderers;
     int imagePadding = 5;
@@ -52,22 +50,30 @@ private:
         DISTRIBUTION,
         THROUGHPUT,
         RADIANCE,
-        RADIANCE_DIFFERENCE
+        RADIANCE_DIFFERENCE,
+        DEPTH_IMAGE
     };
     
     HeatmapDisplayMode displayMode = OPAQUE;
     HeatmapDisplay heatmapToDisplay = DISTRIBUTION;
     
-    unsigned int xBins = 30;
+    Histogram2DSet<float,ushort>* imageDistributionsOne = NULL;
+    Histogram2DSet<float,ushort>* imageDistributionsTwo = NULL;
+    
+    //    bool showThroughputDistribution = true;
+//    Histogram2D<float>* throughputDistroOne = NULL;
+//    Histogram2D<float>* throughputDistroTwo = NULL;
+    
+    unsigned int xBins = 60;
     unsigned int yBins; //Deduced according to image aspect ratio
     Histogram2D<float>* pixelDistributionOne = NULL;
     Histogram2D<float>* pixelDistributionTwo = NULL;
     
-    Histogram2D<float>** activeHeatmapOne = &pixelDistributionOne;
-    Histogram2D<float>** activeHeatmapTwo = &pixelDistributionTwo;
+    Histogram2D<float>* activeHeatmapOne = pixelDistributionOne;
+    Histogram2D<float>* activeHeatmapTwo = pixelDistributionTwo;
     
-    Histogram2D<float>* trueEnergyDistributionOne;
-    Histogram2D<float>* trueEnergyDistributionTwo;
+//    Histogram2D<float>* trueEnergyDistributionOne;
+//    Histogram2D<float>* trueEnergyDistributionTwo;
     
     //Sampled radiance distributions
     Histogram2D<float>* radianceDistributionOne = NULL;
@@ -88,7 +94,7 @@ private:
 	void drawRenderedImage(EMBREERenderer* renderer,int startX, int startY, int width, int height);
     void computePixelDistribution(RIVDataSet<float,ushort>*, Histogram2D<float>*& pixelDistribution);
     void computeRadianceDistributions();
-    void drawHeatmap(bool leftSet,Histogram2D<float>** heatmap);
+    void drawHeatmap(bool leftSet,Histogram2D<float>* heatmap);
     void drawRadianceDifference();
     void drawGrid(float startX, Grid* paintGrid);
     void drawRegularHeatmap(int startX, Histogram2D<float>* heatmap, riv::ColorMap& colors);
@@ -99,13 +105,12 @@ private:
     Histogram2D<float> computeRadianceDistribution(RIVDataSet<float,ushort>* dataset,int xBins, int yBins);
 public:
     void redisplayWindow();
-    void WeightPixelDistributionByThroughput();
+    void WeightDistributionByThroughput();
     void CombinePixelDistributions();
 	//Single renderer constructor
     RIVImageView(EMBREERenderer* rendererOne);
-	RIVImageView(RIVDataSet<float,ushort>** datasetOne,  EMBREERenderer* rendererOne);
-	//Dual renderer constructor
-	RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo,Histogram2D<float>* throughputDistroOne,Histogram2D<float>* throughputDistroTwo,Histogram2D<float>* energyDistributionOne,Histogram2D<float>* energyDistributionTwo);
+	RIVImageView(RIVDataSet<float,ushort>** datasetOne,  EMBREERenderer* rendererOne,Histogram2DSet<float,ushort>* imageDistributions);
+	RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo,Histogram2DSet<float,ushort>* imageDistributionsOne,Histogram2DSet<float,ushort>* imageDistributionsTwo);
     Histogram2D<float>* GetActiveDistributionOne();
     Histogram2D<float>* GetActiveDistributionTwo();
     Histogram2D<float>* GetPixelDistributionOne();

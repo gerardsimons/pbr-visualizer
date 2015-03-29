@@ -14,7 +14,12 @@ const GLdouble identity[] = {1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1};
 /// Affichage
 void printMatrix( const GLdouble* m )
 {
-	for( int i=0; i<16; ++i ) cout<<m[i]<<" ";
+    for( int i=0; i<16; ++i ) {
+        cout<<m[i]<<" ";
+        if((i+1) % 4 == 0) {
+            std::cout << "\n";
+        }
+    }
 }
 
 
@@ -51,6 +56,5 @@ void inverse( const double *m, double *p )
 	// derniere ligne
 	p[3] = p[7] = p[11] = 0; p[15] = 1;
 }
-
 
 #endif

@@ -18,6 +18,9 @@ namespace riv {
     ColorMap::ColorMap(float minRange, float maxRange) : min(minRange), max(maxRange){
 
     }
+    void ColorMap::Invert() {
+        std::reverse(colorTable.begin(),colorTable.end());
+    }
 	Color ColorMap::ComputeColor(float value){
         value -= min;
         value /= (max - min);

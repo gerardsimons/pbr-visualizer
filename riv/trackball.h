@@ -84,9 +84,14 @@ void tb_zoom(float zoom) {
 //    else if( vertical > horizontal )
 //    {
         tb_matrix[14] -= zoom*speedfact;
+//    printf("tb_matrix:\n");
+//    printMatrix(tb_matrix);
 //    }
 //    tb_ancienX = x;
 //    tb_ancienY = y;
+}
+void setZoom(float zoom) {
+    tb_matrix[14] = zoom;
 }
 void startZoom(int x, int y) {
     printf("Start tb zoom\n");

@@ -374,7 +374,7 @@ public:
                             for(auto iterator : multiRef->GetIndexMap()) {
                                 size_t referenceTableRow = iterator.first;
                                 
-                                std::vector<size_t> backRows = iterator.second;
+                                std::vector<size_t>& backRows = iterator.second;
                                 bool filter = true;
                                 size_t rowsFound = 0;
                                 //					printMap(filteredRows);

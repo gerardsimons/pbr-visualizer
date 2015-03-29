@@ -200,7 +200,7 @@ void ParallelCoordsView::drawSelectionBoxes() {
                     
                     
                     
-                    printf("Drawing selection box on axis %s\n",selectedAxis->name.c_str());
+                    printf("Drawing selection box on axis %s\n",axis->name.c_str());
                     
                     //                    glColor4f(1, 1, 1,.5F);
                     //                    glRectf(axis->selection.start.x - 1, axis->selection.start.y, axis->selection.end.x, axis->selection.end.y);
@@ -481,6 +481,15 @@ void ParallelCoordsView::createAxisDensities() {
         createAxisDensities(1, *datasetTwo);
     }
 }
+//void ParallelCoordsView::CycleColorScheme() {
+
+    
+//    delete pathColorOne;
+//    delete rayColorOne;
+//    
+//    
+//    delete pathColorTwo;
+//}
 void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ushort>* dataset) {
     for(auto &axisGroup : axisGroups) {
         tuple_for_each(axisGroup.axes, [&](auto tAxes) {
@@ -838,13 +847,15 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                                 
                                 selectedAxis = axis;
                                 
-                                if(axis->isSelected) {
-                                    axis->isSelected = false;
-                                    sliderView->RemoveSelectedRecord(axis->name);
-                                }
-                                else {
-                                    axis->isSelected = true;
-                                    sliderView->AddSelectedRecord(axisGroup.tableName, axis->name);
+                                if(sliderView) {
+                                    if(axis->isSelected) {
+                                        axis->isSelected = false;
+                                        sliderView->RemoveSelectedRecord(axis->name);
+                                    }
+                                    else {
+                                        axis->isSelected = true;
+                                        sliderView->AddSelectedRecord(axisGroup.tableName, axis->name);
+                                    }
                                 }
                                 
                                 Invalidate();
@@ -980,6 +991,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
                 selectedAxis->selection.end.x = selectedAxis->x + 10;
                 selectedAxis->selection.start.y = y;
                 selectedAxis->selection.end.y = y;
+                
                 //                selection = &selectedAxis->selection;
                 
                 selectionBoxChanged = false;

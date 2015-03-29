@@ -191,7 +191,11 @@ void EMBREERenderer::parsePathTracer(Ref<ParseStream> cin, const FileName& path)
 	while (cin->peek() != "}") {
 		std::string tag = cin->getString();
 		cin->force("=");
-		if      (tag == "depth"          ) g_device->rtSetInt1  (g_renderer, "maxDepth"       , cin->getInt()  );
+        if      (tag == "depth"          ) {
+            int depth = cin->getInt();
+            g_depth = depth;
+            g_device->rtSetInt1  (g_renderer, "maxDepth"       , depth  );
+        }
 		else if (tag == "spp"            ) g_device->rtSetInt1  (g_renderer, "sampler.spp"    , cin->getInt()  );
 		else if (tag == "minContribution") g_device->rtSetFloat1(g_renderer, "minContribution", cin->getFloat());
 		else if (tag == "backplate"      ) g_device->rtSetImage (g_renderer, "backplate", rtLoadImage(path + cin->getFileName()));
@@ -735,4 +739,7 @@ int EMBREERenderer::getHeight() {
 
 int EMBREERenderer::getSamplesPerPixel() {
 	return g_spp;
+}
+int EMBREERenderer::GetDepth() {
+    return g_depth;
 }

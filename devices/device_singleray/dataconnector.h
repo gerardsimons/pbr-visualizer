@@ -70,7 +70,7 @@ private:
 	
 	typedef bool (*path_finished)(PathData* newPath); // type for conciseness
 	typedef void (*frame_finished)(size_t numPaths, size_t numRays);
-	
+    int nrLights = -1;
 	path_finished pfCallback;
 	frame_finished ffCallback;
 public:
@@ -80,9 +80,14 @@ public:
 	
 	DataConnector(path_finished pfCallback, frame_finished ffCallback);
 	DataConnector* Copy() {
-		return new DataConnector(pfCallback,ffCallback);
+		DataConnector* copy = new DataConnector(pfCallback,ffCallback);
+        copy->SetNrLights(nrLights);
+        return copy;
 	}
 //	void ProcessPath();
+    void SetNrLights(int nrLights) {
+        this->nrLights = nrLights;
+    }
 	void FinishFrame(size_t numPaths, size_t numRays);
 	bool FinishPath(Color& color, Color& throughput);
 	void StartPath(const Vec2f& pixel,const Vec2f& lens, float time);

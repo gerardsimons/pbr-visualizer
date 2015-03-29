@@ -38,7 +38,9 @@ namespace embree
 		class __align(16) LightPath
 		{
 		public:
-			
+
+            __forceinline LightPath () { };
+            
 			/*! Constructs a path. */
 			__forceinline LightPath (const Ray& ray, const Medium& medium = Medium::Vacuum(), const int depth = 0,
 									 const Color& throughput = one, const bool ignoreVisibleLights = false, const bool unbend = true)

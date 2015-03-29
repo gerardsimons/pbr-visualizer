@@ -56,5 +56,8 @@ extern const char* LIGHT_R;
 extern const char* LIGHT_G;
 extern const char* LIGHT_B;
 
+extern const char* IMAGE_RADIANCE;
+extern const char* IMAGE_THROUGHPUT;
+extern const char* IMAGE_DEPTH;
 
 #endif

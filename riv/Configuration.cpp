@@ -56,3 +56,8 @@ const char* OCCLUDER_ID = "occluder ID";
 const char* LIGHT_R = "light R";
 const char* LIGHT_G = "light G";
 const char* LIGHT_B = "light B";
+
+//* 2D DISTRIBUTION NAMES *//
+const char* IMAGE_RADIANCE = "image_radiance";
+const char* IMAGE_THROUGHPUT = "image_throughput";
+const char* IMAGE_DEPTH = "image_depth";

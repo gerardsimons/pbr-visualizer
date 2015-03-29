@@ -7,9 +7,6 @@
 //
 
 #include "ImageView.h"
-#include "../Graphics/loadppm.h"
-
-
 #include <math.h>
 
 typedef unsigned short ushort;
@@ -28,7 +25,11 @@ RIVImageView::RIVImageView(EMBREERenderer* renderer) : RIVDataView(datasetOne) {
     yBins = rendererOne->getWidth() / (float)rendererOne->getHeight() * xBins;
 }
 
-RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, EMBREERenderer* renderer) : RIVDataView(datasetOne) {
+RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, EMBREERenderer* renderer,Histogram2DSet<float,ushort>* imageDistributions) : RIVDataView(datasetOne),imageDistributionsOne(imageDistributions) {
+    
+    //    trueEnergyDistributionOne = imageDistributions->GetHistogram<float>(IMAGE_RADIANCE);
+    //    throughputDistroOne = imageDistributions->GetHistogram<float>(IMAGE_THROUGHPUT);
+    
     if(instance != NULL) {
         throw "Only 1 instance of ImageView allowed.";
     }
@@ -40,7 +41,7 @@ RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, EMBREERenderer
     yBins = rendererOne->getHeight() / (float)rendererOne->getWidth() * xBins;
 }
 
-RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, Histogram2D<float>* throughputDistroOne,Histogram2D<float>* throughputDistroTwo,Histogram2D<float>* trueEnergyDistributionOne,Histogram2D<float>* trueEnergyDistributionTwo) : RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(rendererTwo), throughputDistroOne(throughputDistroOne), throughputDistroTwo(throughputDistroTwo),trueEnergyDistributionOne(trueEnergyDistributionOne),trueEnergyDistributionTwo(trueEnergyDistributionTwo) {
+RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, Histogram2DSet<float,ushort>* imageDistributionsOne,Histogram2DSet<float,ushort>* imageDistributionsTwo) : RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(rendererTwo),imageDistributionsOne(imageDistributionsOne),imageDistributionsTwo(imageDistributionsTwo) {
     
     paintGridOne = new Grid(gridSize);
     paintGridTwo = new Grid(gridSize);
@@ -128,70 +129,104 @@ Histogram2D<float> RIVImageView::computeRadianceDistribution(RIVDataSet<float,us
 }
 void RIVImageView::computeRadianceDistributions() {
     
-//    if(r  adianceDistributionOne)
-//        radianceDistributionOne->Clear();
-//    if(radianceDistributionTwo)
-//        delete radianceDistributionTwo;
-//    if(radianceDiffDistribution)
-//        delete radianceDiffDistribution;
+    //    if(r  adianceDistributionOne)
+    //        radianceDistributionOne->Clear();
+    //    if(radianceDistributionTwo)
+    //        delete radianceDistributionTwo;
+    //    if(radianceDiffDistribution)
+    //        delete radianceDiffDistribution;
     
-    if(datasetTwo && !(*datasetTwo)->IsEmpty()) {
+    if(datasetTwo && !(*datasetTwo)->IsEmpty() && imageDistributionsTwo) {
         
         //TODO: Delete pre-existing distributions if present
         
-//        radianceDistributionOne = new Histogram2D<float>(computeRadianceDistribution(*datasetOne, xBins, yBins));
-//        radianceDistributionTwo = new Histogram2D<float>(computeRadianceDistribution(*datasetTwo, xBins, yBins));
+        //        radianceDistributionOne = new Histogram2D<float>(computeRadianceDistribution(*datasetOne, xBins, yBins));
+        //        radianceDistributionTwo = new Histogram2D<float>(computeRadianceDistribution(*datasetTwo, xBins, yBins));
+        
+        auto trueEnergyDistributionOne = imageDistributionsOne->GetHistogram<float>(IMAGE_RADIANCE);
+        auto trueEnergyDistributionTwo = imageDistributionsTwo->GetHistogram<float>(IMAGE_RADIANCE);
+        
         if(!radianceDiffDistribution) {
             radianceDiffDistribution = new Histogram2D<float>(*trueEnergyDistributionOne - *trueEnergyDistributionTwo);
         }
         else {
-//            radianceDiffDistribution->Clear();
+            //            radianceDiffDistribution->Clear();
             delete radianceDiffDistribution;
             radianceDiffDistribution = new Histogram2D<float>(*trueEnergyDistributionOne - *trueEnergyDistributionTwo);
         }
     }
     else printf("Second dataset not set or empty.\n");
 }
-//Change what heatmap to show, 
+//Change what heatmap to show,
 void RIVImageView::ToggleHeatmapToDisplay() {
+    
+    Histogram2D<float>* trueEnergyDistributionOne = imageDistributionsOne->GetHistogram<float>(IMAGE_RADIANCE);
+    Histogram2D<float>* throughputDistributionOne = imageDistributionsOne->GetHistogram<float>(IMAGE_THROUGHPUT);
+    Histogram2D<float>* depthDistributionOne = imageDistributionsOne->GetHistogram<float>(IMAGE_DEPTH);
+    
+    Histogram2D<float>* trueEnergyDistributionTwo;
+    Histogram2D<float>* throughputDistributionTwo;
+    Histogram2D<float>* depthDistributionTwo;
+    if(imageDistributionsTwo) {
+        trueEnergyDistributionTwo = imageDistributionsTwo->GetHistogram<float>(IMAGE_RADIANCE);
+        throughputDistributionTwo = imageDistributionsTwo->GetHistogram<float>(IMAGE_THROUGHPUT);
+        depthDistributionTwo = imageDistributionsTwo->GetHistogram<float>(IMAGE_DEPTH);
+    }
+    
     printf("Toggle heatmap to display : ");
     switch (heatmapToDisplay) {
         case DISTRIBUTION:
             heatmapToDisplay = THROUGHPUT;
             printf("THROUGHPUT");
-            activeHeatmapOne = &throughputDistroOne;
-            activeHeatmapTwo = &throughputDistroTwo;
+            activeHeatmapOne = throughputDistributionOne;
+            activeHeatmapTwo = throughputDistributionTwo;
             break;
         case THROUGHPUT:
+            heatmapToDisplay = DEPTH_IMAGE;
+            printf("DEPTH_IMAGE");
+            activeHeatmapOne = depthDistributionOne;
+            //            depthDistributionOne->PrintRaw();
+            
+            activeHeatmapTwo = depthDistributionTwo;
+            break;
+        case DEPTH_IMAGE:
             heatmapToDisplay = RADIANCE;
             printf("RADIANCE");
             if(!radianceDiffDistribution) {
                 //Create radiance difference distribution
                 computeRadianceDistributions();
             }
-//            activeHeatmapOne = &radianceDistributionOne;
-//            activeHeatmapTwo = &radianceDistributionTwo;
-            activeHeatmapOne = &trueEnergyDistributionOne;
-            activeHeatmapTwo = &trueEnergyDistributionTwo;
+            //            activeHeatmapOne = &radianceDistributionOne;
+            //            activeHeatmapTwo = &radianceDistributionTwo;
+            activeHeatmapOne = trueEnergyDistributionOne;
+            activeHeatmapTwo = trueEnergyDistributionTwo;
             break;
         case RADIANCE:
-            heatmapToDisplay = RADIANCE_DIFFERENCE;
-            activeHeatmapOne = &radianceDiffDistribution;
-            activeHeatmapTwo = &radianceDiffDistribution;
-            printf("RADIANCE_DIFFERENCE");
+            if(datasetTwo) {
+                heatmapToDisplay = RADIANCE_DIFFERENCE;
+                activeHeatmapOne = radianceDiffDistribution;
+                activeHeatmapTwo = radianceDiffDistribution;
+                printf("RADIANCE_DIFFERENCE");
+            }
+            else {
+                heatmapToDisplay = DISTRIBUTION;
+                activeHeatmapOne = pixelDistributionOne;
+                activeHeatmapTwo = pixelDistributionTwo;
+                printf("DISTRIBUTION");
+            }
             break;
         case RADIANCE_DIFFERENCE:
             printf("NONE");
             if((*datasetOne)->IsFiltered() || (datasetTwo && (*datasetTwo)->IsFiltered())) {
                 heatmapToDisplay = DISTRIBUTION;
-                activeHeatmapOne = &pixelDistributionOne;
-                activeHeatmapTwo = &pixelDistributionTwo;
+                activeHeatmapOne = pixelDistributionOne;
+                activeHeatmapTwo = pixelDistributionTwo;
                 printf("DISTRIBUTION");
             }
             else {
                 heatmapToDisplay = THROUGHPUT;
-                activeHeatmapOne = &throughputDistroOne;
-                activeHeatmapTwo = &throughputDistroTwo;
+                activeHeatmapOne = throughputDistributionOne;
+                activeHeatmapTwo = throughputDistributionTwo;
                 printf("THROUGHPUT");
                 
             }
@@ -201,10 +236,10 @@ void RIVImageView::ToggleHeatmapToDisplay() {
     redisplayWindow();
 }
 void RIVImageView::ToggleHeatmapDisplayMode() {
-
+    
     redisplayWindow();
     printf("Heatmap display mode is now ");
-
+    
     switch (displayMode) {
         case NONE:
             displayMode = OPAQUE;
@@ -231,7 +266,7 @@ void RIVImageView::OnDataChanged(RIVDataSet<float,ushort>* source) {
         }
         else if(datasetTwo && *datasetTwo == source) {
             computePixelDistribution(*datasetTwo, pixelDistributionTwo);
-
+            
         }
         else {
             throw std::runtime_error("No such dataset");
@@ -242,21 +277,33 @@ void RIVImageView::OnDataChanged(RIVDataSet<float,ushort>* source) {
 
 void RIVImageView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
     if(dataset == *datasetOne) {
+        
+        bool pixelDistroWasActive = pixelDistributionOne == activeHeatmapOne;
+        
         computePixelDistribution(*datasetOne, pixelDistributionOne);
         computeRadianceDistributions();
 //        printf("Heatmap one result = \n");
 //        pixelDistributionOne->Print();
+        if(pixelDistroWasActive) {
+            activeHeatmapOne = pixelDistributionOne;
+        }
+    
     }
     else if(datasetTwo && dataset == *datasetTwo) {
+        bool pixelDistroWasActive = pixelDistributionTwo == activeHeatmapTwo;
+        
         computePixelDistribution(*datasetTwo, pixelDistributionTwo);
         computeRadianceDistributions();
-//        printf("Heatmap two result = \n");
-//        heatmapTwo->Print();
+        //        printf("Heatmap two result = \n");
+        //        heatmapTwo->Print();
+        if(pixelDistroWasActive) {
+            activeHeatmapTwo = pixelDistributionTwo;
+        }
     }
     else {
         throw std::runtime_error("Unknown dataset");
     }
-
+    
     int currentWindow = glutGetWindow();
     glutSetWindow(RIVImageView::windowHandle);
     glutPostRedisplay();
@@ -302,22 +349,22 @@ void RIVImageView::computePixelDistribution(RIVDataSet<float,ushort>* dataset, H
         float throughputB = throughputsB->Value(row);
         ushort depth = depths->Value(row);
         
-//        printf("throughput (r,g,b) = (%f,%f,%f)\n",throughputR,throughputG,throughputB);
+        //        printf("throughput (r,g,b) = (%f,%f,%f)\n",throughputR,throughputG,throughputB);
         float averageThroughput = 0;
         if(depth) {
             averageThroughput = (throughputR + throughputG + throughputB) / 3.F * depth;
         }
-//        printf("averageThroughput = %f\n",averageThroughput);
-//        size_t magnitude = 1000 * averageThroughput;
+        //        printf("averageThroughput = %f\n",averageThroughput);
+        //        size_t magnitude = 1000 * averageThroughput;
         float xPixel = xPixels->Value(row);
         float yPixel = yPixels->Value(row);
-//        pixelDistribution->Add(xPixel,yPixel,1);
+        //        pixelDistribution->Add(xPixel,yPixel,1);
         pixelDistribution->Add(xPixel,yPixel,1);
     }
     
-//    pixelDistribution->Add(0.5F, 0.5F,90);
+    //    pixelDistribution->Add(0.5F, 0.5F,90);
     
-//    heatmap.Print();
+    //    heatmap.Print();
 }
 void RIVImageView::drawRegularHeatmap(int startX, Histogram2D<float>* heatmap, riv::ColorMap& colors) {
     if(heatmap && heatmap->NumberOfElements()) {
@@ -338,7 +385,7 @@ void RIVImageView::drawRegularHeatmap(int startX, Histogram2D<float>* heatmap, r
         
         float maxValue = heatmap->MaxBinValue();
         
-        //        heatmap->Print();
+        //        heatmap->PrintRaw();
         for(int x = 0 ; x < xBins ; ++x) {
             float binY = height - imagePadding;
             for(int y = 0 ; y < yBins ; ++y) {
@@ -395,31 +442,31 @@ void RIVImageView::drawNormalizedHeatmap(int startX, Histogram2D<float>* heatmap
         if(nrElements) {
             maxNormalizedValue = heatmap->MaxBinValue() / (float)nrElements;
         }
-
-        float variance = std::pow(heatmap->NormalizedVariance(),1);//Normalized for the number of bins
-        float mean = heatmap->NormalizedMean();
         
-//        heatmap->Print();
+        //        float variance = std::pow(heatmap->NormalizedVariance(),1);//Normalized for the number of bins
+        //        float mean = heatmap->NormalizedMean();
+        
+        //        heatmap->PrintRaw();
         for(int x = 0 ; x < xBins ; ++x) {
             float binY = height - imagePadding;
             for(int y = 0 ; y < yBins ; ++y) {
                 float normalizedValue = heatmap->NormalizedValue(x, y);
                 float ratio = normalizedValue / maxNormalizedValue;
-
-                    riv::Color color = colors.ComputeColor(ratio);
-                    
-                    glColor3f(color.R, color.G, color.B);
-                    if(normalizedValue > 0.0001) {
-                        glBegin(GL_LINE_LOOP);
-                        glVertex2f(binX, binY);
-                        glVertex2f(binX + binWidth, binY);
-                        glVertex2f(binX + binWidth,binY - binHeight);
-                        glVertex2f(binX,binY - binHeight);
-                        glEnd();
-                    }
-                    glColor4f(color.R, color.G, color.B,color.A);
-                    glRectf(binX, binY, binX + binWidth, binY - binHeight);
-//                }
+                
+                riv::Color color = colors.ComputeColor(ratio);
+                
+                glColor3f(color.R, color.G, color.B);
+                if(normalizedValue > 0.0001) {
+                    glBegin(GL_LINE_LOOP);
+                    glVertex2f(binX, binY);
+                    glVertex2f(binX + binWidth, binY);
+                    glVertex2f(binX + binWidth,binY - binHeight);
+                    glVertex2f(binX,binY - binHeight);
+                    glEnd();
+                }
+                glColor4f(color.R, color.G, color.B,color.A);
+                glRectf(binX, binY, binX + binWidth, binY - binHeight);
+                //                }
                 //                printf("glRectf(%f,%f,%f,%f)\n",binX, binY, binX + binWidth, binY + binHeight);
                 
                 //            }
@@ -438,20 +485,20 @@ Histogram2D<float>* RIVImageView::GetPixelDistributionTwo() {
     return pixelDistributionTwo;
 }
 Histogram2D<float>* RIVImageView::GetActiveDistributionOne() {
-    if(activeHeatmapOne && *activeHeatmapOne) {
+    if(activeHeatmapOne) {
         if(heatmapToDisplay == RADIANCE_DIFFERENCE) {
-            return *activeHeatmapOne;
+            return activeHeatmapOne;
         }
     }
-    if(datasetTwo && (*datasetTwo)->IsFiltered()) {
+    if(heatmapToDisplay == DISTRIBUTION && datasetOne && (*datasetOne)->IsFiltered()) {
         return pixelDistributionOne;
     }
     return NULL;
 }
 Histogram2D<float>* RIVImageView::GetActiveDistributionTwo() {
-    if(activeHeatmapTwo && *activeHeatmapTwo) {
+    if(activeHeatmapTwo) {
         if(heatmapToDisplay == RADIANCE_DIFFERENCE) {
-            return *activeHeatmapTwo;
+            return activeHeatmapTwo;
         }
     }
     if(datasetTwo && (*datasetTwo)->IsFiltered()) {
@@ -505,7 +552,7 @@ void RIVImageView::drawGrid(float startX, Grid* paintGrid) {
     for(unsigned int x = 0 ; x < gridWidth ; ++x) {
         float pixelY = 0;
         for(unsigned int y = 0 ; y < gridHeight ; ++y) {
-//            glColor3f(x / (float)gridWidth, 0, y / (float)gridHeight);
+            //            glColor3f(x / (float)gridWidth, 0, y / (float)gridHeight);
             bool cellFilled = paintGrid->IsFilled(x, y);
             if(cellFilled) {
                 glColor3f(1,0,0);
@@ -541,26 +588,29 @@ std::string RIVImageView::enumToString(RIVImageView::HeatmapDisplay displayMode)
             return "RADIANCE";
             break;
         case RADIANCE_DIFFERENCE:
-           return "RADIANCE_DIFFERENCE";
+            return "RADIANCE_DIFFERENCE";
+            break;
+        case DEPTH_IMAGE:
+            return "DEPTH_IMAGE";
             break;
     }
 }
-void RIVImageView::drawHeatmap(bool leftSet, Histogram2D<float>** heatmap) {
-//    bool filteredOne = (*datasetOne)->IsFiltered(); //Only draw the heatmaps of pixels when not filtered
+void RIVImageView::drawHeatmap(bool leftSet, Histogram2D<float>* heatmap) {
+    //    bool filteredOne = (*datasetOne)->IsFiltered(); //Only draw the heatmaps of pixels when not filtered
     int startX = imagePadding;
     if(!leftSet) {
         startX += width / 2.F;
     }
     if(displayMode != NONE) {
-        if(heatmap == NULL || *heatmap == NULL) {
+        if(heatmap == NULL) {
             printf("Heatmap is NULL\n");
             return;
         }
         printf("DRAW HEATMAP: \n");
         printf("MODE = %s\n",enumToString(displayMode).c_str());
         printf("HEATMAP TYPE = %s\n",enumToString(heatmapToDisplay).c_str());
-//        printf("HEATMAP = \n");
-//        heatmap->Print();
+        //        printf("HEATMAP = \n");
+        //        heatmap->Print();
         
         riv::ColorMap colors;
         if(displayMode == OPAQUE) {
@@ -582,8 +632,8 @@ void RIVImageView::drawHeatmap(bool leftSet, Histogram2D<float>** heatmap) {
         }
         
         
-        if(heatmapToDisplay == RADIANCE || heatmapToDisplay == RADIANCE_DIFFERENCE) {
-            drawRegularHeatmap(startX, *heatmap, colors);
+        if(heatmapToDisplay == RADIANCE || heatmapToDisplay == RADIANCE_DIFFERENCE || heatmapToDisplay == DEPTH_IMAGE) {
+            drawRegularHeatmap(startX, heatmap, colors);
         }
         else {
             //Only draw distribution when filtered
@@ -596,11 +646,11 @@ void RIVImageView::drawHeatmap(bool leftSet, Histogram2D<float>** heatmap) {
                     activeSet = *datasetTwo;
                 }
                 if(activeSet->IsFiltered()) {
-                    drawNormalizedHeatmap(startX, *heatmap, colors);
+                    drawNormalizedHeatmap(startX, heatmap, colors);
                 }
             }
-            else {
-                drawNormalizedHeatmap(startX, *heatmap, colors);
+            else if(heatmapToDisplay == THROUGHPUT) {
+                drawRegularHeatmap(startX, heatmap, colors);
             }
         }
     }
@@ -612,6 +662,12 @@ void RIVImageView::drawHeatmap(bool leftSet, Histogram2D<float>** heatmap) {
 size_t drawCounter = 0;
 void RIVImageView::Draw() {
     needsRedraw = true;
+    
+    //TODO: THIS SHOULD NOT BE NECESSARY
+    if(heatmapToDisplay == DISTRIBUTION) {
+        activeHeatmapOne = pixelDistributionOne;
+        activeHeatmapTwo = pixelDistributionTwo;
+    }
     
     if(needsRedraw) {
         printHeader("IMAGE VIEW DRAW");
@@ -631,7 +687,7 @@ void RIVImageView::Draw() {
         //		glRectf(0, 0, halfWidth, height);
         printf("Draw rendererd image one\n");
         
-//        heatmapToDisplay = DISTRIBUTION;
+        //        heatmapToDisplay = DISTRIBUTION;
         glColor3f(1,0,0);
         glRectf(0, 0, renderImageWidth, height);
         
@@ -692,7 +748,7 @@ void RIVImageView::filterImage(RIVDataSet<float,ushort>* dataset, Grid* activeGr
     //                float gridToPixelHeight = height / gridHeight;
     
     //                riv::CompoundFilter<float>* pixelFilter = new riv::CompoundFilter<float>();
-
+    
     
     RIVTable<float,ushort>* pathsTable = dataset->GetTable(PATHS_TABLE);
     
@@ -727,7 +783,7 @@ void RIVImageView::filterImage(RIVDataSet<float,ushort>* dataset, Grid* activeGr
 
 bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
     //    ToViewSpaceCoordinates(&x, &y);
-//    return false;
+    //    return false;
     y = height - y;
     if(isDragging || containsPoint(x,y)) {
         //If start dragging > init selection
@@ -797,7 +853,7 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
     }
 }
 void RIVImageView::toGridSpace(int x, int y, Grid*& outGrid, int& gridX, int& gridY) {
-    if(x > width / 2.F) {
+    if(x > width / 2.F && datasetTwo) {
         outGrid = paintGridTwo;
         x -= width / 2.F;
     }
@@ -823,42 +879,52 @@ bool RIVImageView::HandleMouseMotion(int x, int y) {
     }
     else return false;
 }
-void RIVImageView::WeightPixelDistributionByThroughput() {
-    if(pixelDistributionOne && pixelDistributionOne->NumberOfElements() && throughputDistroOne && throughputDistroOne->NumberOfElements()) {
+void RIVImageView::WeightDistributionByThroughput() {
+    
+    
+    
+    auto throughputDistroOne = imageDistributionsOne->GetHistogram<float>(IMAGE_THROUGHPUT);
+    if(activeHeatmapOne && activeHeatmapOne->NumberOfElements() && throughputDistroOne && throughputDistroOne->NumberOfElements()) {
         printf("Weighing pixel distribution by throughput\n");
-        *pixelDistributionOne = *pixelDistributionOne + *throughputDistroOne;
+        *activeHeatmapOne = *activeHeatmapOne * *throughputDistroOne;
         redisplayWindow();
     }
-    if(pixelDistributionTwo && pixelDistributionTwo->NumberOfElements() && throughputDistroTwo && throughputDistroTwo->NumberOfElements()) {
-        printf("Weighing pixel distribution two by throughput\n");
-        pixelDistributionTwo->Print();
-        printf("Throughput distro two");
-        throughputDistroTwo->Print();
-//        unsigned int minPixel = pixelDistributionTwo->MinBinValue();
-//        unsigned int minThroughput = throughputDistroTwo->MinBinValue();
-//        unsigned int min = std::min(minPixel,minThroughput);
-        auto bins = pixelDistributionTwo->NumberOfBins();
-        Histogram2D<float> result(0,1,bins.first,bins.second);
-        for(int xBin = 0 ; xBin < bins.first ; ++xBin) {
-            for(int yBin = 0 ; yBin < bins.second ; ++yBin ) {
-                
-//                float product = pixelDistributionTwo->BinValue(xBin, yBin) * throughputDistroTwo->BinValue(xBin, yBin);
-                unsigned int pixelValue = pixelDistributionTwo->BinValue(xBin, yBin);
-                unsigned int throughputValue = throughputDistroTwo->BinValue(xBin, yBin);
-                unsigned int product = pixelValue * throughputValue;
-                printf("distro * throughput = %d * %d = %d\n",pixelValue,throughputValue,product);
-                result.SetBinValue(xBin, yBin,product);
-
-            }
-        }
-        *pixelDistributionTwo = result;
+    
+    
+    if(imageDistributionsTwo && activeHeatmapTwo && activeHeatmapTwo->NumberOfElements()) {
+        auto throughputDistroTwo = imageDistributionsTwo->GetHistogram<float>(IMAGE_THROUGHPUT);
+        //            printf("Weighing distribution two by throughput\n");
+        //            activeHeatmapTwo->Print();
+        //            printf("Throughput distro two");
+        //            throughputDistroTwo->Print();
+        //        unsigned int minPixel = pixelDistributionTwo->MinBinValue();
+        //        unsigned int minThroughput = throughputDistroTwo->MinBinValue();
+        //        unsigned int min = std::min(minPixel,minThroughput);
+        
+        *activeHeatmapTwo = *activeHeatmapTwo * *throughputDistroTwo;
+        
+        //            auto bins = pixelDistributionTwo->NumberOfBins();
+        //            Histogram2D<float> result(0,1,bins.first,bins.second);
+        //            for(int xBin = 0 ; xBin < bins.first ; ++xBin) {
+        //                for(int yBin = 0 ; yBin < bins.second ; ++yBin ) {
+        //
+        //    //                float product = pixelDistributionTwo->BinValue(xBin, yBin) * throughputDistroTwo->BinValue(xBin, yBin);
+        //                    unsigned int pixelValue = pixelDistributionTwo->BinValue(xBin, yBin);
+        //                    unsigned int throughputValue = throughputDistroTwo->BinValue(xBin, yBin);
+        //                    unsigned int product = pixelValue * throughputValue;
+        //                    printf("distro * throughput = %d * %d = %d\n",pixelValue,throughputValue,product);
+        //                    result.SetBinValue(xBin, yBin,product);
+        //
+        //                }
+        //            }
+        //            *pixelDistributionTwo = result;
         redisplayWindow();
     }
 }
 void RIVImageView::CombinePixelDistributions() {
     
     if(pixelDistributionOne && pixelDistributionTwo) {
-    
+        
         Histogram2D<float> sum = *pixelDistributionOne + *pixelDistributionTwo;
         
         printf("pixelDistributionOne = \n");
@@ -886,18 +952,18 @@ void RIVImageView::clearSelection() {
     
 }
 void RIVImageView::SmoothPixelDistributionOne() {
-//    if(datasetOne && pixelDistributionOne && pixelDistributionOne->NumberOfElements()) {
-//        smoothPixelDistribution(pixelDistributionOne);
-//    }
-    if(datasetOne && activeHeatmapOne && *activeHeatmapOne && (*activeHeatmapOne)->NumberOfElements()) {
-        smoothPixelDistribution(*activeHeatmapOne);
+    //    if(datasetOne && pixelDistributionOne && pixelDistributionOne->NumberOfElements()) {
+    //        smoothPixelDistribution(pixelDistributionOne);
+    //    }
+    if(datasetOne && activeHeatmapOne && activeHeatmapOne->NumberOfElements()) {
+        smoothPixelDistribution(activeHeatmapOne);
     }
 }
 void RIVImageView::SmoothPixelDistributionTwo() {
-//    if(datasetTwo && pixelDistributionTwo && pixelDistributionTwo->NumberOfElements()) {
-//        smoothPixelDistribution(pixelDistributionTwo);
-//    }
-    if(datasetOne && activeHeatmapTwo && *activeHeatmapTwo && (*activeHeatmapTwo)->NumberOfElements()) {
-        smoothPixelDistribution(*activeHeatmapTwo);
+    //    if(datasetTwo && pixelDistributionTwo && pixelDistributionTwo->NumberOfElements()) {
+    //        smoothPixelDistribution(pixelDistributionTwo);
+    //    }
+    if(datasetOne && activeHeatmapTwo && activeHeatmapTwo->NumberOfElements()) {
+        smoothPixelDistribution(activeHeatmapTwo);
     }
 }

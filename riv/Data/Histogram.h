@@ -580,6 +580,7 @@ public:
 //        // by convention, always return *this
 //        return *this;
 //    }
+    std::string name;
     std::pair<unsigned int,unsigned int> NumberOfBins() {
         return std::pair<unsigned int, unsigned int>(xBins,yBins);
     }
@@ -646,7 +647,23 @@ public:
             histograms[i] = newHistogram;
         }
     }
-    Histogram2D(T lowerBound, T upperBound, unsigned int xBins, unsigned int yBins) : upperBound(upperBound), lowerBound(lowerBound), xBins(xBins), yBins(yBins) {
+    Histogram2D(const std::string& name, T lowerBound, T upperBound, unsigned int xBins, unsigned int yBins) : name(name), upperBound(upperBound), lowerBound(lowerBound), xBins(xBins), yBins(yBins) {
+        if(!xBins) {
+            throw std::runtime_error("Number of x bins must be positive (> 0)\n");
+        }
+        if(!yBins) {
+            throw std::runtime_error("Number of y bins must be positive (> 0)\n");
+        }
+        if(upperBound <= lowerBound) {
+            throw std::runtime_error("Lower bound should be < upper bound");
+        }
+        binWidth = (upperBound - lowerBound) / (float)xBins;
+        
+        for(int i = 0 ; i < xBins ; ++i) {
+            histograms[i] = Histogram<T>("2DHistogram", lowerBound, upperBound, yBins);
+        }
+    }
+    Histogram2D(T lowerBound, T upperBound, unsigned int xBins, unsigned int yBins) : name("<NONE>"), upperBound(upperBound), lowerBound(lowerBound), xBins(xBins), yBins(yBins) {
         if(!xBins) {
             throw std::runtime_error("Number of x bins must be positive (> 0)\n");
         }
@@ -778,6 +795,23 @@ public:
         }
         return std::pow(var,0.5);
     }
+    void PrintRaw() {
+        printf("2D Histogram : \n");
+        printf("Number of Elements = %zu\n",nrElements);
+//        printf("Mean = %f\n",Mean());
+//        printf("Variance = %f\n",Variance());
+        if(nrElements) {
+            for(int j = 0 ; j < yBins ; j++) {
+                for(int i = 0 ; i < xBins ; i++) {
+                    T normValue = BinValue(i, j);
+                    std::cout << normValue << "\t";
+//                    printf("%.2f\t",normValue);
+                }
+                printf("\n");
+            }
+        }
+        else printf("<EMPTY>");
+    }
     void Print() {
         printf("2D Histogram : \n");
         printf("Number of Elements = %zu\n",nrElements);
@@ -814,6 +848,7 @@ public:
                         }
                     }
                     size_t average = std::round(sum / binsSummed);
+//                    int left = sum - average;
 //                    size_t newValue = (size_t)
 //                    printf("new value (%d,%d) = %zu\n",x,y,newValue);
                     result.SetBinValue(x,y,average);
@@ -851,6 +886,129 @@ public:
         
         return result;
     }
+    Histogram2D operator*(Histogram2D& other) {
+        std::pair<unsigned int,unsigned int> bins = other.NumberOfBins();
+        
+        if(bins.first != xBins || bins.second != yBins) {
+            throw std::runtime_error("Number of bins of histograms must match");
+        }
+        
+        Histogram2D<float> result(0,1,xBins,yBins);
+        for(int xBin = 0 ; xBin < xBins ; ++xBin) {
+            for(int yBin = 0 ; yBin < yBins ; ++yBin ) {
+                
+                //                float product = pixelDistributionTwo->BinValue(xBin, yBin) * throughputDistroTwo->BinValue(xBin, yBin);
+                unsigned int thisValue = BinValue(xBin, yBin);
+                unsigned int otherValue = other.BinValue(xBin, yBin);
+                unsigned int product = thisValue * otherValue;
+//                printf("distro * throughput = %d * %d = %d\n",thisValue,otherValue,product);
+                result.SetBinValue(xBin, yBin,product);
+                
+            }
+        }
+        
+        return result;
+    }
 };
+template <typename... Ts>
+class Histogram2DSet {
+private:
+    std::tuple<std::vector<Histogram2D<Ts>>...> histograms;
+    std::tuple<std::map<std::string,Histogram2D<Ts>*>...> histogramRegisters; //Maps a name to a histogram pointer
+    
+    //When set to dynamic the set will create new histograms for values added to not yet exsistent histograms
+    //	bool dynamic = true;
+    
+    //	std::tuple<std::vector<Ts>...> values;
+    //	std::tuple<std::vector<Histogram<float>>,std::vector<Histogram<ushort>>> histograms;
+    //	std::tuple<int> ints;
+    
+public:
+    ~Histogram2DSet() {
+        //		tuple_for_each(histograms, [&](auto tHistograms) {
+        //			deletePointerVector(tHistograms);
+        //		});
+    }
+    Histogram2DSet() {
+        
+    }
+    /** Copy Assignment Operator */
+    Histogram2DSet& operator= (const Histogram2DSet& other)
+    {
+        histograms = other.histograms;
+        return *this;
+    }
+    /** Copy Constructor */
+    Histogram2DSet (const Histogram2DSet& other)
+    {
+        histograms = other.histograms;
+    }
+    const std::tuple<std::vector<Histogram2D<Ts>>...>& GetAllHistograms() {
+        return histograms;
+    }
+    template<typename T>
+    std::vector<Histogram2D<T>>* GetHistograms() {
+        return &std::get<std::vector<Histogram2D<T>>>(histograms);
+    }
+    
+    template<typename T>
+    std::map<std::string,Histogram2D<T>*>& GetHistogramRegister() {
+        return std::get<std::map<std::string,Histogram2D<T>*>>(histogramRegisters);
+    }
+    
+    template<typename T>
+    Histogram2D<T>* GetHistogram(const std::string& name) {
+        std::map<std::string,Histogram2D<T>*>& histogramRegister = GetHistogramRegister<T>();
+        auto hist = histogramRegister[name];
+        if(hist) {
+            return hist;
+        }
+        else {
+            auto tHistograms = GetHistograms<T>();
+            
+            for(size_t i = 0 ; i < tHistograms->size() ; ++i) {
+                auto hist = tHistograms->at(i);
+                if(hist.name == name) {
+                    histogramRegister[name] = &tHistograms->at(i);
+                    return &tHistograms->at(i);
+                }
+            }
+        }
+        return NULL;
+    }
+    template<typename T>
+    void AddToHistogram(const std::string name,  const T& valueOne,const T& valueTwo,unsigned int magnitude = 1) {
+//        printf("name = %s\n",name.c_str());
+        Histogram2D<T>* histogram = NULL;
+        histogram = GetHistogram<T>(name);
+        //TODO: Create histogram when set to dynamic and histogram was not found
+        histogram->Add(valueOne,valueTwo,magnitude);
+    }
+    template<typename T>
+    void AddHistogram(const std::string& name, const Histogram2D<T>& hist) {
+        std::vector<Histogram2D<T>>* histograms = GetHistograms<T>();
+        
+        histograms->push_back(hist);
+        auto newHistogram = &histograms->at(histograms->size() - 1);
+        auto map = std::get<std::map<std::string,Histogram2D<T>*>>(histogramRegisters);
+        map[name] = newHistogram;
+    }
+    void Print() {
+        printf("2DHistogram set : \n");
+        tuple_for_each(histograms, [&](auto tHistograms) {
+            for(auto& histogram : tHistograms) {
+                histogram.Print();
+            }
+        });
+    }
+    void Clear() {
+        tuple_for_each(histograms, [&](auto tHistograms) {
+            for(auto& histogram : tHistograms) {
+                histogram.Clear();
+            }
+        });
+    }
+};
+
 
 #endif /* defined(__embree__Histogram__) */

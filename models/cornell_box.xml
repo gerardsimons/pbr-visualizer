@@ -88,13 +88,13 @@
         </TriangleMesh>
         <TriangleMesh id="6" name="short_box">
             <material name="white">
-                <code>"Mirror"</code>
+                <code>"Glass"</code>
                 <parameters>
-                    <float  name="d">  1.0000</float>
+                    <!-- <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
                     <float3 name="Kd"> 1.0000  1.0000  1.0000</float3>
                     <float3 name="Ks"> 0.0000  0.0000  0.0000</float3>
-                    <float  name="Ns"> 0.0000</float>
+                    <float  name="Ns"> 0.0000</float> -->
                 </parameters>
             </material>
             <positions ofs="504" size="20"/>

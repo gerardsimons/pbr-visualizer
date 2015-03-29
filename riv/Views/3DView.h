@@ -109,7 +109,9 @@ private:
     RIVColorProperty* rayColorTwo;
     
     //Path drawing variables
-    int maxBounce = 5; //TODO: Deduce this value from the bounce record
+    int depthOne;
+    int depthTwo;
+    int maxDepth;
     int selectRound = 1;
     const float segmentWidth = .025F;
     float segmentStart = 0;

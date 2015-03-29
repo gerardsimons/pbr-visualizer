@@ -51,6 +51,7 @@ namespace riv {
         ColorMap(std::vector<Color>& colors);
         ColorMap(std::vector<Color>& colors, float minRange, float maxRange);
         ColorMap(float minRange, float maxRange);
+        void Invert();
         
         //Methods
         void SetRange(float minRange,float maxRange);
