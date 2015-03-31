@@ -4,4 +4,8 @@
 -vp 6 9 16 -vi 0 0 0 -vu 0 1 0 -fov 55
 #-size 248 186
 -size 320 240
+#-size 32 24
+#-size 8 6
+#-size 400 320
+#-size 640 480
 -renderer pathtracer { depth = 5 }

@@ -181,8 +181,9 @@ public:
 //        }
 //    }
     unsigned int SampleBin() {
-        if(cdfStale)
+        if(cdfStale) {
             ComputeCDF();
+        }
         
         float R = random() / (float)RAND_MAX;
         
@@ -753,19 +754,22 @@ public:
         return sampledValue;
     }
     std::pair<float,float> Sample2D() {
-        std::pair<float,float> sample;
         
-        unsigned int bin = SampleBin();
-        
-        //Jitter the result within the bin
-        float R = rand() / (float)RAND_MAX;
-        float offset = R * binWidth;
-        float sampledValue = (bin * binWidth + lowerBound) + offset;
-        
-        sample.first = sampledValue;
-        sample.second = histograms[bin].Sample();
-        
-        return sample;
+        if(nrElements) {            
+            std::pair<float,float> sample;
+            
+            unsigned int bin = SampleBin();
+            
+            //Jitter the result within the bin
+            float R = rand() / (float)RAND_MAX;
+            float offset = R * binWidth;
+            float sampledValue = (bin * binWidth + lowerBound) + offset;
+            
+            sample.first = sampledValue;
+            sample.second = histograms[bin].Sample();
+            
+            return sample;
+        }
     }
     int BinValue(unsigned int binX, unsigned int binY) {
         return histograms[binX].BinValue(binY);
@@ -848,6 +852,8 @@ public:
                         }
                     }
                     size_t average = std::round(sum / binsSummed);
+//                    size_t average = std::ceil(sum / binsSummed);
+
 //                    int left = sum - average;
 //                    size_t newValue = (size_t)
 //                    printf("new value (%d,%d) = %zu\n",x,y,newValue);

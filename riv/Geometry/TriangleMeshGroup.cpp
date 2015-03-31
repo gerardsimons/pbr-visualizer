@@ -78,8 +78,8 @@ bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& P
 
 bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& Phit, float& shortestDistance, const Vec3fa& distanceCompare) const {
     bool intersects = false;
-//    shortestDistance = std::numeric_limits<float>::max();
     shortestDistance = std::numeric_limits<float>::max();
+//    shortestDistance = -std::numeric_limits<float>::max();
     Vec3fa bestPhit = Phit;
     
     //DEBUGGING
@@ -155,8 +155,8 @@ bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& P
             glutSolidSphere(1, 10, 10);
             glPopMatrix();
             
-//            if(distance < shortestDistance ) {
             if(distance < shortestDistance ) {
+//            if(distance > shortestDistance ) {
                 
                 printf("New shortest distance!\n");
                 resultIndex = i;

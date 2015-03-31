@@ -67,6 +67,7 @@
             riv::ColorMap hotbodyColorMap;
             
             hotbodyColorMap.AddColor(BLACK);
+            hotbodyColorMap.AddColor(DARK_RED);
             hotbodyColorMap.AddColor(RED);
             hotbodyColorMap.AddColor(YELLOW);
             hotbodyColorMap.AddColor(WHITE);

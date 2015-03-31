@@ -31,16 +31,12 @@ private:
 	
 	EMBREERenderer* rendererOne;
 	EMBREERenderer* rendererTwo = NULL;
-    
 
-	
-//	std::vector<EMBREERenderer*> renderers;
-    int imagePadding = 5;
+    int imagePadding = 0;
 
 	void clearSelection();
 	bool isDragging;
 
-    //TODO: I think these histograms belong in the data controller, or that is where they should originate from
     enum HeatmapDisplayMode {
         OPAQUE,
         HEAT,

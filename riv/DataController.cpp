@@ -179,12 +179,12 @@ void DataController::createDataStructures(const Vec2f& xBounds, const Vec2f& yBo
     float maxSize = std::max(xSize,std::max(ySize,zSize));
     
     //Because floats are annoying with equality, make sure you over-extend a bit the size of the octree
-    int maxDepth = 9;
+    int maxDepth = 10;
     int maxCapacity = 1;
     energyDistribution3D = new Octree(maxDepth,cX,cY,cZ,1.01*maxSize,maxCapacity);
-    int xBins = imageWidth / 2.F;
+    float pixelsPerBins = 1;
+    int xBins = imageWidth / pixelsPerBins;
     int yBins = imageHeight / (float)imageWidth * xBins;
-    
     
     Histogram2D<float> pixelThroughput = Histogram2D<float>(IMAGE_THROUGHPUT,0,1,xBins,yBins);
     Histogram2D<float> energyDistribution2D = Histogram2D<float>(IMAGE_RADIANCE,0,1,xBins,yBins);
@@ -290,8 +290,8 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
     float pixelX = newPath->pixel[0];
     float pixelY = newPath->pixel[1];
     
-    unsigned int averageThroughput = (newPath->throughput.r + newPath->throughput.g + newPath->throughput.b) / 3.F * 100 * nrIntersections;
-//    unsigned int averageThroughput = (newPath->throughput.r + newPath->throughput.g + newPath->throughput.b) / 3.F * 100;
+//    unsigned int averageThroughput = (newPath->throughput.r + newPath->throughput.g + newPath->throughput.b) / 3.F * 100 * nrIntersections;
+    unsigned int averageThroughput = (newPath->throughput.r + newPath->throughput.g + newPath->throughput.b) / 3.F * 100;
     unsigned int averageEnergy = (newPath->radiance.r + newPath->radiance.g + newPath->radiance.b) / 3.F * 100;
     //    unsigned int averageEnergy = (newPath->radiance.r * newPath->throughput.r + newPath->radiance.g * newPath->throughput.g + newPath->radiance.b * newPath->throughput.b) / 3.F * 100;
     

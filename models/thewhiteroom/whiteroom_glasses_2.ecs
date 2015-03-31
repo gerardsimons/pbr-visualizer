@@ -6,20 +6,21 @@
 #-quadlight -1.360387 1.135884 0.475127  0.65 0 -0.34 0 1.66 0 7 7 7 # LEFT
 
 #-pointlight -1.6 1.61 2.85 100 100 100
--pointlight -2.4 1.61 -2.85 100 100 100
+#-pointlight -2.4 1.61 -2.85 100 100 100
 
--vp 1.317 0.61 3.05 -vi -.75 .55 3.15 -vu 0 1 0 -fov 55 #the money shot
-#-vp 1.517 0.61 2.85 -vi -.75 .55 3.15 -vu 0 1 0 -fov 55 #the money shot
+-vp 1.187 0.61 3.05 -vi -.75 .55 3.15 -vu 0 1 0 -fov 55 #the money shot
+#-vp 1.317 0.61 3.05 -vi -.75 .91 3.15 -vu 0 1 0 -fov 55 #the money shot
+#-vp 1.317 0.51 2.85 -vi -.75 .55 3.15 -vu 0 1 0 -fov 55 #the money shot
 #-vp 1.3 1.1 3.1 -vi -.75 .55 3.15 -vu 0 1 0 -fov 55
 #-vp 1.517 0.11 -2.65 -vi -.75 .55 2.85 -vu 0 1 0 -fov 55 #outside the windows
 
 #from the right window
 #-vp 1.58112 2.135884 1.071385 -vi -.75 .55 3.15 -vu 0 1 0 -fov 55 # RIGHT
 
--renderer pathtracer { depth = 6 }
+-renderer pathtracer { depth = 8 }
 #-size 200 150 # 4:3           
 #-size 192 108 # 
-#-size 384 216  
--size 768 432
+-size 384 216  
+#-size 768 432
 #-size 1066 600
 #-size 1920 1080

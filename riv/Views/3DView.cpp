@@ -472,7 +472,7 @@ void RIV3DView::Draw() {
     }
     
     //    drawLightCones(lightConesOne);
-    bool drawSelectionRay = true;
+    bool drawSelectionRay = false;
     //Draw selection ray
     if(drawSelectionRay) {
         glColor3f(1,1,1);

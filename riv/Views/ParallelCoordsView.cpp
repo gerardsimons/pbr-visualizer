@@ -64,7 +64,7 @@ void ParallelCoordsView::createAxes() {
     int bins = 10;
     
     std::vector<std::string> tablesToDisplay = {PATHS_TABLE,INTERSECTIONS_TABLE,LIGHTS_TABLE};
-    std::set<std::string> recordsToIgnore = { INTERACTION_TYPE,LIGHT_ID};
+    std::set<std::string> recordsToIgnore = { INTERACTION_TYPE,LIGHT_ID,OCCLUDER_COUNT,OCCLUDER_ID};
     
     for(const std::string& tableName : tablesToDisplay) {
         RIVTable<float,ushort> *table = (*datasetOne)->GetTable(tableName);

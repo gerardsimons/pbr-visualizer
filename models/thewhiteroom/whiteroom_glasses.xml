@@ -573,9 +573,9 @@
                 <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
+                    <!-- <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
+                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3> -->
+                    <!-- <float  name="Ns">96.0784</float> -->
                 </parameters>
             </material>
             <positions ofs="375860" size="898"/>
@@ -1253,9 +1253,9 @@
                 <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
+                    <!-- <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
+                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3> -->
+                    <!-- <float  name="Ns">96.0784</float> -->
                 </parameters>
             </material>
             <positions ofs="560336" size="898"/>
@@ -1321,9 +1321,9 @@
                 <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
+                    <!-- <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
+                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3> -->
+                    <!-- <float  name="Ns">96.0784</float> -->
                 </parameters>
             </material>
             <positions ofs="1228720" size="898"/>
@@ -1449,8 +1449,8 @@
                     <!-- <float  name="d">  1.0000</float> -->
                     <!-- <float3 name="Ka"> 0.0000  0.0000  0.0000</float3> -->
                     <float3 name="Kd"> 0.4  0.4  0.4</float3>
-                    <!-- <float3 name="Ks"> 0.5000  0.5000  0.5000</float3> -->
-                    <!-- <float  name="Ns">96.0784</float> -->
+                    <float3 name="Ks"> 0.6000  0.6000  0.6000</float3>
+                    <float  name="Ns">200</float>
                 </parameters>
             </material>
             <positions ofs="1341068" size="4996"/>
@@ -2591,8 +2591,8 @@
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
                     <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
+                    <!-- <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
+                    <float  name="Ns">96.0784</float> -->
                     <texture name="map_Kd">"Textures/cushion-green-circles.jpg"</texture>
                 </parameters>
             </material>
@@ -3244,6 +3244,5 @@
             <texcoords ofs="15437376" size="0"/>
             <triangles ofs="15437376" size="206848"/>
         </TriangleMesh> -->
-
     </Group>
 </scene>

@@ -574,8 +574,8 @@
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
                     <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
+                    <!-- <float3 name="Ks"> 0.5000  0.5000  0.5000</float3> -->
+                    <!-- <float  name="Ns">96.0784</float> -->
                 </parameters>
             </material>
             <positions ofs="375860" size="898"/>
@@ -1045,26 +1045,27 @@
             <triangles ofs="512016" size="28"/>
         </TriangleMesh>
 
+<!-- THE DRAWER CUPBOARD STARTS HERE --->
         <TriangleMesh id="61" name="mesh61">
             <material name="C-Table-box">
                 <code>"OBJ"</code>
-                <!-- <parameters>
+                <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
-                    <float3 name="Kd"> 0.6400  0  0</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
-                </parameters> -->
-                <!-- <material> -->
-                <code>"Metal"</code>
+                    <!-- <float3 name="Kd"> 0.6400  0.6400  0.6400</float3> -->
+                    <float3 name="Kd"> 0.2  0.2  0.2</float3>
+                    <!-- <float3 name="Ks"> 0.5000  0.5000  0.5000</float3> -->
+                    <!-- <float  name="Ns">96.0784</float> -->
+                </parameters>
+                </material>
+                <!-- <code>"Metal"</code>
                 <parameters>
                   <float3 name="eta">0.19 0.45 1.50</float3>
                   <float3 name="k">3.06 2.40 1.88</float3>
                   <float name="roughness">0.005</float>
-                </parameters>
+                </parameters> -->
               <!-- </material> -->
-            </material>
+            <!-- </material> -->
             <positions ofs="512352" size="52"/>
             <normals   ofs="512976" size="0"/>
             <texcoords ofs="512976" size="52"/>
@@ -1072,22 +1073,22 @@
         </TriangleMesh>
 
         <TriangleMesh id="62" name="mesh62">
-            <!-- <material name="C-Table-box"> -->
-                <!-- <code>"OBJ"</code> -->
-                <!-- <parameters>
+            <material name="C-Table-box">
+                <code>"OBJ"</code>
+                <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.6400  0  0</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
-                </parameters> -->
-                <material>
+                    <float3 name="Kd"> 0.2  0.2  0.2</float3>
+                    <!-- <float3 name="Ks"> 0.5000  0.5000  0.5000</float3> -->
+                    <!-- <float  name="Ns">96.0784</float> -->
+                </parameters>
+                <!-- <material>
                 <code>"Metal"</code>
                 <parameters>
                   <float3 name="eta">0.19 0.45 1.50</float3>
                   <float3 name="k">3.06 2.40 1.88</float3>
                   <float name="roughness">0.005</float>
-                </parameters>
+                </parameters> -->
               </material>
             <!-- </material> -->
             <positions ofs="513920" size="104"/>
@@ -1097,22 +1098,23 @@
         </TriangleMesh>
 
         <TriangleMesh id="63" name="mesh63">
-            <!-- <material name="C-Table-box"> -->
-                <!-- <code>"OBJ"</code>
+            <material name="C-Table-box">
+                <code>"OBJ"</code>
                 <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.6400  0.00  0.00</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
-                </parameters> -->
-                <material>
+                    <!-- <float3 name="Kd"> 0.6400  0.00  0.00</float3> -->
+                    <float3 name="Kd"> 0.2  0.2  0.2</float3>
+                    <!-- <float3 name="Ks"> 0.5000  0.5000  0.5000</float3> -->
+                    <!-- <float  name="Ns">96.0784</float> -->
+                </parameters>
+                <!-- 
                 <code>"Metal"</code>
                 <parameters>
                   <float3 name="eta">0.19 0.45 1.50</float3>
                   <float3 name="k">3.06 2.40 1.88</float3>
                   <float name="roughness">0.005</float>
-                </parameters>
+                </parameters> -->
               </material>
             <!-- </material> -->
             <positions ofs="517056" size="52"/>
@@ -1148,21 +1150,22 @@
 
         <TriangleMesh id="65" name="mesh65">
             <material name="C-Table-box">
-               <!--  <code>"OBJ"</code>
+                <code>"OBJ"</code>
                 <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.6400  0 0</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
-                </parameters> -->
+                    <!-- <float3 name="Kd"> 0.6400  0 0</float3> -->
+                    <float3 name="Kd"> 0.2  0.2  0.2</float3>
+                    <!-- <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
+                    <float  name="Ns">96.0784</float> -->
+                </parameters>
                 <!-- <material> -->
-                <code>"Metal"</code>
+               <!--  <code>"Metal"</code>
                 <parameters>
                   <float3 name="eta">0.19 0.45 1.50</float3>
                   <float3 name="k">3.06 2.40 1.88</float3>
                   <float name="roughness">0.005</float>
-                </parameters>
+                </parameters> -->
               </material>
             <!-- </material> -->
             <positions ofs="549824" size="104"/>
@@ -1173,21 +1176,22 @@
 
         <TriangleMesh id="66" name="mesh66">
             <material name="C-Table-box">
-                <!-- <code>"OBJ"</code>
+                <code>"OBJ"</code>
                 <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.64 0 0</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
-                </parameters> -->
+                    <!-- <float3 name="Kd"> 0.64 0 0</float3> -->
+                    <float3 name="Kd"> 0.2  0.2  0.2</float3>
+                    <!-- <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
+                    <float  name="Ns">96.0784</float> -->
+                </parameters>
                 <!-- <material> -->
-                <code>"Metal"</code>
+               <!--  <code>"Metal"</code>
                 <parameters>
                   <float3 name="eta">0.19 0.45 1.50</float3>
                   <float3 name="k">3.06 2.40 1.88</float3>
                   <float name="roughness">0.005</float>
-                </parameters>
+                </parameters> -->
               <!-- </material> -->
             </material>
             <positions ofs="552960" size="208"/>
@@ -1254,8 +1258,8 @@
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
                     <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
+                    <!-- <float3 name="Ks"> 0.5000  0.5000  0.5000</float3> -->
+                    <!-- <float  name="Ns">96.0784</float> -->
                 </parameters>
             </material>
             <positions ofs="560336" size="898"/>
@@ -1322,8 +1326,8 @@
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
                     <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
+                    <!-- <float3 name="Ks"> 0.5000  0.5000  0.5000</float3> -->
+                    <!-- <float  name="Ns">96.0784</float> -->
                 </parameters>
             </material>
             <positions ofs="1228720" size="898"/>
@@ -2591,8 +2595,8 @@
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
                     <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
+                    <!-- <float3 name="Ks"> 0.5000  0.5000  0.5000</float3> -->
+                    <!-- <float  name="Ns">96.0784</float> -->
                     <texture name="map_Kd">"Textures/cushion-green-circles.jpg"</texture>
                 </parameters>
             </material>
@@ -3244,6 +3248,5 @@
             <texcoords ofs="15437376" size="0"/>
             <triangles ofs="15437376" size="206848"/>
         </TriangleMesh> -->
-
     </Group>
 </scene>

@@ -133,8 +133,8 @@ void RIVImageView::computeRadianceDistributions() {
     //        radianceDistributionOne->Clear();
     //    if(radianceDistributionTwo)
     //        delete radianceDistributionTwo;
-    //    if(radianceDiffDistribution)
-    //        delete radianceDiffDistribution;
+//    if(radianceDiffDistribution)
+//        delete radianceDiffDistribution;
     
     if(datasetTwo && !(*datasetTwo)->IsEmpty() && imageDistributionsTwo) {
         
@@ -154,6 +154,13 @@ void RIVImageView::computeRadianceDistributions() {
             delete radianceDiffDistribution;
             radianceDiffDistribution = new Histogram2D<float>(*trueEnergyDistributionOne - *trueEnergyDistributionTwo);
         }
+        
+//        trueEnergyDistributionOne->Print();
+//        trueEnergyDistributionTwo->Print();
+//        radianceDiffDistribution->Print();
+//        for(int i = 0 ; i < 1000 ; ++i) {
+//            trueEnergyDistributionOne->Sample2D();
+//        }
     }
     else printf("Second dataset not set or empty.\n");
 }
@@ -498,7 +505,8 @@ Histogram2D<float>* RIVImageView::GetActiveDistributionOne() {
 Histogram2D<float>* RIVImageView::GetActiveDistributionTwo() {
     if(activeHeatmapTwo) {
         if(heatmapToDisplay == RADIANCE_DIFFERENCE) {
-            return activeHeatmapTwo;
+            return radianceDiffDistribution;
+//            return activeHeatmapTwo;
         }
     }
     if(datasetTwo && (*datasetTwo)->IsFiltered()) {
@@ -520,7 +528,7 @@ void RIVImageView::drawRenderedImage(EMBREERenderer *renderer, int startX, int s
     //Make sure it is scaled according to the available space as well flipped vertically
     glPixelZoom((float)imageWidth / g_width, -((float)imageHeight / g_height));
     //Because we flip it we have to translate it back to the top
-    glRasterPos2i(1+startX, imageHeight+startY);
+    glRasterPos2i(startX, imageHeight+startY);
     
     if (format == "RGB_FLOAT32")
         glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_FLOAT,ptr);
@@ -718,8 +726,6 @@ void RIVImageView::Draw() {
                 drawGrid(width / 2.F ,paintGridTwo);
             }
         }
-        
-        
         
         glFlush();
         glutSwapBuffers();
