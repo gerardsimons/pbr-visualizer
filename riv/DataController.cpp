@@ -187,11 +187,17 @@ void DataController::createDataStructures(const Vec2f& xBounds, const Vec2f& yBo
     int yBins = imageHeight / (float)imageWidth * xBins;
     
     Histogram2D<float> pixelThroughput = Histogram2D<float>(IMAGE_THROUGHPUT,0,1,xBins,yBins);
-    Histogram2D<float> energyDistribution2D = Histogram2D<float>(IMAGE_RADIANCE,0,1,xBins,yBins);
+    Histogram2D<float> energyDistributionR = Histogram2D<float>(IMAGE_RADIANCE_R,0,1,xBins,yBins);
+    Histogram2D<float> energyDistributionG = Histogram2D<float>(IMAGE_RADIANCE_G,0,1,xBins,yBins);
+    Histogram2D<float> energyDistributionB = Histogram2D<float>(IMAGE_RADIANCE_B,0,1,xBins,yBins);
+    Histogram2D<float> energyDistributionAvg = Histogram2D<float>(IMAGE_RADIANCE_AVG,0,1,xBins,yBins);
     Histogram2D<float> depthDistribution = Histogram2D<float>(IMAGE_DEPTH,0,1,xBins,yBins);
     
     imageDistributions.AddHistogram(IMAGE_THROUGHPUT, pixelThroughput);
-    imageDistributions.AddHistogram(IMAGE_RADIANCE, energyDistribution2D);
+    imageDistributions.AddHistogram(IMAGE_RADIANCE_R, energyDistributionR);
+    imageDistributions.AddHistogram(IMAGE_RADIANCE_G, energyDistributionG);
+    imageDistributions.AddHistogram(IMAGE_RADIANCE_B, energyDistributionB);
+    imageDistributions.AddHistogram(IMAGE_RADIANCE_AVG, energyDistributionAvg);
     imageDistributions.AddHistogram(IMAGE_DEPTH, depthDistribution);
     
     resetPointers(candidateData);
@@ -296,7 +302,10 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
     //    unsigned int averageEnergy = (newPath->radiance.r * newPath->throughput.r + newPath->radiance.g * newPath->throughput.g + newPath->radiance.b * newPath->throughput.b) / 3.F * 100;
     
     imageDistributions.AddToHistogram(IMAGE_THROUGHPUT, pixelX,pixelY,averageThroughput);
-    imageDistributions.AddToHistogram(IMAGE_RADIANCE, pixelX,pixelY,averageEnergy);
+    imageDistributions.AddToHistogram(IMAGE_RADIANCE_AVG, pixelX,pixelY,averageEnergy);
+    imageDistributions.AddToHistogram(IMAGE_RADIANCE_R, pixelX,pixelY,newPath->radiance.r * 100);
+    imageDistributions.AddToHistogram(IMAGE_RADIANCE_G, pixelX,pixelY,newPath->radiance.g * 100);
+    imageDistributions.AddToHistogram(IMAGE_RADIANCE_B, pixelX,pixelY,newPath->radiance.b * 100);
     imageDistributions.AddToHistogram(IMAGE_DEPTH, pixelX, pixelY,newPath->intersectionData.size());
     
 //    pixelThroughput.Add(pixelX, pixelY, averageThroughput);

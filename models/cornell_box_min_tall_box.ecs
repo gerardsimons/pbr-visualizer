@@ -7,4 +7,7 @@
 #-distantlight -0.5 -0.4 1 150 150 150 5
 #-hdrilight 1 1 1 lines.ppm
 -vp 278 273 -800 -vi 278 273 0 -vu 0 1 0 -fov 37 
--renderer pathtracer { depth = 5 }
+-renderer pathtracer { depth = 3 }
+
+#-size 8 8 
+-size 64 64

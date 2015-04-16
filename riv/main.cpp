@@ -74,7 +74,7 @@ RIVImageView *imageView = NULL;
 RIV3DView *sceneView = NULL;
 ParallelCoordsView *parallelCoordsView = NULL;
 RIVHeatMapView *heatMapView = NULL;
-RIVSliderView* sliderView = NULL;
+//RIVSliderView* sliderView = NULL;
 RIVUIView* uiView = NULL;
 
 RIVDataSet<float,ushort>** datasetOne = NULL;
@@ -94,7 +94,7 @@ const int maxBootstrapRepeatOne = 5;
 const int maxPathsTwo = 5000;
 const int maxBootstrapRepeatTwo = 5;
 
-const int sliderViewHeight = 40;
+const int sliderViewHeight = 0;
 
 bool connectedOne = false;
 bool connectedTwo = false;
@@ -658,11 +658,11 @@ void reshape(int w, int h)
         
         glutSetWindow(sceneViewWindow);
         
-        if(sliderView) {
+//        if(sliderView) {
             //            glutSetWindow(sliderViewWindow);
             //            glut
             //            glutReshapeWindow(<#int width#>, <#int height#>)
-        }
+//        }
     }
     else {
         glutSetWindow(imageViewWindow);
@@ -1093,9 +1093,9 @@ void setup(int argc, char** argv) {
         //		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,colorOne,colorTwo,sizeProperty);
         imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo,dataControllerOne->GetImageDistributions(),dataControllerTwo->GetImageDistributions());
         
-        sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions());
+//        sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions());
 //        parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,binColorMap,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo,sliderView);
-        parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,binColorMap,colorOne,colorOne,colorTwo,colorTwo,sliderView);
+        parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,binColorMap,colorOne,colorOne,colorTwo,colorTwo,NULL);
         
         
         (*datasetTwo)->AddDataListener(sceneView);
@@ -1105,8 +1105,8 @@ void setup(int argc, char** argv) {
         (*datasetOne)->AddDataListener(sceneView);
         (*datasetOne)->AddDataListener(parallelCoordsView);
         
-        (*datasetOne)->AddDataListener(sliderView);
-        (*datasetTwo)->AddDataListener(sliderView);
+//        (*datasetOne)->AddDataListener(sliderView);
+//        (*datasetTwo)->AddDataListener(sliderView);
     }
     else if(datasetOne) {
 //        RIVColorProperty* pathColorTwo = new RIVFixedColorProperty(0, 0, 1);
@@ -1121,7 +1121,7 @@ void setup(int argc, char** argv) {
 //        RIVColorProperty* pathColorOne = new RIVEvaluatedColorProperty<ushort>(colors::jetColorMap(),pathsTable,pathsTable->GetRecord<ushort>(DEPTH));
 //        RIVColorProperty* rayColorOne = new RIVEvaluatedColorProperty<ushort>(colors::jetColorMap(),intersectionsTable,intersectionsTable->GetRecord<ushort>(BOUNCE_NR));
         redBlue.Invert();
-        parallelCoordsView = new ParallelCoordsView(datasetOne, redBlue, redPathColorOne,redRayColorOne,sliderView);
+        parallelCoordsView = new ParallelCoordsView(datasetOne, redBlue, redPathColorOne,redRayColorOne,NULL);
         sceneView = new RIV3DView(datasetOne,rendererOne,sceneDataOne,dataControllerOne->GetEnergyDistribution3D(), pathColorOne, rayColorOne);
         imageView = new RIVImageView(datasetOne,rendererOne,dataControllerOne->GetImageDistributions());
         (*datasetOne)->AddDataListener(imageView);

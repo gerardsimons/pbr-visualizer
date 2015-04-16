@@ -118,7 +118,7 @@
             <texcoords ofs="912" size="0"/>
             <triangles ofs="912" size="2"/>
         </TriangleMesh>
-        <TriangleMesh id="8" name="tall_box">
+<!--         <TriangleMesh id="8" name="tall_box">
             <material name="white">
                 <code>"OBJ"</code>
                 <parameters>
@@ -133,7 +133,7 @@
             <normals   ofs="1128" size="0"/>
             <texcoords ofs="1128" size="0"/>
             <triangles ofs="1128" size="8"/>
-        </TriangleMesh>
+        </TriangleMesh> -->
 
     </Group>
 </scene>

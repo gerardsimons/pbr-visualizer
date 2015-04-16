@@ -169,7 +169,10 @@ public:
         return min;
     }
     T MaximumNormalizedValue() {
-        return MaximumValue() / nrElements;
+        if(nrElements) {
+            return MaximumValue() / nrElements;
+        }
+        else return 0;
     }
 //    float Mean() {
 //        for(int i = 0 ; i < bins ; i++) {
@@ -595,7 +598,7 @@ public:
         histograms[binX] = newHistogram;
         nrElements += newHistogram.NumberOfElements();
     }
-    void SetBinValue(unsigned int binOne, unsigned int binTwo, T newValue) {
+    void SetBinValue(unsigned int binOne, unsigned int binTwo, int newValue) {
         Histogram<T>& histogram = histograms[binOne];
         size_t oldNrElements = histogram.NumberOfElements();
         

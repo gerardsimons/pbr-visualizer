@@ -60,7 +60,7 @@ const char* LIGHT_B = "light B";
 //* 2D DISTRIBUTION NAMES *//
 const char* IMAGE_RADIANCE_R = "image_radiance_r";
 const char* IMAGE_RADIANCE_G = "image_radiance_g";
-const char* IMAGE_RADIANCE_R = "image_radiance_r";
-const char* IMAGE_RADIANCE_AVERAGE = "image_radiance_avg";
+const char* IMAGE_RADIANCE_B = "image_radiance_b";
+const char* IMAGE_RADIANCE_AVG = "image_radiance_avg";
 const char* IMAGE_THROUGHPUT = "image_throughput";
 const char* IMAGE_DEPTH = "image_depth";
