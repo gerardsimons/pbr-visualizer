@@ -3,6 +3,7 @@
 #include <vector>
 #include <math.h>
 #include <exception>
+#include <sys/stat.h>
 
 #include "Configuration.h"
 #include "Data/Filter.h"
@@ -374,6 +375,61 @@ void testFunctions() {
     exit(0);
 }
 
+void mergeRenderScript() {
+    
+    printHeader("MERGE RENDER SCRIPT",100);
+    
+    //Configuration
+    const int baseFidelity = 32;
+    
+    const std::vector<int> frames = createRangeVector(1, 128);
+    const std::vector<int> weights = createRangeVector(0,100,10);
+    
+    const int gammaCorrection = 2;
+    
+    char dir[128];
+    sprintf(dir, "incremental_rendering_%d",rand());
+    
+    mkdir(dir, 0777);
+    
+    //First render with data one frame to collect data
+    rendererOne->RenderNextFrame();
+    rendererTwo->RenderNextFrame();
+    
+    int currentFrameOne = 1;
+    int currentFrameTwo = 1;
+    
+    dataControllerOne->SetDataCollectionMode(DataController::NONE);
+    
+    //Continue rendering of base renderer
+    while(currentFrameOne < baseFidelity) {
+        currentFrameOne++;
+        rendererOne->RenderNextFrame();
+    }
+    
+    imageView->SetHeatmapToDisplay(RIVImageView::RADIANCE_DIFFERENCE);
+    //Get radiancediff distro
+    auto radianceDistro = imageView->GetActiveDistributionTwo();
+    
+    //Smooth radiance distro
+    int smoothSize = 5;
+    radianceDistro->SmoothRectangular(smoothSize);
+    
+    //Select paths that interact with object on first bounce
+    sceneView->SetSelectionMode(RIV3DView::INTERACTION_AND_SHADOW);
+    ushort selectedObjectId = 7;
+    sceneView->FilterPathsTwo(1, selectedObjectId);
+    
+    //Get the selection distribution
+    imageView->SetHeatmapToDisplay(RIVImageView::DISTRIBUTION);
+    auto distro = imageView->GetActiveDistributionTwo();
+    
+    //Copy weights according to inverse of selection
+    rendererOne->CopySwapChainTo(rendererTwo,distro,swapchainWeight,true);
+    
+    
+}
+
 void keys(int keyCode, int x, int y) {
     //    printf("Pressed %d at (%d,%d)\n",keyCode,x,y);
     bool postRedisplay = true;
@@ -459,8 +515,22 @@ void keys(int keyCode, int x, int y) {
             break;
         case 53: // the '5' key, copy 1 to 2
             if(datasetTwo && datasetOne) {
-                printf("Copying swapchain from renderer 1 to renderer 2!!\n");
-                rendererOne->CopySwapChainTo(rendererTwo,swapchainWeight);
+                
+                auto distro = imageView->GetActiveDistributionTwo();
+                if(distro && imageView->heatmapToDisplay == RIVImageView::DISTRIBUTION) {
+                    printf("Copying swapchain from renderer 1 to renderer 2 with weight matrix\n");
+                    
+
+                    
+                    //Convert 2Dhistogram to weight matrix
+
+                    
+                    rendererOne->CopySwapChainTo(rendererTwo,distro,swapchainWeight);
+                }
+                else {
+                    printf("Copying swapchain from renderer 1 to renderer 2 with uniform weight\n");
+                    rendererOne->CopySwapChainTo(rendererTwo,swapchainWeight);
+                }
                 imageView->redisplayWindow();
                 
 //                int newMaxPaths = 1000;
@@ -573,6 +643,9 @@ void keys(int keyCode, int x, int y) {
             postRedisplay = true;
             break;
         }
+        case 118: // 'v'
+            mergeRenderScript();
+            break;
         case 122: // 'z' key, save the image
         {
             parallelCoordsView->ToggleSaturationMode();
@@ -585,8 +658,27 @@ void keys(int keyCode, int x, int y) {
             break;
         }
         case 119: // 'w' key, move camera in Y direction
-            //            sceneView->MoveCamera(0,camSpeed,0);
+            //Gamma correction
+        {
+            auto distroOne = imageView->GetActiveDistributionOne();
+            auto distroTwo = imageView->GetActiveDistributionTwo();
+            
+            double gamma = 1.05;
+            
+            if(distroOne) {
+                if(distroTwo && distroTwo != distroOne) {
+                    distroTwo->GammaCorrection(gamma);
+                }
+                else {
+                    distroOne->GammaCorrection(gamma);
+                }
+            }
+            else if(distroTwo) {
+                distroTwo->GammaCorrection(gamma);
+            }
+            imageView->redisplayWindow();
             break;
+        }
         case 115: // 's' key
             //            sceneView->MoveCamera(0, -camSpeed, 0);
             
@@ -765,7 +857,7 @@ void idle() {
 //    if(linkPixelDistros) {
 //        imageView->AveragePixelDistributions();
 //    }
-    int maxFrameOne = 52;
+    int maxFrameOne = 2048;
     if(!renderingPausedOne && currentFrameOne < maxFrameOne) {
         ++currentFrameOne;
         printf("Rendering renderer #1 frame %d\n",currentFrameOne);
@@ -781,7 +873,7 @@ void idle() {
         renderOneFinishedFrame = false;
         postRedisplay = true;
     }
-    int maxFrameTwo = 52;
+    int maxFrameTwo = 2048;
     if(!renderingPausedTwo && currentFrameTwo < maxFrameTwo) {
         if(dataControllerTwo) {
 //            if(currentFrameTwo == maxFrameTwo) {
@@ -989,6 +1081,13 @@ void setup(int argc, char** argv) {
     colors.push_back(colors::RED);
     riv::ColorMap redBlue(colors);
     
+    int minSamplesPerBin = 2;
+    int minSamples = std::min(maxPathsOne,maxPathsTwo);
+    float rendererSize = rendererOne->getWidth() * rendererOne->getHeight();
+    float samplesPerPixel = minSamples/rendererSize;
+    
+    int xBins = std::ceil(rendererOne->getWidth() / (float)samplesPerPixel / minSamplesPerBin);
+    
     if(nrConnected) {
 
         
@@ -1030,7 +1129,8 @@ void setup(int argc, char** argv) {
         //        glutDisplayFunc(RIVImageView::DrawInstance);
         //        glutReshapeFunc(RIVImageView::ReshapeInstance);
         imageViewWidth = width;
-        imageView = new RIVImageView(rendererOne);
+        
+        imageView = new RIVImageView(rendererOne,xBins);
         
         glutInitWindowSize(rendererOne->getWidth(),rendererOne->getHeight());
     }
@@ -1091,7 +1191,7 @@ void setup(int argc, char** argv) {
         
         sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
         //		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,colorOne,colorTwo,sizeProperty);
-        imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo,dataControllerOne->GetImageDistributions(),dataControllerTwo->GetImageDistributions());
+        imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo,dataControllerOne->GetImageDistributions(),dataControllerTwo->GetImageDistributions(),xBins);
         
 //        sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions());
 //        parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,binColorMap,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo,sliderView);
@@ -1123,7 +1223,7 @@ void setup(int argc, char** argv) {
         redBlue.Invert();
         parallelCoordsView = new ParallelCoordsView(datasetOne, redBlue, redPathColorOne,redRayColorOne,NULL);
         sceneView = new RIV3DView(datasetOne,rendererOne,sceneDataOne,dataControllerOne->GetEnergyDistribution3D(), pathColorOne, rayColorOne);
-        imageView = new RIVImageView(datasetOne,rendererOne,dataControllerOne->GetImageDistributions());
+        imageView = new RIVImageView(datasetOne,rendererOne,dataControllerOne->GetImageDistributions(),xBins);
         (*datasetOne)->AddDataListener(imageView);
         (*datasetOne)->AddDataListener(sceneView);
         (*datasetOne)->AddDataListener(parallelCoordsView);
@@ -1140,7 +1240,6 @@ int main(int argc, char **argv)
     printf("Initialising Rendering InfoVis...\n");
     
 //            testFunctions();
-    
     
     srand(time(NULL));
     /* initialize GLUT, let it extract command-line

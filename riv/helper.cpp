@@ -11,6 +11,7 @@
 #include <math.h>
 #include <algorithm>
 
+
 inline float* linearInterpolateColor(float ratio, const float colorOne[3],const float colorTwo[3]) {
     float color[3];
     printArray(colorOne, 3);

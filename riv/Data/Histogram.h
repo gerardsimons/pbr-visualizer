@@ -218,6 +218,11 @@ public:
 	int BinValue(unsigned int bin) {
 		return hist[bin];
 	}
+    float ScaledValue(unsigned int bin) {
+        int max = MaximumValue();
+        
+        return hist[bin] / (float)max;
+    }
 	float GetBinWidth() {
 		return binWidth;
 	}
@@ -756,6 +761,9 @@ public:
         float sampledValue = (bin + lowerBound) + offset;
         return sampledValue;
     }
+    float ScaledValue(unsigned int binX, unsigned int binY) {
+        return histograms[binX].ScaledValue(binY);
+    }
     std::pair<float,float> Sample2D() {
         
         if(nrElements) {            
@@ -773,6 +781,7 @@ public:
             
             return sample;
         }
+        return std::pair<float,float>(0,0);
     }
     int BinValue(unsigned int binX, unsigned int binY) {
         return histograms[binX].BinValue(binY);
@@ -863,9 +872,32 @@ public:
                     result.SetBinValue(x,y,average);
                 }
             }
+            
+            int lost = this->NumberOfElements() - result.NumberOfElements();
+            printf("Smoothing lost %d elements.\n",lost);
+            
             *this = result;
         }
         else throw std::runtime_error("Smoothing kernel size too big");
+    }
+    void SmoothRectangular(unsigned int size) {
+        SmoothRectangular(size, size);
+    }
+    void GammaCorrection(double gamma) {
+        
+        Histogram2D<T> result = Histogram2D<T>(lowerBound,upperBound,xBins,yBins);
+        
+        for(int x = 0 ; x < xBins ; ++x) {
+            for(int y = 0 ; y < yBins ; ++y) {
+                
+                int value = BinValue(x, y);
+                
+                int gammaCorrectedValue = std::pow(value,gamma);
+                result.SetBinValue(x,y,gammaCorrectedValue);
+            }
+        }
+        
+        *this = result;
     }
     Histogram2D<T> operator+(Histogram2D<T>& right) {
         

@@ -636,17 +636,31 @@ void DataController::SetMaxPaths(int maxPaths) {
     this->maxPaths = maxPaths;
 }
 void DataController::CycleDataCollectionMode() {
-    printf("DataController will update ");
     switch (mode) {
         case ALL:
+            SetDataCollectionMode(DISTRIBUTIONS);
+            break;
+        case DISTRIBUTIONS:
+            SetDataCollectionMode(NONE);
+            break;
+        case NONE:
+            SetDataCollectionMode(ALL);
+            break;
+    }
+}
+void DataController::SetDataCollectionMode(DataCollectionMode newMode) {
+    printf("DataController will update ");
+    mode = newMode;
+    switch (mode) {
+        case DISTRIBUTIONS:
             mode = DISTRIBUTIONS;
             printf("DISTRIBUTIONS");
             break;
-        case DISTRIBUTIONS:
+        case NONE:
             mode = NONE;
             printf("NONE");
             break;
-        case NONE:
+        case ALL:
             mode = ALL;
             printf("ALL");
             break;

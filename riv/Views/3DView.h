@@ -29,12 +29,7 @@ private:
     
     //When path selection mode is used, each clicked object determines the object the next bounce should interact with,
     //when regular object mode is used, the order of interaction is not important
-    enum SelectionMode {
-        PATH,
-        INTERACTION,
-        INTERACTION_AND_SHADOW,
-        OBJECT
-    };
+
     enum DrawPathsMode {
         CAMERA,
         LIGHTS,
@@ -55,8 +50,6 @@ private:
     };
     std::map<size_t,LightCone*> lightConesOne;
     std::map<size_t,LightCone*> lightConesTwo;
-    
-    SelectionMode selectionMode = PATH;
     
     riv::Color backgroundColor = colors::BLACK;
     
@@ -157,7 +150,6 @@ private:
     
     void drawLights(const std::vector<Ref<Light>>& lights, const riv::Color& membershipColor);
     
-//    void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort* selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
     void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, std::set<ushort>& selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
     bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, ushort* selectedObjectId);
 //    bool pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMeshGroup& meshes,std::vector<riv::RowFilter*>& pathFilters, ushort* bounceCount, std::set<ushort>& selectedObjectId);
@@ -178,6 +170,14 @@ public:
     //Dual renderer constructor
     RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, Octree* energyDistributionOne, Octree* energyDistributionTwo, RIVColorProperty* pathColorOne, RIVColorProperty* rayColorOne, RIVColorProperty* pathColorTwo, RIVColorProperty* rayColorTwo);
     
+    enum SelectionMode {
+        PATH,
+        INTERACTION,
+        INTERACTION_AND_SHADOW,
+        OBJECT
+    };
+    SelectionMode selectionMode = PATH;
+    
     static int windowHandle;
     
     void ToggleHideMesh();
@@ -195,6 +195,10 @@ public:
     
     void ResetGraphics();
     
+    //Shortcut methods to automate path or other selection mechanisms, be sure to put the right path mode beforehand
+    void FilterPathsOne(ushort bounceNr, ushort objectId);
+    void FilterPathsTwo(ushort bounceNr, ushort objectId);
+    
     static void DrawInstance(); //Override
     static void ReshapeInstance(int,int);
     static void Mouse(int button, int state, int x, int y);
@@ -204,6 +208,7 @@ public:
     void IncrementBounceNrPath(int delta);
     void CycleSelectedLights();
     void CycleSelectionMode();
+    void SetSelectionMode(SelectionMode newMode);
     void MovePathSegment(float ratioIncrement);
     void CyclePathSegment(bool direction = true); //Cycle the path segment to draw, direction bool indicates direction of cycling, positive meaning incrementing
     void ToggleDrawIntersectionPoints();

@@ -213,7 +213,6 @@ bool arrayContains(T* array, size_t size, T value) {
     }
     return false;
 }
-
 template <typename T>
 void printVector(const std::vector<T>& values,std::string name = "") {
     
@@ -223,6 +222,19 @@ void printVector(const std::vector<T>& values,std::string name = "") {
         std::cout << value << " ";
     }
     std::cout << "]\n";
+}
+template <typename T>
+void print2DVector(const std::vector<std::vector<T>>& values2D,std::string name = "") {
+    
+    std::cout << "2D vector " + name + " = \n";
+    for(const std::vector<T>& values : values2D) {
+        printf("[");
+        for(size_t i = 0 ; i < values.size() ; ++i) {
+            T value = values[i];
+            std::cout << value << " ";
+        }
+        printf("]\n");
+    }
 }
 template <typename T>
 bool vectorContains(const std::vector<T> v, T element) {
@@ -264,6 +276,21 @@ inline float linearInterpolate(float value, float start, float end) {
 	return (value - start) / (end - start);
 }
 
-
+template<typename T = int>
+std::vector<T> createRangeVector(const int lower, const int upper, const int step = 1) {
+    std::vector<T> rangeVector((upper - lower)/(float)step);
+    
+    if(step > 0 & upper > lower) {
+        int index = 0;
+        for(int i = lower ; i < upper ; i += step) {
+            rangeVector[index] = i;
+            
+            index++;
+        }
+    }
+    else throw std::runtime_error("Bad parameters");
+    
+    return rangeVector;
+}
 
 #endif /* defined(__Afstuderen__helper__) */

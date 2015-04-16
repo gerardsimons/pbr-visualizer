@@ -22,14 +22,6 @@
 class DataController {
 private:
     
-    enum DataCollectionMode {
-        ALL,
-        DISTRIBUTIONS,
-        NONE
-    };
-    
-    DataCollectionMode mode = ALL;
-    
     ushort imageWidth;
     ushort imageHeight;
 	std::vector<RIVDataSetListener*> dataListeners;
@@ -129,6 +121,16 @@ private:
 	//Setup the shortcut pointer to the innards of the dataset, tables etc.
 	void resetPointers(RIVDataSet<float,ushort>* dataset);
 public:
+    enum DataCollectionMode {
+        ALL,
+        DISTRIBUTIONS,
+        NONE
+    };
+    
+    DataCollectionMode mode = ALL;
+
+    /* METHODS */
+    
 	RIVDataSet<float,ushort>* Bootstrap(RIVDataSet<float, ushort>* dataset, const size_t N);
 	HistogramSet<float,ushort>* GetTrueDistributions() {
 		return &trueDistributions;
@@ -152,5 +154,6 @@ public:
     void Reset();
     void SetMaxPaths(int maxPaths);
     void CycleDataCollectionMode();
+    void SetDataCollectionMode(DataCollectionMode newMode);
 };
 #endif /* defined(__embree__DataController__) */

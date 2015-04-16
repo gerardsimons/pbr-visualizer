@@ -14,7 +14,7 @@ typedef unsigned short ushort;
 RIVImageView* RIVImageView::instance = NULL;
 int RIVImageView::windowHandle = -1;
 
-RIVImageView::RIVImageView(EMBREERenderer* renderer) : RIVDataView(datasetOne) {
+RIVImageView::RIVImageView(EMBREERenderer* renderer,int xBins) : RIVDataView(datasetOne), xBins(xBins) {
     if(instance != NULL) {
         throw "Only 1 instance of ImageView allowed.";
     }
@@ -25,7 +25,7 @@ RIVImageView::RIVImageView(EMBREERenderer* renderer) : RIVDataView(datasetOne) {
     yBins = rendererOne->getWidth() / (float)rendererOne->getHeight() * xBins;
 }
 
-RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, EMBREERenderer* renderer,Histogram2DSet<float,ushort>* imageDistributions) : RIVDataView(datasetOne),imageDistributionsOne(imageDistributions) {
+RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, EMBREERenderer* renderer,Histogram2DSet<float,ushort>* imageDistributions,int xBins) : RIVDataView(datasetOne),imageDistributionsOne(imageDistributions),xBins(xBins) {
     
     //    trueEnergyDistributionOne = imageDistributions->GetHistogram<float>(IMAGE_RADIANCE);
     //    throughputDistroOne = imageDistributions->GetHistogram<float>(IMAGE_THROUGHPUT);
@@ -41,7 +41,7 @@ RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, EMBREERenderer
     yBins = rendererOne->getHeight() / (float)rendererOne->getWidth() * xBins;
 }
 
-RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, Histogram2DSet<float,ushort>* imageDistributionsOne,Histogram2DSet<float,ushort>* imageDistributionsTwo) : RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(rendererTwo),imageDistributionsOne(imageDistributionsOne),imageDistributionsTwo(imageDistributionsTwo) {
+RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, Histogram2DSet<float,ushort>* imageDistributionsOne,Histogram2DSet<float,ushort>* imageDistributionsTwo,int xBins) : RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(rendererTwo),imageDistributionsOne(imageDistributionsOne),imageDistributionsTwo(imageDistributionsTwo),xBins(xBins) {
     
     paintGridOne = new Grid(gridSize);
     paintGridTwo = new Grid(gridSize);
@@ -51,6 +51,7 @@ RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<flo
     }
     instance = this;
     identifier = "ImageView";
+    
     yBins = rendererOne->getHeight() / (float)rendererOne->getWidth() * xBins;
 }
 
@@ -190,10 +191,6 @@ void RIVImageView::computeRadianceDistributions() {
                 float bDiff = bOne - bTwo;
                 bDiff *= bDiff;
                 
-                if(rDiff > 0.01) {
-                    
-                }
-                
                 size_t diff = 100 * (std::pow(rDiff + bDiff + gDiff,.5));
                 
                 radianceDiffDistribution->SetBinValue(xBin, yBin, diff);
@@ -204,9 +201,7 @@ void RIVImageView::computeRadianceDistributions() {
         
     }
 }
-//Change what heatmap to show,
-void RIVImageView::ToggleHeatmapToDisplay() {
-    
+void RIVImageView::SetHeatmapToDisplay(HeatmapDisplay newHeatmap) {
     Histogram2D<float>* trueEnergyDistributionOne = imageDistributionsOne->GetHistogram<float>(IMAGE_RADIANCE_AVG);
     Histogram2D<float>* throughputDistributionOne = imageDistributionsOne->GetHistogram<float>(IMAGE_THROUGHPUT);
     Histogram2D<float>* depthDistributionOne = imageDistributionsOne->GetHistogram<float>(IMAGE_DEPTH);
@@ -220,63 +215,66 @@ void RIVImageView::ToggleHeatmapToDisplay() {
         depthDistributionTwo = imageDistributionsTwo->GetHistogram<float>(IMAGE_DEPTH);
     }
     
-    printf("Toggle heatmap to display : ");
+    heatmapToDisplay = newHeatmap;
+    printf("Set heatmap to display : %s\n",enumToString(newHeatmap).c_str());
     switch (heatmapToDisplay) {
         case DISTRIBUTION:
-            heatmapToDisplay = THROUGHPUT;
-            printf("THROUGHPUT");
+            activeHeatmapOne = pixelDistributionOne;
+            activeHeatmapTwo = pixelDistributionTwo;
+            break;
+        case THROUGHPUT:
             activeHeatmapOne = throughputDistributionOne;
             activeHeatmapTwo = throughputDistributionTwo;
             break;
-        case THROUGHPUT:
-            heatmapToDisplay = DEPTH_IMAGE;
-            printf("DEPTH_IMAGE");
+        case DEPTH_IMAGE:
             activeHeatmapOne = depthDistributionOne;
-            //            depthDistributionOne->PrintRaw();
-            
             activeHeatmapTwo = depthDistributionTwo;
             break;
-        case DEPTH_IMAGE:
-            heatmapToDisplay = RADIANCE;
-            printf("RADIANCE");
-//            if(!radianceDiffDistribution) {
-                //Create radiance difference distribution
-                computeRadianceDistributions();
-//            }
-            //            activeHeatmapOne = &radianceDistributionOne;
-            //            activeHeatmapTwo = &radianceDistributionTwo;
-            activeHeatmapOne = trueEnergyDistributionOne;
-            activeHeatmapTwo = trueEnergyDistributionTwo;
-            break;
-        case RADIANCE:
+        case RADIANCE_DIFFERENCE:
+            computeRadianceDistributions();
             if(datasetTwo) {
                 heatmapToDisplay = RADIANCE_DIFFERENCE;
                 activeHeatmapOne = radianceDiffDistribution;
                 activeHeatmapTwo = radianceDiffDistribution;
-                printf("RADIANCE_DIFFERENCE");
             }
             else {
-                heatmapToDisplay = DISTRIBUTION;
-                activeHeatmapOne = pixelDistributionOne;
-                activeHeatmapTwo = pixelDistributionTwo;
-                printf("DISTRIBUTION");
+                activeHeatmapOne = NULL;
+                activeHeatmapTwo = NULL;
+            }
+            break;
+        case RADIANCE:
+            activeHeatmapOne = trueEnergyDistributionOne;
+            activeHeatmapTwo = trueEnergyDistributionTwo;
+            break;
+    }
+    printf("\n");
+    redisplayWindow();
+}
+
+//Change what heatmap to show,
+void RIVImageView::ToggleHeatmapToDisplay() {
+    
+    printf("Toggle heatmap to display : ");
+    switch (heatmapToDisplay) {
+        case DISTRIBUTION:
+            SetHeatmapToDisplay(THROUGHPUT);
+            break;
+        case THROUGHPUT:
+            SetHeatmapToDisplay(DEPTH_IMAGE);
+            break;
+        case DEPTH_IMAGE:
+            SetHeatmapToDisplay(RADIANCE);
+            break;
+        case RADIANCE:
+            if(datasetTwo) {
+                SetHeatmapToDisplay(RADIANCE_DIFFERENCE);
+            }
+            else {
+                SetHeatmapToDisplay(DISTRIBUTION);
             }
             break;
         case RADIANCE_DIFFERENCE:
-            printf("NONE");
-            if((*datasetOne)->IsFiltered() || (datasetTwo && (*datasetTwo)->IsFiltered())) {
-                heatmapToDisplay = DISTRIBUTION;
-                activeHeatmapOne = pixelDistributionOne;
-                activeHeatmapTwo = pixelDistributionTwo;
-                printf("DISTRIBUTION");
-            }
-            else {
-                heatmapToDisplay = THROUGHPUT;
-                activeHeatmapOne = throughputDistributionOne;
-                activeHeatmapTwo = throughputDistributionTwo;
-                printf("THROUGHPUT");
-                
-            }
+            SetHeatmapToDisplay(DISTRIBUTION);
             break;
     }
     printf("\n");

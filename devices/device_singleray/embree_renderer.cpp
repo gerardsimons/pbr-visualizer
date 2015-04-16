@@ -16,6 +16,7 @@
 
 #include "embree_renderer.h"
 #include "devices/device_singleray/shapes/trianglemesh_normals.h"
+#include "../../riv/helper.h"
 
 #include <GLUT/GLUT.h>
 
@@ -324,6 +325,71 @@ void EMBREERenderer::CopySwapChainTo(EMBREERenderer* targetRenderer, float weigh
                 thatAccuBuffer->set(x, y, thisPixel);
                 thatBuffer->set(x, y, thisColor);
 //                thatAccuBuffer->set(x, y, thisPixel);
+            }
+        }
+    }
+}
+void EMBREERenderer::CopySwapChainTo(EMBREERenderer *targetRenderer, Histogram2D<float>* distro, float weightScalar, bool inverse) {
+    std::vector<std::vector<float>> weights = std::vector<std::vector<float>>(targetRenderer->getWidth(), std::vector<float>(targetRenderer->getHeight()));
+    auto bins = distro->NumberOfBins();
+    
+    for(int xBin = 0 ; xBin < bins.first ; ++xBin) {
+        for(int yBin = 0 ; yBin < bins.second ; ++yBin) {
+            float scaledValue = distro->ScaledValue(xBin, yBin);
+            
+            if(inverse) {
+                scaledValue = 1-scaledValue;
+            }
+            weights[xBin][yBin] = scaledValue * weightScalar;
+        }
+    }
+    
+    CopySwapChainTo(targetRenderer, weights);
+}
+void EMBREERenderer::CopySwapChainTo(EMBREERenderer* targetRenderer, const std::vector<std::vector<float>>& weights) {
+    SwapChain* thisSwapChain = g_single_device->rtGetSwapChain(g_frameBuffer).ptr;
+    SwapChain* thatSwapChain = targetRenderer->GetSwapChain().ptr;
+    
+    Ref<FrameBuffer> thisBuffer = thisSwapChain->buffer();
+    Ref<FrameBuffer> thatBuffer = thatSwapChain->buffer();
+    
+    //    thatBuffer.ptr = thisBuffer.ptr;
+    //    thatSwapChain.ptr = thisSwapChain.ptr;
+    
+    print2DVector(weights,"weights matrix");
+    
+    //TODO: Support varying sizes, especially those with the same aspect ratio
+    if(thisSwapChain->getWidth() != thatSwapChain->getWidth() || thisSwapChain->getHeight() != thatSwapChain->getHeight()) {
+        printf("Sorry, different swapchain sizes not currently supported\n");
+        return;
+    }
+    if(thisSwapChain->getWidth() != weights.size() && thisSwapChain->getHeight() != weights[0].size()) {
+        throw std::runtime_error("Weights matrix dimensions do not match swapchain dimensions.");
+    }
+    else {
+        //Get the accumulation buffers
+        AccuBuffer* thisAccuBuffer = thisSwapChain->accu().ptr;
+        AccuBuffer* thatAccuBuffer = thatSwapChain->accu().ptr;
+        thatSwapChain->clearAll();
+        for(int x = 0 ; x < thisSwapChain->getWidth() ; ++x) {
+            for(int y = 0 ; y < thisSwapChain->getHeight() ; ++y) {
+                
+                float weight = weights[x][y];
+                
+                Vec4f thisPixel = thisAccuBuffer->getRaw(x, y);
+                //                Color thisColor = Color(thisPixel.x,thisPixel.y,thisPixel.z);
+                Color thisColor = thisAccuBuffer->get(x, y);
+                //                Color thisColor = thisAccuBuffer->get(x, y);
+                float diffWeight = thisPixel.w / weight;
+                thisPixel.x /= diffWeight;
+                thisPixel.y /= diffWeight;
+                thisPixel.z /= diffWeight;
+                thisPixel.w = weight;
+                
+                //                thatAccuBuffer->update(x, y, thisColor, weight, true);
+                thatAccuBuffer->set(x, y, thisPixel);
+                thatBuffer->set(x, y, thisColor);
+                //                thatAccuBuffer->set(x, y, thisPixel);
             }
         }
     }

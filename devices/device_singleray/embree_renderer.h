@@ -140,6 +140,8 @@ public:
     
     Ref<SwapChain> GetSwapChain();
     void CopySwapChainTo(EMBREERenderer* renderer,float copyWeight);
+    void CopySwapChainTo(EMBREERenderer* targetRenderer, const std::vector<std::vector<float>>& weights);
+    void CopySwapChainTo(EMBREERenderer* targetRenderer, Histogram2D<float>* histogram, float weightScalar, bool inverse = false);
     
     std::vector<Ref<embree::Light>> GetLights();
     ushort GetNumLights();

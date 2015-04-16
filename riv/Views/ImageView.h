@@ -35,23 +35,7 @@ private:
     int imagePadding = 0;
 
 	void clearSelection();
-	bool isDragging;
-
-    enum HeatmapDisplayMode {
-        OPAQUE,
-        HEAT,
-        NONE
-    };
-    enum HeatmapDisplay {
-        DISTRIBUTION,
-        THROUGHPUT,
-        RADIANCE,
-        RADIANCE_DIFFERENCE,
-        DEPTH_IMAGE
-    };
-    
-    HeatmapDisplayMode displayMode = OPAQUE;
-    HeatmapDisplay heatmapToDisplay = DISTRIBUTION;
+    bool isDragging;
     
     Histogram2DSet<float,ushort>* imageDistributionsOne = NULL;
     Histogram2DSet<float,ushort>* imageDistributionsTwo = NULL;
@@ -60,7 +44,7 @@ private:
 //    Histogram2D<float>* throughputDistroOne = NULL;
 //    Histogram2D<float>* throughputDistroTwo = NULL;
     
-    unsigned int xBins = 60;
+    unsigned int xBins;
     unsigned int yBins; //Deduced according to image aspect ratio
     Histogram2D<float>* pixelDistributionOne = NULL;
     Histogram2D<float>* pixelDistributionTwo = NULL;
@@ -83,9 +67,6 @@ private:
     Grid* paintGridOne;
     Grid* paintGridTwo = NULL;
     Grid* interactingGrid = NULL;
-	
-    std::string enumToString(HeatmapDisplayMode displayMode);
-    std::string enumToString(HeatmapDisplay displayMode);
     
 	void drawRenderedImage(EMBREERenderer* renderer,int startX, int startY, int width, int height);
     void computePixelDistribution(RIVDataSet<float,ushort>*, Histogram2D<float>*& pixelDistribution);
@@ -100,13 +81,33 @@ private:
     void smoothPixelDistribution(Histogram2D<float>* pixelDistribution);
     Histogram2D<float> computeRadianceDistribution(RIVDataSet<float,ushort>* dataset,int xBins, int yBins);
 public:
+    
+    enum HeatmapDisplayMode {
+        OPAQUE,
+        HEAT,
+        NONE
+    };
+    enum HeatmapDisplay {
+        DISTRIBUTION,
+        THROUGHPUT,
+        RADIANCE,
+        RADIANCE_DIFFERENCE,
+        DEPTH_IMAGE
+    };
+    
+    HeatmapDisplayMode displayMode = OPAQUE;
+    HeatmapDisplay heatmapToDisplay = DISTRIBUTION;
+    
+    std::string enumToString(HeatmapDisplayMode displayMode);
+    std::string enumToString(HeatmapDisplay displayMode);
+    
     void redisplayWindow();
     void WeightDistributionByThroughput();
     void CombinePixelDistributions();
 	//Single renderer constructor
-    RIVImageView(EMBREERenderer* rendererOne);
-	RIVImageView(RIVDataSet<float,ushort>** datasetOne,  EMBREERenderer* rendererOne,Histogram2DSet<float,ushort>* imageDistributions);
-	RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo,Histogram2DSet<float,ushort>* imageDistributionsOne,Histogram2DSet<float,ushort>* imageDistributionsTwo);
+    RIVImageView(EMBREERenderer* rendererOne, int xBins);
+	RIVImageView(RIVDataSet<float,ushort>** datasetOne,  EMBREERenderer* rendererOne,Histogram2DSet<float,ushort>* imageDistributions,int xBins);
+	RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo,Histogram2DSet<float,ushort>* imageDistributionsOne,Histogram2DSet<float,ushort>* imageDistributionsTwo,int xBins);
     Histogram2D<float>* GetActiveDistributionOne();
     Histogram2D<float>* GetActiveDistributionTwo();
     Histogram2D<float>* GetPixelDistributionOne();
@@ -114,6 +115,7 @@ public:
     void ClearPixelDistributionOne();
     void ClearPixelDistributionTwo();
     
+    void SetHeatmapToDisplay(HeatmapDisplay newHeatmap);
     void ToggleHeatmapToDisplay();
     void ToggleHeatmapDisplayMode();
 	

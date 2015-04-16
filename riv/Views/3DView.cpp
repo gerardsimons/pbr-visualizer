@@ -1461,6 +1461,15 @@ Vec3fa RIV3DView::screenToWorldCoordinates(int screenX, int screenY, float zPlan
 bool RIV3DView::isSelectedObject(std::set<ushort>& selectedObjectIds, ushort objectId) {
     return selectedObjectIds.find(objectId) != selectedObjectIds.end();
 }
+
+void RIV3DView::FilterPathsOne(ushort bounceNr, ushort objectId) {
+    std::set<ushort> objectIds = (std::set<ushort>){objectId};
+    filterPaths(*datasetOne, bounceNr, objectIds, pathFiltersOne);
+}
+void RIV3DView::FilterPathsTwo(ushort bounceNr, ushort objectId) {
+    std::set<ushort> objectIds = (std::set<ushort>){objectId};
+    filterPaths(*datasetTwo, bounceNr, objectIds, pathFiltersTwo);
+}
 //void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort* selectedObjectIDs, std::vector<riv::RowFilter*>& pathFilters) {
 void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, std::set<ushort>& selectedObjectIDs, std::vector<riv::RowFilter*>& pathFilters) {
     dataset->StartFiltering();
@@ -1503,7 +1512,7 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
                 size_t intersectionRow = mapping[i];
                 ushort objectID = primitiveIds->Value(intersectionRow);
                 //Check if it has occluders and if the selectedObjectID is in them
-                if(selectionMode == INTERACTION || selectionMode == INTERACTION_AND_SHADOW) {
+                if((selectionMode == INTERACTION || selectionMode == INTERACTION_AND_SHADOW) && i == bounceNr) {
 //                    if( primitiveIds->Value(intersectionRow) == *selectedObjectIDs) {
                     if(selectedObjectIDs.find(objectID) != selectedObjectIDs.end()) {
                         filter = false;
@@ -1607,20 +1616,16 @@ void RIV3DView::CycleSelectedLights() {
 void RIV3DView::CycleSelectionMode() {
     switch (selectionMode) {
         case PATH:
-            selectionMode = INTERACTION;
-            printf("Selection mode is now set to 'INTERACTION'\n");
+            SetSelectionMode(INTERACTION);
             break;
         case INTERACTION:
-            selectionMode = INTERACTION_AND_SHADOW;
-            printf("Selection mode is now set to 'INTERACTION_AND_SHADOW'\n");
+            SetSelectionMode(OBJECT);
             break;
         case INTERACTION_AND_SHADOW:
-            selectionMode = OBJECT;
-            printf("Selection mode is now set to 'OBJECT'\n");
+            SetSelectionMode(OBJECT);
             break;
         case OBJECT:
-            selectionMode = PATH;
-            printf("Selection mode is now set to 'PATH'\n");
+            SetSelectionMode(PATH);
             break;
     }
 }
@@ -1788,5 +1793,23 @@ void RIV3DView::DecrementHeatmapDepth() {
     if(drawHeatmapDepth > 1) {
         --drawHeatmapDepth;
         redisplayWindow();
+    }
+}
+void RIV3DView::SetSelectionMode(SelectionMode mode) {
+    selectionMode = mode;
+    
+    switch (selectionMode) {
+        case PATH:
+            printf("Selection mode is now set to 'INTERACTION'\n");
+            break;
+        case INTERACTION:
+            printf("Selection mode is now set to 'INTERACTION_AND_SHADOW'\n");
+            break;
+        case INTERACTION_AND_SHADOW:
+            printf("Selection mode is now set to 'OBJECT'\n");
+            break;
+        case OBJECT:
+            printf("Selection mode is now set to 'PATH'\n");
+            break;
     }
 }
