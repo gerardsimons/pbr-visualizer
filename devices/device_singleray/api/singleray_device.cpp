@@ -563,7 +563,7 @@ namespace embree
 	
 	void SingleRayDevice::rtRenderFrame(Device::RTRenderer renderer_i, Device::RTCamera camera_i,
 										Device::RTScene scene_i, Device::RTToneMapper toneMapper_i,
-										Device::RTFrameBuffer frameBuffer_i, int accumulate)
+										Device::RTFrameBuffer frameBuffer_i, int accumulate,bool datacallback)
 	{
 		RT_COMMAND_HEADER;
 		
@@ -575,11 +575,16 @@ namespace embree
 		Ref<ConstHandle<SwapChain> > frameBuffer = castHandle<ConstHandle<SwapChain> >(frameBuffer_i,"framebuffer");
 		
 		/* render the frame */
-		renderer->getInstance()->renderFrame(camera->getInstance(),scene->getInstance(),toneMapper->getInstance(),frameBuffer->getInstance(),accumulate,dataConnector);
+        if(datacallback) {
+            renderer->getInstance()->renderFrame(camera->getInstance(),scene->getInstance(),toneMapper->getInstance(),frameBuffer->getInstance(),accumulate,dataConnector);
+        }
+        else {
+            renderer->getInstance()->renderFrame(camera->getInstance(),scene->getInstance(),toneMapper->getInstance(),frameBuffer->getInstance(),accumulate,NULL);
+        }
 	}
     void SingleRayDevice::rtRenderFrame(Device::RTRenderer renderer_i, Device::RTCamera camera_i,
                                         Device::RTScene scene_i, Device::RTToneMapper toneMapper_i,
-                                        Device::RTFrameBuffer frameBuffer_i, int accumulate, Histogram2D<float>* pixelDistributions)
+                                        Device::RTFrameBuffer frameBuffer_i, int accumulate, Histogram2D<float>* pixelDistributions,bool datacallback)
     {
         RT_COMMAND_HEADER;
         
@@ -591,7 +596,12 @@ namespace embree
         Ref<ConstHandle<SwapChain> > frameBuffer = castHandle<ConstHandle<SwapChain> >(frameBuffer_i,"framebuffer");
         
         /* render the frame */
-        renderer->getInstance()->renderFrame(camera->getInstance(),scene->getInstance(),toneMapper->getInstance(),frameBuffer->getInstance(),accumulate,dataConnector,pixelDistributions);
+        if(datacallback) {
+            renderer->getInstance()->renderFrame(camera->getInstance(),scene->getInstance(),toneMapper->getInstance(),frameBuffer->getInstance(),accumulate,dataConnector,pixelDistributions);
+        }
+        else {
+            renderer->getInstance()->renderFrame(camera->getInstance(),scene->getInstance(),toneMapper->getInstance(),frameBuffer->getInstance(),accumulate,NULL,pixelDistributions);
+        }
     }
 	bool SingleRayDevice::rtPick(Device::RTCamera camera_i, float x, float y, Device::RTScene scene_i, float& px, float& py, float& pz)
 	{

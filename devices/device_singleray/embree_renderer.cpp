@@ -155,6 +155,9 @@ void EMBREERenderer::outputMode(const FileName& fileName)
 void EMBREERenderer::outputMode(const std::string& fileName) {
 	outputMode(FileName(fileName));
 }
+void EMBREERenderer::outputMode(const char* fileName) {
+    outputMode(FileName(fileName));
+}
 Vec2<size_t> EMBREERenderer::GetDimensions() {
 	return Vec2<size_t>(g_width,g_height);
 }
@@ -271,15 +274,15 @@ ushort EMBREERenderer::GetNumLights() {
 std::vector<Ref<embree::Light>> EMBREERenderer::GetLights() {
     return g_single_device->rtGetLights(g_render_scene);
 }
-void EMBREERenderer::RenderNextFrame() {
+void EMBREERenderer::RenderNextFrame(bool useDataCallBack) {
 	g_device = g_single_device;
-	g_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1);
+	g_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1,useDataCallBack);
 //	g_device->rtSwapBuffers(g_frameBuffer);
 }
 //Render next frame according to given pixel distribution
-void EMBREERenderer::RenderNextFrame(Histogram2D<float>* pixelDistribution) {
+void EMBREERenderer::RenderNextFrame(Histogram2D<float>* pixelDistribution,bool useDataCallBack) {
     g_device = g_single_device;
-    g_single_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1,pixelDistribution);
+    g_single_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1,pixelDistribution,useDataCallBack);
     
     //If you use double buffers,, the user guided rendering (which only effects an area) will cause the other areas to be of two distinct states (e.g. it flips)
 //    g_single_device->rtSwapBuffers(g_frameBuffer);
@@ -333,6 +336,10 @@ void EMBREERenderer::CopySwapChainTo(EMBREERenderer *targetRenderer, Histogram2D
     std::vector<std::vector<float>> weights = std::vector<std::vector<float>>(targetRenderer->getWidth(), std::vector<float>(targetRenderer->getHeight()));
     auto bins = distro->NumberOfBins();
     
+    
+//    printf("Weight distro = \n");
+//    distro->PrintRaw();
+    
     for(int xBin = 0 ; xBin < bins.first ; ++xBin) {
         for(int yBin = 0 ; yBin < bins.second ; ++yBin) {
             float scaledValue = distro->ScaledValue(xBin, yBin);
@@ -343,6 +350,8 @@ void EMBREERenderer::CopySwapChainTo(EMBREERenderer *targetRenderer, Histogram2D
             weights[xBin][yBin] = scaledValue * weightScalar;
         }
     }
+    
+//    print2DVector(weights);
     
     CopySwapChainTo(targetRenderer, weights);
 }
@@ -356,7 +365,7 @@ void EMBREERenderer::CopySwapChainTo(EMBREERenderer* targetRenderer, const std::
     //    thatBuffer.ptr = thisBuffer.ptr;
     //    thatSwapChain.ptr = thisSwapChain.ptr;
     
-    print2DVector(weights,"weights matrix");
+//    print2DVector(weights,"weights matrix");
     
     //TODO: Support varying sizes, especially those with the same aspect ratio
     if(thisSwapChain->getWidth() != thatSwapChain->getWidth() || thisSwapChain->getHeight() != thatSwapChain->getHeight()) {

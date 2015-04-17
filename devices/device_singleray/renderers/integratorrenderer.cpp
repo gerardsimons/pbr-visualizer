@@ -64,7 +64,7 @@ namespace embree
 		iteration++;
 	}
 	
-	void IntegratorRenderer::renderFrame(const Ref<Camera>& camera, const Ref<BackendScene>& scene, const Ref<ToneMapper>& toneMapper, Ref<SwapChain > swapchain, int accumulate, DataConnector* dataConnector)
+    void IntegratorRenderer::renderFrame(const Ref<Camera>& camera, const Ref<BackendScene>& scene, const Ref<ToneMapper>& toneMapper, Ref<SwapChain > swapchain, int accumulate, DataConnector* dataConnector)
 	{
 		if (accumulate == 0) iteration = 0;
 		this->dataConnector = dataConnector;
@@ -187,6 +187,8 @@ namespace embree
 		
 		rtcDebug();
         renderCount++;
+        
+        //TODO: This will fail when you have more render tiles
         if(dataConnector) {
             dataConnector->FinishFrame(atomicNumPaths,atomicNumRays);
         }
@@ -197,13 +199,17 @@ namespace embree
 	{
         if(dataConnector) {
             if(pixelDistributions) {
-                renderTileForPixelDistribution(threadIndex, threadCount, taskIndex, taskCount, event);
+                renderTileForPixelDistributionWithDataConnector(threadIndex, threadCount, taskIndex, taskCount, event);
                 return;
             }
             else {
                 renderTileWithDataConnector(threadIndex, threadCount, taskIndex, taskCount, event);
                 return;
             }
+        }
+        else if(pixelDistributions) {
+            renderTileForPixelDistribution(threadIndex, threadCount, taskIndex, taskCount, event);
+            return;
         }
         printf("Render tile regular......\n\n");
 		/*! create a new sampler */
@@ -253,13 +259,12 @@ namespace embree
 						
 						state.sample = &sample;
 						state.pixel = Vec2f(fx,fy);
-//						if(dataConnector != NULL) {
-//						}
+
 						L += renderer->integrator->Li(primary, scene, state);
 						
 
 					}
-                    const Color L0 = swapchain->update(x, _y, L, 10, accumulate);
+                    const Color L0 = swapchain->update(x, _y, L, spp , accumulate);
 					const Color L1 = toneMapper->eval(L0,x,y,swapchain);
 					framebuffer->set(x, _y, L1);
 				}
@@ -359,6 +364,116 @@ namespace embree
     void IntegratorRenderer::RenderJob::renderTileForPixelDistribution(size_t threadIndex, size_t threadCount, size_t taskIndex, size_t taskCount, TaskScheduler::Event* event)
     {
         printf("Render tile with pixel distribution......\n\n");
+        
+        //        printf("Pixel distribution = \n");
+        //        pixelDistributions->Print();
+        //        Histogram2D<float> testDistro(0,1,pixelDistributions->NumberOfBins());
+        
+        /*! create a new sampler */
+        IntegratorState state;
+        if (taskIndex == taskCount-1) t0 = getSeconds();
+        
+        /*! tile pick loop */
+        while (true)
+        {
+            /*! pick a new tile */
+            size_t tile = tileID++;
+            if (tile >= numTilesX*numTilesY) break;
+            
+            /*! process all tile samples */
+            const int tile_x = (tile%numTilesX)*TILE_SIZE;
+            const int tile_y = (tile/numTilesX)*TILE_SIZE;
+            Random randomNumberGenerator(tile_x * 91711 + tile_y * 81551 + 3433*swapchain->firstActiveLine());
+            
+            for (size_t dy=0; dy<TILE_SIZE; dy++)
+            {
+                
+                
+                //                size_t y = tile_y+dy;
+                
+                
+                for (size_t dx=0; dx<TILE_SIZE; dx++)
+                {
+                    
+                    std::pair<float,float> pixelSample = pixelDistributions->Sample2D();
+                    //                    printf("pixelSample = %f,%f\n",pixelSample.first,pixelSample.second);
+                    size_t y = pixelSample.second * swapchain->getHeight();
+                    
+                    //                    testPixelDistro.Add(pixelSample);
+                    
+                    if (y >= swapchain->getHeight()) {
+                        continue;
+                    }
+                    
+                    if (!swapchain->activeLine(y)) continue;
+                    size_t _y = swapchain->raster2buffer(y);
+                    
+                    //                    size_t x = tile_x+dx;
+                    size_t x = pixelSample.first * swapchain->getWidth();
+                    //                    printf("pixel x,y = %zu,%zu\n",x,y);
+                    if (x >= swapchain->getWidth()) {
+                        continue;
+                    }
+                    
+                    const int set = randomNumberGenerator.getInt(renderer->samplers->sampleSets);
+                    
+                    Color L = zero;
+                    size_t spp = renderer->samplers->samplesPerPixel;
+                    for (size_t s=0; s<spp; s++)
+                    {
+                        PrecomputedSample& sample = renderer->samplers->samples[set][s];
+                        //                        const float fx = (float(x) + sample.pixel.x)*rcpWidth;
+                        //                        //                        const float fx = (float(x) + 0);
+                        //                        const float fy = (float(y) + sample.pixel.y)*rcpHeight;
+                        
+                        
+                        const float fx = pixelSample.first;
+                        //                        const float fx = (float(x) + 0);
+                        const float fy = pixelSample.second;
+                        
+                        Vec2f lensSample = sample.getLens();
+                        Ray primary;
+                        camera->ray(Vec2f(fx,fy), lensSample, primary);
+                        primary.time = sample.getTime();
+                        
+                        state.sample = &sample;
+                        state.pixel = Vec2f(pixelSample.first,pixelSample.second);
+                        //						if(dataConnector != NULL) {
+//                        dataConnector->StartPath(state.pixel,lensSample,primary.time);
+                        //						}
+                        L += renderer->integrator->Li(primary, scene, state);
+                        
+                        //                        testDistro.Add(pixelSample.first, pixelSample.second);
+                    }
+                    //                    printf("x,y = %d,%d\n",x,y);
+                    //                    L = Color(0,1,0);
+                    //                    float normalizedValue = pixelDistributions->NormalizedValue(pixelSample.first, pixelSample.second);
+                    const Color L0 = swapchain->update(x, _y, L, spp, accumulate);
+                    const Color L1 = toneMapper->eval(L0,x,y,swapchain);
+                    //                    const Color L1 = Color(0,1,0);
+                    framebuffer->set(x, _y, L1);
+                }
+            }
+            
+            /*! print progress bar */
+            if (renderer->showProgress) progress.next();
+            
+            /*! mark one more tile as finished */
+            framebuffer->finishTile();
+        }
+        //        printf("Test pixel distro = \n");
+        //        testPixelDistro.Print();
+        /*! we access the atomic ray counter only once per tile */
+        atomicNumRays += state.numRays;
+        atomicNumPaths += state.numPaths;
+        //        printf("Test distro = \n");
+        //        testDistro.Print();
+        
+    }
+    
+    void IntegratorRenderer::RenderJob::renderTileForPixelDistributionWithDataConnector(size_t threadIndex, size_t threadCount, size_t taskIndex, size_t taskCount, TaskScheduler::Event* event)
+    {
+        printf("Render tile with pixel distribution with data connector......\n\n");
         
 //        printf("Pixel distribution = \n");
 //        pixelDistributions->Print();

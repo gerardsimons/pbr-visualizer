@@ -314,7 +314,7 @@ namespace embree
      *  camera is the camera to use \param scene is the scene to
      *  render \param tonemapper is the tonemapper to use \parm
      *  frameBuffer is the framebuffer to render into */
-    virtual void rtRenderFrame(RTRenderer renderer, RTCamera camera, RTScene scene, RTToneMapper tonemapper, RTFrameBuffer frameBuffer, int accumulate) = 0;
+    virtual void rtRenderFrame(RTRenderer renderer, RTCamera camera, RTScene scene, RTToneMapper tonemapper, RTFrameBuffer frameBuffer, int accumulate, bool datacallback) = 0;
 
     /*! Pick a 3D point. \returns true if a point was picked, false otherwise
      *  \parm x is the x coordinate [0:1] in the image plane

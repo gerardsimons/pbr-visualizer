@@ -110,6 +110,7 @@ public:
 	std::string makeFileName(const std::string path, const std::string fileName);
 	void outputMode(const std::string& fileName);
 	void outputMode(const FileName& fileName);
+    void outputMode(const char* fileName);
 	
 	Handle<Device::RTScene> GetScene();
 	std::vector<Handle<Device::RTPrimitive>>* GetPrimitives() { return &g_prims; };
@@ -124,8 +125,9 @@ public:
 	void parsePathTracer(Ref<ParseStream> cin, const FileName& path);
 	void parseCommandLine(Ref<ParseStream> cin, const FileName& path);
 	
-    void RenderNextFrame(Histogram2D<float>* pixelHistogram);
-	void RenderNextFrame();
+    void RenderNextFrame(Histogram2D<float>* pixelHistogram,bool datacallback = true);
+	void RenderNextFrame(bool datacallback = true);
+    
 	std::string GetFormat() { return g_format; };
 	Vec2<size_t> GetDimensions();
 	

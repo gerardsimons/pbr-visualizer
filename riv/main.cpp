@@ -92,7 +92,7 @@ bool linkPixelDistros = false;
 const int maxPathsOne = 5000;
 const int maxBootstrapRepeatOne = 5;
 
-const int maxPathsTwo = 5000;
+const int maxPathsTwo = 250000;
 const int maxBootstrapRepeatTwo = 5;
 
 const int sliderViewHeight = 0;
@@ -380,40 +380,82 @@ void mergeRenderScript() {
     printHeader("MERGE RENDER SCRIPT",100);
     
     //Configuration
-    const int baseFidelity = 32;
+    const int baseFidelity = 128;
     
-    const std::vector<int> frames = createRangeVector(1, 128);
-    const std::vector<int> weights = createRangeVector(0,100,10);
+//    const int maxFrames = 1;
+    const std::vector<int> frames = createRangeVector(1,64);
+//    const std::vector<int> frames = createRangeVector(1,32);
+    const std::vector<int> weights = createRangeVector(50,200,50);
     
-    const int gammaCorrection = 2;
+    const char* extension = ".bmp";
+    
+    bool generateReferenceImages = false;
+    const double gamma = 2;
     
     char dir[128];
-    sprintf(dir, "incremental_rendering_%d",rand());
+    sprintf(dir, "render_script%d",rand());
     
     mkdir(dir, 0777);
+    
+    dataControllerOne->SetDataCollectionMode(DataController::NONE);
+    dataControllerTwo->SetDataCollectionMode(DataController::NONE);
+    
+    if(generateReferenceImages) {
+        
+        //Overextend a bit
+        std::vector<int> uniformFrames = frames;
+        uniformFrames.push_back(128);
+        uniformFrames.push_back(256);
+        uniformFrames.push_back(512);
+        uniformFrames.push_back(1024);
+        uniformFrames.push_back(2048);
+        
+        for(int frame : uniformFrames) {
+            
+            while(currentFrameTwo < frame) {
+                rendererTwo->RenderNextFrame(false);
+                currentFrameTwo++;
+            }
+            
+            char outputImagePath[256];
+            sprintf(outputImagePath, "%s/uniform_spp=%d%s",dir,currentFrameTwo,extension);
+            rendererTwo->outputMode(outputImagePath);
+        }
+    }
+    
+    dataControllerOne->SetDataCollectionMode(DataController::ALL);
+    dataControllerTwo->SetDataCollectionMode(DataController::ALL);
     
     //First render with data one frame to collect data
     rendererOne->RenderNextFrame();
     rendererTwo->RenderNextFrame();
     
     int currentFrameOne = 1;
-    int currentFrameTwo = 1;
-    
-    dataControllerOne->SetDataCollectionMode(DataController::NONE);
     
     //Continue rendering of base renderer
     while(currentFrameOne < baseFidelity) {
         currentFrameOne++;
-        rendererOne->RenderNextFrame();
+        rendererOne->RenderNextFrame(false);
     }
     
+    //Output the input image
+    char outputImagePath[256];
+    sprintf(outputImagePath, "%s/input_spp=%d%s",dir,baseFidelity,extension);
+    rendererOne->outputMode(outputImagePath);
+
     imageView->SetHeatmapToDisplay(RIVImageView::RADIANCE_DIFFERENCE);
     //Get radiancediff distro
-    auto radianceDistro = imageView->GetActiveDistributionTwo();
+    auto radianceDistro = *imageView->GetActiveDistributionTwo();
     
     //Smooth radiance distro
     int smoothSize = 5;
-    radianceDistro->SmoothRectangular(smoothSize);
+    unsigned int smoothRepeat = 10;
+    radianceDistro.SmoothRectangular(smoothSize,smoothSize,smoothRepeat);
+    
+    //Gamma correct the radiance difference distro
+    radianceDistro.GammaCorrection(gamma);
+    
+//    radianceDistro->SmoothRectangular(3,3,5);
     
     //Select paths that interact with object on first bounce
     sceneView->SetSelectionMode(RIV3DView::INTERACTION_AND_SHADOW);
@@ -424,10 +466,51 @@ void mergeRenderScript() {
     imageView->SetHeatmapToDisplay(RIVImageView::DISTRIBUTION);
     auto distro = imageView->GetActiveDistributionTwo();
     
-    //Copy weights according to inverse of selection
-    rendererOne->CopySwapChainTo(rendererTwo,distro,swapchainWeight,true);
+    distro->SmoothRectangular(3, 3, 10);
     
+    *distro = distro->BooleanHistogram(); //Make sure samples are distributed uniformly
+    distro->PrintRaw();
     
+    dataControllerTwo->SetDataCollectionMode(DataController::ALL);
+    dataControllerTwo->Reset();
+    
+    //Render once more to get more samples in the area hitting the object
+    rendererTwo->RenderNextFrame(distro,true);
+    
+    sceneView->FilterPathsTwo(1, selectedObjectId);
+    
+    distro = imageView->GetActiveDistributionTwo();
+    distro->PrintRaw();
+    *distro = distro->BooleanHistogram();
+    distro->PrintRaw();
+
+    //Smooth the selection distribution
+//    distro->SmoothRectangular(3, 3, 5);
+    
+    dataControllerTwo->SetDataCollectionMode(DataController::NONE);
+
+    for(int weight : weights) {
+        
+        //Copy weights according to inverse of selection
+        rendererOne->CopySwapChainTo(rendererTwo,distro,weight,true);
+        sprintf(outputImagePath, "%s/w=%d_spp=%d%s",dir,weight,0,extension);
+        rendererTwo->outputMode(outputImagePath);
+        currentFrameTwo = 0;
+        for(int frame : frames) {
+            //Reset frame counter renderer two
+            while(currentFrameTwo < frame) {
+                rendererTwo->RenderNextFrame(&radianceDistro,false);
+                currentFrameTwo++;
+            }
+            
+            char outputImagePath[256];
+            sprintf(outputImagePath, "%s/w=%d_spp=%d%s",dir,weight,currentFrameTwo,extension);
+            rendererTwo->outputMode(outputImagePath);
+        }
+    }
+    
+//    imageView->redisplayWindow();
+//    return;
 }
 
 void keys(int keyCode, int x, int y) {
@@ -525,7 +608,7 @@ void keys(int keyCode, int x, int y) {
                     //Convert 2Dhistogram to weight matrix
 
                     
-                    rendererOne->CopySwapChainTo(rendererTwo,distro,swapchainWeight);
+                    rendererOne->CopySwapChainTo(rendererTwo,distro,swapchainWeight,true);
                 }
                 else {
                     printf("Copying swapchain from renderer 1 to renderer 2 with uniform weight\n");
@@ -681,8 +764,14 @@ void keys(int keyCode, int x, int y) {
         }
         case 115: // 's' key
             //            sceneView->MoveCamera(0, -camSpeed, 0);
-            
+        {
+            auto distroTwo = imageView->GetActiveDistributionTwo();
+            if(distroTwo) {
+                *distroTwo = distroTwo->BooleanHistogram();
+            }
+            imageView->redisplayWindow();
             break;
+        }
         case 120: // 'x' key
             imageView->WeightDistributionByThroughput();
             break;
@@ -860,15 +949,28 @@ void idle() {
     int maxFrameOne = 2048;
     if(!renderingPausedOne && currentFrameOne < maxFrameOne) {
         ++currentFrameOne;
+        bool datacallback = dataControllerOne->mode != DataController::NONE;
         printf("Rendering renderer #1 frame %d\n",currentFrameOne);
 //        Histogram2D<float>* pixelDistributionOne = imageView->GetPixelDistributionOne();
         Histogram2D<float>* pixelDistributionOne = imageView->GetActiveDistributionOne();
         if(pixelDistributionOne && pixelDistributionOne->NumberOfElements()) {
             //                heatmapOne->Print();
-            rendererOne->RenderNextFrame(pixelDistributionOne);
+            if(datacallback) {
+                rendererOne->RenderNextFrame(pixelDistributionOne,true);
+            }
+            else {
+                rendererOne->RenderNextFrame(pixelDistributionOne,false);
+                imageView->redisplayWindow();
+            }
         }
         else {
-            rendererOne->RenderNextFrame();
+            if(datacallback) {
+                rendererOne->RenderNextFrame(true);
+            }
+            else {
+                rendererOne->RenderNextFrame(false);
+                imageView->redisplayWindow();
+            }
         }
         renderOneFinishedFrame = false;
         postRedisplay = true;
@@ -882,16 +984,32 @@ void idle() {
 //                connectedTwo = false;
 //                return;
 //            }
+            
+            //Does the data controller want more information?
+            bool datacallback = dataControllerTwo->mode != DataController::NONE;
+            
             ++currentFrameTwo;
             auto pixelDistributionTwo = imageView->GetActiveDistributionTwo();
             printf("Rendering renderer #2 frame %d\n",currentFrameTwo);
             if(pixelDistributionTwo && pixelDistributionTwo->NumberOfElements()) {
 //                printf("Active distribution = \n");
 //                pixelDistributionTwo->Print();
-                rendererTwo->RenderNextFrame(pixelDistributionTwo);
+                if(datacallback) {
+                    rendererTwo->RenderNextFrame(pixelDistributionTwo,true);
+                }
+                else {
+                    rendererTwo->RenderNextFrame(pixelDistributionTwo,false);
+                    imageView->redisplayWindow();
+                }
             }
             else {
-                rendererTwo->RenderNextFrame();
+                if(datacallback) {
+                    rendererTwo->RenderNextFrame(true);
+                }
+                else {
+                    rendererTwo->RenderNextFrame(false);
+                    imageView->redisplayWindow();
+                }
             }
             renderTwoFinishedFrame = false;
         }
@@ -915,7 +1033,7 @@ void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
     //	dataControllerTwo->RendererOneFinishedFrame(numPaths,numRays);
     printf("\n*** Renderer one finished frame %d...\n",currentFrameOne);
     
-    if(connectedOne) {
+    if(connectedOne && dataControllerOne->mode != DataController::NONE) {
         dataControllerOne->Reduce();
         renderOneFinishedFrame = true;
     }
@@ -933,7 +1051,7 @@ bool processRendererTwo(PathData* newPath) {
 }
 void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
     printf("\n*** Renderer two finished frame %d...\n",currentFrameTwo);
-    if(connectedTwo) {
+    if(connectedTwo == true && dataControllerTwo->mode != DataController::NONE) {
         dataControllerTwo->Reduce();
     }
     imageView->redisplayWindow();
@@ -1082,11 +1200,11 @@ void setup(int argc, char** argv) {
     riv::ColorMap redBlue(colors);
     
     int minSamplesPerBin = 2;
-    int minSamples = std::min(maxPathsOne,maxPathsTwo);
-    float rendererSize = rendererOne->getWidth() * rendererOne->getHeight();
-    float samplesPerPixel = minSamples/rendererSize;
     
-    int xBins = std::ceil(rendererOne->getWidth() / (float)samplesPerPixel / minSamplesPerBin);
+    float rendererSize = rendererOne->getWidth() * rendererOne->getHeight();
+    float samplesPerPixel = maxPathsOne/rendererSize;
+    
+    int xBinsOne = std::ceil(rendererOne->getWidth() / (float)samplesPerPixel / minSamplesPerBin);
     
     if(nrConnected) {
 
@@ -1130,7 +1248,7 @@ void setup(int argc, char** argv) {
         //        glutReshapeFunc(RIVImageView::ReshapeInstance);
         imageViewWidth = width;
         
-        imageView = new RIVImageView(rendererOne,xBins);
+        imageView = new RIVImageView(rendererOne,xBinsOne);
         
         glutInitWindowSize(rendererOne->getWidth(),rendererOne->getHeight());
     }
@@ -1154,6 +1272,18 @@ void setup(int argc, char** argv) {
     }
     
     if(datasetTwo && datasetOne) {
+        
+        int minSamplesPerBin = 2;
+        
+        float rendererSize = rendererTwo->getWidth() * rendererTwo->getHeight();
+        float samplesPerPixel = maxPathsTwo/rendererSize;
+        int xBinsTwo;
+        if(samplesPerPixel > minSamplesPerBin) {
+            xBinsTwo = rendererTwo->getWidth();
+        }
+        else {
+            xBinsTwo = std::ceil(rendererTwo->getWidth() / samplesPerPixel / minSamplesPerBin);
+        }
         
         sliderViewWindow = glutCreateSubWindow(mainWindow, padding, height/2.F-2*padding, width - 2* padding, sliderViewHeight);
         RIVSliderView::windowHandle = sliderViewWindow;
@@ -1191,7 +1321,7 @@ void setup(int argc, char** argv) {
         
         sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
         //		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,colorOne,colorTwo,sizeProperty);
-        imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo,dataControllerOne->GetImageDistributions(),dataControllerTwo->GetImageDistributions(),xBins);
+        imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo,dataControllerOne->GetImageDistributions(),dataControllerTwo->GetImageDistributions(),xBinsOne,xBinsTwo);
         
 //        sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions());
 //        parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,binColorMap,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo,sliderView);
@@ -1223,7 +1353,7 @@ void setup(int argc, char** argv) {
         redBlue.Invert();
         parallelCoordsView = new ParallelCoordsView(datasetOne, redBlue, redPathColorOne,redRayColorOne,NULL);
         sceneView = new RIV3DView(datasetOne,rendererOne,sceneDataOne,dataControllerOne->GetEnergyDistribution3D(), pathColorOne, rayColorOne);
-        imageView = new RIVImageView(datasetOne,rendererOne,dataControllerOne->GetImageDistributions(),xBins);
+        imageView = new RIVImageView(datasetOne,rendererOne,dataControllerOne->GetImageDistributions(),xBinsOne);
         (*datasetOne)->AddDataListener(imageView);
         (*datasetOne)->AddDataListener(sceneView);
         (*datasetOne)->AddDataListener(parallelCoordsView);

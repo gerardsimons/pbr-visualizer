@@ -25,140 +25,140 @@ class Histogram {
     
 private:
     
-	//Use ints because we also want to have negative counts when using difference of two histograms
-	std::map<unsigned int,int> hist;
+    //Use ints because we also want to have negative counts when using difference of two histograms
+    std::map<unsigned int,int> hist;
     
     bool cdfStale = true;
     std::map<unsigned int,float> cdf; //Cumulative normalized distribution
-	size_t nrElements;
-	
-	T lowerBound;
-	T upperBound;
-	
-	T* maxValue = NULL;
-	T* minValue = NULL;
+    size_t nrElements;
     
-//    class Bin {
-//    public:
-//        float min;
-//        float max;
-//        
-//        int value;
-//        
-//        Bin(float min, float max) : min(min), max(max) {
-//            value = 0;
-//        }
-//    };
-	
-	unsigned int bins = 0;
-	float binWidth = 0;
-	
-	//Count the values and divide by the total number to get a normalized histogram
-	void count(const std::vector<T>& ts) {
-//		if(ts.size() == 0) {
-//			throw std::runtime_error("Empty data vector");
-//		}
-		for(const T& t : ts) {
-			Add(t);
-		}
-		nrElements = ts.size();
-	}
-	//Create the histogram from the given values and also use it to determine the natural bounds of the data
-	void createFromData(const std::vector<T>& ts) {
-//		if(ts.size() == 0) {
-//			throw std::runtime_error("Empty data vector");
-//		}
-		
-		count(ts);
-		
-		lowerBound = ts[0];
-		upperBound = ts[0];
-		
-		for(auto it : hist) {
-			lowerBound = std::min(lowerBound,it.first);
-			upperBound = std::max(upperBound,it.first);
-		}
-		
-		nrElements = ts.size();
-	}
-	float determineBinWidth() {
-		if(upperBound == lowerBound) {
-			return 0.5F;
-		}
-		else return (float)(upperBound - lowerBound) / bins;
-	}
+    T lowerBound;
+    T upperBound;
+    
+    T* maxValue = NULL;
+    T* minValue = NULL;
+    
+    //    class Bin {
+    //    public:
+    //        float min;
+    //        float max;
+    //
+    //        int value;
+    //
+    //        Bin(float min, float max) : min(min), max(max) {
+    //            value = 0;
+    //        }
+    //    };
+    
+    unsigned int bins = 0;
+    float binWidth = 0;
+    
+    //Count the values and divide by the total number to get a normalized histogram
+    void count(const std::vector<T>& ts) {
+        //		if(ts.size() == 0) {
+        //			throw std::runtime_error("Empty data vector");
+        //		}
+        for(const T& t : ts) {
+            Add(t);
+        }
+        nrElements = ts.size();
+    }
+    //Create the histogram from the given values and also use it to determine the natural bounds of the data
+    void createFromData(const std::vector<T>& ts) {
+        //		if(ts.size() == 0) {
+        //			throw std::runtime_error("Empty data vector");
+        //		}
+        
+        count(ts);
+        
+        lowerBound = ts[0];
+        upperBound = ts[0];
+        
+        for(auto it : hist) {
+            lowerBound = std::min(lowerBound,it.first);
+            upperBound = std::max(upperBound,it.first);
+        }
+        
+        nrElements = ts.size();
+    }
+    float determineBinWidth() {
+        if(upperBound == lowerBound) {
+            return 0.5F;
+        }
+        else return (float)(upperBound - lowerBound) / bins;
+    }
 public:
-	std::string name;
-//    Histogram& operator= (const Histogram& other) {
-//        hist = other.hist;
-//        
-//        upperBound = other.upperBound;
-//        lowerBound = other.lowerBound;
-//
+    std::string name;
+    //    Histogram& operator= (const Histogram& other) {
+    //        hist = other.hist;
+    //
+    //        upperBound = other.upperBound;
+    //        lowerBound = other.lowerBound;
+    //
     //    bins = other.bins;
     
-//        nrElements = other.nrElements;
-//        cdf = other.cdf;
-//        cdfStale = other.cdfStale;
-//        
-//        if(other.maxValue) {
-//            maxValue = new T(*other.maxValue);
-//            delete other.maxValue;
-//        }
-//        if(other.minValue) {
-//            minValue = new T(*other.minValue);
-//            delete other.minValue;
-//        }
-//        
-//        return *this;
-//    }
-	~Histogram() {
-		
-	}
-	Histogram() {
-		nrElements = 0;
-	}
-	Histogram(const std::string& name, ushort lowerBound, ushort upperBound) : name(name), lowerBound(lowerBound), upperBound(upperBound) {
-		nrElements = 0;
-		bins = upperBound - lowerBound;
-		binWidth = 1;
-	}
-	Histogram(const std::string& name, T lowerBound, T upperBound, unsigned int bins) : name(name), lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()) {
-		nrElements = 0;
-	}
-	Histogram(const std::string& name, T lowerBound, T upperBound, unsigned int bins, size_t nrElements) : name(name), lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()), nrElements(nrElements) {
-		
-	}
-	Histogram(const std::string& name, const std::vector<T>& ts, T lowerBound, T upperBound, unsigned int bins) : name(name), lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()) {
-		count(ts);
-	}
-	Histogram(const std::string& name, const std::vector<T>& ts, unsigned int bins)  : name(name) {
-		createFromData(ts,bins);
-	}
-	Histogram(const std::string& name, const SampleSet<T>& sampleset, unsigned int bins) : name(name){
-		createFromData(sampleset.GetSamples(),bins);
-	}
-	Histogram(const std::string& name, const std::vector<T>& ts) : name(name){
-		createFromData(ts);
-	}
-	Histogram(const std::string& name, const SampleSet<T>& sampleset) : name(name){
-		createFromData(sampleset.GetSamples());
-	}
-	T LowerBound() {
-		return lowerBound;
-	}
-	T UpperBound() {
-		return upperBound;
-	}
-	unsigned int MaximumValue() {
+    //        nrElements = other.nrElements;
+    //        cdf = other.cdf;
+    //        cdfStale = other.cdfStale;
+    //
+    //        if(other.maxValue) {
+    //            maxValue = new T(*other.maxValue);
+    //            delete other.maxValue;
+    //        }
+    //        if(other.minValue) {
+    //            minValue = new T(*other.minValue);
+    //            delete other.minValue;
+    //        }
+    //
+    //        return *this;
+    //    }
+    ~Histogram() {
+        
+    }
+    Histogram() {
+        nrElements = 0;
+    }
+    Histogram(const std::string& name, ushort lowerBound, ushort upperBound) : name(name), lowerBound(lowerBound), upperBound(upperBound) {
+        nrElements = 0;
+        bins = upperBound - lowerBound;
+        binWidth = 1;
+    }
+    Histogram(const std::string& name, T lowerBound, T upperBound, unsigned int bins) : name(name), lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()) {
+        nrElements = 0;
+    }
+    Histogram(const std::string& name, T lowerBound, T upperBound, unsigned int bins, size_t nrElements) : name(name), lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()), nrElements(nrElements) {
+        
+    }
+    Histogram(const std::string& name, const std::vector<T>& ts, T lowerBound, T upperBound, unsigned int bins) : name(name), lowerBound(lowerBound), upperBound(upperBound), bins(bins), binWidth(determineBinWidth()) {
+        count(ts);
+    }
+    Histogram(const std::string& name, const std::vector<T>& ts, unsigned int bins)  : name(name) {
+        createFromData(ts,bins);
+    }
+    Histogram(const std::string& name, const SampleSet<T>& sampleset, unsigned int bins) : name(name){
+        createFromData(sampleset.GetSamples(),bins);
+    }
+    Histogram(const std::string& name, const std::vector<T>& ts) : name(name){
+        createFromData(ts);
+    }
+    Histogram(const std::string& name, const SampleSet<T>& sampleset) : name(name){
+        createFromData(sampleset.GetSamples());
+    }
+    T LowerBound() {
+        return lowerBound;
+    }
+    T UpperBound() {
+        return upperBound;
+    }
+    unsigned int MaximumValue() {
         unsigned int max = 0;
-		for(auto iter : hist) {
-			if(iter.second > max) {
-				max = iter.second;
-			}
-		}
-		return max;
-	}
+        for(auto iter : hist) {
+            if(iter.second > max) {
+                max = iter.second;
+            }
+        }
+        return max;
+    }
     unsigned int MinimumValue() {
         unsigned int min = -1;
         for(auto iter : hist) {
@@ -174,15 +174,15 @@ public:
         }
         else return 0;
     }
-//    float Mean() {
-//        for(int i = 0 ; i < bins ; i++) {
-//            int thisValue = BinValue(i);
-//            int rightValue = right.BinValue(i);
-//            int diff = (thisValue - rightValue);
-//            result.Set(i,diff);
-//            
-//        }
-//    }
+    //    float Mean() {
+    //        for(int i = 0 ; i < bins ; i++) {
+    //            int thisValue = BinValue(i);
+    //            int rightValue = right.BinValue(i);
+    //            int diff = (thisValue - rightValue);
+    //            result.Set(i,diff);
+    //
+    //        }
+    //    }
     unsigned int SampleBin() {
         if(cdfStale) {
             ComputeCDF();
@@ -195,6 +195,7 @@ public:
                 return i;
             }
         }
+//        return bins - 1;
         throw std::runtime_error("Error sampling bin");
     }
     float Sample() {
@@ -215,32 +216,36 @@ public:
         }
         cdfStale = false;
     }
-	int BinValue(unsigned int bin) {
-		return hist[bin];
-	}
+    int BinValue(unsigned int bin) {
+        return hist[bin];
+    }
     float ScaledValue(unsigned int bin) {
+        
         int max = MaximumValue();
         
-        return hist[bin] / (float)max;
+        if(max) {
+            return hist[bin] / (float)max;
+        }
+        else return 0;
     }
-	float GetBinWidth() {
-		return binWidth;
-	}
-	void Set(int bin, size_t count) {
+    float GetBinWidth() {
+        return binWidth;
+    }
+    void Set(int bin, size_t count) {
         nrElements += count - hist[bin];
-		hist[bin] = count;
-	}
-	unsigned int Add(const T& value) {
-		
-		unsigned int bin = BinForValue(value);
-		
-		++hist[bin];
-		++nrElements;
+        hist[bin] = count;
+    }
+    unsigned int Add(const T& value) {
+        
+        unsigned int bin = BinForValue(value);
+        
+        ++hist[bin];
+        ++nrElements;
         
         cdfStale = true;
-		
-		return bin;
-	}
+        
+        return bin;
+    }
     unsigned int Add(const T& value, size_t number) {
         
         unsigned int bin = BinForValue(value);
@@ -252,38 +257,38 @@ public:
         
         return bin;
     }
-	unsigned int NumberOfBins() {
-		return bins;
-	}
-	Histogram operator-(Histogram& right) {
-		if(right.bins != bins) {
-			throw std::runtime_error("The histograms should have the same number of bins");
-		}
-		
-//		printf("left - right = \n\n");
-//		printf("left = \n");
-//		Print();
-//		printf("right = \n");
-//		right.Print();
-//		printf("\n");
-		
-		T lowerBound = std::min(LowerBound(),right.LowerBound());
-		T upperBound = std::max(UpperBound(),right.UpperBound());
-
-		Histogram result(name,lowerBound,upperBound,bins,nrElements - right.NumberOfElements());
-		
-		//Use normalized values!
-		for(int i = 0 ; i < bins ; i++) {
-			int thisValue = BinValue(i);
-			int rightValue = right.BinValue(i);
+    unsigned int NumberOfBins() {
+        return bins;
+    }
+    Histogram operator-(Histogram& right) {
+        if(right.bins != bins) {
+            throw std::runtime_error("The histograms should have the same number of bins");
+        }
+        
+        //		printf("left - right = \n\n");
+        //		printf("left = \n");
+        //		Print();
+        //		printf("right = \n");
+        //		right.Print();
+        //		printf("\n");
+        
+        T lowerBound = std::min(LowerBound(),right.LowerBound());
+        T upperBound = std::max(UpperBound(),right.UpperBound());
+        
+        Histogram result(name,lowerBound,upperBound,bins,nrElements - right.NumberOfElements());
+        
+        //Use normalized values!
+        for(int i = 0 ; i < bins ; i++) {
+            int thisValue = BinValue(i);
+            int rightValue = right.BinValue(i);
             int diff = std::abs(thisValue - rightValue);
-			result.Set(i,diff);
-
-		}
-//		printf("Result = \n");
-//		result.Print();
-		return result;
-	}
+            result.Set(i,diff);
+            
+        }
+        //		printf("Result = \n");
+        //		result.Print();
+        return result;
+    }
     Histogram operator+(Histogram& right) {
         if(right.bins != bins) {
             throw std::runtime_error("The histograms should have the same number of bins");
@@ -291,7 +296,7 @@ public:
         
         T lowerBound = std::min(LowerBound(),right.LowerBound());
         T upperBound = std::max(UpperBound(),right.UpperBound());
-        size_t sumElements = nrElements + right.NumberOfElements();
+//        size_t sumElements = nrElements + right.NumberOfElements();
         Histogram result(name,lowerBound,upperBound,bins,0);
         
         //Use normalized values!
@@ -302,258 +307,271 @@ public:
             result.Set(i,diff);
             
         }
-
+        
         return result;
     }
-	int BinForValue(const T& value) {
-//		T valueClamped = value;
-		if(value <= lowerBound) {
+    Histogram BooleanHistogram() {
+        
+        Histogram result(name,lowerBound,upperBound,bins,0);
+        
+        //Use normalized values!
+        for(int i = 0 ; i < bins ; i++) {
+            int thisValue = BinValue(i);
+            int boolValue = (int)(bool)thisValue;
+            result.Set(i,boolValue);
+        }
+        
+        return result;
+    }
+    int BinForValue(const T& value) {
+        //		T valueClamped = value;
+        if(value <= lowerBound) {
             return 0;
-		}
-		else if(value >= upperBound) {
+        }
+        else if(value >= upperBound) {
             return bins - 1;
-		}
-		T delta = upperBound - lowerBound;
-		double interpolated = (double)(value - lowerBound) / (delta);
+        }
+        T delta = upperBound - lowerBound;
+        double interpolated = (double)(value - lowerBound) / (delta);
         unsigned int bin = std::floor(interpolated * (bins));
-//		//When the value is exeactly on the upper edge it floors incorrectly to bin = bins
-//		if(bin == bins) {
-//			bin = bins - 1;
-//		}
-		return bin;
-	}
-	float DistanceTo(Histogram* right) {
-		if(right->bins != bins) {
-			throw std::runtime_error("The histograms should have the same number of bins");
-		}
-		
-		float totalDiff = 0;
-		
-//		printf("DistanceTo:\n");
-//		Print();
-//		right->Print();
-		//Use normalized values!
-		for(int i = 0 ; i < bins ; i++) {
-			float thisValue = NormalizedValue(i);
-			float rightValue = right->NormalizedValue(i);
-			float diff = std::abs((thisValue - rightValue));
-			totalDiff += diff;
-		}
-//		printf("totalDiff = %f\n",totalDiff);
-		return totalDiff;
-	}
-	float NormalizedValue(int i) {
-		if(nrElements)
-			return BinValue(i) / (float) nrElements;
-		else
-			return 0;
-	}
-	void Clear() {
-//        printf("Clear histogram %s\n",name.c_str());
-		hist.clear();
-		nrElements = 0;
+        //		//When the value is exeactly on the upper edge it floors incorrectly to bin = bins
+        //		if(bin == bins) {
+        //			bin = bins - 1;
+        //		}
+        return bin;
+    }
+    float DistanceTo(Histogram* right) {
+        if(right->bins != bins) {
+            throw std::runtime_error("The histograms should have the same number of bins");
+        }
+        
+        float totalDiff = 0;
+        
+        //		printf("DistanceTo:\n");
+        //		Print();
+        //		right->Print();
+        //Use normalized values!
+        for(int i = 0 ; i < bins ; i++) {
+            float thisValue = NormalizedValue(i);
+            float rightValue = right->NormalizedValue(i);
+            float diff = std::abs((thisValue - rightValue));
+            totalDiff += diff;
+        }
+        //		printf("totalDiff = %f\n",totalDiff);
+        return totalDiff;
+    }
+    float NormalizedValue(int i) {
+        if(nrElements)
+            return BinValue(i) / (float) nrElements;
+        else
+            return 0;
+    }
+    void Clear() {
+        //        printf("Clear histogram %s\n",name.c_str());
+        hist.clear();
+        nrElements = 0;
         cdfStale = true;
-	}
-	void Print() {
-		int maxBarSize = 48;
-		printf("Histogram %s has %zu elements in %zu bins :\n",name.c_str(),nrElements,bins);
-		
-		int binIndex = BinForValue(lowerBound);
-		
-		float binStart = lowerBound;
-		
+    }
+    void Print() {
+        int maxBarSize = 48;
+        printf("Histogram %s has %zu elements in %zu bins :\n",name.c_str(),nrElements,bins);
+        
+        int binIndex = BinForValue(lowerBound);
+        
+        float binStart = lowerBound;
+        
         for(int bin = 0 ; bin < bins ; ++bin) {
-//		for(auto it : hist) {
+            //		for(auto it : hist) {
             
-			printf("%.2f - %.2f\t : ",binStart,binStart + binWidth);
-			float normalValue = NormalizedValue(bin);
-			int barSize = normalValue * maxBarSize;
-			int tabs = (maxBarSize - barSize) / 4.F; //4 is the tabwidth in spaces
-			for(int i = 0 ; i < barSize ; i++) {
-				std::cout << "#";
-			}
-			for(int i = 0 ; i < tabs ; ++i) {
-				std::cout << "\t";
-			}
-			std::cout << hist[bin];
-			std::cout << " (" << normalValue << ")" << std::endl;
-			
-			binStart += binWidth;
-			
-			++binIndex;
-		}
-//
-//		for(float i = lowerBound ; i < upperBound ; i += binWidth) {
-//			printf("%.2f - %.2f\t : ",i,i+binWidth);
-//			float normalValue = NormalizedValue(binIndex);
-//			int barSize = normalValue * maxBarSize;
-//			int tabs = maxBarSize / 4 - barSize / 4  + 1; //4 is the tabwidth in spaces
-//			for(int i = 0 ; i < barSize ; i++) {
-//				std::cout << "#";
-//			}
-//			for(int i = 0 ; i < tabs ; ++i) {
-//				std::cout << "\t";
-//			}
-//			int value = BinValue(binIndex);
-//			std::cout << value;
-//			std::cout << " (" << value / (float)nrElements << ")" << std::endl;
-//			++binIndex;
-//		}
-		std::cout << std::endl;
-	}
-	size_t NumberOfElements() const {
-		return nrElements;
-	}
+            printf("%.2f - %.2f\t : ",binStart,binStart + binWidth);
+            float normalValue = NormalizedValue(bin);
+            int barSize = normalValue * maxBarSize;
+            int tabs = (maxBarSize - barSize) / 4.F; //4 is the tabwidth in spaces
+            for(int i = 0 ; i < barSize ; i++) {
+                std::cout << "#";
+            }
+            for(int i = 0 ; i < tabs ; ++i) {
+                std::cout << "\t";
+            }
+            std::cout << hist[bin];
+            std::cout << " (" << normalValue << ")" << std::endl;
+            
+            binStart += binWidth;
+            
+            ++binIndex;
+        }
+        //
+        //		for(float i = lowerBound ; i < upperBound ; i += binWidth) {
+        //			printf("%.2f - %.2f\t : ",i,i+binWidth);
+        //			float normalValue = NormalizedValue(binIndex);
+        //			int barSize = normalValue * maxBarSize;
+        //			int tabs = maxBarSize / 4 - barSize / 4  + 1; //4 is the tabwidth in spaces
+        //			for(int i = 0 ; i < barSize ; i++) {
+        //				std::cout << "#";
+        //			}
+        //			for(int i = 0 ; i < tabs ; ++i) {
+        //				std::cout << "\t";
+        //			}
+        //			int value = BinValue(binIndex);
+        //			std::cout << value;
+        //			std::cout << " (" << value / (float)nrElements << ")" << std::endl;
+        //			++binIndex;
+        //		}
+        std::cout << std::endl;
+    }
+    size_t NumberOfElements() const {
+        return nrElements;
+    }
 };
 
 template <typename... Ts>
 class HistogramSet {
 private:
-	std::tuple<std::vector<Histogram<Ts>>...> histograms;
-	std::tuple<std::map<std::string,Histogram<Ts>*>...> histogramRegisters; //Maps a name to a histogram pointer
-	
-	//When set to dynamic the set will create new histograms for values added to not yet exsistent histograms
-//	bool dynamic = true;
-	
-//	std::tuple<std::vector<Ts>...> values;
-//	std::tuple<std::vector<Histogram<float>>,std::vector<Histogram<ushort>>> histograms;
-//	std::tuple<int> ints;
-	
+    std::tuple<std::vector<Histogram<Ts>>...> histograms;
+    std::tuple<std::map<std::string,Histogram<Ts>*>...> histogramRegisters; //Maps a name to a histogram pointer
+    
+    //When set to dynamic the set will create new histograms for values added to not yet exsistent histograms
+    //	bool dynamic = true;
+    
+    //	std::tuple<std::vector<Ts>...> values;
+    //	std::tuple<std::vector<Histogram<float>>,std::vector<Histogram<ushort>>> histograms;
+    //	std::tuple<int> ints;
+    
 public:
-	~HistogramSet() {
-//		tuple_for_each(histograms, [&](auto tHistograms) {
-//			deletePointerVector(tHistograms);
-//		});
-	}
-	HistogramSet() {
-		
-	}
-	/** Copy Assignment Operator */
-	HistogramSet& operator= (const HistogramSet& other)
-	{
-		histograms = other.histograms;
-		return *this;
-	}
-	/** Copy Constructor */
-	HistogramSet (const HistogramSet& other)
-	{
-		histograms = other.histograms;
-	}
-	const std::tuple<std::vector<Histogram<Ts>>...>& GetAllHistograms() {
-		return histograms;
-	}
-	template<typename T>
-	std::vector<Histogram<T>>* GetHistograms() {
-		return &std::get<std::vector<Histogram<T>>>(histograms);
-	}
-	
-	template<typename T>
-	std::map<std::string,Histogram<T>*>& GetHistogramRegister() {
-		return std::get<std::map<std::string,Histogram<T>*>>(histogramRegisters);
-	}
-	
-	template<typename T>
-	Histogram<T>* GetHistogram(const std::string& name) {
-		std::map<std::string,Histogram<T>*>& histogramRegister = GetHistogramRegister<T>();
-		auto hist = histogramRegister[name];
-		if(hist) {
-			return hist;
-		}
-		else {
-			auto tHistograms = GetHistograms<T>();
-			
-			for(size_t i = 0 ; i < tHistograms->size() ; ++i) {
-				auto hist = tHistograms->at(i);
-				if(hist.name == name) {
-					histogramRegister[name] = &tHistograms->at(i);
-					return &tHistograms->at(i);
-				}
-			}
-		}
-		return NULL;
-	}
-	template<typename T>
-	void AddToHistogram(const std::string name,const T& value) {
-//		printf("name = %s\n",name.c_str());
-		Histogram<T>* histogram = NULL;
-		histogram = GetHistogram<T>(name);
-		//TODO: Create histogram when set to dynamic and histogram was not found
-		histogram->Add(value);
-	}
-
-	template<typename T>
-	void AddHistogram(const Histogram<T>& hist) {
-		std::vector<Histogram<T>>* histograms = GetHistograms<T>();
-		
-		histograms->push_back(hist);
-		auto newHistogram = &histograms->at(histograms->size() - 1);
-		std::get<std::map<std::string,Histogram<T>*>>(histogramRegisters)[hist.name] = newHistogram;
-	}
-	
-	//This assumes the right hand operand histogram set is a superset of this histogram set, throws a runtime_error if a histogram in this set could not be found.
-	HistogramSet operator-(HistogramSet<Ts...>& other) {
-//		return compare<Ts...>();
-		
-		float total = 0;
-		HistogramSet result;
-		
-		tuple_for_each(histograms, [&](auto tHistograms) {
-			for(auto histogram : tHistograms) {
-				
-
-				auto otherHistogram = other.GetHistogram<decltype(histogram->LowerBound())>(histogram->name);
-				if(!otherHistogram) {
-					throw std::runtime_error("Histogram " + histogram->name + " not found in right hand operand");
-				}
-				
-				auto diff = (*histogram) - (*otherHistogram);
-				result.AddHistogram(diff);
-			}
-		});
-		
-		return total;
-	}
-	
-	float DistanceTo(HistogramSet<Ts...>& other) {
-		float total = 0;
-		int nrHistograms = 0;
-		
-		tuple_for_each(histograms, [&](auto tHistograms) {
-
-			for(auto& histogram : tHistograms) {
-				auto otherHistogram = other.GetHistogram<decltype(histogram.LowerBound())>(histogram.name);
-				if(!otherHistogram) {
-					throw std::runtime_error("Histogram " + histogram.name + " not found in right hand operand");
-				}
+    ~HistogramSet() {
+        //		tuple_for_each(histograms, [&](auto tHistograms) {
+        //			deletePointerVector(tHistograms);
+        //		});
+    }
+    HistogramSet() {
+        
+    }
+    /** Copy Assignment Operator */
+    HistogramSet& operator= (const HistogramSet& other)
+    {
+        histograms = other.histograms;
+        return *this;
+    }
+    /** Copy Constructor */
+    HistogramSet (const HistogramSet& other)
+    {
+        histograms = other.histograms;
+    }
+    const std::tuple<std::vector<Histogram<Ts>>...>& GetAllHistograms() {
+        return histograms;
+    }
+    template<typename T>
+    std::vector<Histogram<T>>* GetHistograms() {
+        return &std::get<std::vector<Histogram<T>>>(histograms);
+    }
+    
+    template<typename T>
+    std::map<std::string,Histogram<T>*>& GetHistogramRegister() {
+        return std::get<std::map<std::string,Histogram<T>*>>(histogramRegisters);
+    }
+    
+    template<typename T>
+    Histogram<T>* GetHistogram(const std::string& name) {
+        std::map<std::string,Histogram<T>*>& histogramRegister = GetHistogramRegister<T>();
+        auto hist = histogramRegister[name];
+        if(hist) {
+            return hist;
+        }
+        else {
+            auto tHistograms = GetHistograms<T>();
+            
+            for(size_t i = 0 ; i < tHistograms->size() ; ++i) {
+                auto hist = tHistograms->at(i);
+                if(hist.name == name) {
+                    histogramRegister[name] = &tHistograms->at(i);
+                    return &tHistograms->at(i);
+                }
+            }
+        }
+        return NULL;
+    }
+    template<typename T>
+    void AddToHistogram(const std::string name,const T& value) {
+        //		printf("name = %s\n",name.c_str());
+        Histogram<T>* histogram = NULL;
+        histogram = GetHistogram<T>(name);
+        //TODO: Create histogram when set to dynamic and histogram was not found
+        histogram->Add(value);
+    }
+    
+    template<typename T>
+    void AddHistogram(const Histogram<T>& hist) {
+        std::vector<Histogram<T>>* histograms = GetHistograms<T>();
+        
+        histograms->push_back(hist);
+        auto newHistogram = &histograms->at(histograms->size() - 1);
+        std::get<std::map<std::string,Histogram<T>*>>(histogramRegisters)[hist.name] = newHistogram;
+    }
+    
+    //This assumes the right hand operand histogram set is a superset of this histogram set, throws a runtime_error if a histogram in this set could not be found.
+    HistogramSet operator-(HistogramSet<Ts...>& other) {
+        //		return compare<Ts...>();
+        
+        float total = 0;
+        HistogramSet result;
+        
+        tuple_for_each(histograms, [&](auto tHistograms) {
+            for(auto histogram : tHistograms) {
+                
+                
+                auto otherHistogram = other.GetHistogram<decltype(histogram->LowerBound())>(histogram->name);
+                if(!otherHistogram) {
+                    throw std::runtime_error("Histogram " + histogram->name + " not found in right hand operand");
+                }
+                
+                auto diff = (*histogram) - (*otherHistogram);
+                result.AddHistogram(diff);
+            }
+        });
+        
+        return total;
+    }
+    
+    float DistanceTo(HistogramSet<Ts...>& other) {
+        float total = 0;
+        int nrHistograms = 0;
+        
+        tuple_for_each(histograms, [&](auto tHistograms) {
+            
+            for(auto& histogram : tHistograms) {
+                auto otherHistogram = other.GetHistogram<decltype(histogram.LowerBound())>(histogram.name);
+                if(!otherHistogram) {
+                    throw std::runtime_error("Histogram " + histogram.name + " not found in right hand operand");
+                }
                 ++nrHistograms;
-				total += histogram.DistanceTo(otherHistogram);
-			}
-		});
-		return total / nrHistograms;
-	}
-	
-	void Print() {
-		printf("Histogram set : \n");
-		tuple_for_each(histograms, [&](auto tHistograms) {
-			for(auto& histogram : tHistograms) {
-				histogram.Print();
-			}
-		});
-	}
-	void Join(const HistogramSet& other) {
-		tuple_for_each(other.histograms, [&](auto tHistograms) {
-			for(auto& histogram : tHistograms) {
-				AddHistogram(histogram);
-			}
-		});
-	}
-	void Clear() {
-		tuple_for_each(histograms, [&](auto tHistograms) {
-			for(auto& histogram : tHistograms) {
-				histogram.Clear();
-			}
-		});
-	}
+                total += histogram.DistanceTo(otherHistogram);
+            }
+        });
+        return total / nrHistograms;
+    }
+    
+    void Print() {
+        printf("Histogram set : \n");
+        tuple_for_each(histograms, [&](auto tHistograms) {
+            for(auto& histogram : tHistograms) {
+                histogram.Print();
+            }
+        });
+    }
+    void Join(const HistogramSet& other) {
+        tuple_for_each(other.histograms, [&](auto tHistograms) {
+            for(auto& histogram : tHistograms) {
+                AddHistogram(histogram);
+            }
+        });
+    }
+    void Clear() {
+        tuple_for_each(histograms, [&](auto tHistograms) {
+            for(auto& histogram : tHistograms) {
+                histogram.Clear();
+            }
+        });
+    }
 };
 
 template <typename T>
@@ -572,23 +590,23 @@ private:
     float binWidth = 0;
     size_t nrElements = 0;
 public:
-//    Histogram2D& operator= (const Histogram2D& other)
-//    {
-//        if (this != &other) // protect against invalid self-assignment
-//        {
-//            lowerBound = other.lowerBound;
-//            upperBound = other.upperBound;
-//            
-//            histograms = other.histograms;
-//            
-//            cdf = other.cdf;
-//            cdfStale = other.cdfStale;
-//            binWidth = other.binWidth;
-//            nrElements = other.nrElements;
-//        }
-//        // by convention, always return *this
-//        return *this;
-//    }
+    //    Histogram2D& operator= (const Histogram2D& other)
+    //    {
+    //        if (this != &other) // protect against invalid self-assignment
+    //        {
+    //            lowerBound = other.lowerBound;
+    //            upperBound = other.upperBound;
+    //
+    //            histograms = other.histograms;
+    //
+    //            cdf = other.cdf;
+    //            cdfStale = other.cdfStale;
+    //            binWidth = other.binWidth;
+    //            nrElements = other.nrElements;
+    //        }
+    //        // by convention, always return *this
+    //        return *this;
+    //    }
     std::string name;
     std::pair<unsigned int,unsigned int> NumberOfBins() {
         return std::pair<unsigned int, unsigned int>(xBins,yBins);
@@ -612,7 +630,7 @@ public:
         
         nrElements += (newNrElements - oldNrElements);
         
-//        printf("newNrElements = %zu\n",nrElements);
+        //        printf("newNrElements = %zu\n",nrElements);
     }
     void Add(T valueOne, T valueTwo) {
         unsigned int bin = BinForValue(valueOne);
@@ -766,7 +784,7 @@ public:
     }
     std::pair<float,float> Sample2D() {
         
-        if(nrElements) {            
+        if(nrElements) {
             std::pair<float,float> sample;
             
             unsigned int bin = SampleBin();
@@ -795,7 +813,7 @@ public:
         }
         return 0;
     }
-    size_t NumberOfElements() {  
+    size_t NumberOfElements() {
         return nrElements;
     }
     float NormalizedMean() {
@@ -814,14 +832,14 @@ public:
     void PrintRaw() {
         printf("2D Histogram : \n");
         printf("Number of Elements = %zu\n",nrElements);
-//        printf("Mean = %f\n",Mean());
-//        printf("Variance = %f\n",Variance());
+        //        printf("Mean = %f\n",Mean());
+        //        printf("Variance = %f\n",Variance());
         if(nrElements) {
             for(int j = 0 ; j < yBins ; j++) {
                 for(int i = 0 ; i < xBins ; i++) {
                     T normValue = BinValue(i, j);
                     std::cout << normValue << "\t";
-//                    printf("%.2f\t",normValue);
+                    //                    printf("%.2f\t",normValue);
                 }
                 printf("\n");
             }
@@ -844,39 +862,41 @@ public:
         }
         else printf("<EMPTY>");
     }
-    void SmoothRectangular(unsigned int width, unsigned int height) {
+    void SmoothRectangular(unsigned int width, unsigned int height, const unsigned int repeat = 1) {
         if(width <= xBins && height <= yBins) {
-            Histogram2D<T> result = Histogram2D<T>(lowerBound,upperBound,xBins,yBins);
-            for(unsigned int x = 0 ; x < xBins ; ++x) {
-                for(unsigned int y = 0 ; y < yBins ; ++y) {
-                    int upperX = std::min(x + (width - 1) / 2,xBins - 1);
-                    int lowerX = std::max((int)(x - (width - 1) / 2),0);
-                    float sum = 0;
-                    int binsSummed = 0;
-                    for(int xFilter = lowerX ; xFilter <= upperX ; ++xFilter) {
-                        unsigned int upperY = std::min(y + (height - 1) / 2,yBins - 1);
-                        unsigned int lowerY = std::max((int)(y - (height - 1) / 2),0);
-                        for(int yFilter = lowerY ; yFilter <= upperY ; ++yFilter) {
-                            size_t value = BinValue(xFilter, yFilter);
-//                            printf("Value at filter %d,%d = %zu\n",xFilter,yFilter,value);
-                            sum += value;
-                            ++binsSummed;
+            for(int i = 0 ; i < repeat ; ++i) {
+                Histogram2D<T> result = Histogram2D<T>(lowerBound,upperBound,xBins,yBins);
+                for(unsigned int x = 0 ; x < xBins ; ++x) {
+                    for(unsigned int y = 0 ; y < yBins ; ++y) {
+                        int upperX = std::min(x + (width - 1) / 2,xBins - 1);
+                        int lowerX = std::max((int)(x - (width - 1) / 2),0);
+                        float sum = 0;
+                        int binsSummed = 0;
+                        for(int xFilter = lowerX ; xFilter <= upperX ; ++xFilter) {
+                            unsigned int upperY = std::min(y + (height - 1) / 2,yBins - 1);
+                            unsigned int lowerY = std::max((int)(y - (height - 1) / 2),0);
+                            for(int yFilter = lowerY ; yFilter <= upperY ; ++yFilter) {
+                                size_t value = BinValue(xFilter, yFilter);
+                                //                            printf("Value at filter %d,%d = %zu\n",xFilter,yFilter,value);
+                                sum += value;
+                                ++binsSummed;
+                            }
                         }
+                        size_t average = std::round(sum / binsSummed);
+                        //                    size_t average = std::ceil(sum / binsSummed);
+                        
+                        //                    int left = sum - average;
+                        //                    size_t newValue = (size_t)
+                        //                    printf("new value (%d,%d) = %zu\n",x,y,newValue);
+                        result.SetBinValue(x,y,average);
                     }
-                    size_t average = std::round(sum / binsSummed);
-//                    size_t average = std::ceil(sum / binsSummed);
-
-//                    int left = sum - average;
-//                    size_t newValue = (size_t)
-//                    printf("new value (%d,%d) = %zu\n",x,y,newValue);
-                    result.SetBinValue(x,y,average);
                 }
+                
+                int lost = this->NumberOfElements() - result.NumberOfElements();
+                printf("Smoothing lost %d elements.\n",lost);
+                
+                *this = result;
             }
-            
-            int lost = this->NumberOfElements() - result.NumberOfElements();
-            printf("Smoothing lost %d elements.\n",lost);
-            
-            *this = result;
         }
         else throw std::runtime_error("Smoothing kernel size too big");
     }
@@ -913,6 +933,16 @@ public:
         
         return result;
     }
+    Histogram2D<T> BooleanHistogram() {
+        Histogram2D<T> result = Histogram2D<T>(lowerBound,upperBound,xBins,yBins);
+        
+        for(int x = 0 ; x < xBins ; ++x) {
+            auto booleanHist = histograms[x].BooleanHistogram();
+            result.Set(x,booleanHist);
+        }
+        
+        return result;
+    }
     Histogram2D<T> operator-(Histogram2D<T>& right) {
         
         T lowerBound = std::min(LowerBound(),right.LowerBound());
@@ -942,7 +972,7 @@ public:
                 unsigned int thisValue = BinValue(xBin, yBin);
                 unsigned int otherValue = other.BinValue(xBin, yBin);
                 unsigned int product = thisValue * otherValue;
-//                printf("distro * throughput = %d * %d = %d\n",thisValue,otherValue,product);
+                //                printf("distro * throughput = %d * %d = %d\n",thisValue,otherValue,product);
                 result.SetBinValue(xBin, yBin,product);
                 
             }
@@ -965,25 +995,25 @@ private:
     //	std::tuple<int> ints;
     
 public:
-    ~Histogram2DSet() {
+//    ~Histogram2DSet() {
         //		tuple_for_each(histograms, [&](auto tHistograms) {
         //			deletePointerVector(tHistograms);
         //		});
-    }
+//    }
     Histogram2DSet() {
         
     }
     /** Copy Assignment Operator */
-    Histogram2DSet& operator= (const Histogram2DSet& other)
-    {
-        histograms = other.histograms;
-        return *this;
-    }
+//    Histogram2DSet& operator= (const Histogram2DSet& other)
+//    {
+//        histograms = other.histograms;
+//        return *this;
+//    }
     /** Copy Constructor */
-    Histogram2DSet (const Histogram2DSet& other)
-    {
-        histograms = other.histograms;
-    }
+//    Histogram2DSet (const Histogram2DSet& other)
+//    {
+//        histograms = other.histograms;
+//    }
     const std::tuple<std::vector<Histogram2D<Ts>>...>& GetAllHistograms() {
         return histograms;
     }
@@ -1019,7 +1049,7 @@ public:
     }
     template<typename T>
     void AddToHistogram(const std::string name,  const T& valueOne,const T& valueTwo,unsigned int magnitude = 1) {
-//        printf("name = %s\n",name.c_str());
+        //        printf("name = %s\n",name.c_str());
         Histogram2D<T>* histogram = NULL;
         histogram = GetHistogram<T>(name);
         //TODO: Create histogram when set to dynamic and histogram was not found

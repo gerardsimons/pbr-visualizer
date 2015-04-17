@@ -278,11 +278,11 @@ inline float linearInterpolate(float value, float start, float end) {
 
 template<typename T = int>
 std::vector<T> createRangeVector(const int lower, const int upper, const int step = 1) {
-    std::vector<T> rangeVector((upper - lower)/(float)step);
+    std::vector<T> rangeVector((upper - lower + 1)/(float)step);
     
-    if(step > 0 & upper > lower) {
+    if(step > 0 & upper >= lower) {
         int index = 0;
-        for(int i = lower ; i < upper ; i += step) {
+        for(int i = lower ; i <= upper ; i += step) {
             rangeVector[index] = i;
             
             index++;

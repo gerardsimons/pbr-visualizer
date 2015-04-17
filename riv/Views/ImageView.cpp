@@ -14,7 +14,7 @@ typedef unsigned short ushort;
 RIVImageView* RIVImageView::instance = NULL;
 int RIVImageView::windowHandle = -1;
 
-RIVImageView::RIVImageView(EMBREERenderer* renderer,int xBins) : RIVDataView(datasetOne), xBins(xBins) {
+RIVImageView::RIVImageView(EMBREERenderer* renderer,int xBins) : RIVDataView(datasetOne), xBinsOne(xBins) {
     if(instance != NULL) {
         throw "Only 1 instance of ImageView allowed.";
     }
@@ -22,10 +22,11 @@ RIVImageView::RIVImageView(EMBREERenderer* renderer,int xBins) : RIVDataView(dat
     identifier = "ImageView";
     paintGridOne = new Grid(gridSize);
     rendererOne = renderer;
-    yBins = rendererOne->getWidth() / (float)rendererOne->getHeight() * xBins;
+    
+    yBinsOne = rendererOne->getWidth() / (float)rendererOne->getHeight() * xBinsOne;
 }
 
-RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, EMBREERenderer* renderer,Histogram2DSet<float,ushort>* imageDistributions,int xBins) : RIVDataView(datasetOne),imageDistributionsOne(imageDistributions),xBins(xBins) {
+RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, EMBREERenderer* renderer,Histogram2DSet<float,ushort>* imageDistributions,int xBinsOne) : RIVDataView(datasetOne),imageDistributionsOne(imageDistributions),xBinsOne(xBinsOne) {
     
     //    trueEnergyDistributionOne = imageDistributions->GetHistogram<float>(IMAGE_RADIANCE);
     //    throughputDistroOne = imageDistributions->GetHistogram<float>(IMAGE_THROUGHPUT);
@@ -38,10 +39,10 @@ RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, EMBREERenderer
     paintGridOne = new Grid(gridSize);
     
     rendererOne = renderer;
-    yBins = rendererOne->getHeight() / (float)rendererOne->getWidth() * xBins;
+    yBinsOne = rendererOne->getWidth() / (float)rendererOne->getHeight() * xBinsOne;
 }
 
-RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, Histogram2DSet<float,ushort>* imageDistributionsOne,Histogram2DSet<float,ushort>* imageDistributionsTwo,int xBins) : RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(rendererTwo),imageDistributionsOne(imageDistributionsOne),imageDistributionsTwo(imageDistributionsTwo),xBins(xBins) {
+RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, Histogram2DSet<float,ushort>* imageDistributionsOne,Histogram2DSet<float,ushort>* imageDistributionsTwo,int xBinsOne, int xBinsTwo) : RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(rendererTwo),imageDistributionsOne(imageDistributionsOne),imageDistributionsTwo(imageDistributionsTwo),xBinsOne(xBinsOne),xBinsTwo(xBinsTwo) {
     
     paintGridOne = new Grid(gridSize);
     paintGridTwo = new Grid(gridSize);
@@ -52,7 +53,8 @@ RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<flo
     instance = this;
     identifier = "ImageView";
     
-    yBins = rendererOne->getHeight() / (float)rendererOne->getWidth() * xBins;
+    yBinsOne = rendererOne->getHeight() / (float)rendererOne->getWidth() * xBinsOne;
+    yBinsTwo = rendererTwo->getWidth() / (float)rendererTwo->getHeight() * xBinsTwo;
 }
 
 void RIVImageView::DrawInstance() {
@@ -170,8 +172,8 @@ void RIVImageView::computeRadianceDistributions() {
     
     if(rDistroOne && gDistroOne && bDistroOne && rDistroTwo && gDistroTwo && bDistroTwo) {
         
-        rDistroOne->PrintRaw();
-        rDistroTwo->PrintRaw();
+//        rDistroOne->PrintRaw();
+//        rDistroTwo->PrintRaw();
         
         for(int xBin = 0 ; xBin < bins.first ; ++xBin) {
             for(int yBin = 0 ; yBin < bins.second ; ++yBin) {
@@ -231,7 +233,9 @@ void RIVImageView::SetHeatmapToDisplay(HeatmapDisplay newHeatmap) {
             activeHeatmapTwo = depthDistributionTwo;
             break;
         case RADIANCE_DIFFERENCE:
-            computeRadianceDistributions();
+            if(!radianceDiffDistribution) {
+                computeRadianceDistributions();
+            }
             if(datasetTwo) {
                 heatmapToDisplay = RADIANCE_DIFFERENCE;
                 activeHeatmapOne = radianceDiffDistribution;
@@ -303,14 +307,19 @@ void RIVImageView::ToggleHeatmapDisplayMode() {
 }
 void RIVImageView::OnDataChanged(RIVDataSet<float,ushort>* source) {
     
+    if(radianceDiffDistribution) {
+//        delete radianceDiffDistribution;
+        radianceDiffDistribution = NULL; //MEMORY LEAK
+    }
+    
     if(source->IsFiltered()) {
         if(source == *datasetOne) {
-            computePixelDistribution(*datasetOne, pixelDistributionOne);
-            printf("Pixel distribution one = \n");
-            pixelDistributionOne->Print();
+            computePixelDistribution(*datasetOne, pixelDistributionOne, xBinsOne, yBinsOne);
+//            printf("Pixel distribution one = \n");
+//            pixelDistributionOne->Print();
         }
         else if(datasetTwo && *datasetTwo == source) {
-            computePixelDistribution(*datasetTwo, pixelDistributionTwo);
+            computePixelDistribution(*datasetTwo, pixelDistributionTwo,xBinsTwo, yBinsTwo);
             
         }
         else {
@@ -325,7 +334,7 @@ void RIVImageView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
         
         bool pixelDistroWasActive = pixelDistributionOne == activeHeatmapOne;
         
-        computePixelDistribution(*datasetOne, pixelDistributionOne);
+        computePixelDistribution(*datasetOne, pixelDistributionOne,xBinsOne, yBinsOne);
         computeRadianceDistributions();
         //        printf("Heatmap one result = \n");
         //        pixelDistributionOne->Print();
@@ -337,7 +346,7 @@ void RIVImageView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
     else if(datasetTwo && dataset == *datasetTwo) {
         bool pixelDistroWasActive = pixelDistributionTwo == activeHeatmapTwo;
         
-        computePixelDistribution(*datasetTwo, pixelDistributionTwo);
+        computePixelDistribution(*datasetTwo, pixelDistributionTwo,xBinsTwo, yBinsTwo);
         computeRadianceDistributions();
         //        printf("Heatmap two result = \n");
         //        heatmapTwo->Print();
@@ -371,11 +380,11 @@ void RIVImageView::smoothPixelDistribution(Histogram2D<float>* pixeLDistribution
     pixeLDistribution->SmoothRectangular(3, 3);
     redisplayWindow();
 }
-void RIVImageView::computePixelDistribution(RIVDataSet<float,ushort>* dataset, Histogram2D<float>*& pixelDistribution) {
+void RIVImageView::computePixelDistribution(RIVDataSet<float,ushort>* dataset, Histogram2D<float>*& pixelDistribution,int binsX, int binsY) {
     if(pixelDistribution) {
         delete pixelDistribution;
     }
-    pixelDistribution = new Histogram2D<float>(0, 1, xBins, yBins);
+    pixelDistribution = new Histogram2D<float>(0, 1, binsX, binsY);
     
     RIVTable<float,ushort>* pathsTable = dataset->GetTable(PATHS_TABLE);
     TableIterator* iterator = pathsTable->GetIterator();
@@ -720,7 +729,7 @@ void RIVImageView::Draw() {
         //		printf("\nImageView Draw #%zu\n",++drawCounter);
         glDisable(GL_DEPTH_TEST);
         
-        glClearColor(0,1,1,1);
+        glClearColor(1,1,1,1);
         glClear( GL_COLOR_BUFFER_BIT );
         
         glMatrixMode(GL_MODELVIEW);

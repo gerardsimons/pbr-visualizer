@@ -24,6 +24,7 @@ private:
     void floodFillNeighbors(int x, int y);
     void fillNeighbors(unsigned int x, unsigned int y);
 public:
+    Grid(unsigned int width,unsigned int height, const std::vector<std::vector<bool>> cells);
     Grid(unsigned int width,unsigned int height);
     Grid(unsigned int size);
     

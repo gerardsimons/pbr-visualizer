@@ -32,7 +32,7 @@ private:
 	EMBREERenderer* rendererOne;
 	EMBREERenderer* rendererTwo = NULL;
 
-    int imagePadding = 0;
+    int imagePadding = 5;
 
 	void clearSelection();
     bool isDragging;
@@ -44,8 +44,10 @@ private:
 //    Histogram2D<float>* throughputDistroOne = NULL;
 //    Histogram2D<float>* throughputDistroTwo = NULL;
     
-    unsigned int xBins;
-    unsigned int yBins; //Deduced according to image aspect ratio
+    unsigned int xBinsOne;
+    unsigned int yBinsOne; //Deduced according to image aspect ratio
+    unsigned int xBinsTwo;
+    unsigned int yBinsTwo; //Deduced according to image aspect ratio
     Histogram2D<float>* pixelDistributionOne = NULL;
     Histogram2D<float>* pixelDistributionTwo = NULL;
     
@@ -69,7 +71,7 @@ private:
     Grid* interactingGrid = NULL;
     
 	void drawRenderedImage(EMBREERenderer* renderer,int startX, int startY, int width, int height);
-    void computePixelDistribution(RIVDataSet<float,ushort>*, Histogram2D<float>*& pixelDistribution);
+    void computePixelDistribution(RIVDataSet<float,ushort>*, Histogram2D<float>*& pixelDistribution, int binsX, int binsY);
     void computeRadianceDistributions();
     void drawHeatmap(bool leftSet,Histogram2D<float>* heatmap);
     void drawRadianceDifference();
@@ -106,8 +108,8 @@ public:
     void CombinePixelDistributions();
 	//Single renderer constructor
     RIVImageView(EMBREERenderer* rendererOne, int xBins);
-	RIVImageView(RIVDataSet<float,ushort>** datasetOne,  EMBREERenderer* rendererOne,Histogram2DSet<float,ushort>* imageDistributions,int xBins);
-	RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo,Histogram2DSet<float,ushort>* imageDistributionsOne,Histogram2DSet<float,ushort>* imageDistributionsTwo,int xBins);
+	RIVImageView(RIVDataSet<float,ushort>** datasetOne,  EMBREERenderer* rendererOne,Histogram2DSet<float,ushort>* imageDistributions,int xBinsOne);
+	RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo,Histogram2DSet<float,ushort>* imageDistributionsOne,Histogram2DSet<float,ushort>* imageDistributionsTwo,int xBinsOne,int xBinsTwo);
     Histogram2D<float>* GetActiveDistributionOne();
     Histogram2D<float>* GetActiveDistributionTwo();
     Histogram2D<float>* GetPixelDistributionOne();

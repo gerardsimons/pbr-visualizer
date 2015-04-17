@@ -1512,7 +1512,7 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
                 size_t intersectionRow = mapping[i];
                 ushort objectID = primitiveIds->Value(intersectionRow);
                 //Check if it has occluders and if the selectedObjectID is in them
-                if((selectionMode == INTERACTION || selectionMode == INTERACTION_AND_SHADOW) && i == bounceNr) {
+                if((selectionMode == INTERACTION || selectionMode == INTERACTION_AND_SHADOW) && i == (bounceNr-1)) {
 //                    if( primitiveIds->Value(intersectionRow) == *selectedObjectIDs) {
                     if(selectedObjectIDs.find(objectID) != selectedObjectIDs.end()) {
                         filter = false;
@@ -1619,7 +1619,7 @@ void RIV3DView::CycleSelectionMode() {
             SetSelectionMode(INTERACTION);
             break;
         case INTERACTION:
-            SetSelectionMode(OBJECT);
+            SetSelectionMode(INTERACTION_AND_SHADOW);
             break;
         case INTERACTION_AND_SHADOW:
             SetSelectionMode(OBJECT);
@@ -1663,9 +1663,9 @@ bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMe
     //
     printf("Path creation filter");
     std::set<ushort> selectedObjectIds = {selectedObjectID};
-    if(selectedObjectID == 5) {
-        selectedObjectIds.insert(6);
-    }
+//    if(selectedObjectID == 5) {
+//        selectedObjectIds.insert(6);
+//    }
     filterPaths(dataset, *bounceCount, selectedObjectIds, pathFilters);
     
     //		dataset->Print();
@@ -1800,16 +1800,16 @@ void RIV3DView::SetSelectionMode(SelectionMode mode) {
     
     switch (selectionMode) {
         case PATH:
-            printf("Selection mode is now set to 'INTERACTION'\n");
+            printf("Selection mode is now set to 'PATH'\n");
             break;
         case INTERACTION:
-            printf("Selection mode is now set to 'INTERACTION_AND_SHADOW'\n");
+            printf("Selection mode is now set to 'INTERACTION'\n");
             break;
         case INTERACTION_AND_SHADOW:
-            printf("Selection mode is now set to 'OBJECT'\n");
+            printf("Selection mode is now set to 'INTERACTION_AND_SHADOW'\n");
             break;
         case OBJECT:
-            printf("Selection mode is now set to 'PATH'\n");
+            printf("Selection mode is now set to 'OBJECT'\n");
             break;
     }
 }
