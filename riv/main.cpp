@@ -92,8 +92,8 @@ bool linkPixelDistros = false;
 const int maxPathsOne = 5000;
 const int maxBootstrapRepeatOne = 5;
 
-const int maxPathsTwo = 250000;
-const int maxBootstrapRepeatTwo = 5;
+const int maxPathsTwo = 50000;
+const int maxBootstrapRepeatTwo = 1;
 
 const int sliderViewHeight = 0;
 
@@ -380,14 +380,15 @@ void mergeRenderScript() {
     printHeader("MERGE RENDER SCRIPT",100);
     
     //Configuration
-    const int baseFidelity = 128;
+    const int baseFidelity = 1;
     
 //    const int maxFrames = 1;
-    const std::vector<int> frames = createRangeVector(1,64);
+    const std::vector<int> frames = createRangeVector(1,128);
 //    const std::vector<int> frames = createRangeVector(1,32);
-    const std::vector<int> weights = createRangeVector(50,200,50);
+//    const std::vector<int> weights = createRangeVector(100,);
+    const std::vector<int> weights = {1,2,4,8,16,32,64,128};
     
-    const char* extension = ".bmp";
+    const char* extension = ".png";
     
     bool generateReferenceImages = false;
     const double gamma = 2;
@@ -404,7 +405,7 @@ void mergeRenderScript() {
         
         //Overextend a bit
         std::vector<int> uniformFrames = frames;
-        uniformFrames.push_back(128);
+//        uniformFrames.push_back(128);
         uniformFrames.push_back(256);
         uniformFrames.push_back(512);
         uniformFrames.push_back(1024);
@@ -483,9 +484,27 @@ void mergeRenderScript() {
     distro->PrintRaw();
     *distro = distro->BooleanHistogram();
     distro->PrintRaw();
-
-    //Smooth the selection distribution
-//    distro->SmoothRectangular(3, 3, 5);
+    
+    //Fill holes
+    Grid g = distro->ToGrid();
+    
+//    printf("BEFORE FILLING HOLES!\n");
+//    g.Print();
+    
+    Grid holes = g.GetHoles();
+    
+//    printf("HOLES:  \n");
+//    holes.Print();
+    
+    //Or operator, get both holes and the original grid
+    g = g | holes;
+//    printf("AFTER FILLING HOLES!\n");
+//    g.Print();
+    
+    //Convert back to histogram for rendering
+    *distro = Histogram2D<float>(g);
+    printf("Final weight histogram");
+    distro->PrintRaw();
     
     dataControllerTwo->SetDataCollectionMode(DataController::NONE);
 
@@ -493,15 +512,29 @@ void mergeRenderScript() {
         
         //Copy weights according to inverse of selection
         rendererOne->CopySwapChainTo(rendererTwo,distro,weight,true);
-        sprintf(outputImagePath, "%s/w=%d_spp=%d%s",dir,weight,0,extension);
-        rendererTwo->outputMode(outputImagePath);
+//        sprintf(outputImagePath, "%s/w=%d_spp=%d%s",dir,weight,0,extension);
+//        rendererTwo->outputMode(outputImagePath);
         currentFrameTwo = 0;
+        
+        bool swapchainReset = false;
+        
         for(int frame : frames) {
             //Reset frame counter renderer two
             while(currentFrameTwo < frame) {
-                rendererTwo->RenderNextFrame(&radianceDistro,false);
+                
+//                if(currentFrameTwo < baseFidelity) {
+                    rendererTwo->RenderNextFrame(&radianceDistro,false);
+//                }
+//                else { //We have sampled more than the base fidelity, go back to uniform rendering with uniform weight
+//                    if(!swapchainReset) {
+//                        rendererTwo->SetSwapChainWeight(baseFidelity);
+//                        swapchainReset = true;
+//                    }
+//                    rendererTwo->RenderNextFrame(false);
+            
                 currentFrameTwo++;
             }
+            
             
             char outputImagePath[256];
             sprintf(outputImagePath, "%s/w=%d_spp=%d%s",dir,weight,currentFrameTwo,extension);
@@ -736,6 +769,22 @@ void keys(int keyCode, int x, int y) {
         }
         case 116: // 't' key, use as temp key for some to-test function
         {
+            printf("Test function, who knows what it does?\n");
+            
+            auto distro = imageView->GetActiveDistributionTwo();
+            
+            Grid grid = distro->ToGrid();
+            
+            printf("Grid : ");
+            grid.Print();
+            
+            Grid holes = grid.GetHoles();
+            holes.Print();
+            
+            if(distro) {
+                distro->PrintRaw();
+            }
+            
             invalidateAllViews();
             glutPostRedisplay();
             break;
@@ -746,7 +795,7 @@ void keys(int keyCode, int x, int y) {
             auto distroOne = imageView->GetActiveDistributionOne();
             auto distroTwo = imageView->GetActiveDistributionTwo();
             
-            double gamma = 1.05;
+            double gamma = 2;
             
             if(distroOne) {
                 if(distroTwo && distroTwo != distroOne) {
@@ -1204,7 +1253,12 @@ void setup(int argc, char** argv) {
     float rendererSize = rendererOne->getWidth() * rendererOne->getHeight();
     float samplesPerPixel = maxPathsOne/rendererSize;
     
-    int xBinsOne = std::ceil(rendererOne->getWidth() / (float)samplesPerPixel / minSamplesPerBin);
+    //Complete bull
+//    int xBinsOne = std::ceil(rendererOne->getWidth() / (float)samplesPerPixel / minSamplesPerBin);
+    
+    int xBinsOne = rendererOne->getWidth();
+    
+    int xBinsTwo = xBinsOne;
     
     if(nrConnected) {
 
@@ -1277,13 +1331,16 @@ void setup(int argc, char** argv) {
         
         float rendererSize = rendererTwo->getWidth() * rendererTwo->getHeight();
         float samplesPerPixel = maxPathsTwo/rendererSize;
-        int xBinsTwo;
-        if(samplesPerPixel > minSamplesPerBin) {
-            xBinsTwo = rendererTwo->getWidth();
-        }
-        else {
-            xBinsTwo = std::ceil(rendererTwo->getWidth() / samplesPerPixel / minSamplesPerBin);
-        }
+        
+//        int xBinsTwo = rendererTwo->getWidth() / 2;
+        
+//        int xBinsTwo = rendererTwo->getWidth();
+//        if(samplesPerPixel > minSamplesPerBin) {
+//            xBinsTwo = rendererTwo->getWidth();
+//        }
+//        else {
+//            xBinsTwo = std::ceil(rendererTwo->getWidth() / samplesPerPixel / minSamplesPerBin);
+//        }
         
         sliderViewWindow = glutCreateSubWindow(mainWindow, padding, height/2.F-2*padding, width - 2* padding, sliderViewHeight);
         RIVSliderView::windowHandle = sliderViewWindow;

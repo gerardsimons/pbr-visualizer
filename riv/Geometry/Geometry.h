@@ -24,7 +24,9 @@ inline double euclideanDistance(double x1, double x2, double y1, double y2, doub
 //    double distance = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 -y1) + (z2 - z1) * (z2 - z1));
 //    printf("(%f-%f)*(%f-%f)+(%f-%f)*(%f-%f)+(%f-%f)*(%f-%f)=%f\n",x1,x2,x1,x2,y1,y2,y1,y2,z1,z2,z1,z2,distance);
 //    return distance;
-    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 -y1) + (z2 - z1) * (z2 - z1));
+//    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 -y1) + (z2 - z1) * (z2 - z1));
+    
+    throw std::runtime_error("This does not work anymore.");
 }
 
 class RIVPoint {

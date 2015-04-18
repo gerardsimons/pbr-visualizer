@@ -18,6 +18,7 @@
 
 #include "TupleIterator.h"
 #include "SampleSet.h"
+#include "../Grid.h"
 
 //histogram implementation. Counts the values in the given vector and divides by the number of samples to normalize
 template<typename T>
@@ -706,6 +707,29 @@ public:
             histograms[i] = Histogram<T>("2DHistogram", lowerBound, upperBound, yBins);
         }
     }
+    Histogram2D(Grid& grid) {
+        xBins = grid.GetWidth();
+        yBins = grid.GetHeight();
+        
+        lowerBound = 0;
+        upperBound = grid.GetWidth();
+        
+        nrElements = 0;
+        
+        for(int x = 0 ; x < xBins ; ++x) {
+            auto newHistogram = Histogram<T>("2DHistogram", 0, grid.GetHeight(), yBins);
+            
+            for(int y = 0 ; y < yBins ; ++y) {
+                int filled = grid.IsFilled(y,x);
+                
+                newHistogram.Add(y,filled);
+                
+                nrElements += filled;
+            }
+            
+            histograms[x] = newHistogram;
+        }
+    }
     void Clear() {
         nrElements = 0;
         for(auto it : histograms) {
@@ -942,6 +966,17 @@ public:
         }
         
         return result;
+    }
+    Grid ToGrid() {
+        std::vector<std::vector<bool>> gridCells = std::vector<std::vector<bool>>(xBins,std::vector<bool>(yBins));
+        
+        for(int x = 0 ; x < xBins ; ++x) {
+            for(int y = 0 ; y < yBins ; ++y) {
+                gridCells[x][y] = (bool)BinValue(y,x);
+            }
+        }
+        
+        return Grid(gridCells);
     }
     Histogram2D<T> operator-(Histogram2D<T>& right) {
         

@@ -16,6 +16,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <math.h>
 
 #if __APPLE__
     #include <GLUT/GLUT.h>
@@ -226,15 +227,15 @@ void printVector(const std::vector<T>& values,std::string name = "") {
 template <typename T>
 void print2DVector(const std::vector<std::vector<T>>& values2D,std::string name = "") {
     
-    std::cout << "2D vector " + name + " = \n";
+    std::cout << "2D vector " + name + " = [\n";
     for(const std::vector<T>& values : values2D) {
-        printf("[");
         for(size_t i = 0 ; i < values.size() ; ++i) {
             T value = values[i];
             std::cout << value << " ";
         }
-        printf("]\n");
+        printf("\n");
     }
+    printf("]\n");
 }
 template <typename T>
 bool vectorContains(const std::vector<T> v, T element) {
@@ -278,7 +279,15 @@ inline float linearInterpolate(float value, float start, float end) {
 
 template<typename T = int>
 std::vector<T> createRangeVector(const int lower, const int upper, const int step = 1) {
-    std::vector<T> rangeVector((upper - lower + 1)/(float)step);
+    
+
+    int delta = (upper - lower);
+    int trueStep = std::min(step,delta);
+    std::vector<T> rangeVector;
+    if(delta) {
+        rangeVector = std::vector<T>((delta + 1)/(float)trueStep);
+    }
+    else return std::vector<T> {lower};
     
     if(step > 0 & upper >= lower) {
         int index = 0;

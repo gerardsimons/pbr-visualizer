@@ -141,6 +141,7 @@ public:
 	bool RayPick(Ray& ray, float& x, float& y, float& z);
     
     Ref<SwapChain> GetSwapChain();
+    void SetSwapChainWeight(float weight);
     void CopySwapChainTo(EMBREERenderer* renderer,float copyWeight);
     void CopySwapChainTo(EMBREERenderer* targetRenderer, const std::vector<std::vector<float>>& weights);
     void CopySwapChainTo(EMBREERenderer* targetRenderer, Histogram2D<float>* histogram, float weightScalar, bool inverse = false);

@@ -17,4 +17,4 @@
 #-size 800 600
 #-size 160 120
 -size 320 240
--renderer pathtracer { depth = 5 }
+-renderer pathtracer { depth = 3 }

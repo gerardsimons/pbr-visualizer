@@ -52,9 +52,14 @@ RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<flo
     }
     instance = this;
     identifier = "ImageView";
+
+    int widthOne = rendererOne->getWidth();
+    int heightOne = rendererOne->getHeight();
+    yBinsOne = heightOne / (float)widthOne * xBinsOne;
     
-    yBinsOne = rendererOne->getHeight() / (float)rendererOne->getWidth() * xBinsOne;
-    yBinsTwo = rendererTwo->getWidth() / (float)rendererTwo->getHeight() * xBinsTwo;
+    int widthTwo = rendererTwo->getWidth();
+    int heightTwo = rendererTwo->getHeight();
+    yBinsTwo = heightTwo / (float)widthTwo * xBinsTwo;
 }
 
 void RIVImageView::DrawInstance() {
@@ -135,6 +140,10 @@ Histogram2D<float> RIVImageView::computeRadianceDistribution(RIVDataSet<float,us
 void RIVImageView::computeRadianceDistributions() {
     
     //    if(datasetTwo && !(*datasetTwo)->IsEmpty() && imageDistributionsTwo) {
+    
+    if(!imageDistributionsOne || !imageDistributionsTwo) {
+        return;
+    }
     
     if(radianceDiffDistribution) {
         
@@ -860,27 +869,29 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
             
             if(interactingGrid) {
                 //Get bounds
-                RIVRectangle boundingRectangle = interactingGrid->fillBounds();
+//                RIVRectangle boundingRectangle = interactingGrid->fillBounds();
+//                
+//                
+//                RIVPoint seedPoint;
+//                
+//                if(boundingRectangle.start.x > 0) {
+//                    seedPoint.x = 0;
+//                }
+//                else if(boundingRectangle.end.x < interactingGrid->GetWidth() - 1) {
+//                    seedPoint.x = interactingGrid->GetWidth() - 1;
+//                }
+//                if(boundingRectangle.start.y > 0) {
+//                    seedPoint.y = 0;
+//                }
+//                else if(boundingRectangle.end.y < interactingGrid->GetHeight() - 1) {
+//                    seedPoint.y = interactingGrid->GetHeight() - 1;
+//                }
+//                interactingGrid->FloodFill(seedPoint);
+//                interactingGrid->InvertFill();
                 
+                *interactingGrid = interactingGrid->GetHoles();
                 
-                RIVPoint seedPoint;
-                
-                if(boundingRectangle.start.x > 0) {
-                    seedPoint.x = 0;
-                }
-                else if(boundingRectangle.end.x < interactingGrid->GetWidth() - 1) {
-                    seedPoint.x = interactingGrid->GetWidth() - 1;
-                }
-                if(boundingRectangle.start.y > 0) {
-                    seedPoint.y = 0;
-                }
-                else if(boundingRectangle.end.y < interactingGrid->GetHeight() - 1) {
-                    seedPoint.y = interactingGrid->GetHeight() - 1;
-                }
-                interactingGrid->FloodFill(seedPoint);
-                interactingGrid->InvertFill();
-                
-                showFillArea = false;
+                showFillArea = true;
                 
                 if(interactingGrid == paintGridOne) {
                     filterImage(*datasetOne, interactingGrid, pixelFilterOne);
@@ -892,7 +903,7 @@ bool RIVImageView::HandleMouse(int button, int state, int x, int y) {
                     //What?
                 }
                 
-                interactingGrid = NULL; //We are done with the grid
+//                interactingGrid = NULL; //We are done with the grid
                 redisplayWindow();
             }
             

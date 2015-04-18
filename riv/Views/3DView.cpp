@@ -436,15 +436,14 @@ void RIV3DView::Draw() {
     glScalef(modelScale,modelScale,modelScale);
     glTranslatef(-modelCenter[0], -modelCenter[1], -modelCenter[2]);
     
+    float whiteColor[] = {0.95F,0.95F,.95F};
+    
     if(showMeshes) {
         if(drawDataSetOne) {
-            //		float purpleColor[3] =  {.5f,.2f,1.0f};
-            float redColor[] = {1,0,0};
-            drawMeshModel(&meshesOne,redColor,&selectedObjectIdOne);
+            drawMeshModel(&meshesOne,whiteColor,&selectedObjectIdOne);
         }
         if(drawDataSetTwo) {
-            float blueColor[] = {0,0,1};
-            drawMeshModel(&meshesTwo,blueColor,&selectedObjectIdTwo);
+            drawMeshModel(&meshesTwo,whiteColor,&selectedObjectIdTwo);
         }
     }
     if(drawIntersectionPoints) {
@@ -720,11 +719,15 @@ std::vector<Path> RIV3DView::createLightPaths(ushort selectedLightID, RIVDataSet
     RIVTable<float,ushort>* pathsTable = dataset->GetTable(PATHS_TABLE);
     RIVShortRecord* bounceRecord = isectTable->GetRecord<ushort>(BOUNCE_NR);
     
-    RIVFloatRecord* lightRs = lightsTable->GetRecord<float>(LIGHT_R);
-    RIVFloatRecord* lightGs = lightsTable->GetRecord<float>(LIGHT_G);
-    RIVFloatRecord* lightBs = lightsTable->GetRecord<float>(LIGHT_B);
+    RIVFloatRecord* isectRs = isectTable->GetRecord<float>(INTERSECTION_R);
+    RIVFloatRecord* isectGs = isectTable->GetRecord<float>(INTERSECTION_G);
+    RIVFloatRecord* isectBs = isectTable->GetRecord<float>(INTERSECTION_B);
     
-    RIVShortRecord* primitiveIds = isectTable->GetRecord<ushort>(PRIMITIVE_ID);
+//    RIVFloatRecord* lightRs = lightsTable->GetRecord<float>(LIGHT_R);
+//    RIVFloatRecord* lightGs = lightsTable->GetRecord<float>(LIGHT_G);
+//    RIVFloatRecord* lightBs = lightsTable->GetRecord<float>(LIGHT_B);
+    
+//    RIVShortRecord* primitiveIds = isectTable->GetRecord<ushort>(PRIMITIVE_ID);
     RIVShortRecord* occluders = lightsTable->GetRecord<ushort>(OCCLUDER_ID);
     RIVShortRecord* lightIds = lightsTable->GetRecord<ushort>(LIGHT_ID);
     ushort invalidID = -1;
@@ -777,11 +780,7 @@ std::vector<Path> RIV3DView::createLightPaths(ushort selectedLightID, RIVDataSet
         if(pathID && *pathID != oldPathID) {
             riv::Color pColor;
             pathColor->ComputeColor(pathsTable, *pathID, pColor);
-            //            if(points.size() > 0) {
-            //                paths.push_back(Path(points,pColor));
-            //Start from scratch for a new path
-            //            }
-            //            previousCone = NULL;
+
             oldPathID = *pathID;
             if(!addIntermittentPaths && points.size()) {
                 std::vector<PathPoint> reversedPoints = points;
@@ -793,8 +792,10 @@ std::vector<Path> RIV3DView::createLightPaths(ushort selectedLightID, RIVDataSet
                     PathPoint& point = reversedPoints[i];
                     ushort invertedBounce = numberOfBounces - points[i].bounceNr + 1;
                     point.bounceNr = invertedBounce;
-                    float ratio = (maxDepth - point.bounceNr + 1) / (float)this->maxDepth;
-                    riv::Color pointC = hotbody.ComputeColor(ratio);
+                    
+//                    float ratio = (maxDepth - point.bounceNr + 1) / (float)this->maxDepth;
+//                    riv::Color pointC = hotbody.ComputeColor(ratio);
+                    riv::Color pointC = riv::Color(isectRs->Value(point.rowIndex),isectGs->Value(point.rowIndex),isectBs->Value(point.rowIndex));
                     point.color = pointC;
                 }
                 //                riv::Color pathC = hotbody.ComputeColor( (this->maxDepth - points[0].bounceNr + 1) / (float)this->maxDepth);
