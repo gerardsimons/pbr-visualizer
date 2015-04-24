@@ -58,6 +58,8 @@ rayColorOne(rayColor) {
     //    eye = cameraPositionOne;
     lightsOne = rendererOne->GetLights();
     ResetGraphics();
+    
+    createGizmo();
 };
 RIV3DView::RIV3DView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, const TriangleMeshGroup& sceneDataOne, const TriangleMeshGroup& sceneDataTwo, Octree* energyDistributionOne, Octree* energyDistributionTwo, RIVColorProperty* pathColorOne, RIVColorProperty* rayColorOne, RIVColorProperty* pathColorTwo, RIVColorProperty* rayColorTwo) :
 RIVDataView(datasetOne,datasetTwo),
@@ -107,6 +109,8 @@ rayColorTwo(rayColorTwo){
     lightsTwo = rendererTwo->GetLights();
     //    eye = cameraPositionOne;
     ResetGraphics();
+    
+    createGizmo();
 };
 void RIV3DView::CyclePathSegment(bool direction) {
     float delta = 1.F / maxDepth;
@@ -436,7 +440,7 @@ void RIV3DView::Draw() {
     glScalef(modelScale,modelScale,modelScale);
     glTranslatef(-modelCenter[0], -modelCenter[1], -modelCenter[2]);
     
-    float whiteColor[] = {0.95F,0.95F,.95F};
+    riv::Color whiteColor(0.95F,0.95F,.95F);
     
     if(showMeshes) {
         if(drawDataSetOne) {
@@ -449,6 +453,11 @@ void RIV3DView::Draw() {
     if(drawIntersectionPoints) {
 //        printf("Draw intersection points\n");
         drawPoints();
+    }
+    
+    //If show gizmo
+    if(gizmo) {
+        drawGizmo();
     }
     
     if(drawDataSetOne && !drawDataSetTwo && drawHeatmapTree) {
@@ -585,7 +594,7 @@ void RIV3DView::drawTriangleMeshFull(TriangleMeshFull* mesh, const riv::Color& c
 //    //	reporter::stop("Draw mesh model");
 //    glEnd();
 //}
-void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color, ushort* selectedObjectID) {
+void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, const riv::Color& color, ushort* selectedObjectID) {
     
     //	reporter::startTask("Draw mesh model");
     glEnable(GL_BLEND);
@@ -597,18 +606,25 @@ void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color, ushort
     
     size_t meshindex = 0;
     
-    for(TriangleMeshFull* mesh : meshGroup->GetTriangleMeshes()) {
-        riv::Color meshColor;
-        if(meshindex == *selectedObjectID) {
-        
-            //            glColor3f(0.8, 0.8, 0.6);
-                meshColor = riv::Color(0.8F,0.8F,0.6F);
+    if(selectedObjectID) {
+        for(TriangleMeshFull* mesh : meshGroup->GetTriangleMeshes()) {
+            riv::Color meshColor;
+            if(meshindex == *selectedObjectID) {
+            
+                //            glColor3f(0.8, 0.8, 0.6);
+                    meshColor = riv::Color(0.8F,0.8F,0.6F);
+            }
+            else {
+                meshColor = riv::Color(color.R,color.G,color.B);
+            }
+            drawTriangleMeshFull(mesh, meshColor);
+            meshindex++;
         }
-        else {
-            meshColor = riv::Color(color[0],color[1],color[2]);
+    }
+    else {
+        for(TriangleMeshFull* mesh : meshGroup->GetTriangleMeshes()) {
+            drawTriangleMeshFull(mesh, color);
         }
-        drawTriangleMeshFull(mesh, meshColor);
-        meshindex++;
     }
     //	reporter::stop("Draw mesh model");
     glEnd();
@@ -902,7 +918,6 @@ std::vector<Path> RIV3DView::createCameraPaths(RIVDataSet<float,ushort>* dataset
     RIVShortRecord* primitiveRecord = isectTable->GetRecord<ushort>(PRIMITIVE_ID);
     
     std::vector<Path> paths;
-    
     //Get the records we want;
     //Get the iterator, this iterator is aware of what rows are filtered and not
     TableIterator* intersectionsIterator = isectTable->GetIterator();
@@ -1361,7 +1376,11 @@ void RIV3DView::Motion(int x, int y) {
         instance->HandleMouseMotion(x, y);
     }
 }
-
+void RIV3DView::PassiveMotion(int x, int y) {
+    if(instance != NULL) {
+        instance->HandleMouseMotionPassive(x,y);
+    }
+}
 void RIV3DView::ReshapeInstance(int width, int height) {
     if(instance != NULL) {
         instance->Reshape(width,height);
@@ -1675,6 +1694,7 @@ bool RIV3DView::pathCreation(RIVDataSet<float,ushort>* dataset, const TriangleMe
 }
 bool RIV3DView::HandleMouse(int button, int state, int x, int y) {
     y = height - y;
+    lastX = x;
     if(state == GLUT_DOWN) {
         if(button == GLUT_LEFT_BUTTON) {
             tbMouseFunc(button, state, width-x, y);
@@ -1777,10 +1797,33 @@ void RIV3DView::IncrementBounceNrPath(int delta) {
 }
 bool RIV3DView::HandleMouseMotion(int x, int y) {
     y = height - y;
-    tbMotionFunc(width-x, y);
-    redisplayWindow();
+    
     if(isDragging) {
+        tbMotionFunc(width-x, y);
+        redisplayWindow();
         didMoveCamera = true;
+        
+    }
+    
+    return true;
+}
+bool RIV3DView::HandleMouseMotionPassive(int x, int y) {
+    y = height - y;
+//    printf("passive motion (%d,%d) = \n",x,y);
+    if(activeShape) {
+        //Distance from center of view determines how much to translate
+        int centerX = width / 2.F;
+        
+        int distX = lastX - x;
+        int sign = sgn(distX);
+        Vec3fa translation = sign * std::pow((x - centerX) / (float)(centerX),2) * shapeTranslation * (1/modelScale);
+        printf("translate (%f,%f,%f)\n",translation.x,translation.y,translation.z);
+        
+        activeShape->Translate(translation);
+        
+        lastX = x;
+        
+        redisplayWindow();
     }
     return true;
 }
@@ -1812,5 +1855,198 @@ void RIV3DView::SetSelectionMode(SelectionMode mode) {
         case OBJECT:
             printf("Selection mode is now set to 'OBJECT'\n");
             break;
+    }
+}
+void RIV3DView::createGizmo() {
+    
+    //Delete previous gizmo
+//    if(gizmo) {
+//        delete gizmo;
+//    }
+    
+    vector_t<Vec3fa> positions(16);
+    
+    float unnormalizedModelScale = 1.F / modelScale;
+    const float s = unnormalizedModelScale / 5;
+    
+    positions[0] = Vec3fa(0,0,0);
+    positions[1] = Vec3fa(s,0,0);
+    positions[2] = Vec3fa(s,s,0);
+    positions[3] = Vec3fa(0,s,0);
+    
+    positions[4] = Vec3fa(0,0,s);
+    positions[5] = Vec3fa(s,0,s);
+    positions[6] = Vec3fa(s,s,s);
+    positions[7] = Vec3fa(0,s,s);
+    
+//    positions[8] = Vec3fa(0,0,);
+//    positions[9] = Vec3fa(s,0,0);
+//    positions[10] = Vec3fa(s,0,s);
+//    positions[11] = Vec3fa(0,0,0);
+//    
+//    positions[12] = Vec3fa(0,s,s);
+//    positions[13] = Vec3fa(s,s,0);
+//    positions[14] = Vec3fa(s,s,s);
+//    positions[15] = Vec3fa(0,s,0);
+    
+    vector_t<embree::TriangleMeshFull::Triangle> triangles(8);
+    
+    // z = 0
+    triangles[0] = embree::TriangleMeshFull::Triangle(0,1,2);
+    triangles[1] = embree::TriangleMeshFull::Triangle(0,2,3);
+    
+    //z = 1
+    triangles[2] = embree::TriangleMeshFull::Triangle(4,5,6);
+    triangles[3] = embree::TriangleMeshFull::Triangle(4,6,7);
+
+    //y = 0
+    triangles[4] = embree::TriangleMeshFull::Triangle(0,1,5);
+    triangles[5] = embree::TriangleMeshFull::Triangle(0,1,4);
+    
+    //y = 1 
+    triangles[6] = embree::TriangleMeshFull::Triangle(2,3,7);
+    triangles[7] = embree::TriangleMeshFull::Triangle(2,3,6);
+    
+    //x = 1
+    //1 2 5 6
+    triangles[4] = embree::TriangleMeshFull::Triangle(1,2,5);
+    triangles[5] = embree::TriangleMeshFull::Triangle(1,2,6);
+    
+    //x = 0
+    // 0 3 4 7
+    triangles[6] = embree::TriangleMeshFull::Triangle(0,3,4);
+    triangles[7] = embree::TriangleMeshFull::Triangle(0,3,7);
+    
+    auto newShape = new TriangleMeshFull(positions,triangles);
+    
+    std::vector<TriangleMeshFull*> model;
+    model.push_back(newShape);
+    
+    TriangleMeshGroup meshes(model);
+    gizmo = Gizmo(TriangleMeshGroup(meshes));
+//    Gizmo testGizmo();
+
+    printf("DONE");
+}
+void RIV3DView::drawGizmo() {
+    
+    drawMeshModel(&gizmo.shape, colors::GREEN);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    
+//    riv::Color pointColor(0.5F,0.5F,0.5F);
+    
+    //Draw hit points if any
+    for(size_t i = 0 ; i < gizmo.hitpoints.size() ; ++i) {
+        
+        riv::Color& pointColor = gizmo.colors[i];
+        Vec3fa& hitpoint = gizmo.hitpoints[i];
+        
+        glColor3f(pointColor.R,pointColor.G,pointColor.B);
+        glPushMatrix();
+        glTranslatef(hitpoint.x,hitpoint.y,hitpoint.z);
+        gluSphere(quadric, .004/modelScale, 5, 5);
+
+        glPopMatrix();
+    }
+    
+
+}
+void RIV3DView::filterForGizmo() {
+    if(datasetOne && drawDataSetOne) {
+        filterForGizmo(&gizmo,*datasetOne);
+    }
+    if(datasetTwo && drawDataSetTwo) {
+        filterForGizmo(&gizmo,*datasetTwo);
+    }
+}
+void RIV3DView::filterForGizmo(Gizmo* gizmo, RIVDataSet<float,ushort>* dataset) {
+    if(gizmo != NULL && dataset != NULL) {
+        dataset->StartFiltering();
+        dataset->ClearRowFilters(gizmo->activeFilters);
+        
+        gizmo->hitpoints.clear();
+        gizmo->colors.clear();
+        
+        auto isectsTable = dataset->GetTable(INTERSECTIONS_TABLE);
+        auto pathsTable = dataset->GetTable(PATHS_TABLE);
+        
+        auto interface = (RIVTableInterface*)isectsTable;
+        
+        auto xs = isectsTable->GetRecord<float>(POS_X);
+        auto ys = isectsTable->GetRecord<float>(POS_Y);
+        auto zs = isectsTable->GetRecord<float>(POS_Z);
+        
+        std::string rRecordName = INTERSECTION_R;
+        std::string gRecordName = INTERSECTION_G;
+        std::string bRecordName = INTERSECTION_B;
+        
+        auto recordR = isectsTable->GetRecord<float>(rRecordName);
+        auto recordG = isectsTable->GetRecord<float>(gRecordName);
+        auto recordB = isectsTable->GetRecord<float>(bRecordName);
+        
+    //    TableIterator* iterator = isectsTable->GetIterator();
+        TableIterator* iterator = pathsTable->GetIterator();
+        size_t pathRow;
+        
+        auto gizmoShape = &gizmo->shape;
+        
+        std::map<RIVTableInterface*,std::vector<size_t>> refRowsMap;
+        
+        std::map<size_t,bool> filteredRows;
+        
+        while (iterator->GetNext(pathRow,refRowsMap)) {
+            
+            const std::vector<size_t> isectRows = refRowsMap[interface];
+            bool filterPath = true;
+            //Filter unless we can find one ray that intersects the gizmo
+            if(isectRows.size()) {
+                
+                Vector3f prevPoint = cameraPositionOne;
+                
+                for(size_t isectRow : isectRows) {
+                    float x = xs->Value(isectRow);
+                    float y = ys->Value(isectRow);
+                    float z = zs->Value(isectRow);
+                    
+                    Vector3f position(x,y,z);
+                    
+                    Vector3f dir = position - prevPoint;
+                    pickRay = Ray(position, dir);
+                    
+                    ushort resultIndex;
+                    Vec3fa hit;
+                    float distance;
+                    
+                    if(gizmoShape->Intersect(pickRay, resultIndex, hit, distance)) {
+                        //YAY
+                        filterPath = false;
+                        gizmo->hitpoints.push_back(hit);
+                        gizmo->colors.push_back(riv::Color(recordR->Value(isectRow),recordG->Value(isectRow),recordB->Value(isectRow)));
+                        break;
+                    }
+                    
+                    prevPoint = position;
+                }
+            }
+            filteredRows[pathRow] = filterPath;
+        }
+        riv::RowFilter* filter = new riv::RowFilter(PATHS_TABLE,filteredRows);
+        gizmo->activeFilters.push_back(filter);
+        
+        dataset->AddFilter(filter);
+        dataset->StopFiltering();
+        
+    }
+}
+void RIV3DView::ToggleGizmoTranslationMode(int x, int y, int z) {
+    if(activeShape) {
+        shapeTranslation = Vec3fa(0,0,0);
+        activeShape = NULL;
+        printf("STOP Translating gizmo shape\n");
+    }
+    else {
+        shapeTranslation = Vec3fa(x * translationSpeed, y * translationSpeed, z * translationSpeed);
+        activeShape = &gizmo.shape;
+        printf("Translating gizmo shape (%d,%d,%d)\n",x,y,z);
     }
 }

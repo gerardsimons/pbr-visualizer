@@ -276,7 +276,9 @@ float* linearInterpolateColor(float,const float[3], const float[3]);
 inline float linearInterpolate(float value, float start, float end) {
 	return (value - start) / (end - start);
 }
-
+template <typename T> int sgn(T val) {
+    return (T(0) < val) - (val < T(0));
+}
 template<typename T = int>
 std::vector<T> createRangeVector(const int lower, const int upper, const int step = 1) {
     

@@ -35,6 +35,22 @@ namespace riv {
         bool operator==(const Color& rightHand) {
             return R == rightHand.R && G == rightHand.G && B == rightHand.B && A == rightHand.A;
         }
+        const float operator[] (const int nIndex) {
+            if(nIndex < 3) {
+                switch (nIndex) {
+                    case 0:
+                        return R;
+                        break;
+                    case 1:
+                        return G;
+                        break;
+                    case 2:
+                        return B;
+                        break;
+                }
+            }
+            else throw std::runtime_error("Out of bounds");
+        }
     };
     
     //A linearly interpolated color map

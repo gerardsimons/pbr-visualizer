@@ -97,7 +97,7 @@ namespace embree
     /*******************************************************************
                             render calls
     *******************************************************************/
-    
+      Ref<Shape> rtGetShape(Device::RTShape shape);
     void rtRenderFrame(RTRenderer renderer, RTCamera camera, RTScene scene, RTToneMapper toneMapper, RTFrameBuffer frameBuffer, int accumulate, Histogram2D<float>* pixelDistributions,bool datacallback = true);
     void rtRenderFrame(RTRenderer renderer, RTCamera camera, RTScene scene, RTToneMapper toneMapper, RTFrameBuffer frameBuffer, int accumulate,bool datacallback = true);
     bool rtPick(RTCamera camera, float x, float y, RTScene scene, float& px, float& py, float& pz);

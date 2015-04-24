@@ -11,6 +11,7 @@
 
 #include "DataView.h"
 
+#include "../Gizmo.h"
 #include "../PBRTConfig.h"
 #include "../Geometry/Path.h"
 #include "../Geometry/MeshModel.h"
@@ -56,6 +57,13 @@ private:
     Vector3f cameraPositionOne;
     Vector3f cameraPositionTwo;
     Vector3f eye;
+    
+    int lastX = 0;
+    TriangleMeshGroup* activeShape = NULL;
+    Vec3fa shapeTranslation;
+    float translationSpeed = 0.1F;
+    
+    Gizmo gizmo;
     
     bool isDirty = true;
     
@@ -117,6 +125,8 @@ private:
     ushort selectedLightIdOne = 0;
     ushort selectedLightIdTwo = 0;
     
+    
+    
     bool meshSelected = false;
     std::vector<riv::RowFilter*> pathFiltersOne;
     ushort bounceCountOne = 0;
@@ -133,7 +143,7 @@ private:
     bool isSelectedObject(std::set<ushort>& objectIds, ushort objectId);
     //Draw the mesh model loaded from the PBRT file
 //    void drawMeshModel(TriangleMeshGroup* meshGroup, float* color, std::set<ushort> selectedObjectId);
-    void drawMeshModel(TriangleMeshGroup* meshGroup, float* color,ushort* selectedObjectID);
+    void drawMeshModel(TriangleMeshGroup* meshGroup,const riv::Color& color,ushort* selectedObjectID = NULL);
     void drawPaths(float startSegment, float stopSegment);
     void drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths, float startSegment, float stopSegment,const Vector3f& cameraPosition); //Draw the paths between two consecutive bounces
     void drawPoints();
@@ -147,7 +157,7 @@ private:
     void drawEnergyDistribution(Octree* energyDistribution,ushort maxDepth, float maxEnergy);
     void drawEnergyDifference(Octree* energyDistributionOne, Octree* energyDistributionTwo,ushort maxDepth);
     void drawTriangleMeshFull(TriangleMeshFull* mesh, const riv::Color& color);
-    
+    void drawGizmo();
     void drawLights(const std::vector<Ref<Light>>& lights, const riv::Color& membershipColor);
     
     void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, std::set<ushort>& selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
@@ -163,7 +173,7 @@ private:
     
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
     void redisplayWindow();
-    
+    void createGizmo();
 public:
     //Single renderer constructor
     RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,const TriangleMeshGroup& sceneDataOne, Octree* energyDistribution, RIVColorProperty* pathColor, RIVColorProperty* rayColor);
@@ -180,9 +190,13 @@ public:
     
     static int windowHandle;
     
+    void filterForGizmo();
+    void filterForGizmo(Gizmo* gizmo, RIVDataSet<float,ushort>* dataset);
+    
     void ToggleHideMesh();
     void Reshape(int newWidth, int newHeight);
     void Draw();
+    bool HandleMouseMotionPassive(int x, int y);
     bool HandleMouse(int button, int state, int x, int y);
     bool HandleMouseMotion(int x, int y);
     
@@ -203,7 +217,9 @@ public:
     static void ReshapeInstance(int,int);
     static void Mouse(int button, int state, int x, int y);
     static void Motion(int x, int y);
+    static void PassiveMotion(int x, int y);
     
+    void ToggleGizmoTranslationMode(int x, int y, int z);
     void ToggleBackgroundColor();
     void IncrementBounceNrPath(int delta);
     void CycleSelectedLights();
@@ -219,7 +235,6 @@ public:
     void SetModelData(const MeshModel&);
     void ZoomIn(float zoom);
     void MoveCamera(float,float,float);
-    
 };
 
 #endif /* defined(__Afstuderen___DView__) */

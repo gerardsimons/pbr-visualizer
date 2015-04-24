@@ -116,9 +116,6 @@ public:
     }
     void Translate(float x, float y, float z) {
 		position += Vec3Df(x,y,z);
-		throw "Not yet implemented.";
-//        centerComputed = false;
-//        centered = false;
     }
     void Scale(float scalar) {
         scale *= scalar;

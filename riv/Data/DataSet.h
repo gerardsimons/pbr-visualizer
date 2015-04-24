@@ -289,6 +289,23 @@ public:
             throw std::runtime_error("Need to start filtering first");
         }
     }
+    void ClearRowFilters(const std::vector<riv::RowFilter*>& existingFilters) {
+        if(isFiltering) {
+            for(riv::RowFilter* filter : existingFilters) {
+                for(auto table : tables) {
+                    if(table->ClearRowFilter(filter)) {
+                        for(RIVReference* reference : table->references) {
+                            staleTables[table] = true;
+                            if(reference) {
+                                staleTables[(RIVTable<Ts...>*)reference->targetTable] = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else throw std::runtime_error("Need to start filtering first");
+    }
     void ClearRowFilter(riv::RowFilter* existingFilter) {
         if(isFiltering) {
             if(existingFilter) {

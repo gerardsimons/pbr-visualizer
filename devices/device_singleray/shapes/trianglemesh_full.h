@@ -40,11 +40,20 @@ namespace embree
   public:
     /*! Construction from acceleration structure type. */
     TriangleMeshFull (const AccelType& ty)
-      : Shape(ty) {}
+      : Shape(ty) {
+      
+      
+      }
 
     /*! Construction from parameter container. */
     TriangleMeshFull (const Parms& parms);
+      
+    TriangleMeshFull(const vector_t<Vec3fa>& position, const vector_t<Triangle>& triangles) : Shape("","",""), position(position), triangles(triangles) {};
 
+      
+      TriangleMeshFull() : Shape("","","") {
+          
+      }
   public:
     Ref<Shape> transform(const AffineSpace3f& xfm) const;
     size_t numTriangles() const;

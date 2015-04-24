@@ -48,8 +48,6 @@ void TriangleMeshGroup::init() {
 	center[2] = cZ;
 	float maxDistance = 0;
     
-
-    
 	//Determine the scale we need to scale it to unit
 	//Find the vertex with the most distance to the center
 	for(TriangleMeshFull *mesh : triangleMeshes) {
@@ -71,15 +69,19 @@ void TriangleMeshGroup::init() {
 	printf("meshmodel scale = %f\n",scale);
 }
 
-
 bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& Phit, float& shortestDistance) const {
     return Intersect(ray, resultIndex, Phit, shortestDistance, ray.org);
 }
 
 bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& Phit, float& shortestDistance, const Vec3fa& distanceCompare) const {
     bool intersects = false;
-    shortestDistance = std::numeric_limits<float>::max();
-//    shortestDistance = -std::numeric_limits<float>::max();
+    bool reverse = true;
+
+    if (reverse) {
+        shortestDistance = -std::numeric_limits<float>::max();
+    }
+    else shortestDistance = std::numeric_limits<float>::max();
+
     Vec3fa bestPhit = Phit;
     
     //DEBUGGING
@@ -98,7 +100,6 @@ bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& P
             
             Vec3fa edge1 = v1 - v0;
             Vec3fa edge2 = v2 - v0;
-            
             
             Vec3fa N = cross(edge1, edge2);
             //		std::cout << "Normal = " << N << std::endl;
@@ -147,27 +148,50 @@ bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& P
             }
 
             float distance = embree::length((distanceCompare - Phit));
-            printf("Intersects with %zu\n",i);
-            printf("distance = %f\n",distance);
+//            printf("Intersects with %zu\n",i);
+//            printf("distance = %f\n",distance);
             
             glPushMatrix();
             glTranslatef(Phit.x, Phit.y, Phit.z);
             glutSolidSphere(1, 10, 10);
             glPopMatrix();
             
-            if(distance < shortestDistance ) {
-//            if(distance > shortestDistance ) {
-                
-                printf("New shortest distance!\n");
-                resultIndex = i;
-                shortestDistance = distance;
-                bestPhit = Phit;
-                intersects = true;
+//            if(distance < shortestDistance ) {
+            if(reverse) {
+                if(distance > shortestDistance ) {
+                    
+//                    printf("New shortest distance!\n");
+                    resultIndex = i;
+                    shortestDistance = distance;
+                    bestPhit = Phit;
+                    intersects = true;
+            }
+            }
+            else {
+                if(distance < shortestDistance ) {
+                    
+//                    printf("New shortest distance!\n");
+                    resultIndex = i;
+                    shortestDistance = distance;
+                    bestPhit = Phit;
+                    intersects = true;
+                }
             }
         }
     }
-
-    
     Phit = bestPhit;
     return intersects;
+}
+void TriangleMeshGroup::Translate(const Vec3fa& translation) {
+    for(size_t i = 0 ; i < triangleMeshes.size() ; ++i) {
+        TriangleMeshFull* mesh = triangleMeshes[i];
+//        vector_t<TriangleMeshFull::Triangle>& triangles = mesh->triangles;
+        vector_t<Vec3fa>& position = mesh->position;
+        for(size_t j = 0 ; j < position.size() ; ++j) {
+            position[j] = position[j] + translation;
+        }
+    }
+}
+void TriangleMeshGroup::Translate(float x, float y, float z) {
+    Translate(Vec3fa(x,y,z));
 }

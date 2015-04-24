@@ -813,6 +813,38 @@ void EMBREERenderer::parseCommandLine(Ref<ParseStream> cin, const FileName& path
         }
     }
 }
+void EMBREERenderer::AddShape(const std::vector<Vec3f> &positions, const std::vector<Vec3f> &triangles) {
+    Handle<Device::RTMaterial> material = g_device->rtNewMaterial("matte");
+    g_device->rtSetFloat3(material, "reflectance", 0.5f, 0.5f, 0.5f);
+    g_device->rtCommit(material);
+    
+    std::vector<Handle<Device::RTPrimitive> > model;
+    
+    Handle<Device::RTData> dataPositions = g_device->rtNewData("immutable", positions.size() * sizeof(Vec3f), (positions.size() ? &positions[0] : NULL));
+    Handle<Device::RTData> dataTriangles = g_device->rtNewData("immutable", triangles.size() * sizeof(Vec3i), (triangles.size() ? &triangles[0] : NULL));
+    
+    /* create triangle mesh */
+    Handle<Device::RTShape> mesh = g_device->rtNewShape("trianglemesh");
+    g_device->rtSetArray(mesh, "positions", "float3", dataPositions, positions.size(), sizeof(Vec3f), 0);
+    g_device->rtSetArray(mesh, "indices"  , "int3"  , dataTriangles, triangles.size(), sizeof(Vec3i), 0);
+//    if (normals.size()  ) {
+//        Handle<Device::RTData> dataNormals = g_device->rtNewData("immutable", normals.size() * sizeof(Vec3f), (normals.size() ? &normals[0] : NULL));
+//        g_device->rtSetArray(mesh, "normals", "float3", dataNormals, normals.size(), sizeof(Vec3f), 0);
+//    }
+//    if (texcoords.size()) {
+//        Handle<Device::RTData> dataTexCoords = g_device->rtNewData("immutable", texcoords.size() * sizeof(Vec2f), (texcoords.size() ? &texcoords[0] : NULL));
+//        g_device->rtSetArray(mesh, "texcoords", "float2", dataTexCoords, texcoords.size(), sizeof(Vec2f), 0);
+//    }
+    g_device->rtSetString(mesh,"accel",g_mesh_accel.c_str());
+    g_device->rtSetString(mesh,"builder",g_mesh_builder.c_str());
+    g_device->rtSetString(mesh,"traverser",g_mesh_traverser.c_str());
+    
+    g_device->rtCommit(mesh);
+    model.push_back(g_device->rtNewShapePrimitive(mesh, material, NULL));
+    
+    return model;
+}
+
 
 void* EMBREERenderer::MapFrameBuffer() {
     return g_device->rtMapFrameBuffer(g_frameBuffer);

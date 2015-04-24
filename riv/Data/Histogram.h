@@ -1,4 +1,4 @@
-//
+    //
 //  Histogram.h
 //  embree
 //
@@ -191,13 +191,12 @@ public:
         
         float R = random() / (float)RAND_MAX;
         
-        for(int i = 0 ; i < bins ; ++i) {
+        for(int i = 0 ; i < bins - 1 ; ++i) {
             if(R <= cdf[i]) {
                 return i;
             }
         }
-//        return bins - 1;
-        throw std::runtime_error("Error sampling bin");
+        return bins - 1;
     }
     float Sample() {
         unsigned int bin = SampleBin();
@@ -720,9 +719,9 @@ public:
             auto newHistogram = Histogram<T>("2DHistogram", 0, grid.GetHeight(), yBins);
             
             for(int y = 0 ; y < yBins ; ++y) {
-                int filled = grid.IsFilled(y,x);
+                int filled = grid.IsFilled(x,y);
                 
-                newHistogram.Add(y,filled);
+                newHistogram.Set(y,filled);
                 
                 nrElements += filled;
             }
@@ -968,11 +967,11 @@ public:
         return result;
     }
     Grid ToGrid() {
-        std::vector<std::vector<bool>> gridCells = std::vector<std::vector<bool>>(xBins,std::vector<bool>(yBins));
+        std::vector<std::vector<bool>> gridCells = std::vector<std::vector<bool>>(yBins,std::vector<bool>(xBins));
         
         for(int x = 0 ; x < xBins ; ++x) {
             for(int y = 0 ; y < yBins ; ++y) {
-                gridCells[x][y] = (bool)BinValue(y,x);
+                gridCells[y][x] = (bool)BinValue(x,y);
             }
         }
         

@@ -28,8 +28,6 @@ private:
 	/*                                  State                                     */
 	/******************************************************************************/
 	
-	SingleRayDevice* g_single_device = NULL;
-	
 	/* camera settings */
 	Vector3f g_camPos    = Vector3f(0.0f,0.0f,0.0f);
 	Vector3f g_camLookAt = Vector3f(1.0f,0.0f,0.0f);
@@ -97,6 +95,8 @@ private:
 	
 	void displayFunc();
 public:
+    SingleRayDevice* g_single_device = NULL;
+    
 	Handle<Device::RTCamera> createCamera(const AffineSpace3f& space);
 	void createScene();
 	
@@ -106,6 +106,9 @@ public:
 	
     EMBREERenderer(DataConnector* dataConnector, const std::string& commandsFile,ushort numThreads);
     EMBREERenderer(const std::string& commandsFile);
+    
+    //Add a untextured shape to the singleray device
+    void AddShape(const std::vector<Vec3f>& positions,const std::vector<Vec3f>& faces);
 
 	std::string makeFileName(const std::string path, const std::string fileName);
 	void outputMode(const std::string& fileName);

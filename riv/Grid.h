@@ -24,6 +24,9 @@ private:
     void floodFillNeighbors(int x, int y);
     void fillNeighbors(unsigned int x, unsigned int y);
 public:
+    
+    static Grid FromLayout(const std::vector<std::string>& layout);
+    
     Grid(const std::vector<std::vector<bool>> cells);
     Grid(unsigned int width,unsigned int height, const std::vector<std::vector<bool>> cells);
     Grid(unsigned int width,unsigned int height);
@@ -31,6 +34,7 @@ public:
     
     //Return bounding volume for the currently filled cells
     RIVRectangle FillBounds();
+    void FillHoles();
     Grid GetHoles();
     
     void FloodFill(const RIVPoint& seed);

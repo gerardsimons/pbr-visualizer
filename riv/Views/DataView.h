@@ -134,6 +134,10 @@ public:
 	virtual void Draw() = 0;
 	virtual bool HandleMouse(int button, int state, int x, int y) = 0;
 	virtual bool HandleMouseMotion(int x, int y) = 0;
+    virtual bool HandleMouseMotionPassive(int x, int y) {
+        printf("Not implemented.\n");
+        return false;
+    }
 	RIVColorProperty** GetPathColor(ushort renderer) {
 		if(renderer) {
 			return GetPathColorOne();

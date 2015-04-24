@@ -14,8 +14,8 @@
 
 Grid::Grid(const std::vector<std::vector<bool>> cells) : cells(cells) {
     if(cells.size() && cells[0].size()) {
-        this->width = cells.size();
-        this->height = cells[0].size();
+        this->height = cells.size();
+        this->width = cells[0].size();
     }
     else throw std::runtime_error("Invalid cells dimensions");
 }
@@ -34,9 +34,9 @@ Grid::Grid(unsigned int size) : width(size), height(size){
     initCells();
 }
 void Grid::initCells() {
-    cells.resize(width);
-    for(unsigned int x = 0 ; x < width ; ++x) {
-        cells[x].resize(height);
+    cells.resize(height);
+    for(unsigned int x = 0 ; x < height ; ++x) {
+        cells[x].resize(width);
     }
 }
 RIVRectangle Grid::FillBounds() {
@@ -51,7 +51,7 @@ RIVRectangle Grid::FillBounds() {
         //        bool emptyColumn = true;
         for(int y = 0 ; y < height ; ++y) {
             
-            if(cells[x][y]) {
+            if(cells[y][x]) {
                 if(firstFilledRow == -1) {
                     firstFilledRow = x;
                     firstFilledColumn = y;
@@ -68,9 +68,7 @@ RIVRectangle Grid::FillBounds() {
 Grid Grid::GetHoles() {
     
     Grid copy = *this;
-    
     RIVRectangle boundingRectangle = copy.FillBounds();
-    
     RIVPoint seedPoint;
     
     if(boundingRectangle.start.x > 0) {
@@ -104,36 +102,36 @@ void Grid::Clear() {
     }
 }
 bool Grid::IsFilled(int cellX, int cellY) {
-    return cells[cellX][cellY];
+    return cells[cellY][cellX];
 }
 void Grid::fillNeighbors(unsigned int x, unsigned int y) {
     if(x > 0) {
-        cells[x-1][y] = true;
+        cells[y-1][x] = true;
     }
     if(y > 0) {
-        cells[x][y-1] = true;
+        cells[y][x-1] = true;
     }
     if(x < width - 1) {
-        cells[x+1][y] = true;
+        cells[y+1][x] = true;
     }
     if(y < height - 1) {
-        cells[x][y+1] = true;
+        cells[y][x+1] = true;
     }
 }
 void Grid::FillCell(unsigned int x, unsigned int y) {
 //    printf("Fill cell %ud,%ud\n",x,y);
-    if(x <= width && y <= height) {
-        cells[x][y] = true;
-        fillNeighbors(x, y);
-    }
-    else {
-        throw std::runtime_error("out of grid bounds");
-    }
+//    if(x <= width && y <= height) {
+        cells[y][x] = true;
+//        fillNeighbors(x, y);
+//    }
+//    else {
+//        throw std::runtime_error("out of grid bounds");
+//    }
 }
 void Grid::InvertFill() {
     for(unsigned int x = 0 ; x < width ; ++x) {
         for(unsigned int y = 0 ; y < height ; ++y) {
-            cells[x][y] = !cells[x][y];
+            cells[y][x] = !cells[y][x];
         }
     }
 }
@@ -163,32 +161,10 @@ void Grid::floodFillNeighbors(int seedX, int seedY) {
             stack.push(RIVPoint(x, y - 1));
         }
     }
-    
-//    const int distX = 2;
-//    const int distY = 2;
-//    
-//    if(cells[x][y]) {
-//        return;
-//    }
-//    else {
-//        cells[x][y] = true;
-//    }
-//    if(x > 0) {
-//        
-//        for(int nX = x ; nX < x + distX ; ++x){
-//            
-//        }
-//        
-//    }
-//    if(y > 0) {
-//        floodFillNeighbors(x, y-1);
-//    }
-//    if(x < width - 1) {
-//        floodFillNeighbors(x + 1, y);
-//    }
-//    if(y < height - 1) {
-//        floodFillNeighbors(x, y + 1);
-//    }
+}
+void Grid::FillHoles() {
+    Grid holes = GetHoles();
+    *this = *this | holes;
 }
 void Grid::FloodFill(const RIVPoint &seed) {
     floodFillNeighbors(seed.x, seed.y);
@@ -206,11 +182,34 @@ Grid Grid::operator | (Grid& other) {
     Grid result(width,height);
     for(int x = 0 ; x < width ; x++) {
         for(int y = 0 ; y < height ; y++) {
-            if(cells[x][y] || other.IsFilled(x, y)) {
+            if(cells[y][x] || other.IsFilled(x, y)) {
                 result.FillCell(x, y);
             }
         }
     }
     
     return result;
+}
+Grid Grid::FromLayout(const std::vector<std::string>& layout) {
+    
+    if(layout.size()) {
+        std::vector<std::vector<bool>> cells = std::vector<std::vector<bool>>(layout.size(),std::vector<bool>(layout[0].size()));
+        int x = 0;
+        for(const std::string layoutLine : layout) {
+            int y = 0;
+            for(char c : layoutLine) {
+                if(c == 'X') {
+                    cells[x][y] = true;
+                }
+                else if(c == '.') {
+                    cells[x][y] = false;
+                }
+                else throw std::runtime_error("Unknown char");
+                y++;
+            }
+            x++;
+        }
+        return Grid(cells);
+    }
+    else throw std::runtime_error("Empty layout");
 }

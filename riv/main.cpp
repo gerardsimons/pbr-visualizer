@@ -89,10 +89,10 @@ EMBREERenderer* rendererTwo = NULL;
 
 bool linkPixelDistros = false;
 
-const int maxPathsOne = 5000;
+const int maxPathsOne = 6000;
 const int maxBootstrapRepeatOne = 5;
 
-const int maxPathsTwo = 50000;
+const int maxPathsTwo = 60000;
 const int maxBootstrapRepeatTwo = 1;
 
 const int sliderViewHeight = 0;
@@ -131,7 +131,14 @@ void display(void)
     
     //	dataController->Unpause();
 }
-
+void testGizmo() {
+    
+    //Test adding something to the renderer
+    std::vector<Vec3f> positions(4);
+    std::vector<Vec3f> triangles;
+    
+//    rendererTwo->AddShape(<#const std::vector<Vec3f> &positions#>, <#const std::vector<Vec3f> &faces#>)
+}
 void invalidateAllViews() {
     sceneView->Invalidate();
     parallelCoordsView->Invalidate();
@@ -158,6 +165,55 @@ void testOctree() {
     
     
 }
+
+void testGrid() {
+    
+//    Grid g(10,5);
+//    
+//    g.Print();
+    
+    /*
+     *
+     *
+     */
+    
+    std::vector<std::string> layout =  {"............",
+                                        "............",
+                                        "....X..X....",
+                                        "...X..X.X...",
+                                        "....XX.X....",
+                                        "............"
+                                        "............"};
+        
+    Grid g = Grid::FromLayout(layout);
+    g.Print();
+    
+    g.FillHoles();
+    g.Print();
+    
+    Histogram2D<float> fromGrid(g);
+    fromGrid.PrintRaw();
+    
+    g = fromGrid.ToGrid();
+    g.Print();
+    
+    Grid grid = fromGrid.BooleanHistogram().ToGrid();
+    grid.Print();
+    //                grid.FillHoles();
+    //                grid. ();
+    fromGrid = Histogram2D<float>(grid);
+    fromGrid.PrintRaw();
+    
+//    Grid holes = g.GetHoles();
+//    holes.Print();
+//    
+//    Grid filled = g | holes;
+//    filled.Print();
+
+//    filled = filled | holes;
+//    filled.Print();
+}
+
 void testSampling() {
     RIVDataSet<float,ushort>* testData = new RIVDataSet<float,ushort>("test_set");
     
@@ -309,6 +365,9 @@ void testReferenceMemoryLeaks() {
 
 void testFunctions() {
     
+    testGrid();
+    exit(0);
+    
     testReferenceMemoryLeaks();
     return;
     
@@ -380,18 +439,29 @@ void mergeRenderScript() {
     printHeader("MERGE RENDER SCRIPT",100);
     
     //Configuration
-    const int baseFidelity = 1;
+//    const int baseFidelity = 128; //Cornell
+    const int baseFidelity = 128; //Teapots
     
 //    const int maxFrames = 1;
     const std::vector<int> frames = createRangeVector(1,128);
-//    const std::vector<int> frames = createRangeVector(1,32);
+//    const std::vector<int> frames = createRangeVector(1,32); //Cornell
 //    const std::vector<int> weights = createRangeVector(100,);
-    const std::vector<int> weights = {1,2,4,8,16,32,64,128};
+    const std::vector<int> weights = {8};
+//        const std::vector<int> weights = {32,64,128,256,512};
+//    const std::vector<int> weights = {4};
+    
+//    Teapot scene
+    ushort selectedObjectId = 4;
+    
+    //Cornell box scene
+//        ushort selectedObjectId = 7;
     
     const char* extension = ".png";
     
     bool generateReferenceImages = false;
-    const double gamma = 2;
+    
+//    const double gamma = 2;
+    const double gamma = 1; //teapots
     
     char dir[128];
     sprintf(dir, "render_script%d",rand());
@@ -459,8 +529,9 @@ void mergeRenderScript() {
 //    radianceDistro->SmoothRectangular(3,3,5);
     
     //Select paths that interact with object on first bounce
-    sceneView->SetSelectionMode(RIV3DView::INTERACTION_AND_SHADOW);
-    ushort selectedObjectId = 7;
+//    sceneView->SetSelectionMode(RIV3DView::INTERACTION_AND_SHADOW);
+    sceneView->SetSelectionMode(RIV3DView::INTERACTION);
+    
     sceneView->FilterPathsTwo(1, selectedObjectId);
     
     //Get the selection distribution
@@ -488,21 +559,22 @@ void mergeRenderScript() {
     //Fill holes
     Grid g = distro->ToGrid();
     
-//    printf("BEFORE FILLING HOLES!\n");
-//    g.Print();
+    printf("BEFORE FILLING HOLES!\n");
+    g.Print();
     
     Grid holes = g.GetHoles();
     
-//    printf("HOLES:  \n");
-//    holes.Print();
+    printf("HOLES:  \n");
+    holes.Print();
     
     //Or operator, get both holes and the original grid
     g = g | holes;
-//    printf("AFTER FILLING HOLES!\n");
-//    g.Print();
+    printf("AFTER FILLING HOLES!\n");
+    g.Print();
     
     //Convert back to histogram for rendering
     *distro = Histogram2D<float>(g);
+    *distro=distro->BooleanHistogram();
     printf("Final weight histogram");
     distro->PrintRaw();
     
@@ -542,8 +614,11 @@ void mergeRenderScript() {
         }
     }
     
-//    imageView->redisplayWindow();
-//    return;
+    imageView->SetHeatmapToDisplay(RIVImageView::RADIANCE_DIFFERENCE);
+    auto distroTwo = imageView->GetActiveDistributionTwo();
+    *distroTwo = radianceDistro;
+    imageView->redisplayWindow();
+    return;
 }
 
 void keys(int keyCode, int x, int y) {
@@ -636,11 +711,7 @@ void keys(int keyCode, int x, int y) {
                 if(distro && imageView->heatmapToDisplay == RIVImageView::DISTRIBUTION) {
                     printf("Copying swapchain from renderer 1 to renderer 2 with weight matrix\n");
                     
-
-                    
                     //Convert 2Dhistogram to weight matrix
-
-                    
                     rendererOne->CopySwapChainTo(rendererTwo,distro,swapchainWeight,true);
                 }
                 else {
@@ -762,32 +833,87 @@ void keys(int keyCode, int x, int y) {
         case 118: // 'v'
             mergeRenderScript();
             break;
+        case 120: // 'x' key
+//            imageView->WeightDistributionByThroughput();
+            sceneView->ToggleGizmoTranslationMode(1,0,0);
+            break;
+        case 121:
+            sceneView->ToggleGizmoTranslationMode(0,1,0);
+            break;
         case 122: // 'z' key, save the image
         {
-            parallelCoordsView->ToggleSaturationMode();
+            sceneView->ToggleGizmoTranslationMode(0,0,1);
+            break;
+        }
+        case 115: // 's' key
+            //            sceneView->MoveCamera(0, -camSpeed, 0);
+        {
+            auto distroTwo = imageView->GetActiveDistributionTwo();
+            if(distroTwo) {
+                Grid grid = distroTwo->BooleanHistogram().ToGrid();
+                grid.Print();
+
+                *distroTwo = Histogram2D<float>(grid);
+                distroTwo->PrintRaw();
+            }
+            
+            imageView->redisplayWindow();
             break;
         }
         case 116: // 't' key, use as temp key for some to-test function
         {
-            printf("Test function, who knows what it does?\n");
-            
-            auto distro = imageView->GetActiveDistributionTwo();
-            
-            Grid grid = distro->ToGrid();
-            
-            printf("Grid : ");
-            grid.Print();
-            
-            Grid holes = grid.GetHoles();
-            holes.Print();
-            
-            if(distro) {
-                distro->PrintRaw();
-            }
-            
-            invalidateAllViews();
-            glutPostRedisplay();
+            sceneView->filterForGizmo();
             break;
+//            sceneView->SetSelectionMode(RIV3DView::INTERACTION_AND_SHADOW);
+//            sceneView->FilterPathsTwo(1, 4);
+//            imageView->redisplayWindow();
+//            
+//            auto distro = imageView->GetActiveDistributionTwo();
+//            distro->PrintRaw();
+//            *distro = distro->BooleanHistogram();
+//            distro->PrintRaw();
+//            
+//            //Fill holes
+//            Grid g = distro->ToGrid();
+////
+//            printf("BEFORE FILLING HOLES!\n");
+//            g.Print();
+////
+//            Grid holes = g.GetHoles();
+//            
+//            printf("HOLES:  \n");
+//            holes.Print();
+////
+////            //Or operator, get both holes and the original grid
+//            g = g | holes;
+//            printf("AFTER FILLING HOLES!\n");
+//            g.Print();
+//            
+//            //Convert back to histogram for rendering
+//            *distro = Histogram2D<float>(g);
+////            *distro=distro->BooleanHistogram();
+//            printf("Final weight histogram");
+//            distro->PrintRaw();
+//            
+////            printf("Test function, who knows what it does?\n");
+////            
+////            auto distro = imageView->GetActiveDistributionTwo();
+////            
+////            Grid grid = distro->ToGrid();
+////            
+////            printf("Grid : ");
+////            grid.Print();
+////            
+////            Grid holes = grid.GetHoles();
+////            holes.Print();
+////            
+////            if(distro) {
+////                distro->PrintRaw();
+////            }
+////            
+////            invalidateAllViews();
+////            glutPostRedisplay();
+////            break;
         }
         case 119: // 'w' key, move camera in Y direction
             //Gamma correction
@@ -795,7 +921,7 @@ void keys(int keyCode, int x, int y) {
             auto distroOne = imageView->GetActiveDistributionOne();
             auto distroTwo = imageView->GetActiveDistributionTwo();
             
-            double gamma = 2;
+            double gamma = 1;
             
             if(distroOne) {
                 if(distroTwo && distroTwo != distroOne) {
@@ -808,22 +934,12 @@ void keys(int keyCode, int x, int y) {
             else if(distroTwo) {
                 distroTwo->GammaCorrection(gamma);
             }
+            
+            distroTwo->PrintRaw();
+            
             imageView->redisplayWindow();
             break;
         }
-        case 115: // 's' key
-            //            sceneView->MoveCamera(0, -camSpeed, 0);
-        {
-            auto distroTwo = imageView->GetActiveDistributionTwo();
-            if(distroTwo) {
-                *distroTwo = distroTwo->BooleanHistogram();
-            }
-            imageView->redisplayWindow();
-            break;
-        }
-        case 120: // 'x' key
-            imageView->WeightDistributionByThroughput();
-            break;
         case GLUT_KEY_UP:
             //            sceneView->MoveCamera(0,0,camSpeed);
             sceneView->ZoomIn(camSpeed);
@@ -1193,6 +1309,8 @@ void setup(int argc, char** argv) {
             DataConnector* dcTwo = new DataConnector(processRendererTwo,rendererTwoFinishedFrame);
             rendererTwo = new EMBREERenderer(dcTwo, std::string(argv[4]),1);
             dcTwo->SetNrLights(rendererTwo->GetNumLights());
+            
+            testGizmo();
             //            float acceptProbTwo = 2.F * maxPaths / (rendererTwo->getWidth() * rendererTwo->getHeight() * rendererTwo->getSamplesPerPixel());
             //            dataControllerOne->SetAcceptProbability(acceptProbTwo);
             sceneDataTwo = getSceneData(rendererTwo);
@@ -1257,7 +1375,6 @@ void setup(int argc, char** argv) {
 //    int xBinsOne = std::ceil(rendererOne->getWidth() / (float)samplesPerPixel / minSamplesPerBin);
     
     int xBinsOne = rendererOne->getWidth();
-    
     int xBinsTwo = xBinsOne;
     
     if(nrConnected) {
@@ -1322,6 +1439,7 @@ void setup(int argc, char** argv) {
         glutReshapeFunc(RIV3DView::ReshapeInstance);
         glutMouseFunc(RIV3DView::Mouse);
         glutMotionFunc(RIV3DView::Motion);
+        glutPassiveMotionFunc(RIV3DView::PassiveMotion);
         glutSpecialFunc(keys);
     }
     
@@ -1376,8 +1494,8 @@ void setup(int argc, char** argv) {
         
         riv::ColorMap binColorMap(colors,0,1);
         
-        sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
-        //		sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,colorOne,colorTwo,sizeProperty);
+//        sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
+          sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),colorOne,colorOne,pathColorTwo,colorTwo);
         imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo,dataControllerOne->GetImageDistributions(),dataControllerTwo->GetImageDistributions(),xBinsOne,xBinsTwo);
         
 //        sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions());
@@ -1426,7 +1544,7 @@ int main(int argc, char **argv)
 {
     printf("Initialising Rendering InfoVis...\n");
     
-//            testFunctions();
+//    testFunctions();
     
     srand(time(NULL));
     /* initialize GLUT, let it extract command-line

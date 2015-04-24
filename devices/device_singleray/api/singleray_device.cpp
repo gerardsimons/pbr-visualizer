@@ -265,7 +265,11 @@ namespace embree
 	
 	Device::RTShape SingleRayDevice::rtNewShape(const char* type) {
 		RT_COMMAND_HEADER;
-		if      (!strcasecmp(type,"trianglemesh")) return (Device::RTShape) new CreateHandle<TriangleMesh,Shape>;
+        
+        if      (!strcasecmp(type,"trianglemesh")) {
+            auto handle = new CreateHandle<TriangleMesh,Shape>;
+            return (Device::RTShape) handle;
+        }
 		else if (!strcasecmp(type,"triangle")    ) return (Device::RTShape) new ConstructorHandle<Triangle,Shape>;
 		else if (!strcasecmp(type,"sphere")      ) return (Device::RTShape) new ConstructorHandle<Sphere,Shape>;
 		else if (!strcasecmp(type,"disk")        ) return (Device::RTShape) new ConstructorHandle<Disk,Shape>;
@@ -636,10 +640,13 @@ namespace embree
 	
 	//Custom added functions
 	Shape* SingleRayDevice::rtGetShape(Device::RTPrimitive primitive) {
-		Ref<PrimitiveHandle>      primHandle    = castHandle<PrimitiveHandle>(primitive   ,"primitive");
+		Ref<PrimitiveHandle> primHandle = castHandle<PrimitiveHandle>(primitive   ,"primitive");
 		return primHandle->getShapeInstance().ptr;
 	}
-    
+    Ref<Shape> SingleRayDevice::rtGetShape(Device::RTShape shape) {
+        auto something = castHandle<InstanceHandle<Shape>>(shape,"trianglemesh");
+        return something.ptr->getInstance();
+    }
     Ref<SwapChain> SingleRayDevice::rtGetSwapChain(Device::RTFrameBuffer frameBuffer_i) {
                 return castHandle<ConstHandle<SwapChain> >(frameBuffer_i,"framebuffer")->getInstance();
     }

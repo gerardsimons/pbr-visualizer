@@ -10,4 +10,5 @@
 -renderer pathtracer { depth = 3 }
 
 #-size 8 8 
+#-size 128 128
 -size 128 128
