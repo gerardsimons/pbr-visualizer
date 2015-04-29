@@ -14,6 +14,8 @@
 #include <stdexcept>
 #include <stdio.h>
 
+//#define DEBUG_STR
+
 size_t DataConnector::IdCounter = 0;
 
 void DataConnector::FinishFrame(size_t numPaths, size_t numRays) {
@@ -25,7 +27,9 @@ DataConnector::DataConnector(path_finished pfCallback, frame_finished ffCallback
 //Finish the current path with the latest data
 bool DataConnector::FinishPath(const Color& color, const Color& throughput) {
 	//Find callback
-//    printf("Finish path\n\n");
+#ifdef DEBUG_STR
+    printf("Finish path\n\n");
+#endif
 	if(pathSet) {
         currentLightData.clear();
         //Some preprocessing
@@ -46,13 +50,17 @@ bool DataConnector::FinishPath(const Color& color, const Color& throughput) {
 }
 void DataConnector::StartPath(const Vec2f& pixel,const Vec2f& lens, float time) {
 	pathSet = true;
-//	printf("Starting Path\n");
+    #ifdef DEBUG_STR
+	printf("Starting Path\n");
+    #endif
 	currentPath = (PathData){pixel,lens,time};
 //    printf("Start path\n");
 }
 
 void DataConnector::AddIntersectionData(const Vec3fa& pos, const Vec3fa& dir,const Color& color, int primitive_id, ushort type) {
-//    printf("Intersection added.\n");
+    #ifdef DEBUG_STR
+    printf("Intersection added.\n");
+#endif
 //	printf("position = [%f,%f,%f]\n",x,y,z);
 //	printf("color = [%f,%f,%f]\n",r,g,b);
 //	printf("primitive ID = %d\n",primitive_id);
@@ -68,14 +76,16 @@ void DataConnector::AddIntersectionData(const Vec3fa& pos, const Vec3fa& dir,con
 //            
 //        }
 		currentIntersect = IntersectData(pos, dir, color, primitive_id, 0, 0, type);
-
+        FinishIntersection();
 //        currentLightData.clear();
 	}
 	else throw std::runtime_error("Path is not set.");
 }
 void DataConnector::AddLightData(ushort lightId, ushort occluderId, const embree::Color &color) {
 //    currentPath.intersectionData.back().lightData.push_back((LightData){lightId,occluderId,color});
-//    printf("Add light data\n");
+    #ifdef DEBUG_STR
+    printf("Add light data\n");
+    #endif
     currentLightData.push_back((LightData){lightId,occluderId,color});
 }
 void DataConnector::FinishIntersection() {
