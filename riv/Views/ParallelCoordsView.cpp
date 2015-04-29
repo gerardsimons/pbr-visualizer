@@ -75,7 +75,7 @@ void ParallelCoordsView::createAxes() {
     float delta = 1.F / (total_nr_of_records - 1) * (width - 2 * paddingX);
     
     size_t axisIndex = 0;
-    //		std::vector<std::string> pathTableRecordNames = {"pi xel x","pixel y","R","G","B","throughput R","throughput G","throughput B","renderer","depth"};
+    //		std::vector<std::string> pathTableRecordNames = {"pixel x","pixel y","R","G","B","throughput R","throughput G","throughput B","renderer","depth"};
     const int divisionCount = 2;
     if(datasetTwo) {
         for(const std::string& tableName : tablesToDisplay) {
@@ -447,22 +447,22 @@ void ParallelCoordsView::drawAxesExtras() {
                     //					glRectf(axis->x - selectionGlyphSize, glyphY - selectionGlyphSize, axis->x + selectionGlyphSize, glyphY + selectionGlyphSize);
                 }
                 
-//                auto &scale = axis->scale;
+                auto& scale = axis->scale;
                 
                 //Draw the scales indicators
-//                if(scale.size() > 0) {
-//                    for(size_t j = 0 ; j < scale.size() ; j++) {
-//                        float value = axis->ValueOnScale(scale[j]);
-//                        int height = axis->PositionOnScaleForScalar(scale[j]);
-//                        
-//                        std::string text = std::to_string(value);
-//                        
-//                        char buffer[4];
-//                        sprintf(buffer,"%.2f",value);
-//                        
-//                        //                        drawText(buffer,4,axis->x + axis->width + 16,height,textColor,.08F);
-//                    }
-//                }
+                if(scale.size() > 0) {
+                    for(size_t j = 0 ; j < scale.size() ; j++) {
+                        float value = axis->ValueOnScale(scale[j]);
+                        int height = axis->PositionOnScaleForScalar(scale[j]);
+                        
+                        std::string text = std::to_string(value);
+                        
+                        char buffer[4];
+                        sprintf(buffer,"%.2f",value);
+                        
+                        drawText(buffer,4,axis->x + axis->width + 16,height,textColor,.08F);
+                    }
+                }
             }
         });
     }

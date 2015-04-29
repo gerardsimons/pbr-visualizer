@@ -298,44 +298,6 @@ public:
                     }
                 }
             });
-            //			}
-            if(!filterSourceRow) {
-                //                tuple_for_each(conjunctiveFilters, [&](auto tFilters) {
-                //                    for(auto conjunctiveFilter : tFilters) {
-                //                        filterSourceRow = true;
-                //                        typedef typename get_template_type<typename std::decay<decltype(*conjunctiveFilter)>::type>::type templateType;
-                //
-                //                        for(auto filter : conjunctiveFilter->filters) {
-                //                            auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
-                //                            if(!filter->PassesFilter(recordForFilter->Value(row))) {
-                //                                filterSourceRow = true;
-                //                                break;
-                //                            }
-                //                        }
-                //                        if(filterSourceRow) {
-                //                            break;
-                //                        }
-                //                    }
-                //
-                //                });
-            }
-            if(!filterSourceRow) {
-                //                tuple_for_each(disjunctiveFilters, [&](auto tFilters) {
-                //                    for(auto disjunctiveFilter : tFilters) {
-                //                        filterSourceRow = true;
-                //                        typedef typename get_template_type<typename std::decay<decltype(*disjunctiveFilter)>::type>::type templateType;
-                //                        filterSourceRow = true;
-                //                        for(auto filter : disjunctiveFilter->filters) {
-                //                            auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
-                //                            if(filter->PassesFilter(recordForFilter->Value(row))) {
-                //                                filterSourceRow = false;
-                //                                break;
-                //                            }
-                //
-                //                        }
-                //                    }
-                //                });
-            }
             
             //FINISH UP
             if(filterSourceRow) {

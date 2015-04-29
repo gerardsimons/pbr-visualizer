@@ -60,7 +60,9 @@ namespace embree
       : scene(scene) {}
 
     ~BackendScene () {
-      if (scene) rtcDeleteScene(scene);
+        if (scene) {
+            rtcDeleteScene(scene);
+        }
     }
 
     /*! Adds a light to the scene. */

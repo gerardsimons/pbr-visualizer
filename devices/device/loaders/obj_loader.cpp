@@ -375,9 +375,8 @@ namespace embree
     g_device->rtSetString(mesh,"traverser",g_mesh_traverser.c_str());
       
     g_device->rtCommit(mesh);
-      auto result = g_device->rtNewShapePrimitive(mesh, curMaterial, NULL);
       
-    model.push_back(result);
+    model.push_back(g_device->rtNewShapePrimitive(mesh, curMaterial, NULL));
   }
 
   std::vector<Handle<Device::RTPrimitive> > loadOBJ(const FileName &fileName) {

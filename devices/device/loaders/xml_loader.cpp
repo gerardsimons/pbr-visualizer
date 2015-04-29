@@ -449,8 +449,9 @@ namespace embree
     if (numPositions) g_device->rtSetArray(mesh, "positions", "float3", positions, numPositions, sizeof(Vec3f), 0);
     if (numMotions  ) g_device->rtSetArray(mesh, "motions"  , "float3", motions  , numMotions  , sizeof(Vec3f), 0);
     if (numNormals  ) g_device->rtSetArray(mesh, "normals"  , "float3", normals  , numNormals  , sizeof(Vec3f), 0);
-    if (numTexCoords) g_device->rtSetArray(mesh, "texcoords", "float2", texcoords, numTexCoords, sizeof(Vec2f ), 0);
-    if (numTriangles) g_device->rtSetArray(mesh, "indices"  , "int3"  , triangles, numTriangles, sizeof(Vec3i ), 0);
+    if (numTexCoords) g_device->rtSetArray(mesh, "texcoords", "float2", texcoords, numTexCoords, sizeof(Vec2f), 0);
+    if (numTriangles) g_device->rtSetArray(mesh, "indices"  , "int3"  , triangles, numTriangles, sizeof(Vec3i), 0);
+      
     g_device->rtSetString(mesh,"accel",g_mesh_accel.c_str());
     g_device->rtSetString(mesh,"builder",g_mesh_builder.c_str());
     g_device->rtSetString(mesh,"traverser",g_mesh_traverser.c_str());
@@ -467,6 +468,7 @@ namespace embree
     Vector3f dPdt = load<Vector3f>(xml->childOpt("motion"),Vector3f(0,0,0));
 
     Handle<Device::RTShape> sphere = g_device->rtNewShape("sphere");
+      
     g_device->rtSetFloat3(sphere, "P", P.x, P.y, P.z);
     g_device->rtSetFloat3(sphere, "dPdt", dPdt.x, dPdt.y, dPdt.z);
     g_device->rtSetFloat1(sphere, "r", load<float>(xml->child("radius")));
@@ -475,6 +477,7 @@ namespace embree
     g_device->rtSetString(sphere,"accel",g_mesh_accel.c_str());
     g_device->rtSetString(sphere,"builder",g_mesh_builder.c_str());
     g_device->rtSetString(sphere,"traverser",g_mesh_traverser.c_str());
+      
     g_device->rtCommit(sphere);
 
     return g_device->rtNewShapePrimitive(sphere, material, copyToArray(transforms.top()));

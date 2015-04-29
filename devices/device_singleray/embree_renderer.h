@@ -40,8 +40,7 @@ private:
 	Handle<Device::RTToneMapper> g_tonemapper = NULL;
 	Handle<Device::RTFrameBuffer> g_frameBuffer = NULL;
 	Handle<Device::RTImage> g_backplate = NULL;
-	Handle<Device::RTScene> g_render_scene = NULL;
-	std::vector<Handle<Device::RTPrimitive> > g_prims;
+
 	
 	Handle<Device::RTCamera> camera = NULL;
 	
@@ -95,6 +94,8 @@ private:
 	
 	void displayFunc();
 public:
+    std::vector<Handle<Device::RTPrimitive> > g_prims;
+    Handle<Device::RTScene> g_render_scene = NULL;
     SingleRayDevice* g_single_device = NULL;
     
 	Handle<Device::RTCamera> createCamera(const AffineSpace3f& space);

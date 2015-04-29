@@ -126,8 +126,13 @@ public:
         DISTRIBUTIONS,
         NONE
     };
+    enum AcceptMode {
+        UNIFORM,
+        RADIANCE
+    };
     
-    DataCollectionMode mode = ALL;
+    DataCollectionMode collectionMode = ALL;
+    AcceptMode acceptMode = UNIFORM;
 
     /* METHODS */
     
@@ -153,7 +158,9 @@ public:
 	void Reduce();
     void Reset();
     void SetMaxPaths(int maxPaths);
-    void CycleDataCollectionMode();
     void SetDataCollectionMode(DataCollectionMode newMode);
+    void CycleDataCollectionMode();
+    void SetDataAcceptMode(AcceptMode newMode);
+    void CycleDataAcceptMode();
 };
 #endif /* defined(__embree__DataController__) */

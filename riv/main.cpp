@@ -92,8 +92,8 @@ bool linkPixelDistros = false;
 const int maxPathsOne = 6000;
 const int maxBootstrapRepeatOne = 5;
 
-const int maxPathsTwo = 60000;
-const int maxBootstrapRepeatTwo = 1;
+const int maxPathsTwo = 6000;
+const int maxBootstrapRepeatTwo = 5;
 
 const int sliderViewHeight = 0;
 
@@ -755,8 +755,13 @@ void keys(int keyCode, int x, int y) {
                 imageView->CombinePixelDistributions();
             }
             break;
-        case 97: // 'a' key
-            sceneView->MoveCamera(-camSpeed, 0, 0);
+        case 97: // 'a' key, change accept mode of datacontrollers
+            
+            dataControllerOne->CycleDataAcceptMode();
+            if(dataControllerTwo) {
+                dataControllerTwo->CycleDataAcceptMode();
+            }
+            
             break;
         case 98: // 'b' key, bootstrap
 //            glutSwapBuffers();
@@ -1111,10 +1116,11 @@ void idle() {
 //    if(linkPixelDistros) {
 //        imageView->AveragePixelDistributions();
 //    }
-    int maxFrameOne = 2048;
+//    int maxFrameOne = 2048;
+    int maxFrameOne = 10000000;
     if(!renderingPausedOne && currentFrameOne < maxFrameOne) {
         ++currentFrameOne;
-        bool datacallback = dataControllerOne->mode != DataController::NONE;
+        bool datacallback = dataControllerOne->collectionMode != DataController::NONE;
         printf("Rendering renderer #1 frame %d\n",currentFrameOne);
 //        Histogram2D<float>* pixelDistributionOne = imageView->GetPixelDistributionOne();
         Histogram2D<float>* pixelDistributionOne = imageView->GetActiveDistributionOne();
@@ -1151,7 +1157,7 @@ void idle() {
 //            }
             
             //Does the data controller want more information?
-            bool datacallback = dataControllerTwo->mode != DataController::NONE;
+            bool datacallback = dataControllerTwo->collectionMode != DataController::NONE;
             
             ++currentFrameTwo;
             auto pixelDistributionTwo = imageView->GetActiveDistributionTwo();
@@ -1198,7 +1204,7 @@ void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
     //	dataControllerTwo->RendererOneFinishedFrame(numPaths,numRays);
     printf("\n*** Renderer one finished frame %d...\n",currentFrameOne);
     
-    if(connectedOne && dataControllerOne->mode != DataController::NONE) {
+    if(connectedOne) {
         dataControllerOne->Reduce();
         renderOneFinishedFrame = true;
     }
@@ -1216,7 +1222,7 @@ bool processRendererTwo(PathData* newPath) {
 }
 void rendererTwoFinishedFrame(size_t numPaths, size_t numRays) {
     printf("\n*** Renderer two finished frame %d...\n",currentFrameTwo);
-    if(connectedTwo == true && dataControllerTwo->mode != DataController::NONE) {
+    if(connectedTwo == true) {
         dataControllerTwo->Reduce();
     }
     imageView->redisplayWindow();
@@ -1366,15 +1372,16 @@ void setup(int argc, char** argv) {
     colors.push_back(colors::RED);
     riv::ColorMap redBlue(colors);
     
-    int minSamplesPerBin = 2;
+    int minSamplesPerPixel = 3;
     
     float rendererSize = rendererOne->getWidth() * rendererOne->getHeight();
-    float samplesPerPixel = maxPathsOne/rendererSize;
-    
-    //Complete bull
-//    int xBinsOne = std::ceil(rendererOne->getWidth() / (float)samplesPerPixel / minSamplesPerBin);
-    
+    float samplesPerPixel = maxPathsOne / rendererSize;
     int xBinsOne = rendererOne->getWidth();
+    //Complete bull
+    if(samplesPerPixel < minSamplesPerPixel) {
+        float pixelsPerBin = minSamplesPerPixel / samplesPerPixel;
+        xBinsOne = std::ceil(rendererOne->getWidth() / std::pow(pixelsPerBin,0.5));
+    }
     int xBinsTwo = xBinsOne;
     
     if(nrConnected) {
@@ -1494,8 +1501,8 @@ void setup(int argc, char** argv) {
         
         riv::ColorMap binColorMap(colors,0,1);
         
-//        sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
-          sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),colorOne,colorOne,pathColorTwo,colorTwo);
+        sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
+//          sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),colorOne,colorOne,pathColorTwo,colorTwo);
         imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo,dataControllerOne->GetImageDistributions(),dataControllerTwo->GetImageDistributions(),xBinsOne,xBinsTwo);
         
 //        sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions());

@@ -655,6 +655,13 @@ namespace embree
         auto lights = scene->getInstance().ptr->allLights;
         return lights;
     }
+//    void SingleRayDevice::rtAddToScene(Device::RTScene scene_i, Device::RTPrimitive primitive) {
+//        Ref<BackendScene::Handle >   scene  = castHandle<BackendScene::Handle>   (scene_i ,"scene" );
+//        scene->getInstance().ptr->
+        
+        
+//        return scene->getInstance().ptr;
+//    }
 //    ushort SingleRayDevice::rtGetNumLights(Device::RTScene scene_i) {
 //        Ref<BackendScene::Handle >   scene  = castHandle<BackendScene::Handle>   (scene_i ,"scene" );
 //        auto lights = scene->getInstance().ptr->allLights;

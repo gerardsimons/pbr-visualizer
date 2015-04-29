@@ -921,81 +921,104 @@ std::vector<Path> RIV3DView::createCameraPaths(RIVDataSet<float,ushort>* dataset
     //Get the records we want;
     //Get the iterator, this iterator is aware of what rows are filtered and not
     TableIterator* intersectionsIterator = isectTable->GetIterator();
+    TableIterator* pathsIterator = pathsTable->GetIterator();
     
-    size_t row = 0;
-    size_t* pathID = NULL;
-    size_t oldPathID = 0;
+    size_t row ;
     ushort bounceNr;
     
-    std::vector<PathPoint> points;
     //    lightCones.clear();
     //    LightCone* previousCone = NULL;
     
-    //    dataset->Print(10);
+        dataset->Print(10);
     std::map<RIVTableInterface*,std::vector<size_t>> referenceRowsMap;
+    RIVTableInterface* isectsInterface = (RIVTableInterface*)isectTable;
     
-    while(intersectionsIterator->GetNext(row,referenceRowsMap)) {
+    while(pathsIterator->GetNext(row,referenceRowsMap)) {
         
-        std::vector<size_t> refRows;
-        for(auto it : referenceRowsMap) {
-            if(it.first->name == PATHS_TABLE) {
-                refRows = it.second;
-            }
-        }
-        if(refRows.size()) {
-            pathID = &refRows[0];
-        }
-        
-        
-        //        ushort primitiveId = primitiveRecord->Value(row);
-        //        LightCone*& existing = lightCones[primitiveId];
-        //        float x = xRecord->Value(row);
-        //        float y = yRecord->Value(row);
-        //        float z = zRecord->Value(row);
-        //        if(!existing) {
-        //           existing = new LightCone();
-        //        }
-        
-        //        size_t N = existing->originN;
-        //        float rcp = 1.F / existing->originN;
-        //        std::cout << existing->origin << " + " << x << "," << y << "," << z << " = ";
-        //        existing->origin[0] = (existing->origin[0] * N + x) / (N+1);
-        //        existing->origin[1] = (existing->origin[1] * N + y) / (N+1);
-        //        existing->origin[2] = (existing->origin[2] * N + z) / (N+1);
-        //        existing->originN++;
-        //        std::cout  << existing->origin << std::endl;
-        
-        //New path, clear previous stuff
-        if(pathID && *pathID != oldPathID) {
-            riv::Color pColor;
-            pathColor->ComputeColor(pathsTable, *pathID, pColor);
-            if(points.size() > 0) {
-                paths.push_back(Path(points,pColor));
-                points.clear();
-            }
-            //            previousCone = NULL;
+        const std::vector<size_t>& refRows = referenceRowsMap[isectsInterface];
+        if(refRows.size() > 0) {
             
-            oldPathID = *pathID;
+            std::vector<PathPoint> points;
+            
+            for(size_t isectRow : refRows) {
+                bounceNr = bounceRecord->Value(isectRow);
+                riv::Color pointC;
+                pointColor->ComputeColor(isectTable, isectRow, pointC); //Check if any color can be computed for the given row
+                PathPoint p = {isectRow,bounceNr,pointC};
+
+                points.push_back(p);
+            }
+
+            
+            riv::Color pColor;
+            pathColor->ComputeColor(pathsTable, row, pColor);
+            paths.push_back(Path(points,pColor));
+            
+            points.clear();
+            
+            
         }
-        //If still the same path, the previous cone should point more towards this point
-        //        if(previousCone) {
-        //            float rcp = 1.F / existing->targetN;
-        //            size_t N = previousCone->targetN;
-        //            previousCone->target[0] = (previousCone->target[0] * N + x) / (N+1);
-        //            previousCone->target[1] = (previousCone->target[1] * N + y) / (N+1);
-        //            previousCone->target[2] = (previousCone->target[2] * N + z) / (N+1);
-        //            ++previousCone->targetN;
-        //        }
-        bounceNr = bounceRecord->Value(row);
-        riv::Color pointC;
-        pointColor->ComputeColor(isectTable, row, pointC); //Check if any color can be computed for the given row
-        PathPoint p;
-        p.rowIndex = row;
-        p.bounceNr = bounceNr;
-        p.color = pointC;
-        points.push_back(p);
-        oldPathID = *pathID;
-        //        previousCone = existing;
+        
+//        std::vector<size_t> refRows;
+//        for(auto it : referenceRowsMap) {
+//            if(it.first->name == PATHS_TABLE) {
+//                refRows = it.second;
+//            }
+//        }
+//        if(refRows.size()) {
+//            pathID = &refRows[0];
+//        }
+//        
+//        
+//        //        ushort primitiveId = primitiveRecord->Value(row);
+//        //        LightCone*& existing = lightCones[primitiveId];
+//        //        float x = xRecord->Value(row);
+//        //        float y = yRecord->Value(row);
+//        //        float z = zRecord->Value(row);
+//        //        if(!existing) {
+//        //           existing = new LightCone();
+//        //        }
+//        
+//        //        size_t N = existing->originN;
+//        //        float rcp = 1.F / existing->originN;
+//        //        std::cout << existing->origin << " + " << x << "," << y << "," << z << " = ";
+//        //        existing->origin[0] = (existing->origin[0] * N + x) / (N+1);
+//        //        existing->origin[1] = (existing->origin[1] * N + y) / (N+1);
+//        //        existing->origin[2] = (existing->origin[2] * N + z) / (N+1);
+//        //        existing->originN++;
+//        //        std::cout  << existing->origin << std::endl;
+//        
+//        //New path, clear previous stuff
+//        if(pathID && *pathID != oldPathID) {
+//            riv::Color pColor;
+//            pathColor->ComputeColor(pathsTable, *pathID, pColor);
+//            if(points.size() > 0) {
+//                paths.push_back(Path(points,pColor));
+//                points.clear();
+//            }
+//            //            previousCone = NULL;
+//            
+//            oldPathID = *pathID;
+//        }
+//        //If still the same path, the previous cone should point more towards this point
+//        //        if(previousCone) {
+//        //            float rcp = 1.F / existing->targetN;
+//        //            size_t N = previousCone->targetN;
+//        //            previousCone->target[0] = (previousCone->target[0] * N + x) / (N+1);
+//        //            previousCone->target[1] = (previousCone->target[1] * N + y) / (N+1);
+//        //            previousCone->target[2] = (previousCone->target[2] * N + z) / (N+1);
+//        //            ++previousCone->targetN;
+//        //        }
+//        bounceNr = bounceRecord->Value(row);
+//        riv::Color pointC;
+//        pointColor->ComputeColor(isectTable, row, pointC); //Check if any color can be computed for the given row
+//        PathPoint p;
+//        p.rowIndex = row;
+//        p.bounceNr = bounceNr;
+//        p.color = pointC;
+//        points.push_back(p);
+//        oldPathID = *pathID;
+//        //        previousCone = existing;
     }
     reporter::stop("Creating camera paths");
     
@@ -1397,7 +1420,7 @@ void RIV3DView::OnDataChanged(RIVDataSet<float,ushort>* source) {
             std::set<ushort> selectedObjectIds = {selectedObjectIdOne};
             filterPaths((*datasetOne), bounceCountOne, selectedObjectIds, pathFiltersOne);
         }
-        createCameraPaths((*datasetOne), pathColorOne,rayColorOne);
+        cameraPathsOne = createCameraPaths((*datasetOne), pathColorOne,rayColorOne);
     }
     else if(source == *datasetTwo) {
         pathColorTwo->Reset(source);
@@ -1406,7 +1429,7 @@ void RIV3DView::OnDataChanged(RIVDataSet<float,ushort>* source) {
             std::set<ushort> selectedObjectIds = {selectedObjectIdTwo};
             filterPaths((*datasetTwo), bounceCountTwo, selectedObjectIds, pathFiltersTwo);
         }
-        createCameraPaths((*datasetTwo), pathColorTwo,rayColorTwo);
+        cameraPathsTwo = createCameraPaths((*datasetTwo), pathColorTwo,rayColorTwo);
     }
     
     //	TODO: Paths and points are stale when this happens, but recreation is not necessary unless drawPoints or drawPaths is set to TRUE
@@ -1438,19 +1461,6 @@ void RIV3DView::ZoomIn(float zoom) {
     printf("Zoom %f\n",zoom);
     redisplayWindow();
 }
-void RIV3DView::MoveCamera(float x, float y, float z) {
-    //    eye.x += x;
-    //    eye.y += y;
-    //    eye.z += z;
-    
-    
-    //    tb_zoom(1, 0);
-    //    tb_zoom(0, 1);
-    
-    //    printf("new eye (x,y,z) = (%f,%f,%f)\n",eye.x,eye.y,eye.z);
-    //    isDirty = true;
-}
-
 Vec3fa RIV3DView::screenToWorldCoordinates(int screenX, int screenY, float zPlane) {
     
     Vec3fa worldPos;
@@ -1857,29 +1867,33 @@ void RIV3DView::SetSelectionMode(SelectionMode mode) {
             break;
     }
 }
+TriangleMeshGroup getSceneData(EMBREERenderer* renderer);
 void RIV3DView::createGizmo() {
-    
-    //Delete previous gizmo
-//    if(gizmo) {
-//        delete gizmo;
-//    }
-    
-    vector_t<Vec3fa> positions(16);
+
+    vector_t<Vec3fa> positions(3);
+//    vector_t<Vec3fa> positions(16);
     
     float unnormalizedModelScale = 1.F / modelScale;
     const float s = unnormalizedModelScale / 5;
     
+    Vec3fa pos = modelCenter / s;
+    
+//    positions[0] = Vec3fa(0,0,0) + pos;
+//    positions[1] = Vec3fa(s,0,0) + pos;
+//    positions[2] = Vec3fa(s,s,0) + pos;
+//    positions[3] = Vec3fa(0,s,0) + pos;
+    
     positions[0] = Vec3fa(0,0,0);
     positions[1] = Vec3fa(s,0,0);
     positions[2] = Vec3fa(s,s,0);
-    positions[3] = Vec3fa(0,s,0);
+//    positions[3] = Vec3fa(0,s,0);
     
-    positions[4] = Vec3fa(0,0,s);
-    positions[5] = Vec3fa(s,0,s);
-    positions[6] = Vec3fa(s,s,s);
-    positions[7] = Vec3fa(0,s,s);
-    
-//    positions[8] = Vec3fa(0,0,);
+//    positions[4] = Vec3fa(0,0,s);
+//    positions[5] = Vec3fa(s,0,s);
+//    positions[6] = Vec3fa(s,s,s);
+//    positions[7] = Vec3fa(0,s,s);
+//    
+//    positions[8] = Vec3fa(0,0,s);
 //    positions[9] = Vec3fa(s,0,0);
 //    positions[10] = Vec3fa(s,0,s);
 //    positions[11] = Vec3fa(0,0,0);
@@ -1889,42 +1903,84 @@ void RIV3DView::createGizmo() {
 //    positions[14] = Vec3fa(s,s,s);
 //    positions[15] = Vec3fa(0,s,0);
     
-    vector_t<embree::TriangleMeshFull::Triangle> triangles(8);
+//    vector_t<embree::TriangleMeshFull::Triangle> triangles(8);
+    vector_t<embree::TriangleMeshFull::Triangle> triangles(1);
     
     // z = 0
     triangles[0] = embree::TriangleMeshFull::Triangle(0,1,2);
-    triangles[1] = embree::TriangleMeshFull::Triangle(0,2,3);
+//    triangles[1] = embree::TriangleMeshFull::Triangle(0,2,3);
     
     //z = 1
-    triangles[2] = embree::TriangleMeshFull::Triangle(4,5,6);
-    triangles[3] = embree::TriangleMeshFull::Triangle(4,6,7);
-
-    //y = 0
-    triangles[4] = embree::TriangleMeshFull::Triangle(0,1,5);
-    triangles[5] = embree::TriangleMeshFull::Triangle(0,1,4);
+//    triangles[2] = embree::TriangleMeshFull::Triangle(4,5,6);
+//    triangles[3] = embree::TriangleMeshFull::Triangle(4,6,7);
+//
+//    //y = 0
+//    triangles[4] = embree::TriangleMeshFull::Triangle(0,1,5);
+//    triangles[5] = embree::TriangleMeshFull::Triangle(0,1,4);
+//
+//    //y = 1
+//    triangles[6] = embree::TriangleMeshFull::Triangle(2,3,7);
+//    triangles[7] = embree::TriangleMeshFull::Triangle(2,3,6);
+//
+//    //x = 1
+//    //1 2 5 6
+//    triangles[4] = embree::TriangleMeshFull::Triangle(1,2,5);
+//    triangles[5] = embree::TriangleMeshFull::Triangle(1,2,6);
+//    
+//    //x = 0
+//    // 0 3 4 7
+//    triangles[6] = embree::TriangleMeshFull::Triangle(0,3,4);
+//    triangles[7] = embree::TriangleMeshFull::Triangle(0,3,7);
     
-    //y = 1 
-    triangles[6] = embree::TriangleMeshFull::Triangle(2,3,7);
-    triangles[7] = embree::TriangleMeshFull::Triangle(2,3,6);
-    
-    //x = 1
-    //1 2 5 6
-    triangles[4] = embree::TriangleMeshFull::Triangle(1,2,5);
-    triangles[5] = embree::TriangleMeshFull::Triangle(1,2,6);
-    
-    //x = 0
-    // 0 3 4 7
-    triangles[6] = embree::TriangleMeshFull::Triangle(0,3,4);
-    triangles[7] = embree::TriangleMeshFull::Triangle(0,3,7);
-    
-    auto newShape = new TriangleMeshFull(positions,triangles);
+    TriangleMeshFull* newShape = new TriangleMeshFull(positions,triangles);
     
     std::vector<TriangleMeshFull*> model;
     model.push_back(newShape);
     
     TriangleMeshGroup meshes(model);
-    gizmo = Gizmo(TriangleMeshGroup(meshes));
-//    Gizmo testGizmo();
+    meshes.Translate(modelCenter);
+    gizmo = Gizmo(meshes);
+    
+    //* COMMIT TO RENDERER AS PRIMITIVE *//
+    SingleRayDevice* g_device = rendererOne->g_single_device;
+    //Define material
+    Handle<Device::RTMaterial> defaultMaterial = g_device->rtNewMaterial("Matte");
+    g_device->rtSetFloat3(defaultMaterial, "reflectance", 1.F, 0, 0);
+    g_device->rtCommit(defaultMaterial);
+    
+    for(TriangleMeshFull* tMesh : meshes.GetTriangleMeshes()) {
+        Handle<Device::RTData> dataPositions = g_device->rtNewData("immutable", tMesh->position.size() * sizeof(Vec3f), (tMesh->position.size() ? &tMesh->position[0] : NULL));
+        Handle<Device::RTData> dataTriangles = g_device->rtNewData("immutable", tMesh->triangles.size() * sizeof(Vec3i), (tMesh->triangles.size() ? &tMesh->triangles[0] : NULL));
+        
+        /* create triangle mesh */
+        Handle<Device::RTShape> mesh = g_device->rtNewShape("trianglemesh");
+        g_device->rtSetArray(mesh, "positions", "float3", dataPositions, positions.size(), sizeof(Vec3f), 0);
+        g_device->rtSetArray(mesh, "indices"  , "int3"  , dataTriangles, triangles.size(), sizeof(Vec3i), 0);
+
+        g_device->rtSetString(mesh,"accel",g_mesh_accel.c_str());
+        g_device->rtSetString(mesh,"builder",g_mesh_builder.c_str());
+        g_device->rtSetString(mesh,"traverser",g_mesh_traverser.c_str());
+        
+        g_device->rtCommit(mesh);
+        
+        auto newPrimitive = g_device->rtNewShapePrimitive(mesh, defaultMaterial, NULL);
+        rendererOne->g_prims.push_back(newPrimitive);
+        
+        auto t = (TriangleMeshFull*) g_device->rtGetShape(newPrimitive);
+        
+//        meshesOne = TriangleMeshGroup(t);
+    }
+
+//    auto newMeshes = getSceneData(rendererOne);
+    
+//    g_prims.insert(g_prims.end(), resultbegin(), result.end());
+
+    //Recreate scene with new prim
+//    rendererOne->createScene();
+    
+//    for (size_t i=0; i<g_prims.size(); i++) {
+//        g_device->rtSetPrimitive(rendererOne->g_render_scene,rendererOne->g_prims.size(),result);
+//    }
 
     printf("DONE");
 }
@@ -2035,7 +2091,6 @@ void RIV3DView::filterForGizmo(Gizmo* gizmo, RIVDataSet<float,ushort>* dataset) 
         
         dataset->AddFilter(filter);
         dataset->StopFiltering();
-        
     }
 }
 void RIV3DView::ToggleGizmoTranslationMode(int x, int y, int z) {

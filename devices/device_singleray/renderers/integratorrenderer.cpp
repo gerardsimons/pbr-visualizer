@@ -261,11 +261,13 @@ namespace embree
 						state.pixel = Vec2f(fx,fy);
 
 						L += renderer->integrator->Li(primary, scene, state);
-						
-
 					}
+//                    if(L.r + L.g + L.b > 20.0) {
+//                        L = Color(20,0,0);
+//                    }
                     const Color L0 = swapchain->update(x, _y, L, spp , accumulate);
 					const Color L1 = toneMapper->eval(L0,x,y,swapchain);
+                    
 					framebuffer->set(x, _y, L1);
 				}
 			}
@@ -341,8 +343,6 @@ namespace embree
                         
                         
                     }
-//                    float r = (renderCount % 5) / 5.F;
-//                    L = Color(r,0,0);
                     const Color L0 = swapchain->update(x, _y, L, spp, accumulate);
                     const Color L1 = toneMapper->eval(L0,x,y,swapchain);
                     
@@ -448,6 +448,10 @@ namespace embree
                     //                    printf("x,y = %d,%d\n",x,y);
                     //                    L = Color(0,1,0);
                     //                    float normalizedValue = pixelDistributions->NormalizedValue(pixelSample.first, pixelSample.second);
+                    if(L.r + L.g + L.b > 20.0) {
+                        L = Color(1,0,0);
+                    }
+                    
                     const Color L0 = swapchain->update(x, _y, L, spp, accumulate);
                     const Color L1 = toneMapper->eval(L0,x,y,swapchain);
                     //                    const Color L1 = Color(0,1,0);

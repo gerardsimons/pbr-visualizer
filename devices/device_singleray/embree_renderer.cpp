@@ -438,7 +438,6 @@ void EMBREERenderer::parseCommandLine(Ref<ParseStream> cin, const FileName& path
         /* read model from file */
         else if (tag == "-i") {
             std::vector<Handle<Device::RTPrimitive> > prims = rtLoadScene(makeFileName(path,cin->getFileName()));
-            
             g_prims.insert(g_prims.end(), prims.begin(), prims.end());
         }
         

@@ -41,6 +41,9 @@ typedef struct IntersectData {
 	IntersectData(const Vec3fa& position, const Vec3fa& dir,const Color& color, ushort primitiveId, ushort shapeId, ushort lightId, ushort interactionType) :
 		position(position), dir(dir), color(color), primitiveId(primitiveId), shapeId(shapeId), lightId(lightId), interactionType(interactionType) {
 	}
+    IntersectData() {
+        
+    }
 } IntersectData;
 
 class PathData {
@@ -66,6 +69,7 @@ class DataConnector {
 private:
 	bool pathSet = false;
 	PathData currentPath;
+    IntersectData currentIntersect;
     std::vector<LightData> currentLightData;
 	
 	typedef bool (*path_finished)(PathData* newPath); // type for conciseness
@@ -89,11 +93,12 @@ public:
         this->nrLights = nrLights;
     }
 	void FinishFrame(size_t numPaths, size_t numRays);
-	bool FinishPath(Color& color, Color& throughput);
+	bool FinishPath(const Color& color, const Color& throughput);
 	void StartPath(const Vec2f& pixel,const Vec2f& lens, float time);
 //	void set_callback((void) (*newCallBack)(PathData*));
-	void AddIntersectionData(const Vec3fa& pos, const Vec3fa& dir, Color& color, int primitive_id, ushort type);
+	void AddIntersectionData(const Vec3fa& pos, const Vec3fa& dir, const Color& color, int primitive_id, ushort type);
     void AddLightData(ushort lightId, ushort occluderId, const Color& color);
+    void FinishIntersection();
 };
 
 #endif

@@ -592,8 +592,8 @@ void RIVImageView::drawRenderedImage(EMBREERenderer *renderer, int startX, int s
         glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGBA,GL_UNSIGNED_BYTE,ptr);
     else if (format == "RGB8")
         glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_UNSIGNED_BYTE,ptr);
-    else
-        throw std::runtime_error("unknown framebuffer format: "+format);
+//    else
+//        throw std::runtime_error("unknown framebuffer format: "+format);
     
     renderer->UnmapFrameBuffer();
 }
@@ -1027,7 +1027,7 @@ void RIVImageView::SmoothPixelDistributionTwo() {
     //    if(datasetTwo && pixelDistributionTwo && pixelDistributionTwo->NumberOfElements()) {
     //        smoothPixelDistribution(pixelDistributionTwo);
     //    }
-    if(datasetOne && activeHeatmapTwo && activeHeatmapTwo->NumberOfElements()) {
+    if(datasetTwo && activeHeatmapTwo && activeHeatmapTwo->NumberOfElements()) {
         smoothPixelDistribution(activeHeatmapTwo);
     }
 }

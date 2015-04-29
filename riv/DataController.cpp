@@ -78,6 +78,7 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
         }
     }
     
+    //LIGHTS STUFF
     tuple_for_each(lightRecords, [&](auto tRecords) {
         for(auto record : tRecords) {
             typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
@@ -92,6 +93,7 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
             }
         }
     });
+    
 //    bootstrap->Print();
     
     //	reporter::stop("Creating bootstrap");
@@ -101,12 +103,16 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 void DataController::initDataSet(RIVDataSet<float, ushort> *dataset,const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, ushort nrPrimitives) {
     
     RIVTable<float,ushort>* pathTable = dataset->CreateTable(PATHS_TABLE);
+    const float maxRadiance = 1;
     
     pathTable->CreateRecord<float>(PIXEL_X,0,1,true);
     pathTable->CreateRecord<float>(PIXEL_Y,0,1,true);
-    pathTable->CreateRecord<float>(PATH_R,0,1,true);
-    pathTable->CreateRecord<float>(PATH_G,0,1,true);
-    pathTable->CreateRecord<float>(PATH_B,0,1,true);
+//    pathTable->CreateRecord<float>(PATH_R,0,1,true);
+//    pathTable->CreateRecord<float>(PATH_G,0,1,true);
+//    pathTable->CreateRecord<float>(PATH_B,0,1,true);
+        pathTable->CreateRecord<float>(PATH_R,0,maxRadiance,true);
+        pathTable->CreateRecord<float>(PATH_G,0,maxRadiance,true);
+        pathTable->CreateRecord<float>(PATH_B,0,maxRadiance,true);
     pathTable->CreateRecord<float>(THROUGHPUT_R,0,1,true);
     pathTable->CreateRecord<float>(THROUGHPUT_G,0,1,true);
     pathTable->CreateRecord<float>(THROUGHPUT_B,0,1,true);
@@ -122,6 +128,7 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset,const Vec2f&
     isectsTable->CreateRecord<float>(POS_X,xBounds[0],xBounds[1],true);
     isectsTable->CreateRecord<float>(POS_Y,yBounds[0],yBounds[1],true);
     isectsTable->CreateRecord<float>(POS_Z,zBounds[0],zBounds[1],true);
+    
     //	isectsTable->CreateRecord<float>(DIR_X,0,1,true);
     //	isectsTable->CreateRecord<float>(DIR_Y,0,1,true);
     //	isectsTable->CreateRecord<float>(DIR_Z,0,1,true);
@@ -256,7 +263,7 @@ RIVDataSet<float,ushort>** DataController::GetDataSet() {
 }
 bool DataController::ProcessNewPath(int frame, PathData* newPath) {
     
-    if(mode == NONE) {
+    if(collectionMode == NONE) {
         return false;
     }
     
@@ -298,11 +305,11 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
     
 //    unsigned int averageThroughput = (newPath->throughput.r + newPath->throughput.g + newPath->throughput.b) / 3.F * 100 * nrIntersections;
     unsigned int averageThroughput = (newPath->throughput.r + newPath->throughput.g + newPath->throughput.b) / 3.F * 100;
-    unsigned int averageEnergy = (newPath->radiance.r + newPath->radiance.g + newPath->radiance.b) / 3.F * 100;
+    float averageEnergy = (newPath->radiance.r + newPath->radiance.g + newPath->radiance.b) / 3.F;
     //    unsigned int averageEnergy = (newPath->radiance.r * newPath->throughput.r + newPath->radiance.g * newPath->throughput.g + newPath->radiance.b * newPath->throughput.b) / 3.F * 100;
     
     imageDistributions.AddToHistogram(IMAGE_THROUGHPUT, pixelX,pixelY,averageThroughput);
-    imageDistributions.AddToHistogram(IMAGE_RADIANCE_AVG, pixelX,pixelY,averageEnergy);
+    imageDistributions.AddToHistogram(IMAGE_RADIANCE_AVG, pixelX,pixelY,averageEnergy * 100);
     imageDistributions.AddToHistogram(IMAGE_RADIANCE_R, pixelX,pixelY,newPath->radiance.r * 100);
     imageDistributions.AddToHistogram(IMAGE_RADIANCE_G, pixelX,pixelY,newPath->radiance.g * 100);
     imageDistributions.AddToHistogram(IMAGE_RADIANCE_B, pixelX,pixelY,newPath->radiance.b * 100);
@@ -313,12 +320,24 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
     
     //    printf("Addeding energy %f to %d,%d\n",averageEnergy,(int)pixelX,(int)pixelY);
     //    energyDistribution2D.PrintRaw();
+    const float maxEnergy = 20;
     
-    if(mode == ALL && currentPathTable->NumberOfRows() < maxPaths) {
-        float accept = rand() / (float)RAND_MAX;
-        //			accept = 0;
+    if(collectionMode == ALL && currentPathTable->NumberOfRows() < maxPaths) {
+
+        float r = rand() / (float)RAND_MAX;
+        float accept = r;
+        
+        if(acceptMode == RADIANCE) {
+            accept = 1 - (r * (averageEnergy / maxEnergy));
+        }
+        
+//        printf("Average energy = %f\n",averageEnergy);
+//        printf("Accept prob = %f\n",accept);
         //			printf("Accept prob = %f\n",accept);
         if(accept <= acceptProbability) {
+            
+//            printf("ACCEPTED!!\n");
+            
             //				++pathCount;
             //			rendererId->AddValue(renderer);
             xPixels->AddValue(newPath->pixel[0]);
@@ -387,7 +406,7 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 
 void DataController::Reduce() {
     
-    if(mode == ALL) {
+    if(collectionMode == ALL) {
         
         printHeader("DATA REDUCTION",100);
         const std::string taskName = "data reduction";
@@ -407,7 +426,7 @@ void DataController::Reduce() {
             acceptProbability /= 2;
             
             currentData->NotifyDataListeners();
-//            currentData->Print();
+            currentData->Print(100);
             
         }
         else {
@@ -636,7 +655,7 @@ void DataController::SetMaxPaths(int maxPaths) {
     this->maxPaths = maxPaths;
 }
 void DataController::CycleDataCollectionMode() {
-    switch (mode) {
+    switch (collectionMode) {
         case ALL:
             SetDataCollectionMode(DISTRIBUTIONS);
             break;
@@ -650,20 +669,46 @@ void DataController::CycleDataCollectionMode() {
 }
 void DataController::SetDataCollectionMode(DataCollectionMode newMode) {
     printf("DataController will update ");
-    mode = newMode;
-    switch (mode) {
+    collectionMode = newMode;
+    switch (collectionMode) {
         case DISTRIBUTIONS:
-            mode = DISTRIBUTIONS;
+            collectionMode = DISTRIBUTIONS;
             printf("DISTRIBUTIONS");
             break;
         case NONE:
-            mode = NONE;
+            collectionMode = NONE;
             printf("NONE");
             break;
         case ALL:
-            mode = ALL;
+            collectionMode = ALL;
             printf("ALL");
             break;
     }
     printf("\n");
+}
+void DataController::SetDataAcceptMode(AcceptMode newMode) {
+    acceptMode = newMode;
+    printf("New data accept mode = '");
+    switch(newMode) {
+        case UNIFORM:
+            printf("UNIFORM");
+            break;
+        case RADIANCE:
+            printf("RADIANCE");
+            break;
+    }
+    printf("'\n");
+}
+void DataController::CycleDataAcceptMode() {
+    switch (acceptMode) {
+        case UNIFORM:
+            SetDataAcceptMode(RADIANCE);
+            break;
+        case RADIANCE:
+            SetDataAcceptMode(UNIFORM);
+            break;
+    }
+    
+    //The old distributions do not help
+    Reset();
 }

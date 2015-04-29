@@ -3220,7 +3220,7 @@
             <texcoords ofs="10457616" size="0"/>
             <triangles ofs="10457616" size="1280"/>
         </TriangleMesh>
-        <TriangleMesh id="183" name="mesh183">
+<!--         <TriangleMesh id="183" name="mesh183">
             <material name="Glass.001">
                 <code>"Glass"</code>
                 <parameters>
@@ -3233,7 +3233,7 @@
             <normals   ofs="11714088" size="0"/>
             <texcoords ofs="11714088" size="0"/>
             <triangles ofs="11714088" size="206848"/>
-        </TriangleMesh>
+        </TriangleMesh> -->
 <!--         <TriangleMesh id="184" name="mesh184">
             <material name="Glass.002">
             <code>"glass"</code>
