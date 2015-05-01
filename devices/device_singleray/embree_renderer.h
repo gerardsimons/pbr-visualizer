@@ -145,6 +145,7 @@ public:
 	bool RayPick(Ray& ray, float& x, float& y, float& z);
     
     Ref<SwapChain> GetSwapChain();
+    void LoadFromImage(const std::string& name, unsigned int spp);
     void SetSwapChainWeight(float weight);
     void CopySwapChainTo(EMBREERenderer* renderer,float copyWeight);
     void CopySwapChainTo(EMBREERenderer* targetRenderer, const std::vector<std::vector<float>>& weights);

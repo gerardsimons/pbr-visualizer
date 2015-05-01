@@ -75,7 +75,7 @@ bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& P
 
 bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& Phit, float& shortestDistance, const Vec3fa& distanceCompare) const {
     bool intersects = false;
-    bool reverse = true;
+    bool reverse = false;
 
     if (reverse) {
         shortestDistance = -std::numeric_limits<float>::max();

@@ -445,12 +445,6 @@ namespace embree
                         
                         //                        testDistro.Add(pixelSample.first, pixelSample.second);
                     }
-                    //                    printf("x,y = %d,%d\n",x,y);
-                    //                    L = Color(0,1,0);
-                    //                    float normalizedValue = pixelDistributions->NormalizedValue(pixelSample.first, pixelSample.second);
-                    if(L.r + L.g + L.b > 20.0) {
-                        L = Color(1,0,0);
-                    }
                     
                     const Color L0 = swapchain->update(x, _y, L, spp, accumulate);
                     const Color L1 = toneMapper->eval(L0,x,y,swapchain);

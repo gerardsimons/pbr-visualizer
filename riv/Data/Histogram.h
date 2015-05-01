@@ -21,13 +21,13 @@
 #include "../Grid.h"
 
 //histogram implementation. Counts the values in the given vector and divides by the number of samples to normalize
-template<typename T>
+template<typename T,typename U = int>
 class Histogram {
     
 private:
     
     //Use ints because we also want to have negative counts when using difference of two histograms
-    std::map<unsigned int,int> hist;
+    std::map<unsigned int,U> hist;
     
     bool cdfStale = true;
     std::map<unsigned int,float> cdf; //Cumulative normalized distribution
@@ -151,8 +151,8 @@ public:
     T UpperBound() {
         return upperBound;
     }
-    unsigned int MaximumValue() {
-        unsigned int max = 0;
+    U MaximumValue() {
+        U max = 0;
         for(auto iter : hist) {
             if(iter.second > max) {
                 max = iter.second;
@@ -160,8 +160,8 @@ public:
         }
         return max;
     }
-    unsigned int MinimumValue() {
-        unsigned int min = -1;
+    U MinimumValue() {
+        U min = -1;
         for(auto iter : hist) {
             if(iter.second < min) {
                 min = iter.second;
@@ -216,13 +216,11 @@ public:
         }
         cdfStale = false;
     }
-    int BinValue(unsigned int bin) {
+    U BinValue(unsigned int bin) {
         return hist[bin];
     }
     float ScaledValue(unsigned int bin) {
-        
-        int max = MaximumValue();
-        
+        U max = MaximumValue();
         if(max) {
             return hist[bin] / (float)max;
         }
@@ -231,7 +229,7 @@ public:
     float GetBinWidth() {
         return binWidth;
     }
-    void Set(int bin, size_t count) {
+    void Set(int bin, U count) {
         nrElements += count - hist[bin];
         hist[bin] = count;
     }
@@ -279,8 +277,8 @@ public:
         
         //Use normalized values!
         for(int i = 0 ; i < bins ; i++) {
-            int thisValue = BinValue(i);
-            int rightValue = right.BinValue(i);
+            U thisValue = BinValue(i);
+            U rightValue = right.BinValue(i);
             int diff = std::abs(thisValue - rightValue);
             result.Set(i,diff);
             
@@ -300,10 +298,10 @@ public:
         Histogram result(name,lowerBound,upperBound,bins,0);
         
         //Use normalized values!
-        for(int i = 0 ; i < bins ; i++) {
-            int thisValue = BinValue(i);
-            int rightValue = right.BinValue(i);
-            int diff = (thisValue + rightValue);
+        for(unsigned int i = 0 ; i < bins ; i++) {
+            U thisValue = BinValue(i);
+            U rightValue = right.BinValue(i);
+            U diff = (thisValue + rightValue);
             result.Set(i,diff);
             
         }
@@ -315,9 +313,9 @@ public:
         Histogram result(name,lowerBound,upperBound,bins,0);
         
         //Use normalized values!
-        for(int i = 0 ; i < bins ; i++) {
-            int thisValue = BinValue(i);
-            int boolValue = (int)(bool)thisValue;
+        for(unsigned int i = 0 ; i < bins ; i++) {
+            U thisValue = BinValue(i);
+            U boolValue = (int)(bool)thisValue;
             result.Set(i,boolValue);
         }
         
@@ -380,7 +378,7 @@ public:
         
         float binStart = lowerBound;
         
-        for(int bin = 0 ; bin < bins ; ++bin) {
+        for(unsigned int bin = 0 ; bin < bins ; ++bin) {
             //		for(auto it : hist) {
             
             printf("%.2f - %.2f\t : ",binStart,binStart + binWidth);
@@ -886,6 +884,7 @@ public:
         else printf("<EMPTY>");
     }
     void SmoothRectangular(unsigned int width, unsigned int height, const unsigned int repeat = 1) {
+        unsigned int size = width * height;
         if(width <= xBins && height <= yBins) {
             for(int i = 0 ; i < repeat ; ++i) {
                 Histogram2D<T> result = Histogram2D<T>(lowerBound,upperBound,xBins,yBins);
@@ -904,6 +903,9 @@ public:
                                 sum += value;
                                 ++binsSummed;
                             }
+                        }
+                        if(sum > 0) {
+                            sum *= binsSummed;
                         }
                         size_t average = std::round(sum / binsSummed);
                         //                    size_t average = std::ceil(sum / binsSummed);

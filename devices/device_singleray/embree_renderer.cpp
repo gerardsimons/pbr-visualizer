@@ -277,7 +277,6 @@ std::vector<Ref<embree::Light>> EMBREERenderer::GetLights() {
 void EMBREERenderer::RenderNextFrame(bool useDataCallBack) {
     g_device = g_single_device;
     g_device->rtRenderFrame(g_renderer,camera,g_render_scene,g_tonemapper,g_frameBuffer,1,useDataCallBack);
-    //	g_device->rtSwapBuffers(g_frameBuffer);
 }
 //Render next frame according to given pixel distribution
 void EMBREERenderer::RenderNextFrame(Histogram2D<float>* pixelDistribution,bool useDataCallBack) {
@@ -866,4 +865,28 @@ int EMBREERenderer::getSamplesPerPixel() {
 }
 int EMBREERenderer::GetDepth() {
     return g_depth;
+}
+void EMBREERenderer::LoadFromImage(const std::string& name, unsigned int spp) {
+    SwapChain* thisSwapChain = g_single_device->rtGetSwapChain(g_frameBuffer).ptr;
+    
+    Ref<FrameBuffer> thisBuffer = thisSwapChain->buffer();
+    Image* image = loadImage(FileName(name)).ptr;
+
+    //Get the accumulation buffers
+    AccuBuffer* thisAccuBuffer = thisSwapChain->accu().ptr;
+    
+    
+    for(int x = 0 ; x < thisSwapChain->getWidth() ; ++x) {
+        for(int y = 0 ; y < thisSwapChain->getHeight() ; ++y) {
+            Color4 thisPixel = image->get(x, y);
+            
+            Vec4f vec(thisPixel.r,thisPixel.g,thisPixel.b,spp);
+            
+            //                thatAccuBuffer->update(x, y, thisColor, weight, true);
+            thisAccuBuffer->set(x, y, vec);
+            thisBuffer->set(x, y, thisPixel);
+            //                thatAccuBuffer->set(x, y, thisPixel);
+        }
+    }
+    
 }

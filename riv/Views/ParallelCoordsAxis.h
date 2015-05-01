@@ -52,6 +52,8 @@ public:
 	
 	Histogram<T> densityHistogramOne;
 	Histogram<T> densityHistogramTwo;
+    
+    std::vector<Histogram<float>> radianceHistograms;
 	
 	bool differenceDensityComputed = false;
 	
@@ -62,13 +64,20 @@ public:
 	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision, const Histogram<T>& histogramOne)
 	: ParallelCoordsAxisInterface(x,y,width,height,name),minValue(minValue),maxValue(maxValue),recordPointer(recordPointer), densityHistogramOne(histogramOne) {
 		ComputeScale(scaleDivision);
-
+        
+//        radianceHistograms.resize(3);
+//        radianceHistograms[0] = Histogram<float>(0,1,10);
+//        radianceHistograms[1] = Histogram<float>(0,1,10);
+//        radianceHistograms[2] = Histogram<float>(0,1,10);
 	}
 	
 	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision,const Histogram<T>& histogramOne, const Histogram<T>& histogramTwo)
 	: ParallelCoordsAxisInterface(x,y,width,height,name),minValue(minValue),maxValue(maxValue),recordPointer(recordPointer),densityHistogramOne(histogramOne), densityHistogramTwo(histogramTwo) {
 		ComputeScale(scaleDivision);
-
+        
+//        radianceHistograms[0] = Histogram<float>(0,1,10);
+//        radianceHistograms[1] = Histogram<float>(0,1,10);
+//        radianceHistograms[2] = Histogram<float>(0,1,10);
 	}
 	
 	ParallelCoordsAxis() {
@@ -85,6 +94,16 @@ public:
 		}
 		else return &densityHistogramTwo;
 	}
+    
+    std::vector<Histogram<T>>& GetRadianceHistograms() {
+        return radianceHistograms;
+    }
+    
+    void AddRadiance(float r, float g, float b) {
+//        radianceHistograms[0].Add(r);
+//        radianceHistograms[1].Add(g);
+//        radianceHistograms[2].Add(b);
+    }
 	
 	Histogram<T>* GetHistogramOne() {
 		return &densityHistogramOne;

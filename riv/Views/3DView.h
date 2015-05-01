@@ -75,7 +75,14 @@ private:
     //Whether the generated octree should be drawn (if any is generated)
     bool drawHeatmapTree = false;
     
-    bool showMeshes = true;
+    enum MeshDisplayMode {
+        NO_MESH,
+        FIXED_COLOR,
+        MEMBERSHIP_COLOR
+    };
+    
+    MeshDisplayMode meshDisplay = MEMBERSHIP_COLOR;
+    
     //	size_t selectedMesh = -1;
     
     //Mesh model data
@@ -193,7 +200,7 @@ public:
     void filterForGizmo();
     void filterForGizmo(Gizmo* gizmo, RIVDataSet<float,ushort>* dataset);
     
-    void ToggleHideMesh();
+    void CycleMeshDiplayMode();
     void Reshape(int newWidth, int newHeight);
     void Draw();
     bool HandleMouseMotionPassive(int x, int y);

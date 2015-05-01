@@ -440,15 +440,27 @@ void RIV3DView::Draw() {
     glScalef(modelScale,modelScale,modelScale);
     glTranslatef(-modelCenter[0], -modelCenter[1], -modelCenter[2]);
     
-    riv::Color whiteColor(0.95F,0.95F,.95F);
+//    riv::Color redColor;
     
-    if(showMeshes) {
-        if(drawDataSetOne) {
-            drawMeshModel(&meshesOne,whiteColor,&selectedObjectIdOne);
+    if(meshDisplay != NO_MESH) {
+        if(meshDisplay == MEMBERSHIP_COLOR) {
+            if(drawDataSetOne) {
+                drawMeshModel(&meshesOne,colors::RED,&selectedObjectIdOne);
+            }
+            if(drawDataSetTwo) {
+                drawMeshModel(&meshesTwo,colors::BLUE,&selectedObjectIdTwo);
+            }
         }
-        if(drawDataSetTwo) {
-            drawMeshModel(&meshesTwo,whiteColor,&selectedObjectIdTwo);
+        else if(meshDisplay == FIXED_COLOR) {
+            riv::Color meshColor = riv::Color(0.9F,0.9F,0.9F);
+            if(drawDataSetOne) {
+                drawMeshModel(&meshesOne,meshColor,&selectedObjectIdOne);
+            }
+            if(drawDataSetTwo) {
+                drawMeshModel(&meshesTwo,meshColor,&selectedObjectIdTwo);
+            }
         }
+
     }
     if(drawIntersectionPoints) {
 //        printf("Draw intersection points\n");
@@ -647,8 +659,23 @@ void RIV3DView::drawPoints() {
         }
     }
 }
-void RIV3DView::ToggleHideMesh() {
-    showMeshes = !showMeshes;
+void RIV3DView::CycleMeshDiplayMode() {
+    printf("MeshDisplay mode set to ");
+    switch(meshDisplay) {
+        case NO_MESH:
+            meshDisplay = FIXED_COLOR;
+            printf("'FIXED_COLOR'\n");
+            break;
+        case FIXED_COLOR:
+            meshDisplay = MEMBERSHIP_COLOR;
+            printf("'MEMBERSHIP_COLOR'\n");
+            break;
+        case MEMBERSHIP_COLOR:
+            meshDisplay = NO_MESH;
+            printf("'NO_MESH'\n");
+            break;
+    }
+    
     redisplayWindow();
 }
 void RIV3DView::drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<Path>& paths) {
@@ -915,27 +942,23 @@ std::vector<Path> RIV3DView::createCameraPaths(RIVDataSet<float,ushort>* dataset
     
     RIVTable<float,ushort>* pathsTable = dataset->GetTable(PATHS_TABLE);
     RIVShortRecord* bounceRecord = isectTable->GetRecord<ushort>(BOUNCE_NR);
-    RIVShortRecord* primitiveRecord = isectTable->GetRecord<ushort>(PRIMITIVE_ID);
     
     std::vector<Path> paths;
-    //Get the records we want;
-    //Get the iterator, this iterator is aware of what rows are filtered and not
-    TableIterator* intersectionsIterator = isectTable->GetIterator();
     TableIterator* pathsIterator = pathsTable->GetIterator();
     
-    size_t row ;
+    size_t row;
     ushort bounceNr;
     
     //    lightCones.clear();
     //    LightCone* previousCone = NULL;
     
-        dataset->Print(10);
+//        dataset->Print(10);
     std::map<RIVTableInterface*,std::vector<size_t>> referenceRowsMap;
     RIVTableInterface* isectsInterface = (RIVTableInterface*)isectTable;
     
     while(pathsIterator->GetNext(row,referenceRowsMap)) {
         
-        const std::vector<size_t>& refRows = referenceRowsMap[isectsInterface];
+        std::vector<size_t>& refRows = referenceRowsMap[isectsInterface];
         if(refRows.size() > 0) {
             
             std::vector<PathPoint> points;
@@ -958,200 +981,11 @@ std::vector<Path> RIV3DView::createCameraPaths(RIVDataSet<float,ushort>* dataset
             
             
         }
-        
-//        std::vector<size_t> refRows;
-//        for(auto it : referenceRowsMap) {
-//            if(it.first->name == PATHS_TABLE) {
-//                refRows = it.second;
-//            }
-//        }
-//        if(refRows.size()) {
-//            pathID = &refRows[0];
-//        }
-//        
-//        
-//        //        ushort primitiveId = primitiveRecord->Value(row);
-//        //        LightCone*& existing = lightCones[primitiveId];
-//        //        float x = xRecord->Value(row);
-//        //        float y = yRecord->Value(row);
-//        //        float z = zRecord->Value(row);
-//        //        if(!existing) {
-//        //           existing = new LightCone();
-//        //        }
-//        
-//        //        size_t N = existing->originN;
-//        //        float rcp = 1.F / existing->originN;
-//        //        std::cout << existing->origin << " + " << x << "," << y << "," << z << " = ";
-//        //        existing->origin[0] = (existing->origin[0] * N + x) / (N+1);
-//        //        existing->origin[1] = (existing->origin[1] * N + y) / (N+1);
-//        //        existing->origin[2] = (existing->origin[2] * N + z) / (N+1);
-//        //        existing->originN++;
-//        //        std::cout  << existing->origin << std::endl;
-//        
-//        //New path, clear previous stuff
-//        if(pathID && *pathID != oldPathID) {
-//            riv::Color pColor;
-//            pathColor->ComputeColor(pathsTable, *pathID, pColor);
-//            if(points.size() > 0) {
-//                paths.push_back(Path(points,pColor));
-//                points.clear();
-//            }
-//            //            previousCone = NULL;
-//            
-//            oldPathID = *pathID;
-//        }
-//        //If still the same path, the previous cone should point more towards this point
-//        //        if(previousCone) {
-//        //            float rcp = 1.F / existing->targetN;
-//        //            size_t N = previousCone->targetN;
-//        //            previousCone->target[0] = (previousCone->target[0] * N + x) / (N+1);
-//        //            previousCone->target[1] = (previousCone->target[1] * N + y) / (N+1);
-//        //            previousCone->target[2] = (previousCone->target[2] * N + z) / (N+1);
-//        //            ++previousCone->targetN;
-//        //        }
-//        bounceNr = bounceRecord->Value(row);
-//        riv::Color pointC;
-//        pointColor->ComputeColor(isectTable, row, pointC); //Check if any color can be computed for the given row
-//        PathPoint p;
-//        p.rowIndex = row;
-//        p.bounceNr = bounceNr;
-//        p.color = pointC;
-//        points.push_back(p);
-//        oldPathID = *pathID;
-//        //        previousCone = existing;
+
     }
     reporter::stop("Creating camera paths");
     
     return paths;
-}
-
-#define PI 3.141592
-float angleTest = 0;
-void RIV3DView::drawLightCones(const std::map<size_t,LightCone*>& lightCones) {
-    GLUquadric* qobj = gluNewQuadric();
-    int i = 0;
-    int size = lightCones.size();
-    for(auto pair : lightCones) {
-        glColor3f(i/(float)size, 0, 0);
-        LightCone* cone = pair.second;
-        
-        //        cone->origin = 0;
-        //        cone->target = 1;
-        Vec3fa diff = cone->target - cone->origin;
-        //        float max = std::max(diff.x,std::max(diff.y,diff.z));
-        float diffLength = length(diff);
-        Vec3fa dir = diff / diffLength;
-        //        glRotatef(360, dir.x, dir.y, dir.z);
-        glPushMatrix();
-        glTranslatef(cone->origin.x,cone->origin.y,cone->origin.z);
-        //        glTranslatef(modelCenter[0],modelCenter[1],modelCenter[2]);
-        double toDegrees = 180.0 / PI;
-        
-        
-        //        float acosX = std::acos(dir.x / toDegrees) / 2;
-        //        float angleX = acosX * toDegrees;
-        //        float angleY = std::acos(dir.y / toDegrees)/2*toDegrees;
-        //        float angleZ = std::acos(dir.z / toDegrees)/2*toDegrees;
-        
-        //DEGREES
-        //        float angleX = 360 - std::atan(diff.y / diff.z) * toDegrees;
-        //RAD
-        float angleX = std::atan2(diff.y,diff.z);
-        
-        
-        //        angle *= toDegrees;
-        
-        
-        //
-        
-        if(diff.y < 0 || diff.z < 0) {
-            //DEGREES
-            //            angleX += 180;
-            //RAD
-            //            angleX += PI;
-        }
-        float angleY = std::atan2(diff.x,diff.z);
-        if(diff.x < 0 || diff.z < 0) {
-            //            angleY += 180;
-            //            angleY += PI;
-        }
-        float angleZ = std::atan2(diff.x,diff.y);
-        if(diff.y < 0 || diff.x < 0) {
-            //            angleZ += 180;
-            //            angleZ += PI;
-        }
-        Vec3f angle(angleX,angleY,angleZ);
-        //        glPushMatrix();
-        //        glRotatef(angle.z,0,0,1);
-        //        glPopMatrix();
-        //        glPushMatrix();
-        
-        GLdouble xRotationMatrix[16] =
-        {1,0,0,0,
-            0,std::cos(angleX),-std::sin(angleX),0,
-            0,std::sin(angleX), std::cos(angleX),0,
-            0,0,0,1};
-        
-        //        angleTest += 0.1;
-        //        angleY = angleTest;
-        GLdouble yRotationMatrix[16] =
-        {std::cos(angleY),0,-std::sin(angleY),0,
-            0,1,0,0,
-            std::sin(angleY),0,std::cos(angleY),0,
-            0,0,0,1};
-        
-        GLdouble zRotationMatrix[16] =
-        {std::cos(angleZ),-sin(angleZ),0,0,
-            std::sin(angleZ),std::cos(angleZ),0,0,
-            0,0,1,0,
-            0,0,0,1};
-        
-        glPushMatrix();
-        //        glRotatef(45,.5,.5,0);
-        glMultMatrixd(xRotationMatrix);
-        glMultMatrixd(yRotationMatrix);
-        glMultMatrixd(zRotationMatrix);
-        
-        
-        //        glPopMatrix();
-        //        glPushMatrix();
-        //        glRotatef(angle.y,0,1,0);
-        //        glPopMatrix();
-        //        glTranslatef(-cone->origin.x,-cone->origin.y,-cone->origin.z);
-        
-        //        glPushMatrix();
-        
-        //        glRotatef(angleZ,0,0,1);
-        //        glRotatef(1, angleX, angleY, angleZ);
-        std::cout << " dir = " << dir << std::endl;
-        std::cout << " origin = " << cone->origin << std::endl;
-        std::cout << " target = " << cone->target << std::endl;
-        printf("angle = %f,%f,%f\n",angle.x*toDegrees,angle.y*toDegrees,angle.z*toDegrees);
-        
-        //        float angleY
-        //        float angleZ
-        
-        
-        //        glTranslatef(cone->origin.x,cone->origin.y,cone->origin.z);
-        //        glRotatef(angle, 360*dir.x,360*dir.y,360*dir.z);
-        //        ++angle;
-        
-        
-        
-        float heightCylinder = length(diff);
-        gluCylinder(qobj, 10.0, 40.0, heightCylinder, 8, 16);
-        //        glPopMatrix();
-        glPopMatrix();
-        //        glPopMatrix();
-        glColor3f(0, i/(float)size, 0);
-        glBegin(GL_LINES);
-        glVertex3f(cone->origin.x, cone->origin.y, cone->origin.z);
-        glVertex3f(cone->origin.x+diff.x,cone->origin.y+ diff.y,cone->origin.z+ diff.z);
-        //            glVertex3f(cone->target.x, cone->target.y, cone->target.z);
-        glEnd();
-        ++i;
-    }
-    gluDeleteQuadric(qobj);
 }
 void RIV3DView::MovePathSegment(float ratioIncrement) {
     if(pathsMode != NONE && (drawDataSetOne || drawDataSetTwo)) {
@@ -1347,10 +1181,8 @@ void RIV3DView::drawPaths(RIVDataSet<float,ushort>* dataset, const std::vector<P
             }
         }
     }
-    
     //	reporter::stop(taskname);
 }
-
 void RIV3DView::ToggleDrawPaths() {
     //Create the paths if necessary (allows for smoother animations)
     printf("Display paths mode is now set to '");
@@ -1542,7 +1374,7 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
                 size_t intersectionRow = mapping[i];
                 ushort objectID = primitiveIds->Value(intersectionRow);
                 //Check if it has occluders and if the selectedObjectID is in them
-                if((selectionMode == INTERACTION || selectionMode == INTERACTION_AND_SHADOW) && i == (bounceNr-1)) {
+                if((selectionMode == INTERACTION || selectionMode == INTERACTION_AND_SHADOW)) {
 //                    if( primitiveIds->Value(intersectionRow) == *selectedObjectIDs) {
                     if(selectedObjectIDs.find(objectID) != selectedObjectIDs.end()) {
                         filter = false;

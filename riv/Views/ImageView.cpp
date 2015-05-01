@@ -39,7 +39,8 @@ RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, EMBREERenderer
     paintGridOne = new Grid(gridSize);
     
     rendererOne = renderer;
-    yBinsOne = rendererOne->getWidth() / (float)rendererOne->getHeight() * xBinsOne;
+    double aspectRatio = (float)rendererOne->getHeight() / rendererOne->getWidth();
+    yBinsOne = aspectRatio * xBinsOne;
 }
 
 RIVImageView::RIVImageView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, EMBREERenderer* rendererOne, EMBREERenderer* rendererTwo, Histogram2DSet<float,ushort>* imageDistributionsOne,Histogram2DSet<float,ushort>* imageDistributionsTwo,int xBinsOne, int xBinsTwo) : RIVDataView(datasetOne,datasetTwo), rendererOne(rendererOne), rendererTwo(rendererTwo),imageDistributionsOne(imageDistributionsOne),imageDistributionsTwo(imageDistributionsTwo),xBinsOne(xBinsOne),xBinsTwo(xBinsTwo) {
@@ -991,12 +992,12 @@ void RIVImageView::CombinePixelDistributions() {
         
         Histogram2D<float> sum = *pixelDistributionOne + *pixelDistributionTwo;
         
-        printf("pixelDistributionOne = \n");
-        pixelDistributionOne->Print();
-        printf("pixelDistributionTwo = \n");
-        pixelDistributionTwo->Print();
-        printf("sum = \n");
-        sum.Print();
+//        printf("pixelDistributionOne = \n");
+//        pixelDistributionOne->Print();
+//        printf("pixelDistributionTwo = \n");
+//        pixelDistributionTwo->Print();
+//        printf("sum = \n");
+//        sum.Print();
         
         *pixelDistributionOne = sum;
         *pixelDistributionTwo = sum;

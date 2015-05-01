@@ -2,10 +2,9 @@
 
 <scene>
   <Group>
-
   
     <Sphere>
-      <position>213 210 210</position>
+      <position>250 310 250</position>
       <radius>90</radius>
       <numTheta>50</numTheta>
       <numPhi>50</numPhi>
@@ -16,7 +15,6 @@
       </material>
     </Sphere>
 
-    
 <!--     <Sphere>
       <position>394 90 351</position>
       <radius>90</radius>
@@ -140,16 +138,16 @@
     </TriangleMesh>
 
     <!-- light -->
-   <QuadLight>
+<!--    <QuadLight>
       <AffineSpace>
         130   0   0 63.0
           0   0   1 548.77
           0 105   0 227.0
       </AffineSpace>
-      <L>50 50 45</L>
-    </QuadLight>
+      <L>120 120 110</L>
+    </QuadLight> -->
 
-    <QuadLight>
+<!--     <QuadLight>
       <AffineSpace>
         130   0   0 363.0
           0   0   1 548.77
@@ -157,7 +155,7 @@
       </AffineSpace>
       <L>50 50 45</L>
     </QuadLight>
-
+ -->
 <!--  <SpotLight>
     <AffineSpace>
       1 0  0 213

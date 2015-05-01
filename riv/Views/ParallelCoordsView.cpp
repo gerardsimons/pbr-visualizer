@@ -330,9 +330,9 @@ void ParallelCoordsView::drawAxes() {
                         
                         //						printf("glColor3f(%f,%f,%f)\n",r,g,b);
                         float width = ratio * (maxBinWidth - axis->width) + axis->width;
-                        if(width > maxBinWidth) {
-                            size_t maxTest = histogramTwo.MaximumValue();
-                        }
+//                        if(width > maxBinWidth) {
+//                            size_t maxTest = histogramTwo.MaximumValue();
+//                        }
                         float startBinX = axis->x - width / 2.F;
                         float endBinX = axis->x + width / 2.F;
                         glRectf(startBinX, startBinY, endBinX, endBinY);
@@ -491,6 +491,12 @@ void ParallelCoordsView::createAxisDensities() {
 //    delete pathColorTwo;
 //}
 void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ushort>* dataset) {
+    
+    std::map<std::string,std::vector<std::string>> tableToRadianceRecords;
+    tableToRadianceRecords[PATHS_TABLE] = {PATH_R,PATH_G,PATH_B};
+    tableToRadianceRecords[INTERSECTIONS_TABLE] = {INTERSECTION_R,INTERSECTION_G,INTERSECTION_B};
+    tableToRadianceRecords[LIGHTS_TABLE] = {LIGHT_R,LIGHT_G,LIGHT_B};
+    
     for(auto &axisGroup : axisGroups) {
         tuple_for_each(axisGroup.axes, [&](auto tAxes) {
             for(auto axis : tAxes) {
@@ -498,7 +504,6 @@ void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ush
             }
         });
     }
-    
     for(auto &axisGroup : axisGroups) {
         size_t row = 0;
         
@@ -506,12 +511,18 @@ void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ush
         tuple_for_each(axisGroup.axes, [&](auto& tAxes) {
             for(auto& axis : tAxes) {
                 TableIterator* iterator = table->GetIterator();
+                
+                RIVRecord<float>* rRecord = table->GetRecord<float>(tableToRadianceRecords[table->GetName()][0]);
+                RIVRecord<float>* gRecord = table->GetRecord<float>(tableToRadianceRecords[table->GetName()][1]);
+                RIVRecord<float>* bRecord = table->GetRecord<float>(tableToRadianceRecords[table->GetName()][2]);
+                
                 while(iterator->GetNext(row)) {
                     
                     auto record = table->GetRecord<decltype(axis->minValue)>(axis->name);
                     auto value = record->Value(row);
                     
                     axis->GetHistogram(datasetId)->Add(value);
+                    axis->AddRadiance(rRecord->Value(row),gRecord->Value(row),bRecord->Value(row));
                 }
             }
         });

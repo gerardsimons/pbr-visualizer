@@ -59,40 +59,44 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
         }
     });
     
-    std::vector<size_t> sampledIntersections;
-    for(size_t index : sampledRows) {
-        std::vector<size_t> refRows = refToIntersections->GetReferenceRows(index);
-        for(int i = 0 ; i < refRows.size() ; ++i) {
-            size_t intersectionRow = refRows[i];
-            sampledIntersections.push_back(intersectionRow);
-            
-            tuple_for_each(isectRecords, [&](auto tRecords) {
+    if(collectionMode == ALL || collectionMode == PATH_AND_INTERSECTION_ONLY)  {
+        std::vector<size_t> sampledIntersections;
+        for(size_t index : sampledRows) {
+            std::vector<size_t> refRows = refToIntersections->GetReferenceRows(index);
+            for(int i = 0 ; i < refRows.size() ; ++i) {
+                size_t intersectionRow = refRows[i];
+                sampledIntersections.push_back(intersectionRow);
+                
+                tuple_for_each(isectRecords, [&](auto tRecords) {
+                    for(auto record : tRecords) {
+                        typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
+                        auto bootRecord = bootstrapIsects->GetRecord<Type>(record->name);
+                        
+                        bootRecord->AddValue(record->Value(intersectionRow));
+                    }
+                    
+                });
+          
+            }
+        }
+        if(collectionMode == ALL) {
+            //LIGHTS STUFF
+            tuple_for_each(lightRecords, [&](auto tRecords) {
                 for(auto record : tRecords) {
                     typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
-                    auto bootRecord = bootstrapIsects->GetRecord<Type>(record->name);
-                    
-                    bootRecord->AddValue(record->Value(intersectionRow));
+                    auto bootRecord = bootstrapLights->GetRecord<Type>(record->name);
+                    for(size_t index : sampledIntersections) {
+                        std::vector<size_t> refRows = refToLights->GetReferenceRows(index);
+                        //                printArray(refRows.rows,refRows.size);
+                        for(int i = 0 ; i < refRows.size() ; ++i) {
+                            bootRecord->AddValue(record->Value(refRows[i]));
+                        }
+                        
+                    }
                 }
-                
             });
         }
     }
-    
-    //LIGHTS STUFF
-    tuple_for_each(lightRecords, [&](auto tRecords) {
-        for(auto record : tRecords) {
-            typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
-            auto bootRecord = bootstrapLights->GetRecord<Type>(record->name);
-            for(size_t index : sampledIntersections) {
-                std::vector<size_t> refRows = refToLights->GetReferenceRows(index);
-                //                printArray(refRows.rows,refRows.size);
-                for(int i = 0 ; i < refRows.size() ; ++i) {
-                    bootRecord->AddValue(record->Value(refRows[i]));
-                }
-                
-            }
-        }
-    });
     
 //    bootstrap->Print();
     
@@ -103,7 +107,6 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
 void DataController::initDataSet(RIVDataSet<float, ushort> *dataset,const Vec2f& xBounds, const Vec2f& yBounds, const Vec2f& zBounds, ushort nrPrimitives) {
     
     RIVTable<float,ushort>* pathTable = dataset->CreateTable(PATHS_TABLE);
-    const float maxRadiance = 1;
     
     pathTable->CreateRecord<float>(PIXEL_X,0,1,true);
     pathTable->CreateRecord<float>(PIXEL_Y,0,1,true);
@@ -320,9 +323,9 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
     
     //    printf("Addeding energy %f to %d,%d\n",averageEnergy,(int)pixelX,(int)pixelY);
     //    energyDistribution2D.PrintRaw();
-    const float maxEnergy = 20;
+    const float maxEnergy = 2 * maxRadiance;
     
-    if(collectionMode == ALL && currentPathTable->NumberOfRows() < maxPaths) {
+    if((collectionMode == ALL || collectionMode == PATH_ONLY || collectionMode || PATH_AND_INTERSECTION_ONLY) && currentPathTable->NumberOfRows() < maxPaths) {
 
         float r = rand() / (float)RAND_MAX;
         float accept = r;
@@ -353,48 +356,53 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
             throughputGs->AddValue(newPath->throughput.g);
             throughputBs->AddValue(newPath->throughput.b);
             depths->AddValue((ushort)newPath->intersectionData.size());
-            std::vector<size_t> indices(nrIntersections);
             
-            for(int i = 0 ; i < nrIntersections ; ++i) {
-                IntersectData& isect = newPath->intersectionData[i];
-                
-                bounceNrs->AddValue(i+1);
-                xs->AddValue(isect.position[0]);
-                ys->AddValue(isect.position[1]);
-                zs->AddValue(isect.position[2]);
-                //					dirX->AddValue(isect.dir[0]);
-                //					dirY->AddValue(isect.dir[1]);
-                //					dirZ->AddValue(isect.dir[2]);
-                isectColorRs->AddValue(isect.color.r);
-                isectColorGs->AddValue(isect.color.g);
-                isectColorBs->AddValue(isect.color.b);
-                primitiveIds->AddValue(isect.primitiveId);
-                //					shapeIds->AddValue(isect.shapeId);
-                interactionTypes->AddValue(isect.interactionType);
-                //					lightIds->AddValue(isect.lightId);
-                
-                size_t isectIndex = bounceNrs->Size() - 1;
-                size_t nrLights = isect.lightData.size();
-                //                size_t* lightsReferenceRows = new size_t[nrLights];
-                occluderCounts->AddValue(nrLights);
-                for(int j = 0 ; j < nrLights ; ++j) {
-                    //                    printf("isect to occluder : %zu --> %zu\n",j,)
-                    const LightData& lightD = isect.lightData[j];
-                    //                    printf("occluder id = %d\n",lightD.occluderId);
-                    occluderIds->AddValue(lightD.occluderId);
-                    lightIds->AddValue(lightD.lightId);
-                    lightRs->AddValue(lightD.radiance.r);
-                    lightGs->AddValue(lightD.radiance.g);
-                    lightBs->AddValue(lightD.radiance.b);
+            if(collectionMode != PATH_ONLY) {
+                std::vector<size_t> indices(nrIntersections);
+                for(int i = 0 ; i < nrIntersections ; ++i) {
+                    IntersectData& isect = newPath->intersectionData[i];
                     
-                    lightsToIsectsRef->AddReference(lightRs->Size() - 1, isectColorBs->Size() - 1);
-                    //                    lightsReferenceRows[j] = occluderIds->Size() - 1;
+                    bounceNrs->AddValue(i+1);
+                    xs->AddValue(isect.position[0]);
+                    ys->AddValue(isect.position[1]);
+                    zs->AddValue(isect.position[2]);
+                    //					dirX->AddValue(isect.dir[0]);
+                    //					dirY->AddValue(isect.dir[1]);
+                    //					dirZ->AddValue(isect.dir[2]);
+                    isectColorRs->AddValue(isect.color.r);
+                    isectColorGs->AddValue(isect.color.g);
+                    isectColorBs->AddValue(isect.color.b);
+                    primitiveIds->AddValue(isect.primitiveId);
+                    //					shapeIds->AddValue(isect.shapeId);
+                    interactionTypes->AddValue(isect.interactionType);
+                    //					lightIds->AddValue(isect.lightId);
+                    
+                    size_t isectIndex = bounceNrs->Size() - 1;
+                    size_t nrLights = isect.lightData.size();
+                    //                size_t* lightsReferenceRows = new size_t[nrLights];
+                    occluderCounts->AddValue(nrLights);
+                    
+                    if(collectionMode == ALL) {
+                        for(int j = 0 ; j < nrLights ; ++j) {
+                            //                    printf("isect to occluder : %zu --> %zu\n",j,)
+                            const LightData& lightD = isect.lightData[j];
+                            //                    printf("occluder id = %d\n",lightD.occluderId);
+                            occluderIds->AddValue(lightD.occluderId);
+                            lightIds->AddValue(lightD.lightId);
+                            lightRs->AddValue(lightD.radiance.r);
+                            lightGs->AddValue(lightD.radiance.g);
+                            lightBs->AddValue(lightD.radiance.b);
+                            
+                            lightsToIsectsRef->AddReference(lightRs->Size() - 1, isectColorBs->Size() - 1);
+                            //                    lightsReferenceRows[j] = occluderIds->Size() - 1;
+                        }
+                    }
+                    //                isectsToLightsRef->AddReferences(isectIndex, std::pair<size_t*,ushort>(lightsReferenceRows,nrLights));
+                    isectsToPathsRef->AddReference(isectIndex, colorRs->Size() - 1);
+                    indices[i] = isectIndex;
                 }
-                //                isectsToLightsRef->AddReferences(isectIndex, std::pair<size_t*,ushort>(lightsReferenceRows,nrLights));
-                isectsToPathsRef->AddReference(isectIndex, colorRs->Size() - 1);
-                indices[i] = isectIndex;
+                pathsToIsectRef->AddReferences(colorRs->Size() - 1, indices);
             }
-            pathsToIsectRef->AddReferences(colorRs->Size() - 1, indices);
             return true;
         }
     }
@@ -406,7 +414,10 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 
 void DataController::Reduce() {
     
-    if(collectionMode == ALL) {
+    size_t pathRows = candidateData->GetTable(PATHS_TABLE)->NumberOfRows();
+    printf("%zu / %zu paths collected.\n",pathRows,maxPaths);
+    
+    if((collectionMode == ALL || collectionMode == PATH_ONLY || collectionMode == PATH_AND_INTERSECTION_ONLY) && pathRows >= maxPaths) {
         
         printHeader("DATA REDUCTION",100);
         const std::string taskName = "data reduction";
@@ -426,7 +437,7 @@ void DataController::Reduce() {
             acceptProbability /= 2;
             
             currentData->NotifyDataListeners();
-            currentData->Print(100);
+//            currentData->Print(100);
             
         }
         else {
@@ -646,10 +657,12 @@ void DataController::Reset() {
     resetPointers(candidateData);
     bootstrapRepeat = maxBootstrapRepeat;
     
-    firstTime = true;
-    acceptProbability *= 2;
-    maxPaths *= 2;
-    bestBootstrapResult = std::numeric_limits<float>::max();
+    if(!firstTime) {
+        firstTime = true;
+        acceptProbability *= 2;
+        maxPaths *= 2;
+        bestBootstrapResult = std::numeric_limits<float>::max();
+    }
 }
 void DataController::SetMaxPaths(int maxPaths) {
     this->maxPaths = maxPaths;
@@ -657,6 +670,12 @@ void DataController::SetMaxPaths(int maxPaths) {
 void DataController::CycleDataCollectionMode() {
     switch (collectionMode) {
         case ALL:
+            SetDataCollectionMode(PATH_ONLY);
+            break;
+        case PATH_ONLY:
+            SetDataCollectionMode(PATH_AND_INTERSECTION_ONLY);
+            break;
+        case PATH_AND_INTERSECTION_ONLY:
             SetDataCollectionMode(DISTRIBUTIONS);
             break;
         case DISTRIBUTIONS:
@@ -672,16 +691,19 @@ void DataController::SetDataCollectionMode(DataCollectionMode newMode) {
     collectionMode = newMode;
     switch (collectionMode) {
         case DISTRIBUTIONS:
-            collectionMode = DISTRIBUTIONS;
             printf("DISTRIBUTIONS");
             break;
-        case NONE:
-            collectionMode = NONE;
-            printf("NONE");
-            break;
         case ALL:
-            collectionMode = ALL;
             printf("ALL");
+            break;
+        case PATH_ONLY:
+            printf("PATH_ONLY");
+            break;
+        case PATH_AND_INTERSECTION_ONLY:
+            printf("PATH_AND_INTERSECTION_ONLY");
+            break;
+        case NONE:
+            printf("NONE");
             break;
     }
     printf("\n");

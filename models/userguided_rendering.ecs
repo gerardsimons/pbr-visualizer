@@ -3,5 +3,5 @@
 #-vp 278 273 -400 -vi 278 273 0 -vu 0 1 0 -fov 37 
 #-pointlight 213 140 -227 1000000 1000000 1000000
 #-pointlight 213 140 -527 3000000 3000000 3000000
-#-quadlight 275 275 -600 50 50 0 50 0 0 30000 30000 27000
--renderer pathtracer { depth = 8 }
+-quadlight 1 225 250 0 100 0 0 0 100 150 150 135
+-renderer pathtracer { depth = 5 }

@@ -90,10 +90,10 @@ EMBREERenderer* rendererTwo = NULL;
 bool linkPixelDistros = false;
 
 const int maxPathsOne = 6000;
-const int maxBootstrapRepeatOne = 5;
+const int maxBootstrapRepeatOne = 0;
 
 const int maxPathsTwo = 6000;
-const int maxBootstrapRepeatTwo = 5;
+const int maxBootstrapRepeatTwo = 1;
 
 const int sliderViewHeight = 0;
 
@@ -212,6 +212,17 @@ void testGrid() {
 
 //    filled = filled | holes;
 //    filled.Print();
+}
+
+void testSmoothing() {
+    Histogram2D<int> hist2D(0,5,5,5);
+    hist2D.Add(2,2);
+    
+    hist2D.PrintRaw();
+    
+    printf("After smoothing\n\n");
+    hist2D.SmoothRectangular(3, 3);
+    hist2D.PrintRaw();
 }
 
 void testSampling() {
@@ -365,8 +376,10 @@ void testReferenceMemoryLeaks() {
 
 void testFunctions() {
     
-    testGrid();
+    testSmoothing();
     exit(0);
+    
+    testGrid();
     
     testReferenceMemoryLeaks();
     return;
@@ -809,7 +822,7 @@ void keys(int keyCode, int x, int y) {
             postRedisplay = false;
             break;
         case 109:
-            sceneView->ToggleHideMesh();
+            sceneView->CycleMeshDiplayMode();
             break;
         case 112: //The 'p' key, toggle drawing paths in 3D view
             sceneView->ToggleDrawPaths();
@@ -833,6 +846,12 @@ void keys(int keyCode, int x, int y) {
                 rendererTwo->outputMode("renderer2_output_frame=" + std::to_string(currentFrameTwo) + ".bmp");
             }
             postRedisplay = true;
+            break;
+        }
+        case 117: //'u' key, load image from file
+        {
+            std::string name = "input.bmp";
+            rendererOne->LoadFromImage(name, 3472);
             break;
         }
         case 118: // 'v'
@@ -926,7 +945,7 @@ void keys(int keyCode, int x, int y) {
             auto distroOne = imageView->GetActiveDistributionOne();
             auto distroTwo = imageView->GetActiveDistributionTwo();
             
-            double gamma = 1;
+            double gamma = 1.05;
             
             if(distroOne) {
                 if(distroTwo && distroTwo != distroOne) {
@@ -938,9 +957,8 @@ void keys(int keyCode, int x, int y) {
             }
             else if(distroTwo) {
                 distroTwo->GammaCorrection(gamma);
+                distroTwo->PrintRaw();
             }
-            
-            distroTwo->PrintRaw();
             
             imageView->redisplayWindow();
             break;
@@ -1116,8 +1134,8 @@ void idle() {
 //    if(linkPixelDistros) {
 //        imageView->AveragePixelDistributions();
 //    }
-//    int maxFrameOne = 2048;
-    int maxFrameOne = 10000000;
+    int maxFrameOne = 1024;
+//    int maxFrameOne = 10000000;
     if(!renderingPausedOne && currentFrameOne < maxFrameOne) {
         ++currentFrameOne;
         bool datacallback = dataControllerOne->collectionMode != DataController::NONE;
@@ -1372,7 +1390,7 @@ void setup(int argc, char** argv) {
     colors.push_back(colors::RED);
     riv::ColorMap redBlue(colors);
     
-    int minSamplesPerPixel = 3;
+    int minSamplesPerPixel = 5;
     
     float rendererSize = rendererOne->getWidth() * rendererOne->getHeight();
     float samplesPerPixel = maxPathsOne / rendererSize;

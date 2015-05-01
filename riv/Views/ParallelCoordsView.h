@@ -24,7 +24,6 @@ enum INTERACTION_STATE {
 	DRAG_SELECTION,
 };
 
-
 class ParallelCoordsView : public RIVDataView, public RIVDataSetListener
 {
 private:
@@ -128,7 +127,8 @@ public:
 	bool DecreaseLineOpacity();
 	bool IncreaseLineOpacity();
 
-	
+//    void CycleColorMode();
+    
 	//Create graphical primitives based on data currently set
 	void InitializeGraphics();
 	
