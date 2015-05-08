@@ -74,7 +74,6 @@ RIVDataSet<float,ushort>* DataController::Bootstrap(RIVDataSet<float, ushort>* d
                         
                         bootRecord->AddValue(record->Value(intersectionRow));
                     }
-                    
                 });
           
             }
@@ -141,8 +140,8 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset,const Vec2f&
     isectsTable->CreateRecord<float>(INTERSECTION_B,0,1,true);
     isectsTable->CreateRecord<ushort>(PRIMITIVE_ID,0,nrPrimitives,true);
     isectsTable->CreateRecord<ushort>(OCCLUDER_COUNT,0,maxNrLights+1,true);
-    //	shapeIds = isectsTable->CreateShortRecord("shape ID");
-    interactionTypes = isectsTable->CreateRecord<ushort>(INTERACTION_TYPE,0,17,true);
+    isectsTable->CreateRecord<ushort>(INTERACTION_TYPE,0,17,true);
+//    isectsTable->CreateRecord<ushort>(GIZMO_ID,0,3,false);
     
     RIVTable<float,ushort>* lightsTable = dataset->CreateTable(LIGHTS_TABLE);
     lightsTable->CreateRecord<ushort>(LIGHT_ID,0,maxNrLights,true);
@@ -254,12 +253,14 @@ void DataController::resetPointers(RIVDataSet<float,ushort>* dataset) {
     interactionTypes = currentIntersectionsTable->GetRecord<ushort>(INTERACTION_TYPE);
     primitiveIds = currentIntersectionsTable->GetRecord<ushort>(PRIMITIVE_ID);
     occluderCounts = currentIntersectionsTable->GetRecord<ushort>(OCCLUDER_COUNT);
+//    gizmoIds = currentIntersectionsTable->GetRecord<ushort>(GIZMO_ID);
     
     lightIds = currentLightsTable->GetRecord<ushort>(LIGHT_ID);
     occluderIds = currentLightsTable->GetRecord<ushort>(OCCLUDER_ID);
     lightRs = currentLightsTable->GetRecord<float>(LIGHT_R);
     lightGs = currentLightsTable->GetRecord<float>(LIGHT_G);
     lightBs = currentLightsTable->GetRecord<float>(LIGHT_B);
+
 }
 RIVDataSet<float,ushort>** DataController::GetDataSet() {
     return &currentData;
@@ -381,6 +382,7 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
                     size_t nrLights = isect.lightData.size();
                     //                size_t* lightsReferenceRows = new size_t[nrLights];
                     occluderCounts->AddValue(nrLights);
+//                    gizmoIds->AddValue(0);
                     
                     if(collectionMode == ALL) {
                         for(int j = 0 ; j < nrLights ; ++j) {
@@ -415,10 +417,11 @@ bool DataController::ProcessNewPath(int frame, PathData* newPath) {
 void DataController::Reduce() {
     
     size_t pathRows = candidateData->GetTable(PATHS_TABLE)->NumberOfRows();
-    printf("%zu / %zu paths collected.\n",pathRows,maxPaths);
+    printf("%zu / %d paths collected.\n",pathRows,maxPaths);
     
-    if((collectionMode == ALL || collectionMode == PATH_ONLY || collectionMode == PATH_AND_INTERSECTION_ONLY) && pathRows >= maxPaths) {
-        
+//    if((collectionMode == ALL || collectionMode == PATH_ONLY || collectionMode == PATH_AND_INTERSECTION_ONLY) && pathRows >= maxPaths) {
+    if((collectionMode == ALL || collectionMode == PATH_ONLY || collectionMode == PATH_AND_INTERSECTION_ONLY)) {
+    
         printHeader("DATA REDUCTION",100);
         const std::string taskName = "data reduction";
         reporter::startTask(taskName);

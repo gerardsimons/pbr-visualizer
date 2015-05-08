@@ -452,7 +452,7 @@ void RIV3DView::Draw() {
             }
         }
         else if(meshDisplay == FIXED_COLOR) {
-            riv::Color meshColor = riv::Color(0.9F,0.9F,0.9F);
+            riv::Color meshColor = riv::Color(0.6F,0.6F,0.6F);
             if(drawDataSetOne) {
                 drawMeshModel(&meshesOne,meshColor,&selectedObjectIdOne);
             }
@@ -468,8 +468,8 @@ void RIV3DView::Draw() {
     }
     
     //If show gizmo
-    if(gizmo) {
-        drawGizmo();
+    if(showGizmos) {
+        drawGizmos();
     }
     
     if(drawDataSetOne && !drawDataSetTwo && drawHeatmapTree) {
@@ -692,6 +692,7 @@ void RIV3DView::drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<
     
     size_t row = 0;
     TableIterator* it = isectTable->GetIterator();
+    const float sphereScale = 0.008;
     
     //Draw the points as low poly spheres
     for(const Path& path : paths) {
@@ -709,7 +710,8 @@ void RIV3DView::drawPoints(RIVDataSet<float,ushort>* dataset, const std::vector<
             glColor3f(pointColor.R,pointColor.G,pointColor.B);
             glPushMatrix();
             glTranslatef(x, y, z);
-            gluSphere(quadric, .004/modelScale, 5, 5);
+            
+            gluSphere(quadric, sphereScale/modelScale, 5, 5);
             //            glutSolidSphere(1, 5, 5);
             glPopMatrix();
         }
@@ -1700,10 +1702,10 @@ void RIV3DView::SetSelectionMode(SelectionMode mode) {
     }
 }
 TriangleMeshGroup getSceneData(EMBREERenderer* renderer);
-void RIV3DView::createGizmo() {
-
-    vector_t<Vec3fa> positions(3);
-//    vector_t<Vec3fa> positions(16);
+Gizmo RIV3DView::createGizmo() {
+    
+//    vector_t<Vec3fa> positions(3);
+    vector_t<Vec3fa> positions(16);
     
     float unnormalizedModelScale = 1.F / modelScale;
     const float s = unnormalizedModelScale / 5;
@@ -1718,51 +1720,51 @@ void RIV3DView::createGizmo() {
     positions[0] = Vec3fa(0,0,0);
     positions[1] = Vec3fa(s,0,0);
     positions[2] = Vec3fa(s,s,0);
-//    positions[3] = Vec3fa(0,s,0);
+    positions[3] = Vec3fa(0,s,0);
     
-//    positions[4] = Vec3fa(0,0,s);
-//    positions[5] = Vec3fa(s,0,s);
-//    positions[6] = Vec3fa(s,s,s);
-//    positions[7] = Vec3fa(0,s,s);
-//    
-//    positions[8] = Vec3fa(0,0,s);
-//    positions[9] = Vec3fa(s,0,0);
-//    positions[10] = Vec3fa(s,0,s);
-//    positions[11] = Vec3fa(0,0,0);
-//    
-//    positions[12] = Vec3fa(0,s,s);
-//    positions[13] = Vec3fa(s,s,0);
-//    positions[14] = Vec3fa(s,s,s);
-//    positions[15] = Vec3fa(0,s,0);
+    positions[4] = Vec3fa(0,0,s);
+    positions[5] = Vec3fa(s,0,s);
+    positions[6] = Vec3fa(s,s,s);
+    positions[7] = Vec3fa(0,s,s);
     
-//    vector_t<embree::TriangleMeshFull::Triangle> triangles(8);
-    vector_t<embree::TriangleMeshFull::Triangle> triangles(1);
+    positions[8] = Vec3fa(0,0,s);
+    positions[9] = Vec3fa(s,0,0);
+    positions[10] = Vec3fa(s,0,s);
+    positions[11] = Vec3fa(0,0,0);
+    
+    positions[12] = Vec3fa(0,s,s);
+    positions[13] = Vec3fa(s,s,0);
+    positions[14] = Vec3fa(s,s,s);
+    positions[15] = Vec3fa(0,s,0);
+    
+    vector_t<embree::TriangleMeshFull::Triangle> triangles(8);
+//    vector_t<embree::TriangleMeshFull::Triangle> triangles(1);
     
     // z = 0
     triangles[0] = embree::TriangleMeshFull::Triangle(0,1,2);
-//    triangles[1] = embree::TriangleMeshFull::Triangle(0,2,3);
+    triangles[1] = embree::TriangleMeshFull::Triangle(0,2,3);
     
-    //z = 1
-//    triangles[2] = embree::TriangleMeshFull::Triangle(4,5,6);
-//    triangles[3] = embree::TriangleMeshFull::Triangle(4,6,7);
-//
-//    //y = 0
-//    triangles[4] = embree::TriangleMeshFull::Triangle(0,1,5);
-//    triangles[5] = embree::TriangleMeshFull::Triangle(0,1,4);
-//
-//    //y = 1
-//    triangles[6] = embree::TriangleMeshFull::Triangle(2,3,7);
-//    triangles[7] = embree::TriangleMeshFull::Triangle(2,3,6);
-//
-//    //x = 1
-//    //1 2 5 6
-//    triangles[4] = embree::TriangleMeshFull::Triangle(1,2,5);
-//    triangles[5] = embree::TriangleMeshFull::Triangle(1,2,6);
-//    
-//    //x = 0
-//    // 0 3 4 7
-//    triangles[6] = embree::TriangleMeshFull::Triangle(0,3,4);
-//    triangles[7] = embree::TriangleMeshFull::Triangle(0,3,7);
+//    z = 1
+    triangles[2] = embree::TriangleMeshFull::Triangle(4,5,6);
+    triangles[3] = embree::TriangleMeshFull::Triangle(4,6,7);
+
+    //y = 0
+    triangles[4] = embree::TriangleMeshFull::Triangle(0,1,5);
+    triangles[5] = embree::TriangleMeshFull::Triangle(0,1,4);
+
+    //y = 1
+    triangles[6] = embree::TriangleMeshFull::Triangle(2,3,7);
+    triangles[7] = embree::TriangleMeshFull::Triangle(2,3,6);
+
+    //x = 1
+    //1 2 5 6
+    triangles[4] = embree::TriangleMeshFull::Triangle(1,2,5);
+    triangles[5] = embree::TriangleMeshFull::Triangle(1,2,6);
+    
+    //x = 0
+    // 0 3 4 7
+    triangles[6] = embree::TriangleMeshFull::Triangle(0,3,4);
+    triangles[7] = embree::TriangleMeshFull::Triangle(0,3,7);
     
     TriangleMeshFull* newShape = new TriangleMeshFull(positions,triangles);
     
@@ -1771,37 +1773,38 @@ void RIV3DView::createGizmo() {
     
     TriangleMeshGroup meshes(model);
     meshes.Translate(modelCenter);
-    gizmo = Gizmo(meshes);
     
-    //* COMMIT TO RENDERER AS PRIMITIVE *//
-    SingleRayDevice* g_device = rendererOne->g_single_device;
-    //Define material
-    Handle<Device::RTMaterial> defaultMaterial = g_device->rtNewMaterial("Matte");
-    g_device->rtSetFloat3(defaultMaterial, "reflectance", 1.F, 0, 0);
-    g_device->rtCommit(defaultMaterial);
+    return Gizmo(meshes);
     
-    for(TriangleMeshFull* tMesh : meshes.GetTriangleMeshes()) {
-        Handle<Device::RTData> dataPositions = g_device->rtNewData("immutable", tMesh->position.size() * sizeof(Vec3f), (tMesh->position.size() ? &tMesh->position[0] : NULL));
-        Handle<Device::RTData> dataTriangles = g_device->rtNewData("immutable", tMesh->triangles.size() * sizeof(Vec3i), (tMesh->triangles.size() ? &tMesh->triangles[0] : NULL));
+//    //* COMMIT TO RENDERER AS PRIMITIVE *//
+//    SingleRayDevice* g_device = rendererOne->g_single_device;
+//    //Define material
+//    Handle<Device::RTMaterial> defaultMaterial = g_device->rtNewMaterial("Matte");
+//    g_device->rtSetFloat3(defaultMaterial, "reflectance", 1.F, 0, 0);
+//    g_device->rtCommit(defaultMaterial);
+//    
+//    for(TriangleMeshFull* tMesh : meshes.GetTriangleMeshes()) {
+//        Handle<Device::RTData> dataPositions = g_device->rtNewData("immutable", tMesh->position.size() * sizeof(Vec3f), (tMesh->position.size() ? &tMesh->position[0] : NULL));
+//        Handle<Device::RTData> dataTriangles = g_device->rtNewData("immutable", tMesh->triangles.size() * sizeof(Vec3i), (tMesh->triangles.size() ? &tMesh->triangles[0] : NULL));
+//        
+//        /* create triangle mesh */
+//        Handle<Device::RTShape> mesh = g_device->rtNewShape("trianglemesh");
+//        g_device->rtSetArray(mesh, "positions", "float3", dataPositions, positions.size(), sizeof(Vec3f), 0);
+//        g_device->rtSetArray(mesh, "indices"  , "int3"  , dataTriangles, triangles.size(), sizeof(Vec3i), 0);
+//
+//        g_device->rtSetString(mesh,"accel",g_mesh_accel.c_str());
+//        g_device->rtSetString(mesh,"builder",g_mesh_builder.c_str());
+//        g_device->rtSetString(mesh,"traverser",g_mesh_traverser.c_str());
+    
+//        g_device->rtCommit(mesh);
         
-        /* create triangle mesh */
-        Handle<Device::RTShape> mesh = g_device->rtNewShape("trianglemesh");
-        g_device->rtSetArray(mesh, "positions", "float3", dataPositions, positions.size(), sizeof(Vec3f), 0);
-        g_device->rtSetArray(mesh, "indices"  , "int3"  , dataTriangles, triangles.size(), sizeof(Vec3i), 0);
-
-        g_device->rtSetString(mesh,"accel",g_mesh_accel.c_str());
-        g_device->rtSetString(mesh,"builder",g_mesh_builder.c_str());
-        g_device->rtSetString(mesh,"traverser",g_mesh_traverser.c_str());
-        
-        g_device->rtCommit(mesh);
-        
-        auto newPrimitive = g_device->rtNewShapePrimitive(mesh, defaultMaterial, NULL);
-        rendererOne->g_prims.push_back(newPrimitive);
-        
-        auto t = (TriangleMeshFull*) g_device->rtGetShape(newPrimitive);
+//        auto newPrimitive = g_device->rtNewShapePrimitive(mesh, defaultMaterial, NULL);
+//        rendererOne->g_prims.push_back(newPrimitive);
+    
+//        auto t = (TriangleMeshFull*) g_device->rtGetShape(newPrimitive);
         
 //        meshesOne = TriangleMeshGroup(t);
-    }
+//    }
 
 //    auto newMeshes = getSceneData(rendererOne);
     
@@ -1814,37 +1817,40 @@ void RIV3DView::createGizmo() {
 //        g_device->rtSetPrimitive(rendererOne->g_render_scene,rendererOne->g_prims.size(),result);
 //    }
 
-    printf("DONE");
+//    printf("DONE");
 }
-void RIV3DView::drawGizmo() {
+void RIV3DView::drawGizmos() {
+    for(Gizmo& gizmo : gizmos) {
     
-    drawMeshModel(&gizmo.shape, colors::GREEN);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    
-//    riv::Color pointColor(0.5F,0.5F,0.5F);
-    
-    //Draw hit points if any
-    for(size_t i = 0 ; i < gizmo.hitpoints.size() ; ++i) {
+        drawMeshModel(&gizmo.shape, gizmo.color);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         
-        riv::Color& pointColor = gizmo.colors[i];
-        Vec3fa& hitpoint = gizmo.hitpoints[i];
+    //    riv::Color pointColor(0.5F,0.5F,0.5F);
         
-        glColor3f(pointColor.R,pointColor.G,pointColor.B);
-        glPushMatrix();
-        glTranslatef(hitpoint.x,hitpoint.y,hitpoint.z);
-        gluSphere(quadric, .004/modelScale, 5, 5);
+        //Draw hit points if any
+        for(size_t i = 0 ; i < gizmo.hitpoints.size() ; ++i) {
+            
+            riv::Color& pointColor = gizmo.colors[i];
+            Vec3fa& hitpoint = gizmo.hitpoints[i];
+            
+            glColor3f(pointColor.R,pointColor.G,pointColor.B);
+            glPushMatrix();
+            glTranslatef(hitpoint.x,hitpoint.y,hitpoint.z);
+            gluSphere(quadric, .004/modelScale, 5, 5);
 
-        glPopMatrix();
+            glPopMatrix();
+        }
     }
-    
-
+        
 }
 void RIV3DView::filterForGizmo() {
-    if(datasetOne && drawDataSetOne) {
-        filterForGizmo(&gizmo,*datasetOne);
-    }
-    if(datasetTwo && drawDataSetTwo) {
-        filterForGizmo(&gizmo,*datasetTwo);
+    if(activeGizmo) {
+        if(datasetOne && drawDataSetOne) {
+            filterForGizmo(activeGizmo,*datasetOne);
+        }
+        if(datasetTwo && drawDataSetTwo) {
+            filterForGizmo(activeGizmo,*datasetTwo);
+        }
     }
 }
 void RIV3DView::filterForGizmo(Gizmo* gizmo, RIVDataSet<float,ushort>* dataset) {
@@ -1933,7 +1939,7 @@ void RIV3DView::ToggleGizmoTranslationMode(int x, int y, int z) {
     }
     else {
         shapeTranslation = Vec3fa(x * translationSpeed, y * translationSpeed, z * translationSpeed);
-        activeShape = &gizmo.shape;
+        activeShape = &activeGizmo->shape;
         printf("Translating gizmo shape (%d,%d,%d)\n",x,y,z);
     }
 }

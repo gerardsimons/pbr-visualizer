@@ -22,13 +22,14 @@
 		const riv::Color CYAN = {0.F,1.F,1.F};
 		const riv::Color PURPLE = {1.F,0.F,1.F};
 		const riv::Color LIGHT_BLUE = {0.317F,.553F, .741F};
-		const riv::Color DARK_RED = {0.5F,0,0};
-		const riv::Color DARK_BLUE = {0,0,0.5F};
+		const riv::Color DARK_RED = {0.5F,0.F,0.F};
+		const riv::Color DARK_BLUE = {0.F,0.F,0.5F};
 		
 		std::vector<riv::Color> allColors();
 		riv::ColorMap jetColorMap();
         riv::ColorMap redGrayBlueColorMap();
         riv::ColorMap greenGrayPurpleColorMap();
+        riv::ColorMap blueYellowColorMap();
         riv::ColorMap brownColorMap();
         riv::ColorMap hotBodyColorMap();
 	}

@@ -12,6 +12,7 @@
 #include <string>
 #include "../Data/Record.h"
 #include "../Geometry/Geometry.h"
+#include "../Graphics/ColorMap.h"
 
 //Interface class for parallel coords axis
 class ParallelCoordsAxisInterface {
@@ -53,36 +54,42 @@ public:
 	Histogram<T> densityHistogramOne;
 	Histogram<T> densityHistogramTwo;
     
-    std::vector<Histogram<float>> radianceHistograms;
+    Histogram<float> rHistogram;
+    Histogram<float> gHistogram;
+    Histogram<float> bHistogram;
 	
 	bool differenceDensityComputed = false;
 	
 	T minValue;
 	T maxValue;
-	RIVRecord<T>* recordPointer;
+    
+	RIVRecord<T>* recordOne;
+    RIVRecord<T>* recordTwo;
 	
 	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision, const Histogram<T>& histogramOne)
-	: ParallelCoordsAxisInterface(x,y,width,height,name),minValue(minValue),maxValue(maxValue),recordPointer(recordPointer), densityHistogramOne(histogramOne) {
+	: ParallelCoordsAxisInterface(x,y,width,height,name),minValue(minValue),maxValue(maxValue),recordOne(recordPointer), densityHistogramOne(histogramOne) {
 		ComputeScale(scaleDivision);
         
-//        radianceHistograms.resize(3);
-//        radianceHistograms[0] = Histogram<float>(0,1,10);
-//        radianceHistograms[1] = Histogram<float>(0,1,10);
-//        radianceHistograms[2] = Histogram<float>(0,1,10);
+        initHistograms(10);
 	}
 	
-	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordPointer, unsigned int scaleDivision,const Histogram<T>& histogramOne, const Histogram<T>& histogramTwo)
-	: ParallelCoordsAxisInterface(x,y,width,height,name),minValue(minValue),maxValue(maxValue),recordPointer(recordPointer),densityHistogramOne(histogramOne), densityHistogramTwo(histogramTwo) {
+    //Double constructor
+	ParallelCoordsAxis(int x,int y,int width, int height, T minValue, T maxValue, const std::string& name, RIVRecord<T>* recordOne,RIVRecord<T>* recordTwo, unsigned int scaleDivision,const Histogram<T>& histogramOne, const Histogram<T>& histogramTwo)
+	: ParallelCoordsAxisInterface(x,y,width,height,name),minValue(minValue),maxValue(maxValue),recordOne(recordOne),recordTwo(recordTwo),densityHistogramOne(histogramOne), densityHistogramTwo(histogramTwo) {
 		ComputeScale(scaleDivision);
         
-//        radianceHistograms[0] = Histogram<float>(0,1,10);
-//        radianceHistograms[1] = Histogram<float>(0,1,10);
-//        radianceHistograms[2] = Histogram<float>(0,1,10);
+        initHistograms(10);
 	}
 	
 	ParallelCoordsAxis() {
 		
 	}
+    
+    void initHistograms(int bins) {
+        rHistogram = Histogram<float>("R",0,1,10);
+        gHistogram = Histogram<float>("G",0,1,10);
+        bHistogram = Histogram<float>("B",0,1,10);
+    }
 	
 	void ResetDensities() {
 		differenceDensityComputed = false;
@@ -95,14 +102,26 @@ public:
 		else return &densityHistogramTwo;
 	}
     
-    std::vector<Histogram<T>>& GetRadianceHistograms() {
-        return radianceHistograms;
+//    std::vector<Histogram<T>>& GetRadianceHistograms() {
+//        return radianceHistograms;
+//    }
+    
+    void AddRadiance(unsigned int bin, float r, float g, float b) {
+        const float scalar = 25;
+        rHistogram.AddToBin(bin,r*scalar);
+        gHistogram.AddToBin(bin,g*scalar);
+        bHistogram.AddToBin(bin,b*scalar);
     }
     
-    void AddRadiance(float r, float g, float b) {
-//        radianceHistograms[0].Add(r);
-//        radianceHistograms[1].Add(g);
-//        radianceHistograms[2].Add(b);
+    riv::Color GetBinRadiance(unsigned int bin) {
+        //Assuming they all have the same number of elements
+        float nrElements = rHistogram.NumberOfElements() / 10;
+        
+        float r = rHistogram.BinValue(bin) / nrElements;
+        float g = gHistogram.BinValue(bin) / nrElements;
+        float b = bHistogram.BinValue(bin) / nrElements;
+        
+        return riv::Color(r,g,b);
     }
 	
 	Histogram<T>* GetHistogramOne() {
@@ -170,6 +189,14 @@ public:
 		}
 		scale.push_back(1.F);
 	}
+    
+    void ClearHistograms() {
+        densityHistogramOne.Clear();
+        densityHistogramTwo.Clear();
+        rHistogram.Clear();
+        gHistogram.Clear();
+        bHistogram.Clear();
+    }
 };
 
 #endif

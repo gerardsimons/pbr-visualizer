@@ -1022,6 +1022,7 @@ void RIVImageView::SmoothPixelDistributionOne() {
     //    }
     if(datasetOne && activeHeatmapOne && activeHeatmapOne->NumberOfElements()) {
         smoothPixelDistribution(activeHeatmapOne);
+        activeHeatmapOne->PrintRaw();
     }
 }
 void RIVImageView::SmoothPixelDistributionTwo() {
@@ -1030,5 +1031,6 @@ void RIVImageView::SmoothPixelDistributionTwo() {
     //    }
     if(datasetTwo && activeHeatmapTwo && activeHeatmapTwo->NumberOfElements()) {
         smoothPixelDistribution(activeHeatmapTwo);
+        activeHeatmapTwo->PrintRaw();
     }
 }

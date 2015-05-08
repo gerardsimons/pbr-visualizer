@@ -57,6 +57,9 @@ bool isDirty = true;
 int posX = 0;
 int posY = 0;
 
+int maxFrameOne = 512;
+int maxFrameTwo = 512;
+
 /* GLUT window handle */
 int mainWindow;
 
@@ -78,10 +81,10 @@ RIVHeatMapView *heatMapView = NULL;
 //RIVSliderView* sliderView = NULL;
 RIVUIView* uiView = NULL;
 
+/* The datasets, views have pointers to this in order to draw their views consistently */
 RIVDataSet<float,ushort>** datasetOne = NULL;
 RIVDataSet<float,ushort>** datasetTwo = NULL;
 
-/* The dataset, views have pointers to this in order to draw their views consistently */
 DataController* dataControllerOne;
 DataController* dataControllerTwo = NULL; //It is possible this one will not be used
 EMBREERenderer* rendererOne = NULL;
@@ -90,7 +93,7 @@ EMBREERenderer* rendererTwo = NULL;
 bool linkPixelDistros = false;
 
 const int maxPathsOne = 6000;
-const int maxBootstrapRepeatOne = 0;
+const int maxBootstrapRepeatOne = 1;
 
 const int maxPathsTwo = 6000;
 const int maxBootstrapRepeatTwo = 1;
@@ -752,9 +755,7 @@ void keys(int keyCode, int x, int y) {
             printf("connected to data processing\n");
             break;
         case 56: // the '8' key, average pixel distro 1
-
-//                printf("Copying swapchain from renderer 1 to renderer 2!!\n");
-                imageView->SmoothPixelDistributionOne();
+            imageView->SmoothPixelDistributionOne();
             
             break;
         case 57: // the '9' key, average pixel distro 2
@@ -809,6 +810,7 @@ void keys(int keyCode, int x, int y) {
             break;
         case 96: // '`' key, change background color of 3D view
             sceneView->ToggleBackgroundColor();
+            parallelCoordsView->ToggleBackgroundColor();
             break;
         case 104: // the 'h' from heatmap, toggle drawing the octree heatmap
             sceneView->ToggleDrawHeatmap();
@@ -872,17 +874,21 @@ void keys(int keyCode, int x, int y) {
         case 115: // 's' key
             //            sceneView->MoveCamera(0, -camSpeed, 0);
         {
-            auto distroTwo = imageView->GetActiveDistributionTwo();
-            if(distroTwo) {
-                Grid grid = distroTwo->BooleanHistogram().ToGrid();
-                grid.Print();
-
-                *distroTwo = Histogram2D<float>(grid);
-                distroTwo->PrintRaw();
-            }
             
-            imageView->redisplayWindow();
+            parallelCoordsView->ToggleSaturationMode();
             break;
+            
+//            auto distroTwo = imageView->GetActiveDistributionTwo();
+//            if(distroTwo) {
+//                Grid grid = distroTwo->BooleanHistogram().ToGrid();
+//                grid.Print();
+//
+//                *distroTwo = Histogram2D<float>(grid);
+//                distroTwo->PrintRaw();
+//            }
+//            
+//            imageView->redisplayWindow();
+//            break;
         }
         case 116: // 't' key, use as temp key for some to-test function
         {
@@ -1077,6 +1083,10 @@ void UnpauseRendererOne() {
     if(datasetOne && (*datasetOne)->IsFiltered()) {
         dataControllerOne->Reset();
     }
+    
+    if(currentFrameOne == maxFrameOne) {
+        maxFrameOne *= 2;
+    }
 }
 void UnpauseRendererTwo() {
     renderingPausedTwo = false;
@@ -1085,6 +1095,10 @@ void UnpauseRendererTwo() {
     //should be reset in order to speed up convergence
     if(datasetTwo && (*datasetTwo)->IsFiltered()) {
         dataControllerTwo->Reset();
+    }
+    
+    if(currentFrameTwo == maxFrameTwo) {
+        maxFrameTwo *= 2;
     }
 }
 void TogglePauseOne() {
@@ -1134,7 +1148,7 @@ void idle() {
 //    if(linkPixelDistros) {
 //        imageView->AveragePixelDistributions();
 //    }
-    int maxFrameOne = 1024;
+
 //    int maxFrameOne = 10000000;
     if(!renderingPausedOne && currentFrameOne < maxFrameOne) {
         ++currentFrameOne;
@@ -1164,7 +1178,7 @@ void idle() {
         renderOneFinishedFrame = false;
         postRedisplay = true;
     }
-    int maxFrameTwo = 2048;
+
     if(!renderingPausedTwo && currentFrameTwo < maxFrameTwo) {
         if(dataControllerTwo) {
 //            if(currentFrameTwo == maxFrameTwo) {
@@ -1227,8 +1241,6 @@ void rendererOneFinishedFrame(size_t numPaths, size_t numRays) {
         renderOneFinishedFrame = true;
     }
     imageView->redisplayWindow();
-
-    //    renderingPausedOne = true;
 }
 
 bool processRendererTwo(PathData* newPath) {
@@ -1390,7 +1402,7 @@ void setup(int argc, char** argv) {
     colors.push_back(colors::RED);
     riv::ColorMap redBlue(colors);
     
-    int minSamplesPerPixel = 5;
+    int minSamplesPerPixel = 1;
     
     float rendererSize = rendererOne->getWidth() * rendererOne->getHeight();
     float samplesPerPixel = maxPathsOne / rendererSize;
@@ -1525,7 +1537,7 @@ void setup(int argc, char** argv) {
         
 //        sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions());
 //        parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,binColorMap,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo,sliderView);
-        parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,binColorMap,colorOne,colorOne,colorTwo,colorTwo,NULL);
+        parallelCoordsView = new ParallelCoordsView(datasetOne,datasetTwo,binColorMap,NULL);
         
         
         (*datasetTwo)->AddDataListener(sceneView);
@@ -1534,9 +1546,6 @@ void setup(int argc, char** argv) {
         (*datasetOne)->AddDataListener(imageView);
         (*datasetOne)->AddDataListener(sceneView);
         (*datasetOne)->AddDataListener(parallelCoordsView);
-        
-//        (*datasetOne)->AddDataListener(sliderView);
-//        (*datasetTwo)->AddDataListener(sliderView);
     }
     else if(datasetOne) {
 //        RIVColorProperty* pathColorTwo = new RIVFixedColorProperty(0, 0, 1);
@@ -1551,15 +1560,15 @@ void setup(int argc, char** argv) {
 //        RIVColorProperty* pathColorOne = new RIVEvaluatedColorProperty<ushort>(colors::jetColorMap(),pathsTable,pathsTable->GetRecord<ushort>(DEPTH));
 //        RIVColorProperty* rayColorOne = new RIVEvaluatedColorProperty<ushort>(colors::jetColorMap(),intersectionsTable,intersectionsTable->GetRecord<ushort>(BOUNCE_NR));
         redBlue.Invert();
-        parallelCoordsView = new ParallelCoordsView(datasetOne, redBlue, redPathColorOne,redRayColorOne,NULL);
+//        parallelCoordsView = new ParallelCoordsView(datasetOne, redBlue, redPathColorOne,redRayColorOne,NULL);
+        parallelCoordsView = new ParallelCoordsView(datasetOne,redBlue,NULL);
         sceneView = new RIV3DView(datasetOne,rendererOne,sceneDataOne,dataControllerOne->GetEnergyDistribution3D(), pathColorOne, rayColorOne);
         imageView = new RIVImageView(datasetOne,rendererOne,dataControllerOne->GetImageDistributions(),xBinsOne);
-        (*datasetOne)->AddDataListener(imageView);
-        (*datasetOne)->AddDataListener(sceneView);
-        (*datasetOne)->AddDataListener(parallelCoordsView);
+        
+        (*datasetOne)->AddDataListener((RIVDataSetListener*)imageView);
+        (*datasetOne)->AddDataListener((RIVDataSetListener*)sceneView);
+        (*datasetOne)->AddDataListener((RIVDataSetListener*)parallelCoordsView);
     }
-    //        heatMapView = new RIVHeatMapView(&dataset);
-    //	uiView = new RIVUIView(datasetOne, parallelCoordsView, sceneView, imageView,  uiViewWidth, uiPosX, bottomHalfY, squareSize, padding, padding);
     
     //Add some filter callbacks
     printf("Finished setting up...");
@@ -1580,7 +1589,6 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
     
     width = glutGet(GLUT_SCREEN_WIDTH);
-    //	height = 0.75*glutGet(GLUT_SCREEN_HEIGHT);
     height = .85 * glutGet(GLUT_SCREEN_HEIGHT);
     
     /* set the initial window size */

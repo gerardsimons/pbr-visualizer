@@ -49,6 +49,7 @@ const char* PRIMITIVE_ID = "object ID";
 const char* INTERACTION_TYPE = "interaction_type";
 const char* SHAPE_ID = "shape ID";
 const char* OCCLUDER_COUNT = "occlusions";
+const char* GIZMO_ID = "gizmo_id";
 
 //* RECORD NAMES OF THE LIGHTS TABLE *//
 const char* LIGHT_ID = "light ID";

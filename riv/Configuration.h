@@ -49,6 +49,7 @@ extern const char* PRIMITIVE_ID;
 extern const char* INTERACTION_TYPE;
 extern const char* SHAPE_ID;
 extern const char* OCCLUDER_COUNT;
+extern const char* GIZMO_ID;
 
 extern const char* LIGHT_ID;
 extern const char* OCCLUDER_ID;

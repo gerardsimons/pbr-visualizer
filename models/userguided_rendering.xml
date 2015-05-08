@@ -10,8 +10,13 @@
       <numPhi>50</numPhi>
       <material>
         <code>"Glass"</code>
+        <parameters/>
+        <!-- <code>"Metal"</code>
         <parameters>
-        </parameters>
+          <float3 name="eta">0.19 0.45 1.50</float3>
+          <float3 name="k">3.06 2.40 1.88</float3>
+          <float name="roughness">0.005</float>
+        </parameters> -->
       </material>
     </Sphere>
 

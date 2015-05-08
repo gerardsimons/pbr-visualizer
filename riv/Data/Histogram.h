@@ -255,6 +255,12 @@ public:
         
         return bin;
     }
+    void AddToBin(unsigned int bin, size_t number) {
+        hist[bin] += number;
+        nrElements += number;
+        
+        cdfStale = true;
+    }
     unsigned int NumberOfBins() {
         return bins;
     }

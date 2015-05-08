@@ -2,7 +2,6 @@
 
 <scene>
     <Group id="0" name="">
-
         <TriangleMesh id="1" name="mesh1">
             <material name="white">
                 <code>"OBJ"</code>
@@ -19,7 +18,6 @@
             <texcoords ofs="144" size="0"/>
             <triangles ofs="144" size="6"/>
         </TriangleMesh>
-
         <TriangleMesh id="2" name="mesh2">
             <material name="white">
                 <code>"OBJ"</code>
@@ -36,7 +34,6 @@
             <texcoords ofs="264" size="0"/>
             <triangles ofs="264" size="2"/>
         </TriangleMesh>
-
         <TriangleMesh id="3" name="mesh3">
             <material name="white">
                 <code>"OBJ"</code>
@@ -53,7 +50,6 @@
             <texcoords ofs="336" size="0"/>
             <triangles ofs="336" size="2"/>
         </TriangleMesh>
-
         <TriangleMesh id="4" name="mesh4">
             <material name="green">
                 <code>"OBJ"</code>

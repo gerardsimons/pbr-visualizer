@@ -32,8 +32,7 @@
             <normals   ofs="16368" size="0"/>
             <texcoords ofs="16368" size="0"/>
             <triangles ofs="16368" size="2"/>
-        </TriangleMesh> -->
-
+        </TriangleMesh> --<name />
          <TriangleMesh id="3" name="mesh3">
             <material name="Emitter-mid-window">
                 <code>"OBJ"</code>
@@ -137,8 +136,10 @@
             <triangles ofs="65928" size="1296"/>
         </TriangleMesh>
 
-        <TriangleMesh id="9" name="mesh9">
+<!--         <TriangleMesh id="9" name="mesh9">
             <material name="lampshade-inner">
+                <code>"Glass"</code>
+                <parameters/>
                 <code>"OBJ"</code>
                 <parameters>
                     <float  name="d">  1.0000</float>
@@ -152,7 +153,7 @@
             <normals   ofs="86628" size="0"/>
             <texcoords ofs="86628" size="429"/>
             <triangles ofs="90060" size="768"/>
-        </TriangleMesh>
+        </TriangleMesh> -->
         <TriangleMesh id="10" name="mesh10">
             <material name="Apple">
                 <code>"OBJ"</code>
@@ -635,39 +636,42 @@
             <triangles ofs="425932" size="12"/>
         </TriangleMesh>
 
-        <TriangleMesh id="38" name="mesh38">
+<!--         <TriangleMesh id="38" name="mesh38">
             <material name="ceiling-shade-wire">
-                <code>"OBJ"</code>
+                <code>"Metal"</code>
                 <parameters>
-                    <float  name="d">  1.0000</float>
-                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
-                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
-                    <float  name="Ns">96.0784</float>
+                  <float3 name="eta">0.19 0.45 1.50</float3>
+                  <float3 name="k">3.06 2.40 1.88</float3>
+                  <float name="roughness">0.005</float>
                 </parameters>
             </material>
             <positions ofs="426076" size="192"/>
             <normals   ofs="428380" size="0"/>
             <texcoords ofs="428380" size="0"/>
             <triangles ofs="428380" size="384"/>
-        </TriangleMesh>
+        </TriangleMesh> -->
 
+<!--                
         <TriangleMesh id="39" name="mesh39">
             <material name="Ceiling-lampshade">
-                <code>"OBJ"</code>
+                <code>"Glass"</code>
+                <parameters/>
+
+ <code>"OBJ"</code>
                 <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
                     <float3 name="Kd"> 0.6840  0.6488  0.5928</float3>
                     <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
                     <float  name="Ns">96.0784</float>
-                </parameters>
+                </parameters> 
             </material>
             <positions ofs="432988" size="1425"/>
             <normals   ofs="450088" size="0"/>
             <texcoords ofs="450088" size="1425"/>
             <triangles ofs="461488" size="2688"/>
         </TriangleMesh>
+        -->
 
         <TriangleMesh id="40" name="mesh40">
             <material name="picframe-black">

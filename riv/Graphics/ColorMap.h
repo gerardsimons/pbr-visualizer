@@ -28,6 +28,9 @@ namespace riv {
         }
         Color(float R, float G, float B, float A) : R(R), G(G), B(B), A(A) {
         }
+        Color(int R, int G, int B) : R(R), G(G), B(B), A(1) {
+            
+        }
         //0 to 256
         Color(unsigned short R, unsigned short G, unsigned short B) : R(R / 255.F),G(G / 255.F),B(B / 255.F),A(1){
             

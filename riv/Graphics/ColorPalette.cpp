@@ -79,23 +79,22 @@
                 
             riv::ColorMap qualitativeColors;
             
-//            qualitativeColors.AddColor(riv::Color(127,201,127));
-//            qualitativeColors.AddColor(riv::Color(190,174,212));
-//            qualitativeColors.AddColor(riv::Color(253,192,134));
-//            qualitativeColors.AddColor(riv::Color(255,255,153));
-//            qualitativeColors.AddColor(riv::Color(56,108,176));
+            qualitativeColors.AddColor(riv::Color(127,201,127));
+            qualitativeColors.AddColor(riv::Color(190,174,212));
+            qualitativeColors.AddColor(riv::Color(253,192,134));
+            qualitativeColors.AddColor(riv::Color(255,255,153));
+            qualitativeColors.AddColor(riv::Color(56,108,176));
             
             return qualitativeColors;
         }
         
-        riv::ColorMap brownColorMap() {
+        riv::ColorMap blueYellowColorMap() {
+            riv::ColorMap colors;
             
-            riv::ColorMap browns;
+            colors.AddColor(colors::BLUE);
+            colors.AddColor(colors::YELLOW);
             
-//            browns.AddColor(riv::Color(1,0.968,0.737));
-//                        browns.AddColor(riv::Color(0.999,0.768,0.31));
-//                        browns.AddColor(riv::Color(0.851,0.373,0.0054));
-            return browns;
+            return colors;
         }
         
 		std::vector<riv::Color> allColors() {

@@ -18,6 +18,7 @@
 class Gizmo {
 public:
     TriangleMeshGroup shape;
+    riv::Color color;
     std::vector<riv::RowFilter*> activeFilters;
     
     std::vector<Vec3fa> hitpoints;

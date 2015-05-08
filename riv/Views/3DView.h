@@ -63,7 +63,10 @@ private:
     Vec3fa shapeTranslation;
     float translationSpeed = 0.1F;
     
-    Gizmo gizmo;
+    bool showGizmos = true;
+    Gizmo* activeGizmo = NULL;
+    std::vector<Gizmo> gizmos;
+    std::vector<riv::Color> availableColors = {colors::GREEN, colors::BLUE};
     
     bool isDirty = true;
     
@@ -132,8 +135,6 @@ private:
     ushort selectedLightIdOne = 0;
     ushort selectedLightIdTwo = 0;
     
-    
-    
     bool meshSelected = false;
     std::vector<riv::RowFilter*> pathFiltersOne;
     ushort bounceCountOne = 0;
@@ -164,7 +165,7 @@ private:
     void drawEnergyDistribution(Octree* energyDistribution,ushort maxDepth, float maxEnergy);
     void drawEnergyDifference(Octree* energyDistributionOne, Octree* energyDistributionTwo,ushort maxDepth);
     void drawTriangleMeshFull(TriangleMeshFull* mesh, const riv::Color& color);
-    void drawGizmo();
+    void drawGizmos();
     void drawLights(const std::vector<Ref<Light>>& lights, const riv::Color& membershipColor);
     
     void filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, std::set<ushort>& selectedObjectID, std::vector<riv::RowFilter*>& pathFilters);
@@ -180,7 +181,7 @@ private:
     
     Vec3fa screenToWorldCoordinates(int mouseX, int mouseY, float zPlane);
     void redisplayWindow();
-    void createGizmo();
+    Gizmo createGizmo();
 public:
     //Single renderer constructor
     RIV3DView(RIVDataSet<float,ushort>** dataset,EMBREERenderer* renderer,const TriangleMeshGroup& sceneDataOne, Octree* energyDistribution, RIVColorProperty* pathColor, RIVColorProperty* rayColor);

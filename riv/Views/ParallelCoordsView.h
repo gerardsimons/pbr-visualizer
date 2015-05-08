@@ -37,17 +37,16 @@ private:
 	bool drawDataSetTwo = true;
 	
 	int axisWidth = 10;
-	
-//	HistogramSet<float,ushort>* distributionsOne;
-//	HistogramSet<float,ushort>* distributionsTwo = NULL;
-    
+    riv::Color backgroundColor = colors::WHITE;
     riv::ColorMap membershipColors;
     
-    RIVColorProperty* rayColorEnergyOne;
-    RIVColorProperty* pathColorEnergyOne;
+    RIVColorProperty* rayColorOne;
+    RIVColorProperty* pathColorOne;
+    RIVColorProperty* lightColorOne;
     
-    RIVColorProperty* rayColorEnergyTwo = NULL;
-    RIVColorProperty* pathColorEnergyTwo = NULL;
+    RIVColorProperty* rayColorTwo = NULL;
+    RIVColorProperty* pathColorTwo = NULL;
+    RIVColorProperty* lightColorTwo = NULL;
     
     //Properties
     std::vector<ParallelCoordsAxisGroup<float,ushort>> axisGroups;
@@ -86,21 +85,20 @@ private:
 	//Draw scale indicators and selection glyphs
 	void drawAxesExtras();
 	//Draws the lines of the parallel coordinates plot for the given dataset, note that it also 
-	void drawLines(int datasetNumber, RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColors, RIVColorProperty* rayColors);
-	void drawSelectionBoxes();
+	void drawLines(int datasetNumber, RIVDataSet<float,ushort>* dataset);
 	void swapAxes(ParallelCoordsAxisGroup<float,ushort>* axisGroup, const std::string& swapAxisOne, const std::string& swapAxisTwo);
-
 	void filterData();
+    void resetAxes();
 public:
 	void redisplayWindow();
 	void createAxisDensities();
     //Single dataset constructors
-    ParallelCoordsView(RIVDataSet<float,ushort>** dataset, int x, int y, int width, int height, int paddingX, int paddingY,riv::ColorMap& membershipColors, RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVSliderView* sliderView);
-    ParallelCoordsView(RIVDataSet<float,ushort>** dataset, riv::ColorMap& membershipColors, RIVColorProperty *pathColor, RIVColorProperty *rayColor,RIVSliderView* sliderView);
+    ParallelCoordsView(RIVDataSet<float,ushort>** dataset, int x, int y, int width, int height, int paddingX, int paddingY,riv::ColorMap& membershipColors, RIVSliderView* sliderView);
+    ParallelCoordsView(RIVDataSet<float,ushort>** dataset, riv::ColorMap& membershipColors, RIVSliderView* sliderView);
     
 	//Constructors for double renderers
-	ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,int x, int y, int width, int height, int paddingX, int paddingY,riv::ColorMap& membershipColors, RIVColorProperty *pathColor, RIVColorProperty *rayColor,RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView);
-	ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,riv::ColorMap& membershipColors, RIVColorProperty *pathColor, RIVColorProperty *rayColor, RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView);
+	ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,int x, int y, int width, int height, int paddingX, int paddingY,riv::ColorMap& membershipColors, RIVSliderView* sliderView);
+	ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo,riv::ColorMap& membershipColors,RIVSliderView* sliderView);
 
 	~ParallelCoordsView();
 	
@@ -126,8 +124,7 @@ public:
 	
 	bool DecreaseLineOpacity();
 	bool IncreaseLineOpacity();
-
-//    void CycleColorMode();
+    void ToggleBackgroundColor();
     
 	//Create graphical primitives based on data currently set
 	void InitializeGraphics();

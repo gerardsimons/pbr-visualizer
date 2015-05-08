@@ -15,15 +15,15 @@
 ParallelCoordsView* ParallelCoordsView::instance = NULL;
 int ParallelCoordsView::windowHandle = -1;
 
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, int x, int y, int width, int height, int paddingX, int paddingY, riv::ColorMap& membershipColors, RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne,RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView) : RIVDataView(datasetOne,datasetTwo,x,y,width,height,paddingX,paddingY,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo), sliderView(sliderView), membershipColors(membershipColors) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, int x, int y, int width, int height, int paddingX, int paddingY, riv::ColorMap& membershipColors,RIVSliderView* sliderView) : RIVDataView(datasetOne,datasetTwo,x,y,width,height,paddingX,paddingY), sliderView(sliderView), membershipColors(membershipColors) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
     identifier = "ParallelCoordsView";
     instance = this;
 }
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, riv::ColorMap& membershipColors, RIVColorProperty *pathColorOne, RIVColorProperty *rayColorOne, RIVColorProperty *pathColorTwo, RIVColorProperty *rayColorTwo,RIVSliderView* sliderView) :
-RIVDataView(datasetOne,datasetTwo,pathColorOne,rayColorOne,pathColorTwo,rayColorTwo), sliderView(sliderView),membershipColors(membershipColors)
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** datasetOne, RIVDataSet<float,ushort>** datasetTwo, riv::ColorMap& membershipColors, RIVSliderView* sliderView) :
+RIVDataView(datasetOne,datasetTwo), sliderView(sliderView),membershipColors(membershipColors)
 {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
@@ -33,57 +33,110 @@ RIVDataView(datasetOne,datasetTwo,pathColorOne,rayColorOne,pathColorTwo,rayColor
 }
 
 /** SINGLE DATASET CONSTRUCTORS **/
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, int x, int y, int width, int height, int paddingX, int paddingY,riv::ColorMap& membershipColors, RIVColorProperty* pathColor, RIVColorProperty *rayColor,RIVSliderView* sliderView) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY),sliderView(sliderView),membershipColors(membershipColors) {
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, int x, int y, int width, int height, int paddingX, int paddingY,riv::ColorMap& membershipColors, RIVSliderView* sliderView) : RIVDataView(dataset,x,y,width,height, paddingX, paddingY),sliderView(sliderView),membershipColors(membershipColors) {
     if(instance != NULL) {
         throw "Only 1 instance allowed.";
     }
-    this->pathColorOne = pathColor;
-    this->rayColorOne = rayColor;
-    identifier = "ParallelCoordsView";
-    instance = this;
-    //Nothing else to do
-}
-
-ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, riv::ColorMap& membershipColors, RIVColorProperty *pathColor, RIVColorProperty* rayColor,RIVSliderView* sliderView) : RIVDataView(dataset), sliderView(sliderView),membershipColors(membershipColors) {
-    if(instance != NULL) {
-        throw "Only 1 instance allowed.";
-    }
-    this->pathColorOne = pathColor;
-    this->rayColorOne = rayColor;
     identifier = "ParallelCoordsView";
     instance = this;
 }
 
+ParallelCoordsView::ParallelCoordsView(RIVDataSet<float,ushort>** dataset, riv::ColorMap& membershipColors, RIVSliderView* sliderView) : RIVDataView(dataset), sliderView(sliderView),membershipColors(membershipColors) {
+    if(instance != NULL) {
+        throw "Only 1 instance allowed.";
+    }
+    identifier = "ParallelCoordsView";
+    instance = this;
+}
+//Reset axes according to data
+void ParallelCoordsView::resetAxes() {
+    
+    printf("Resetting parallel coordinates axes...\n");
+    
+    if(datasetTwo) {
+        for(auto& axisGroup : axisGroups) {
+            
+            RIVTable<float,ushort> *table = (*datasetOne)->GetTable(axisGroup.tableName);
+            RIVTable<float,ushort> *otherTable = (*datasetTwo)->GetTable(axisGroup.tableName);
+            
+            tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+                for(auto axis : tAxes) {
+                    
+                    typedef typename get_template_type<typename std::decay<decltype(*axis->recordOne)>::type>::type Type;
+                    
+                    axis->recordOne = table->GetRecord<Type>(axis->name);
+                    axis->recordTwo = otherTable->GetRecord<Type>(axis->name);
+                    
+                    axis->ClearHistograms();
+                    
+                    auto record = axis->recordOne;
+                    auto otherRecord = axis->recordTwo;
+                    
+                    auto minMax = record->MinMax();
+                    auto otherMinMax = otherRecord->MinMax();
+                    
+                    float min = std::min(minMax.first,otherMinMax.first);
+                    float max = std::min(minMax.second,otherMinMax.second);
+                    
+                    axis->minValue = min;
+                    axis->maxValue = max;
+                }
+            });
+        }
+    }
+    else {
+        for(auto& axisGroup : axisGroups) {
+            RIVTable<float,ushort> *table = (*datasetOne)->GetTable(axisGroup.tableName);
+            
+            tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+                for(auto axis : tAxes) {
+                    
+                    typedef typename get_template_type<typename std::decay<decltype(*axis->recordOne)>::type>::type Type;
+                    
+                    axis->recordOne = table->GetRecord<Type>(axis->name);
+                    
+                    auto record = axis->recordOne;
+                    auto minMax = record->MinMax();
+                    
+                    axis->minValue = minMax.first;
+                    axis->maxValue = minMax.second;
+                }
+            });
+        }
+    }
+}
 void ParallelCoordsView::createAxes() {
     printf("Create axes\n");
     axisGroups.clear();
-    size_t total_nr_of_records = 0;
-    //    int y = startY + paddingY;
+    size_t totalNrRecords = 0;
+
     int y = 1.5F * paddingY; //View port takes care of startY
     int axisHeight = height - 2.5F * paddingY;
     int bins = 10;
     
     std::vector<std::string> tablesToDisplay = {PATHS_TABLE,INTERSECTIONS_TABLE,LIGHTS_TABLE};
-    std::set<std::string> recordsToIgnore = { INTERACTION_TYPE,LIGHT_ID,OCCLUDER_COUNT,OCCLUDER_ID};
+    std::set<std::string> recordsToIgnore = {LIGHT_ID,OCCLUDER_COUNT,OCCLUDER_ID};
     
     for(const std::string& tableName : tablesToDisplay) {
         RIVTable<float,ushort> *table = (*datasetOne)->GetTable(tableName);
-        total_nr_of_records += table->NumberOfRecords();
+        totalNrRecords += table->NumberOfRecords();
     }
-    total_nr_of_records -= recordsToIgnore.size();
+    totalNrRecords -= recordsToIgnore.size();
     
-    float delta = 1.F / (total_nr_of_records - 1) * (width - 2 * paddingX);
-    
+    float delta = 1.F / (totalNrRecords - 1) * (width - 2 * paddingX);
     size_t axisIndex = 0;
-    //		std::vector<std::string> pathTableRecordNames = {"pixel x","pixel y","R","G","B","throughput R","throughput G","throughput B","renderer","depth"};
     const int divisionCount = 2;
+    
     if(datasetTwo) {
         for(const std::string& tableName : tablesToDisplay) {
-            //			std::vector<RIVTable<float,ushort>*>* otherTablePointers = (*datasetTwo)->GetTables();
+            
+            RIVColorProperty* colorPropertyOne = new RIVFixedColorProperty(colors::RED);
+            RIVColorProperty* colorPropertyTwo = new RIVFixedColorProperty(colors::BLUE);
+            
             RIVTable<float,ushort> *table = (*datasetOne)->GetTable(tableName);
             RIVTable<float,ushort> *otherTable = (*datasetTwo)->GetTable(tableName);
             
-            ParallelCoordsAxisGroup<float,ushort> axisGroup(table->GetName());
+            ParallelCoordsAxisGroup<float,ushort> axisGroup(table->GetName(),colorPropertyOne,colorPropertyTwo);
             
             auto recordsTuple = table->GetAllRecords();
             tuple_for_each(recordsTuple, [&](auto tRecords) {
@@ -100,14 +153,6 @@ void ParallelCoordsView::createAxes() {
                         //A tuple containing the min and max values of the record
                         auto minMax = record->MinMax();
                         auto otherMinMax = otherRecord->MinMax();
-                        //                    const std::string& name = record->name;
-                        //				printf("Record %s has min-max : ",record->name.c_str());
-                        //				std::cout << " " << minMax.first << ", " << minMax.second << std::endl;
-                        
-                        //					auto histOne = distributionsOne->GetHistogram<Type>(name);
-                        //					auto histTwo = distributionsTwo->GetHistogram<Type>(name);
-                        
-                        //					axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,distributionsOne->GetHistogram<Type>(name),distributionsTwo->GetHistogram<Type>(name));
                         
                         float min = std::min(minMax.first,otherMinMax.first);
                         float max = std::min(minMax.second,otherMinMax.second);
@@ -123,13 +168,13 @@ void ParallelCoordsView::createAxes() {
                             auto dataHistOne = Histogram<Type>(record->name,min,max,diff);
                             auto dataHistTwo = Histogram<Type>(record->name,min,max,diff);
                             
-                            axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,dataHistOne,dataHistTwo);
+                            axisGroup.CreateAxis(record, otherRecord, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,dataHistOne,dataHistTwo);
                         }
                         else {
                             auto dataHistOne = Histogram<Type>(record->name,min,max,bins);
                             auto dataHistTwo = Histogram<Type>(record->name,min,max,bins);
                             
-                            axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,dataHistOne,dataHistTwo);
+                            axisGroup.CreateAxis(record,otherRecord, x, y, axisWidth, axisHeight, std::min(minMax.first,otherMinMax.first), std::max(minMax.second,otherMinMax.second), record->name, divisionCount,dataHistOne,dataHistTwo);
                         }
                         axisIndex++;
                     }
@@ -141,46 +186,37 @@ void ParallelCoordsView::createAxes() {
     else {
         for(const std::string& tableName : tablesToDisplay) {
             RIVTable<float,ushort> *table = (*datasetOne)->GetTable(tableName);
-            ParallelCoordsAxisGroup<float,ushort> axisGroup(table->GetName());
+            RIVColorProperty* colorPropertyOne = new RIVFixedColorProperty(colors::RED);
+            ParallelCoordsAxisGroup<float,ushort> axisGroup(table->GetName(),colorPropertyOne);
             auto recordsTuple = table->GetAllRecords();
             tuple_for_each(recordsTuple, [&](auto tRecords) {
                 for(size_t i = 0 ; i < tRecords.size() ; ++i) {
                     auto& record = tRecords.at(i);
                     
                     if(recordsToIgnore.find(record->name) == recordsToIgnore.end()) {
-                    typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
-                    
-                    int x = delta * (axisIndex) + paddingX;
-                    std::string name = record->name;
-                    //A tuple containing the min and max values of the record
-                    auto minMax = record->MinMax();
-                    //				printf("Record %s has min-max : ",record->name.c_str());
-                    //				std::cout << " " << minMax.first << ", " << minMax.second << std::endl;
-                    
-                    //                    auto histOne = distributionsOne->GetHistogram<Type>(name);
-                    
-                    
-                    //If the type is unsigned short, its a discrete value, if there are not too many, use each discrete value as a bin, otherwise clump them together same as floats
-                    if(typeid(Type) == typeid(ushort)) {
+                        typedef typename get_template_type<typename std::decay<decltype(*record)>::type>::type Type;
                         
-                        ushort diff = minMax.second - minMax.first;
-                        if(diff > bins) {
-                            diff = bins;
+                        int x = delta * (axisIndex) + paddingX;
+                        std::string name = record->name;
+                        //A tuple containing the min and max values of the record
+                        auto minMax = record->MinMax();
+
+                        //If the type is unsigned short, its a discrete value, if there are not too many, use each discrete value as a bin, otherwise clump them together same as floats
+                        if(typeid(Type) == typeid(ushort)) {
+                            
+                            ushort diff = minMax.second - minMax.first;
+                            if(diff > bins) {
+                                diff = bins;
+                            }
+                            
+                            auto dataHistOne = Histogram<Type>(record->name,minMax.first,minMax.second,diff);
+                            axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, minMax.first, minMax.second, name, divisionCount, dataHistOne);
                         }
-                        
-                        auto dataHistOne = Histogram<Type>(record->name,minMax.first,minMax.second,diff);
-                        
-                        axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, minMax.first, minMax.second, name, divisionCount, dataHistOne);
-                    }
-                    else {
-                        auto dataHistOne = Histogram<Type>(record->name,minMax.first,minMax.second,bins);
-                        
-                        
-                        axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, minMax.first,minMax.second, record->name, divisionCount,dataHistOne);
-                    }
-                    
-                    
-                    axisIndex++;
+                        else {
+                            auto dataHistOne = Histogram<Type>(record->name,minMax.first,minMax.second,bins);
+                            axisGroup.CreateAxis(record, x, y, axisWidth, axisHeight, minMax.first,minMax.second, record->name, divisionCount,dataHistOne);
+                        }
+                        axisIndex++;
                     }
                 }
             });
@@ -189,27 +225,11 @@ void ParallelCoordsView::createAxes() {
     }
     printf("Create axes finished\n");
 }
-void ParallelCoordsView::drawSelectionBoxes() {
-    for(auto& axisGroup : axisGroups) {
-        tuple_for_each(axisGroup.axes, [&](auto tAxes) {
-            for(auto& axis : tAxes) {
-                if(axis->HasSelectionBox) {
-                    
-                    //Find startbin
-                    
-                    
-                    
-                    
-                    printf("Drawing selection box on axis %s\n",axis->name.c_str());
-                    
-                    //                    glColor4f(1, 1, 1,.5F);
-                    //                    glRectf(axis->selection.start.x - 1, axis->selection.start.y, axis->selection.end.x, axis->selection.end.y);
-                }
-            }
-        });
-    }
-}
+
 void ParallelCoordsView::drawAxes() {
+    
+    bool drawMembershipBins = true;
+    
     for(auto& axisGroup : axisGroups) {
         size_t rowsOne = (*datasetOne)->GetTable(axisGroup.tableName)->NumberOfRows();
         size_t rowsTwo = 0;
@@ -228,12 +248,10 @@ void ParallelCoordsView::drawAxes() {
                 //                printf("Draw axis %s\n",axis->name.c_str());
                 
                 //Draw basic black backdrop for each axis
-                glColor3f(0,0,0);
+                glColor3f(1,1,1);
                 
                 float halfWidth = axis->width / 2.F;
                 glRectf(axis->x - halfWidth, axis->y, axis->x + halfWidth, axis->y + axis->height);
-                
-                glEnd();
                 
                 bool hasSelectionBox = axis->HasSelectionBox;
                 
@@ -265,7 +283,6 @@ void ParallelCoordsView::drawAxes() {
                     //                    printf("Start,end selection bin = %d,%d\n",startSelectionBin,endSelectionBin);
                 }
                 
-                
                 float maxValueOne = histogramOne.MaximumValue() * sizeDiff;
                 float maxValueTwo = histogramTwo.MaximumValue();
                 
@@ -293,15 +310,14 @@ void ParallelCoordsView::drawAxes() {
                         float normalizedValueTwo = 0;
                         
                         if(nrElementsOne) {
-                            //                            normalizedValueOne = binValueOne / nrElementsOne;
                             normalizedValueOne = binValueOne / nrElementsOne;
                         }
                         if(nrElementsTwo) {
-                            //                            normalizedValueTwo = binValueTwo / nrElementsTwo;
                             normalizedValueTwo = binValueTwo / nrElementsTwo;
                         }
+                        riv::Color binColor;
+                        //Determine the color by membership
                         
-                        //					float valueDelta = valueTwo - valueTwo;
                         float blueColorValue;
                         float redColorValue;
                         float ratio = 0;
@@ -311,30 +327,51 @@ void ParallelCoordsView::drawAxes() {
                             redColorValue = 1-blueColorValue;
                             ratio = binValueTwo / maxValueTwo;
                             
-                            riv::Color testColor = membershipColors.ComputeColor(blueColorValue);
-                            glColor3f(testColor.R, testColor.G, testColor.B);
+                            if(drawMembershipBins) {
+                                if(useSaturation) {
+                                    float h,s,v;
+                                    RGBtoHSV(redColorValue, 0, blueColorValue, &h, &s, &v);
+                                    float r,g,b;
+                                    HSVtoRGB(&r, &g, &b, h, ratio, v);
+                                    binColor = riv::Color(r,g,b);
+                                }
+                                else {
+                                    binColor = membershipColors.ComputeColor(blueColorValue);
+                                }
+                            }
                         }
                         else if(binValueOne > binValueTwo) {
                             redColorValue = ((binValueOne - binValueTwo) / binValueOne + 1) / 2.F;
                             blueColorValue = 1 - redColorValue;
                             ratio = binValueOne / maxValueOne;
                             
-                            riv::Color testColor = membershipColors.ComputeColor(blueColorValue);
-                            glColor3f(testColor.R, testColor.G, testColor.B);
+                            if(drawMembershipBins) {
+                                if(useSaturation) {
+                                    float h,s,v;
+                                    RGBtoHSV(redColorValue, 0, blueColorValue, &h, &s, &v);
+                                    float r,g,b;
+                                    HSVtoRGB(&r, &g, &b, h, ratio, v);
+                                    binColor = riv::Color(r,g,b);
+                                }
+                                else {
+                                    binColor = membershipColors.ComputeColor(blueColorValue);
+                                }
+                            }
                         }
                         else {
-                            //                            riv::Color testColor = redWhiteBlue.ComputeColor(0.5);
-                            ratio = binValueOne / maxValueOne;
-                            glColor3f(1,1,1);
+                            ratio = 0;
+                            binColor = riv::Color(1.0F,1.0F,1.F);
+                        }
+                        if(!drawMembershipBins) {
+                            binColor = axis->GetBinRadiance(bin);
                         }
                         
-                        //						printf("glColor3f(%f,%f,%f)\n",r,g,b);
                         float width = ratio * (maxBinWidth - axis->width) + axis->width;
-//                        if(width > maxBinWidth) {
-//                            size_t maxTest = histogramTwo.MaximumValue();
-//                        }
+                        
                         float startBinX = axis->x - width / 2.F;
                         float endBinX = axis->x + width / 2.F;
+                        
+                        glColor3f(binColor.R,binColor.G,binColor.B);
                         glRectf(startBinX, startBinY, endBinX, endBinY);
                         
                         glColor3f(0,0,0);
@@ -348,11 +385,11 @@ void ParallelCoordsView::drawAxes() {
                         
                         glEnd();
                         
+                        
                         if(axis->HasSelectionBox) {
                             //Draw a thicker black line around the edges of the bin when it is brushed/selected
                             const int selectionLineWidth = 8;
                             glLineWidth(selectionLineWidth);
-                            
                             
                             if(bin >= startSelectionBin && bin <= endSelectionBin) {
                                 //The points of the selection rectangle for this particular bin
@@ -361,37 +398,22 @@ void ParallelCoordsView::drawAxes() {
                                 int selectionBinStartY;
                                 int selectionBinEndY;
                                 if(endSelectionBin == bin) {
-                                    //Left line
-                                    //                                    printf("bin %d is the end selection bin\n",bin);
                                     selectionBinStartY = axis->selection.start.y;
                                     if(bin == startSelectionBin) {
-                                        //                                        printf(" AND selection bin\n");
                                         selectionBinEndY = axis->selection.end.y;
-                                        
                                     }
                                     else {
                                         selectionBinEndY = startBinY;
                                     }
-                                    
-                                    //                                    glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
-                                    
-                                    
                                 }
                                 else if(bin == startSelectionBin) {
-                                    //                                    printf("bin %d is the start selection bin",bin);
                                     selectionBinStartY = endBinY;
                                     selectionBinEndY = axis->selection.end.y;
-                                    //                                                                        glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
                                 }
                                 else {
-                                    //                                    printf("bin %d is a middle selection bin\n",bin);
                                     selectionBinStartY = startBinY;
                                     selectionBinEndY = endBinY;
-                                    //                                                                        glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
-                                    //
                                 }
-                                //                                printf("glRectf(%d,%d,%d,%d)\n",selectionBinStartX,selectionBinStartY,selectionBinEndX,selectionBinEndY);
-                                //                                glRectf(selectionBinStartX, selectionBinStartY, selectionBinEndX, selectionBinEndY);
                                 glColor4f(0,0,0,0.4);
                                 glBegin(GL_LINES);
                                 glVertex2f(selectionBinStartX,selectionBinStartY);
@@ -476,6 +498,15 @@ void ParallelCoordsView::createAxisPoints() {
     }
 }
 void ParallelCoordsView::createAxisDensities() {
+    
+    for(auto &axisGroup : axisGroups) {
+        tuple_for_each(axisGroup.axes, [&](auto tAxes) {
+            for(auto axis : tAxes) {
+                axis->ClearHistograms();
+            }
+        });
+    }
+    
     createAxisDensities(0, *datasetOne);
     if(datasetTwo) {
         createAxisDensities(1, *datasetTwo);
@@ -483,11 +514,11 @@ void ParallelCoordsView::createAxisDensities() {
 }
 //void ParallelCoordsView::CycleColorScheme() {
 
-    
+
 //    delete pathColorOne;
 //    delete rayColorOne;
-//    
-//    
+//
+//
 //    delete pathColorTwo;
 //}
 void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ushort>* dataset) {
@@ -498,31 +529,35 @@ void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ush
     tableToRadianceRecords[LIGHTS_TABLE] = {LIGHT_R,LIGHT_G,LIGHT_B};
     
     for(auto &axisGroup : axisGroups) {
-        tuple_for_each(axisGroup.axes, [&](auto tAxes) {
-            for(auto axis : tAxes) {
-                axis->GetHistogram(datasetId)->Clear();
-            }
-        });
-    }
-    for(auto &axisGroup : axisGroups) {
-        size_t row = 0;
         
         auto table = dataset->GetTable(axisGroup.tableName);
+        
+        RIVRecord<float>* rRecord = table->GetRecord<float>(tableToRadianceRecords[table->GetName()][0]);
+        RIVRecord<float>* gRecord = table->GetRecord<float>(tableToRadianceRecords[table->GetName()][1]);
+        RIVRecord<float>* bRecord = table->GetRecord<float>(tableToRadianceRecords[table->GetName()][2]);
+        
         tuple_for_each(axisGroup.axes, [&](auto& tAxes) {
             for(auto& axis : tAxes) {
+                
                 TableIterator* iterator = table->GetIterator();
-                
-                RIVRecord<float>* rRecord = table->GetRecord<float>(tableToRadianceRecords[table->GetName()][0]);
-                RIVRecord<float>* gRecord = table->GetRecord<float>(tableToRadianceRecords[table->GetName()][1]);
-                RIVRecord<float>* bRecord = table->GetRecord<float>(tableToRadianceRecords[table->GetName()][2]);
-                
+                size_t row;
                 while(iterator->GetNext(row)) {
                     
                     auto record = table->GetRecord<decltype(axis->minValue)>(axis->name);
                     auto value = record->Value(row);
                     
-                    axis->GetHistogram(datasetId)->Add(value);
-                    axis->AddRadiance(rRecord->Value(row),gRecord->Value(row),bRecord->Value(row));
+                    unsigned int bin = axis->GetHistogram(datasetId)->Add(value);
+                    
+                    //                    axis->AddRadiance(bin,rRecord->Value(row),gRecord->Value(row),bRecord->Value(row));
+                    
+                    riv::Color color;
+                    if(axisGroup.colorPropertyOne->ComputeColor(table, row, color)) {
+                        axis->AddRadiance(bin,color.R,color.G,color.B);
+                    }
+                    
+                    if(axisGroup.colorPropertyTwo && axisGroup.colorPropertyTwo->ComputeColor(table, row, color)) {
+                        axis->AddRadiance(bin,color.R,color.G,color.B);
+                    }
                 }
             }
         });
@@ -561,7 +596,7 @@ void ParallelCoordsView::createAxisPoints(int datasetId, RIVDataSet<float,ushort
     printf("%zu points per axis created.\n",pointsCreated);
     
 }
-void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* dataset, RIVColorProperty* pathColors, RIVColorProperty* rayColors) {
+void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* dataset) {
     //	linesAreDirty = true;
     
     //	dataset->Print();
@@ -606,53 +641,25 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
         auto table = dataset->GetTable(axisGroup.tableName);
         size_t numRows = table->NumberOfRows();
         size_t row = 0;
-        if(numRows != axisGroup.axisInterfaces[0]->GetPoints(datasetId).size()) {
-            printf("ERROR: Points not yet present...\n");
-            //            createAxes();
-            //            createAxisDensities();
-            //            createAxisPoints();
-            return;
-        }
-        
+        //        if(numRows != axisGroup.axisInterfaces[0]->GetPoints(datasetId).size()) {
+        //            printf("ERROR: Points not yet present...\n");
+        //            return;
+        //        }
         
         TableIterator* iterator = table->GetIterator();
         
-        
-        
-        
         //Find what color property to use for this table
-        RIVColorProperty* colorProperty = pathColors;
-        //        if(table->name == PATHS_TABLE) {
-        //            if(pathMembershipDataPresent) {
-        //                colorProperty = new RIVEvaluatedColorProperty<float>(colorMap,table,pathMembershipRecord);
-        //            }
-        //            else colorProperty = pathColors;
-        //            //			membershipRecord = pathMembershipRecord;
-        //        }
-        //        else if(table->name == INTERSECTIONS_TABLE) {
-        //            if(isectMembershipDataPresent) {
-        //                colorProperty = new RIVEvaluatedColorProperty<float>(colorMap,table,isectMembershipRecord);
-        //            }
-        //            else colorProperty = rayColors;
-        //        }
+        RIVColorProperty* colorProperty = axisGroup.GetColorProperty(datasetId);
         
         //You gotta love 'auto'!
         size_t lineIndex = 0;
         riv::Color lineColor;
         while(iterator->GetNext(row)) {
-            
-            
             float offset = axisWidth / 2.F;
-            
             if(colorProperty->ComputeColor(table, row, lineColor)) {
                 
                 glColor4f(lineColor.R, lineColor.G, lineColor.B, lineOpacity);
-                //					}
-                
-                //TODO: Optimize this; unnecessary lines are being drawn 'through' the axis
                 glBegin(GL_LINE_STRIP);
-                //				int axisIndex = 0;
-                
                 
                 for(auto axis : axisGroup.axisInterfaces) {
                     
@@ -661,8 +668,6 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
                     
                     glVertex2f(x - offset, y);
                     glVertex2f(x + offset, y);
-                    //						offset = -offset * axisIndex++;
-                    
                 }
                 
                 glEnd();
@@ -717,19 +722,12 @@ void ParallelCoordsView::Reshape(int width, int height) {
     paddingX = 30;
     paddingY = 30;
     
+    createAxes();
     Invalidate();
-    
-    InitializeGraphics();
-}
-
-void ParallelCoordsView::InitializeGraphics() {
-    //Recreate the axes according to the new layout
-    //	createAxes();
 }
 
 size_t drawCount = 0;
 void ParallelCoordsView::Draw() {
-    //    printf("linesAreDirty = %d axesAreDirty = %d\n",linesAreDirty,axesAreDirty);
     printHeader("PARALLEL COORDINATES PLOT VIEW DRAW");
     
     std::string taskName = "ParallelCoordsView Draw";
@@ -739,27 +737,22 @@ void ParallelCoordsView::Draw() {
     if(needsRedraw) {
         printf("Clear PCV window\n");
         //		glClearColor(0.9, 0.9, 0.9, 0.0);
-        glClearColor(1,1,1,0);
+        glClearColor(backgroundColor.R,backgroundColor.G,backgroundColor.B,0);
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    }
-    
-    //Draw the lines from each axis
-    if(needsRedraw) {
+        
         if(drawDataSetOne) {
             printf("Draw lines for dataset one\n");
-            drawLines(0,*datasetOne,pathColorOne,rayColorOne);
+            drawLines(0,*datasetOne);
         }
         if(datasetTwo && drawDataSetTwo) {
             printf("Draw lines for dataset two\n");
-            drawLines(1,*datasetTwo,pathColorTwo,rayColorTwo);
+            drawLines(1,*datasetTwo);
         }
         drawAxes();
         drawAxesExtras();
-        drawSelectionBoxes();
+        glFlush();
+        glutSwapBuffers();
     }
-    
-    glFlush();
-    glutSwapBuffers();
     
     reporter::stop(taskName);
 }
@@ -858,16 +851,38 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                                 
                                 selectedAxis = axis;
                                 
-                                if(sliderView) {
-                                    if(axis->isSelected) {
-                                        axis->isSelected = false;
-                                        sliderView->RemoveSelectedRecord(axis->name);
+                                //Create new color property from selected axis
+                                axis->isSelected = !axis->isSelected;
+                                
+                                typedef typename get_template_type<typename std::decay<decltype(*axis)>::type>::type Type;
+                                if(datasetOne) {
+                                    auto table = (*datasetOne)->GetTable(axisGroup.tableName);
+                                    RIVRecord<Type>* axisRecord = table->GetRecord<Type>(axis->name);
+                                    if(axisGroup.colorPropertyOne) {
+                                        delete axisGroup.colorPropertyOne;
                                     }
-                                    else {
-                                        axis->isSelected = true;
-                                        sliderView->AddSelectedRecord(axisGroup.tableName, axis->name);
-                                    }
+                                    axisGroup.colorPropertyOne = new RIVEvaluatedColorProperty<Type>(colors::blueYellowColorMap(),(*datasetOne)->GetTable(axisGroup.tableName),axisRecord);
                                 }
+                                if(datasetTwo) {
+                                    auto table = (*datasetTwo)->GetTable(axisGroup.tableName);
+                                    RIVRecord<Type>* axisRecord = table->GetRecord<Type>(axis->name);
+                                    if(axisGroup.colorPropertyTwo) {
+                                        delete axisGroup.colorPropertyTwo;
+                                    }
+                                    axisGroup.colorPropertyTwo = new RIVEvaluatedColorProperty<Type>(colors::blueYellowColorMap(),(*datasetOne)->GetTable(axisGroup.tableName),axisRecord);
+                                }
+                                
+                                //
+                                //                                if(sliderView) {
+                                //                                    if(axis->isSelected) {
+                                //                                        axis->isSelected = false;
+                                //                                        sliderView->RemoveSelectedRecord(axis->name);
+                                //                                    }
+                                //                                    else {
+                                //                                        axis->isSelected = true;
+                                //                                        sliderView->AddSelectedRecord(axisGroup.tableName, axis->name);
+                                //                                    }
+                                //                                }
                                 
                                 Invalidate();
                                 
@@ -1152,41 +1167,43 @@ void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
     printf("\n**   ParallelCoordsView onDataChanged notified.\n");
     
     Invalidate();
-    createAxes();
+    resetAxes();
     createAxisDensities();
     
     //Recreate the color property
     if(source == (*datasetOne)) {
-        printf("Dataset One was changed.\n\n");
-        auto rgbPath = dynamic_cast<RIVColorRGBProperty<float>*>(pathColorOne);
-        auto rgbRay = dynamic_cast<RIVColorRGBProperty<float>*>(rayColorOne);
-        //        createAxisPoints(0, *datasetOne);
-        if(rgbPath) {
-            auto pathTable = source->GetTable(PATHS_TABLE);
-            auto isectTable = source->GetTable(INTERSECTIONS_TABLE);
-            rgbPath->SetColorRecords(pathTable->GetRecord<float>(PATH_R), pathTable->GetRecord<float>(PATH_G), pathTable->GetRecord<float>(PATH_B));
-            rgbRay->SetColorRecords(isectTable->GetRecord<float>(INTERSECTION_R), isectTable->GetRecord<float>(INTERSECTION_G), isectTable->GetRecord<float>(INTERSECTION_B));
+        printf("Dataset one was changed.\n\n");
+        //        auto rgbPath = dynamic_cast<RIVColorRGBProperty<float>*>(pathColorOne);
+        //        auto rgbRay = dynamic_cast<RIVColorRGBProperty<float>*>(rayColorOne);
+        //        //        createAxisPoints(0, *datasetOne);
+        //        if(rgbPath) {
+        //            auto pathTable = source->GetTable(PATHS_TABLE);
+        //            auto isectTable = source->GetTable(INTERSECTIONS_TABLE);
+        //            rgbPath->SetColorRecords(pathTable->GetRecord<float>(PATH_R), pathTable->GetRecord<float>(PATH_G), pathTable->GetRecord<float>(PATH_B));
+        //            rgbRay->SetColorRecords(isectTable->GetRecord<float>(INTERSECTION_R), isectTable->GetRecord<float>(INTERSECTION_G), isectTable->GetRecord<float>(INTERSECTION_B));
+        //        }
+        //        else {
+        for(auto& axisGroup : axisGroups) {
+            axisGroup.colorPropertyOne->Reset(source);
         }
-        else {
-            pathColorOne->Reset(source);
-            rayColorOne->Reset(source);
-        }
+        //        }
     }
     else if(source == (*datasetTwo)) {
         printf("Dataset Two was changed.\n\n");
-        auto rgbPath = dynamic_cast<RIVColorRGBProperty<float>*>(pathColorTwo);
-        auto rgbRay = dynamic_cast<RIVColorRGBProperty<float>*>(rayColorTwo);
-        //        createAxisPoints(1, *datasetTwo);
-        if(rgbPath) {
-            auto pathTable = source->GetTable(PATHS_TABLE);
-            auto isectTable = source->GetTable(INTERSECTIONS_TABLE);
-            rgbPath->SetColorRecords(pathTable->GetRecord<float>(PATH_R), pathTable->GetRecord<float>(PATH_G), pathTable->GetRecord<float>(PATH_B));
-            rgbRay->SetColorRecords(isectTable->GetRecord<float>(INTERSECTION_R), isectTable->GetRecord<float>(INTERSECTION_G), isectTable->GetRecord<float>(INTERSECTION_B));
+        //        auto rgbPath = dynamic_cast<RIVColorRGBProperty<float>*>(pathColorTwo);
+        //        auto rgbRay = dynamic_cast<RIVColorRGBProperty<float>*>(rayColorTwo);
+        //        //        createAxisPoints(1, *datasetTwo);
+        //        if(rgbPath) {
+        //            auto pathTable = source->GetTable(PATHS_TABLE);
+        //            auto isectTable = source->GetTable(INTERSECTIONS_TABLE);
+        //            rgbPath->SetColorRecords(pathTable->GetRecord<float>(PATH_R), pathTable->GetRecord<float>(PATH_G), pathTable->GetRecord<float>(PATH_B));
+        //            rgbRay->SetColorRecords(isectTable->GetRecord<float>(INTERSECTION_R), isectTable->GetRecord<float>(INTERSECTION_G), isectTable->GetRecord<float>(INTERSECTION_B));
+        //        }
+        //        else {
+        for(auto& axisGroup : axisGroups) {
+            axisGroup.colorPropertyTwo->Reset(source);
         }
-        else {
-            pathColorTwo->Reset(source);
-            rayColorTwo->Reset(source);
-        }
+        //        }
     }
     else {
         throw std::runtime_error("Unknown dataset");
@@ -1224,33 +1241,28 @@ void ParallelCoordsView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
     
     redisplayWindow();
 }
+void ParallelCoordsView::ToggleBackgroundColor() {
+    
+    if(backgroundColor == colors::WHITE) {
+        backgroundColor = colors::BLACK;
+    }
+    else if(backgroundColor == colors::BLACK) {
+        backgroundColor = colors::WHITE;
+    }
+    
+    redisplayWindow();
+}
 bool ParallelCoordsView::DecreaseLineOpacity() {
     
     lineOpacity /= 1.5;
+    if(lineOpacity < 0.01) {
+        lineOpacity = 0.01;
+    }
     redisplayWindow();
     return true;
-    //    if(lineOpacity > 0.F) {
-    //        lineOpacity -= lineOpacityIncrement;
-    //        if(lineOpacity < 0.F) {
-    //            lineOpacity = 0;
-    //        }
-    //        Invalidate();
-    //        redisplayWindow();
-    //        return true;
-    //    }
-    //    else return false;
 }
 bool ParallelCoordsView::IncreaseLineOpacity() {
-    //    if(lineOpacity < 1.F) {
-    //        lineOpacity += lineOpacityIncrement;
-    //        if(lineOpacity > 1.F) {
-    //            lineOpacity = 1;
-    //        }
-    //        Invalidate();
-    //        redisplayWindow();
-    //        return true;
-    //    }
-    //    else return false;
+    
     lineOpacity *= 1.5;
     redisplayWindow();
     return true;

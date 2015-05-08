@@ -12,7 +12,6 @@
 #include "ParallelCoordsAxis.h"
 #include "../Data/Table.h"
 
-
 #include <tuple>
 #include <map>
 #include <vector>
@@ -29,16 +28,22 @@ public:
 		});
 	}
 	
+    RIVColorProperty* colorPropertyOne;
+    RIVColorProperty* colorPropertyTwo = NULL;
+    
 	std::vector<ParallelCoordsAxisInterface*> axisInterfaces;
 	std::vector<std::pair<size_t,size_t>> axisOrder;
 	
-	std::string tableName;
+	const std::string tableName;
 	std::tuple<std::vector<ParallelCoordsAxis<Ts>*>...> axes;
 	
-	ParallelCoordsAxisGroup(const std::string& tableName) : tableName(tableName) {
+    ParallelCoordsAxisGroup(const std::string& tableName, RIVColorProperty* colorPropertyOne, RIVColorProperty* colorPropertyTwo) : tableName(tableName), colorPropertyOne(colorPropertyOne),colorPropertyTwo(colorPropertyTwo) {
 		
 	}
-	
+    ParallelCoordsAxisGroup(const std::string& tableName, RIVColorProperty* colorProperty) : tableName(tableName), colorPropertyOne(colorProperty)  {
+        
+    }
+    
 	void SwapAxes(size_t swapIndexOne, size_t swapIndexTwo) {
 		auto axisOne = axisInterfaces[swapIndexOne];
 		auto axisTwo = axisInterfaces[swapIndexTwo];
@@ -82,11 +87,16 @@ public:
 //			else {
 //				
 //			}
-			
-			
 		}
 	}
 	
+    RIVColorProperty* GetColorProperty(ushort datasetId) {
+        if(datasetId) {
+            return colorPropertyTwo;
+        }
+        else return colorPropertyOne;
+    }
+    
 	template<typename U>
 	std::vector<ParallelCoordsAxis<U>*>* GetAxes() {
 		return &std::get<std::vector<ParallelCoordsAxis<U>*>>(axes);
@@ -108,9 +118,9 @@ public:
 	}
 	
 	template<typename U>
-	ParallelCoordsAxis<U>* CreateAxis(RIVRecord<U>* record, int x, int y, int axisWidth, int axisHeight, U min, U max, const std::string& name, int divisionCount,const  Histogram<U>& histogramOne, const Histogram<U>& histogramTwo) {
+	ParallelCoordsAxis<U>* CreateAxis(RIVRecord<U>* recordOne,RIVRecord<U>* recordTwo, int x, int y, int axisWidth, int axisHeight, U min, U max, const std::string& name, int divisionCount,const  Histogram<U>& histogramOne, const Histogram<U>& histogramTwo) {
 		std::vector<ParallelCoordsAxis<U>*>* tAxes = GetAxes<U>();
-		auto axis = new ParallelCoordsAxis<U>(x,y,axisWidth,axisHeight,min,max,name,record,divisionCount,histogramOne, histogramTwo);
+		auto axis = new ParallelCoordsAxis<U>(x,y,axisWidth,axisHeight,min,max,name,recordOne,recordTwo,divisionCount,histogramOne, histogramTwo);
 		tAxes->push_back(axis);
 		axisInterfaces.push_back(axis);
 		return tAxes->at(tAxes->size() - 1);

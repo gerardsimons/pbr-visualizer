@@ -33,7 +33,6 @@
             <texcoords ofs="16368" size="0"/>
             <triangles ofs="16368" size="2"/>
         </TriangleMesh> -->
-
 <!--          <TriangleMesh id="3" name="mesh3">
             <material name="Emitter-mid-window">
                 <code>"OBJ"</code>
@@ -234,7 +233,6 @@
             <texcoords ofs="193308" size="682"/>
             <triangles ofs="198764" size="1248"/>
         </TriangleMesh>
-
         <TriangleMesh id="14" name="mesh14">
             <material name="Bowl">
                 <code>"OBJ"</code>
@@ -651,11 +649,11 @@
             <texcoords ofs="428380" size="0"/>
             <triangles ofs="428380" size="384"/>
         </TriangleMesh>
-
+        
         <TriangleMesh id="39" name="mesh39">
             <material name="Ceiling-lampshade">
-                <!-- <code>"Glass"</code> -->
-                <!-- <parameters/> -->
+                <code>"Glass"</code>
+                <parameters/>
                 <code>"OBJ"</code>
                 <parameters>
                     <float  name="d">  1.0000</float>
@@ -668,7 +666,7 @@
             <texcoords ofs="450088" size="1425"/>
             <triangles ofs="461488" size="2688"/>
         </TriangleMesh>
-
+        
         <TriangleMesh id="40" name="mesh40">
             <material name="picframe-black">
                 <code>"OBJ"</code>
@@ -1520,7 +1518,7 @@
             <triangles ofs="1535908" size="2"/>
         </TriangleMesh>
 
-        <!-- <TriangleMesh id="86" name="mesh86">
+        <TriangleMesh id="86" name="mesh86">
             <material name="Glass-Fake-windows">
                 <code>"Glass"</code>
                 <parameters>
@@ -1571,7 +1569,7 @@
             <normals   ofs="1546300" size="0"/>
             <texcoords ofs="1546300" size="0"/>
             <triangles ofs="1546300" size="1332"/>
-        </TriangleMesh> -->
+        </TriangleMesh>
 
 <!--         <TriangleMesh id="90" name="mesh90">
             <material name="Glass-Fake-picframe">
@@ -3194,7 +3192,7 @@
             <texcoords ofs="10457616" size="0"/>
             <triangles ofs="10457616" size="1280"/>
         </TriangleMesh>
-        <TriangleMesh id="183" name="mesh183">
+<!--         <TriangleMesh id="183" name="mesh183">
             <material name="Glass.001">
                 <code>"Glass"</code>
                 <parameters>
@@ -3221,6 +3219,6 @@
             <normals   ofs="15437376" size="0"/>
             <texcoords ofs="15437376" size="0"/>
             <triangles ofs="15437376" size="206848"/>
-        </TriangleMesh>
+        </TriangleMesh> -->
     </Group>
 </scene>
