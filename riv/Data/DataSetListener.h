@@ -20,6 +20,10 @@ public:
     virtual void OnFiltersChanged(RIVDataSet<float,ushort>* source) = 0;
 	//Did new data get added or old data removed?
 	virtual void OnDataChanged(RIVDataSet<float,ushort>* source) = 0;
+    //The structure of the data changed, tables or records added or removed
+    virtual void OnDataStructureChanged(RIVDataSet<float,ushort>* source) {
+        
+    }
 };
 
 #endif

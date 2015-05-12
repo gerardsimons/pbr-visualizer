@@ -221,7 +221,6 @@ public:
             throw std::runtime_error("Need to start filtering first");
         }
     }
-    
     void ClearData() {
         for(RIVTable<Ts...>* table : tables) {
             table->ClearData();
@@ -399,6 +398,11 @@ public:
             });
         }
         dataset->StopFiltering();
+    }
+    void OnDataStructureChanged() {
+        for(RIVDataSetListener* listener : dataListeners) {
+            listener->OnDataStructureChanged(this);
+        }
     }
 };
 

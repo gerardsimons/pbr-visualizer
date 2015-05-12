@@ -121,6 +121,7 @@ public:
     //implement virtual functions prescribed by DataSetListener
     virtual void OnDataChanged(RIVDataSet<float,ushort>* source);
 	virtual void OnFiltersChanged(RIVDataSet<float,ushort>* dataset);
+    virtual void OnDataStructureChanged(RIVDataSet<float,ushort>* dataset);
 	
 	bool DecreaseLineOpacity();
 	bool IncreaseLineOpacity();

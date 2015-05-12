@@ -1,0 +1,245 @@
+<?xml version="1.0"?>
+
+<scene>
+    <Group id="0" name="">
+
+        <TriangleMesh id="1" name="mesh1">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="0" size="8"/>
+            <normals   ofs="96" size="0"/>
+            <texcoords ofs="96" size="0"/>
+            <triangles ofs="96" size="12"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="2" name="mesh2">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="240" size="3644"/>
+            <normals   ofs="43968" size="0"/>
+            <texcoords ofs="43968" size="0"/>
+            <triangles ofs="43968" size="6320"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="3" name="mesh3">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="119808" size="32316"/>
+            <normals   ofs="507600" size="0"/>
+            <texcoords ofs="507600" size="0"/>
+            <triangles ofs="507600" size="65590"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="4" name="mesh4">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="1294680" size="100207"/>
+            <normals   ofs="2497164" size="0"/>
+            <texcoords ofs="2497164" size="0"/>
+            <triangles ofs="2497164" size="201031"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="5" name="mesh5">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="4909536" size="34834"/>
+            <normals   ofs="5327544" size="0"/>
+            <texcoords ofs="5327544" size="0"/>
+            <triangles ofs="5327544" size="69451"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="6" name="mesh6">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="6160956" size="8"/>
+            <normals   ofs="6161052" size="0"/>
+            <texcoords ofs="6161052" size="0"/>
+            <triangles ofs="6161052" size="12"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="7" name="mesh7">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="6161196" size="4"/>
+            <normals   ofs="6161244" size="0"/>
+            <texcoords ofs="6161244" size="0"/>
+            <triangles ofs="6161244" size="2"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="8" name="mesh8">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="6161268" size="8"/>
+            <normals   ofs="6161364" size="0"/>
+            <texcoords ofs="6161364" size="0"/>
+            <triangles ofs="6161364" size="12"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="9" name="mesh9">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="6161508" size="8"/>
+            <normals   ofs="6161604" size="0"/>
+            <texcoords ofs="6161604" size="0"/>
+            <triangles ofs="6161604" size="12"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="10" name="mesh10">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="6161748" size="8"/>
+            <normals   ofs="6161844" size="0"/>
+            <texcoords ofs="6161844" size="0"/>
+            <triangles ofs="6161844" size="12"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="11" name="mesh11">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="6161988" size="8"/>
+            <normals   ofs="6162084" size="0"/>
+            <texcoords ofs="6162084" size="0"/>
+            <triangles ofs="6162084" size="12"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="12" name="mesh12">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="6162228" size="8"/>
+            <normals   ofs="6162324" size="0"/>
+            <texcoords ofs="6162324" size="0"/>
+            <triangles ofs="6162324" size="12"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="13" name="mesh13">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="6162468" size="8"/>
+            <normals   ofs="6162564" size="0"/>
+            <texcoords ofs="6162564" size="0"/>
+            <triangles ofs="6162564" size="12"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="14" name="mesh14">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="6162708" size="4"/>
+            <normals   ofs="6162756" size="0"/>
+            <texcoords ofs="6162756" size="0"/>
+            <triangles ofs="6162756" size="2"/>
+        </TriangleMesh>
+
+    </Group>
+</scene>

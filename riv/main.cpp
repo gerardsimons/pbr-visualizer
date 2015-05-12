@@ -95,7 +95,7 @@ bool linkPixelDistros = false;
 const int maxPathsOne = 6000;
 const int maxBootstrapRepeatOne = 1;
 
-const int maxPathsTwo = 6000;
+const int maxPathsTwo = 20000;
 const int maxBootstrapRepeatTwo = 1;
 
 const int sliderViewHeight = 0;
@@ -787,6 +787,9 @@ void keys(int keyCode, int x, int y) {
                 postRedisplay = true;
             }
             break;
+        case 103: // 'g' key, change active gizmo
+            sceneView->ToggleActiveGizmo();
+            break;
         case 108 : // 'l' key, toggle lines drawing
             ++swapchainWeight;
             printf("Swapchain weight is now %f\n",swapchainWeight);
@@ -852,8 +855,7 @@ void keys(int keyCode, int x, int y) {
         }
         case 117: //'u' key, load image from file
         {
-            std::string name = "input.bmp";
-            rendererOne->LoadFromImage(name, 3472);
+            sceneView->AddGizmo();
             break;
         }
         case 118: // 'v'
@@ -892,7 +894,7 @@ void keys(int keyCode, int x, int y) {
         }
         case 116: // 't' key, use as temp key for some to-test function
         {
-            sceneView->filterForGizmo();
+            sceneView->filterForGizmos();
             break;
 //            sceneView->SetSelectionMode(RIV3DView::INTERACTION_AND_SHADOW);
 //            sceneView->FilterPathsTwo(1, 4);
@@ -969,20 +971,20 @@ void keys(int keyCode, int x, int y) {
             imageView->redisplayWindow();
             break;
         }
-        case GLUT_KEY_UP:
+        case GLUT_KEY_LEFT:
             //            sceneView->MoveCamera(0,0,camSpeed);
             sceneView->ZoomIn(camSpeed);
             break;
-        case GLUT_KEY_DOWN:
+        case GLUT_KEY_RIGHT:
             //            sceneView->MoveCamera(0,0,-camSpeed);
             sceneView->ZoomIn(-camSpeed);
             break;
-        case GLUT_KEY_LEFT:
-            //            sceneView->MoveCamera( camSpeed,0,0);
-            break;
-        case GLUT_KEY_RIGHT:
-            //            sceneView->MoveCamera(-camSpeed,0,0);
-            break;
+//        case GLUT_KEY_LEFT:
+//            //            sceneView->MoveCamera( camSpeed,0,0);
+//            break;
+//        case GLUT_KEY_RIGHT:
+//            //            sceneView->MoveCamera(-camSpeed,0,0);
+//            break;
         case GLUT_KEY_F1:
             dataControllerOne->CycleDataCollectionMode();
             if(dataControllerTwo) {

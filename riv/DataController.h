@@ -96,7 +96,7 @@ private:
 	
 	const int bootstrapBeforePause = 3;
 	//The number of bins we use for the histograms that keep track of the true distribution of the data
-    const float maxRadiance = 5;
+    const float maxRadiance = 1;
 	const int bins = 10;
 	int reduceRounds = 0;
     ushort maxNrLights = 0;

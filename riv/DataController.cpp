@@ -188,7 +188,7 @@ void DataController::createDataStructures(const Vec2f& xBounds, const Vec2f& yBo
     float maxSize = std::max(xSize,std::max(ySize,zSize));
     
     //Because floats are annoying with equality, make sure you over-extend a bit the size of the octree
-    int maxDepth = 10;
+    int maxDepth = 8;
     int maxCapacity = 1;
     energyDistribution3D = new Octree(maxDepth,cX,cY,cZ,1.01*maxSize,maxCapacity);
     float pixelsPerBins = 1;

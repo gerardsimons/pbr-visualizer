@@ -25,6 +25,11 @@ public:
     Vec2f xBounds;
     Vec2f yBounds;
     Vec2f zBounds;
+    TriangleMeshGroup(const TriangleMeshGroup& copy) {
+        for(TriangleMeshFull* t : copy.triangleMeshes) {
+            triangleMeshes.push_back(new TriangleMeshFull(t->position,t->triangles));
+        }
+    }
 	TriangleMeshGroup(const std::vector<embree::TriangleMeshFull*>& triangleMeshes) : triangleMeshes(triangleMeshes) {
 		init();
 	}

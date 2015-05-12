@@ -1,0 +1,18 @@
+-i greenhouse_no_reflector_no_plant.xml
+
+#-vp 0 8.5 10.6 -vi 0 0 -10 -vu 0 1 0 -fov 55 # FRONT FACING
+#-vp -5.25 8.5 10.6 -vi 0 0 -10 -vu 0 1 0 -fov 55 # OBLIQUE
+#-vp -10 18 0 -vi 0 0 0 -vu 0 1 0 -fov 55 # SIDE
+
+-pointlight -7.5 18 40 7000 7000 7000
+-vp -7.5 18 40 -vi -7.5 18 0 -vu 0 1 0 -fov 55 
+
+# RENDER SHOT
+#-vp -17.5 22 38 -vi -7.5 10 0 -vu 0 1 0 -fov 55 
+
+#-size 248 186
+#-size 800 600
+#-size 160 120
+-size 320 240
+
+-renderer pathtracer { depth = 3 }

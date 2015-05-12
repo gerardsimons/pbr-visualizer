@@ -24,10 +24,13 @@ public:
     std::vector<Vec3fa> hitpoints;
     std::vector<riv::Color> colors;
     
+    ushort gizmoId = 0;
+    
     operator bool() const;
     
     Gizmo() { };
-    Gizmo(const TriangleMeshGroup& shape);
+    Gizmo(const TriangleMeshGroup& shape, ushort gizmoId, const riv::Color& color);
+    Gizmo(const Gizmo& copy);
 };
 
 #endif /* defined(__embree__Gizmo__) */

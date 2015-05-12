@@ -858,18 +858,18 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                                 if(datasetOne) {
                                     auto table = (*datasetOne)->GetTable(axisGroup.tableName);
                                     RIVRecord<Type>* axisRecord = table->GetRecord<Type>(axis->name);
-                                    if(axisGroup.colorPropertyOne) {
-                                        delete axisGroup.colorPropertyOne;
-                                    }
-                                    axisGroup.colorPropertyOne = new RIVEvaluatedColorProperty<Type>(colors::blueYellowColorMap(),(*datasetOne)->GetTable(axisGroup.tableName),axisRecord);
+//                                    if(axisGroup.colorPropertyOne) {
+//                                        delete axisGroup.colorPropertyOne;
+//                                    }
+//                                    axisGroup.colorPropertyOne = new RIVEvaluatedColorProperty<Type>(colors::blueYellowColorMap(),(*datasetOne)->GetTable(axisGroup.tableName),axisRecord);
                                 }
                                 if(datasetTwo) {
                                     auto table = (*datasetTwo)->GetTable(axisGroup.tableName);
                                     RIVRecord<Type>* axisRecord = table->GetRecord<Type>(axis->name);
-                                    if(axisGroup.colorPropertyTwo) {
-                                        delete axisGroup.colorPropertyTwo;
-                                    }
-                                    axisGroup.colorPropertyTwo = new RIVEvaluatedColorProperty<Type>(colors::blueYellowColorMap(),(*datasetOne)->GetTable(axisGroup.tableName),axisRecord);
+//                                    if(axisGroup.colorPropertyTwo) {
+//                                        delete axisGroup.colorPropertyTwo;
+//                                    }
+//                                    axisGroup.colorPropertyTwo = new RIVEvaluatedColorProperty<Type>(colors::blueYellowColorMap(),(*datasetOne)->GetTable(axisGroup.tableName),axisRecord);
                                 }
                                 
                                 //
@@ -1010,8 +1010,10 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
             return true;
         case MOUSE_DOWN_AXIS:
             if(yDistanceTravelled > dragStartSensitivity) {
+                
                 interactionState = CREATE_SELECTION_BOX;
                 printf("NEW STATE IS CREATE_SELECTION_BOX\n");
+                
                 selectedAxis->HasSelectionBox = true;
                 selectedAxis->selection.start.x = selectedAxis->x - 10;
                 selectedAxis->selection.end.x = selectedAxis->x + 10;
@@ -1215,7 +1217,16 @@ void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
     //	axisGroups[1].Reorder(6,0);
     redisplayWindow();
 }
-
+void ParallelCoordsView::OnDataStructureChanged(RIVDataSet<float, ushort>* dataset) {
+    if(dataset == *datasetOne || dataset == *datasetTwo) {
+        createAxes();
+        createAxisDensities();
+        createAxisPoints();
+        redisplayWindow();
+        
+        
+    }
+}
 void ParallelCoordsView::redisplayWindow() {
     int currentWindow = glutGetWindow();
     glutSetWindow(ParallelCoordsView::windowHandle);

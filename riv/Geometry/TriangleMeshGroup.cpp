@@ -75,7 +75,7 @@ bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& P
 
 bool TriangleMeshGroup::Intersect(const Ray& ray, ushort& resultIndex, Vec3fa& Phit, float& shortestDistance, const Vec3fa& distanceCompare) const {
     bool intersects = false;
-    bool reverse = false;
+    bool reverse = true;
 
     if (reverse) {
         shortestDistance = -std::numeric_limits<float>::max();
@@ -191,6 +191,7 @@ void TriangleMeshGroup::Translate(const Vec3fa& translation) {
             position[j] = position[j] + translation;
         }
     }
+    center = center + translation;
 }
 void TriangleMeshGroup::Translate(float x, float y, float z) {
     Translate(Vec3fa(x,y,z));
