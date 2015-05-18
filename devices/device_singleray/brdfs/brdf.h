@@ -16,14 +16,14 @@
 
 #ifndef __EMBREE_BRDF_H__
 #define __EMBREE_BRDF_H__
-
+#pragma once
 #include "../shapes/differentialgeometry.h"
 
 namespace embree {
-
+    
     /*! BRDF type can be used as a hint to the integrator to help pick the best integration method  */
     enum BRDFType {
-
+        
         ALL                   = 0xFFFFFFFF,    /*! all BRDF components for the given surface        */
         DIFFUSE               = 0x000F000F,    /*! all diffuse BRDFs for the given surface          */
         DIFFUSE_REFLECTION    = 0x00000001,    /*! fully diffuse reflection BRDF                    */
@@ -40,7 +40,7 @@ namespace embree {
         SPECULAR_REFLECTION   = 0x00000100,    /*! perfect specular reflection BRDF                 */
         SPECULAR_TRANSMISSION = 0x01000000,    /*! perfect specular transmission BRDF               */
         TRANSMISSION          = 0xFFFF0000     /*! all transmission BRDFs for the given surface     */
-
+        
     };
 
     /*! BRDF interface definition.  A BRDF can be evaluated and sampled, and the sampling PDF       */
@@ -52,49 +52,49 @@ namespace embree {
     /*! cosine term can be skipped in case it is handled through sampling.                          */
     class BRDF {
     public:
-
+        
         /*! constructor */
         __forceinline BRDF(const BRDFType type) : type(type) {}
-
+        
         /*! virtual destructor */
         virtual ~BRDF() {}
-
+        
         /*! evaluate the BRDF */
         virtual Color eval(const Vector3f               & wo,    /*! outgoing light direction          */
                            const DifferentialGeometry& dg,    /*! shade location on a surface       */
                            const Vector3f               & wi)    /*! incoming light direction          */ const {
-
+            
             /*! specular BRDFs cannot be evaluated and should return zero */
             return(zero);
-
+            
         }
-
+        
         /*! sample the BRDF */
         virtual Color sample(const Vector3f               & wo,  /*! outgoing light direction          */
                              const DifferentialGeometry& dg,  /*! shade location on a surface       */
                              Sample3f                  & wi,  /*! sampled light direction and PDF   */
                              const Vec2f               & s)   /*! sample location given by caller   */ const {
-
+            
             /*! by default we perform a cosine weighted hemisphere sampling */
             return(eval(wo, dg, wi = cosineSampleHemisphere(s.x, s.y, dg.Ns)));
-
+            
         }
-
+        
         /*! evaluate sampling PDF */
         virtual float pdf(const Vector3f               & wo,     /*! outgoing light direction          */
                           const DifferentialGeometry& dg,     /*! shade location on a surface       */
                           const Vector3f               & wi)     /*! incoming light direction          */ const {
-
+            
             /*! return the probability density */
             return(cosineSampleHemispherePDF(wi, dg.Ns));
-
+            
         }
-
+        
         /*! BRDF type hint to the integrator */
         BRDFType type;
-
+        
     };
-
+    
 }
 
 #endif // __EMBREE_BRDF_H__

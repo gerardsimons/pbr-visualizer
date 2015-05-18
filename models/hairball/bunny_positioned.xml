@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<scene>
+    <Group id="0" name="">
+
+        <TriangleMesh id="1" name="mesh1">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="0" size="207735"/>
+            <normals   ofs="2492820" size="207735"/>
+            <texcoords ofs="4985640" size="0"/>
+            <triangles ofs="4985640" size="69451"/>
+        </TriangleMesh>
+
+    </Group>
+</scene>

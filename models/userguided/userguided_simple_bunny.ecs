@@ -1,0 +1,13 @@
+-i userguided_simple_bunny.xml
+
+#-vp 0 10 -18 -vi 0 10 0 -vu 0 1 0 -fov 45 # FRONT
+#-vp 0 15 -30 -vi 0 10 0 -vu 0 1 0 -fov 45 # FRONT
+
+-vp 12.5951 13.5559 -20.454  -vi 0 10 0 -vu 0 1 0 # SLIGHTLY OBLIQUE FROM THE RIGHT
+
+#-vp 30 10 -18 -vi 0 10 0 -vu 0 1 0 -fov 45
+#-pointlight 0 10 -25 4000 4000 4000
+-quadlight -0 10 -25 2 0 0 0 2 0 1000 1000 1000
+
+-size 256 256
+-renderer pathtracer { depth = 5 }

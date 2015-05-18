@@ -161,7 +161,7 @@ void ParallelCoordsView::createAxes() {
                         if(typeid(Type) == typeid(ushort)) {
                             
                             ushort diff = max - min;
-                            if(diff > bins) {
+                            if(diff > bins*2) {
                                 diff = bins;
                             }
                             
@@ -205,7 +205,7 @@ void ParallelCoordsView::createAxes() {
                         if(typeid(Type) == typeid(ushort)) {
                             
                             ushort diff = minMax.second - minMax.first;
-                            if(diff > bins) {
+                            if(diff > bins*2) {
                                 diff = bins;
                             }
                             
@@ -541,6 +541,7 @@ void ParallelCoordsView::createAxisDensities(int datasetId, RIVDataSet<float,ush
                 
                 TableIterator* iterator = table->GetIterator();
                 size_t row;
+                
                 while(iterator->GetNext(row)) {
                     
                     auto record = table->GetRecord<decltype(axis->minValue)>(axis->name);

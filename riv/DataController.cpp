@@ -140,7 +140,7 @@ void DataController::initDataSet(RIVDataSet<float, ushort> *dataset,const Vec2f&
     isectsTable->CreateRecord<float>(INTERSECTION_B,0,1,true);
     isectsTable->CreateRecord<ushort>(PRIMITIVE_ID,0,nrPrimitives,true);
     isectsTable->CreateRecord<ushort>(OCCLUDER_COUNT,0,maxNrLights+1,true);
-    isectsTable->CreateRecord<ushort>(INTERACTION_TYPE,0,17,true);
+    isectsTable->CreateRecord<ushort>(INTERACTION_TYPE,0,15,true);
 //    isectsTable->CreateRecord<ushort>(GIZMO_ID,0,3,false);
     
     RIVTable<float,ushort>* lightsTable = dataset->CreateTable(LIGHTS_TABLE);
@@ -439,12 +439,18 @@ void DataController::Reduce() {
             maxPaths /= 2;
             acceptProbability /= 2;
             
+            
+            
             currentData->NotifyDataListeners();
 //            currentData->Print(100);
-            
+//            return;
         }
         else {
             printf("Score to beat = %f\n",bestBootstrapResult);
+        }
+        
+        if(acceptMode == RADIANCE) {
+            return;
         }
         
         RIVDataSet<float,ushort>* joinedData = currentData->CloneStructure(dataTables);
@@ -719,6 +725,7 @@ void DataController::SetDataAcceptMode(AcceptMode newMode) {
             printf("UNIFORM");
             break;
         case RADIANCE:
+            maxPaths /= 2;
             printf("RADIANCE");
             break;
     }

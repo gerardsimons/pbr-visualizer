@@ -521,7 +521,7 @@ void EMBREERenderer::parseCommandLine(Ref<ParseStream> cin, const FileName& path
             Handle<Device::RTLight> light = g_device->rtNewLight("spotlight");
             const Vector3f P = cin->getVector3f();
             const Vector3f D = cin->getVector3f();
-            const Color I = cin->getColor();
+            const Color I = cin->getColor();	
             const float angleMin = cin->getFloat();
             const float angleMax = cin->getFloat();
             g_device->rtSetFloat3(light, "P", P.x, P.y, P.z);

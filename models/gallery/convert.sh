@@ -1,0 +1,1 @@
+obj2xml gallery.obj galler.xml gallery.bin

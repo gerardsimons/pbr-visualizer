@@ -400,7 +400,9 @@ namespace embree
       else if (entry->name == "float2" ) { Vec2f value = load<Vec2f>(entry);  g_device->rtSetFloat2(material, name.c_str(), value.x, value.y); }
       else if (entry->name == "float3" ) { Vec3f value = load<Vec3f>(entry);  g_device->rtSetFloat3(material, name.c_str(), value.x, value.y, value.z); }
       else if (entry->name == "float4" ) { Vec4f value = load<Vec4f>(entry);  g_device->rtSetFloat4(material, name.c_str(), value.x, value.y, value.z, value.w); }
-      else if (entry->name == "texture") g_device->rtSetTexture(material, name.c_str(), rtLoadTexture(path + load<std::string>(entry)));
+      else if (entry->name == "texture") {
+          g_device->rtSetTexture(material, name.c_str(), rtLoadTexture(path + load<std::string>(entry)));   
+      }
       else throw std::runtime_error(entry->loc.str()+": invalid type: "+entry->name);
     }
 

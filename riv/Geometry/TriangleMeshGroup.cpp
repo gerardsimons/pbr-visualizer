@@ -43,9 +43,11 @@ void TriangleMeshGroup::init() {
 	cX /= nrVertices;
 	cY /= nrVertices;
 	cZ /= nrVertices;
+    
 	center[0] = cX;
 	center[1] = cY;
 	center[2] = cZ;
+    
 	float maxDistance = 0;
     
 	//Determine the scale we need to scale it to unit

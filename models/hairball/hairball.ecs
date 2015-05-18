@@ -1,0 +1,12 @@
+#-i hairball.xml
+#-i bunny_positioned.xml
+#-i bunny.obj
+-i bunny_lens.xml
+#-i userguided_bunny_lens.obj
+-vp 1 6.38 -24 -vd 0 0 1 -vu 0 1 0 -fov 37 
+#-quadlight 6 6 -2 0 0 1 0 1 0 200 200 200
+#-quadlight -4.5 6 -2 0 1 0 0 0 1 200 200 200
+-quadlight -4.5 7 -2 0 1 0 0 0 1 500 500 500
+#-quadlight -4.5 5.5 -1.5 0 2 0 0 0 2 50 50 50
+#-pointlight 0 8	 0 100 100 100
+-renderer pathtracer { depth = 5 }

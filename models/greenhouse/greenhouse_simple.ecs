@@ -1,0 +1,6 @@
+-i greenhouse_simple.xml
+
+-vp 10 3 0 -vi 0 3 0 -vu 0 1 0 -fov 45 
+-pointlight 10 3 0 100 100 100
+
+-renderer pathtracer {depth = 5}

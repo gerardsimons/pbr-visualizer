@@ -93,9 +93,10 @@ EMBREERenderer* rendererTwo = NULL;
 bool linkPixelDistros = false;
 
 const int maxPathsOne = 6000;
+//const int maxPathsOne = 250000;
 const int maxBootstrapRepeatOne = 1;
 
-const int maxPathsTwo = 20000;
+const int maxPathsTwo = 6000;
 const int maxBootstrapRepeatTwo = 1;
 
 const int sliderViewHeight = 0;
@@ -450,6 +451,65 @@ void testFunctions() {
     exit(0);
 }
 
+void userguidedRenderScript() {
+    
+    printHeader("USERGUIDED RENDER SCRIPT");
+    
+    dataControllerOne->SetDataCollectionMode(DataController::NONE);
+    
+    const int baseSPP = 32;
+    const int guidedSPP = 32;
+    currentFrameOne = 0;
+    
+    //Render normally for baseSPP
+    while(currentFrameOne < baseSPP - 1) {
+        rendererOne->RenderNextFrame(false);
+        currentFrameOne++;
+    }
+    
+    //Gather samples
+    dataControllerOne->SetDataCollectionMode(DataController::ALL);
+    rendererOne->RenderNextFrame();
+    currentFrameOne++;
+    
+    char dir[128];
+    sprintf(dir, "userguided_render_%d",rand());
+    mkdir(dir, 0777);
+    
+    char outputImagePath[256];
+    const char* extension = ".png";
+    sprintf(outputImagePath, "%s/base_spp=%d%s",dir,currentFrameOne,extension);
+    rendererOne->outputMode(outputImagePath);
+    
+    //Filter paths
+    sceneView->FilterPathsOne(1, 2);
+    sceneView->FilterPathsOne(2, 1);
+    
+    //Smooth distribution
+    int smooths = 5;
+    for(int i = 0 ; i < smooths ; ++i) {
+        imageView->SmoothPixelDistributionOne();
+    }
+    
+    rendererOne->RenderNextFrame();
+    
+    for(int i = 0 ; i < smooths ; ++i) {
+        imageView->SmoothPixelDistributionOne();
+    }
+    
+    auto distro = imageView->GetActiveDistributionOne();
+    distro->PrintRaw();
+    
+    dataControllerOne->SetDataCollectionMode(DataController::NONE);
+    while(currentFrameOne < guidedSPP + baseSPP) {
+        rendererOne->RenderNextFrame(distro,false);
+        ++currentFrameOne;
+    }
+    
+    sprintf(outputImagePath, "%s/u=%d_g=%d_%s",dir,baseSPP,guidedSPP,extension);
+    rendererOne->outputMode(outputImagePath);
+}
+
 void mergeRenderScript() {
     
     printHeader("MERGE RENDER SCRIPT",100);
@@ -789,6 +849,14 @@ void keys(int keyCode, int x, int y) {
             break;
         case 103: // 'g' key, change active gizmo
             sceneView->ToggleActiveGizmo();
+            break;
+        case 105: // 'i' key, scripted stuff
+            
+            
+            
+            sceneView->FilterPathsOne(1, 5);
+            sceneView->FilterPathsOne(2, 0);
+            userguidedRenderScript();
             break;
         case 108 : // 'l' key, toggle lines drawing
             ++swapchainWeight;
@@ -1404,7 +1472,7 @@ void setup(int argc, char** argv) {
     colors.push_back(colors::RED);
     riv::ColorMap redBlue(colors);
     
-    int minSamplesPerPixel = 1;
+    int minSamplesPerPixel = 4;
     
     float rendererSize = rendererOne->getWidth() * rendererOne->getHeight();
     float samplesPerPixel = maxPathsOne / rendererSize;

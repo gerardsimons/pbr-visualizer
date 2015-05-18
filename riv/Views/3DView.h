@@ -196,6 +196,7 @@ public:
         PATH,
         INTERACTION,
         INTERACTION_AND_SHADOW,
+        SHADOW,
         OBJECT
     };
     SelectionMode selectionMode = PATH;
@@ -227,6 +228,8 @@ public:
     //Shortcut methods to automate path or other selection mechanisms, be sure to put the right path mode beforehand
     void FilterPathsOne(ushort bounceNr, ushort objectId);
     void FilterPathsTwo(ushort bounceNr, ushort objectId);
+    void FilterPathsOne(ushort bounceNr, std::set<ushort>& objectIds);
+    void FilterPathsTwo(ushort bounceNr, std::set<ushort>& objectIds);
     
     static void DrawInstance(); //Override
     static void ReshapeInstance(int,int);

@@ -1305,10 +1305,16 @@ bool RIV3DView::isSelectedObject(std::set<ushort>& selectedObjectIds, ushort obj
 
 void RIV3DView::FilterPathsOne(ushort bounceNr, ushort objectId) {
     std::set<ushort> objectIds = (std::set<ushort>){objectId};
-    filterPaths(*datasetOne, bounceNr, objectIds, pathFiltersOne);
+    FilterPathsTwo(bounceNr, objectIds);
 }
 void RIV3DView::FilterPathsTwo(ushort bounceNr, ushort objectId) {
     std::set<ushort> objectIds = (std::set<ushort>){objectId};
+    FilterPathsOne(bounceNr, objectIds);
+}
+void RIV3DView::FilterPathsOne(ushort bounceNr, std::set<ushort>& objectIds) {
+    filterPaths(*datasetOne, bounceNr, objectIds, pathFiltersOne);
+}
+void RIV3DView::FilterPathsTwo(ushort bounceNr, std::set<ushort>& objectIds) {
     filterPaths(*datasetTwo, bounceNr, objectIds, pathFiltersTwo);
 }
 //void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, ushort* selectedObjectIDs, std::vector<riv::RowFilter*>& pathFilters) {
@@ -1349,6 +1355,7 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
             std::vector<size_t> mapping = pathIsectReference->GetReferenceRows(row);
             ushort nrIntersections = mapping.size();
             bool filter = true;
+            RIVRecord<ushort>* occluderCounts = isectsTable->GetRecord<ushort>(OCCLUDER_COUNT);
             for(ushort i = 0 ; i < nrIntersections ; ++i) {
                 size_t intersectionRow = mapping[i];
                 ushort objectID = primitiveIds->Value(intersectionRow);
@@ -1375,7 +1382,24 @@ void RIV3DView::filterPaths(RIVDataSet<float,ushort>* dataset, ushort bounceNr, 
                         }
                     }
                 }
-                
+                else if(selectionMode == SHADOW) {
+//                    const auto& lightsMapping = isectsToLightsReference->GetReferenceRows(intersectionRow);
+//                    ushort nrLightRows = lightsMapping.size();
+//                    for(ushort j = 0 ; j < nrLightRows ; ++j) {
+//                        size_t lightRow = lightsMapping[j];
+//                        ushort occluderId = occluderIds->Value(lightRow);
+//                        if(selectedObjectIDs.find(occluderId) != selectedObjectIDs.end()) {
+//                            filter = false;
+//                            //                                                            printf("Path %zu intersection #%zu occluder %zu has occluder id = %d\n",row,intersectionRow,lightRow,occluderId);
+//                            break;
+//                        }
+//                    }
+//
+                    if(selectedObjectIDs.find(occluderCounts->Value(intersectionRow)) != selectedObjectIDs.end()) {
+                        filter = false;
+                        break;
+                    }
+                }
                 
                 else if(selectionMode == PATH) {
                     short objectBounceNr = bounceNrs->Value(intersectionRow);
@@ -1463,6 +1487,9 @@ void RIV3DView::CycleSelectionMode() {
             SetSelectionMode(INTERACTION_AND_SHADOW);
             break;
         case INTERACTION_AND_SHADOW:
+            SetSelectionMode(SHADOW);
+            break;
+        case SHADOW:
             SetSelectionMode(OBJECT);
             break;
         case OBJECT:
@@ -1673,6 +1700,9 @@ void RIV3DView::SetSelectionMode(SelectionMode mode) {
         case INTERACTION_AND_SHADOW:
             printf("Selection mode is now set to 'INTERACTION_AND_SHADOW'\n");
             break;
+        case SHADOW:
+            printf("Selection mode is now set to 'SHADOW'\n");
+            break;
         case OBJECT:
             printf("Selection mode is now set to 'OBJECT'\n");
             break;
@@ -1684,7 +1714,8 @@ Gizmo RIV3DView::createGizmo(ushort newGizmoId) {
     float unnormalizedModelScale = 1.F / modelScale;
     const float s = unnormalizedModelScale / 5;
     Vec3fa scale(s,s,s);
-//    scale.y *= 1.667;
+    
+    scale.y *= 1.667;
     
     Vec3fa pos = modelCenter / s - scale / 2.F;
     pos.y = -10;
@@ -2024,7 +2055,11 @@ void RIV3DView::AddGizmo() {
         activeGizmo = gizmoTwo;
         gizmoTwo->color = colors::BLUE;
     }
-    else printf("Only %d gizmos allowed\n",gizmosAllowed);
+    else {
+        printf("Only %d gizmos allowed\n",gizmosAllowed);
+        
+        gizmoTwo->shape.Translate(-gizmoTwo->shape.GetCenter());
+    }
 }
 void RIV3DView::ToggleActiveGizmo() {
     if(gizmoOne && !activeGizmo) {

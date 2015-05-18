@@ -244,7 +244,9 @@ namespace embree
 	{
 		RT_COMMAND_HEADER;
 		if      (!strcasecmp(type,"Matte")         ) return (Device::RTMaterial) new ConstructorHandle<Matte,Material>;
-		else if (!strcasecmp(type,"Plastic")       ) return (Device::RTMaterial) new ConstructorHandle<Plastic,Material>;
+        else if (!strcasecmp(type,"Plastic")       ) {
+            return (Device::RTMaterial) new ConstructorHandle<Plastic,Material>;
+        }
 		else if (!strcasecmp(type,"Dielectric")    ) return (Device::RTMaterial) new ConstructorHandle<Dielectric,Material>;
         else if (!strcasecmp(type,"Glass")         ) {
             return (Device::RTMaterial) new ConstructorHandle<Dielectric,Material>;

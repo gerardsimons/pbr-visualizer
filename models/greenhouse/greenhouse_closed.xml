@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+
+<scene>
+    <Group id="0" name="">
+
+        <TriangleMesh id="1" name="mesh1">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="0" size="4"/>
+            <normals   ofs="48" size="0"/>
+            <texcoords ofs="48" size="0"/>
+            <triangles ofs="48" size="2"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="2" name="mesh2">
+            <material name="None">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.8000  0.8000</float3>
+                    <float3 name="Ks"> 0.8000  0.8000  0.8000</float3>
+                    <float  name="Ns"> 0.0000</float>
+                </parameters>
+            </material>
+            <positions ofs="72" size="4"/>
+            <normals   ofs="120" size="0"/>
+            <texcoords ofs="120" size="0"/>
+            <triangles ofs="120" size="2"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="3" name="mesh3">
+            <material name="material1">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.5120  0.5120  0.5120</float3>
+                    <float3 name="Ks"> 0.2500  0.2500  0.2500</float3>
+                    <float  name="Ns"> 7.8431</float>
+                </parameters>
+            </material>
+            <positions ofs="144" size="4"/>
+            <normals   ofs="192" size="0"/>
+            <texcoords ofs="192" size="0"/>
+            <triangles ofs="192" size="2"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="4" name="mesh4">
+            <material name="material0">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.6400  0.6400  0.6400</float3>
+                    <float3 name="Ks"> 0.4000  0.4000  0.4000</float3>
+                    <float  name="Ns"> 7.8431</float>
+                </parameters>
+            </material>
+            <positions ofs="216" size="376"/>
+            <normals   ofs="4728" size="0"/>
+            <texcoords ofs="4728" size="0"/>
+            <triangles ofs="4728" size="684"/>
+        </TriangleMesh>
+
+        <TriangleMesh id="5" name="mesh5">
+            <material name="material2">
+                <code>"OBJ"</code>
+                <parameters>
+                    <float  name="d">  1.0000</float>
+                    <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
+                    <float3 name="Kd"> 0.8000  0.6275  0.4915</float3>
+                    <float3 name="Ks"> 0.5000  0.5000  0.5000</float3>
+                    <float  name="Ns">96.0784</float>
+                </parameters>
+            </material>
+            <positions ofs="12936" size="16"/>
+            <normals   ofs="13128" size="0"/>
+            <texcoords ofs="13128" size="0"/>
+            <triangles ofs="13128" size="24"/>
+        </TriangleMesh>
+
+    </Group>
+</scene>

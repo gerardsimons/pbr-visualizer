@@ -21,6 +21,62 @@
 
 namespace embree
 {
+    
+    
+    
+    ushort BRDFTypeToShort(BRDFType type) {
+        if(type == ALL) {
+            return 0;
+        }
+        else if(type == DIFFUSE ) {
+            return 1;
+        }
+        else if(type == DIFFUSE_REFLECTION ) {
+            return 2;
+        }
+        else if(type == DIFFUSE_TRANSMISSION ) {
+            return 3;
+        }
+        else if(type == GLOSSY ) {
+            return 4;
+        }
+        else if(type == GLOSSY_REFLECTION ) {
+            return 5;
+        }
+        else if(type == GLOSSY_TRANSMISSION ) {
+            return 6;
+        }
+        else if(type == JIMENEZ ) {
+            return 7;
+        }
+        else if(type == JIMENEZ_REFLECTION ) {
+            return 8;
+        }
+        else if(type == JIMENEZ_TRANSMISSION ) {
+            return 9;
+        }
+        else if(type == NONE ) {
+            return 10;
+        }
+        else if(type == REFLECTION ) {
+            return 11;
+        }
+        else if(type == SPECULAR ) {
+            return 12;
+        }
+        else if(type == SPECULAR_REFLECTION ) {
+            return 13;
+        }
+        else if(type == SPECULAR_TRANSMISSION ) {
+            return 14;
+        }
+        else if(type == TRANSMISSION ) {
+            return 15;
+        }
+        else return 16;
+    }
+    
+    
 	PathTraceIntegrator::PathTraceIntegrator(const Parms& parms)
 	: lightSampleID(-1), firstScatterSampleID(-1), firstScatterTypeSampleID(-1)
 	{
@@ -320,7 +376,7 @@ namespace embree
 				Color isectColor = c * Li(scatteredPath, scene, state, dataConnector) * rcp(wi.pdf);
                 L += isectColor;
                 
-                dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,type);
+                dataConnector->AddIntersectionData(dg.P,lightPath.lastRay.dir,L,lightPath.lastRay.id0,BRDFTypeToShort(type));
 			}
 		}
 //        if(L != Color(zero)) {
