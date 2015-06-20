@@ -58,13 +58,17 @@
             <triangles ofs="651624" size="65590"/>
         </TriangleMesh>
 
+        
         <TriangleMesh id="5" name="mesh5">
             <material>
-                <code>"MetallicPaint"</code>
+                <code>"OBJ"</code>
                 <parameters>
+                    <float3 name="Kd">0 0.5 0.1</float3>
+                </parameters>
+                <!-- <parameters>
                     <float name="eta">1.45</float>
                     <float3 name="shadeColor">0.0 0.5 0.0</float3>
-                </parameters>
+                </parameters> -->
             </material>
             <positions ofs="1438704" size="100207"/>
             <normals   ofs="2641188" size="0"/>
@@ -92,9 +96,9 @@
                 <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.95  0.95  0.95</float3>
-                    <float3 name="Ks"> 1 1 1 </float3>
-                    <float  name="Ns"> 50 </float>
+                    <float3 name="Kd"> 1 1 1</float3>
+<!--                    <float3 name="Ks"> 1 1 1 </float3>-->
+<!--                    <float  name="Ns"> 50 </float>-->
                 </parameters>
             </material>
             <positions ofs="6304980" size="8"/>
@@ -109,7 +113,7 @@
                 <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.95  0.95  0.95</float3>
+                    <float3 name="Kd"> 0.7 0.7 0.7</float3>
                 </parameters>
             </material>
             <positions ofs="6305220" size="4"/>
@@ -124,7 +128,7 @@
                 <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.95  0.95  0.95</float3>
+                    <float3 name="Kd"> 0.7 0.7 0.7</float3>
                 </parameters>
             </material>
             <positions ofs="6305292" size="8"/>
@@ -139,7 +143,7 @@
                 <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.95  0.95  0.95</float3>
+                    <float3 name="Kd"> 0.7 0.7 0.7</float3>
                 </parameters>
             </material>
             <positions ofs="6305532" size="8"/>
@@ -154,7 +158,7 @@
                 <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.95  0.95  0.95</float3>
+                    <float3 name="Kd"> 0.7 0.7 0.7</float3>
                 </parameters>
             </material>
             <positions ofs="6305772" size="8"/>
@@ -242,7 +246,7 @@
                 <parameters>
                     <float  name="d">  1.0000</float>
                     <float3 name="Ka"> 0.0000  0.0000  0.0000</float3>
-                    <float3 name="Kd"> 0.95  0.95  0.95</float3>
+                    <float3 name="Kd"> 0.7 0.7 0.7</float3>
                 </parameters>
             </material>
             <positions ofs="6306804" size="8"/>

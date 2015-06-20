@@ -1,6 +1,6 @@
--i gallery_no_glass.xml
+	-i gallery_no_glass.xml
 #-vp -22 10 -28 -vi 15 0 15 -vu 0 1 0 -fov 37 
--vp -32 10 -38 -vi 15 0 15 -vu 0 1 0 -fov 37 
+-vp -33 10 -39 -vi 15 0 15 -vu 0 1 0 -fov 37 
 #-vp -28 10 -34 -vi 15 0 15 -vu 0 1 0 -fov 37 
 #-vp -35.1451 4.03626 -35.8645 -vu 0 1 0 -fov 37
 #-vp 278 273 -400 -vi 0 0 0 -vu 0 1 0 -fov 37 
@@ -16,14 +16,17 @@
 -quadlight 0 20 0  1 0 0 0 0 1 350 350 350
 
 #above bunny
--quadlight -15 20 -15  1 0 0 0 0 1 250 250 250
+#-quadlight -15 20 -15 1 0 0 0 0 1 250 250 250
+-quadlight -15 20 -15 2 0 0 0 0 2 200 200 200
 
 #above glass ball
 #-quadlight -15 20 15  1 0 0 0 0 1 350 350 350
 -quadlight -14.5 20 14.5  2 0 0 0 0 2 150 150 150
-#-quadlight -15 20 15  .5 0 0 0 0 .5 400 400 400
+#-quadlight -15 20 15  .5 0 0 0 0 .5 1200 1200 1200
 
--quadlight 15 20 -15  1 0 0 0 0 1 350 350 350
+#above dragon
+-quadlight 15 20 -15  2 0 0 0 0 2 200 200 200
+
 -quadlight 15 20 15 1 0 0 0 0 1 350 350 350
 
 # SMALLER INTENSER
@@ -36,5 +39,5 @@
 #-pointlight 0 5 0 100 100 100
 #-quadlight 1 225 250 0 100 0 0 0 100 150 150 135
 
--size 640 480
+-size 480 360
 -renderer pathtracer { depth = 5 }

@@ -379,6 +379,14 @@ void RIV3DView::drawCamera(const Vec3fa& position) {
     
     
 }
+
+void RIV3DView::RotateView(double angle) {
+    rotateX += angle;
+    
+    redisplayWindow();
+    
+    printf("View rotated by %f\n",angle);
+}
 void RIV3DView::Draw() {
     
     
@@ -407,6 +415,7 @@ void RIV3DView::Draw() {
     glPushMatrix();
     glScalef(modelScale,modelScale,modelScale);
     glTranslatef(-modelCenter[0], -modelCenter[1], -modelCenter[2]);
+    glRotated(rotateX, 0, 1, 0);
     
     //    riv::Color redColor;
     
@@ -1305,11 +1314,11 @@ bool RIV3DView::isSelectedObject(std::set<ushort>& selectedObjectIds, ushort obj
 
 void RIV3DView::FilterPathsOne(ushort bounceNr, ushort objectId) {
     std::set<ushort> objectIds = (std::set<ushort>){objectId};
-    FilterPathsTwo(bounceNr, objectIds);
+    FilterPathsOne(bounceNr, objectIds);
 }
 void RIV3DView::FilterPathsTwo(ushort bounceNr, ushort objectId) {
     std::set<ushort> objectIds = (std::set<ushort>){objectId};
-    FilterPathsOne(bounceNr, objectIds);
+    FilterPathsTwo(bounceNr, objectIds);
 }
 void RIV3DView::FilterPathsOne(ushort bounceNr, std::set<ushort>& objectIds) {
     filterPaths(*datasetOne, bounceNr, objectIds, pathFiltersOne);
@@ -1715,7 +1724,7 @@ Gizmo RIV3DView::createGizmo(ushort newGizmoId) {
     const float s = unnormalizedModelScale / 5;
     Vec3fa scale(s,s,s);
     
-    scale.y *= 1.667;
+//    scale.y *= 1.667;
     
     Vec3fa pos = modelCenter / s - scale / 2.F;
     pos.y = -10;

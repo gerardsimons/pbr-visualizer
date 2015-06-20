@@ -249,6 +249,7 @@ void ParallelCoordsView::drawAxes() {
                 
                 //Draw basic black backdrop for each axis
                 glColor3f(1,1,1);
+                glColor3f(0,0,0);
                 
                 float halfWidth = axis->width / 2.F;
                 glRectf(axis->x - halfWidth, axis->y, axis->x + halfWidth, axis->y + axis->height);
@@ -259,6 +260,7 @@ void ParallelCoordsView::drawAxes() {
                 int endSelectionBin = -1;
                 
                 float maxBinWidth = 3.5 * axis->width;
+//                float maxBinWidth = 1;
                 
                 auto& histogramOne = axis->densityHistogramOne;
                 auto& histogramTwo = axis->densityHistogramTwo;
@@ -472,19 +474,6 @@ void ParallelCoordsView::drawAxesExtras() {
                 auto& scale = axis->scale;
                 
                 //Draw the scales indicators
-                if(scale.size() > 0) {
-                    for(size_t j = 0 ; j < scale.size() ; j++) {
-                        float value = axis->ValueOnScale(scale[j]);
-                        int height = axis->PositionOnScaleForScalar(scale[j]);
-                        
-                        std::string text = std::to_string(value);
-                        
-                        char buffer[4];
-                        sprintf(buffer,"%.2f",value);
-                        
-                        drawText(buffer,4,axis->x + axis->width + 16,height,textColor,.08F);
-                    }
-                }
             }
         });
     }

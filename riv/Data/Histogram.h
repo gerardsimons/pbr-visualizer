@@ -910,9 +910,9 @@ public:
                                 ++binsSummed;
                             }
                         }
-                        if(sum > 0) {
-                            sum *= binsSummed;
-                        }
+//                        if(sum > 0) {
+//                            sum *= binsSummed;
+//                        }
                         size_t average = std::round(sum / binsSummed);
                         //                    size_t average = std::ceil(sum / binsSummed);
                         

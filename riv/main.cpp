@@ -93,10 +93,10 @@ EMBREERenderer* rendererTwo = NULL;
 bool linkPixelDistros = false;
 
 const int maxPathsOne = 6000;
-//const int maxPathsOne = 250000;
+//const int maxPathsOne = 100000;
 const int maxBootstrapRepeatOne = 1;
 
-const int maxPathsTwo = 6000;
+const int maxPathsTwo = 8000;
 const int maxBootstrapRepeatTwo = 1;
 
 const int sliderViewHeight = 0;
@@ -515,29 +515,29 @@ void mergeRenderScript() {
     printHeader("MERGE RENDER SCRIPT",100);
     
     //Configuration
-//    const int baseFidelity = 128; //Cornell
-    const int baseFidelity = 128; //Teapots
+    const int baseFidelity = 1; //Cornell
+//    const int baseFidelity = 32; //Teapots
     
 //    const int maxFrames = 1;
-    const std::vector<int> frames = createRangeVector(1,128);
+    const std::vector<int> frames = createRangeVector(1,32);
 //    const std::vector<int> frames = createRangeVector(1,32); //Cornell
 //    const std::vector<int> weights = createRangeVector(100,);
-    const std::vector<int> weights = {8};
+    const std::vector<int> weights = {1024};
 //        const std::vector<int> weights = {32,64,128,256,512};
 //    const std::vector<int> weights = {4};
     
 //    Teapot scene
-    ushort selectedObjectId = 4;
+//    ushort selectedObjectId = 4;
     
-    //Cornell box scene
-//        ushort selectedObjectId = 7;
+//    Cornell box scene
+    ushort selectedObjectId = 7;
     
     const char* extension = ".png";
     
     bool generateReferenceImages = false;
     
-//    const double gamma = 2;
-    const double gamma = 1; //teapots
+    const double gamma = 2;
+//    const double gamma = 1; //teapots
     
     char dir[128];
     sprintf(dir, "render_script%d",rand());
@@ -599,14 +599,17 @@ void mergeRenderScript() {
     unsigned int smoothRepeat = 10;
     radianceDistro.SmoothRectangular(smoothSize,smoothSize,smoothRepeat);
     
+    return;
+    
     //Gamma correct the radiance difference distro
-    radianceDistro.GammaCorrection(gamma);
+//    radianceDistro.GammaCorrection(gamma);
     
 //    radianceDistro->SmoothRectangular(3,3,5);
     
     //Select paths that interact with object on first bounce
 //    sceneView->SetSelectionMode(RIV3DView::INTERACTION_AND_SHADOW);
-    sceneView->SetSelectionMode(RIV3DView::INTERACTION);
+//    sceneView->SetSelectionMode(RIV3DView::INTERACTION);
+    sceneView->SetSelectionMode(RIV3DView::PATH);
     
     sceneView->FilterPathsTwo(1, selectedObjectId);
     
@@ -614,7 +617,7 @@ void mergeRenderScript() {
     imageView->SetHeatmapToDisplay(RIVImageView::DISTRIBUTION);
     auto distro = imageView->GetActiveDistributionTwo();
     
-    distro->SmoothRectangular(3, 3, 10);
+    distro->SmoothRectangular(5, 5, 10);
     
     *distro = distro->BooleanHistogram(); //Make sure samples are distributed uniformly
     distro->PrintRaw();
@@ -765,10 +768,12 @@ void keys(int keyCode, int x, int y) {
         case 49: //The '1' key, switch to renderer one if not already using it
             parallelCoordsView->ToggleDrawDataSetOne();
             sceneView->ToggleDrawDataSetOne();
+            sceneView->MovePathSegment(-1000000);
             break;
         case 50: //The '2' key, switch to renderer two if not already using it
             parallelCoordsView->ToggleDrawDataSetTwo();
             sceneView->ToggleDrawDataSetTwo();
+            sceneView->MovePathSegment(-1000000);
             break;
         case 51: // the '3' key, pause renderer 1
             if(datasetOne) {
@@ -847,13 +852,15 @@ void keys(int keyCode, int x, int y) {
                 postRedisplay = true;
             }
             break;
+        case 101: //'e' key
+        {
+            sceneView->RotateView(4);
+            break;
+        }
         case 103: // 'g' key, change active gizmo
             sceneView->ToggleActiveGizmo();
             break;
         case 105: // 'i' key, scripted stuff
-            
-            
-            
             sceneView->FilterPathsOne(1, 5);
             sceneView->FilterPathsOne(2, 0);
             userguidedRenderScript();
@@ -885,6 +892,9 @@ void keys(int keyCode, int x, int y) {
             break;
         case 104: // the 'h' from heatmap, toggle drawing the octree heatmap
             sceneView->ToggleDrawHeatmap();
+//            sceneView->ToggleDrawIntersectionPoints();
+//            sceneView->CycleMeshDiplayMode();
+//            sceneView->ToggleDrawDataSetTwo();
             break;
         case 106: // the 'j' key, cause the h is taken for the other heatmap
             imageView->ToggleHeatmapDisplayMode();
@@ -1601,8 +1611,8 @@ void setup(int argc, char** argv) {
         
         riv::ColorMap binColorMap(colors,0,1);
         
-        sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
-//          sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),colorOne,colorOne,pathColorTwo,colorTwo);
+//        sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),pathColorOne,rayColorOne,pathColorTwo,rayColorTwo);
+          sceneView = new RIV3DView(datasetOne,datasetTwo,rendererOne,rendererTwo,sceneDataOne, sceneDataTwo, dataControllerOne->GetEnergyDistribution3D(),dataControllerTwo->GetEnergyDistribution3D(),colorOne,colorOne,pathColorTwo,colorTwo);
         imageView = new RIVImageView(datasetOne,datasetTwo,rendererOne,rendererTwo,dataControllerOne->GetImageDistributions(),dataControllerTwo->GetImageDistributions(),xBinsOne,xBinsTwo);
         
 //        sliderView = new RIVSliderView(datasetOne,datasetTwo,dataControllerOne->GetTrueDistributions(),dataControllerTwo->GetTrueDistributions());

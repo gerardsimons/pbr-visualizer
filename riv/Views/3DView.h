@@ -126,7 +126,7 @@ private:
     int depthTwo;
     int maxDepth;
     int selectRound = 1;
-    const float segmentWidth = .025F;
+    const float segmentWidth = .075F;
     float segmentStart = 0;
     float segmentStop = segmentWidth;
     
@@ -136,6 +136,8 @@ private:
     
     ushort selectedLightIdOne = 0;
     ushort selectedLightIdTwo = 0;
+    
+    double rotateX = 0;
     
     bool meshSelected = false;
     std::vector<riv::RowFilter*> pathFiltersOne;
@@ -237,6 +239,7 @@ public:
     static void Motion(int x, int y);
     static void PassiveMotion(int x, int y);
     
+    void RotateView(double angle);
     void ToggleGizmoTranslationMode(int x, int y, int z);
     void ToggleActiveGizmo();
     void ToggleBackgroundColor();
