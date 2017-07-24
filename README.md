@@ -19,3 +19,6 @@ The application was written in C++ on MacOS using XCode with a Clang C++11 compi
 * Clang C++11 compiler
 * CMake to generate build files (optional)
 
+## Building and Running
+
+Although I have not (yet) supplied any instructions on building (using CMake) and running, I am happy to help out anyone who wants to try and get it running on their platform. Please PM me if you are interested and I will try to help you it any way I can. 
