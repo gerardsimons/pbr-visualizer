@@ -109,7 +109,7 @@ public:
     EMBREERenderer(const std::string& commandsFile);
     
     //Add a untextured shape to the singleray device
-    void AddShape(const std::vector<Vec3f>& positions,const std::vector<Vec3f>& faces);
+    std::vector<Handle<Device::RTPrimitive>> AddShape(const std::vector<Vec3f>& positions,const std::vector<Vec3f>& faces);
 
 	std::string makeFileName(const std::string path, const std::string fileName);
 	void outputMode(const std::string& fileName);

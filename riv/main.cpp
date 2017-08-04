@@ -37,6 +37,9 @@
 
 #define BIN_X 30
 
+#define CONNECT_MODE "-connect"
+#define RENDER_ONLY_MODE "-renderonly"
+
 /* window width and height */
 //int width = 1650
 //int height = 1000;
@@ -954,76 +957,13 @@ void keys(int keyCode, int x, int y) {
         case 115: // 's' key
             //            sceneView->MoveCamera(0, -camSpeed, 0);
         {
-            
             parallelCoordsView->ToggleSaturationMode();
             break;
-            
-//            auto distroTwo = imageView->GetActiveDistributionTwo();
-//            if(distroTwo) {
-//                Grid grid = distroTwo->BooleanHistogram().ToGrid();
-//                grid.Print();
-//
-//                *distroTwo = Histogram2D<float>(grid);
-//                distroTwo->PrintRaw();
-//            }
-//            
-//            imageView->redisplayWindow();
-//            break;
         }
         case 116: // 't' key, use as temp key for some to-test function
         {
             sceneView->filterForGizmos();
             break;
-//            sceneView->SetSelectionMode(RIV3DView::INTERACTION_AND_SHADOW);
-//            sceneView->FilterPathsTwo(1, 4);
-//            imageView->redisplayWindow();
-//            
-//            auto distro = imageView->GetActiveDistributionTwo();
-//            distro->PrintRaw();
-//            *distro = distro->BooleanHistogram();
-//            distro->PrintRaw();
-//            
-//            //Fill holes
-//            Grid g = distro->ToGrid();
-////
-//            printf("BEFORE FILLING HOLES!\n");
-//            g.Print();
-////
-//            Grid holes = g.GetHoles();
-//            
-//            printf("HOLES:  \n");
-//            holes.Print();
-////
-////            //Or operator, get both holes and the original grid
-//            g = g | holes;
-//            printf("AFTER FILLING HOLES!\n");
-//            g.Print();
-//            
-//            //Convert back to histogram for rendering
-//            *distro = Histogram2D<float>(g);
-////            *distro=distro->BooleanHistogram();
-//            printf("Final weight histogram");
-//            distro->PrintRaw();
-//            
-////            printf("Test function, who knows what it does?\n");
-////            
-////            auto distro = imageView->GetActiveDistributionTwo();
-////            
-////            Grid grid = distro->ToGrid();
-////            
-////            printf("Grid : ");
-////            grid.Print();
-////            
-////            Grid holes = grid.GetHoles();
-////            holes.Print();
-////            
-////            if(distro) {
-////                distro->PrintRaw();
-////            }
-////            
-////            invalidateAllViews();
-////            glutPostRedisplay();
-////            break;
         }
         case 119: // 'w' key, move camera in Y direction
             //Gamma correction
@@ -1376,15 +1316,15 @@ RIVColorRGBProperty<float>* createRayColorProperty(RIVDataSet<float,ushort>* dat
     return new RIVColorRGBProperty<float>(intersectionsTable,isectRRecord,isectGRecord,isectBrRecord);
 }
 
-void setup(int argc, char** argv) {
+bool setup(int argc, char** argv) {
     
     //Create the EMBREE renderer
-    DataConnector* dcOne = new DataConnector(processRendererOne,rendererOneFinishedFrame);
+    DataConnector* dcOne = new DataConnector(processRendererOne, rendererOneFinishedFrame);
     TriangleMeshGroup sceneDataTwo;
     TriangleMeshGroup sceneDataOne;
     if(argc == 3) { //Just one renderer
         char* type = argv[1];
-        if(strcmp(type,"-connect") == 0) {
+        if(strcmp(type,CONNECT_MODE) == 0) {
             rendererOne = new EMBREERenderer(dcOne, std::string(argv[2]),1);
             sceneDataOne = getSceneData(rendererOne);
             dataControllerOne = new DataController(2 * maxPathsOne, maxBootstrapRepeatOne,sceneDataOne.xBounds,sceneDataOne.yBounds,sceneDataOne.zBounds,sceneDataOne.NumberOfMeshes(),rendererOne->GetNumLights(), rendererOne->getWidth(),rendererOne->getHeight(),rendererOne->GetDepth());
@@ -1395,43 +1335,41 @@ void setup(int argc, char** argv) {
             printf("1 renderer set up.\n");
             dcOne->SetNrLights(rendererOne->GetNumLights());
         }
-        else if(strcmp(argv[1],"-renderonly") == 0) { // No connect, render only
+        else if(strcmp(type,RENDER_ONLY_MODE) == 0) { // No connect, render only
             rendererOne = new EMBREERenderer(std::string(argv[2]));
             printf("1 renderer set up for rendering only.\n");
         }
         else {
             char buffer[60];
-            sprintf(buffer,"Unknown command option %s\n",argv[1]);
+            sprintf(buffer,"Unknown command option %s\n",type);
             throw std::runtime_error(buffer);
         }
     }
     else if(argc == 5) {
-        if(strcmp(argv[1],"-connect") == 0) {
+        char* type = argv[1];
+        if(strcmp(type,CONNECT_MODE) == 0) {
             rendererOne = new EMBREERenderer(dcOne, std::string(argv[2]),1);
             connectedOne = true;
             sceneDataOne = getSceneData(rendererOne);
         }
-        else if(strcmp(argv[1],"-renderonly") == 0) { // No connect, render only
+        else if(strcmp(type,RENDER_ONLY_MODE) == 0) { // No connect, render only
             rendererOne = new EMBREERenderer(std::string(argv[3]));
             printf("1 renderer set up for rendering only.\n");
         }
         else {
             char buffer[60];
-            sprintf(buffer,"Unknown command option %s\n",argv[1]);
+            sprintf(buffer,"Unknown command option %s\n",type);
             throw std::runtime_error(buffer);
         }
-        if(strcmp(argv[3],"-connect") == 0) {
+        if(strcmp(argv[3],CONNECT_MODE) == 0) {
             connectedTwo = true;
             DataConnector* dcTwo = new DataConnector(processRendererTwo,rendererTwoFinishedFrame);
             rendererTwo = new EMBREERenderer(dcTwo, std::string(argv[4]),1);
             dcTwo->SetNrLights(rendererTwo->GetNumLights());
             
-            testGizmo();
-            //            float acceptProbTwo = 2.F * maxPaths / (rendererTwo->getWidth() * rendererTwo->getHeight() * rendererTwo->getSamplesPerPixel());
-            //            dataControllerOne->SetAcceptProbability(acceptProbTwo);
             sceneDataTwo = getSceneData(rendererTwo);
         }
-        else if(strcmp(argv[3],"-renderonly") == 0) { // No connect, render only
+        else if(strcmp(argv[3],RENDER_ONLY_MODE) == 0) { // No connect, render only
             rendererOne = new EMBREERenderer(std::string(argv[3]));
             printf("1 renderer set up for rendering only.\n");
         }
@@ -1459,10 +1397,16 @@ void setup(int argc, char** argv) {
         dataControllerOne->SetAcceptProbability(acceptProbOne);
         dataControllerTwo->SetAcceptProbability(acceptProbTwo);
         printf("2 renderers set up.\n");
+
+        return true;
         
     }
-    else {
-        throw std::runtime_error("Unsupported number of arguments (2 or 4 expected)");
+    else { // Print help message
+        printf("Usage:\n");
+        printf("Run the visualizer with either one or two render instances. Each instances can be run as a regular EMBREE instance, or in connected mode, meaning the data is collected and visualised.\n");
+        printf("run_mode being either -connected or -renderonly\n");
+        printf("./riv_main run_mode path_to_ecs [run_mode_2 path_to_ecs_2]\n");
+        return false;
     }
     
 
@@ -1656,10 +1600,13 @@ void setup(int argc, char** argv) {
 
 int main(int argc, char **argv)
 {
+    if(!setup(argc, argv)) {
+        return 0;
+    }
+
     printf("Initialising Rendering InfoVis...\n");
     
-//    testFunctions();
-    
+    // Plant the seed
     srand(time(NULL));
     /* initialize GLUT, let it extract command-line
      GLUT options that you may provide */
@@ -1696,8 +1643,6 @@ int main(int argc, char **argv)
     /* register function that handles mouse */
     
     glutSpecialFunc(keys);
-    
-    setup(argc,argv);
     
     /* Transparency stuff */
     glEnable (GL_BLEND);

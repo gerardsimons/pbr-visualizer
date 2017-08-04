@@ -811,12 +811,12 @@ void EMBREERenderer::parseCommandLine(Ref<ParseStream> cin, const FileName& path
         }
     }
 }
-void EMBREERenderer::AddShape(const std::vector<Vec3f> &positions, const std::vector<Vec3f> &triangles) {
+std::vector<Handle<Device::RTPrimitive>> EMBREERenderer::AddShape(const std::vector<Vec3f> &positions, const std::vector<Vec3f> &triangles) {
     Handle<Device::RTMaterial> material = g_device->rtNewMaterial("matte");
     g_device->rtSetFloat3(material, "reflectance", 0.5f, 0.5f, 0.5f);
     g_device->rtCommit(material);
     
-    std::vector<Handle<Device::RTPrimitive> > model;
+    std::vector<Handle<Device::RTPrimitive>> model;
     
     Handle<Device::RTData> dataPositions = g_device->rtNewData("immutable", positions.size() * sizeof(Vec3f), (positions.size() ? &positions[0] : NULL));
     Handle<Device::RTData> dataTriangles = g_device->rtNewData("immutable", triangles.size() * sizeof(Vec3i), (triangles.size() ? &triangles[0] : NULL));
