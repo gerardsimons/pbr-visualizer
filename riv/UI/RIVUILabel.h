@@ -9,7 +9,11 @@
 #ifndef __embree__RIVUILabel__
 #define __embree__RIVUILabel__
 
+#if __APPLE__
 #include <GLUT/GLUT.h>
+#else
+#include <GL/glut.h>
+#endif
 #include <string>
 
 #include "RIVUIElement.h"

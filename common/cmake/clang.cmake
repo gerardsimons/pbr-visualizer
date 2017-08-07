@@ -22,17 +22,17 @@ SET(FLAGS_AVX2  "-mavx2 -mvzeroupper")
 
 SET(CMAKE_CXX_COMPILER "clang++")
 SET(CMAKE_C_COMPILER "clang")
-SET(CMAKE_CXX_FLAGS "-DDEBUG -g -fPIC -fvisibility-inlines-hidden -fvisibility=hidden -stdlib=libc++ -Wno-c++11-narrowing -Wno-reorder")
+SET(CMAKE_CXX_FLAGS "-DDEBUG -g -fPIC -fvisibility-inlines-hidden -fvisibility=hidden -stdlib=libc++ -Wno-narrowing -Wno-reorder")
 SET(CMAKE_CXX_FLAGS_DEBUG "-O0")
 SET(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -g -O3 -Wstrict-aliasing=0 -ffast-math ")
 SET(CMAKE_EXE_LINKER_FLAGS "")
 
-SET(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
-ADD_DEFINITIONS("-std=c++1y") 
+SET(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++14")
+ADD_DEFINITIONS("-std=c++14") 
 
 IF (APPLE)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmacosx-version-min=10.7")
-  set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++1y")
+  set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++14")
   set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
 ENDIF (APPLE)
 

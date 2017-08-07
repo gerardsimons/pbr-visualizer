@@ -5,7 +5,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <math.h>
+#include <cmath>
 
 #if defined(__APPLE__)
 #include <GLUT/glut.h>

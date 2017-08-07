@@ -14,7 +14,7 @@
 #elif __linux
 #include <GL/glut.h>
 #endif
-#include <math.h>
+#include <cmath>
 #include <ostream>
 #include <iostream>
 
@@ -72,15 +72,10 @@ public:
     Point3D() { x = 0; y = 0 ; z = 0;};
     
     float EuclideanDistanceTo(Point3D& P) {
-//        float distance = sqrt(pow(P.x - x,2) + pow(P.y - y,2) + pow(P.z - z,2));
-        
-//        std::cout << "distance " << *this << " to " << P << " is " << distance << "\n";
-        
-//        return distance;
         return sqrt(pow(P.x - x,2) + pow(P.y - y,2) + pow(P.z - z,2));
     }
     float ManhattanDistanceTo(Point3D& P) {
-        return abs(P.x - x) + abs(P.y - y) + abs(P.z - z);
+        return abs(float(P.x - x)) + abs(float(P.y - y)) + abs(float(P.z - z));
     }
     bool operator==(Point3D& p) {
         return p.x == x && p.y == y && p.z == z;
@@ -89,8 +84,7 @@ public:
         printf("(%f,%f,%f)\n",x,y,z);
     }
     
-    friend std::ostream& operator<<(std::ostream& os, const Point3D& p)
-    {
+    friend std::ostream& operator<<(std::ostream& os, const Point3D& p) {
         os << "(" << p.x << "," << p.y << ',' << p.z << ")";
         return os;
     }

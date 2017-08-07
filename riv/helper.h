@@ -12,14 +12,14 @@
 #include <iostream>
 #include <stdio.h>
 #include <map>
-#include <math.h>
+#include <cmath>
 #include <vector>
 #include <algorithm>
 #include <iterator>
-#include <math.h>
+#include <cmath>
 
-#if __APPLE__
-    #include <GLUT/GLUT.h>
+#if __APPLE_
+_#include <GLUT/GLUT.h>
 #elif __linux
 #include <GL/glut.h>
 #endif

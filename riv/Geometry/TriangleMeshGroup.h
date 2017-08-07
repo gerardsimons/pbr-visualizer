@@ -10,6 +10,7 @@
 #define __embree__TriangleMeshGroup__
 
 #include <vector>
+#include <cmath>
 #include "devices/device_singleray/shapes/trianglemesh_full.h"
 #include "Ray.h"
 

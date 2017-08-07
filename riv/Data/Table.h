@@ -285,12 +285,11 @@ public:
                 }
             }
             //Process the regular filters such as range filters discrete filters etc.
-            //			if(!filterSourceRow) {
             tuple_for_each(filters, [&](auto tFilters) {
                 if(!filterSourceRow) {
                     for(auto filter : tFilters) {
                         typedef typename get_template_type<typename std::decay<decltype(*filter)>::type>::type templateType;
-                        auto recordForFilter = GetRecord<templateType>(filter->GetAttribute());
+                        auto recordForFilter = this->GetRecord<templateType>(filter->GetAttribute());
                         filterSourceRow = !filter->PassesFilter(recordForFilter->Value(row));
                         if(filterSourceRow) {
                             break;
@@ -301,14 +300,10 @@ public:
             
             //FINISH UP
             if(filterSourceRow) {
-                //				printf("row = %zu FILTERED\n",row);
                 FilterRow(row);
                 newlyFilteredRows[row] = true;
             }
         }
-        //		printf("%zu rows filtered in table %s\n",newlyFilteredRows.size(),name.c_str());
-        //				Print();
-        //		reporter::stop(task);
     }
     void FilterReferences() {
         reporter::startTask("Filter References");

@@ -9,6 +9,7 @@
 #ifndef __embree__Grid__
 #define __embree__Grid__
 
+#include <cmath>
 #include <vector>
 #include "Geometry/Geometry.h"
 

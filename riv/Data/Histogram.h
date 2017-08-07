@@ -39,26 +39,11 @@ private:
     T* maxValue = NULL;
     T* minValue = NULL;
     
-    //    class Bin {
-    //    public:
-    //        float min;
-    //        float max;
-    //
-    //        int value;
-    //
-    //        Bin(float min, float max) : min(min), max(max) {
-    //            value = 0;
-    //        }
-    //    };
-    
     unsigned int bins = 0;
     float binWidth = 0;
     
     //Count the values and divide by the total number to get a normalized histogram
     void count(const std::vector<T>& ts) {
-        //		if(ts.size() == 0) {
-        //			throw std::runtime_error("Empty data vector");
-        //		}
         for(const T& t : ts) {
             Add(t);
         }
@@ -565,7 +550,7 @@ public:
     void Join(const HistogramSet& other) {
         tuple_for_each(other.histograms, [&](auto tHistograms) {
             for(auto& histogram : tHistograms) {
-                AddHistogram(histogram);
+                this->AddHistogram(histogram);
             }
         });
     }

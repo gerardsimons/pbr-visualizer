@@ -10,7 +10,7 @@
 #define __Afstuderen___DModel__
 
 #include <vector>
-#include <stdlib.h>
+#include <cmath>
 
 #include "TriangleMesh.h"
 #include "Geometry.h"

@@ -7,7 +7,7 @@
 //
 
 #include "ImageView.h"
-#include <math.h>
+#include <cmath>
 
 typedef unsigned short ushort;
 

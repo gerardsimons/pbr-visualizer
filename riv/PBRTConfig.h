@@ -10,6 +10,7 @@
 #define __qt_widgets__PBRTConfig__
 
 #include <vector>
+#include <cmath>
 #include "Geometry/MeshModel.h"
 #include "Geometry/MeshModelGroup.h"
 

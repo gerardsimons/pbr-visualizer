@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
-#include <math.h>
+#include <cmath>
 #include <exception>
 #include <sys/stat.h>
 
@@ -39,10 +39,6 @@
 
 #define CONNECT_MODE "-connect"
 #define RENDER_ONLY_MODE "-renderonly"
-
-/* window width and height */
-//int width = 1650
-//int height = 1000;
 
 int padding = 10;
 

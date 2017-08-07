@@ -18,7 +18,11 @@
 #include "devices/device_singleray/shapes/trianglemesh_normals.h"
 #include "../../riv/helper.h"
 
+#if __APPLE__
 #include <GLUT/GLUT.h>
+#elif __linux
+#include <GL/glut.h>
+#endif
 
 //#include "api/instance.h"
 //#include "api/handle.h"

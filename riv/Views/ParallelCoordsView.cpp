@@ -8,7 +8,7 @@
 #include "../Data/Table.h"
 #include "../Configuration.h"
 
-#include <math.h>
+#include <cmath>
 #include <stdio.h>
 
 //Static declarations
