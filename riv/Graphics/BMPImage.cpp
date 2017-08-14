@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <math.h>
+#include <cmath>
 #include <stdlib.h>
 
 #include "BMPImage.h"

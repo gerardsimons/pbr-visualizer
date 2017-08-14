@@ -7,7 +7,11 @@
 //
 
 #include "graphics_helper.h"
-#include <GLUT/GLUT.h>
+#if __APPLE__
+    #include <GLUT/GLUT.h>
+#elif __linux
+    #include <GL/glut.h>
+#endif
 
 //function to draw coordinate axes with a certain length (1 as a default)
 void drawCoordSystem(float length)

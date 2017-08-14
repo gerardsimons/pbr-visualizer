@@ -14,7 +14,7 @@ BTW all comments here are French. :)
 #elif __linux
 	#include <GL/glut.h>
 #endif
-#include <math.h>
+#include <cmath>
 #include "Geometry/matrix.h"
 
 

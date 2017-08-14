@@ -477,7 +477,7 @@ void ParallelCoordsView::drawAxesExtras() {
             }
         });
     }
-    Invalidate();
+    this->Invalidate();
 }
 void ParallelCoordsView::createAxisPoints() {
     //	printf("CREATE AXIS POINTS!!!\n");
@@ -713,7 +713,7 @@ void ParallelCoordsView::Reshape(int width, int height) {
     paddingY = 30;
     
     createAxes();
-    Invalidate();
+    this->Invalidate();
 }
 
 size_t drawCount = 0;
@@ -750,7 +750,7 @@ void ParallelCoordsView::Draw() {
 void ParallelCoordsView::ToggleDrawDataSetOne() {
     drawDataSetOne = !drawDataSetOne;
     
-    Invalidate();
+    this->Invalidate();
     
     redisplayWindow();
 }
@@ -758,7 +758,7 @@ void ParallelCoordsView::ToggleDrawDataSetOne() {
 void ParallelCoordsView::ToggleDrawDataSetTwo() {
     drawDataSetTwo = !drawDataSetTwo;
     
-    Invalidate();
+    this->Invalidate();
     
     redisplayWindow();
 }
@@ -874,7 +874,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                                 //                                    }
                                 //                                }
                                 
-                                Invalidate();
+                                this->Invalidate();
                                 
                                 axisFound = true;
                                 
@@ -923,7 +923,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
                                 selectedAxis->x = axisOriginX;
                                 axisGroup.SwapAxes(axisIndex,swapAxisIndex);
                                 
-                                Invalidate();
+                                this->Invalidate();
                                 
                                 glutPostRedisplay();
                                 
@@ -981,7 +981,7 @@ bool ParallelCoordsView::HandleMouse(int button, int state, int x, int y) {
 void ParallelCoordsView::ToggleSaturationMode() {
     useSaturation = !useSaturation;
     
-    Invalidate();
+    this->Invalidate();
     
     redisplayWindow();
 }
@@ -1013,7 +1013,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
                 //                selection = &selectedAxis->selection;
                 
                 selectionBoxChanged = false;
-                Invalidate();
+                this->Invalidate();
                 
                 axisUpdateY = y;
                 return true;
@@ -1023,7 +1023,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
                 printf("NEW STATE IS DRAG_AXIS\n");
                 
                 selectionBoxChanged = false;
-                Invalidate();
+                this->Invalidate();
                 
                 axisOriginX = x;
                 axisUpdateX = x;
@@ -1058,10 +1058,10 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
             if(std::abs(y - axisUpdateY) > updateSensitivity) {
                 axisUpdateY = y;
                 filterData();
-                Invalidate();
+                this->Invalidate();
                 selectionBoxChanged = true;
             }
-            Invalidate();
+            this->Invalidate();
             glutPostRedisplay();
             return true;
         case DRAG_SELECTION: {
@@ -1080,7 +1080,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
             if(std::abs(y - axisUpdateY) > updateSensitivity) {
                 axisUpdateY = y;
                 filterData();
-                Invalidate();
+                this->Invalidate();
                 selectionBoxChanged = true;
             }
             dragBoxLastY = y;
@@ -1092,7 +1092,7 @@ bool ParallelCoordsView::HandleMouseMotion(int x, int y) {
                 axisUpdateX = x;
                 selectedAxis->x = x;
                 
-                Invalidate();
+                this->Invalidate();
                 
                 glutPostRedisplay();
             }
@@ -1158,7 +1158,7 @@ void ParallelCoordsView::OnDataChanged(RIVDataSet<float,ushort>* source) {
     //Recreate the axes
     printf("\n**   ParallelCoordsView onDataChanged notified.\n");
     
-    Invalidate();
+    this->Invalidate();
     resetAxes();
     createAxisDensities();
     
@@ -1238,7 +1238,7 @@ void ParallelCoordsView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
     else {
         throw std::runtime_error("Unknown dataset\n");
     }
-    Invalidate();
+    this->Invalidate();
     
     redisplayWindow();
 }

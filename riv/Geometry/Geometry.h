@@ -12,22 +12,11 @@
 #if __APPLE__
     #include <GLUT/GLUT.h>
 #elif __linux
-#include <GL/glut.h>
+    #include <GL/glut.h>
 #endif
 #include <cmath>
 #include <ostream>
 #include <iostream>
-
-
-
-inline double euclideanDistance(double x1, double x2, double y1, double y2, double z1, double z2) {
-//    double distance = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 -y1) + (z2 - z1) * (z2 - z1));
-//    printf("(%f-%f)*(%f-%f)+(%f-%f)*(%f-%f)+(%f-%f)*(%f-%f)=%f\n",x1,x2,x1,x2,y1,y2,y1,y2,z1,z2,z1,z2,distance);
-//    return distance;
-//    return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 -y1) + (z2 - z1) * (z2 - z1));
-    
-    throw std::runtime_error("This does not work anymore.");
-}
 
 class RIVPoint {
 public:
@@ -75,7 +64,7 @@ public:
         return sqrt(pow(P.x - x,2) + pow(P.y - y,2) + pow(P.z - z,2));
     }
     float ManhattanDistanceTo(Point3D& P) {
-        return abs(float(P.x - x)) + abs(float(P.y - y)) + abs(float(P.z - z));
+        return std::abs(float(P.x - x)) + std::abs(float(P.y - y)) + std::abs(float(P.z - z));
     }
     bool operator==(Point3D& p) {
         return p.x == x && p.y == y && p.z == z;
@@ -210,38 +199,6 @@ public:
         for(int i = 0 ; i < 4 ; i++) {
             glVertex3f(        points[leftFace[i]].x,         points[leftFace[i]].y,         points[leftFace[i]].z);
         }
-        
-//        facePoints[0] = 0;
-//        facePoints[1] = 1;
-//        facePoints[2] = 2;
-//        facePoints[3] = 3;
-//        
-//        facePoints[4] = 4;
-//        facePoints[5] = 5;
-//        facePoints[6] = 6;
-//        facePoints[7] = 7;
-//        //Front face
-//        for(int i = 0 ; i < 24 ; i++) {
-//            int index = facePoints[i];
-//            Point3D p = points[index];
-//            const int faceIndex = i / 4;
-//            printf("Point %d : ",i);
-//            p.Print();
-//            
-////            glColor4f(color[faceIndex][0],color[faceIndex][1],color[faceIndex][2], 1.F);
-//            glVertex3f(p.x,p.y,(p).z);
-//            if((i + 1) % 4 == 0) {
-//                printf("\n");
-//                float r = rand() / (float)RAND_MAX;
-//                float g = rand() / (float)RAND_MAX;
-//                float b = rand() / (float)RAND_MAX;
-//                
-//                glColor4f(r,g,b, 1.F);
-//            }
-//            
-//        }
-    
-        
         glEnd();
         
     }

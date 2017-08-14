@@ -11,6 +11,8 @@
 
 //#include <stdio.h>
 #include <vector>
+#include <stdexcept> // Some Linux flavors require this? https://stackoverflow.com/questions/5527091/runtime-error-was-not-declared-in-this-scope-for-g-4-1-2
+#include <algorithm>
 
 typedef unsigned short ushort;
 

@@ -8,7 +8,13 @@
 
 #include "RIVUIElement.h"
 
-#include <GLUT/GLUT.h>
+#include <stdexcept>
+#if __APPLE__
+    #include <GLUT/GLUT.h>
+#elif __linux
+    #include <GL/glut.h>
+#endif
+#include <stdexcept>
 
 RIVUIElement::RIVUIElement(int x, int y, int width, int height) : x(x), y(y), width(width), height(height) {
 	

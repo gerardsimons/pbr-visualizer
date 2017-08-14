@@ -15,6 +15,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <limits>
 
 #include "TupleIterator.h"
 #include "SampleSet.h"

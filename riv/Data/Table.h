@@ -15,7 +15,7 @@
 #include <tuple>
 #include <set>
 
-#include <math.h>
+#include <cmath>
 
 #include "TupleIterator.h"
 #include "TableInterface.h"

@@ -7,7 +7,12 @@
 //
 
 #include "RIVUIDropdown.h"
-#include <GLUT/GLUT.h>
+#include <stdexcept>
+#if __APPLE__
+    #include <GLUT/GLUT.h>
+#elif __linux
+    #include <GL/glut.h>
+#endif
 
 RIVUIDropdown::RIVUIDropdown(int x, int y, int width, int height, const std::vector<std::string>& stringElements) : RIVUIElement(x,y,width,height) {
 	if(stringElements.size()) {
