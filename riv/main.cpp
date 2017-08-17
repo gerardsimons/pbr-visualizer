@@ -1596,10 +1596,6 @@ bool setup(int argc, char** argv) {
 
 int main(int argc, char **argv)
 {
-    if(!setup(argc, argv)) {
-        return 0;
-    }
-
     printf("Initialising Rendering InfoVis...\n");
     
     // Plant the seed
@@ -1622,6 +1618,10 @@ int main(int argc, char **argv)
     
     /* create the window and store the handle to it */
     mainWindow = glutCreateWindow("Rendering InfoVis" /* title */ );
+
+    if(!setup(argc, argv)) {
+        return 0;
+    }
     
     glEnable( GL_LINE_SMOOTH );
     glEnable( GL_POLYGON_SMOOTH );
