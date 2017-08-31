@@ -8,17 +8,28 @@ The application was intended as a real-time visualisation front-end of a physica
 
 An adapted and simplified [Embree](https://embree.github.io/) renderer is included which will render an according to an Embree scene description file and visualise a sample of the data associated with its light paths, individual rays and intersection points. Two different scenes may be run similtaneously, offering a comparative visualisation useful for detecting differences in scene properties or rendering settings.
 
-Visualisations include an advanced interactive parallel coordinates plot, a preview
-
-The application was written in C++ on MacOS using XCode with a Clang C++11 compiler. No attempt has been made to migrate to Linux or Windows C++ compilers. In principle a Linux running a Clang C++11 compiler should be similar.
+Visualisations include an advanced interactive parallel coordinates plot, a preview of the renderer, a 3D view of the scene geometry and ray tracing animation. 
 
 ## Prerequisites 
 
-* OpenGL
+* UNIX system (tested on Ubuntu 17.04 and MacOS)
+* OpenGL & GLUT
 * EMBREE Rendering Kernels [[LINK](https://embree.github.io/downloads.html)]
-* Clang C++11 compiler
-* CMake to generate build files (optional)
+* C++14 compiler (tested with GCC)
+* CMake to generate build files
 
-## Building and Running
+## Building
 
-Although I have not (yet) supplied any instructions on building (using CMake) and running, I am happy to help out anyone who wants to try and get it running on their platform. Please PM me if you are interested and I will try to help you it any way I can. 
+Create a destination build dir, and use CMake to configure and generate build files. I recommend using cmake-gui to easily check and verify any missing dependencies. Some things to note :
+
+* Make sure you set the BUILD_SINGLE_RAY_DEVICE option)
+* Set CMAKE_CXX_COMPILER to `/usr/bin/g++`
+* Set the EMBREE_INCLUDE_PATH to your `<embree_install_path>/include`
+* Set the EMBREE_LIBRARY to your `<embree_install_path>/lib/libembree.so`
+* It should be able to resolve the GLUT and GL dependendecies on its own. They should point to `libGLU.so` and `libGL.so` files.
+
+Look at any subsequent errors and try and resolve any other required dependencies or errors (Feel free to ask me for help!)
+
+When the generation is sucessful, your build directory should be populated with many things, amongst which there should be a `Makefile`. Go the directory and run `make -j4` (change the 4 to the number of cores you have available)
+
+_Any problems? Contact me!_
