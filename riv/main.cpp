@@ -1349,7 +1349,7 @@ bool setup(int argc, char** argv) {
             sceneDataOne = getSceneData(rendererOne);
         }
         else if(strcmp(type,RENDER_ONLY_MODE) == 0) { // No connect, render only
-            rendererOne = new EMBREERenderer(std::string(argv[3]));
+            rendererOne = new EMBREERenderer(std::string(argv[2]));
             printf("1 renderer set up for rendering only.\n");
         }
         else {
@@ -1366,12 +1366,12 @@ bool setup(int argc, char** argv) {
             sceneDataTwo = getSceneData(rendererTwo);
         }
         else if(strcmp(argv[3],RENDER_ONLY_MODE) == 0) { // No connect, render only
-            rendererOne = new EMBREERenderer(std::string(argv[3]));
+            rendererOne = new EMBREERenderer(std::string(argv[4]));
             printf("1 renderer set up for rendering only.\n");
         }
         else {
             char buffer[60];
-            sprintf(buffer,"Unknown command option %s\n",argv[1]);
+            sprintf(buffer,"Unknown command option %s\n",argv[3]);
             throw std::runtime_error(buffer);
         }
         
@@ -1628,6 +1628,7 @@ int main(int argc, char **argv)
     glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
     glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
     
+    glutSetWindow(mainWindow);
     glutIdleFunc(idle);
     
     /* register function to handle window resizes */
