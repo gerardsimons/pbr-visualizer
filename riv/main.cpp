@@ -98,7 +98,7 @@ const int maxBootstrapRepeatOne = 1;
 const int maxPathsTwo = 8000;
 const int maxBootstrapRepeatTwo = 1;
 
-const int sliderViewHeight = 0;
+const int sliderViewHeight = 50;
 
 bool connectedOne = false;
 bool connectedTwo = false;
@@ -133,6 +133,7 @@ void display(void)
     glClear(GL_COLOR_BUFFER_BIT);
     
     //	dataController->Unpause();
+    glutSwapBuffers();
 }
 void testGizmo() {
     
@@ -1183,7 +1184,11 @@ void idle() {
 //    int maxFrameOne = 10000000;
     if(!renderingPausedOne && currentFrameOne < maxFrameOne) {
         ++currentFrameOne;
-        bool datacallback = dataControllerOne->collectionMode != DataController::NONE;
+
+        bool datacallback = false;
+        if (dataControllerOne) {
+            datacallback = dataControllerOne->collectionMode != DataController::NONE;
+        }
         printf("Rendering renderer #1 frame %d\n",currentFrameOne);
 //        Histogram2D<float>* pixelDistributionOne = imageView->GetPixelDistributionOne();
         Histogram2D<float>* pixelDistributionOne = imageView->GetActiveDistributionOne();
@@ -1409,7 +1414,7 @@ bool setup(int argc, char** argv) {
         dataControllerTwo->SetAcceptProbability(acceptProbTwo);
         printf("2 renderers set up.\n");
 
-        return true;
+        //return true;
         
     }
     else { // Print help message

@@ -591,7 +591,7 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
     
     //	dataset->Print();
     
-    size_t lineIndex = 0;
+    size_t lines = 0;
     
     glEnable(GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -664,8 +664,9 @@ void ParallelCoordsView::drawLines(int datasetId, RIVDataSet<float,ushort>* data
                 ++lineIndex;
             }
         }
+        lines += lineIndex;
     }
-    printf("Parallel coordinates view drew %zu polylines\n",lineIndex);
+    printf("Parallel coordinates view drew %zu polylines\n",lines);
     //	reporter::stop("drawLines");
 }
 
