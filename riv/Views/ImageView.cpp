@@ -586,6 +586,8 @@ void RIVImageView::drawRenderedImage(EMBREERenderer *renderer, int startX, int s
     glPixelZoom((float)imageWidth / g_width, -((float)imageHeight / g_height));
     //Because we flip it we have to translate it back to the top
     glRasterPos2i(startX, imageHeight+startY);
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     
     if (format == "RGB_FLOAT32")
         glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_FLOAT,ptr);
@@ -593,8 +595,8 @@ void RIVImageView::drawRenderedImage(EMBREERenderer *renderer, int startX, int s
         glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGBA,GL_UNSIGNED_BYTE,ptr);
     else if (format == "RGB8")
         glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_UNSIGNED_BYTE,ptr);
-//    else
-//        throw std::runtime_error("unknown framebuffer format: "+format);
+    else
+        throw std::runtime_error("unknown framebuffer format: "+format);
     
     renderer->UnmapFrameBuffer();
 }
