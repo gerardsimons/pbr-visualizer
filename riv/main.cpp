@@ -1592,6 +1592,7 @@ bool setup(int argc, char** argv) {
     
     //Add some filter callbacks
     printf("Finished setting up...");
+    return true;
 }
 
 int main(int argc, char **argv)
