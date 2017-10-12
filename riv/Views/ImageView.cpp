@@ -368,11 +368,7 @@ void RIVImageView::OnFiltersChanged(RIVDataSet<float,ushort>* dataset) {
         throw std::runtime_error("Unknown dataset");
     }
     
-    int currentWindow = glutGetWindow();
-    glutSetWindow(RIVImageView::windowHandle);
-    glutPostRedisplay();
-    //Return window to given window
-    glutSetWindow(currentWindow);
+    redisplayWindow();
 }
 void RIVImageView::ClearPixelDistributionOne() {
     if(pixelDistributionOne) {
@@ -592,10 +588,14 @@ void RIVImageView::drawRenderedImage(EMBREERenderer *renderer, int startX, int s
     else if (format == "RGBA8")
         glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGBA,GL_UNSIGNED_BYTE,ptr);
     else if (format == "RGB8")
+    {
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glDrawPixels((GLsizei)g_width,(GLsizei)g_height,GL_RGB,GL_UNSIGNED_BYTE,ptr);
-//    else
-//        throw std::runtime_error("unknown framebuffer format: "+format);
-    
+    }
+    else
+        throw std::runtime_error("unknown framebuffer format: "+format);
+
+    glFinish();
     renderer->UnmapFrameBuffer();
 }
 void RIVImageView::redisplayWindow() {
@@ -733,10 +733,13 @@ void RIVImageView::Draw() {
         activeHeatmapOne = pixelDistributionOne;
         activeHeatmapTwo = pixelDistributionTwo;
     }
+
+    glGetError();
+    assert(glutGetWindow() == RIVImageView::windowHandle);
     
     if(needsRedraw) {
         printHeader("IMAGE VIEW DRAW");
-        //		printf("\nImageView Draw #%zu\n",++drawCounter);
+        printf("\nImageView Draw #%zu\n",++drawCounter);
         glDisable(GL_DEPTH_TEST);
         
         glClearColor(1,1,1,1);
@@ -783,10 +786,12 @@ void RIVImageView::Draw() {
                 drawGrid(width / 2.F ,paintGridTwo);
             }
         }
-        
+
         glFlush();
         glutSwapBuffers();
     }
+
+    assert(glGetError() == GL_NO_ERROR);
 }
 
 #ifdef __APPLE__

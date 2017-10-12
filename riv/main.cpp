@@ -98,7 +98,7 @@ const int maxBootstrapRepeatOne = 1;
 const int maxPathsTwo = 8000;
 const int maxBootstrapRepeatTwo = 1;
 
-const int sliderViewHeight = 0;
+const int sliderViewHeight = 50;
 
 bool connectedOne = false;
 bool connectedTwo = false;
@@ -133,6 +133,7 @@ void display(void)
     glClear(GL_COLOR_BUFFER_BIT);
     
     //	dataController->Unpause();
+    glutSwapBuffers();
 }
 void testGizmo() {
     
@@ -699,7 +700,41 @@ void mergeRenderScript() {
     return;
 }
 
-void keys(int keyCode, int x, int y) {
+void specialKeys(int keyCode, int x, int y) {
+    bool postRedisplay = true;
+    char key = (char)keyCode;
+    printf("'%c' key (code = %d) pressed.\n",keyCode,key);
+
+    float camSpeed = .25F;
+    switch(keyCode) {
+    case GLUT_KEY_LEFT:
+        //            sceneView->MoveCamera(0,0,camSpeed);
+        sceneView->ZoomIn(camSpeed);
+        break;
+    case GLUT_KEY_RIGHT:
+        //            sceneView->MoveCamera(0,0,-camSpeed);
+        sceneView->ZoomIn(-camSpeed);
+        break;
+//        case GLUT_KEY_LEFT:
+//            //            sceneView->MoveCamera( camSpeed,0,0);
+//            break;
+//        case GLUT_KEY_RIGHT:
+//            //            sceneView->MoveCamera(-camSpeed,0,0);
+//            break;
+    case GLUT_KEY_F1:
+        dataControllerOne->CycleDataCollectionMode();
+        if(dataControllerTwo) {
+            dataControllerTwo->CycleDataCollectionMode();
+        }
+    default:
+        postRedisplay = false;
+    }
+    if(postRedisplay) {
+        glutPostRedisplay();
+    }
+}
+
+void keys(unsigned char keyCode, int x, int y) {
     //    printf("Pressed %d at (%d,%d)\n",keyCode,x,y);
     bool postRedisplay = true;
     
@@ -985,25 +1020,6 @@ void keys(int keyCode, int x, int y) {
             imageView->redisplayWindow();
             break;
         }
-        case GLUT_KEY_LEFT:
-            //            sceneView->MoveCamera(0,0,camSpeed);
-            sceneView->ZoomIn(camSpeed);
-            break;
-        case GLUT_KEY_RIGHT:
-            //            sceneView->MoveCamera(0,0,-camSpeed);
-            sceneView->ZoomIn(-camSpeed);
-            break;
-//        case GLUT_KEY_LEFT:
-//            //            sceneView->MoveCamera( camSpeed,0,0);
-//            break;
-//        case GLUT_KEY_RIGHT:
-//            //            sceneView->MoveCamera(-camSpeed,0,0);
-//            break;
-        case GLUT_KEY_F1:
-            dataControllerOne->CycleDataCollectionMode();
-            if(dataControllerTwo) {
-                dataControllerTwo->CycleDataCollectionMode();
-            }
         default:
             postRedisplay = false;
     }
@@ -1168,7 +1184,11 @@ void idle() {
 //    int maxFrameOne = 10000000;
     if(!renderingPausedOne && currentFrameOne < maxFrameOne) {
         ++currentFrameOne;
-        bool datacallback = dataControllerOne->collectionMode != DataController::NONE;
+
+        bool datacallback = false;
+        if (dataControllerOne) {
+            datacallback = dataControllerOne->collectionMode != DataController::NONE;
+        }
         printf("Rendering renderer #1 frame %d\n",currentFrameOne);
 //        Histogram2D<float>* pixelDistributionOne = imageView->GetPixelDistributionOne();
         Histogram2D<float>* pixelDistributionOne = imageView->GetActiveDistributionOne();
@@ -1394,7 +1414,7 @@ bool setup(int argc, char** argv) {
         dataControllerTwo->SetAcceptProbability(acceptProbTwo);
         printf("2 renderers set up.\n");
 
-        return true;
+        //return true;
         
     }
     else { // Print help message
@@ -1448,7 +1468,8 @@ bool setup(int argc, char** argv) {
         glutReshapeFunc(ParallelCoordsView::ReshapeInstance);
         glutMouseFunc(ParallelCoordsView::Mouse);
         glutMotionFunc(ParallelCoordsView::Motion);
-        glutSpecialFunc(keys);
+        glutSpecialFunc(specialKeys);
+        glutKeyboardFunc(keys);
         if(nrConnected == 2) {
 //            imageViewWidth += imageViewWidth;
             imageViewWidth = std::min(2 * squareSize * ratio,.6667F*width);
@@ -1456,7 +1477,8 @@ bool setup(int argc, char** argv) {
         imageViewWindow = glutCreateSubWindow(mainWindow,padding,bottomHalfY,imageViewWidth,imageViewHeight);
         glutSetWindow(imageViewWindow);
         RIVImageView::windowHandle = imageViewWindow;
-        glutSpecialFunc(keys);
+        glutSpecialFunc(specialKeys);
+        glutKeyboardFunc(keys);
         glutDisplayFunc(RIVImageView::DrawInstance);
         glutReshapeFunc(RIVImageView::ReshapeInstance);
         glutMouseFunc(RIVImageView::Mouse);
@@ -1468,7 +1490,8 @@ bool setup(int argc, char** argv) {
         imageViewWindow = glutCreateSubWindow(mainWindow,0,height - (imageViewHeight / 2.F),imageViewWidth,imageViewHeight);
         glutSetWindow(imageViewWindow);
         RIVImageView::windowHandle = imageViewWindow;
-        glutSpecialFunc(keys);
+        glutSpecialFunc(specialKeys);
+        glutKeyboardFunc(keys);
         glutDisplayFunc(RIVImageView::DrawInstance);
         glutReshapeFunc(RIVImageView::ReshapeInstance);
         
@@ -1497,7 +1520,8 @@ bool setup(int argc, char** argv) {
         glutMouseFunc(RIV3DView::Mouse);
         glutMotionFunc(RIV3DView::Motion);
         glutPassiveMotionFunc(RIV3DView::PassiveMotion);
-        glutSpecialFunc(keys);
+        glutSpecialFunc(specialKeys);
+        glutKeyboardFunc(keys);
     }
     
     if(datasetTwo && datasetOne) {
@@ -1525,7 +1549,8 @@ bool setup(int argc, char** argv) {
         glutReshapeFunc(RIVSliderView::ReshapeInstance);
         glutMouseFunc(RIVSliderView::Mouse);
         glutMotionFunc(RIVSliderView::Motion);
-        glutSpecialFunc(keys);
+        glutSpecialFunc(specialKeys);
+        glutKeyboardFunc(keys);
         
         RIVColorProperty* colorTwo = new RIVFixedColorProperty(0, 0, 1);
         auto pathColorOne = createPathColorProperty(*datasetOne);
@@ -1592,6 +1617,7 @@ bool setup(int argc, char** argv) {
     
     //Add some filter callbacks
     printf("Finished setting up...");
+    return true;
 }
 
 int main(int argc, char **argv)
@@ -1639,7 +1665,8 @@ int main(int argc, char **argv)
     
     /* register function that handles mouse */
     
-    glutSpecialFunc(keys);
+    glutSpecialFunc(specialKeys);
+    glutKeyboardFunc(keys);
     
     /* Transparency stuff */
     glEnable (GL_BLEND);

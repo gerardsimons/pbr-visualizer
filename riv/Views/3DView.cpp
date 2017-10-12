@@ -544,6 +544,7 @@ void RIV3DView::drawTriangleMeshFull(TriangleMeshFull* mesh, const riv::Color& c
     vector_t<Vec3fa>& position = mesh->position;
     glColor3f(color.R,color.G,color.B);
     glLineWidth(lineThickness);
+    glBegin(GL_TRIANGLES);
     for(size_t i = 0 ; i < triangles.size() ; ++i) {
         size_t t0 = triangles[i].v0;
         size_t t1 = triangles[i].v1;
@@ -555,7 +556,7 @@ void RIV3DView::drawTriangleMeshFull(TriangleMeshFull* mesh, const riv::Color& c
         glVertex3f(v1[0],v1[1],v1[2]);
         glVertex3f(v2[0],v2[1],v2[2]);
     }
-    
+    glEnd();
 }
 //void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, float* color, std::set<ushort>& selectedObjectIds) {
 //
@@ -592,7 +593,7 @@ void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, const riv::Color& co
     //    glColor3f(.5f,.2f,1.0f); //Purple
     
     /** Draw the model **/
-    glBegin(GL_TRIANGLES);
+
     
     size_t meshindex = 0;
     
@@ -617,7 +618,6 @@ void RIV3DView::drawMeshModel(TriangleMeshGroup* meshGroup, const riv::Color& co
         }
     }
     //	reporter::stop("Draw mesh model");
-    glEnd();
 }
 void RIV3DView::drawPoints() {
     if(drawIntersectionPoints) {
